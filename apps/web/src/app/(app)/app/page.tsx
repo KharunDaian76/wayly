@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { LanguageSelect } from '@/components/language-select';
 import { useAuth } from '@/lib/auth/auth-context';
+import { useI18n } from '@/lib/i18n/i18n-context';
 
 function StatusRow({ label, value }: { label: string; value: string }) {
   return (
@@ -19,6 +21,7 @@ function StatusRow({ label, value }: { label: string; value: string }) {
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const { t } = useI18n();
   const [loggingOut, setLoggingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,7 +36,7 @@ export default function AppHomePage() {
       await logout();
       router.replace('/login');
     } catch {
-      setError('Sign out failed. Please try again.');
+      setError(t('app.signOutFailed'));
     } finally {
       setLoggingOut(false);
     }
@@ -44,15 +47,16 @@ export default function AppHomePage() {
       <Container className="flex flex-col gap-8 py-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Signed in as</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('app.signedInAs')}</p>
             <h1 className="font-display text-2xl font-bold tracking-tight">{user.displayName}</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <LanguageSelect />
             <Button variant="outline" asChild>
-              <Link href="/">Back to home</Link>
+              <Link href="/">{t('common.backToHome')}</Link>
             </Button>
             <Button variant="secondary" onClick={handleLogout} disabled={loggingOut}>
-              {loggingOut ? 'Signing out…' : 'Sign out'}
+              {loggingOut ? t('app.signingOut') : t('app.signOut')}
             </Button>
           </div>
         </div>
@@ -65,16 +69,22 @@ export default function AppHomePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Your account</CardTitle>
+            <CardTitle>{t('app.yourAccount')}</CardTitle>
           </CardHeader>
           <CardContent>
             <dl className="flex flex-col gap-4">
-              <StatusRow label="Email" value={user.email} />
-              <StatusRow label="Display name" value={user.displayName} />
-              <StatusRow label="Roles" value={user.roles.join(', ') || '—'} />
-              <StatusRow label="Verified" value={user.verified ? 'Yes' : 'No'} />
-              <StatusRow label="KYC status" value={user.kycStatus} />
-              <StatusRow label="Phone verified" value={user.phoneVerified ? 'Yes' : 'No'} />
+              <StatusRow label={t('common.email')} value={user.email} />
+              <StatusRow label={t('common.displayName')} value={user.displayName} />
+              <StatusRow label={t('app.roles')} value={user.roles.join(', ') || t('common.none')} />
+              <StatusRow
+                label={t('app.verified')}
+                value={user.verified ? t('common.yes') : t('common.no')}
+              />
+              <StatusRow label={t('app.kycStatus')} value={user.kycStatus} />
+              <StatusRow
+                label={t('app.phoneVerified')}
+                value={user.phoneVerified ? t('common.yes') : t('common.no')}
+              />
             </dl>
           </CardContent>
         </Card>
@@ -83,14 +93,10 @@ export default function AppHomePage() {
           className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-foreground"
           role="status"
         >
-          Verification will be required before creating deliveries, browsing orders, chatting, or
-          accepting orders.
+          {t('app.kycNotice')}
         </div>
 
-        <p className="text-sm text-muted-foreground">
-          This is a placeholder app shell. Orders, trips, chat, and payments arrive in later
-          milestones.
-        </p>
+        <p className="text-sm text-muted-foreground">{t('app.placeholderNotice')}</p>
       </Container>
     </div>
   );

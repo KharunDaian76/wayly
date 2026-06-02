@@ -10,10 +10,12 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { AuthShell } from '@/components/auth/auth-shell';
 import { PasswordInput } from '@/components/auth/password-input';
 import { useAuth } from '@/lib/auth/auth-context';
+import { useI18n } from '@/lib/i18n/i18n-context';
 
 export default function RegisterPage() {
   const router = useRouter();
   const { status, register } = useAuth();
+  const { t } = useI18n();
   const [form, setForm] = useState<RegisterInput>({
     email: '',
     password: '',
@@ -31,8 +33,8 @@ export default function RegisterPage() {
 
   if (status === 'loading' || status === 'authenticated') {
     return (
-      <AuthShell title="Create account" description="Checking your session…">
-        <p className="text-sm text-muted-foreground">Loading…</p>
+      <AuthShell title={t('register.title')} description={t('register.checkingSession')}>
+        <p className="text-sm text-muted-foreground">{t('common.loading')}</p>
       </AuthShell>
     );
   }
@@ -58,18 +60,18 @@ export default function RegisterPage() {
       await register(parsed.data);
       router.replace('/app');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Registration failed. Please try again.');
+      setError(err instanceof ApiError ? err.message : t('register.registrationFailed'));
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <AuthShell title="Create account" description="Join Wayly to send and deliver with trust.">
+    <AuthShell title={t('register.title')} description={t('register.description')}>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
         <div className="flex flex-col gap-2">
           <label htmlFor="displayName" className="text-sm font-medium">
-            Display name
+            {t('common.displayName')}
           </label>
           <Input
             id="displayName"
@@ -87,7 +89,7 @@ export default function RegisterPage() {
 
         <div className="flex flex-col gap-2">
           <label htmlFor="email" className="text-sm font-medium">
-            Email
+            {t('common.email')}
           </label>
           <Input
             id="email"
@@ -104,7 +106,7 @@ export default function RegisterPage() {
 
         <div className="flex flex-col gap-2">
           <label htmlFor="password" className="text-sm font-medium">
-            Password
+            {t('common.password')}
           </label>
           <PasswordInput
             id="password"
@@ -127,13 +129,13 @@ export default function RegisterPage() {
         ) : null}
 
         <Button type="submit" fullWidth disabled={submitting}>
-          {submitting ? 'Creating account…' : 'Create account'}
+          {submitting ? t('register.creatingAccount') : t('register.createAccount')}
         </Button>
 
         <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
+          {t('register.hasAccount')}{' '}
           <Link href="/login" className="font-medium text-primary hover:underline">
-            Sign in
+            {t('register.signIn')}
           </Link>
         </p>
       </form>

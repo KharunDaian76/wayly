@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { LanguageSelect } from '@/components/language-select';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { siteConfig } from '@/config/site';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Container } from '@wayly/ui';
@@ -25,7 +28,10 @@ export function AuthShell({ title, description, children }: AuthShellProps) {
           <Link href="/" className="font-display text-lg font-extrabold tracking-tight">
             {siteConfig.name}
           </Link>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <LanguageSelect />
+            <ThemeToggle />
+          </div>
         </Container>
       </header>
 

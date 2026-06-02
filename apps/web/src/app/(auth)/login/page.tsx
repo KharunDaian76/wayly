@@ -10,10 +10,12 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { AuthShell } from '@/components/auth/auth-shell';
 import { PasswordInput } from '@/components/auth/password-input';
 import { useAuth } from '@/lib/auth/auth-context';
+import { useI18n } from '@/lib/i18n/i18n-context';
 
 export default function LoginPage() {
   const router = useRouter();
   const { status, login } = useAuth();
+  const { t } = useI18n();
   const [form, setForm] = useState<LoginInput>({ email: '', password: '' });
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginInput, string>>>({});
   const [error, setError] = useState<string | null>(null);
@@ -27,8 +29,8 @@ export default function LoginPage() {
 
   if (status === 'loading' || status === 'authenticated') {
     return (
-      <AuthShell title="Sign in" description="Checking your session…">
-        <p className="text-sm text-muted-foreground">Loading…</p>
+      <AuthShell title={t('login.title')} description={t('login.checkingSession')}>
+        <p className="text-sm text-muted-foreground">{t('common.loading')}</p>
       </AuthShell>
     );
   }
@@ -54,18 +56,18 @@ export default function LoginPage() {
       await login(parsed.data);
       router.replace('/app');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Sign in failed. Please try again.');
+      setError(err instanceof ApiError ? err.message : t('login.signInFailed'));
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <AuthShell title="Sign in" description="Welcome back. Enter your credentials to continue.">
+    <AuthShell title={t('login.title')} description={t('login.description')}>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
         <div className="flex flex-col gap-2">
           <label htmlFor="email" className="text-sm font-medium">
-            Email
+            {t('common.email')}
           </label>
           <Input
             id="email"
@@ -82,7 +84,7 @@ export default function LoginPage() {
 
         <div className="flex flex-col gap-2">
           <label htmlFor="password" className="text-sm font-medium">
-            Password
+            {t('common.password')}
           </label>
           <PasswordInput
             id="password"
@@ -105,13 +107,13 @@ export default function LoginPage() {
         ) : null}
 
         <Button type="submit" fullWidth disabled={submitting}>
-          {submitting ? 'Signing in…' : 'Sign in'}
+          {submitting ? t('login.signingIn') : t('login.signIn')}
         </Button>
 
         <p className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{' '}
+          {t('login.noAccount')}{' '}
           <Link href="/register" className="font-medium text-primary hover:underline">
-            Create one
+            {t('login.createOne')}
           </Link>
         </p>
       </form>
