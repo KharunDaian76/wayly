@@ -12,6 +12,7 @@ import { InfraModule } from './infra/infra.module';
 import { LoggerModule } from './infra/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
+import { KycModule } from './modules/kyc/kyc.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -35,9 +36,9 @@ import { UsersModule } from './modules/users/users.module';
     HealthModule,
     AuthModule,
     UsersModule,
+    KycModule,
     // ---------------------------------------------------------------------
     // Future business modules:
-    //   KycModule,           // M2
     //   GeoModule,           // M5
     //   OrdersModule,        // M4
     //   TripsModule,         // M4
