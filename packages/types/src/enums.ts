@@ -52,10 +52,12 @@ export const SubscriptionType = {
 } as const;
 export type SubscriptionType = (typeof SubscriptionType)[keyof typeof SubscriptionType];
 
-/** Contextual user roles (a user may act as both sender and wayler). */
+/**
+ * Authorization roles. "Sender" and "Wayler" are contextual MODES every user
+ * can switch between (not security roles), so they are intentionally absent.
+ */
 export const UserRole = {
-  SENDER: 'SENDER',
-  WAYLER: 'WAYLER',
+  USER: 'USER',
   ADMIN: 'ADMIN',
   ARBITRATOR: 'ARBITRATOR',
 } as const;

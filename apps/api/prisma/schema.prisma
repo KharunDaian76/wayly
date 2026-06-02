@@ -1,9 +1,9 @@
-// Wayly — Prisma schema (foundation only).
+// Wayly — Prisma schema.
 //
-// Domain models are introduced from M1 onward (Auth & Users first), followed by
-// KYC, Orders, Payments, Chat, Disputes, etc. Intentionally NO models yet.
+// M1 introduces the first real domain models: User, RefreshToken, and
+// PasswordResetToken. KYC/Orders/Payments/Chat/etc. arrive in later milestones.
 //
-// PostGIS is enabled now because local city-delivery feed/search relies on
+// PostGIS is enabled because local city-delivery feed/search relies on
 // geographic radius queries (geography(Point)) from M4/M5.
 
 generator client {
@@ -17,17 +17,89 @@ datasource db {
   extensions = [postgis]
 }
 
-// ---------------------------------------------------------------------------
-// TEMPORARY / INTERNAL — M0 placeholder only.
-//
-// Prisma Client generation requires at least one model. This model exists solely
-// so `prisma generate` succeeds during M0. It is NOT a Wayly domain entity and
-// carries no business meaning. DELETE this model in M1 when the first real
-// models (User, etc.) are introduced.
-// ---------------------------------------------------------------------------
-model M0HealthCheck {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
+// --- Enums (mirror @wayly/types) ---------------------------------------------
 
-  @@map("_health_check")
+// Authorization roles. "Sender"/"Wayler" are contextual modes, NOT roles.
+enum UserRole {
+  USER
+  ADMIN
+  ARBITRATOR
+}
+
+// KYC verification status; gates core activity until APPROVED (enforced in M2+).
+enum KycStatus {
+  NONE
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// --- Models ------------------------------------------------------------------
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique
+  phone        String?    @unique
+  passwordHash String
+  displayName  String
+  avatarUrl    String?
+  roles        UserRole[] @default([USER])
+
+  // KYC / verification (provider integration lands in M2).
+  verified      Boolean   @default(false)
+  kycStatus     KycStatus @default(NONE)
+  phoneVerified Boolean   @default(false)
+
+  // Payments / payouts (Stripe integration lands in M8).
+  stripeCustomerId       String? @unique
+  stripeConnectAccountId String? @unique
+  connectOnboarded       Boolean @default(false)
+
+  locale  String  @default("en")
+  country String?
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  deletedAt               DateTime?
+  gdprDeletionRequestedAt DateTime?
+
+  refreshTokens       RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// Refresh tokens are stored ONLY as hashes (never the raw token), with a
+// familyId to support rotation + reuse detection.
+model RefreshToken {
+  id                String    @id @default(uuid()) @db.Uuid
+  userId            String    @db.Uuid
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash         String    @unique
+  familyId          String    @db.Uuid
+  userAgent         String?
+  ip                String?
+  expiresAt         DateTime
+  revokedAt         DateTime?
+  replacedByTokenId String?   @db.Uuid
+  createdAt         DateTime  @default(now())
+
+  @@index([userId])
+  @@index([familyId])
+  @@map("refresh_tokens")
+}
+
+// Password reset tokens are stored ONLY as hashes.
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
