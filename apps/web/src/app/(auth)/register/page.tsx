@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, type FormEvent } from 'react';
 
 import { AuthShell } from '@/components/auth/auth-shell';
+import { PasswordInput } from '@/components/auth/password-input';
 import { useAuth } from '@/lib/auth/auth-context';
 
 export default function RegisterPage() {
@@ -105,9 +106,8 @@ export default function RegisterPage() {
           <label htmlFor="password" className="text-sm font-medium">
             Password
           </label>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="new-password"
             value={form.password}
             aria-invalid={fieldErrors.password ? true : undefined}
