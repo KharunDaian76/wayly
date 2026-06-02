@@ -8,6 +8,8 @@ export {
   type UpdateProfileBody,
   type UsersApi,
 } from './auth.types';
+export { createKycApi } from './kyc';
+export { type KycApi, type KycMockRejectBody, type KycStartBody } from './kyc.types';
 export { type HealthApi } from './health';
 export type { ApiClientOptions, RequestOptions, TokenProvider, HealthResult } from './types';
-export type { AuthResult, UserProfile } from '@wayly/types';
+export type { AuthResult, KycStatusView, KycVerificationSummary, UserProfile } from '@wayly/types';

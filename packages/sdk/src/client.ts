@@ -2,6 +2,8 @@ import { createAuthApi } from './auth';
 import type { AuthApi, UsersApi } from './auth.types';
 import { ApiError } from './errors';
 import { createHealthApi, type HealthApi } from './health';
+import { createKycApi } from './kyc';
+import type { KycApi } from './kyc.types';
 import type { ApiClientOptions, RequestOptions } from './types';
 import { createUsersApi } from './users';
 
@@ -27,6 +29,9 @@ export class ApiClient {
   /** Current-user profile endpoints. */
   readonly users: UsersApi;
 
+  /** KYC verification endpoints. */
+  readonly kyc: KycApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -44,6 +49,7 @@ export class ApiClient {
     this.health = createHealthApi((path, opts) => this.request(path, opts));
     this.auth = createAuthApi((path, opts) => this.request(path, opts));
     this.users = createUsersApi((path, opts) => this.request(path, opts));
+    this.kyc = createKycApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {

@@ -21,6 +21,21 @@ export interface KycVerificationSummary {
 }
 
 /**
+ * Full KYC status payload from GET /kyc/status and mock approve/reject routes.
+ */
+export interface KycStatusView {
+  verified: boolean;
+  kycStatus: KycStatus;
+  latestVerification: KycVerificationSummary | null;
+  canCreateOrder: boolean;
+  canBrowseOrders: boolean;
+  canAcceptOrder: boolean;
+  canChat: boolean;
+  canContact: boolean;
+  canReceivePayout: boolean;
+}
+
+/**
  * High-level KYC gating snapshot derived from User.verified / User.kycStatus.
  * Used by future guards and UI to explain what is blocked until verification.
  */
