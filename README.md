@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users foundation) and **M2 mock KYC** (schema, mock API, SDK, `/app` status panel) are complete. Real Sumsub/provider integration, orders, payments, chat, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, and **M3 Sender/Wayler mode switcher** (frontend-only on `/app`) are complete. Real orders, payments, chat, and admin are future milestones.
 
 ## Tech stack
 
@@ -44,7 +44,7 @@ nvm use                 # Node 20 (reads .nvmrc)
 corepack enable         # pnpm 9
 pnpm install            # installs workspace + generates the lockfile
 
-cp .env.example .env    # fill local values (see M1 / M2 sections below)
+cp .env.example .env    # fill local values (see M1 / M2 / M3 sections below)
 
 pnpm docker:up          # start Postgres 16 (+PostGIS) and Redis 7 in Docker
 pnpm db:generate        # generate the Prisma client
@@ -288,6 +288,41 @@ Invoke-RestMethod -Method GET `
 - **Admin / manual review** — operator tools beyond mock approve/reject
 - **Real order/feed/chat blocking** — enforce KYC gates in orders, marketplace, and chat modules (flags exist; downstream features are not built yet)
 
+## M3 Sender/Wayler mode
+
+Wayly users can act as **Senders** (create delivery requests) or **Waylers** (carry/deliver items). M3 Batch 1 adds a **frontend-only mode switcher** on `/app` — a UI preference, not a security role.
+
+### Current M3 status
+
+| Area                                             | Status                                          |
+| ------------------------------------------------ | ----------------------------------------------- |
+| Sender/Wayler mode switcher on `/app`            | Complete                                        |
+| Mode stored in `localStorage` (`wayly-app-mode`) | Complete                                        |
+| Default mode                                     | **sender**                                      |
+| Sender/Wayler mode is a UI preference            | Yes — **not** a security role                   |
+| Security roles                                   | **USER**, **ADMIN**, **ARBITRATOR** (unchanged) |
+| Backend mode persistence                         | Not implemented                                 |
+| Real order creation / browsing                   | Not implemented                                 |
+
+Prerequisites are the same as M1/M2: `pnpm dev` running and a logged-in user.
+
+### Manual test checklist
+
+- [ ] **Login** at `/login`
+- [ ] Open **`/app`** — mode switcher appears near the top (“Choose how you want to use Wayly”)
+- [ ] Switch **Sender ↔ Wayler** — placeholder dashboard card updates (title, description, button label)
+- [ ] **Refresh the page** — selected mode persists (`localStorage`)
+- [ ] **Change language** — mode switcher and dashboard text translate (8 locales)
+- [ ] Confirm **Create delivery request** / **Browse delivery requests** buttons are **disabled placeholders only** (no real flows)
+
+If KYC is not approved, each mode shows an informational note about verification — this is display-only; no order blocking exists yet.
+
+### Future milestones (Sender/Wayler)
+
+- **Sender mode** will later create real delivery requests
+- **Wayler mode** will later browse and accept delivery requests
+- **KYC, subscription, and payment gates** will apply when those business features are built (flags and notes exist today; enforcement comes with orders)
+
 ## Common scripts
 
 | Command                          | Description                        |
@@ -311,7 +346,7 @@ Invoke-RestMethod -Method GET `
 - **M0 — Foundation:** monorepo, tooling, shared config, design tokens, Docker Compose. ✅
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
-- **M3 — Design system & app shell:** landing, PWA, main screen (role switch + International toggle).
+- **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅ (Batch 1); landing, PWA, International toggle, and real order flows later
 - **M4–M15:** orders, geo/maps, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
