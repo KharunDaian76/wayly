@@ -1,0 +1,20 @@
+{
+  "name": "@wayly/config-tailwind",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./tailwind.preset.ts"
+  },
+  "files": [
+    "tailwind.preset.ts"
+  ],
+  "devDependencies": {
+    "tailwindcss": "^3.4.13",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

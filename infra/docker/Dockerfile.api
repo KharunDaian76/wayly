@@ -1,0 +1,35 @@
+# syntax=docker/dockerfile:1
+#
+# Wayly backend (NestJS) image.
+#
+# The SAME image is reused to run BullMQ workers later (override CMD), and it
+# hosts the webhook receivers (Stripe/Sumsub) and the WebSocket gateway — no new
+# service needed. Production slimming (pnpm deploy/prune) is added in the
+# deployment milestone; this image prioritizes a correct, reproducible build.
+#
+# Build context is the monorepo root:
+#   docker build -f infra/docker/Dockerfile.api -t wayly-api .
+
+FROM node:20-slim AS base
+ENV PNPM_HOME=/pnpm
+ENV PATH=$PNPM_HOME:$PATH
+# OpenSSL + CA certs are required by Prisma's query engine.
+RUN corepack enable \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+FROM base AS build
+COPY . .
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @wayly/api exec prisma generate
+RUN pnpm --filter "@wayly/api..." build
+
+FROM build AS runtime
+ENV NODE_ENV=production
+WORKDIR /app/apps/api
+EXPOSE 4000
+# Liveness:  GET /api/v1/health/live
+# Readiness: GET /api/v1/health/ready
+CMD ["node", "dist/main.js"]

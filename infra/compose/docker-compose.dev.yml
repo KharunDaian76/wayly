@@ -1,0 +1,49 @@
+# Local development backing services for Wayly.
+#
+# Brings up PostgreSQL 16 (with PostGIS) and Redis 7. The `api` and `web` apps
+# run on the host via `pnpm dev` for fast hot-reload; these are the stateful
+# dependencies they connect to. Production infrastructure is intentionally NOT
+# defined here.
+#
+#   Start:  pnpm docker:up      (docker compose -f infra/compose/docker-compose.dev.yml up -d)
+#   Stop:   pnpm docker:down
+name: wayly-dev
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: wayly-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-wayly}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wayly}
+      POSTGRES_DB: ${POSTGRES_DB:-wayly}
+    ports:
+      - '5432:5432'
+    volumes:
+      - wayly_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-wayly} -d ${POSTGRES_DB:-wayly}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: wayly-redis
+    restart: unless-stopped
+    # AOF persistence so cached/session/queue state survives restarts in dev.
+    command: ['redis-server', '--appendonly', 'yes']
+    ports:
+      - '6379:6379'
+    volumes:
+      - wayly_redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  wayly_pgdata:
+  wayly_redisdata:

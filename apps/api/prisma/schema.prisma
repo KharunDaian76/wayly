@@ -1,0 +1,33 @@
+// Wayly — Prisma schema (foundation only).
+//
+// Domain models are introduced from M1 onward (Auth & Users first), followed by
+// KYC, Orders, Payments, Chat, Disputes, etc. Intentionally NO models yet.
+//
+// PostGIS is enabled now because local city-delivery feed/search relies on
+// geographic radius queries (geography(Point)) from M4/M5.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [postgis]
+}
+
+// ---------------------------------------------------------------------------
+// TEMPORARY / INTERNAL — M0 placeholder only.
+//
+// Prisma Client generation requires at least one model. This model exists solely
+// so `prisma generate` succeeds during M0. It is NOT a Wayly domain entity and
+// carries no business meaning. DELETE this model in M1 when the first real
+// models (User, etc.) are introduced.
+// ---------------------------------------------------------------------------
+model M0HealthCheck {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  @@map("_health_check")
+}

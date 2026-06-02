@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+#
+# Wayly frontend (Next.js) image — for container parity / self-hosting.
+# Production web deploys to Vercel (which builds itself); this image is optional
+# and fully exercised in the deployment milestone. Standalone-output slimming is
+# added there.
+#
+# Build context is the monorepo root:
+#   docker build -f infra/docker/Dockerfile.web -t wayly-web .
+
+FROM node:20-alpine AS base
+RUN corepack enable
+WORKDIR /app
+
+FROM base AS build
+COPY . .
+RUN pnpm install --frozen-lockfile
+# NEXT_PUBLIC_* values are inlined at build time; provide real values via build
+# args/secrets in the deployment milestone (defaults are used otherwise).
+RUN pnpm --filter "@wayly/web..." build
+
+FROM build AS runtime
+ENV NODE_ENV=production
+WORKDIR /app/apps/web
+EXPOSE 3000
+CMD ["pnpm", "start"]

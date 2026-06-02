@@ -1,0 +1,12 @@
+{
+  "name": "@wayly/config-tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "nestjs.json",
+    "react-library.json"
+  ]
+}
