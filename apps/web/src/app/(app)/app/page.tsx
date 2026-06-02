@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 import { LanguageSelect } from '@/components/language-select';
+import { ModeSwitcher } from '@/components/app/mode-switcher';
+import { useAppMode } from '@/lib/app-mode/app-mode-context';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
@@ -31,6 +33,7 @@ function flagLabel(value: boolean, yes: string, no: string): string {
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
+  const { mode } = useAppMode();
   const { t } = useI18n();
   const [loggingOut, setLoggingOut] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,6 +128,39 @@ export default function AppHomePage() {
             {error}
           </p>
         ) : null}
+
+        <ModeSwitcher />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {mode === 'sender'
+                ? t('app.mode.senderDashboard.title')
+                : t('app.mode.waylerDashboard.title')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <p className="text-sm text-muted-foreground">
+              {mode === 'sender'
+                ? t('app.mode.senderDashboard.description')
+                : t('app.mode.waylerDashboard.description')}
+            </p>
+            {!kycLoading && !isApproved ? (
+              <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                {mode === 'sender'
+                  ? t('app.mode.senderDashboard.kycRequired')
+                  : t('app.mode.waylerDashboard.kycRequired')}
+              </p>
+            ) : null}
+            <div>
+              <Button disabled>
+                {mode === 'sender'
+                  ? t('app.mode.senderDashboard.createRequest')
+                  : t('app.mode.waylerDashboard.browseRequests')}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader>

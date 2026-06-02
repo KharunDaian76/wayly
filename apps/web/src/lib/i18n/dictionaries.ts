@@ -59,6 +59,21 @@ const en = {
   'app.kycPanel.actionFailed': 'Verification action failed. Please try again.',
   'app.kycPanel.devOnly': 'Development only',
   'app.kycPanel.approvedHelper': 'Verification is approved. No further action is needed.',
+  'app.mode.title': 'Choose how you want to use Wayly',
+  'app.mode.sender': 'Sender mode',
+  'app.mode.wayler': 'Wayler mode',
+  'app.mode.senderDescription': 'Create delivery requests and manage packages.',
+  'app.mode.waylerDescription': 'Browse delivery requests and accept trips.',
+  'app.mode.senderDashboard.title': 'Sender dashboard',
+  'app.mode.senderDashboard.description':
+    'Create delivery requests, track trips, and manage packages.',
+  'app.mode.senderDashboard.createRequest': 'Create delivery request',
+  'app.mode.senderDashboard.kycRequired': 'Verification is required before creating deliveries.',
+  'app.mode.waylerDashboard.title': 'Wayler dashboard',
+  'app.mode.waylerDashboard.description': 'Browse available delivery requests and accept trips.',
+  'app.mode.waylerDashboard.browseRequests': 'Browse delivery requests',
+  'app.mode.waylerDashboard.kycRequired':
+    'Verification is required before browsing or accepting orders.',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -123,6 +138,20 @@ const ru: Dictionary = {
   'app.kycPanel.actionFailed': 'Не удалось выполнить действие. Попробуйте снова.',
   'app.kycPanel.devOnly': 'Только для разработки',
   'app.kycPanel.approvedHelper': 'Верификация одобрена. Дальнейшие действия не требуются.',
+  'app.mode.title': 'Выберите, как использовать Wayly',
+  'app.mode.sender': 'Режим отправителя',
+  'app.mode.wayler': 'Режим курьера',
+  'app.mode.senderDescription': 'Создавайте заявки на доставку и управляйте посылками.',
+  'app.mode.waylerDescription': 'Просматривайте заявки и принимайте поездки.',
+  'app.mode.senderDashboard.title': 'Панель отправителя',
+  'app.mode.senderDashboard.description':
+    'Создавайте заявки на доставку, отслеживайте поездки и управляйте посылками.',
+  'app.mode.senderDashboard.createRequest': 'Создать заявку на доставку',
+  'app.mode.senderDashboard.kycRequired': 'Для создания доставок требуется верификация.',
+  'app.mode.waylerDashboard.title': 'Панель курьера',
+  'app.mode.waylerDashboard.description': 'Просматривайте доступные заявки и принимайте поездки.',
+  'app.mode.waylerDashboard.browseRequests': 'Просмотр заявок на доставку',
+  'app.mode.waylerDashboard.kycRequired': 'Для просмотра и принятия заказов требуется верификация.',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -183,6 +212,22 @@ const es: Dictionary = {
   'app.kycPanel.actionFailed': 'Error en la verificación. Inténtalo de nuevo.',
   'app.kycPanel.devOnly': 'Solo desarrollo',
   'app.kycPanel.approvedHelper': 'Verificación aprobada. No se necesita ninguna acción.',
+  'app.mode.title': 'Elige cómo quieres usar Wayly',
+  'app.mode.sender': 'Modo remitente',
+  'app.mode.wayler': 'Modo repartidor',
+  'app.mode.senderDescription': 'Crea solicitudes de entrega y gestiona paquetes.',
+  'app.mode.waylerDescription': 'Explora solicitudes y acepta viajes de entrega.',
+  'app.mode.senderDashboard.title': 'Panel de remitente',
+  'app.mode.senderDashboard.description':
+    'Crea solicitudes de entrega, sigue viajes y gestiona paquetes.',
+  'app.mode.senderDashboard.createRequest': 'Crear solicitud de entrega',
+  'app.mode.senderDashboard.kycRequired': 'Se requiere verificación antes de crear entregas.',
+  'app.mode.waylerDashboard.title': 'Panel de repartidor',
+  'app.mode.waylerDashboard.description':
+    'Explora solicitudes de entrega disponibles y acepta viajes.',
+  'app.mode.waylerDashboard.browseRequests': 'Explorar solicitudes de entrega',
+  'app.mode.waylerDashboard.kycRequired':
+    'Se requiere verificación antes de explorar o aceptar pedidos.',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -243,6 +288,23 @@ const fr: Dictionary = {
   'app.kycPanel.actionFailed': "Échec de l'action. Veuillez réessayer.",
   'app.kycPanel.devOnly': 'Développement uniquement',
   'app.kycPanel.approvedHelper': 'Vérification approuvée. Aucune action supplémentaire requise.',
+  'app.mode.title': 'Choisissez comment utiliser Wayly',
+  'app.mode.sender': 'Mode expéditeur',
+  'app.mode.wayler': 'Mode livreur',
+  'app.mode.senderDescription': 'Créez des demandes de livraison et gérez vos colis.',
+  'app.mode.waylerDescription': 'Parcourez les demandes et acceptez des trajets.',
+  'app.mode.senderDashboard.title': 'Tableau de bord expéditeur',
+  'app.mode.senderDashboard.description':
+    'Créez des demandes de livraison, suivez les trajets et gérez vos colis.',
+  'app.mode.senderDashboard.createRequest': 'Créer une demande de livraison',
+  'app.mode.senderDashboard.kycRequired':
+    'La vérification est requise avant de créer des livraisons.',
+  'app.mode.waylerDashboard.title': 'Tableau de bord livreur',
+  'app.mode.waylerDashboard.description':
+    'Parcourez les demandes de livraison disponibles et acceptez des trajets.',
+  'app.mode.waylerDashboard.browseRequests': 'Parcourir les demandes de livraison',
+  'app.mode.waylerDashboard.kycRequired':
+    'La vérification est requise avant de parcourir ou accepter des commandes.',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -304,6 +366,23 @@ const de: Dictionary = {
   'app.kycPanel.devOnly': 'Nur Entwicklung',
   'app.kycPanel.approvedHelper':
     'Verifizierung genehmigt. Es sind keine weiteren Schritte erforderlich.',
+  'app.mode.title': 'Wählen Sie, wie Sie Wayly nutzen möchten',
+  'app.mode.sender': 'Absender-Modus',
+  'app.mode.wayler': 'Wayler-Modus',
+  'app.mode.senderDescription': 'Lieferanfragen erstellen und Pakete verwalten.',
+  'app.mode.waylerDescription': 'Anfragen durchsuchen und Fahrten annehmen.',
+  'app.mode.senderDashboard.title': 'Absender-Dashboard',
+  'app.mode.senderDashboard.description':
+    'Lieferanfragen erstellen, Fahrten verfolgen und Pakete verwalten.',
+  'app.mode.senderDashboard.createRequest': 'Lieferanfrage erstellen',
+  'app.mode.senderDashboard.kycRequired':
+    'Verifizierung ist erforderlich, bevor Lieferungen erstellt werden können.',
+  'app.mode.waylerDashboard.title': 'Wayler-Dashboard',
+  'app.mode.waylerDashboard.description':
+    'Verfügbare Lieferanfragen durchsuchen und Fahrten annehmen.',
+  'app.mode.waylerDashboard.browseRequests': 'Lieferanfragen durchsuchen',
+  'app.mode.waylerDashboard.kycRequired':
+    'Verifizierung ist erforderlich, bevor Aufträge durchsucht oder angenommen werden können.',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -364,6 +443,22 @@ const tr: Dictionary = {
   'app.kycPanel.actionFailed': 'Doğrulama işlemi başarısız. Tekrar deneyin.',
   'app.kycPanel.devOnly': 'Yalnızca geliştirme',
   'app.kycPanel.approvedHelper': 'Doğrulama onaylandı. Başka bir işlem gerekmez.',
+  'app.mode.title': "Wayly'yi nasıl kullanmak istediğinizi seçin",
+  'app.mode.sender': 'Gönderici modu',
+  'app.mode.wayler': 'Wayler modu',
+  'app.mode.senderDescription': 'Teslimat talepleri oluşturun ve paketleri yönetin.',
+  'app.mode.waylerDescription': 'Taleplere göz atın ve seyahatleri kabul edin.',
+  'app.mode.senderDashboard.title': 'Gönderici paneli',
+  'app.mode.senderDashboard.description':
+    'Teslimat talepleri oluşturun, seyahatleri takip edin ve paketleri yönetin.',
+  'app.mode.senderDashboard.createRequest': 'Teslimat talebi oluştur',
+  'app.mode.senderDashboard.kycRequired': 'Teslimat oluşturmadan önce doğrulama gereklidir.',
+  'app.mode.waylerDashboard.title': 'Wayler paneli',
+  'app.mode.waylerDashboard.description':
+    'Mevcut teslimat taleplerine göz atın ve seyahatleri kabul edin.',
+  'app.mode.waylerDashboard.browseRequests': 'Teslimat taleplerine göz at',
+  'app.mode.waylerDashboard.kycRequired':
+    'Siparişlere göz atmadan veya kabul etmeden önce doğrulama gereklidir.',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -424,6 +519,19 @@ const ar: Dictionary = {
   'app.kycPanel.actionFailed': 'فشل إجراء التحقق. حاول مرة أخرى.',
   'app.kycPanel.devOnly': 'للتطوير فقط',
   'app.kycPanel.approvedHelper': 'تمت الموافقة على التحقق. لا يلزم اتخاذ أي إجراء آخر.',
+  'app.mode.title': 'اختر كيف تريد استخدام Wayly',
+  'app.mode.sender': 'وضع المرسل',
+  'app.mode.wayler': 'وضع الناقل',
+  'app.mode.senderDescription': 'أنشئ طلبات التوصيل وأدر الطرود.',
+  'app.mode.waylerDescription': 'تصفح الطلبات واقبل رحلات التوصيل.',
+  'app.mode.senderDashboard.title': 'لوحة المرسل',
+  'app.mode.senderDashboard.description': 'أنشئ طلبات التوصيل، تتبع الرحلات، وأدر الطرود.',
+  'app.mode.senderDashboard.createRequest': 'إنشاء طلب توصيل',
+  'app.mode.senderDashboard.kycRequired': 'التحقق مطلوب قبل إنشاء عمليات التوصيل.',
+  'app.mode.waylerDashboard.title': 'لوحة الناقل',
+  'app.mode.waylerDashboard.description': 'تصفح طلبات التوصيل المتاحة واقبل الرحلات.',
+  'app.mode.waylerDashboard.browseRequests': 'تصفح طلبات التوصيل',
+  'app.mode.waylerDashboard.kycRequired': 'التحقق مطلوب قبل تصفح أو قبول الطلبات.',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -483,6 +591,19 @@ const zh: Dictionary = {
   'app.kycPanel.actionFailed': '验证操作失败，请重试。',
   'app.kycPanel.devOnly': '仅开发环境',
   'app.kycPanel.approvedHelper': '验证已通过，无需进一步操作。',
+  'app.mode.title': '选择您使用 Wayly 的方式',
+  'app.mode.sender': '发件人模式',
+  'app.mode.wayler': '配送员模式',
+  'app.mode.senderDescription': '创建配送请求并管理包裹。',
+  'app.mode.waylerDescription': '浏览配送请求并接受行程。',
+  'app.mode.senderDashboard.title': '发件人面板',
+  'app.mode.senderDashboard.description': '创建配送请求、跟踪行程并管理包裹。',
+  'app.mode.senderDashboard.createRequest': '创建配送请求',
+  'app.mode.senderDashboard.kycRequired': '创建配送前需要完成验证。',
+  'app.mode.waylerDashboard.title': '配送员面板',
+  'app.mode.waylerDashboard.description': '浏览可用的配送请求并接受行程。',
+  'app.mode.waylerDashboard.browseRequests': '浏览配送请求',
+  'app.mode.waylerDashboard.kycRequired': '浏览或接受订单前需要完成验证。',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 
