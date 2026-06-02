@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users foundation) — auth backend/frontend, password visibility toggle, and basic i18n are complete. KYC, orders, payments, chat, and admin are future milestones.
+> **Status:** M1 (Auth & Users foundation) and **M2 mock KYC** (schema, mock API, SDK, `/app` status panel) are complete. Real Sumsub/provider integration, orders, payments, chat, and admin are future milestones.
 
 ## Tech stack
 
@@ -44,7 +44,7 @@ nvm use                 # Node 20 (reads .nvmrc)
 corepack enable         # pnpm 9
 pnpm install            # installs workspace + generates the lockfile
 
-cp .env.example .env    # fill local values (see M1 section below)
+cp .env.example .env    # fill local values (see M1 / M2 sections below)
 
 pnpm docker:up          # start Postgres 16 (+PostGIS) and Redis 7 in Docker
 pnpm db:generate        # generate the Prisma client
@@ -168,7 +168,8 @@ Marketing landing page (`/`) is not translated yet.
 | Auth frontend (`/login`, `/register`, `/app`, session restore) | Complete                        |
 | Password visibility toggle                                     | Complete                        |
 | Basic language support (8 locales, localStorage preference)    | Complete                        |
-| KYC provider integration                                       | Not started (M2+)               |
+| KYC mock flow (schema, API, SDK, `/app` panel)                 | Complete (M2)                   |
+| Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
 | Orders, payments, chat, admin                                  | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -188,6 +189,104 @@ The current frontend is a **functional foundation**, not final premium design.
 > The `Dockerfile.api` / `Dockerfile.web` images are for container parity and
 > future deployment (API → Render, web → Vercel); local dev uses the host + the
 > Compose services above.
+
+## M2 KYC mock testing
+
+This section covers the **mock KYC gate** delivered in M2: Prisma schema, backend mock endpoints, SDK methods, and the KYC status panel on `/app`. There is **no real Sumsub (or other provider) integration yet** — local dev uses a mock approve/reject flow.
+
+### Current M2 KYC status
+
+| Area                                       | Status                              |
+| ------------------------------------------ | ----------------------------------- |
+| KYC schema (`KycVerification`, user flags) | Complete                            |
+| Mock backend KYC endpoints                 | Complete                            |
+| SDK KYC methods (`api.kyc.*`)              | Complete                            |
+| `/app` KYC status panel                    | Complete                            |
+| Real Sumsub / provider integration         | Not implemented (future batch)      |
+| File upload, webhooks, admin review UI     | Not implemented (future milestones) |
+
+Prerequisites are the same as M1: Docker running, migrations applied, `pnpm dev` up, and a registered user (or use your existing account).
+
+### Backend KYC routes
+
+All routes require a valid JWT (`Authorization: Bearer <accessToken>`). They are mounted under `/api/v1`:
+
+| Method | Path                       | Description                                     |
+| ------ | -------------------------- | ----------------------------------------------- |
+| GET    | `/api/v1/kyc/status`       | Current KYC status, latest verification, flags  |
+| POST   | `/api/v1/kyc/start`        | Start or resume mock verification (→ `PENDING`) |
+| POST   | `/api/v1/kyc/mock/approve` | **Dev only** — approve pending verification     |
+| POST   | `/api/v1/kyc/mock/reject`  | **Dev only** — reject pending verification      |
+
+Interactive docs: http://localhost:4000/docs (tag **kyc**).
+
+### Frontend manual testing
+
+Use this after M1 setup (`pnpm dev`, migrations, registered user):
+
+- [ ] **Login** at `/login`
+- [ ] Open **`/app`** — KYC status panel is visible (status, latest verification, access flags)
+- [ ] Click **Start verification** — status moves to **PENDING** (mock buttons become enabled in dev)
+- [ ] Confirm **PENDING** on the panel and in latest verification
+- [ ] Click **Mock approve** (development only) — status becomes **APPROVED**
+- [ ] Confirm **APPROVED** and all feature flags show **Yes** (`canCreateOrder`, `canBrowseOrders`, `canAcceptOrder`, `canChat`, `canContact`, `canReceivePayout`)
+- [ ] **Refresh the page** — status persists; Start and mock buttons are disabled with the approved helper text
+
+To test reject instead of approve: after **Start verification**, use **Mock reject** and confirm status becomes **REJECTED** and flags stay **No**.
+
+### PowerShell manual API test
+
+Replace `you@example.com` and `YourPassword1!` with a user you registered locally.
+
+```powershell
+# 1. Login and capture access token
+$login = Invoke-RestMethod -Method POST `
+  -Uri "http://localhost:4000/api/v1/auth/login" `
+  -ContentType "application/json" `
+  -Body '{"email":"you@example.com","password":"YourPassword1!"}'
+
+$token = $login.accessToken
+$headers = @{ Authorization = "Bearer $token" }
+
+# 2. GET KYC status
+Invoke-RestMethod -Method GET `
+  -Uri "http://localhost:4000/api/v1/kyc/status" `
+  -Headers $headers
+
+# 3. POST start (optional body: country, levelName)
+Invoke-RestMethod -Method POST `
+  -Uri "http://localhost:4000/api/v1/kyc/start" `
+  -ContentType "application/json" `
+  -Headers $headers `
+  -Body '{}'
+
+# 4. POST mock approve (development only)
+Invoke-RestMethod -Method POST `
+  -Uri "http://localhost:4000/api/v1/kyc/mock/approve" `
+  -Headers $headers
+
+# 5. GET status again — expect kycStatus APPROVED, verified true, flags true
+Invoke-RestMethod -Method GET `
+  -Uri "http://localhost:4000/api/v1/kyc/status" `
+  -Headers $headers
+```
+
+### Troubleshooting
+
+| Problem                                                | What to try                                                                                                           |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| KYC status/API fails                                   | Confirm **Docker Desktop** is running, `pnpm docker:up` succeeded, and **`pnpm dev`** is up                           |
+| `http://localhost:4000/docs` does not load             | The **API is not running** — start Docker, then `pnpm dev` from the repo root                                         |
+| Mock approve: _No pending KYC verification to approve_ | User is already **APPROVED**, or there is **no PENDING** verification — run **start** first, or register a fresh user |
+| Mock reject: _No pending KYC verification to reject_   | Same as above — need a **PENDING** verification before mock reject                                                    |
+| Mock approve/reject return **404** in production       | Expected — mock routes are **development-only** and must not be exposed in production                                 |
+
+### Future milestones (KYC)
+
+- **Real Sumsub integration** — applicant creation, SDK/token flow, production provider
+- **File upload & webhooks** — document submission and async provider callbacks
+- **Admin / manual review** — operator tools beyond mock approve/reject
+- **Real order/feed/chat blocking** — enforce KYC gates in orders, marketplace, and chat modules (flags exist; downstream features are not built yet)
 
 ## Common scripts
 
@@ -211,7 +310,7 @@ The current frontend is a **functional foundation**, not final premium design.
 
 - **M0 — Foundation:** monorepo, tooling, shared config, design tokens, Docker Compose. ✅
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
-- **M2 — KYC gate (mocked):** phone OTP + identity/liveness behind mock providers; `verified` flag.
+- **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** landing, PWA, main screen (role switch + International toggle).
 - **M4–M15:** orders, geo/maps, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider swap, hardening, launch.
 
