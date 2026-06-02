@@ -2,7 +2,8 @@
 //
 // M1: User, RefreshToken, PasswordResetToken.
 // M2 Batch 1: KycVerification (provider integration lands in a later batch).
-// Orders/Payments/Chat/etc. arrive in later milestones.
+// M4 Batch 1: DeliveryOrder foundation (API/UI land in later batches).
+// Payments/Chat/Disputes/etc. arrive in later milestones.
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
 // geographic radius queries (geography(Point)) from M4/M5.
@@ -33,6 +34,29 @@ enum KycStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+// Delivery request lifecycle (M4 foundation; transitions enforced in later batches).
+enum DeliveryOrderStatus {
+  DRAFT
+  OPEN
+  ACCEPTED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+  DISPUTED
+}
+
+enum DeliveryOrderType {
+  LOCAL
+  INTERNATIONAL
+}
+
+enum PackageSize {
+  SMALL
+  MEDIUM
+  LARGE
+  OVERSIZED
 }
 
 // --- Models ------------------------------------------------------------------
@@ -67,6 +91,8 @@ model User {
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
   kycVerifications    KycVerification[]
+  sentDeliveryOrders     DeliveryOrder[] @relation("SentDeliveryOrders")
+  acceptedDeliveryOrders DeliveryOrder[] @relation("AcceptedDeliveryOrders")
 
   @@index([deletedAt])
   @@map("users")
@@ -131,4 +157,59 @@ model KycVerification {
   @@index([status])
   @@index([createdAt])
   @@map("kyc_verifications")
+}
+
+// P2P delivery request posted by a Sender; optionally accepted by a Wayler (M4 foundation).
+model DeliveryOrder {
+  id               String              @id @default(uuid()) @db.Uuid
+  senderId         String              @db.Uuid
+  sender           User                @relation("SentDeliveryOrders", fields: [senderId], references: [id], onDelete: Restrict)
+  acceptedWaylerId String?             @db.Uuid
+  acceptedWayler   User?               @relation("AcceptedDeliveryOrders", fields: [acceptedWaylerId], references: [id], onDelete: SetNull)
+  status           DeliveryOrderStatus @default(DRAFT)
+  type             DeliveryOrderType
+  title            String
+  description      String?
+  packageSize      PackageSize?
+  packageWeightKg  Decimal?            @db.Decimal(8, 2)
+
+  pickupCountry     String?
+  pickupCity        String?
+  pickupAddressText String?
+  pickupLat         Decimal? @db.Decimal(10, 7)
+  pickupLng         Decimal? @db.Decimal(10, 7)
+
+  dropoffCountry     String?
+  dropoffCity        String?
+  dropoffAddressText String?
+  dropoffLat         Decimal? @db.Decimal(10, 7)
+  dropoffLng         Decimal? @db.Decimal(10, 7)
+
+  pickupDateFrom   DateTime?
+  pickupDateTo     DateTime?
+  deliveryDeadline DateTime?
+
+  currency             String   @default("USD")
+  offeredRewardAmount  Decimal? @db.Decimal(10, 2)
+  escrowRequired       Boolean  @default(true)
+  notes                String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  acceptedAt  DateTime?
+  cancelledAt DateTime?
+  deliveredAt DateTime?
+
+  @@index([senderId])
+  @@index([acceptedWaylerId])
+  @@index([status])
+  @@index([type])
+  @@index([pickupCountry])
+  @@index([pickupCity])
+  @@index([dropoffCountry])
+  @@index([dropoffCity])
+  @@index([createdAt])
+  @@index([publishedAt])
+  @@map("delivery_orders")
 }

@@ -74,3 +74,31 @@ export const NotificationType = {
   SYSTEM: 'SYSTEM',
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
+/** Delivery request lifecycle (M4 foundation). */
+export const DeliveryOrderStatus = {
+  DRAFT: 'DRAFT',
+  OPEN: 'OPEN',
+  ACCEPTED: 'ACCEPTED',
+  IN_TRANSIT: 'IN_TRANSIT',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED',
+  DISPUTED: 'DISPUTED',
+} as const;
+export type DeliveryOrderStatus = (typeof DeliveryOrderStatus)[keyof typeof DeliveryOrderStatus];
+
+/** Local same-city vs international/intercity delivery request. */
+export const DeliveryOrderType = {
+  LOCAL: 'LOCAL',
+  INTERNATIONAL: 'INTERNATIONAL',
+} as const;
+export type DeliveryOrderType = (typeof DeliveryOrderType)[keyof typeof DeliveryOrderType];
+
+/** Approximate package size category for a delivery request. */
+export const PackageSize = {
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+  OVERSIZED: 'OVERSIZED',
+} as const;
+export type PackageSize = (typeof PackageSize)[keyof typeof PackageSize];
