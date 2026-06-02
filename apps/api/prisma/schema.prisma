@@ -1,7 +1,8 @@
 // Wayly — Prisma schema.
 //
-// M1 introduces the first real domain models: User, RefreshToken, and
-// PasswordResetToken. KYC/Orders/Payments/Chat/etc. arrive in later milestones.
+// M1: User, RefreshToken, PasswordResetToken.
+// M2 Batch 1: KycVerification (provider integration lands in a later batch).
+// Orders/Payments/Chat/etc. arrive in later milestones.
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
 // geographic radius queries (geography(Point)) from M4/M5.
@@ -65,6 +66,7 @@ model User {
 
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
+  kycVerifications    KycVerification[]
 
   @@index([deletedAt])
   @@map("users")
@@ -102,4 +104,31 @@ model PasswordResetToken {
 
   @@index([userId])
   @@map("password_reset_tokens")
+}
+
+// KYC verification attempts (Sumsub/manual providers wired in a later batch).
+// User.kycStatus / User.verified remain denormalized quick-access fields.
+model KycVerification {
+  id                  String    @id @default(uuid()) @db.Uuid
+  userId              String    @db.Uuid
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status              KycStatus @default(PENDING)
+  provider            String?
+  providerApplicantId String?   @unique
+  providerReviewId    String?
+  levelName           String?
+  country             String?
+  documentType        String?
+  rejectionReason     String?
+  rawProviderPayload  Json?
+  submittedAt         DateTime?
+  reviewedAt          DateTime?
+  expiresAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("kyc_verifications")
 }
