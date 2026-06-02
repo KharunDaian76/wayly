@@ -14,6 +14,12 @@ export function setupSwagger(app: INestApplication): void {
     .setDescription('Wayly — cross-platform P2P delivery platform. Backend API.')
     .setVersion('1.0')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
+    .addCookieAuth('refresh-token', {
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'wayly_refresh',
+      description: 'httpOnly refresh token cookie (set by login/register, rotated on refresh)',
+    })
     .addTag('health', 'Liveness & readiness probes')
     .addTag('auth', 'Authentication & sessions (M1)')
     .addTag('users', 'User profiles & GDPR deletion (M1)')

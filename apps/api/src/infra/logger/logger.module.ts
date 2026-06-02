@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 
 import { AppConfigModule } from '../../config/config.module';
@@ -14,7 +14,11 @@ import { AppConfigService } from '../../config/config.service';
  * - Redaction: secrets and PII (auth headers, cookies, tokens, passwords, card
  *   fields) are stripped before anything is written.
  * - Dev: human-readable pretty logs. Prod: JSON for log aggregation.
+ *
+ * Marked @Global so feature modules (Auth, Users, …) can inject context loggers
+ * via @InjectPinoLogger without re-importing this module in every feature.
  */
+@Global()
 @Module({
   imports: [
     PinoLoggerModule.forRootAsync({

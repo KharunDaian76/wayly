@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { Logger } from 'nestjs-pino';
 
@@ -21,8 +22,8 @@ async function bootstrap(): Promise<void> {
   // --- Security middleware ---
   app.use(helmet());
   app.use(compression());
+  app.use(cookieParser());
   app.enableCors({ origin: [config.core.webUrl], credentials: true });
-  // TODO(M1+): rate limiting (@nestjs/throttler) and CSRF protection.
 
   // --- API routing: /api/v1/... ---
   app.setGlobalPrefix('api');

@@ -44,6 +44,27 @@ export class AppConfigService {
     };
   }
 
+  get auth() {
+    return {
+      cookieName: this.get('AUTH_COOKIE_NAME'),
+      passwordResetTtl: this.get('PASSWORD_RESET_TTL'),
+      /** Refresh cookie flags — strict in production, http-friendly in local dev. */
+      refreshCookie: {
+        httpOnly: true as const,
+        secure: this.isProduction,
+        sameSite: (this.isProduction ? 'none' : 'lax') as 'none' | 'lax',
+        path: '/api/v1/auth',
+      },
+    };
+  }
+
+  get throttle() {
+    return {
+      ttl: this.get('THROTTLE_TTL'),
+      limit: this.get('THROTTLE_LIMIT'),
+    };
+  }
+
   get database() {
     return {
       url: this.get('DATABASE_URL'),

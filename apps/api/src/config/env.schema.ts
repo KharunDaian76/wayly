@@ -25,6 +25,10 @@ export const envSchema = z
     JWT_REFRESH_SECRET: z.string().min(16),
     JWT_ACCESS_TTL: z.string().default('15m'),
     JWT_REFRESH_TTL: z.string().default('30d'),
+    AUTH_COOKIE_NAME: z.string().default('wayly_refresh'),
+    PASSWORD_RESET_TTL: z.string().default('1h'),
+    THROTTLE_TTL: z.coerce.number().int().positive().default(60_000),
+    THROTTLE_LIMIT: z.coerce.number().int().positive().default(100),
 
     // --- Database ---
     DATABASE_URL: z.string().url(),
