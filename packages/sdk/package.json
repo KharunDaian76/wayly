@@ -28,6 +28,9 @@
     "lint": "eslint \"src/**/*.ts\" --max-warnings 0",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@wayly/types": "workspace:*"
+  },
   "devDependencies": {
     "@wayly/config-eslint": "workspace:*",
     "@wayly/config-tsconfig": "workspace:*",

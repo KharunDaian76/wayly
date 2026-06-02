@@ -1,11 +1,11 @@
 import { createApiClient } from '@wayly/sdk';
 
+import { getAccessToken } from '@/lib/auth/token-store';
+
 import { clientEnv } from './env';
 
-/**
- * Configured Wayly API client (singleton for the browser).
- * Auth-token injection is added in M1 once sessions exist.
- */
+/** Configured Wayly API client (singleton for the browser). */
 export const api = createApiClient({
   baseUrl: clientEnv.apiUrl,
+  getAuthToken: () => getAccessToken(),
 });

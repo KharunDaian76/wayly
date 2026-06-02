@@ -27,15 +27,15 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          {/* Auth routes are wired in M1; placeholders for now. */}
+          {/* Auth routes (M1). */}
           <Link
-            href="#"
+            href="/login"
             className="hidden rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary sm:inline-flex"
           >
             Sign in
           </Link>
           <Link
-            href="#"
+            href="/register"
             className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
           >
             Get started

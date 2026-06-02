@@ -20,6 +20,10 @@ export interface RequestOptions {
   query?: Record<string, string | number | boolean | undefined>;
   /** Non-2xx statuses to treat as success (e.g. 503 for health checks). */
   acceptStatuses?: number[];
+  /** Send cookies (required for httpOnly refresh token). Defaults to `include`. */
+  credentials?: RequestCredentials;
+  /** Explicit Bearer token; overrides `getAuthToken` when set (including `null`). */
+  accessToken?: string | null;
 }
 
 /** Shape returned by the backend health endpoints (Terminus). */

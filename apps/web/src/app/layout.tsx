@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 
-import { ThemeProvider } from '@/components/theme-provider';
+import { Providers } from '@/components/providers';
 import { siteConfig } from '@/config/site';
 import { fontDisplay, fontSans } from '@/lib/fonts';
 
@@ -49,14 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${fontSans.variable} ${fontDisplay.variable}`}
     >
       <body className="min-h-dvh font-sans">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

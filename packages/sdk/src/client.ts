@@ -1,6 +1,9 @@
+import { createAuthApi } from './auth';
+import type { AuthApi, UsersApi } from './auth.types';
 import { ApiError } from './errors';
 import { createHealthApi, type HealthApi } from './health';
 import type { ApiClientOptions, RequestOptions } from './types';
+import { createUsersApi } from './users';
 
 const API_PREFIX = '/api/v1';
 
@@ -18,6 +21,12 @@ export class ApiClient {
   /** Health endpoint group. */
   readonly health: HealthApi;
 
+  /** Auth endpoints (cookie + Bearer access token). */
+  readonly auth: AuthApi;
+
+  /** Current-user profile endpoints. */
+  readonly users: UsersApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -33,10 +42,21 @@ export class ApiClient {
     this.fetchImpl = options.fetch ? options.fetch : baseFetch.bind(globalThis);
 
     this.health = createHealthApi((path, opts) => this.request(path, opts));
+    this.auth = createAuthApi((path, opts) => this.request(path, opts));
+    this.users = createUsersApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-    const { method = 'GET', body, headers, signal, query, acceptStatuses = [] } = options;
+    const {
+      method = 'GET',
+      body,
+      headers,
+      signal,
+      query,
+      acceptStatuses = [],
+      credentials = 'include',
+      accessToken: explicitToken,
+    } = options;
 
     const url = new URL(`${this.baseUrl}${API_PREFIX}${path}`);
     if (query) {
@@ -54,7 +74,12 @@ export class ApiClient {
       finalHeaders['content-type'] = 'application/json';
     }
 
-    const token = this.getAuthToken ? await this.getAuthToken() : undefined;
+    const token =
+      explicitToken !== undefined
+        ? explicitToken
+        : this.getAuthToken
+          ? await this.getAuthToken()
+          : undefined;
     if (token) {
       finalHeaders.authorization = `Bearer ${token}`;
     }
@@ -64,6 +89,7 @@ export class ApiClient {
       headers: finalHeaders,
       body: body !== undefined ? JSON.stringify(body) : undefined,
       signal,
+      credentials,
     });
 
     const isJson = response.headers.get('content-type')?.includes('application/json');

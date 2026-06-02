@@ -195,9 +195,15 @@ importers:
       '@wayly/sdk':
         specifier: workspace:*
         version: link:../../packages/sdk
+      '@wayly/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@wayly/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@wayly/validation':
+        specifier: workspace:*
+        version: link:../../packages/validation
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -312,6 +318,10 @@ importers:
   packages/config-tsconfig: {}
 
   packages/sdk:
+    dependencies:
+      '@wayly/types':
+        specifier: workspace:*
+        version: link:../types
     devDependencies:
       '@wayly/config-eslint':
         specifier: workspace:*
