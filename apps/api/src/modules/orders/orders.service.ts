@@ -1,0 +1,132 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  DeliveryOrderStatus as PrismaDeliveryOrderStatus,
+  DeliveryOrderType as PrismaDeliveryOrderType,
+  Prisma,
+} from '@prisma/client';
+import type { DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
+import { DeliveryOrderStatus } from '@wayly/types';
+import type { CreateDeliveryOrderInput, DeliveryOrderQueryInput } from '@wayly/validation';
+
+import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
+import type { RequestUser } from '../../common/types/request-user.type';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+
+import { toDeliveryOrderDetail, toDeliveryOrderSummary } from './orders.mapper';
+
+export interface OrdersListQuery extends DeliveryOrderQueryInput {
+  page: number;
+}
+
+export interface DeliveryOrderListResult {
+  items: DeliveryOrderSummary[];
+  page: number;
+  limit: number;
+  total: number;
+}
+
+@Injectable()
+export class OrdersService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(user: RequestUser, input: CreateDeliveryOrderInput): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.create({
+      data: this.toCreateData(user.id, input),
+    });
+
+    return toDeliveryOrderDetail(record);
+  }
+
+  async list(user: RequestUser, query: OrdersListQuery): Promise<DeliveryOrderListResult> {
+    requireKycApproved(user);
+
+    const status = query.status ?? DeliveryOrderStatus.OPEN;
+    const where = this.buildListWhere(query, status);
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.deliveryOrder.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+      }),
+      this.prisma.deliveryOrder.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toDeliveryOrderSummary),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
+  }
+
+  async getById(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    return toDeliveryOrderDetail(record);
+  }
+
+  private buildListWhere(
+    query: OrdersListQuery,
+    status: DeliveryOrderStatus,
+  ): Prisma.DeliveryOrderWhereInput {
+    return {
+      status: status as PrismaDeliveryOrderStatus,
+      ...(query.type ? { type: query.type } : {}),
+      ...(query.pickupCountry ? { pickupCountry: query.pickupCountry } : {}),
+      ...(query.pickupCity ? { pickupCity: query.pickupCity } : {}),
+      ...(query.dropoffCountry ? { dropoffCountry: query.dropoffCountry } : {}),
+      ...(query.dropoffCity ? { dropoffCity: query.dropoffCity } : {}),
+    };
+  }
+
+  private toCreateData(
+    senderId: string,
+    input: CreateDeliveryOrderInput,
+  ): Prisma.DeliveryOrderUncheckedCreateInput {
+    const data: Prisma.DeliveryOrderUncheckedCreateInput = {
+      senderId,
+      status: PrismaDeliveryOrderStatus.DRAFT,
+      type: input.type as PrismaDeliveryOrderType,
+      title: input.title,
+    };
+
+    if (input.description !== undefined) data.description = input.description;
+    if (input.packageSize !== undefined) data.packageSize = input.packageSize;
+    if (input.packageWeightKg !== undefined) {
+      data.packageWeightKg = new Prisma.Decimal(input.packageWeightKg);
+    }
+    if (input.pickupCountry !== undefined) data.pickupCountry = input.pickupCountry;
+    if (input.pickupCity !== undefined) data.pickupCity = input.pickupCity;
+    if (input.pickupAddressText !== undefined) data.pickupAddressText = input.pickupAddressText;
+    if (input.pickupLat !== undefined) data.pickupLat = new Prisma.Decimal(input.pickupLat);
+    if (input.pickupLng !== undefined) data.pickupLng = new Prisma.Decimal(input.pickupLng);
+    if (input.dropoffCountry !== undefined) data.dropoffCountry = input.dropoffCountry;
+    if (input.dropoffCity !== undefined) data.dropoffCity = input.dropoffCity;
+    if (input.dropoffAddressText !== undefined) data.dropoffAddressText = input.dropoffAddressText;
+    if (input.dropoffLat !== undefined) data.dropoffLat = new Prisma.Decimal(input.dropoffLat);
+    if (input.dropoffLng !== undefined) data.dropoffLng = new Prisma.Decimal(input.dropoffLng);
+    if (input.pickupDateFrom !== undefined) data.pickupDateFrom = new Date(input.pickupDateFrom);
+    if (input.pickupDateTo !== undefined) data.pickupDateTo = new Date(input.pickupDateTo);
+    if (input.deliveryDeadline !== undefined) {
+      data.deliveryDeadline = new Date(input.deliveryDeadline);
+    }
+    if (input.currency !== undefined) data.currency = input.currency;
+    if (input.offeredRewardAmount !== undefined) {
+      data.offeredRewardAmount = new Prisma.Decimal(input.offeredRewardAmount);
+    }
+    if (input.escrowRequired !== undefined) data.escrowRequired = input.escrowRequired;
+    if (input.notes !== undefined) data.notes = input.notes;
+
+    return data;
+  }
+}

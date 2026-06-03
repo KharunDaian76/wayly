@@ -15,8 +15,8 @@ const optionalNotesSchema = z.string().trim().min(1).max(2000).optional();
 const optionalDescriptionSchema = z.string().trim().min(1).max(5000).optional();
 const optionalLatSchema = z.number().min(-90).max(90).optional();
 const optionalLngSchema = z.number().min(-180).max(180).optional();
-const optionalWeightSchema = z.number().positive().max(99_999.99).optional();
-const optionalRewardSchema = z.number().nonnegative().max(99_999_999.99).optional();
+const optionalWeightSchema = z.coerce.number().positive().max(99_999.99).optional();
+const optionalRewardSchema = z.coerce.number().nonnegative().max(99_999_999.99).optional();
 const optionalDateSchema = z.string().datetime().optional();
 
 const deliveryOrderFieldsSchema = z.object({

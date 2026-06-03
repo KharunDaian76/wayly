@@ -26,3 +26,8 @@ export class ZodValidationPipe implements PipeTransform {
 export function zodBody<T extends ZodSchema>(schema: T): ZodValidationPipe {
   return new ZodValidationPipe(schema);
 }
+
+/** Factory for inline @Query(new ZodValidationPipe(schema)) usage. */
+export function zodQuery<T extends ZodSchema>(schema: T): ZodValidationPipe {
+  return new ZodValidationPipe(schema);
+}

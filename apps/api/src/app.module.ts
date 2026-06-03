@@ -13,6 +13,7 @@ import { LoggerModule } from './infra/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
+import { OrdersModule } from './modules/orders/orders.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -37,10 +38,10 @@ import { UsersModule } from './modules/users/users.module';
     AuthModule,
     UsersModule,
     KycModule,
+    OrdersModule,
     // ---------------------------------------------------------------------
     // Future business modules:
     //   GeoModule,           // M5
-    //   OrdersModule,        // M4
     //   TripsModule,         // M4
     //   SubscriptionsModule, // M7
     //   PaymentsModule,      // M8
