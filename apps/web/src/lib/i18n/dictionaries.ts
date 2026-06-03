@@ -108,6 +108,15 @@ const en = {
   'app.orders.publishSuccess': 'Delivery request published successfully.',
   'app.orders.publishFailed': 'Could not publish delivery request. Please try again.',
   'app.orders.publishedNote': 'Published orders will become visible to Waylers in a later feed.',
+  'app.waylerFeed.title': 'Available delivery requests',
+  'app.waylerFeed.refresh': 'Refresh',
+  'app.waylerFeed.loading': 'Loading delivery requests…',
+  'app.waylerFeed.empty': 'No open delivery requests yet.',
+  'app.waylerFeed.loadFailed': 'Failed to load delivery requests.',
+  'app.waylerFeed.labelPublished': 'Published',
+  'app.waylerFeed.statusOpen': 'Open',
+  'app.waylerFeed.kycRequired': 'Verification is required before browsing delivery requests.',
+  'app.waylerFeed.acceptComingSoon': 'Accept — coming soon',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -220,6 +229,15 @@ const ru: Dictionary = {
   'app.orders.publishSuccess': 'Заявка на доставку успешно опубликована.',
   'app.orders.publishFailed': 'Не удалось опубликовать заявку. Попробуйте снова.',
   'app.orders.publishedNote': 'Опубликованные заявки станут видны курьерам в следующем этапе.',
+  'app.waylerFeed.title': 'Доступные заявки на доставку',
+  'app.waylerFeed.refresh': 'Обновить',
+  'app.waylerFeed.loading': 'Загрузка заявок…',
+  'app.waylerFeed.empty': 'Открытых заявок пока нет.',
+  'app.waylerFeed.loadFailed': 'Не удалось загрузить заявки.',
+  'app.waylerFeed.labelPublished': 'Опубликовано',
+  'app.waylerFeed.statusOpen': 'Открыта',
+  'app.waylerFeed.kycRequired': 'Для просмотра заявок на доставку требуется верификация.',
+  'app.waylerFeed.acceptComingSoon': 'Принять — скоро',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -331,6 +349,16 @@ const es: Dictionary = {
   'app.orders.publishFailed': 'No se pudo publicar la solicitud. Inténtalo de nuevo.',
   'app.orders.publishedNote':
     'Las solicitudes publicadas serán visibles para los repartidores en un hito posterior.',
+  'app.waylerFeed.title': 'Solicitudes de entrega disponibles',
+  'app.waylerFeed.refresh': 'Actualizar',
+  'app.waylerFeed.loading': 'Cargando solicitudes de entrega…',
+  'app.waylerFeed.empty': 'Aún no hay solicitudes abiertas.',
+  'app.waylerFeed.loadFailed': 'No se pudieron cargar las solicitudes.',
+  'app.waylerFeed.labelPublished': 'Publicado',
+  'app.waylerFeed.statusOpen': 'Abierta',
+  'app.waylerFeed.kycRequired':
+    'Se requiere verificación antes de explorar solicitudes de entrega.',
+  'app.waylerFeed.acceptComingSoon': 'Aceptar — próximamente',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -444,6 +472,16 @@ const fr: Dictionary = {
   'app.orders.publishFailed': 'Impossible de publier la demande. Réessayez.',
   'app.orders.publishedNote':
     'Les demandes publiées seront visibles par les livreurs dans un jalon ultérieur.',
+  'app.waylerFeed.title': 'Demandes de livraison disponibles',
+  'app.waylerFeed.refresh': 'Actualiser',
+  'app.waylerFeed.loading': 'Chargement des demandes de livraison…',
+  'app.waylerFeed.empty': 'Aucune demande ouverte pour le moment.',
+  'app.waylerFeed.loadFailed': 'Impossible de charger les demandes.',
+  'app.waylerFeed.labelPublished': 'Publié',
+  'app.waylerFeed.statusOpen': 'Ouverte',
+  'app.waylerFeed.kycRequired':
+    'La vérification est requise avant de parcourir les demandes de livraison.',
+  'app.waylerFeed.acceptComingSoon': 'Accepter — bientôt',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -559,6 +597,16 @@ const de: Dictionary = {
     'Lieferanfrage konnte nicht veröffentlicht werden. Bitte erneut versuchen.',
   'app.orders.publishedNote':
     'Veröffentlichte Anfragen werden Waylern in einem späteren Meilenstein sichtbar.',
+  'app.waylerFeed.title': 'Verfügbare Lieferanfragen',
+  'app.waylerFeed.refresh': 'Aktualisieren',
+  'app.waylerFeed.loading': 'Lieferanfragen werden geladen…',
+  'app.waylerFeed.empty': 'Noch keine offenen Lieferanfragen.',
+  'app.waylerFeed.loadFailed': 'Lieferanfragen konnten nicht geladen werden.',
+  'app.waylerFeed.labelPublished': 'Veröffentlicht',
+  'app.waylerFeed.statusOpen': 'Offen',
+  'app.waylerFeed.kycRequired':
+    'Verifizierung ist erforderlich, bevor Lieferanfragen durchsucht werden können.',
+  'app.waylerFeed.acceptComingSoon': 'Annehmen — demnächst',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -669,6 +717,15 @@ const tr: Dictionary = {
   'app.orders.publishSuccess': 'Teslimat talebi başarıyla yayınlandı.',
   'app.orders.publishFailed': 'Talep yayınlanamadı. Lütfen tekrar deneyin.',
   'app.orders.publishedNote': 'Yayınlanan talepler daha sonraki aşamada Waylerlara görünür olacak.',
+  'app.waylerFeed.title': 'Mevcut teslimat talepleri',
+  'app.waylerFeed.refresh': 'Yenile',
+  'app.waylerFeed.loading': 'Teslimat talepleri yükleniyor…',
+  'app.waylerFeed.empty': 'Henüz açık teslimat talebi yok.',
+  'app.waylerFeed.loadFailed': 'Teslimat talepleri yüklenemedi.',
+  'app.waylerFeed.labelPublished': 'Yayınlandı',
+  'app.waylerFeed.statusOpen': 'Açık',
+  'app.waylerFeed.kycRequired': 'Teslimat taleplerine göz atmadan önce doğrulama gereklidir.',
+  'app.waylerFeed.acceptComingSoon': 'Kabul et — yakında',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -775,6 +832,15 @@ const ar: Dictionary = {
   'app.orders.publishSuccess': 'تم نشر طلب التوصيل بنجاح.',
   'app.orders.publishFailed': 'تعذر نشر طلب التوصيل. حاول مرة أخرى.',
   'app.orders.publishedNote': 'ستصبح الطلبات المنشورة مرئية للناقلين في مرحلة لاحقة.',
+  'app.waylerFeed.title': 'طلبات التوصيل المتاحة',
+  'app.waylerFeed.refresh': 'تحديث',
+  'app.waylerFeed.loading': 'جارٍ تحميل طلبات التوصيل…',
+  'app.waylerFeed.empty': 'لا توجد طلبات توصيل مفتوحة بعد.',
+  'app.waylerFeed.loadFailed': 'تعذر تحميل طلبات التوصيل.',
+  'app.waylerFeed.labelPublished': 'تاريخ النشر',
+  'app.waylerFeed.statusOpen': 'مفتوح',
+  'app.waylerFeed.kycRequired': 'التحقق مطلوب قبل تصفح طلبات التوصيل.',
+  'app.waylerFeed.acceptComingSoon': 'قبول — قريباً',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -880,6 +946,15 @@ const zh: Dictionary = {
   'app.orders.publishSuccess': '配送请求已成功发布。',
   'app.orders.publishFailed': '无法发布配送请求，请重试。',
   'app.orders.publishedNote': '已发布的订单将在后续阶段对配送员可见。',
+  'app.waylerFeed.title': '可用配送请求',
+  'app.waylerFeed.refresh': '刷新',
+  'app.waylerFeed.loading': '正在加载配送请求…',
+  'app.waylerFeed.empty': '暂无开放的配送请求。',
+  'app.waylerFeed.loadFailed': '无法加载配送请求。',
+  'app.waylerFeed.labelPublished': '发布时间',
+  'app.waylerFeed.statusOpen': '开放',
+  'app.waylerFeed.kycRequired': '浏览配送请求前需要完成验证。',
+  'app.waylerFeed.acceptComingSoon': '接受 — 即将推出',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 

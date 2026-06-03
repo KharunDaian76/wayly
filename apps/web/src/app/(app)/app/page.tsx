@@ -68,6 +68,9 @@ export default function AppHomePage() {
   const [publishingOrderId, setPublishingOrderId] = useState<string | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [publishSuccess, setPublishSuccess] = useState(false);
+  const [openOrders, setOpenOrders] = useState<DeliveryOrderSummary[]>([]);
+  const [openLoading, setOpenLoading] = useState(false);
+  const [openError, setOpenError] = useState<string | null>(null);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -103,11 +106,30 @@ export default function AppHomePage() {
     }
   }, [t]);
 
+  const loadOpenOrders = useCallback(async () => {
+    setOpenLoading(true);
+    setOpenError(null);
+    try {
+      const result = await api.orders.list({ status: 'OPEN' });
+      setOpenOrders(result.items);
+    } catch {
+      setOpenError(t('app.waylerFeed.loadFailed'));
+    } finally {
+      setOpenLoading(false);
+    }
+  }, [t]);
+
   useEffect(() => {
     if (user && mode === 'sender' && isApproved) {
       void loadDraftOrders();
     }
   }, [user, mode, isApproved, loadDraftOrders]);
+
+  useEffect(() => {
+    if (user && mode === 'wayler' && isApproved) {
+      void loadOpenOrders();
+    }
+  }, [user, mode, isApproved, loadOpenOrders]);
 
   if (!user) {
     return null;
@@ -276,13 +298,88 @@ export default function AppHomePage() {
                   : t('app.mode.waylerDashboard.kycRequired')}
               </p>
             ) : null}
-            {mode === 'wayler' ? (
-              <div>
-                <Button disabled>{t('app.mode.waylerDashboard.browseRequests')}</Button>
-              </div>
-            ) : null}
           </CardContent>
         </Card>
+
+        {mode === 'wayler' ? (
+          <Card>
+            <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <CardTitle>{t('app.waylerFeed.title')}</CardTitle>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={!isApproved || openLoading}
+                onClick={() => void loadOpenOrders()}
+              >
+                {t('app.waylerFeed.refresh')}
+              </Button>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              {!kycLoading && !isApproved ? (
+                <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                  {t('app.waylerFeed.kycRequired')}
+                </p>
+              ) : null}
+              {openError ? (
+                <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                  {openError}
+                </p>
+              ) : null}
+              {isApproved && openLoading ? (
+                <p className="text-sm text-muted-foreground">{t('app.waylerFeed.loading')}</p>
+              ) : isApproved && openOrders.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t('app.waylerFeed.empty')}</p>
+              ) : isApproved ? (
+                <ul className="flex flex-col gap-4">
+                  {openOrders.map((order) => (
+                    <li
+                      key={order.id}
+                      className="rounded-lg border border-border/60 px-4 py-3 text-sm"
+                    >
+                      <p className="font-medium">{order.title}</p>
+                      <p className="text-muted-foreground">{order.type}</p>
+                      <dl className="mt-2 flex flex-col gap-1">
+                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                          <dt className="text-muted-foreground">{t('app.orders.labelRoute')}</dt>
+                          <dd>
+                            {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                            {t('app.orders.routeSeparator')}{' '}
+                            {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                          </dd>
+                        </div>
+                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                          <dt className="text-muted-foreground">{t('app.orders.labelReward')}</dt>
+                          <dd>
+                            {formatReward(
+                              order.offeredRewardAmount,
+                              order.currency,
+                              t('app.orders.rewardNone'),
+                            )}
+                          </dd>
+                        </div>
+                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                          <dt className="text-muted-foreground">
+                            {t('app.waylerFeed.labelPublished')}
+                          </dt>
+                          <dd>{new Date(order.publishedAt ?? order.createdAt).toLocaleString()}</dd>
+                        </div>
+                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                          <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
+                          <dd>{t('app.waylerFeed.statusOpen')}</dd>
+                        </div>
+                      </dl>
+                      <div className="mt-3">
+                        <Button variant="secondary" size="sm" disabled>
+                          {t('app.waylerFeed.acceptComingSoon')}
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </CardContent>
+          </Card>
+        ) : null}
 
         {mode === 'sender' ? (
           <>
