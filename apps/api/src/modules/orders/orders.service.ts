@@ -43,7 +43,7 @@ export class OrdersService {
     requireKycApproved(user);
 
     const status = query.status ?? DeliveryOrderStatus.OPEN;
-    const where = this.buildListWhere(query, status);
+    const where = this.buildListWhere(query, status, user.id);
     const skip = (query.page - 1) * query.limit;
 
     const [records, total] = await Promise.all([
@@ -72,15 +72,21 @@ export class OrdersService {
       throw new NotFoundException('Delivery order not found');
     }
 
+    if (record.status === PrismaDeliveryOrderStatus.DRAFT && record.senderId !== user.id) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
     return toDeliveryOrderDetail(record);
   }
 
   private buildListWhere(
     query: OrdersListQuery,
     status: DeliveryOrderStatus,
+    currentUserId: string,
   ): Prisma.DeliveryOrderWhereInput {
     return {
       status: status as PrismaDeliveryOrderStatus,
+      ...(status === DeliveryOrderStatus.DRAFT ? { senderId: currentUserId } : {}),
       ...(query.type ? { type: query.type } : {}),
       ...(query.pickupCountry ? { pickupCountry: query.pickupCountry } : {}),
       ...(query.pickupCity ? { pickupCity: query.pickupCity } : {}),

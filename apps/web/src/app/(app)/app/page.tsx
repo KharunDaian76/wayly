@@ -1,12 +1,12 @@
 'use client';
 
 import { ApiError } from '@wayly/sdk';
-import type { KycStatusView } from '@wayly/types';
-import { KycStatus } from '@wayly/types';
-import { Button, Card, CardContent, CardHeader, CardTitle, Container } from '@wayly/ui';
+import type { DeliveryOrderSummary, KycStatusView } from '@wayly/types';
+import { DeliveryOrderType, KycStatus } from '@wayly/types';
+import { Button, Card, CardContent, CardHeader, CardTitle, Container, Input } from '@wayly/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
@@ -30,6 +30,15 @@ function flagLabel(value: boolean, yes: string, no: string): string {
   return value ? yes : no;
 }
 
+function formatLocation(city: string | null, country: string | null): string {
+  const parts = [city, country].filter(Boolean);
+  return parts.length > 0 ? parts.join(', ') : '—';
+}
+
+function formatReward(amount: string | null, currency: string, noneLabel: string): string {
+  return amount ? `${amount} ${currency}` : noneLabel;
+}
+
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
@@ -41,6 +50,21 @@ export default function AppHomePage() {
   const [kycLoading, setKycLoading] = useState(true);
   const [kycError, setKycError] = useState<string | null>(null);
   const [action, setAction] = useState<'start' | 'approve' | 'reject' | null>(null);
+  const [orderTitle, setOrderTitle] = useState('');
+  const [orderType, setOrderType] = useState<'LOCAL' | 'INTERNATIONAL'>('LOCAL');
+  const [orderDescription, setOrderDescription] = useState('');
+  const [pickupCountry, setPickupCountry] = useState('');
+  const [pickupCity, setPickupCity] = useState('');
+  const [dropoffCountry, setDropoffCountry] = useState('');
+  const [dropoffCity, setDropoffCity] = useState('');
+  const [orderCurrency, setOrderCurrency] = useState('USD');
+  const [offeredRewardAmount, setOfferedRewardAmount] = useState('');
+  const [orderSubmitting, setOrderSubmitting] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
+  const [orderSuccess, setOrderSuccess] = useState<{ id: string; status: string } | null>(null);
+  const [draftOrders, setDraftOrders] = useState<DeliveryOrderSummary[]>([]);
+  const [draftsLoading, setDraftsLoading] = useState(false);
+  const [draftsError, setDraftsError] = useState<string | null>(null);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -60,6 +84,27 @@ export default function AppHomePage() {
       void loadKycStatus();
     }
   }, [user, loadKycStatus]);
+
+  const isApproved = kycStatus?.verified && kycStatus?.kycStatus === KycStatus.APPROVED;
+
+  const loadDraftOrders = useCallback(async () => {
+    setDraftsLoading(true);
+    setDraftsError(null);
+    try {
+      const result = await api.orders.list({ status: 'DRAFT' });
+      setDraftOrders(result.items);
+    } catch {
+      setDraftsError(t('app.orders.draftsLoadFailed'));
+    } finally {
+      setDraftsLoading(false);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    if (user && mode === 'sender' && isApproved) {
+      void loadDraftOrders();
+    }
+  }, [user, mode, isApproved, loadDraftOrders]);
 
   if (!user) {
     return null;
@@ -101,8 +146,69 @@ export default function AppHomePage() {
     }
   }
 
-  const isApproved = kycStatus?.kycStatus === KycStatus.APPROVED;
   const hasPendingVerification = kycStatus?.latestVerification?.status === KycStatus.PENDING;
+
+  async function handleCreateDraftOrder(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setOrderError(null);
+    setOrderSuccess(null);
+
+    const title = orderTitle.trim();
+    if (!title) {
+      return;
+    }
+
+    setOrderSubmitting(true);
+    try {
+      const body: {
+        type: typeof orderType;
+        title: string;
+        currency: string;
+        description?: string;
+        pickupCountry?: string;
+        pickupCity?: string;
+        dropoffCountry?: string;
+        dropoffCity?: string;
+        offeredRewardAmount?: number;
+      } = {
+        type: orderType,
+        title,
+        currency: orderCurrency.trim() || 'USD',
+      };
+      const description = orderDescription.trim();
+      if (description) body.description = description;
+      const pickupCountryValue = pickupCountry.trim();
+      if (pickupCountryValue) body.pickupCountry = pickupCountryValue;
+      const pickupCityValue = pickupCity.trim();
+      if (pickupCityValue) body.pickupCity = pickupCityValue;
+      const dropoffCountryValue = dropoffCountry.trim();
+      if (dropoffCountryValue) body.dropoffCountry = dropoffCountryValue;
+      const dropoffCityValue = dropoffCity.trim();
+      if (dropoffCityValue) body.dropoffCity = dropoffCityValue;
+      const rewardRaw = offeredRewardAmount.trim();
+      if (rewardRaw) {
+        const reward = Number(rewardRaw);
+        if (!Number.isNaN(reward)) {
+          body.offeredRewardAmount = reward;
+        }
+      }
+
+      const created = await api.orders.create(body);
+      setOrderSuccess({ id: created.id, status: created.status });
+      setOrderTitle('');
+      setOrderDescription('');
+      setPickupCountry('');
+      setPickupCity('');
+      setDropoffCountry('');
+      setDropoffCity('');
+      setOfferedRewardAmount('');
+      await loadDraftOrders();
+    } catch (err) {
+      setOrderError(err instanceof ApiError ? err.message : t('app.orders.createFailed'));
+    } finally {
+      setOrderSubmitting(false);
+    }
+  }
 
   return (
     <div className="border-b border-border/60 bg-background">
@@ -152,15 +258,200 @@ export default function AppHomePage() {
                   : t('app.mode.waylerDashboard.kycRequired')}
               </p>
             ) : null}
-            <div>
-              <Button disabled>
-                {mode === 'sender'
-                  ? t('app.mode.senderDashboard.createRequest')
-                  : t('app.mode.waylerDashboard.browseRequests')}
-              </Button>
-            </div>
+            {mode === 'wayler' ? (
+              <div>
+                <Button disabled>{t('app.mode.waylerDashboard.browseRequests')}</Button>
+              </div>
+            ) : null}
           </CardContent>
         </Card>
+
+        {mode === 'sender' ? (
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('app.orders.createTitle')}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                <p className="text-sm text-muted-foreground">{t('app.orders.createDescription')}</p>
+                {!kycLoading && !isApproved ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.orders.kycRequiredNote')}
+                  </p>
+                ) : null}
+                {orderError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {orderError}
+                  </p>
+                ) : null}
+                {orderSuccess ? (
+                  <p
+                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
+                    role="status"
+                  >
+                    {t('app.orders.createSuccess')}{' '}
+                    <span className="font-mono text-xs">
+                      {orderSuccess.id} ({orderSuccess.status})
+                    </span>
+                  </p>
+                ) : null}
+                <form className="flex flex-col gap-4" onSubmit={handleCreateDraftOrder}>
+                  <label className="flex flex-col gap-1.5 text-sm">
+                    <span className="font-medium">{t('app.orders.fieldTitle')}</span>
+                    <Input
+                      value={orderTitle}
+                      onChange={(e) => setOrderTitle(e.target.value)}
+                      required
+                      disabled={!isApproved || orderSubmitting}
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1.5 text-sm">
+                    <span className="font-medium">{t('app.orders.fieldType')}</span>
+                    <select
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      value={orderType}
+                      onChange={(e) => setOrderType(e.target.value as 'LOCAL' | 'INTERNATIONAL')}
+                      disabled={!isApproved || orderSubmitting}
+                    >
+                      <option value={DeliveryOrderType.LOCAL}>{t('app.orders.typeLocal')}</option>
+                      <option value={DeliveryOrderType.INTERNATIONAL}>
+                        {t('app.orders.typeInternational')}
+                      </option>
+                    </select>
+                  </label>
+                  <label className="flex flex-col gap-1.5 text-sm">
+                    <span className="font-medium">{t('app.orders.fieldDescription')}</span>
+                    <Input
+                      value={orderDescription}
+                      onChange={(e) => setOrderDescription(e.target.value)}
+                      disabled={!isApproved || orderSubmitting}
+                    />
+                  </label>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium">{t('app.orders.fieldPickupCountry')}</span>
+                      <Input
+                        value={pickupCountry}
+                        onChange={(e) => setPickupCountry(e.target.value)}
+                        disabled={!isApproved || orderSubmitting}
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium">{t('app.orders.fieldPickupCity')}</span>
+                      <Input
+                        value={pickupCity}
+                        onChange={(e) => setPickupCity(e.target.value)}
+                        disabled={!isApproved || orderSubmitting}
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium">{t('app.orders.fieldDropoffCountry')}</span>
+                      <Input
+                        value={dropoffCountry}
+                        onChange={(e) => setDropoffCountry(e.target.value)}
+                        disabled={!isApproved || orderSubmitting}
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium">{t('app.orders.fieldDropoffCity')}</span>
+                      <Input
+                        value={dropoffCity}
+                        onChange={(e) => setDropoffCity(e.target.value)}
+                        disabled={!isApproved || orderSubmitting}
+                      />
+                    </label>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium">{t('app.orders.fieldCurrency')}</span>
+                      <Input
+                        value={orderCurrency}
+                        onChange={(e) => setOrderCurrency(e.target.value)}
+                        disabled={!isApproved || orderSubmitting}
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium">{t('app.orders.fieldReward')}</span>
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        value={offeredRewardAmount}
+                        onChange={(e) => setOfferedRewardAmount(e.target.value)}
+                        disabled={!isApproved || orderSubmitting}
+                      />
+                    </label>
+                  </div>
+                  <Button
+                    type="submit"
+                    disabled={!isApproved || orderSubmitting || !orderTitle.trim()}
+                  >
+                    {orderSubmitting ? t('app.orders.submitting') : t('app.orders.submitCreate')}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('app.orders.draftsTitle')}</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {draftsLoading ? (
+                  <p className="text-sm text-muted-foreground">{t('app.orders.draftsLoading')}</p>
+                ) : draftsError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {draftsError}
+                  </p>
+                ) : draftOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">{t('app.orders.draftsEmpty')}</p>
+                ) : (
+                  <ul className="flex flex-col gap-4">
+                    {draftOrders.map((order) => (
+                      <li
+                        key={order.id}
+                        className="rounded-lg border border-border/60 px-4 py-3 text-sm"
+                      >
+                        <p className="font-medium">{order.title}</p>
+                        <p className="text-muted-foreground">{order.type}</p>
+                        <dl className="mt-2 flex flex-col gap-1">
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">{t('app.orders.labelRoute')}</dt>
+                            <dd>
+                              {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                              {t('app.orders.routeSeparator')}{' '}
+                              {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">{t('app.orders.labelReward')}</dt>
+                            <dd>
+                              {formatReward(
+                                order.offeredRewardAmount,
+                                order.currency,
+                                t('app.orders.rewardNone'),
+                              )}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">
+                              {t('app.orders.labelCreatedAt')}
+                            </dt>
+                            <dd>{new Date(order.createdAt).toLocaleString()}</dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
+                            <dd>{order.status}</dd>
+                          </div>
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+          </>
+        ) : null}
 
         <Card>
           <CardHeader>

@@ -10,6 +10,8 @@ export {
 } from './auth.types';
 export { createKycApi } from './kyc';
 export { type KycApi, type KycMockRejectBody, type KycStartBody } from './kyc.types';
+export { createOrdersApi } from './orders';
+export { type DeliveryOrderListResult, type OrdersApi, type OrdersListQuery } from './orders.types';
 export { type HealthApi } from './health';
 export type { ApiClientOptions, RequestOptions, TokenProvider, HealthResult } from './types';
 export type { AuthResult, KycStatusView, KycVerificationSummary, UserProfile } from '@wayly/types';
