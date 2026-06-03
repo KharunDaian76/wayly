@@ -103,6 +103,11 @@ const en = {
   'app.orders.labelRoute': 'Route',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': 'No reward set',
+  'app.orders.publish': 'Publish',
+  'app.orders.publishing': 'Publishing…',
+  'app.orders.publishSuccess': 'Delivery request published successfully.',
+  'app.orders.publishFailed': 'Could not publish delivery request. Please try again.',
+  'app.orders.publishedNote': 'Published orders will become visible to Waylers in a later feed.',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -210,6 +215,11 @@ const ru: Dictionary = {
   'app.orders.labelRoute': 'Маршрут',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': 'Вознаграждение не указано',
+  'app.orders.publish': 'Опубликовать',
+  'app.orders.publishing': 'Публикация…',
+  'app.orders.publishSuccess': 'Заявка на доставку успешно опубликована.',
+  'app.orders.publishFailed': 'Не удалось опубликовать заявку. Попробуйте снова.',
+  'app.orders.publishedNote': 'Опубликованные заявки станут видны курьерам в следующем этапе.',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -315,6 +325,12 @@ const es: Dictionary = {
   'app.orders.labelRoute': 'Ruta',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': 'Sin recompensa',
+  'app.orders.publish': 'Publicar',
+  'app.orders.publishing': 'Publicando…',
+  'app.orders.publishSuccess': 'Solicitud de entrega publicada correctamente.',
+  'app.orders.publishFailed': 'No se pudo publicar la solicitud. Inténtalo de nuevo.',
+  'app.orders.publishedNote':
+    'Las solicitudes publicadas serán visibles para los repartidores en un hito posterior.',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -422,6 +438,12 @@ const fr: Dictionary = {
   'app.orders.labelRoute': 'Itinéraire',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': 'Aucune récompense',
+  'app.orders.publish': 'Publier',
+  'app.orders.publishing': 'Publication…',
+  'app.orders.publishSuccess': 'Demande de livraison publiée avec succès.',
+  'app.orders.publishFailed': 'Impossible de publier la demande. Réessayez.',
+  'app.orders.publishedNote':
+    'Les demandes publiées seront visibles par les livreurs dans un jalon ultérieur.',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -530,6 +552,13 @@ const de: Dictionary = {
   'app.orders.labelRoute': 'Route',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': 'Keine Belohnung',
+  'app.orders.publish': 'Veröffentlichen',
+  'app.orders.publishing': 'Wird veröffentlicht…',
+  'app.orders.publishSuccess': 'Lieferanfrage erfolgreich veröffentlicht.',
+  'app.orders.publishFailed':
+    'Lieferanfrage konnte nicht veröffentlicht werden. Bitte erneut versuchen.',
+  'app.orders.publishedNote':
+    'Veröffentlichte Anfragen werden Waylern in einem späteren Meilenstein sichtbar.',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -635,6 +664,11 @@ const tr: Dictionary = {
   'app.orders.labelRoute': 'Güzergah',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': 'Ödül belirtilmedi',
+  'app.orders.publish': 'Yayınla',
+  'app.orders.publishing': 'Yayınlanıyor…',
+  'app.orders.publishSuccess': 'Teslimat talebi başarıyla yayınlandı.',
+  'app.orders.publishFailed': 'Talep yayınlanamadı. Lütfen tekrar deneyin.',
+  'app.orders.publishedNote': 'Yayınlanan talepler daha sonraki aşamada Waylerlara görünür olacak.',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -736,6 +770,11 @@ const ar: Dictionary = {
   'app.orders.labelRoute': 'المسار',
   'app.orders.routeSeparator': '←',
   'app.orders.rewardNone': 'لم تُحدد مكافأة',
+  'app.orders.publish': 'نشر',
+  'app.orders.publishing': 'جارٍ النشر…',
+  'app.orders.publishSuccess': 'تم نشر طلب التوصيل بنجاح.',
+  'app.orders.publishFailed': 'تعذر نشر طلب التوصيل. حاول مرة أخرى.',
+  'app.orders.publishedNote': 'ستصبح الطلبات المنشورة مرئية للناقلين في مرحلة لاحقة.',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -836,6 +875,11 @@ const zh: Dictionary = {
   'app.orders.labelRoute': '路线',
   'app.orders.routeSeparator': '→',
   'app.orders.rewardNone': '未设置悬赏',
+  'app.orders.publish': '发布',
+  'app.orders.publishing': '发布中…',
+  'app.orders.publishSuccess': '配送请求已成功发布。',
+  'app.orders.publishFailed': '无法发布配送请求，请重试。',
+  'app.orders.publishedNote': '已发布的订单将在后续阶段对配送员可见。',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 

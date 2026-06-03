@@ -31,6 +31,13 @@ export function createOrdersApi(request: Requester): OrdersApi {
         ...withCookies,
         accessToken,
       }),
+
+    publish: (id: string, accessToken?: string | null) =>
+      request<DeliveryOrderDetail>(`/orders/${id}/publish`, {
+        method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
   };
 }
 

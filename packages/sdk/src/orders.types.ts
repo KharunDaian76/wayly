@@ -29,6 +29,7 @@ export interface OrdersApi {
   create(body: CreateDeliveryOrderInput, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   list(query?: OrdersListQuery, accessToken?: string | null): Promise<DeliveryOrderListResult>;
   detail(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
+  publish(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
 }
 
 export type { CreateDeliveryOrderInput, DeliveryOrderDetail, DeliveryOrderSummary };

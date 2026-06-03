@@ -65,6 +65,9 @@ export default function AppHomePage() {
   const [draftOrders, setDraftOrders] = useState<DeliveryOrderSummary[]>([]);
   const [draftsLoading, setDraftsLoading] = useState(false);
   const [draftsError, setDraftsError] = useState<string | null>(null);
+  const [publishingOrderId, setPublishingOrderId] = useState<string | null>(null);
+  const [publishError, setPublishError] = useState<string | null>(null);
+  const [publishSuccess, setPublishSuccess] = useState(false);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -147,6 +150,21 @@ export default function AppHomePage() {
   }
 
   const hasPendingVerification = kycStatus?.latestVerification?.status === KycStatus.PENDING;
+
+  async function handlePublishDraft(orderId: string) {
+    setPublishError(null);
+    setPublishSuccess(false);
+    setPublishingOrderId(orderId);
+    try {
+      await api.orders.publish(orderId);
+      setPublishSuccess(true);
+      await loadDraftOrders();
+    } catch (err) {
+      setPublishError(err instanceof ApiError ? err.message : t('app.orders.publishFailed'));
+    } finally {
+      setPublishingOrderId(null);
+    }
+  }
 
   async function handleCreateDraftOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -397,6 +415,20 @@ export default function AppHomePage() {
                 <CardTitle>{t('app.orders.draftsTitle')}</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
+                <p className="text-sm text-muted-foreground">{t('app.orders.publishedNote')}</p>
+                {publishError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {publishError}
+                  </p>
+                ) : null}
+                {publishSuccess ? (
+                  <p
+                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
+                    role="status"
+                  >
+                    {t('app.orders.publishSuccess')}
+                  </p>
+                ) : null}
                 {draftsLoading ? (
                   <p className="text-sm text-muted-foreground">{t('app.orders.draftsLoading')}</p>
                 ) : draftsError ? (
@@ -444,6 +476,18 @@ export default function AppHomePage() {
                             <dd>{order.status}</dd>
                           </div>
                         </dl>
+                        <div className="mt-3">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            disabled={!isApproved || publishingOrderId !== null}
+                            onClick={() => void handlePublishDraft(order.id)}
+                          >
+                            {publishingOrderId === order.id
+                              ? t('app.orders.publishing')
+                              : t('app.orders.publish')}
+                          </Button>
+                        </div>
                       </li>
                     ))}
                   </ul>

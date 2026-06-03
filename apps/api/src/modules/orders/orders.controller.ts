@@ -11,6 +11,7 @@ import {
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -75,6 +76,20 @@ export class OrdersController {
     @Query(zodQuery(ordersListQuerySchema)) query: z.infer<typeof ordersListQuerySchema>,
   ): Promise<DeliveryOrderListResult> {
     return this.orders.list(user, query);
+  }
+
+  @Post(':id/publish')
+  @ApiOperation({ summary: 'Publish a draft delivery order (Sender only)' })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  @ApiNotFoundResponse({ description: 'Delivery order not found' })
+  @ApiConflictResponse({ description: 'Order is not in DRAFT status' })
+  publish(
+    @CurrentUser() user: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<DeliveryOrderDetail> {
+    return this.orders.publish(user, id);
   }
 
   @Get(':id')

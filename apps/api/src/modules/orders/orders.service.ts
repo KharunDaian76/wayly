@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import {
   DeliveryOrderStatus as PrismaDeliveryOrderStatus,
   DeliveryOrderType as PrismaDeliveryOrderType,
@@ -77,6 +77,29 @@ export class OrdersService {
     }
 
     return toDeliveryOrderDetail(record);
+  }
+
+  async publish(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record || record.senderId !== user.id) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.status !== PrismaDeliveryOrderStatus.DRAFT) {
+      throw new ConflictException('Only draft delivery orders can be published');
+    }
+
+    const updated = await this.prisma.deliveryOrder.update({
+      where: { id },
+      data: {
+        status: PrismaDeliveryOrderStatus.OPEN,
+        publishedAt: new Date(),
+      },
+    });
+
+    return toDeliveryOrderDetail(updated);
   }
 
   private buildListWhere(
