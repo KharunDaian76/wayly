@@ -25,6 +25,11 @@ export interface DeliveryOrderListResult {
   total: number;
 }
 
+/** Accepted order row for Wayler tracking (includes acceptedAt). */
+export interface AcceptedOrderSummary extends DeliveryOrderSummary {
+  acceptedAt: string | null;
+}
+
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
@@ -100,6 +105,61 @@ export class OrdersService {
     });
 
     return toDeliveryOrderDetail(updated);
+  }
+
+  async accept(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.status === PrismaDeliveryOrderStatus.DRAFT && record.senderId !== user.id) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.senderId === user.id) {
+      throw new ConflictException('Sender cannot accept their own delivery order');
+    }
+
+    if (record.status === PrismaDeliveryOrderStatus.ACCEPTED) {
+      throw new ConflictException('Delivery order has already been accepted');
+    }
+
+    if (record.status !== PrismaDeliveryOrderStatus.OPEN) {
+      throw new ConflictException('Only open delivery orders can be accepted');
+    }
+
+    const acceptedAt = new Date();
+    const updated = await this.prisma.deliveryOrder.update({
+      where: { id },
+      data: {
+        status: PrismaDeliveryOrderStatus.ACCEPTED,
+        acceptedWaylerId: user.id,
+        acceptedAt,
+      },
+    });
+
+    return toDeliveryOrderDetail(updated);
+  }
+
+  /** Orders accepted by the given Wayler (current user only at the API boundary). */
+  async acceptedOrdersLog(userId: string): Promise<AcceptedOrderSummary[]> {
+    const records = await this.prisma.deliveryOrder.findMany({
+      where: { acceptedWaylerId: userId },
+      orderBy: { acceptedAt: 'desc' },
+    });
+
+    return records.map((record) => ({
+      ...toDeliveryOrderSummary(record),
+      acceptedAt: record.acceptedAt?.toISOString() ?? null,
+    }));
+  }
+
+  async listAcceptedByWayler(user: RequestUser): Promise<AcceptedOrderSummary[]> {
+    requireKycApproved(user);
+    return this.acceptedOrdersLog(user.id);
   }
 
   private buildListWhere(

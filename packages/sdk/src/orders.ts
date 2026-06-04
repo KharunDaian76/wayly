@@ -1,6 +1,11 @@
 import type { CreateDeliveryOrderInput, DeliveryOrderDetail } from '@wayly/types';
 
-import type { DeliveryOrderListResult, OrdersApi, OrdersListQuery } from './orders.types';
+import type {
+  AcceptedDeliveryOrderSummary,
+  DeliveryOrderListResult,
+  OrdersApi,
+  OrdersListQuery,
+} from './orders.types';
 import type { RequestOptions } from './types';
 
 type Requester = <T>(path: string, options?: RequestOptions) => Promise<T>;
@@ -35,6 +40,20 @@ export function createOrdersApi(request: Requester): OrdersApi {
     publish: (id: string, accessToken?: string | null) =>
       request<DeliveryOrderDetail>(`/orders/${id}/publish`, {
         method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+
+    accept: (id: string, accessToken?: string | null) =>
+      request<DeliveryOrderDetail>(`/orders/${id}/accept`, {
+        method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+
+    accepted: (accessToken?: string | null) =>
+      request<AcceptedDeliveryOrderSummary[]>('/orders/accepted', {
+        method: 'GET',
         ...withCookies,
         accessToken,
       }),

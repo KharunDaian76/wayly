@@ -78,6 +78,15 @@ export class OrdersController {
     return this.orders.list(user, query);
   }
 
+  @Get('accepted')
+  @ApiOperation({ summary: 'List delivery orders accepted by the current Wayler' })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto, isArray: true })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  listAccepted(@CurrentUser() user: RequestUser) {
+    return this.orders.listAcceptedByWayler(user);
+  }
+
   @Post(':id/publish')
   @ApiOperation({ summary: 'Publish a draft delivery order (Sender only)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
@@ -90,6 +99,22 @@ export class OrdersController {
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<DeliveryOrderDetail> {
     return this.orders.publish(user, id);
+  }
+
+  @Post(':id/accept')
+  @ApiOperation({ summary: 'Accept an open delivery order (Wayler)' })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  @ApiNotFoundResponse({ description: 'Delivery order not found' })
+  @ApiConflictResponse({
+    description: 'Order is not OPEN, already accepted, or sender cannot accept their own order',
+  })
+  accept(
+    @CurrentUser() user: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<DeliveryOrderDetail> {
+    return this.orders.accept(user, id);
   }
 
   @Get(':id')

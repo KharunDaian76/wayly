@@ -1,21 +1,40 @@
 'use client';
 
 import { ApiError } from '@wayly/sdk';
+import type { AcceptedDeliveryOrderSummary, OrdersListQuery } from '@wayly/sdk';
 import type { DeliveryOrderSummary, KycStatusView } from '@wayly/types';
 import { DeliveryOrderType, KycStatus } from '@wayly/types';
-import { Button, Card, CardContent, CardHeader, CardTitle, Container, Input } from '@wayly/ui';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Container,
+  Input,
+  Skeleton,
+} from '@wayly/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
 
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useI18n } from '@/lib/i18n/i18n-context';
+import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
+import { cn } from '@/lib/utils';
 
 const isDev = process.env.NODE_ENV !== 'production';
+
+const FEED_SELECT_CLASS =
+  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm';
+
+type FeedSort = 'rewardDesc' | 'publishedDesc' | 'routeAsc';
+
+const FEED_EXIT_MS = 280;
 
 function StatusRow({ label, value }: { label: string; value: string }) {
   return (
@@ -37,6 +56,127 @@ function formatLocation(city: string | null, country: string | null): string {
 
 function formatReward(amount: string | null, currency: string, noneLabel: string): string {
   return amount ? `${amount} ${currency}` : noneLabel;
+}
+
+function canAcceptOpenOrder(
+  order: DeliveryOrderSummary,
+  currentUserId: string,
+  kycApproved: boolean,
+): boolean {
+  return kycApproved && order.senderId !== currentUserId;
+}
+
+function parseRewardAmount(amount: string | null): number | null {
+  if (!amount) {
+    return null;
+  }
+  const value = Number(amount);
+  return Number.isFinite(value) ? value : null;
+}
+
+function routeSortKey(order: DeliveryOrderSummary): string {
+  const pickup = [order.pickupCity, order.pickupCountry].filter(Boolean).join(', ');
+  const dropoff = [order.dropoffCity, order.dropoffCountry].filter(Boolean).join(', ');
+  return `${pickup} → ${dropoff}`.toLowerCase();
+}
+
+function sortFeedOrders(orders: DeliveryOrderSummary[], sort: FeedSort): DeliveryOrderSummary[] {
+  const copy = [...orders];
+  if (sort === 'rewardDesc') {
+    copy.sort((a, b) => {
+      const rewardA = parseRewardAmount(a.offeredRewardAmount) ?? -Infinity;
+      const rewardB = parseRewardAmount(b.offeredRewardAmount) ?? -Infinity;
+      return rewardB - rewardA;
+    });
+    return copy;
+  }
+  if (sort === 'publishedDesc') {
+    copy.sort((a, b) => {
+      const timeA = new Date(a.publishedAt ?? a.createdAt).getTime();
+      const timeB = new Date(b.publishedAt ?? b.createdAt).getTime();
+      return timeB - timeA;
+    });
+    return copy;
+  }
+  copy.sort((a, b) => routeSortKey(a).localeCompare(routeSortKey(b)));
+  return copy;
+}
+
+function filterFeedOrdersByReward(
+  orders: DeliveryOrderSummary[],
+  minRaw: string,
+  maxRaw: string,
+): DeliveryOrderSummary[] {
+  const minText = minRaw.trim();
+  const maxText = maxRaw.trim();
+  if (!minText && !maxText) {
+    return orders;
+  }
+  const min = minText ? Number(minText) : null;
+  const max = maxText ? Number(maxText) : null;
+  return orders.filter((order) => {
+    const amount = parseRewardAmount(order.offeredRewardAmount);
+    if (amount === null) {
+      return false;
+    }
+    if (min !== null && !Number.isNaN(min) && amount < min) {
+      return false;
+    }
+    if (max !== null && !Number.isNaN(max) && amount > max) {
+      return false;
+    }
+    return true;
+  });
+}
+
+function FeedOrdersSkeleton() {
+  return (
+    <ul className="flex flex-col gap-4" aria-hidden>
+      {[0, 1, 2].map((key) => (
+        <li key={key} className="rounded-lg border border-border/60 px-4 py-3">
+          <Skeleton className="mb-2 h-4 w-3/5 max-w-xs" />
+          <Skeleton className="mb-3 h-3 w-24" />
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+            <Skeleton className="h-3 w-2/5" />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function AcceptedOrdersSkeleton() {
+  return (
+    <ul className="flex flex-col gap-4" aria-hidden>
+      {[0, 1].map((key) => (
+        <li key={key} className="rounded-lg border border-border/60 px-4 py-3">
+          <Skeleton className="mb-2 h-4 w-3/5 max-w-xs" />
+          <Skeleton className="mb-3 h-3 w-24" />
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+            <Skeleton className="h-3 w-2/5" />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function resolveAcceptError(err: unknown, t: (key: TranslationKey) => string): string {
+  if (!(err instanceof ApiError)) {
+    return t('app.waylerFeed.acceptFailed');
+  }
+  const message = err.message.toLowerCase();
+  if (message.includes('own delivery order')) {
+    return t('app.waylerFeed.senderCannotAcceptOwn');
+  }
+  if (message.includes('already been accepted') || message.includes('only open')) {
+    return t('app.waylerFeed.acceptAlreadyAccepted');
+  }
+  return err.message || t('app.waylerFeed.acceptFailed');
 }
 
 export default function AppHomePage() {
@@ -68,9 +208,24 @@ export default function AppHomePage() {
   const [publishingOrderId, setPublishingOrderId] = useState<string | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [publishSuccess, setPublishSuccess] = useState(false);
-  const [openOrders, setOpenOrders] = useState<DeliveryOrderSummary[]>([]);
-  const [openLoading, setOpenLoading] = useState(false);
-  const [openError, setOpenError] = useState<string | null>(null);
+  const [feedOrders, setFeedOrders] = useState<DeliveryOrderSummary[]>([]);
+  const [feedLoading, setFeedLoading] = useState(false);
+  const [feedError, setFeedError] = useState<string | null>(null);
+  const [feedType, setFeedType] = useState<'' | 'LOCAL' | 'INTERNATIONAL'>('');
+  const [feedRewardMin, setFeedRewardMin] = useState('');
+  const [feedRewardMax, setFeedRewardMax] = useState('');
+  const [feedPickupCountry, setFeedPickupCountry] = useState('');
+  const [feedPickupCity, setFeedPickupCity] = useState('');
+  const [feedDropoffCountry, setFeedDropoffCountry] = useState('');
+  const [feedDropoffCity, setFeedDropoffCity] = useState('');
+  const [feedSort, setFeedSort] = useState<FeedSort>('publishedDesc');
+  const [exitingOrderIds, setExitingOrderIds] = useState<ReadonlySet<string>>(() => new Set());
+  const [acceptingOrderId, setAcceptingOrderId] = useState<string | null>(null);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
+  const [acceptSuccess, setAcceptSuccess] = useState(false);
+  const [acceptedOrders, setAcceptedOrders] = useState<AcceptedDeliveryOrderSummary[]>([]);
+  const [acceptedLoading, setAcceptedLoading] = useState(false);
+  const [acceptedError, setAcceptedError] = useState<string | null>(null);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -106,16 +261,54 @@ export default function AppHomePage() {
     }
   }, [t]);
 
-  const loadOpenOrders = useCallback(async () => {
-    setOpenLoading(true);
-    setOpenError(null);
+  const loadFeedOrders = useCallback(async () => {
+    setFeedLoading(true);
+    setFeedError(null);
     try {
-      const result = await api.orders.list({ status: 'OPEN' });
-      setOpenOrders(result.items);
+      const query: OrdersListQuery = { status: 'OPEN' };
+      if (feedType) {
+        query.type = feedType;
+      }
+      const pickupCountryValue = feedPickupCountry.trim();
+      if (pickupCountryValue) {
+        query.pickupCountry = pickupCountryValue;
+      }
+      const pickupCityValue = feedPickupCity.trim();
+      if (pickupCityValue) {
+        query.pickupCity = pickupCityValue;
+      }
+      const dropoffCountryValue = feedDropoffCountry.trim();
+      if (dropoffCountryValue) {
+        query.dropoffCountry = dropoffCountryValue;
+      }
+      const dropoffCityValue = feedDropoffCity.trim();
+      if (dropoffCityValue) {
+        query.dropoffCity = dropoffCityValue;
+      }
+      const result = await api.orders.list(query);
+      setFeedOrders(result.items);
     } catch {
-      setOpenError(t('app.waylerFeed.loadFailed'));
+      setFeedError(t('app.waylerFeed.loadFailed'));
     } finally {
-      setOpenLoading(false);
+      setFeedLoading(false);
+    }
+  }, [t, feedType, feedPickupCountry, feedPickupCity, feedDropoffCountry, feedDropoffCity]);
+
+  const displayedFeedOrders = useMemo(() => {
+    const rewardFiltered = filterFeedOrdersByReward(feedOrders, feedRewardMin, feedRewardMax);
+    return sortFeedOrders(rewardFiltered, feedSort);
+  }, [feedOrders, feedRewardMin, feedRewardMax, feedSort]);
+
+  const loadAcceptedOrders = useCallback(async () => {
+    setAcceptedLoading(true);
+    setAcceptedError(null);
+    try {
+      const items = await api.orders.accepted();
+      setAcceptedOrders(items);
+    } catch {
+      setAcceptedError(t('app.waylerFeed.acceptedPanel.loadFailed'));
+    } finally {
+      setAcceptedLoading(false);
     }
   }, [t]);
 
@@ -127,9 +320,19 @@ export default function AppHomePage() {
 
   useEffect(() => {
     if (user && mode === 'wayler' && isApproved) {
-      void loadOpenOrders();
+      void loadAcceptedOrders();
     }
-  }, [user, mode, isApproved, loadOpenOrders]);
+  }, [user, mode, isApproved, loadAcceptedOrders]);
+
+  useEffect(() => {
+    if (!user || mode !== 'wayler' || !isApproved) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      void loadFeedOrders();
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [user, mode, isApproved, loadFeedOrders]);
 
   if (!user) {
     return null;
@@ -172,6 +375,29 @@ export default function AppHomePage() {
   }
 
   const hasPendingVerification = kycStatus?.latestVerification?.status === KycStatus.PENDING;
+
+  async function handleAcceptOrder(orderId: string) {
+    setAcceptError(null);
+    setAcceptSuccess(false);
+    setAcceptingOrderId(orderId);
+    try {
+      await api.orders.accept(orderId);
+      setAcceptSuccess(true);
+      setExitingOrderIds((prev) => new Set(prev).add(orderId));
+      await new Promise((resolve) => setTimeout(resolve, FEED_EXIT_MS));
+      setFeedOrders((prev) => prev.filter((order) => order.id !== orderId));
+      setExitingOrderIds((prev) => {
+        const next = new Set(prev);
+        next.delete(orderId);
+        return next;
+      });
+      await Promise.all([loadFeedOrders(), loadAcceptedOrders()]);
+    } catch (err) {
+      setAcceptError(resolveAcceptError(err, t));
+    } finally {
+      setAcceptingOrderId(null);
+    }
+  }
 
   async function handlePublishDraft(orderId: string) {
     setPublishError(null);
@@ -302,83 +528,327 @@ export default function AppHomePage() {
         </Card>
 
         {mode === 'wayler' ? (
-          <Card>
-            <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <CardTitle>{t('app.waylerFeed.title')}</CardTitle>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={!isApproved || openLoading}
-                onClick={() => void loadOpenOrders()}
-              >
-                {t('app.waylerFeed.refresh')}
-              </Button>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              {!kycLoading && !isApproved ? (
-                <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                  {t('app.waylerFeed.kycRequired')}
-                </p>
-              ) : null}
-              {openError ? (
-                <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                  {openError}
-                </p>
-              ) : null}
-              {isApproved && openLoading ? (
-                <p className="text-sm text-muted-foreground">{t('app.waylerFeed.loading')}</p>
-              ) : isApproved && openOrders.length === 0 ? (
-                <p className="text-sm text-muted-foreground">{t('app.waylerFeed.empty')}</p>
-              ) : isApproved ? (
-                <ul className="flex flex-col gap-4">
-                  {openOrders.map((order) => (
-                    <li
-                      key={order.id}
-                      className="rounded-lg border border-border/60 px-4 py-3 text-sm"
-                    >
-                      <p className="font-medium">{order.title}</p>
-                      <p className="text-muted-foreground">{order.type}</p>
-                      <dl className="mt-2 flex flex-col gap-1">
-                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                          <dt className="text-muted-foreground">{t('app.orders.labelRoute')}</dt>
-                          <dd>
-                            {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
-                            {t('app.orders.routeSeparator')}{' '}
-                            {formatLocation(order.dropoffCity, order.dropoffCountry)}
-                          </dd>
-                        </div>
-                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                          <dt className="text-muted-foreground">{t('app.orders.labelReward')}</dt>
-                          <dd>
-                            {formatReward(
-                              order.offeredRewardAmount,
-                              order.currency,
-                              t('app.orders.rewardNone'),
-                            )}
-                          </dd>
-                        </div>
-                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                          <dt className="text-muted-foreground">
-                            {t('app.waylerFeed.labelPublished')}
-                          </dt>
-                          <dd>{new Date(order.publishedAt ?? order.createdAt).toLocaleString()}</dd>
-                        </div>
-                        <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                          <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
-                          <dd>{t('app.waylerFeed.statusOpen')}</dd>
-                        </div>
-                      </dl>
-                      <div className="mt-3">
-                        <Button variant="secondary" size="sm" disabled>
-                          {t('app.waylerFeed.acceptComingSoon')}
-                        </Button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </CardContent>
-          </Card>
+          <>
+            <Card>
+              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <CardTitle>{t('app.waylerFeed.title')}</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!isApproved || feedLoading}
+                  onClick={() => void loadFeedOrders()}
+                >
+                  {t('app.waylerFeed.refresh')}
+                </Button>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {!kycLoading && !isApproved ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.waylerFeed.kycRequired')}
+                  </p>
+                ) : null}
+                {isApproved ? (
+                  <fieldset
+                    className="flex flex-col gap-4 rounded-lg border border-border/60 p-4"
+                    disabled={feedLoading}
+                  >
+                    <legend className="px-1 text-sm font-medium">
+                      {t('app.waylerFeed.filtersTitle')}
+                    </legend>
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.filterStatus')}</span>
+                        <select className={FEED_SELECT_CLASS} value="OPEN" disabled aria-readonly>
+                          <option value="OPEN">{t('app.waylerFeed.filterStatusOpen')}</option>
+                          <option value="ACCEPTED" disabled>
+                            {t('app.waylerFeed.filterStatusAccepted')}
+                          </option>
+                        </select>
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.filterType')}</span>
+                        <select
+                          className={FEED_SELECT_CLASS}
+                          value={feedType}
+                          onChange={(e) =>
+                            setFeedType(e.target.value as '' | 'LOCAL' | 'INTERNATIONAL')
+                          }
+                        >
+                          <option value="">{t('app.waylerFeed.filterTypeAll')}</option>
+                          <option value={DeliveryOrderType.LOCAL}>
+                            {t('app.orders.typeLocal')}
+                          </option>
+                          <option value={DeliveryOrderType.INTERNATIONAL}>
+                            {t('app.orders.typeInternational')}
+                          </option>
+                        </select>
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.sortLabel')}</span>
+                        <select
+                          className={FEED_SELECT_CLASS}
+                          value={feedSort}
+                          onChange={(e) => setFeedSort(e.target.value as FeedSort)}
+                        >
+                          <option value="rewardDesc">{t('app.waylerFeed.sortRewardDesc')}</option>
+                          <option value="publishedDesc">
+                            {t('app.waylerFeed.sortPublishedDesc')}
+                          </option>
+                          <option value="routeAsc">{t('app.waylerFeed.sortRouteAsc')}</option>
+                        </select>
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.filterRewardMin')}</span>
+                        <Input
+                          type="number"
+                          min={0}
+                          step="any"
+                          value={feedRewardMin}
+                          onChange={(e) => setFeedRewardMin(e.target.value)}
+                        />
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.filterRewardMax')}</span>
+                        <Input
+                          type="number"
+                          min={0}
+                          step="any"
+                          value={feedRewardMax}
+                          onChange={(e) => setFeedRewardMax(e.target.value)}
+                        />
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">
+                          {t('app.waylerFeed.filterPickupCountry')}
+                        </span>
+                        <Input
+                          value={feedPickupCountry}
+                          onChange={(e) => setFeedPickupCountry(e.target.value)}
+                        />
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.filterPickupCity')}</span>
+                        <Input
+                          value={feedPickupCity}
+                          onChange={(e) => setFeedPickupCity(e.target.value)}
+                        />
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">
+                          {t('app.waylerFeed.filterDropoffCountry')}
+                        </span>
+                        <Input
+                          value={feedDropoffCountry}
+                          onChange={(e) => setFeedDropoffCountry(e.target.value)}
+                        />
+                      </label>
+                      <label className="flex flex-col gap-1.5 text-sm">
+                        <span className="font-medium">{t('app.waylerFeed.filterDropoffCity')}</span>
+                        <Input
+                          value={feedDropoffCity}
+                          onChange={(e) => setFeedDropoffCity(e.target.value)}
+                        />
+                      </label>
+                    </div>
+                  </fieldset>
+                ) : null}
+                {feedError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {feedError}
+                  </p>
+                ) : null}
+                {acceptError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {acceptError}
+                  </p>
+                ) : null}
+                {acceptSuccess ? (
+                  <p
+                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
+                    role="status"
+                  >
+                    {t('app.waylerFeed.acceptSuccess')}
+                  </p>
+                ) : null}
+                {isApproved && feedLoading ? (
+                  <>
+                    <p className="sr-only">{t('app.waylerFeed.loading')}</p>
+                    <FeedOrdersSkeleton />
+                  </>
+                ) : isApproved && feedOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">{t('app.waylerFeed.empty')}</p>
+                ) : isApproved && displayedFeedOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t('app.waylerFeed.emptyFiltered')}
+                  </p>
+                ) : isApproved ? (
+                  <ul className="flex flex-col gap-4">
+                    {displayedFeedOrders.map((order) => {
+                      const isOwnOrder = order.senderId === user.id;
+                      const canAccept = canAcceptOpenOrder(order, user.id, isApproved);
+                      const isAccepting = acceptingOrderId === order.id;
+                      const acceptDisabled = !canAccept || acceptingOrderId !== null;
+                      const isExiting = exitingOrderIds.has(order.id);
+
+                      return (
+                        <li
+                          key={order.id}
+                          className={cn(
+                            'rounded-lg border border-border/60 px-4 py-3 text-sm',
+                            'transition-all duration-200 ease-out hover:shadow-md hover:scale-[1.01]',
+                            isExiting ? 'wayly-feed-item-exit' : 'wayly-feed-item-enter',
+                          )}
+                        >
+                          <p className="font-medium">{order.title}</p>
+                          <p className="text-muted-foreground">{order.type}</p>
+                          <dl className="mt-2 flex flex-col gap-1">
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelRoute')}
+                              </dt>
+                              <dd>
+                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                {t('app.orders.routeSeparator')}{' '}
+                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelReward')}
+                              </dt>
+                              <dd>
+                                {formatReward(
+                                  order.offeredRewardAmount,
+                                  order.currency,
+                                  t('app.orders.rewardNone'),
+                                )}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.waylerFeed.labelPublished')}
+                              </dt>
+                              <dd>
+                                {new Date(order.publishedAt ?? order.createdAt).toLocaleString()}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelStatus')}
+                              </dt>
+                              <dd>{t('app.waylerFeed.statusOpen')}</dd>
+                            </div>
+                          </dl>
+                          <div className="mt-3 flex flex-col gap-2">
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              className="transition-all duration-200 ease-out"
+                              disabled={acceptDisabled}
+                              onClick={() => void handleAcceptOrder(order.id)}
+                            >
+                              {isAccepting
+                                ? t('app.waylerFeed.accepting')
+                                : t('app.waylerFeed.accept')}
+                            </Button>
+                            {isOwnOrder ? (
+                              <p className="text-xs text-muted-foreground" role="note">
+                                {t('app.waylerFeed.senderCannotAcceptOwn')}
+                              </p>
+                            ) : !isApproved ? (
+                              <p className="text-xs text-muted-foreground" role="note">
+                                {t('app.waylerFeed.acceptDisabledKyc')}
+                              </p>
+                            ) : null}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <CardTitle>{t('app.waylerFeed.acceptedPanel.title')}</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!isApproved || acceptedLoading}
+                  onClick={() => void loadAcceptedOrders()}
+                >
+                  {t('app.waylerFeed.acceptedPanel.refresh')}
+                </Button>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {!kycLoading && !isApproved ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.waylerFeed.kycRequired')}
+                  </p>
+                ) : null}
+                {acceptedError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {acceptedError}
+                  </p>
+                ) : null}
+                {isApproved && acceptedLoading ? (
+                  <>
+                    <p className="sr-only">{t('app.waylerFeed.acceptedPanel.loading')}</p>
+                    <AcceptedOrdersSkeleton />
+                  </>
+                ) : isApproved && acceptedOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t('app.waylerFeed.acceptedPanel.empty')}
+                  </p>
+                ) : isApproved ? (
+                  <ul className="flex flex-col gap-4">
+                    {acceptedOrders.map((order) => (
+                      <li
+                        key={order.id}
+                        className="rounded-lg border border-border/60 px-4 py-3 text-sm"
+                      >
+                        <p className="font-medium">{order.title}</p>
+                        <p className="text-muted-foreground">{order.type}</p>
+                        <dl className="mt-2 flex flex-col gap-1">
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">{t('app.orders.labelRoute')}</dt>
+                            <dd>
+                              {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                              {t('app.orders.routeSeparator')}{' '}
+                              {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">{t('app.orders.labelReward')}</dt>
+                            <dd>
+                              {formatReward(
+                                order.offeredRewardAmount,
+                                order.currency,
+                                t('app.orders.rewardNone'),
+                              )}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">
+                              {t('app.waylerFeed.acceptedPanel.labelAcceptedAt')}
+                            </dt>
+                            <dd>
+                              {order.acceptedAt ? new Date(order.acceptedAt).toLocaleString() : '—'}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
+                            <dd>{order.status}</dd>
+                          </div>
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </CardContent>
+            </Card>
+          </>
         ) : null}
 
         {mode === 'sender' ? (
