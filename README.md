@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + shared types**) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dispute API/UI, payment hold/refund integration, and admin/arbitrator panel are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dispute notifications, payment hold/refund integration, resolution workflow, and admin/arbitrator panel are future milestones.
 
 ## Tech stack
 
@@ -162,29 +162,31 @@ Marketing landing page (`/`) is not translated yet.
 
 ### Current M1 status
 
-| Area                                                                | Status                          |
-| ------------------------------------------------------------------- | ------------------------------- |
-| Auth backend (register, login, refresh, logout, `/users/me`)        | Complete                        |
-| Auth frontend (`/login`, `/register`, `/app`, session restore)      | Complete                        |
-| Password visibility toggle                                          | Complete                        |
-| Basic language support (8 locales, localStorage preference)         | Complete                        |
-| KYC mock flow (schema, API, SDK, `/app` panel)                      | Complete (M2)                   |
-| Real KYC provider (Sumsub)                                          | Not started (future M2 batch)   |
-| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)       | Complete (M4)                   |
-| Proof of delivery (metadata note + confirmation code)               | Complete (M4)                   |
-| In-app notifications (schema, API, SDK, bell/dropdown, polling)     | Complete (M4)                   |
-| Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)      | Complete (M4)                   |
-| Chat message in-app notifications (other participant only)          | Complete (M4)                   |
-| Chat modal polling (10s while open, visibility-aware)               | Complete (M4)                   |
-| Premium `/app` dashboard UI foundation (visual polish)              | Complete (M4)                   |
-| Payment/escrow schema foundation (Prisma + shared types)            | Complete (M5)                   |
-| Mock/manual payment API + SDK (`MANUAL` provider)                   | Complete (M5)                   |
-| Sender Accepted mock payment UI (authorize / hold / release)        | Complete (M5)                   |
-| Wayler Accepted read-only payment/payout visibility                 | Complete (M5)                   |
-| Mock payment in-app notifications (Wayler dispatch, `SYSTEM`)       | Complete (M5)                   |
-| Dispute/arbitration schema foundation (Prisma + shared types)       | Complete (M6 foundation)        |
-| Stripe, checkout, real payout processing, refunds, payout dashboard | Not started (future milestones) |
-| Disputes API/UI, admin/arbitrator panel                             | Not started (future milestones) |
+| Area                                                                             | Status                          |
+| -------------------------------------------------------------------------------- | ------------------------------- |
+| Auth backend (register, login, refresh, logout, `/users/me`)                     | Complete                        |
+| Auth frontend (`/login`, `/register`, `/app`, session restore)                   | Complete                        |
+| Password visibility toggle                                                       | Complete                        |
+| Basic language support (8 locales, localStorage preference)                      | Complete                        |
+| KYC mock flow (schema, API, SDK, `/app` panel)                                   | Complete (M2)                   |
+| Real KYC provider (Sumsub)                                                       | Not started (future M2 batch)   |
+| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)                    | Complete (M4)                   |
+| Proof of delivery (metadata note + confirmation code)                            | Complete (M4)                   |
+| In-app notifications (schema, API, SDK, bell/dropdown, polling)                  | Complete (M4)                   |
+| Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)                   | Complete (M4)                   |
+| Chat message in-app notifications (other participant only)                       | Complete (M4)                   |
+| Chat modal polling (10s while open, visibility-aware)                            | Complete (M4)                   |
+| Premium `/app` dashboard UI foundation (visual polish)                           | Complete (M4)                   |
+| Payment/escrow schema foundation (Prisma + shared types)                         | Complete (M5)                   |
+| Mock/manual payment API + SDK (`MANUAL` provider)                                | Complete (M5)                   |
+| Sender Accepted mock payment UI (authorize / hold / release)                     | Complete (M5)                   |
+| Wayler Accepted read-only payment/payout visibility                              | Complete (M5)                   |
+| Mock payment in-app notifications (Wayler dispatch, `SYSTEM`)                    | Complete (M5)                   |
+| Dispute/arbitration schema foundation (Prisma + shared types)                    | Complete (M6)                   |
+| Disputes API + SDK (`DisputesModule`, `api.disputes.*`)                          | Complete (M6)                   |
+| Sender/Wayler Accepted dispute UI (open/view modal, messages, evidence metadata) | Complete (M6)                   |
+| Stripe, checkout, real payout processing, refunds, payout dashboard              | Not started (future milestones) |
+| Admin/arbitrator panel, dispute resolution, payment hold on dispute              | Not started (future milestones) |
 
 The `/app` dashboard has a **premium UI foundation** (shell, cards, badges, alerts); full landing/onboarding redesign is a future milestone.
 
@@ -338,7 +340,7 @@ If KYC is not approved, each mode shows a verification notice; M4 enforces KYC o
 
 ## M4 Marketplace flow: Sender to Wayler
 
-M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **Mock/manual payment API + two-sided payment UI** (Sender controls, Wayler read-only visibility) exist for local testing (see **Payment and escrow foundation**). **Dispute/arbitration schema + shared types** exist for future order-problem handling (see **Dispute and arbitration foundation**); **no Stripe, checkout, real payout processing, dispute API/UI, admin/arbitrator panel, or subscriptions yet.**
+M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **Mock/manual payment API + two-sided payment UI** (Sender controls, Wayler read-only visibility) exist for local testing (see **Payment and escrow foundation**). **Dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** let parties open disputes, exchange messages, and attach evidence metadata on eligible orders (see **Dispute and arbitration foundation**); **no Stripe, checkout, real payout processing, admin/arbitrator panel, dispute resolution workflow, or subscriptions yet.**
 
 Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm dev` up, and **KYC approved** (mock approve in dev) for marketplace actions.
 
@@ -1099,10 +1101,11 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 ### Future milestones (marketplace)
 
 - **Stripe checkout & real payout processing** — provider integration (mock/manual API + Sender/Wayler payment UI complete — see **Payment and escrow foundation**)
-- **Disputes & arbitration API/UI** — open/list/detail, messages, evidence, resolution workflow (schema + shared types complete — see **Dispute and arbitration foundation**)
+- **Dispute resolution workflow** — arbitrator assignment, resolve/reject, `DisputeResolution` outcomes (schema + API + SDK + Sender/Wayler UI complete — see **Dispute and arbitration foundation**)
 - **Payment hold/refund/release on dispute outcome** — tie `PaymentIntent` / ledger to arbitrator resolution
+- **Dispute notifications** — in-app (and later push/email) for open, message, assignment, resolution
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
-- **Admin / arbitrator panel** — assignment, review queue, resolution actions
+- **Admin / arbitrator panel** — assignment, review queue, resolution actions, audit visibility
 - **Subscriptions / paywall**
 - **Mobile / PWA polish** and premium redesign (see **Premium dashboard UI foundation** — foundation pass complete)
 
@@ -1469,13 +1472,13 @@ Mock API, two-sided payment UI, and Wayler in-app notifications today exercise t
 
 ## Dispute and arbitration foundation
 
-Wayly is building a **safety structure for order problems** before real payments go live. The current batch adds **database schema** and **shared types** for disputes, threaded messages, evidence, arbitrator assignment, and resolution outcomes — so future API, UI, and payment hooks can share one model. **No dispute routes, SDK methods, frontend UI, admin panel, or payment hold/refund logic yet.**
+Wayly is building a **safety structure for order problems** before real payments go live. The current implementation includes **database schema**, **shared types**, **`DisputesModule` API + SDK**, and **Sender/Wayler Accepted dispute UI** on `/app` — so Senders and Waylers can open disputes, view detail, add messages, and attach evidence metadata on eligible orders. **No admin/arbitrator panel, resolution workflow, payment hold/refund integration, file upload, or dispute notifications yet.**
 
 ### Purpose
 
 - Give Wayly a **safety structure for order problems** before real payments.
 - Support future **refund/release decisions**, **evidence review**, **chat/evidence context**, and **arbitrator/admin workflow**.
-- Current version is **schema/types only**.
+- Let **Senders and Waylers** open and participate in disputes on accepted jobs today via API and `/app` UI.
 
 ### Schema
 
@@ -1532,55 +1535,150 @@ Wayly is building a **safety structure for order problems** before real payments
 
 Migration: `apps/api/prisma/migrations/20260605170814_dispute_arbitration_foundation/migration.sql`
 
-### Intended future flow
+### Current dispute flow
 
 ```text
-Sender or Wayler opens dispute on eligible order
+Accepted order (ACCEPTED / IN_TRANSIT / DELIVERED)
         ↓
-User explains reason + description
+Sender or Wayler: Open dispute (reason + description) on /app
         ↓
-Parties add messages and evidence
+View dispute detail (status, reason, description, createdAt)
         ↓
-Arbitrator/admin reviews thread + evidence
+Parties add messages (OPEN or UNDER_REVIEW only)
         ↓
-Resolution: refund Sender, release to Wayler, partial refund, no action, or other
+Parties add evidence metadata — title, optional description, optional fileUrl
+        ↓
+Arbitrator/admin review + resolution (future)
         ↓
 Payment/escrow handling depends on dispute result (future)
 ```
 
+### API routes (`/api/v1/disputes`, Swagger tag **disputes**)
+
+| Method | Route                    | Action                                           |
+| ------ | ------------------------ | ------------------------------------------------ |
+| `POST` | `/disputes`              | Open dispute → `DisputeDetail`                   |
+| `GET`  | `/disputes`              | List user disputes → `DisputeListResponse`       |
+| `GET`  | `/disputes/:id`          | Dispute detail → `DisputeDetail`                 |
+| `POST` | `/disputes/:id/messages` | Add message → `DisputeMessageSummary`            |
+| `POST` | `/disputes/:id/evidence` | Add evidence metadata → `DisputeEvidenceSummary` |
+
+All routes require **JWT + KYC approval** (`VerificationGuard` + `requireKycApproved`).
+
+### SDK (`api.disputes`)
+
+| Method                                                        | Usage                                                                              |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `disputes.list({ limit: 100 })`                               | Load user disputes once per Accepted panel refresh; match by `orderId` client-side |
+| `disputes.open({ orderId, reason, description })`             | Open dispute from modal                                                            |
+| `disputes.detail(id)`                                         | Load detail with messages + evidence                                               |
+| `disputes.addMessage(id, { body })`                           | Post thread message                                                                |
+| `disputes.addEvidence(id, { title, description?, fileUrl? })` | Post evidence metadata                                                             |
+
+Validation: `@wayly/validation` — `openDisputeSchema`, `disputesListQuerySchema`, `addDisputeMessageSchema`, `addDisputeEvidenceSchema`.
+
+### Frontend dispute UI (`/app`)
+
+**Component:** `apps/web/src/components/app/dispute-panel.tsx` — compact modal (same pattern as chat).
+
+**Placement:**
+
+| Panel                                 | Controls                                             |
+| ------------------------------------- | ---------------------------------------------------- |
+| **Sender Accepted Orders**            | **Open dispute** / **View dispute** per order        |
+| **Wayler Accepted delivery requests** | **Open dispute** / **View dispute** per accepted job |
+
+Shown only for orders in **ACCEPTED**, **IN_TRANSIT**, or **DELIVERED**. **DRAFT**, **OPEN**, and **CANCELLED** orders do not show dispute buttons.
+
+**Data loading:** `api.disputes.list({ limit: 100 })` when Sender/Wayler Accepted panels refresh; build `orderId → DisputeSummary` map client-side (latest per order). List load failure shows a small translated note; **Open dispute** remains available (backend 409 handled in modal).
+
+**Open mode:**
+
+- Order title/reference in header
+- Reason select (`DisputeReason`)
+- Description textarea (client min 10 / max 3000)
+- Submit → `api.disputes.open(...)` → switches to detail view and refreshes dispute map
+
+**Detail mode:**
+
+- `api.disputes.detail(id)` — status, reason, description, `createdAt`
+- Messages list (asc) + add message form
+- Evidence list (desc) + add evidence metadata form (`title`, optional `description`, optional `fileUrl`)
+- Manual **Refresh** button
+- **No file upload** — metadata only
+
+**Duplicate active dispute:** second open on same order → **409** with `duplicateActive` message, or **View dispute** after refresh when dispute already exists.
+
+i18n keys: `app.disputes.*` (8 locales), including reason and status labels.
+
+### Rules
+
+| Rule                    | Behavior                                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Auth**                | JWT + KYC required on all dispute routes and UI actions                                                                         |
+| **Participants**        | `openedById`, order **Sender**, accepted **Wayler**, or `assignedArbitratorId` (arbitrator access reserved for future admin UI) |
+| **Privacy**             | Non-participants receive **404**                                                                                                |
+| **Eligible orders**     | **ACCEPTED**, **IN_TRANSIT**, or **DELIVERED** only                                                                             |
+| **Ineligible orders**   | **DRAFT**, **OPEN**, **CANCELLED** → **409** on open                                                                            |
+| **One active dispute**  | At most one **OPEN** or **UNDER_REVIEW** dispute per order → duplicate returns **409**                                          |
+| **Messages / evidence** | Only while dispute is **OPEN** or **UNDER_REVIEW**                                                                              |
+
 ### Current scope
 
-| Included                                  | Not included (yet)                |
-| ----------------------------------------- | --------------------------------- |
-| Prisma enums + models + migration         | `DisputesModule` / API routes     |
-| `@wayly/types` dispute summaries          | SDK dispute methods               |
-| User + `DeliveryOrder` relations          | Frontend dispute UI               |
-| Arbitrator assignment field on `Dispute`  | Admin/arbitrator dashboard        |
-| Message + evidence models (metadata only) | Payment hold/refund/release logic |
-|                                           | Dispute notifications             |
-|                                           | File/photo evidence upload        |
+| Included                                                            | Not included (yet)                     |
+| ------------------------------------------------------------------- | -------------------------------------- |
+| Prisma enums + models + migration                                   | Admin/arbitrator dashboard             |
+| `@wayly/types` dispute summaries                                    | Assign arbitrator workflow             |
+| `DisputesModule` API + Swagger                                      | Resolve/reject dispute workflow        |
+| `@wayly/validation` dispute schemas                                 | Payment hold/refund/release on outcome |
+| SDK `api.disputes.*`                                                | File/photo evidence upload             |
+| Sender/Wayler Accepted **Open/View dispute** buttons                | Dispute notifications                  |
+| `DisputePanel` modal (open + detail + messages + evidence metadata) | Dispute timeline UI                    |
+| Duplicate active dispute handling                                   | Arbitration notes / audit log UI       |
+| i18n `app.disputes.*` (8 locales)                                   |                                        |
 
-### Manual verification
+### Current limitations
+
+- **No admin/arbitrator workflow** — `assignedArbitratorId` exists on schema but no admin UI or assignment API yet
+- **No payment/refund/release integration** — dispute outcome does not block or change `PaymentIntent` / ledger
+- **No file upload** — `fileUrl` is optional metadata string only
+- **No dispute notifications** — no in-app, push, or email dispatch on open/message/resolution
+- **No resolution workflow** — `DisputeResolution`, `resolutionNote`, `resolvedAt` not settable via API yet
+
+### Manual verification (schema + API)
 
 - [ ] Prisma migration applied (`dispute_arbitration_foundation`)
-- [ ] Prisma client generated (`pnpm --filter @wayly/api db:generate` or workspace equivalent)
-- [ ] `pnpm build` passes
-- [ ] `pnpm lint` passes
-- [ ] `pnpm typecheck` passes
+- [ ] Prisma client generated
+- [ ] `pnpm build`, `pnpm lint`, `pnpm typecheck` pass
+- [ ] Swagger tag **disputes** visible at `/docs`
+
+### Manual visual testing checklist (dispute UI on `/app`)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler):
+
+- [ ] **User A** publishes order; **User B** accepts
+- [ ] **User A** opens **Sender Accepted** panel → **Open dispute** on accepted order
+- [ ] **User A** selects reason and submits description (≥ 10 chars)
+- [ ] Modal switches to **detail view** (status, reason, description, `createdAt`)
+- [ ] **User B** opens **Wayler Accepted** panel → **View dispute** on same order
+- [ ] **User B** adds a message in dispute modal
+- [ ] **User A** clicks **Refresh** in detail view → sees **User B**'s message
+- [ ] **User A** adds evidence metadata (title + optional description / fileUrl)
+- [ ] Second **Open dispute** on same order → `duplicateActive` message or **View dispute** after refresh
+- [ ] **DRAFT** / **OPEN** orders do **not** show dispute button
+- [ ] No file-upload UI appears in dispute modal
 
 ### Future milestones (disputes & arbitration)
 
-- **`DisputesModule` API** — Nest module, guards, Swagger tag
-- **Open dispute endpoint** — eligible orders, reason + description validation
-- **List/detail disputes** — paginated list + detail with messages/evidence
-- **Dispute messages** — post/list thread messages between parties
-- **Evidence submission** — metadata records; later file upload integration
-- **Admin/arbitrator assignment** — assign `assignedArbitratorId`, queue for `ADMIN`/`ARBITRATOR` roles
-- **Resolution workflow** — set `resolution`, `resolutionNote`, `resolvedAt`; transition `DisputeStatus`
 - **Dispute notifications** — in-app (and later push/email) for open, message, assignment, resolution
+- **Admin/arbitrator dashboard** — review queue, order/payment context, resolution actions
+- **Assign arbitrator** — set `assignedArbitratorId`; queue for `ADMIN`/`ARBITRATOR` roles
+- **Resolve dispute** — set `resolution`, `resolutionNote`, `resolvedAt`; transition `DisputeStatus`
 - **Payment hold/refund/release integration** — block payout during dispute; execute outcome on `PaymentIntent` / ledger
 - **File/photo evidence upload** — storage + signed URLs for `DisputeEvidence.fileUrl`
-- **Admin/arbitrator dashboard** — review queue, order/payment context, resolution actions
+- **Dispute timeline** — chronological activity view for parties and arbitrators
+- **Arbitration notes** — internal arbitrator commentary separate from party messages
+- **Audit logs** — immutable record of dispute state changes for compliance
 
 ## Premium dashboard UI foundation
 
@@ -1663,7 +1761,7 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
 - **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
-- **M6 — Disputes & arbitration (foundation):** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types (`DisputeSummary`, `DisputeDetail`, message/evidence summaries, list response), User/`DeliveryOrder` relations. ✅ (schema + types only). Next: `DisputesModule` API, open/list/detail, messages, evidence, arbitrator assignment, resolution workflow, notifications, payment hold/refund/release integration, file upload, admin/arbitrator dashboard.
+- **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales). ✅ (schema + API + SDK + two-sided UI complete; no admin, resolution, notifications, payment hooks, file upload). Next: dispute notifications, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs.
 - **M7–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds**, subscriptions/paywall, offline + PDF agreements, WebSocket/SSE notification preferences, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
