@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`, **lightweight polling** for unread badge and open dropdown) are complete. Photo/signature proof, payments, escrow, chat, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`) are complete. Photo/signature proof, payments, escrow, real-time chat/push, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -173,7 +173,8 @@ Marketing landing page (`/`) is not translated yet.
 | Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)   | Complete (M4)                   |
 | Proof of delivery (metadata note + confirmation code)           | Complete (M4)                   |
 | In-app notifications (schema, API, SDK, bell/dropdown, polling) | Complete (M4)                   |
-| Payments, escrow, chat, disputes, admin                         | Not started (future milestones) |
+| Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)  | Complete (M4)                   |
+| Payments, escrow, disputes, admin                               | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
 
@@ -289,7 +290,7 @@ Invoke-RestMethod -Method GET `
 - **Real Sumsub integration** — applicant creation, SDK/token flow, production provider
 - **File upload & webhooks** — document submission and async provider callbacks
 - **Admin / manual review** — operator tools beyond mock approve/reject
-- **Real order/feed/chat blocking** — enforce KYC gates in orders, marketplace, and chat modules (flags exist; downstream features are not built yet)
+- **KYC enforcement polish** — orders, marketplace, and chat modules enforce KYC today; remaining flags (e.g. `canChat`, `canContact`) may gate future contact surfaces
 
 ## M3 Sender/Wayler mode
 
@@ -327,7 +328,7 @@ If KYC is not approved, each mode shows a verification notice; M4 enforces KYC o
 
 ## M4 Marketplace flow: Sender to Wayler
 
-M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`. **No payments, escrow, chat, disputes, admin, or subscriptions yet.**
+M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **No payments, escrow, disputes, admin, or subscriptions yet.**
 
 Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm dev` up, and **KYC approved** (mock approve in dev) for marketplace actions.
 
@@ -354,6 +355,8 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Automatic Sender lifecycle notifications (accept/transit/proof/delivered) | Complete |
 | Frontend notification bell/dropdown on `/app`                             | Complete |
 | Notification bell polling (30s unread / 60s list, visibility-aware)       | Complete |
+| Chat schema + API + SDK (Conversation / ChatMessage)                      | Complete |
+| Frontend chat modal on `/app` (Sender/Wayler Accepted panels)             | Complete |
 | Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
 | Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
 | Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
@@ -573,6 +576,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User B** clicks **Mark delivered**
 - [ ] **User A** refreshes Sender Accepted panel → sees **DELIVERED** badge, note, and **deliveredAt** when set
 - [ ] **User A** opens the notification bell → sees lifecycle notifications (see **Notifications** section)
+- [ ] **User A** and **User B** can open chat from Accepted panels after accept (see **Chat / contact** section)
 
 ### Future milestones (delivery lifecycle)
 
@@ -845,9 +849,124 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
 - **Admin / system notifications** — `SYSTEM` type, operator broadcasts
 
+## Chat / contact between Sender and Wayler
+
+Chat lets the **Sender** and **accepted Wayler** coordinate delivery details for an order. The current version is **order-based in-app chat** — one conversation per accepted order, opened from Accepted panels on `/app`. **WebSocket/SSE, polling, chat notifications, attachments, and read-receipt UI** are not implemented yet.
+
+### Purpose
+
+- Coordinate pickup, handoff, and delivery questions between the two parties on an active job.
+- Tied to a single `DeliveryOrder` — not a global inbox or open-marketplace chat.
+- Real-time delivery and push/email alerts are planned for later milestones.
+
+### Schema
+
+**`Conversation`** (`conversations`)
+
+| Field       | Type     | Description                                        |
+| ----------- | -------- | -------------------------------------------------- |
+| `id`        | UUID     | Primary key                                        |
+| `orderId`   | UUID     | Unique — one conversation per order                |
+| `senderId`  | UUID     | Order Sender (`DeliveryOrder.senderId`)            |
+| `waylerId`  | UUID     | Accepted Wayler (`DeliveryOrder.acceptedWaylerId`) |
+| `createdAt` | DateTime | When conversation was created                      |
+| `updatedAt` | DateTime | Bumped when a new message is sent                  |
+
+Relations: `order` → `DeliveryOrder`, `sender` / `wayler` → `User`, `messages` → `ChatMessage[]`.
+
+**`ChatMessage`** (`chat_messages`)
+
+| Field            | Type      | Description                    |
+| ---------------- | --------- | ------------------------------ |
+| `id`             | UUID      | Primary key                    |
+| `conversationId` | UUID      | Parent conversation            |
+| `senderId`       | UUID      | User who sent the message      |
+| `body`           | String    | Message text (trimmed, 1–2000) |
+| `readAt`         | DateTime? | When recipient marked read     |
+| `createdAt`      | DateTime  | When message was sent          |
+
+Shared types: `ConversationSummary`, `ChatMessageSummary`, `ConversationDetail`, `ConversationListResponse` (`@wayly/types`).
+
+### API routes
+
+All routes require **JWT + KYC approved**. Base path: `/api/v1`.
+
+| Method | Path                                   | Description                                             |
+| ------ | -------------------------------------- | ------------------------------------------------------- |
+| POST   | `/api/v1/conversations/order/:orderId` | Create or fetch conversation for an eligible order      |
+| GET    | `/api/v1/conversations`                | Paginated list for current user (`page`, `limit`)       |
+| GET    | `/api/v1/conversations/:id`            | Conversation detail + message history (latest 100, asc) |
+| POST   | `/api/v1/conversations/:id/messages`   | Send message — body `{ body: string }`                  |
+| POST   | `/api/v1/conversations/:id/read`       | Mark unread messages from the other participant as read |
+
+Interactive docs: http://localhost:4000/docs (tag **conversations**).
+
+### SDK
+
+```typescript
+api.conversations.forOrder(orderId);              // POST /conversations/order/:orderId
+api.conversations.list(query?);                   // GET /conversations
+api.conversations.detail(id);                     // GET /conversations/:id
+api.conversations.sendMessage(id, { body });      // POST /conversations/:id/messages
+api.conversations.markRead(id);                   // POST /conversations/:id/read
+```
+
+### Rules
+
+- **JWT + KYC required** on all conversation routes (`VerificationGuard`).
+- **Participants only** — current user must be `senderId` or `waylerId` on the order/conversation; others receive **404** (privacy style).
+- **Eligible order statuses:** **ACCEPTED**, **IN_TRANSIT**, **DELIVERED** only.
+- **Not eligible:** **DRAFT**, **OPEN**, **CANCELLED** (and orders without `acceptedWaylerId`) → **409** on create/fetch by order.
+- **One conversation per order** — `orderId` is unique; `forOrder` returns existing conversation if already created.
+- **Message body** — trimmed, min 1, max 2000 characters (`sendChatMessageSchema`).
+- **Mark read** — sets `readAt` on messages where `senderId !== currentUser` and `readAt` is null.
+- **No WebSocket/SSE** — clients refresh manually; no chat polling in the current frontend.
+
+### Frontend behavior (`/app`)
+
+| Feature             | Behavior                                                               |
+| ------------------- | ---------------------------------------------------------------------- |
+| **Open chat**       | Button on **Sender Accepted Orders** and **Wayler Accepted** panels    |
+| **Eligible orders** | `ACCEPTED`, `IN_TRANSIT`, `DELIVERED` only — no button on DRAFT/OPEN   |
+| **Open flow**       | `api.conversations.forOrder(order.id)` → opens compact chat modal      |
+| **On open**         | `api.conversations.detail(id)` + `api.conversations.markRead(id)`      |
+| **Message list**    | You/Other bubbles, `createdAt`, empty state                            |
+| **Send**            | Textarea max 2000 chars; Send disabled when body empty/whitespace-only |
+| **After send**      | Clear input, reload detail, mark read                                  |
+| **Refresh**         | Reload detail + mark read                                              |
+| **Close**           | Dismiss modal; click outside to close                                  |
+
+i18n keys under `app.chat.*` (8 locales).
+
+### Manual testing checklist (chat)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User C**:
+
+- [ ] **User A** publishes an order
+- [ ] **User B** accepts
+- [ ] **User A** (Sender Accepted panel) → **Open chat** → conversation created
+- [ ] **User A** sends a message
+- [ ] **User B** (Wayler Accepted panel) → **Open chat** → sees **User A**'s message
+- [ ] **User B** replies
+- [ ] **User A** clicks **Refresh** in chat → sees **User B**'s reply
+- [ ] **User C** (not participant) → `POST /conversations/order/:orderId` or `GET /conversations/:id` → **404**
+- [ ] DRAFT/OPEN orders → **no Open chat button** (not in Accepted panels / ineligible status)
+- [ ] Empty/whitespace message → Send disabled
+- [ ] KYC-unapproved user → conversation API blocked (**403** `KYC_REQUIRED`)
+
+### Future milestones (chat)
+
+- **Chat notifications** — alert recipient when a new message arrives (in-app / push / email)
+- **Polling or WebSocket/SSE** — live message updates without manual refresh
+- **Typing indicators** — show when the other party is composing
+- **Read receipt UI** — visual read state beyond backend `readAt` + `markRead`
+- **File / image attachments** — proof photos, location pins, etc.
+- **Moderation / reporting** — flag abusive messages
+- **Admin / arbitrator visibility** — dispute evidence access
+- **Localized system messages** — server-side templates for automated chat events
+
 ### Future milestones (marketplace)
 
-- **Chat / contact** between Sender and Wayler after accept
 - **Payments & escrow** (Stripe, offline flows)
 - **Disputes & arbitration**
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
@@ -879,8 +998,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`, **polling** — 30s unread / 60s list, visibility-aware). ✅ (core loop + cancellation + lifecycle + metadata proof + in-app notifications + polling complete; photo/signature proof, WebSocket/SSE/push/email, payments/chat/disputes later)
-- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE/push/email notifications + preferences, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, dispatch, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat foundation complete; photo/signature proof, WebSocket/SSE/push/email, chat real-time/notifications, payments/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, chat real-time/polling/notifications/attachments, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE/push/email notification preferences, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
