@@ -2,8 +2,8 @@
 
 import { ApiError } from '@wayly/sdk';
 import type { AcceptedDeliveryOrderSummary, OrdersListQuery } from '@wayly/sdk';
-import type { DeliveryOrderSummary, KycStatusView } from '@wayly/types';
-import { DeliveryOrderStatus, DeliveryOrderType, KycStatus } from '@wayly/types';
+import type { DeliveryOrderSummary, KycStatusView, PaymentIntentSummary } from '@wayly/types';
+import { DeliveryOrderStatus, DeliveryOrderType, KycStatus, PaymentStatus } from '@wayly/types';
 import {
   Button,
   Card,
@@ -68,6 +68,8 @@ type SenderAcceptedOrderRow = DeliveryOrderSummary & {
   proofNote?: string | null;
   proofConfirmationCode?: string | null;
   proofSubmittedAt?: string | null;
+  paymentIntent: PaymentIntentSummary | null;
+  paymentLoadFailed: boolean;
 };
 
 const SENDER_LIFECYCLE_STATUSES = new Set<DeliveryOrderSummary['status']>([
@@ -315,6 +317,49 @@ function resolveAcceptError(err: unknown, t: (key: TranslationKey) => string): s
   return err.message || t('app.waylerFeed.acceptFailed');
 }
 
+function formatPaymentAmount(amount: string | null | undefined, currency: string): string {
+  return amount ? `${amount} ${currency}` : '—';
+}
+
+function senderPaymentStatusLabel(
+  intent: PaymentIntentSummary | null,
+  t: (key: TranslationKey) => string,
+): string {
+  if (!intent) {
+    return t('app.senderPanel.payment.notAuthorized');
+  }
+  switch (intent.status) {
+    case PaymentStatus.AUTHORIZED:
+      return t('app.senderPanel.payment.authorized');
+    case PaymentStatus.HELD_IN_ESCROW:
+      return t('app.senderPanel.payment.heldInEscrow');
+    case PaymentStatus.RELEASED:
+      return t('app.senderPanel.payment.released');
+    case PaymentStatus.REFUNDED:
+      return t('app.senderPanel.payment.refunded');
+    case PaymentStatus.FAILED:
+      return t('app.senderPanel.payment.failed');
+    case PaymentStatus.CANCELLED:
+      return t('app.senderPanel.payment.cancelled');
+    default:
+      return t('app.senderPanel.payment.notAuthorized');
+  }
+}
+
+async function fetchPaymentIntentForOrder(
+  orderId: string,
+): Promise<{ intent: PaymentIntentSummary | null; loadFailed: boolean }> {
+  try {
+    const intent = await api.payments.forOrder(orderId);
+    return { intent, loadFailed: false };
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) {
+      return { intent: null, loadFailed: false };
+    }
+    return { intent: null, loadFailed: true };
+  }
+}
+
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
@@ -392,6 +437,15 @@ export default function AppHomePage() {
   const [chatOrderId, setChatOrderId] = useState<string | null>(null);
   const [openingChatOrderId, setOpeningChatOrderId] = useState<string | null>(null);
   const [chatOpenError, setChatOpenError] = useState<string | null>(null);
+  const [paymentActionOrderId, setPaymentActionOrderId] = useState<string | null>(null);
+  const [paymentAction, setPaymentAction] = useState<'authorize' | 'hold' | 'release' | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [paymentErrorOrderId, setPaymentErrorOrderId] = useState<string | null>(null);
+  const [paymentSuccessOrderId, setPaymentSuccessOrderId] = useState<string | null>(null);
+  const [paymentSuccessKind, setPaymentSuccessKind] = useState<
+    'authorize' | 'hold' | 'release' | null
+  >(null);
+  const paymentActionBusy = paymentActionOrderId !== null;
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -464,7 +518,10 @@ export default function AppHomePage() {
       ].filter((order) => SENDER_LIFECYCLE_STATUSES.has(order.status));
       const withTimestamps = await Promise.all(
         items.map(async (order) => {
-          const detail = await api.orders.detail(order.id);
+          const [detail, payment] = await Promise.all([
+            api.orders.detail(order.id),
+            fetchPaymentIntentForOrder(order.id),
+          ]);
           return {
             ...order,
             acceptedAt: detail.acceptedAt,
@@ -472,6 +529,8 @@ export default function AppHomePage() {
             proofNote: detail.proofNote,
             proofConfirmationCode: detail.proofConfirmationCode,
             proofSubmittedAt: detail.proofSubmittedAt,
+            paymentIntent: payment.intent,
+            paymentLoadFailed: payment.loadFailed,
           };
         }),
       );
@@ -779,6 +838,75 @@ export default function AppHomePage() {
     setChatConversationId(null);
     setChatOrderTitle(null);
     setChatOrderId(null);
+  }
+
+  async function handleMockAuthorizePayment(orderId: string) {
+    setPaymentError(null);
+    setPaymentErrorOrderId(null);
+    setPaymentSuccessOrderId(null);
+    setPaymentSuccessKind(null);
+    setPaymentActionOrderId(orderId);
+    setPaymentAction('authorize');
+    try {
+      await api.payments.mockAuthorizeOrder(orderId);
+      setPaymentSuccessOrderId(orderId);
+      setPaymentSuccessKind('authorize');
+      await loadSenderAcceptedOrders();
+    } catch (err) {
+      setPaymentErrorOrderId(orderId);
+      setPaymentError(
+        err instanceof ApiError ? err.message : t('app.senderPanel.payment.actionFailed'),
+      );
+    } finally {
+      setPaymentActionOrderId(null);
+      setPaymentAction(null);
+    }
+  }
+
+  async function handleMockHoldEscrow(orderId: string, paymentIntentId: string) {
+    setPaymentError(null);
+    setPaymentErrorOrderId(null);
+    setPaymentSuccessOrderId(null);
+    setPaymentSuccessKind(null);
+    setPaymentActionOrderId(orderId);
+    setPaymentAction('hold');
+    try {
+      await api.payments.mockHoldEscrow(paymentIntentId);
+      setPaymentSuccessOrderId(orderId);
+      setPaymentSuccessKind('hold');
+      await loadSenderAcceptedOrders();
+    } catch (err) {
+      setPaymentErrorOrderId(orderId);
+      setPaymentError(
+        err instanceof ApiError ? err.message : t('app.senderPanel.payment.actionFailed'),
+      );
+    } finally {
+      setPaymentActionOrderId(null);
+      setPaymentAction(null);
+    }
+  }
+
+  async function handleMockReleasePayment(orderId: string, paymentIntentId: string) {
+    setPaymentError(null);
+    setPaymentErrorOrderId(null);
+    setPaymentSuccessOrderId(null);
+    setPaymentSuccessKind(null);
+    setPaymentActionOrderId(orderId);
+    setPaymentAction('release');
+    try {
+      await api.payments.mockRelease(paymentIntentId);
+      setPaymentSuccessOrderId(orderId);
+      setPaymentSuccessKind('release');
+      await loadSenderAcceptedOrders();
+    } catch (err) {
+      setPaymentErrorOrderId(orderId);
+      setPaymentError(
+        err instanceof ApiError ? err.message : t('app.senderPanel.payment.actionFailed'),
+      );
+    } finally {
+      setPaymentActionOrderId(null);
+      setPaymentAction(null);
+    }
   }
 
   async function handleAcceptOrder(orderId: string) {
@@ -1876,6 +2004,33 @@ export default function AppHomePage() {
                   <ul className="flex flex-col gap-4">
                     {senderAcceptedOrders.map((order) => {
                       const statusNote = senderStatusNote(order.status, t);
+                      const paymentIntent = order.paymentIntent;
+                      const paymentStatus = paymentIntent?.status ?? null;
+                      const canAuthorizePayment =
+                        (!paymentIntent || paymentStatus === PaymentStatus.PENDING) &&
+                        (order.status === DeliveryOrderStatus.ACCEPTED ||
+                          order.status === DeliveryOrderStatus.IN_TRANSIT);
+                      const canHoldEscrow = paymentStatus === PaymentStatus.AUTHORIZED;
+                      const canReleasePayment =
+                        paymentStatus === PaymentStatus.HELD_IN_ESCROW &&
+                        order.status === DeliveryOrderStatus.DELIVERED &&
+                        Boolean(order.proofSubmittedAt);
+                      const showReleaseRequirements =
+                        paymentStatus === PaymentStatus.HELD_IN_ESCROW && !canReleasePayment;
+                      const terminalPaymentStatus =
+                        paymentStatus === PaymentStatus.REFUNDED ||
+                        paymentStatus === PaymentStatus.FAILED ||
+                        paymentStatus === PaymentStatus.CANCELLED;
+                      const paymentSuccessMessage =
+                        paymentSuccessOrderId === order.id
+                          ? paymentSuccessKind === 'authorize'
+                            ? t('app.senderPanel.payment.authorizeSuccess')
+                            : paymentSuccessKind === 'hold'
+                              ? t('app.senderPanel.payment.holdSuccess')
+                              : paymentSuccessKind === 'release'
+                                ? t('app.senderPanel.payment.releaseSuccess')
+                                : null
+                          : null;
 
                       return (
                         <li key={order.id} className={ORDER_CARD_CLASS}>
@@ -1973,6 +2128,129 @@ export default function AppHomePage() {
                               {t('app.senderPanel.proofMissing')}
                             </p>
                           ) : null}
+                          <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                            <p className="text-sm font-medium">
+                              {t('app.senderPanel.payment.title')}
+                            </p>
+                            {order.paymentLoadFailed ? (
+                              <p className="mt-2 text-sm text-destructive">
+                                {t('app.senderPanel.payment.loadFailed')}
+                              </p>
+                            ) : null}
+                            {paymentSuccessMessage ? (
+                              <p className={cn(ALERT_SUCCESS_CLASS, 'mt-2 text-sm')}>
+                                {paymentSuccessMessage}
+                              </p>
+                            ) : null}
+                            {paymentErrorOrderId === order.id && paymentError ? (
+                              <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')}>
+                                {paymentError}
+                              </p>
+                            ) : null}
+                            <p className="mt-1 text-sm font-medium">
+                              {senderPaymentStatusLabel(paymentIntent, t)}
+                            </p>
+                            <dl className="mt-2 flex flex-col gap-1 text-sm">
+                              {paymentIntent ? (
+                                <>
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.senderPanel.payment.provider')}
+                                    </dt>
+                                    <dd>{paymentIntent.provider}</dd>
+                                  </div>
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.senderPanel.payment.amount')}
+                                    </dt>
+                                    <dd>
+                                      {formatPaymentAmount(
+                                        paymentIntent.amount,
+                                        paymentIntent.currency,
+                                      )}
+                                    </dd>
+                                  </div>
+                                  {paymentIntent.platformFeeAmount ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.senderPanel.payment.platformFee')}
+                                      </dt>
+                                      <dd>
+                                        {formatPaymentAmount(
+                                          paymentIntent.platformFeeAmount,
+                                          paymentIntent.currency,
+                                        )}
+                                      </dd>
+                                    </div>
+                                  ) : null}
+                                  {paymentIntent.escrowAmount ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.senderPanel.payment.escrowAmount')}
+                                      </dt>
+                                      <dd>
+                                        {formatPaymentAmount(
+                                          paymentIntent.escrowAmount,
+                                          paymentIntent.currency,
+                                        )}
+                                      </dd>
+                                    </div>
+                                  ) : null}
+                                </>
+                              ) : null}
+                            </dl>
+                            {showReleaseRequirements ? (
+                              <p className="mt-2 text-sm text-muted-foreground">
+                                {t('app.senderPanel.payment.releaseRequirements')}
+                              </p>
+                            ) : null}
+                            {!terminalPaymentStatus && paymentStatus !== PaymentStatus.RELEASED ? (
+                              <div className="wayly-action-group mt-3">
+                                {canAuthorizePayment ? (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={paymentActionBusy}
+                                    onClick={() => void handleMockAuthorizePayment(order.id)}
+                                  >
+                                    {paymentActionOrderId === order.id &&
+                                    paymentAction === 'authorize'
+                                      ? t('app.senderPanel.payment.mockAuthorizing')
+                                      : t('app.senderPanel.payment.mockAuthorize')}
+                                  </Button>
+                                ) : null}
+                                {canHoldEscrow && paymentIntent ? (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={paymentActionBusy}
+                                    onClick={() =>
+                                      void handleMockHoldEscrow(order.id, paymentIntent.id)
+                                    }
+                                  >
+                                    {paymentActionOrderId === order.id && paymentAction === 'hold'
+                                      ? t('app.senderPanel.payment.mockHoldingEscrow')
+                                      : t('app.senderPanel.payment.mockHoldEscrow')}
+                                  </Button>
+                                ) : null}
+                                {canReleasePayment && paymentIntent ? (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={paymentActionBusy}
+                                    onClick={() =>
+                                      void handleMockReleasePayment(order.id, paymentIntent.id)
+                                    }
+                                  >
+                                    {paymentActionOrderId === order.id &&
+                                    paymentAction === 'release'
+                                      ? t('app.senderPanel.payment.mockReleasing')
+                                      : t('app.senderPanel.payment.mockRelease')}
+                                  </Button>
+                                ) : null}
+                              </div>
+                            ) : null}
+                          </div>
                           {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
                             <Button
                               className="mt-3 w-full sm:w-auto"
