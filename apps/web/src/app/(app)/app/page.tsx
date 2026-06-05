@@ -21,6 +21,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
+import { NotificationBell } from '@/components/app/notification-bell';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
@@ -881,6 +882,7 @@ export default function AppHomePage() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <LanguageSelect />
+            <NotificationBell />
             <Button variant="outline" asChild>
               <Link href="/">{t('common.backToHome')}</Link>
             </Button>

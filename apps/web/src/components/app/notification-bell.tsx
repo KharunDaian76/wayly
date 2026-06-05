@@ -1,0 +1,256 @@
+'use client';
+
+import { ApiError } from '@wayly/sdk';
+import type { NotificationSummary } from '@wayly/types';
+import { Button } from '@wayly/ui';
+import { Bell } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { useI18n } from '@/lib/i18n/i18n-context';
+import { api } from '@/lib/sdk';
+import { cn } from '@/lib/utils';
+
+export function NotificationBell() {
+  const { t } = useI18n();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [unreadTotal, setUnreadTotal] = useState(0);
+  const [items, setItems] = useState<NotificationSummary[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [markingReadId, setMarkingReadId] = useState<string | null>(null);
+  const [markingAll, setMarkingAll] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const actionBusy = markingReadId !== null || markingAll;
+
+  const loadUnreadCount = useCallback(async () => {
+    try {
+      const result = await api.notifications.unreadCount();
+      setUnreadTotal(result.unreadTotal);
+    } catch {
+      // Non-blocking: bell still works if count fails on load.
+    }
+  }, []);
+
+  const loadList = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await api.notifications.list({ page: 1, limit: 10 });
+      setItems(result.items);
+      setUnreadTotal(result.unreadTotal);
+    } catch {
+      setError(t('app.notifications.loadFailed'));
+    } finally {
+      setLoading(false);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    void loadUnreadCount();
+  }, [loadUnreadCount]);
+
+  useEffect(() => {
+    if (open) {
+      setSuccessMessage(null);
+      void loadList();
+    }
+  }, [open, loadList]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    function handlePointerDown(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, [open]);
+
+  async function handleMarkRead(id: string) {
+    setMarkingReadId(id);
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      const updated = await api.notifications.markRead(id);
+      setItems((prev) => prev.map((item) => (item.id === id ? updated : item)));
+      const count = await api.notifications.unreadCount();
+      setUnreadTotal(count.unreadTotal);
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message || t('app.notifications.loadFailed')
+          : t('app.notifications.loadFailed'),
+      );
+    } finally {
+      setMarkingReadId(null);
+    }
+  }
+
+  async function handleMarkAllRead() {
+    setMarkingAll(true);
+    setError(null);
+    setSuccessMessage(null);
+    try {
+      await api.notifications.markAllRead();
+      setUnreadTotal(0);
+      await loadList();
+      setSuccessMessage(t('app.notifications.markAllReadSuccess'));
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message || t('app.notifications.loadFailed')
+          : t('app.notifications.loadFailed'),
+      );
+    } finally {
+      setMarkingAll(false);
+    }
+  }
+
+  const badgeLabel =
+    unreadTotal > 0
+      ? t('app.notifications.unreadCount').replace('{count}', String(unreadTotal))
+      : undefined;
+
+  return (
+    <div ref={containerRef} className="relative">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="relative px-2.5"
+        aria-label={t('app.notifications.open')}
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <Bell className="h-4 w-4" aria-hidden />
+        {unreadTotal > 0 ? (
+          <span
+            className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
+            aria-label={badgeLabel}
+          >
+            {unreadTotal > 99 ? '99+' : unreadTotal}
+          </span>
+        ) : null}
+      </Button>
+
+      {open ? (
+        <div
+          className="absolute right-0 z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-lg border border-border bg-background shadow-lg"
+          role="dialog"
+          aria-label={t('app.notifications.title')}
+        >
+          <div className="flex items-center justify-between gap-2 border-b border-border/60 px-3 py-2">
+            <p className="text-sm font-semibold">{t('app.notifications.title')}</p>
+            <div className="flex items-center gap-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 px-2 text-xs"
+                disabled={loading || actionBusy}
+                onClick={() => void loadList()}
+              >
+                {t('app.notifications.refresh')}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 px-2 text-xs"
+                disabled={loading || actionBusy || unreadTotal === 0}
+                onClick={() => void handleMarkAllRead()}
+              >
+                {markingAll
+                  ? t('app.notifications.markingRead')
+                  : t('app.notifications.markAllRead')}
+              </Button>
+            </div>
+          </div>
+
+          <div className="max-h-80 overflow-y-auto p-2">
+            {error ? (
+              <p className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger">
+                {error}
+              </p>
+            ) : null}
+            {successMessage ? (
+              <p
+                className="mb-2 rounded-md border border-accent/30 bg-accent/10 px-2 py-1.5 text-xs text-foreground"
+                role="status"
+              >
+                {successMessage}
+              </p>
+            ) : null}
+            {loading ? (
+              <p className="px-2 py-4 text-center text-sm text-muted-foreground">
+                {t('app.notifications.loading')}
+              </p>
+            ) : items.length === 0 ? (
+              <p className="px-2 py-4 text-center text-sm text-muted-foreground">
+                {t('app.notifications.empty')}
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-2">
+                {items.map((item) => {
+                  const isUnread = item.readAt === null;
+                  const isMarking = markingReadId === item.id;
+
+                  return (
+                    <li
+                      key={item.id}
+                      className={cn(
+                        'rounded-md border px-3 py-2 text-sm',
+                        isUnread
+                          ? 'border-primary/30 bg-primary/5'
+                          : 'border-border/60 bg-muted/20',
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="font-medium leading-snug">{item.title}</p>
+                        <span
+                          className={cn(
+                            'shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium',
+                            isUnread
+                              ? 'bg-primary/15 text-foreground'
+                              : 'bg-muted text-muted-foreground',
+                          )}
+                        >
+                          {isUnread ? t('app.notifications.unread') : t('app.notifications.read')}
+                        </span>
+                      </div>
+                      {item.body ? (
+                        <p className="mt-1 text-xs text-muted-foreground">{item.body}</p>
+                      ) : null}
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {new Date(item.createdAt).toLocaleString()}
+                      </p>
+                      {isUnread ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="mt-2 h-7 px-2 text-xs"
+                          disabled={actionBusy}
+                          onClick={() => void handleMarkRead(item.id)}
+                        >
+                          {isMarking
+                            ? t('app.notifications.markingRead')
+                            : t('app.notifications.markRead')}
+                        </Button>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
