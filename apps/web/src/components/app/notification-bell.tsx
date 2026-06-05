@@ -10,10 +10,18 @@ import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
+const UNREAD_COUNT_POLL_MS = 30_000;
+const LIST_POLL_MS = 60_000;
+
 export function NotificationBell() {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
+  const countInFlightRef = useRef(false);
+  const listInFlightRef = useRef(false);
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(
+    () => typeof document !== 'undefined' && document.visibilityState === 'visible',
+  );
   const [unreadTotal, setUnreadTotal] = useState(0);
   const [items, setItems] = useState<NotificationSummary[]>([]);
   const [loading, setLoading] = useState(false);
@@ -23,39 +31,86 @@ export function NotificationBell() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const actionBusy = markingReadId !== null || markingAll;
 
-  const loadUnreadCount = useCallback(async () => {
+  const fetchUnreadCount = useCallback(async () => {
+    if (countInFlightRef.current) {
+      return;
+    }
+    countInFlightRef.current = true;
     try {
       const result = await api.notifications.unreadCount();
       setUnreadTotal(result.unreadTotal);
     } catch {
-      // Non-blocking: bell still works if count fails on load.
+      // Silent for background polling; badge keeps last known value.
+    } finally {
+      countInFlightRef.current = false;
     }
   }, []);
 
-  const loadList = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const result = await api.notifications.list({ page: 1, limit: 10 });
-      setItems(result.items);
-      setUnreadTotal(result.unreadTotal);
-    } catch {
-      setError(t('app.notifications.loadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const fetchList = useCallback(
+    async (foreground = true) => {
+      if (listInFlightRef.current) {
+        return;
+      }
+      listInFlightRef.current = true;
+      if (foreground) {
+        setLoading(true);
+        setError(null);
+      }
+      try {
+        const result = await api.notifications.list({ page: 1, limit: 10 });
+        setItems(result.items);
+        setUnreadTotal(result.unreadTotal);
+      } catch {
+        if (foreground) {
+          setError(t('app.notifications.loadFailed'));
+        }
+      } finally {
+        if (foreground) {
+          setLoading(false);
+        }
+        listInFlightRef.current = false;
+      }
+    },
+    [t],
+  );
 
   useEffect(() => {
-    void loadUnreadCount();
-  }, [loadUnreadCount]);
+    function handleVisibilityChange() {
+      setVisible(document.visibilityState === 'visible');
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
 
   useEffect(() => {
-    if (open) {
-      setSuccessMessage(null);
-      void loadList();
+    if (!visible) {
+      return;
     }
-  }, [open, loadList]);
+    void fetchUnreadCount();
+    const intervalId = window.setInterval(() => {
+      void fetchUnreadCount();
+    }, UNREAD_COUNT_POLL_MS);
+    return () => window.clearInterval(intervalId);
+  }, [visible, fetchUnreadCount]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    setSuccessMessage(null);
+    void fetchList(true);
+    void fetchUnreadCount();
+  }, [open, fetchList, fetchUnreadCount]);
+
+  useEffect(() => {
+    if (!open || !visible) {
+      return;
+    }
+    const intervalId = window.setInterval(() => {
+      void fetchList(false);
+    }, LIST_POLL_MS);
+    return () => window.clearInterval(intervalId);
+  }, [open, visible, fetchList]);
 
   useEffect(() => {
     if (!open) {
@@ -77,8 +132,7 @@ export function NotificationBell() {
     try {
       const updated = await api.notifications.markRead(id);
       setItems((prev) => prev.map((item) => (item.id === id ? updated : item)));
-      const count = await api.notifications.unreadCount();
-      setUnreadTotal(count.unreadTotal);
+      await fetchUnreadCount();
     } catch (err) {
       setError(
         err instanceof ApiError
@@ -97,7 +151,7 @@ export function NotificationBell() {
     try {
       await api.notifications.markAllRead();
       setUnreadTotal(0);
-      await loadList();
+      await fetchList(true);
       setSuccessMessage(t('app.notifications.markAllReadSuccess'));
     } catch (err) {
       setError(
@@ -153,7 +207,7 @@ export function NotificationBell() {
                 size="sm"
                 className="h-8 px-2 text-xs"
                 disabled={loading || actionBusy}
-                onClick={() => void loadList()}
+                onClick={() => void fetchList(true)}
               >
                 {t('app.notifications.refresh')}
               </Button>
