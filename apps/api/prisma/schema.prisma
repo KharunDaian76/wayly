@@ -4,7 +4,8 @@
 // M2 Batch 1: KycVerification (provider integration lands in a later batch).
 // M4 Batch 1: DeliveryOrder foundation (API/UI land in later batches).
 // Notification foundation (routes/dispatch land in a later batch).
-// Payments/Chat/Disputes/etc. arrive in later milestones.
+// Chat foundation (routes/WebSocket land in a later batch).
+// Payments/Disputes/etc. arrive in later milestones.
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
 // geographic radius queries (geography(Point)) from M4/M5.
@@ -109,6 +110,9 @@ model User {
   acceptedDeliveryOrders        DeliveryOrder[] @relation("AcceptedDeliveryOrders")
   proofSubmittedDeliveryOrders  DeliveryOrder[] @relation("ProofSubmittedDeliveryOrders")
   notifications                 Notification[]
+  sentConversations             Conversation[] @relation("ConversationSender")
+  waylerConversations           Conversation[] @relation("ConversationWayler")
+  chatMessages                  ChatMessage[]  @relation("ChatMessageSender")
 
   @@index([deletedAt])
   @@map("users")
@@ -224,6 +228,7 @@ model DeliveryOrder {
   proofSubmittedById     String?   @db.Uuid
   proofSubmittedBy       User?     @relation("ProofSubmittedDeliveryOrders", fields: [proofSubmittedById], references: [id], onDelete: SetNull)
   notifications          Notification[]
+  conversation           Conversation?
 
   @@index([senderId])
   @@index([acceptedWaylerId])
@@ -258,4 +263,42 @@ model Notification {
   @@index([type])
   @@index([relatedOrderId])
   @@map("notifications")
+}
+
+// Order-based chat between Sender and accepted Wayler (API/WebSocket land in a later batch).
+model Conversation {
+  id        String        @id @default(uuid()) @db.Uuid
+  orderId   String        @unique @db.Uuid
+  order     DeliveryOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  senderId  String        @db.Uuid
+  sender    User          @relation("ConversationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  waylerId  String        @db.Uuid
+  wayler    User          @relation("ConversationWayler", fields: [waylerId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  messages ChatMessage[]
+
+  @@index([senderId])
+  @@index([waylerId])
+  @@index([orderId])
+  @@index([createdAt])
+  @@map("conversations")
+}
+
+model ChatMessage {
+  id             String       @id @default(uuid()) @db.Uuid
+  conversationId String       @db.Uuid
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String       @db.Uuid
+  sender         User         @relation("ChatMessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  body           String
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@index([readAt])
+  @@map("chat_messages")
 }
