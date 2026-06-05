@@ -21,6 +21,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
+import { ConversationPanel } from '@/components/app/conversation-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
@@ -361,6 +362,12 @@ export default function AppHomePage() {
   const [submittingProofOrderId, setSubmittingProofOrderId] = useState<string | null>(null);
   const [proofError, setProofError] = useState<string | null>(null);
   const [proofSuccessOrderId, setProofSuccessOrderId] = useState<string | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatConversationId, setChatConversationId] = useState<string | null>(null);
+  const [chatOrderTitle, setChatOrderTitle] = useState<string | null>(null);
+  const [chatOrderId, setChatOrderId] = useState<string | null>(null);
+  const [openingChatOrderId, setOpeningChatOrderId] = useState<string | null>(null);
+  const [chatOpenError, setChatOpenError] = useState<string | null>(null);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -721,6 +728,33 @@ export default function AppHomePage() {
     } finally {
       setSubmittingProofOrderId(null);
     }
+  }
+
+  async function handleOpenChat(orderId: string, orderTitle: string) {
+    setChatOpenError(null);
+    setOpeningChatOrderId(orderId);
+    try {
+      const conversation = await api.conversations.forOrder(orderId);
+      setChatConversationId(conversation.id);
+      setChatOrderTitle(orderTitle);
+      setChatOrderId(conversation.orderId);
+      setChatOpen(true);
+    } catch (err) {
+      setChatOpenError(
+        err instanceof ApiError
+          ? err.message || t('app.chat.loadFailed')
+          : t('app.chat.loadFailed'),
+      );
+    } finally {
+      setOpeningChatOrderId(null);
+    }
+  }
+
+  function handleCloseChat() {
+    setChatOpen(false);
+    setChatConversationId(null);
+    setChatOrderTitle(null);
+    setChatOrderId(null);
   }
 
   async function handleAcceptOrder(orderId: string) {
@@ -1234,6 +1268,11 @@ export default function AppHomePage() {
                     {proofError}
                   </p>
                 ) : null}
+                {chatOpenError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {chatOpenError}
+                  </p>
+                ) : null}
                 {isApproved && acceptedLoading ? (
                   <>
                     <p className="sr-only">{t('app.waylerFeed.acceptedPanel.loading')}</p>
@@ -1339,6 +1378,19 @@ export default function AppHomePage() {
                             <p className="mt-3 text-sm text-muted-foreground">
                               {t('app.waylerFeed.acceptedPanel.delivered')}
                             </p>
+                          ) : null}
+                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                            <Button
+                              className="mt-3 w-full sm:w-auto"
+                              variant="outline"
+                              size="sm"
+                              disabled={openingChatOrderId !== null}
+                              onClick={() => void handleOpenChat(order.id, order.title)}
+                            >
+                              {openingChatOrderId === order.id
+                                ? t('app.chat.loading')
+                                : t('app.chat.open')}
+                            </Button>
                           ) : null}
                           {showProofForm ? (
                             <div className="mt-3 rounded-md border border-border/60 p-3">
@@ -1844,6 +1896,11 @@ export default function AppHomePage() {
                     {senderAcceptedError}
                   </p>
                 ) : null}
+                {chatOpenError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {chatOpenError}
+                  </p>
+                ) : null}
                 {canViewSenderOrders && senderAcceptedLoading ? (
                   <>
                     <p className="sr-only">{t('app.senderPanel.acceptedLoading')}</p>
@@ -1958,6 +2015,19 @@ export default function AppHomePage() {
                               {t('app.senderPanel.proofMissing')}
                             </p>
                           ) : null}
+                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                            <Button
+                              className="mt-3 w-full sm:w-auto"
+                              variant="outline"
+                              size="sm"
+                              disabled={openingChatOrderId !== null}
+                              onClick={() => void handleOpenChat(order.id, order.title)}
+                            >
+                              {openingChatOrderId === order.id
+                                ? t('app.chat.loading')
+                                : t('app.chat.open')}
+                            </Button>
+                          ) : null}
                         </li>
                       );
                     })}
@@ -1967,6 +2037,15 @@ export default function AppHomePage() {
             </Card>
           </>
         ) : null}
+
+        <ConversationPanel
+          open={chatOpen}
+          onClose={handleCloseChat}
+          conversationId={chatConversationId}
+          orderTitle={chatOrderTitle}
+          orderId={chatOrderId}
+          currentUserId={user.id}
+        />
 
         <Card>
           <CardHeader>
