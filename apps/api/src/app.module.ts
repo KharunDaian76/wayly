@@ -11,6 +11,7 @@ import { AppConfigService } from './config/config.service';
 import { InfraModule } from './infra/infra.module';
 import { LoggerModule } from './infra/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConversationsModule } from './modules/conversations/conversations.module';
 import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
@@ -41,6 +42,7 @@ import { UsersModule } from './modules/users/users.module';
     KycModule,
     OrdersModule,
     NotificationsModule,
+    ConversationsModule,
     // ---------------------------------------------------------------------
     // Future business modules:
     //   GeoModule,           // M5
@@ -48,7 +50,7 @@ import { UsersModule } from './modules/users/users.module';
     //   SubscriptionsModule, // M7
     //   PaymentsModule,      // M8
     //   AgreementsModule,    // M9
-    //   ChatModule,          // M6
+    //   ChatModule WebSocket, // later batch
     //   Notifications dispatch / WebSocket, // later batch
     //   DisputesModule,      // M10
     //   AdminModule,         // M12

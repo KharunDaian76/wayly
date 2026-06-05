@@ -1,5 +1,7 @@
 import { createAuthApi } from './auth';
 import type { AuthApi, UsersApi } from './auth.types';
+import { createConversationsApi } from './conversations';
+import type { ConversationsApi } from './conversations.types';
 import { ApiError } from './errors';
 import { createHealthApi, type HealthApi } from './health';
 import { createKycApi } from './kyc';
@@ -42,6 +44,9 @@ export class ApiClient {
   /** In-app notification endpoints. */
   readonly notifications: NotificationsApi;
 
+  /** Order-based conversation endpoints. */
+  readonly conversations: ConversationsApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -62,6 +67,7 @@ export class ApiClient {
     this.kyc = createKycApi((path, opts) => this.request(path, opts));
     this.orders = createOrdersApi((path, opts) => this.request(path, opts));
     this.notifications = createNotificationsApi((path, opts) => this.request(path, opts));
+    this.conversations = createConversationsApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {

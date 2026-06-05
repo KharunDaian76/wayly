@@ -10,6 +10,12 @@ export {
 } from './auth.types';
 export { createKycApi } from './kyc';
 export { type KycApi, type KycMockRejectBody, type KycStartBody } from './kyc.types';
+export { createConversationsApi } from './conversations';
+export {
+  type ConversationsApi,
+  type ConversationsListQuery,
+  type MarkConversationReadResponse,
+} from './conversations.types';
 export { createNotificationsApi } from './notifications';
 export {
   type NotificationsApi,
@@ -30,9 +36,13 @@ export { type HealthApi } from './health';
 export type { ApiClientOptions, RequestOptions, TokenProvider, HealthResult } from './types';
 export type {
   AuthResult,
+  ChatMessageSummary,
+  ConversationDetail,
+  ConversationListResponse,
   KycStatusView,
   KycVerificationSummary,
   NotificationListResponse,
   NotificationSummary,
   UserProfile,
 } from '@wayly/types';
+export type { SendChatMessageInput } from '@wayly/validation';
