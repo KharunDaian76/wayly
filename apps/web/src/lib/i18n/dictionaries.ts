@@ -190,6 +190,13 @@ const en = {
   'app.senderPanel.publishSuccess': 'Delivery request published successfully.',
   'app.senderPanel.publishFailed': 'Could not publish delivery request. Please try again.',
   'app.senderPanel.publishing': 'Publishing…',
+  'app.senderPanel.statusAccepted': 'Accepted',
+  'app.senderPanel.statusInTransit': 'In transit',
+  'app.senderPanel.statusDelivered': 'Delivered',
+  'app.senderPanel.acceptedNote': 'Wayler accepted this delivery request.',
+  'app.senderPanel.inTransitNote': 'Delivery is currently in transit.',
+  'app.senderPanel.deliveredNote': 'Delivery has been marked as delivered.',
+  'app.senderPanel.labelDeliveredAt': 'Delivered',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -383,6 +390,13 @@ const ru: Dictionary = {
   'app.senderPanel.publishSuccess': 'Заявка на доставку успешно опубликована.',
   'app.senderPanel.publishFailed': 'Не удалось опубликовать заявку. Попробуйте снова.',
   'app.senderPanel.publishing': 'Публикация…',
+  'app.senderPanel.statusAccepted': 'Принято',
+  'app.senderPanel.statusInTransit': 'В пути',
+  'app.senderPanel.statusDelivered': 'Доставлено',
+  'app.senderPanel.acceptedNote': 'Вейлер принял эту заявку на доставку.',
+  'app.senderPanel.inTransitNote': 'Доставка сейчас в пути.',
+  'app.senderPanel.deliveredNote': 'Доставка отмечена как завершённая.',
+  'app.senderPanel.labelDeliveredAt': 'Доставлено',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -577,6 +591,13 @@ const es: Dictionary = {
   'app.senderPanel.publishSuccess': 'Solicitud de entrega publicada correctamente.',
   'app.senderPanel.publishFailed': 'No se pudo publicar la solicitud. Inténtalo de nuevo.',
   'app.senderPanel.publishing': 'Publicando…',
+  'app.senderPanel.statusAccepted': 'Aceptado',
+  'app.senderPanel.statusInTransit': 'En tránsito',
+  'app.senderPanel.statusDelivered': 'Entregado',
+  'app.senderPanel.acceptedNote': 'Un Wayler aceptó esta solicitud de entrega.',
+  'app.senderPanel.inTransitNote': 'La entrega está actualmente en tránsito.',
+  'app.senderPanel.deliveredNote': 'La entrega ha sido marcada como entregada.',
+  'app.senderPanel.labelDeliveredAt': 'Entregado',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -776,6 +797,13 @@ const fr: Dictionary = {
   'app.senderPanel.publishSuccess': 'Demande de livraison publiée avec succès.',
   'app.senderPanel.publishFailed': 'Impossible de publier la demande. Réessayez.',
   'app.senderPanel.publishing': 'Publication…',
+  'app.senderPanel.statusAccepted': 'Acceptée',
+  'app.senderPanel.statusInTransit': 'En transit',
+  'app.senderPanel.statusDelivered': 'Livrée',
+  'app.senderPanel.acceptedNote': 'Un Wayler a accepté cette demande de livraison.',
+  'app.senderPanel.inTransitNote': 'La livraison est actuellement en transit.',
+  'app.senderPanel.deliveredNote': 'La livraison a été marquée comme livrée.',
+  'app.senderPanel.labelDeliveredAt': 'Livrée',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -980,6 +1008,13 @@ const de: Dictionary = {
   'app.senderPanel.publishFailed':
     'Lieferanfrage konnte nicht veröffentlicht werden. Bitte erneut versuchen.',
   'app.senderPanel.publishing': 'Wird veröffentlicht…',
+  'app.senderPanel.statusAccepted': 'Angenommen',
+  'app.senderPanel.statusInTransit': 'Unterwegs',
+  'app.senderPanel.statusDelivered': 'Zugestellt',
+  'app.senderPanel.acceptedNote': 'Ein Wayler hat diese Lieferanfrage angenommen.',
+  'app.senderPanel.inTransitNote': 'Die Lieferung ist derzeit unterwegs.',
+  'app.senderPanel.deliveredNote': 'Die Lieferung wurde als zugestellt markiert.',
+  'app.senderPanel.labelDeliveredAt': 'Zugestellt',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -1171,6 +1206,13 @@ const tr: Dictionary = {
   'app.senderPanel.publishSuccess': 'Teslimat talebi başarıyla yayınlandı.',
   'app.senderPanel.publishFailed': 'Teslimat talebi yayınlanamadı. Lütfen tekrar deneyin.',
   'app.senderPanel.publishing': 'Yayınlanıyor…',
+  'app.senderPanel.statusAccepted': 'Kabul edildi',
+  'app.senderPanel.statusInTransit': 'Yolda',
+  'app.senderPanel.statusDelivered': 'Teslim edildi',
+  'app.senderPanel.acceptedNote': 'Bir Wayler bu teslimat talebini kabul etti.',
+  'app.senderPanel.inTransitNote': 'Teslimat şu anda yolda.',
+  'app.senderPanel.deliveredNote': 'Teslimat teslim edildi olarak işaretlendi.',
+  'app.senderPanel.labelDeliveredAt': 'Teslim edildi',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -1356,6 +1398,13 @@ const ar: Dictionary = {
   'app.senderPanel.publishSuccess': 'تم نشر طلب التوصيل بنجاح.',
   'app.senderPanel.publishFailed': 'تعذر نشر طلب التوصيل. يرجى المحاولة مرة أخرى.',
   'app.senderPanel.publishing': 'جارٍ النشر…',
+  'app.senderPanel.statusAccepted': 'مقبول',
+  'app.senderPanel.statusInTransit': 'قيد النقل',
+  'app.senderPanel.statusDelivered': 'تم التسليم',
+  'app.senderPanel.acceptedNote': 'قبل Wayler طلب التوصيل هذا.',
+  'app.senderPanel.inTransitNote': 'التوصيل قيد النقل حالياً.',
+  'app.senderPanel.deliveredNote': 'تم تعيين التوصيل كمُسلَّم.',
+  'app.senderPanel.labelDeliveredAt': 'تم التسليم',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -1540,6 +1589,13 @@ const zh: Dictionary = {
   'app.senderPanel.publishSuccess': '配送请求已成功发布。',
   'app.senderPanel.publishFailed': '无法发布配送请求，请重试。',
   'app.senderPanel.publishing': '发布中…',
+  'app.senderPanel.statusAccepted': '已接受',
+  'app.senderPanel.statusInTransit': '运输中',
+  'app.senderPanel.statusDelivered': '已送达',
+  'app.senderPanel.acceptedNote': 'Wayler 已接受此配送请求。',
+  'app.senderPanel.inTransitNote': '配送正在运输中。',
+  'app.senderPanel.deliveredNote': '配送已标记为已送达。',
+  'app.senderPanel.labelDeliveredAt': '送达时间',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 

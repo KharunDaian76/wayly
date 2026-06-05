@@ -37,7 +37,16 @@ const FEED_SELECT_CLASS =
 
 type FeedSort = 'rewardDesc' | 'publishedDesc' | 'routeAsc';
 
-type SenderAcceptedOrderRow = DeliveryOrderSummary & { acceptedAt: string | null };
+type SenderAcceptedOrderRow = DeliveryOrderSummary & {
+  acceptedAt: string | null;
+  deliveredAt: string | null;
+};
+
+const SENDER_LIFECYCLE_STATUSES = new Set<DeliveryOrderSummary['status']>([
+  DeliveryOrderStatus.ACCEPTED,
+  DeliveryOrderStatus.IN_TRANSIT,
+  DeliveryOrderStatus.DELIVERED,
+]);
 
 const FEED_EXIT_MS = 280;
 const SENDER_LIST_LIMIT = 100;
@@ -189,6 +198,51 @@ function AcceptedOrdersSkeleton() {
   );
 }
 
+function senderStatusBadgeClass(status: DeliveryOrderSummary['status']): string {
+  switch (status) {
+    case DeliveryOrderStatus.ACCEPTED:
+      return 'border-accent/40 bg-accent/15 text-foreground';
+    case DeliveryOrderStatus.IN_TRANSIT:
+      return 'border-primary/40 bg-primary/10 text-foreground';
+    case DeliveryOrderStatus.DELIVERED:
+      return 'border-emerald-500/40 bg-emerald-500/10 text-foreground';
+    default:
+      return 'border-border bg-muted text-muted-foreground';
+  }
+}
+
+function senderStatusLabel(
+  status: DeliveryOrderSummary['status'],
+  t: (key: TranslationKey) => string,
+): string {
+  switch (status) {
+    case DeliveryOrderStatus.ACCEPTED:
+      return t('app.senderPanel.statusAccepted');
+    case DeliveryOrderStatus.IN_TRANSIT:
+      return t('app.senderPanel.statusInTransit');
+    case DeliveryOrderStatus.DELIVERED:
+      return t('app.senderPanel.statusDelivered');
+    default:
+      return status;
+  }
+}
+
+function senderStatusNote(
+  status: DeliveryOrderSummary['status'],
+  t: (key: TranslationKey) => string,
+): string | null {
+  switch (status) {
+    case DeliveryOrderStatus.ACCEPTED:
+      return t('app.senderPanel.acceptedNote');
+    case DeliveryOrderStatus.IN_TRANSIT:
+      return t('app.senderPanel.inTransitNote');
+    case DeliveryOrderStatus.DELIVERED:
+      return t('app.senderPanel.deliveredNote');
+    default:
+      return null;
+  }
+}
+
 function resolveAcceptError(err: unknown, t: (key: TranslationKey) => string): string {
   if (!(err instanceof ApiError)) {
     return t('app.waylerFeed.acceptFailed');
@@ -323,19 +377,32 @@ export default function AppHomePage() {
     setSenderAcceptedLoading(true);
     setSenderAcceptedError(null);
     try {
-      const result = await api.orders.mine({ status: 'ACCEPTED', limit: SENDER_LIST_LIMIT });
-      const withAcceptedAt = await Promise.all(
-        result.items.map(async (order) => {
+      const [acceptedResult, inTransitResult, deliveredResult] = await Promise.all([
+        api.orders.mine({ status: 'ACCEPTED', limit: SENDER_LIST_LIMIT }),
+        api.orders.mine({ status: 'IN_TRANSIT', limit: SENDER_LIST_LIMIT }),
+        api.orders.mine({ status: 'DELIVERED', limit: SENDER_LIST_LIMIT }),
+      ]);
+      const items = [
+        ...acceptedResult.items,
+        ...inTransitResult.items,
+        ...deliveredResult.items,
+      ].filter((order) => SENDER_LIFECYCLE_STATUSES.has(order.status));
+      const withTimestamps = await Promise.all(
+        items.map(async (order) => {
           const detail = await api.orders.detail(order.id);
-          return { ...order, acceptedAt: detail.acceptedAt };
+          return {
+            ...order,
+            acceptedAt: detail.acceptedAt,
+            deliveredAt: detail.deliveredAt,
+          };
         }),
       );
-      withAcceptedAt.sort((a, b) => {
+      withTimestamps.sort((a, b) => {
         const timeA = a.acceptedAt ? new Date(a.acceptedAt).getTime() : 0;
         const timeB = b.acceptedAt ? new Date(b.acceptedAt).getTime() : 0;
         return timeB - timeA;
       });
-      setSenderAcceptedOrders(withAcceptedAt);
+      setSenderAcceptedOrders(withTimestamps);
     } catch {
       setSenderAcceptedError(t('app.senderPanel.acceptedLoadFailed'));
     } finally {
@@ -1432,46 +1499,71 @@ export default function AppHomePage() {
                   </p>
                 ) : canViewSenderOrders ? (
                   <ul className="flex flex-col gap-4">
-                    {senderAcceptedOrders.map((order) => (
-                      <li key={order.id} className={SENDER_ORDER_CARD_CLASS}>
-                        <p className="font-medium">{order.title}</p>
-                        <p className="text-muted-foreground">{order.type}</p>
-                        <dl className="mt-2 flex flex-col gap-1">
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.senderPanel.labelRoute')}
-                            </dt>
-                            <dd>
-                              {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
-                              {t('app.orders.routeSeparator')}{' '}
-                              {formatLocation(order.dropoffCity, order.dropoffCountry)}
-                            </dd>
-                          </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.senderPanel.labelReward')}
-                            </dt>
-                            <dd>
-                              {formatReward(
-                                order.offeredRewardAmount,
-                                order.currency,
-                                t('app.orders.rewardNone'),
+                    {senderAcceptedOrders.map((order) => {
+                      const statusNote = senderStatusNote(order.status, t);
+
+                      return (
+                        <li key={order.id} className={SENDER_ORDER_CARD_CLASS}>
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium">{order.title}</p>
+                            <span
+                              className={cn(
+                                'shrink-0 rounded-full border px-2 py-0.5 text-xs font-medium',
+                                senderStatusBadgeClass(order.status),
                               )}
-                            </dd>
+                            >
+                              {senderStatusLabel(order.status, t)}
+                            </span>
                           </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.senderPanel.labelAcceptedAt')}
-                            </dt>
-                            <dd>
-                              {order.acceptedAt
-                                ? new Date(order.acceptedAt).toLocaleString()
-                                : t('common.none')}
-                            </dd>
-                          </div>
-                        </dl>
-                      </li>
-                    ))}
+                          <p className="text-muted-foreground">{order.type}</p>
+                          {statusNote ? (
+                            <p className="mt-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+                              {statusNote}
+                            </p>
+                          ) : null}
+                          <dl className="mt-2 flex flex-col gap-1">
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelRoute')}
+                              </dt>
+                              <dd>
+                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                {t('app.orders.routeSeparator')}{' '}
+                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelReward')}
+                              </dt>
+                              <dd>
+                                {formatReward(
+                                  order.offeredRewardAmount,
+                                  order.currency,
+                                  t('app.orders.rewardNone'),
+                                )}
+                              </dd>
+                            </div>
+                            {order.acceptedAt ? (
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.senderPanel.labelAcceptedAt')}
+                                </dt>
+                                <dd>{new Date(order.acceptedAt).toLocaleString()}</dd>
+                              </div>
+                            ) : null}
+                            {order.deliveredAt ? (
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.senderPanel.labelDeliveredAt')}
+                                </dt>
+                                <dd>{new Date(order.deliveredAt).toLocaleString()}</dd>
+                              </div>
+                            ) : null}
+                          </dl>
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : null}
               </CardContent>
