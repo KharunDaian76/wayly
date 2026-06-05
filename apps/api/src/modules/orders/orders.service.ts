@@ -11,7 +11,11 @@ import {
 } from '@prisma/client';
 import type { DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
 import { DeliveryOrderStatus } from '@wayly/types';
-import type { CreateDeliveryOrderInput, DeliveryOrderQueryInput } from '@wayly/validation';
+import type {
+  CreateDeliveryOrderInput,
+  DeliveryOrderQueryInput,
+  SubmitDeliveryProofInput,
+} from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
@@ -238,6 +242,49 @@ export class OrdersService {
       data: {
         status: PrismaDeliveryOrderStatus.CANCELLED,
         cancelledAt,
+      },
+    });
+
+    return toDeliveryOrderDetail(updated);
+  }
+
+  async submitProof(
+    user: RequestUser,
+    id: string,
+    input: SubmitDeliveryProofInput,
+  ): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.acceptedWaylerId !== user.id) {
+      throw new ForbiddenException(
+        'Only the accepted Wayler can submit proof for this delivery order',
+      );
+    }
+
+    if (record.status === PrismaDeliveryOrderStatus.ACCEPTED) {
+      throw new ConflictException('Delivery must be in transit before proof can be submitted');
+    }
+
+    if (
+      record.status !== PrismaDeliveryOrderStatus.IN_TRANSIT &&
+      record.status !== PrismaDeliveryOrderStatus.DELIVERED
+    ) {
+      throw new ConflictException('Proof can only be submitted for in-transit or delivered orders');
+    }
+
+    const proofSubmittedAt = new Date();
+    const updated = await this.prisma.deliveryOrder.update({
+      where: { id },
+      data: {
+        proofNote: input.note ?? record.proofNote,
+        proofConfirmationCode: input.confirmationCode ?? record.proofConfirmationCode,
+        proofSubmittedAt,
+        proofSubmittedById: user.id,
       },
     });
 

@@ -69,6 +69,15 @@ export class CreateDeliveryOrderBodyDto {
   notes?: string;
 }
 
+/** Swagger-only schema for POST /orders/:id/proof (validated by Zod at runtime). */
+export class SubmitDeliveryProofBodyDto {
+  @ApiPropertyOptional({ example: 'Package handed to recipient', maxLength: 1000 })
+  note?: string;
+
+  @ApiPropertyOptional({ example: '123456', maxLength: 64 })
+  confirmationCode?: string;
+}
+
 export class DeliveryOrderSummaryDto {
   @ApiProperty({ format: 'uuid' })
   id!: string;
@@ -169,6 +178,18 @@ export class DeliveryOrderDetailDto extends DeliveryOrderSummaryDto {
 
   @ApiPropertyOptional({ format: 'date-time' })
   deliveredAt!: string | null;
+
+  @ApiPropertyOptional()
+  proofNote!: string | null;
+
+  @ApiPropertyOptional()
+  proofConfirmationCode!: string | null;
+
+  @ApiPropertyOptional({ format: 'date-time' })
+  proofSubmittedAt!: string | null;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  proofSubmittedById!: string | null;
 }
 
 export class DeliveryOrderListResponseDto {

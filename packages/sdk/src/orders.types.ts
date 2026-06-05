@@ -5,6 +5,7 @@ import type {
   DeliveryOrderSummary,
   DeliveryOrderType,
 } from '@wayly/types';
+import type { SubmitDeliveryProofInput } from '@wayly/validation';
 
 /** GET /orders query parameters. */
 export interface OrdersListQuery {
@@ -53,8 +54,19 @@ export interface OrdersApi {
   markDelivered(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   /** Cancel a DRAFT or OPEN delivery order (Sender only). */
   cancel(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
+  /** Submit proof-of-delivery metadata (accepted Wayler, IN_TRANSIT or DELIVERED). */
+  submitProof(
+    id: string,
+    body: SubmitDeliveryProofInput,
+    accessToken?: string | null,
+  ): Promise<DeliveryOrderDetail>;
   /** List delivery orders accepted by the authenticated Wayler. */
   accepted(accessToken?: string | null): Promise<AcceptedDeliveryOrderSummary[]>;
 }
 
-export type { CreateDeliveryOrderInput, DeliveryOrderDetail, DeliveryOrderSummary };
+export type {
+  CreateDeliveryOrderInput,
+  DeliveryOrderDetail,
+  DeliveryOrderSummary,
+  SubmitDeliveryProofInput,
+};

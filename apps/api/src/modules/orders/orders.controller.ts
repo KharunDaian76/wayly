@@ -9,6 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
@@ -22,7 +23,12 @@ import {
 } from '@nestjs/swagger';
 import type { DeliveryOrderDetail } from '@wayly/types';
 import { DeliveryOrderStatus, DeliveryOrderType } from '@wayly/types';
-import { createDeliveryOrderSchema, deliveryOrderQuerySchema, enumSchema } from '@wayly/validation';
+import {
+  createDeliveryOrderSchema,
+  deliveryOrderQuerySchema,
+  enumSchema,
+  submitDeliveryProofSchema,
+} from '@wayly/validation';
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
@@ -36,6 +42,7 @@ import {
   CreateDeliveryOrderBodyDto,
   DeliveryOrderDetailDto,
   DeliveryOrderListResponseDto,
+  SubmitDeliveryProofBodyDto,
 } from './dto/swagger.dto';
 import { OrdersService, type DeliveryOrderListResult } from './orders.service';
 
@@ -167,6 +174,30 @@ export class OrdersController {
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<DeliveryOrderDetail> {
     return this.orders.markDelivered(user, id);
+  }
+
+  @Post(':id/proof')
+  @ApiOperation({ summary: 'Submit proof-of-delivery metadata (accepted Wayler)' })
+  @ApiBody({ type: SubmitDeliveryProofBodyDto })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto })
+  @ApiBadRequestResponse({
+    description: 'Invalid body (empty note/confirmationCode, or neither field provided)',
+  })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({
+    description: 'KYC approval required, or caller is not the accepted Wayler',
+  })
+  @ApiNotFoundResponse({ description: 'Delivery order not found' })
+  @ApiConflictResponse({
+    description: 'Order is not IN_TRANSIT or DELIVERED (e.g. ACCEPTED, DRAFT, OPEN, or CANCELLED)',
+  })
+  submitProof(
+    @CurrentUser() user: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodBody(submitDeliveryProofSchema))
+    body: ReturnType<typeof submitDeliveryProofSchema.parse>,
+  ): Promise<DeliveryOrderDetail> {
+    return this.orders.submitProof(user, id, body);
   }
 
   @Post(':id/cancel')

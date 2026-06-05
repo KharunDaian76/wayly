@@ -6,6 +6,7 @@ import type {
   OrdersApi,
   OrdersListQuery,
   OrdersMineQuery,
+  SubmitDeliveryProofInput,
 } from './orders.types';
 import type { RequestOptions } from './types';
 
@@ -77,6 +78,14 @@ export function createOrdersApi(request: Requester): OrdersApi {
     cancel: (id: string, accessToken?: string | null) =>
       request<DeliveryOrderDetail>(`/orders/${id}/cancel`, {
         method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+
+    submitProof: (id: string, body: SubmitDeliveryProofInput, accessToken?: string | null) =>
+      request<DeliveryOrderDetail>(`/orders/${id}/proof`, {
+        method: 'POST',
+        body,
         ...withCookies,
         accessToken,
       }),

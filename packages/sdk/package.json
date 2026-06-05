@@ -29,7 +29,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@wayly/types": "workspace:*"
+    "@wayly/types": "workspace:*",
+    "@wayly/validation": "workspace:*"
   },
   "devDependencies": {
     "@wayly/config-eslint": "workspace:*",

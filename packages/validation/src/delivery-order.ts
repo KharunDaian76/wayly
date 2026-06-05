@@ -62,3 +62,18 @@ export const deliveryOrderQuerySchema = paginationSchema.extend({
   dropoffCity: optionalCitySchema,
 });
 export type DeliveryOrderQueryInput = z.infer<typeof deliveryOrderQuerySchema>;
+
+const optionalProofNoteSchema = z.string().trim().min(1).max(1000).optional();
+const optionalProofConfirmationCodeSchema = z.string().trim().min(1).max(64).optional();
+
+/** Submit proof-of-delivery metadata (accepted Wayler, in transit or delivered). */
+export const submitDeliveryProofSchema = z
+  .object({
+    note: optionalProofNoteSchema,
+    confirmationCode: optionalProofConfirmationCodeSchema,
+  })
+  .refine((data) => data.note !== undefined || data.confirmationCode !== undefined, {
+    message: 'At least one of note or confirmationCode is required',
+  });
+
+export type SubmitDeliveryProofInput = z.infer<typeof submitDeliveryProofSchema>;
