@@ -59,6 +59,10 @@ export interface DeliveryOrderDetail {
   acceptedAt: ISODateString | null;
   cancelledAt: ISODateString | null;
   deliveredAt: ISODateString | null;
+  proofNote: string | null;
+  proofConfirmationCode: string | null;
+  proofSubmittedAt: ISODateString | null;
+  proofSubmittedById: string | null;
 }
 
 /** Payload to create a delivery request (draft or publish in later batches). */

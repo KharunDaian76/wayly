@@ -56,5 +56,9 @@ export function toDeliveryOrderDetail(record: DeliveryOrder): DeliveryOrderDetai
     acceptedAt: toIso(record.acceptedAt),
     cancelledAt: toIso(record.cancelledAt),
     deliveredAt: toIso(record.deliveredAt),
+    proofNote: record.proofNote,
+    proofConfirmationCode: record.proofConfirmationCode,
+    proofSubmittedAt: toIso(record.proofSubmittedAt),
+    proofSubmittedById: record.proofSubmittedById,
   };
 }

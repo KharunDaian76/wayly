@@ -91,8 +91,9 @@ model User {
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
   kycVerifications    KycVerification[]
-  sentDeliveryOrders     DeliveryOrder[] @relation("SentDeliveryOrders")
-  acceptedDeliveryOrders DeliveryOrder[] @relation("AcceptedDeliveryOrders")
+  sentDeliveryOrders            DeliveryOrder[] @relation("SentDeliveryOrders")
+  acceptedDeliveryOrders        DeliveryOrder[] @relation("AcceptedDeliveryOrders")
+  proofSubmittedDeliveryOrders  DeliveryOrder[] @relation("ProofSubmittedDeliveryOrders")
 
   @@index([deletedAt])
   @@map("users")
@@ -201,6 +202,13 @@ model DeliveryOrder {
   cancelledAt DateTime?
   deliveredAt DateTime?
 
+  // Proof-of-delivery metadata (Wayler-submitted; photo/signature URLs in later batches).
+  proofNote              String?
+  proofConfirmationCode  String?
+  proofSubmittedAt       DateTime?
+  proofSubmittedById     String?   @db.Uuid
+  proofSubmittedBy       User?     @relation("ProofSubmittedDeliveryOrders", fields: [proofSubmittedById], references: [id], onDelete: SetNull)
+
   @@index([senderId])
   @@index([acceptedWaylerId])
   @@index([status])
@@ -211,5 +219,6 @@ model DeliveryOrder {
   @@index([dropoffCity])
   @@index([createdAt])
   @@index([publishedAt])
+  @@index([proofSubmittedById])
   @@map("delivery_orders")
 }
