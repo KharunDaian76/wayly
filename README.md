@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -181,6 +181,7 @@ Marketing landing page (`/`) is not translated yet.
 | Mock/manual payment API + SDK (`MANUAL` provider)                   | Complete (M5)                   |
 | Sender Accepted mock payment UI (authorize / hold / release)        | Complete (M5)                   |
 | Wayler Accepted read-only payment/payout visibility                 | Complete (M5)                   |
+| Mock payment in-app notifications (Wayler dispatch, `SYSTEM`)       | Complete (M5)                   |
 | Stripe, checkout, real payout processing, refunds, payout dashboard | Not started (future milestones) |
 | Disputes, admin                                                     | Not started (future milestones) |
 
@@ -342,39 +343,40 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 
 ### Current marketplace status
 
-| Area                                                                      | Status   |
-| ------------------------------------------------------------------------- | -------- |
-| `DeliveryOrder` schema (Prisma)                                           | Complete |
-| Create draft (`POST /orders`)                                             | Complete |
-| Cancel DRAFT/OPEN (`POST /orders/:id/cancel`, Sender only)                | Complete |
-| Sender Cancel UI (Drafts + Published panels)                              | Complete |
-| Publish draft → OPEN (`POST /orders/:id/publish`)                         | Complete |
-| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)                   | Complete |
-| Accept OPEN order (`POST /orders/:id/accept`)                             | Complete |
-| Start transit (`POST /orders/:id/start-transit`)                          | Complete |
-| Mark delivered (`POST /orders/:id/mark-delivered`)                        | Complete |
-| Wayler accepted panel (`GET /orders/accepted`) + progression              | Complete |
-| Sender tracking panels (Drafts / Published / Accepted)                    | Complete |
-| Sender Accepted lifecycle visibility (ACCEPTED/IN_TRANSIT/DELIVERED)      | Complete |
-| Proof-of-delivery schema + submit API + SDK                               | Complete |
-| Wayler proof submit/update UI (IN_TRANSIT / DELIVERED)                    | Complete |
-| Sender proof read-only visibility                                         | Complete |
-| Notification schema + API + SDK                                           | Complete |
-| Automatic Sender lifecycle notifications (accept/transit/proof/delivered) | Complete |
-| Frontend notification bell/dropdown on `/app`                             | Complete |
-| Notification bell polling (30s unread / 60s list, visibility-aware)       | Complete |
-| Chat schema + API + SDK (Conversation / ChatMessage)                      | Complete |
-| Frontend chat modal on `/app` (Sender/Wayler Accepted panels)             | Complete |
-| Chat message notifications (`SYSTEM` type → bell/dropdown)                | Complete |
-| Chat modal polling (10s detail refresh, visibility-aware)                 | Complete |
-| Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
-| Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
-| Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
-| Premium `/app` dashboard UI foundation (shell, cards, badges, alerts)     | Complete |
-| Payment/escrow schema (`PaymentIntent`, `Payout`, `LedgerEntry`)          | Complete |
-| Mock/manual payment API + SDK (`MANUAL` provider)                         | Complete |
-| Sender Accepted mock payment UI (authorize / hold / release)              | Complete |
-| Wayler Accepted read-only payment/payout visibility                       | Complete |
+| Area                                                                          | Status   |
+| ----------------------------------------------------------------------------- | -------- |
+| `DeliveryOrder` schema (Prisma)                                               | Complete |
+| Create draft (`POST /orders`)                                                 | Complete |
+| Cancel DRAFT/OPEN (`POST /orders/:id/cancel`, Sender only)                    | Complete |
+| Sender Cancel UI (Drafts + Published panels)                                  | Complete |
+| Publish draft → OPEN (`POST /orders/:id/publish`)                             | Complete |
+| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)                       | Complete |
+| Accept OPEN order (`POST /orders/:id/accept`)                                 | Complete |
+| Start transit (`POST /orders/:id/start-transit`)                              | Complete |
+| Mark delivered (`POST /orders/:id/mark-delivered`)                            | Complete |
+| Wayler accepted panel (`GET /orders/accepted`) + progression                  | Complete |
+| Sender tracking panels (Drafts / Published / Accepted)                        | Complete |
+| Sender Accepted lifecycle visibility (ACCEPTED/IN_TRANSIT/DELIVERED)          | Complete |
+| Proof-of-delivery schema + submit API + SDK                                   | Complete |
+| Wayler proof submit/update UI (IN_TRANSIT / DELIVERED)                        | Complete |
+| Sender proof read-only visibility                                             | Complete |
+| Notification schema + API + SDK                                               | Complete |
+| Automatic Sender lifecycle notifications (accept/transit/proof/delivered)     | Complete |
+| Frontend notification bell/dropdown on `/app`                                 | Complete |
+| Notification bell polling (30s unread / 60s list, visibility-aware)           | Complete |
+| Chat schema + API + SDK (Conversation / ChatMessage)                          | Complete |
+| Frontend chat modal on `/app` (Sender/Wayler Accepted panels)                 | Complete |
+| Chat message notifications (`SYSTEM` type → bell/dropdown)                    | Complete |
+| Chat modal polling (10s detail refresh, visibility-aware)                     | Complete |
+| Wayler feed filters & sort (type, location, reward, sort)                     | Complete |
+| Wayler map route previews (Leaflet + city/country geocoding)                  | Complete |
+| Sender privacy endpoint (`GET /orders/mine`)                                  | Complete |
+| Premium `/app` dashboard UI foundation (shell, cards, badges, alerts)         | Complete |
+| Payment/escrow schema (`PaymentIntent`, `Payout`, `LedgerEntry`)              | Complete |
+| Mock/manual payment API + SDK (`MANUAL` provider)                             | Complete |
+| Sender Accepted mock payment UI (authorize / hold / release)                  | Complete |
+| Wayler Accepted read-only payment/payout visibility                           | Complete |
+| Mock payment in-app notifications (Wayler dispatch on authorize/hold/release) | Complete |
 
 ### API routes (orders)
 
@@ -709,12 +711,12 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Notifications
 
-Notifications keep users aware of **order lifecycle events**, **new chat messages**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order and chat notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
+Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order, payment, and chat notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
 
 ### Current notification flow
 
 ```text
-Order lifecycle action OR chat message sent (backend)
+Order lifecycle action OR mock payment action OR chat message sent (backend)
         ↓
 NotificationsService.createForUser()  →  Notification row in DB
         ↓
@@ -727,7 +729,7 @@ NotificationBell on /app  (badge + dropdown)
 Polling refresh  (unread count every 30s; list every 60s while open)
 ```
 
-Chat message notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate chat inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
+Payment and chat notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate payment or chat inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
 
 ### Schema (`Notification`)
 
@@ -746,17 +748,17 @@ Shared types: `NotificationSummary`, `NotificationListResponse` (`@wayly/types`)
 
 ### `NotificationType` enum
 
-| Value              | Notes (current dispatch)                                                                                                   |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                              |
-| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                |
-| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                |
-| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                              |
-| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                               |
-| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                               |
-| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                  |
-| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                  |
-| `SYSTEM`           | **Dispatched** → other chat participant on new message (until `CHAT_MESSAGE` type exists); admin/system reserved for later |
+| Value              | Notes (current dispatch)                                                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                                                                                                 |
+| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                                                                                   |
+| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                                                                                   |
+| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                                                                                                 |
+| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                                                                                                  |
+| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                                                                                                  |
+| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                                                                                     |
+| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                                                                                     |
+| `SYSTEM`           | **Dispatched** → other chat participant on new message; **Wayler on mock payment events** (authorize / hold / release — until dedicated payment types exist); admin/system reserved for later |
 
 ### API routes
 
@@ -782,7 +784,7 @@ api.notifications.markAllRead();  // POST /notifications/read-all
 
 ### Dispatch behavior (automatic creation)
 
-The backend creates notifications **internally** when order lifecycle actions or chat messages succeed. Failures to create a notification are logged and do **not** block the underlying action.
+The backend creates notifications **internally** when order lifecycle actions, mock payment actions, or chat messages succeed. Failures to create a notification are logged and do **not** block the underlying action. Notifications are created **only after a successful state change** — idempotent/no-op payment calls do **not** duplicate notifications.
 
 **Order lifecycle** (after successful order transition):
 
@@ -792,6 +794,18 @@ The backend creates notifications **internally** when order lifecycle actions or
 | Wayler starts transit  | `ORDER_IN_TRANSIT` | **Sender** |
 | Wayler submits proof   | `PROOF_SUBMITTED`  | **Sender** |
 | Wayler marks delivered | `ORDER_DELIVERED`  | **Sender** |
+
+**Mock payment** (after successful `PaymentsService` transition — see **Payment and escrow foundation**):
+
+| Payment event    | `NotificationType` | Recipient  | Title                  | Body                                                |
+| ---------------- | ------------------ | ---------- | ---------------------- | --------------------------------------------------- |
+| mock-authorize   | `SYSTEM`           | **Wayler** | Payment was authorized | The Sender authorized payment for your delivery.    |
+| mock-hold-escrow | `SYSTEM`           | **Wayler** | Escrow is held         | Payment is now held in escrow for your delivery.    |
+| mock-release     | `SYSTEM`           | **Wayler** | Mock payout created    | A mock/manual payout was created for your delivery. |
+
+All mock payment notifications include **`relatedOrderId`** = linked delivery order. **Sender is not notified** for their own authorize/hold actions. No dedicated payment `NotificationType` enum values yet — `SYSTEM` is used to avoid a schema migration.
+
+**Duplicate prevention:** `mock-authorize` returns early without notification when status is already `AUTHORIZED` or `HELD_IN_ESCROW`. `mock-hold-escrow` and `mock-release` require prior status and reject invalid repeats with **409**.
 
 **Chat messages** (after `POST /conversations/:id/messages` succeeds):
 
@@ -811,9 +825,10 @@ A dedicated `CHAT_MESSAGE` enum value is planned for a later batch; `SYSTEM` is 
 **Not dispatched in the current version:**
 
 - **No Wayler self-action notifications** — Waylers are not notified for their own accept/transit/proof/deliver actions.
+- **No Sender payment-action notifications** — Senders are not notified when they authorize or hold escrow (Wayler is notified instead).
 - **No cancel notification** — Sender cancel (DRAFT/OPEN) does not create `ORDER_CANCELLED` yet.
 - **No KYC / publish notifications** — enum values exist; dispatch comes later.
-- **No admin/system broadcasts** — `SYSTEM` is used for chat today; operator messages later.
+- **No admin/system broadcasts** — `SYSTEM` is used for chat and mock payment today; operator messages later.
 
 ### Frontend behavior (`/app` header)
 
@@ -882,13 +897,27 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User B** replies → **User A** receives a notification
 - [ ] **User B**'s unread badge updates within **30 seconds** via existing bell polling (no page refresh)
 
+**Mock payment notifications:**
+
+- [ ] **User A** creates order with reward/currency; **User B** accepts
+- [ ] **User A** mock-authorizes → **User B** receives `SYSTEM` notification (“Payment was authorized”) with `relatedOrderId`
+- [ ] **User A** mock-holds escrow → **User B** receives “Escrow is held”
+- [ ] **User B** delivers with proof; **User A** mock-releases → **User B** receives “Mock payout created”
+- [ ] **User A** does **not** receive notifications for own authorize/hold actions
+- [ ] Re-clicking authorize when already `AUTHORIZED`/`HELD_IN_ESCROW` does **not** create duplicate notifications
+- [ ] **User B**'s unread badge updates within **30 seconds** via existing bell polling (no frontend changes)
+
 ### Future milestones (notifications)
 
+- **Dedicated payment notification types** — e.g. `PAYMENT_AUTHORIZED`, `ESCROW_HELD`, `PAYOUT_CREATED` (replace `SYSTEM` for payment dispatch)
 - **Dedicated `CHAT_MESSAGE` type** — replace `SYSTEM` for chat dispatch (schema enum addition)
 - **WebSocket/SSE real-time delivery** — instant unread count and list updates (lightweight **polling exists today**)
 - **Email / push notifications** — FCM, transactional email for offline users
 - **Notification preferences** — per-type opt-in/out, quiet hours
-- **Localized notification templates** — server-side title/body per user locale
+- **Localized notification templates** — server-side title/body per user locale (order, payment, chat)
+- **Real Stripe/payment notifications** — checkout, capture, webhook-driven status updates
+- **Payout failure notifications** — Wayler/Sender alerts when payout processing fails
+- **Refund/dispute notifications** — holds, reversals, arbitrator outcomes
 - **KYC notifications** — `KYC_APPROVED`, `KYC_REJECTED` on provider/mock outcomes
 - **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
 - **Admin / system notifications** — operator broadcasts (separate from chat `SYSTEM` dispatch today)
@@ -1084,6 +1113,7 @@ Wayly is preparing for **monetization** with a database foundation, shared types
 - Prepare the data model for Sender → platform → Wayler money flows tied to `DeliveryOrder`.
 - Exercise **authorize → hold escrow → release** transitions via mock API and Sender UI before Stripe integration.
 - Let Waylers **observe** payment/payout status on accepted jobs (read-only) while Senders control mock actions.
+- Notify **Waylers in-app** when mock payment state changes (authorize / hold / release) via existing notification bell.
 - Record **platform fee** (mock 10%), **escrow hold**, and **payout creation** in the ledger.
 - Provide an append-only-style **ledger** for audit and future dispute evidence.
 - API/SDK/Swagger remain available for direct testing (`/docs`, tag **payments**).
@@ -1150,15 +1180,18 @@ Order ACCEPTED or IN_TRANSIT (with reward + currency, accepted Wayler)
         ↓
 Sender: mock-authorize (UI or POST)  →  PaymentIntent AUTHORIZED (MANUAL)
         ↓  LedgerEntry: PAYMENT_AUTHORIZED
+        ↓  In-app notification → Wayler ("Payment was authorized")
 Sender: mock-hold-escrow (UI or POST)  →  HELD_IN_ESCROW
         ↓  LedgerEntry: ESCROW_HELD, PLATFORM_FEE_CHARGED (10% mock fee)
+        ↓  In-app notification → Wayler ("Escrow is held")
 Wayler: transit → submit proof → mark DELIVERED
         ↓
 Sender: mock-release (UI or POST)  →  RELEASED + Payout PENDING (MANUAL)
         ↓  LedgerEntry: PAYOUT_CREATED
+        ↓  In-app notification → Wayler ("Mock payout created")
 ```
 
-Sender Accepted panel buttons call the same SDK methods as the API routes above. Wayler Accepted panel loads the same intent read-only via `api.payments.forOrder(order.id)`.
+Sender Accepted panel buttons call the same SDK methods as the API routes above. Wayler Accepted panel loads the same intent read-only via `api.payments.forOrder(order.id)`. Wayler notifications flow through the existing bell/dropdown (see **Notifications**).
 
 **Fee split (mock):** `amount` = `offeredRewardAmount`; `platformFeeAmount` = 10%; `escrowAmount` = remainder.
 
@@ -1170,13 +1203,16 @@ User A (Sender)                          User B (Wayler)
         │ creates order (reward + currency)      │
         │                                        │ accepts
         │ mock authorize → AUTHORIZED            │ sees "Payment not authorized yet"
+        │                                        │ bell: "Payment was authorized"
         │ mock hold escrow → HELD_IN_ESCROW      │ refreshes → HELD_IN_ESCROW + amounts
+        │                                        │ bell: "Escrow is held"
         │                                        │ transit → proof → DELIVERED
         │ mock release → RELEASED + Payout PENDING │ refreshes → RELEASED / mock payout created
+        │                                        │ bell: "Mock payout created"
 ```
 
 - **Sender** controls mock **authorize**, **hold escrow**, and **release** from **Accepted Orders**.
-- **Wayler** **observes** status only — **no payment action buttons**.
+- **Wayler** **observes** status in Accepted panel and via **in-app notifications** — **no payment action buttons**.
 - **Release** requires order **DELIVERED** and **`proofSubmittedAt`** (matches API).
 - **Released** means a **Payout** was created in mock/manual mode (`PENDING`, provider **MANUAL**).
 
@@ -1267,6 +1303,37 @@ On `/app` in **Wayler mode**, each job in **Accepted delivery requests** include
 
 i18n keys: `app.waylerFeed.acceptedPanel.payment.*` (8 locales).
 
+### Mock payment notifications (Wayler dispatch)
+
+After each **successful** mock payment state change, `PaymentsService` dispatches an in-app notification to the **Wayler** (`payeeId`). Dispatch uses `NotificationsService.createForUser()` — failures are logged and do **not** roll back the payment action.
+
+| Payment action   | Recipient  | `NotificationType` | Title                  | Body                                                |
+| ---------------- | ---------- | ------------------ | ---------------------- | --------------------------------------------------- |
+| mock-authorize   | **Wayler** | `SYSTEM`           | Payment was authorized | The Sender authorized payment for your delivery.    |
+| mock-hold-escrow | **Wayler** | `SYSTEM`           | Escrow is held         | Payment is now held in escrow for your delivery.    |
+| mock-release     | **Wayler** | `SYSTEM`           | Mock payout created    | A mock/manual payout was created for your delivery. |
+
+- **`relatedOrderId`** is set on every mock payment notification.
+- **Sender is not notified** for their own authorize/hold actions (release also notifies Wayler only in the current batch).
+- **`SYSTEM` type** is used because no payment-specific `NotificationType` exists yet — dedicated types are a future milestone.
+- **No duplicate notifications** on idempotent calls — e.g. re-authorize when already `AUTHORIZED`/`HELD_IN_ESCROW` returns existing state without notifying.
+
+**End-to-end flow (no frontend changes required for dispatch):**
+
+```text
+Sender mock payment action (UI or API)
+        ↓
+PaymentsService state change + ledger
+        ↓
+NotificationsService.createForUser()  →  Wayler notification row
+        ↓
+GET /notifications*  +  api.notifications.*
+        ↓
+NotificationBell polling  →  unread badge + dropdown
+```
+
+See **Notifications** for bell polling, mark-read, and full manual test steps.
+
 ### Rules (mock/manual)
 
 | Step                 | Rules                                                                                                                                                                                                                                                                                                                                                                    |
@@ -1295,18 +1362,19 @@ i18n keys: `app.waylerFeed.acceptedPanel.payment.*` (8 locales).
 
 ### Current scope
 
-| Included                                                     | Not included (yet)                |
-| ------------------------------------------------------------ | --------------------------------- |
-| Prisma enums + models + migration                            | Stripe / Connect integration      |
-| `@wayly/types` payment summaries                             | Real Wayler payout dashboard      |
-| Mock/manual payment API + SDK                                | Checkout flow / card forms        |
-| Sender Accepted mock payment UI (authorize / hold / release) | Payout method setup               |
-| Wayler Accepted read-only payment/payout visibility          | Payout processing (`PAID`)        |
-| Escrow release rules (mock, proof-gated)                     | Refund workflow                   |
-| Ledger on authorize/hold/release                             | Payment webhooks                  |
-| Two-sided mock payment UI (Sender acts, Wayler observes)     | Payout history / failure handling |
-|                                                              | Subscription / paywall UI         |
-|                                                              | Real money movement               |
+| Included                                                     | Not included (yet)                   |
+| ------------------------------------------------------------ | ------------------------------------ |
+| Prisma enums + models + migration                            | Stripe / Connect integration         |
+| `@wayly/types` payment summaries                             | Real Wayler payout dashboard         |
+| Mock/manual payment API + SDK                                | Checkout flow / card forms           |
+| Sender Accepted mock payment UI (authorize / hold / release) | Payout method setup                  |
+| Wayler Accepted read-only payment/payout visibility          | Payout processing (`PAID`)           |
+| Escrow release rules (mock, proof-gated)                     | Refund workflow                      |
+| Ledger on authorize/hold/release                             | Payment webhooks                     |
+| Two-sided mock payment UI (Sender acts, Wayler observes)     | Payout history / failure handling    |
+| Mock payment in-app notifications (Wayler, `SYSTEM` type)    | Dedicated payment notification types |
+|                                                              | Subscription / paywall UI            |
+|                                                              | Real money movement                  |
 
 ### Manual testing checklist (mock payments — API)
 
@@ -1351,6 +1419,19 @@ On `/app` in **Wayler mode** with the same two users (**A** = Sender, **B** = Wa
 - [ ] **User B** panel has **no** payment action buttons (authorize / hold / release)
 - [ ] No Stripe, checkout, or card-form UI on Wayler panel
 
+### Manual testing checklist (mock payment notifications)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler) on `/app`:
+
+- [ ] **User A** creates order with reward/currency; **User B** accepts
+- [ ] **User A** mock-authorizes → **User B** sees “Payment was authorized” in bell (`SYSTEM`, `relatedOrderId` set)
+- [ ] **User A** mock-holds escrow → **User B** sees “Escrow is held”
+- [ ] **User B** delivers with proof; **User A** mock-releases → **User B** sees “Mock payout created”
+- [ ] **User A** receives **no** notification for own authorize/hold actions
+- [ ] Re-click authorize when already authorized → **no** duplicate Wayler notification
+- [ ] **User B** unread badge updates within **30s** via existing bell polling (no frontend changes)
+- [ ] Payment action still succeeds if notification insert fails (logged server-side only)
+
 ### Intended production flow (future)
 
 ```text
@@ -1363,10 +1444,13 @@ DELIVERED + proof → RELEASED → Payout PAID
 Refunds / disputes → holds, arbitrator review
 ```
 
-Mock API and two-sided payment UI (Sender controls + Wayler visibility) today exercise the middle lifecycle without a payment processor.
+Mock API, two-sided payment UI, and Wayler in-app notifications today exercise the middle lifecycle without a payment processor.
 
 ### Future milestones (payments & monetization)
 
+- **Dedicated payment notification types** — replace `SYSTEM` for authorize/hold/release dispatch
+- **Localized payment notification templates** — per-user locale for title/body
+- **Push/email for payment events** — offline Wayler/Sender alerts
 - **Real Wayler payout dashboard** — earnings summary, pending/paid payouts beyond per-order read-only panel
 - **Payout method setup** — bank/account onboarding for Waylers
 - **Stripe Connect / provider payout integration** — real payee onboarding and transfers
@@ -1461,7 +1545,7 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
-- **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons; 8-locale i18n on both panels). ✅ (schema + mock API + two-sided UI complete; no Stripe/real money). Next: real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
+- **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
 - **M6–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds**, subscriptions/paywall, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin/arbitrator panel, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
