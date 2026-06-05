@@ -12,11 +12,12 @@ import {
 } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import type { PaymentIntentSummary } from '@wayly/types';
-import { DeliveryOrderStatus } from '@wayly/types';
+import { DeliveryOrderStatus, NotificationType } from '@wayly/types';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { toPaymentIntentSummary } from './payments.mapper';
 
@@ -24,7 +25,10 @@ const MOCK_PLATFORM_FEE_RATE = new Decimal('0.1');
 
 @Injectable()
 export class PaymentsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async mockAuthorizeOrder(user: RequestUser, orderId: string): Promise<PaymentIntentSummary> {
     requireKycApproved(user);
@@ -104,6 +108,15 @@ export class PaymentsService {
         });
         return intent;
       });
+
+      await this.notifications.createForUser({
+        userId: order.acceptedWaylerId,
+        type: NotificationType.SYSTEM,
+        title: 'Payment was authorized',
+        body: 'The Sender authorized payment for your delivery.',
+        relatedOrderId: order.id,
+      });
+
       return toPaymentIntentSummary(updated);
     }
 
@@ -135,6 +148,15 @@ export class PaymentsService {
       });
       return intent;
     });
+
+    await this.notifications.createForUser({
+      userId: order.acceptedWaylerId,
+      type: NotificationType.SYSTEM,
+      title: 'Payment was authorized',
+      body: 'The Sender authorized payment for your delivery.',
+      relatedOrderId: order.id,
+    });
+
     return toPaymentIntentSummary(created);
   }
 
@@ -194,6 +216,16 @@ export class PaymentsService {
 
       return record;
     });
+
+    if (intent.payeeId) {
+      await this.notifications.createForUser({
+        userId: intent.payeeId,
+        type: NotificationType.SYSTEM,
+        title: 'Escrow is held',
+        body: 'Payment is now held in escrow for your delivery.',
+        relatedOrderId: intent.orderId,
+      });
+    }
 
     return toPaymentIntentSummary(updated);
   }
@@ -258,6 +290,14 @@ export class PaymentsService {
       });
 
       return record;
+    });
+
+    await this.notifications.createForUser({
+      userId: intent.payeeId,
+      type: NotificationType.SYSTEM,
+      title: 'Mock payout created',
+      body: 'A mock/manual payout was created for your delivery.',
+      relatedOrderId: intent.orderId,
     });
 
     return toPaymentIntentSummary(updated);
