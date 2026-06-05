@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps) are complete. Photo/signature proof, payments, escrow, chat, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`) are complete. Photo/signature proof, payments, escrow, chat, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -172,6 +172,7 @@ Marketing landing page (`/`) is not translated yet.
 | Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
 | Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)  | Complete (M4)                   |
 | Proof of delivery (metadata note + confirmation code)          | Complete (M4)                   |
+| In-app notifications (schema, API, SDK, bell/dropdown)         | Complete (M4)                   |
 | Payments, escrow, chat, disputes, admin                        | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -332,26 +333,29 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 
 ### Current marketplace status
 
-| Area                                                                 | Status   |
-| -------------------------------------------------------------------- | -------- |
-| `DeliveryOrder` schema (Prisma)                                      | Complete |
-| Create draft (`POST /orders`)                                        | Complete |
-| Cancel DRAFT/OPEN (`POST /orders/:id/cancel`, Sender only)           | Complete |
-| Sender Cancel UI (Drafts + Published panels)                         | Complete |
-| Publish draft → OPEN (`POST /orders/:id/publish`)                    | Complete |
-| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)              | Complete |
-| Accept OPEN order (`POST /orders/:id/accept`)                        | Complete |
-| Start transit (`POST /orders/:id/start-transit`)                     | Complete |
-| Mark delivered (`POST /orders/:id/mark-delivered`)                   | Complete |
-| Wayler accepted panel (`GET /orders/accepted`) + progression         | Complete |
-| Sender tracking panels (Drafts / Published / Accepted)               | Complete |
-| Sender Accepted lifecycle visibility (ACCEPTED/IN_TRANSIT/DELIVERED) | Complete |
-| Proof-of-delivery schema + submit API + SDK                          | Complete |
-| Wayler proof submit/update UI (IN_TRANSIT / DELIVERED)               | Complete |
-| Sender proof read-only visibility                                    | Complete |
-| Wayler feed filters & sort (type, location, reward, sort)            | Complete |
-| Wayler map route previews (Leaflet + city/country geocoding)         | Complete |
-| Sender privacy endpoint (`GET /orders/mine`)                         | Complete |
+| Area                                                                      | Status   |
+| ------------------------------------------------------------------------- | -------- |
+| `DeliveryOrder` schema (Prisma)                                           | Complete |
+| Create draft (`POST /orders`)                                             | Complete |
+| Cancel DRAFT/OPEN (`POST /orders/:id/cancel`, Sender only)                | Complete |
+| Sender Cancel UI (Drafts + Published panels)                              | Complete |
+| Publish draft → OPEN (`POST /orders/:id/publish`)                         | Complete |
+| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)                   | Complete |
+| Accept OPEN order (`POST /orders/:id/accept`)                             | Complete |
+| Start transit (`POST /orders/:id/start-transit`)                          | Complete |
+| Mark delivered (`POST /orders/:id/mark-delivered`)                        | Complete |
+| Wayler accepted panel (`GET /orders/accepted`) + progression              | Complete |
+| Sender tracking panels (Drafts / Published / Accepted)                    | Complete |
+| Sender Accepted lifecycle visibility (ACCEPTED/IN_TRANSIT/DELIVERED)      | Complete |
+| Proof-of-delivery schema + submit API + SDK                               | Complete |
+| Wayler proof submit/update UI (IN_TRANSIT / DELIVERED)                    | Complete |
+| Sender proof read-only visibility                                         | Complete |
+| Notification schema + API + SDK                                           | Complete |
+| Automatic Sender lifecycle notifications (accept/transit/proof/delivered) | Complete |
+| Frontend notification bell/dropdown on `/app`                             | Complete |
+| Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
+| Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
+| Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
 
 ### API routes (orders)
 
@@ -567,6 +571,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User A** refreshes Sender Accepted panel → sees **IN_TRANSIT** badge and note
 - [ ] **User B** clicks **Mark delivered**
 - [ ] **User A** refreshes Sender Accepted panel → sees **DELIVERED** badge, note, and **deliveredAt** when set
+- [ ] **User A** opens the notification bell → sees lifecycle notifications (see **Notifications** section)
 
 ### Future milestones (delivery lifecycle)
 
@@ -574,7 +579,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **Photo / signature proof** of handoff — see **Proof of delivery** future milestones
 - **Payment release** after delivery (escrow / Stripe)
 - **Disputes / arbitration** on delivery completion
-- **Notifications** (push/email) on status changes
+- **Real-time / push / email** on status changes — in-app notifications exist today; see **Notifications**
 
 ## Proof of delivery
 
@@ -669,6 +674,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User B** marks **delivered** → proof section still visible and updateable on Wayler side
 - [ ] **User A** can view proof but has **no edit** controls
 - [ ] Empty proof body (both fields blank) → submit button disabled / API **400**
+- [ ] **User A** opens notification bell → sees **PROOF_SUBMITTED** notification (see **Notifications**)
 
 ### Future milestones (proof of delivery)
 
@@ -679,7 +685,124 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **Payment release** after proof and/or delivery (escrow / Stripe)
 - **Dispute evidence bundle** — attach proof to dispute records
 - **Admin / arbitrator proof review** — operator review of submitted proof
-- **Notifications** — alert Sender when proof is submitted or updated
+- **Push/email on proof updates** — Sender in-app **PROOF_SUBMITTED** notification exists today; see **Notifications**
+
+## Notifications
+
+Notifications keep users aware of **order lifecycle events** and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app` — no polling, WebSocket/SSE, email, or push yet. Real-time delivery and outbound channels are planned for later milestones.
+
+### Schema (`Notification`)
+
+| Field            | Type               | Description                           |
+| ---------------- | ------------------ | ------------------------------------- |
+| `id`             | UUID               | Primary key                           |
+| `userId`         | UUID               | Recipient user                        |
+| `type`           | `NotificationType` | Event category (see enum below)       |
+| `title`          | String             | Short headline                        |
+| `body`           | String?            | Optional detail text                  |
+| `relatedOrderId` | UUID?              | Linked delivery order when applicable |
+| `readAt`         | DateTime?          | When marked read (`null` = unread)    |
+| `createdAt`      | DateTime           | When the notification was created     |
+
+Shared types: `NotificationSummary`, `NotificationListResponse` (`@wayly/types`).
+
+### `NotificationType` enum
+
+| Value              | Notes (current dispatch)                      |
+| ------------------ | --------------------------------------------- |
+| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                 |
+| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts   |
+| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts   |
+| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered |
+| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent  |
+| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted  |
+| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent     |
+| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent     |
+| `SYSTEM`           | Reserved — admin/system messages later        |
+
+### API routes
+
+All routes require a valid **JWT** only — **KYC is not required** to list or mark notifications read. Base path: `/api/v1`.
+
+| Method | Path                                 | Description                                        |
+| ------ | ------------------------------------ | -------------------------------------------------- |
+| GET    | `/api/v1/notifications`              | Paginated list (`page`, `limit`, `unreadOnly`)     |
+| GET    | `/api/v1/notifications/unread-count` | `{ unreadTotal }` for badge                        |
+| POST   | `/api/v1/notifications/:id/read`     | Mark one notification read → `NotificationSummary` |
+| POST   | `/api/v1/notifications/read-all`     | Mark all notifications read for current user       |
+
+Interactive docs: http://localhost:4000/docs (tag **notifications**).
+
+### SDK
+
+```typescript
+api.notifications.list(query?);   // GET /notifications — page, limit, unreadOnly
+api.notifications.unreadCount();  // GET /notifications/unread-count
+api.notifications.markRead(id);   // POST /notifications/:id/read
+api.notifications.markAllRead();  // POST /notifications/read-all
+```
+
+### Dispatch behavior (automatic creation)
+
+The backend creates notifications **internally** when order lifecycle actions succeed. Failures to create a notification are logged and do **not** block the order action.
+
+| Order event            | `NotificationType` | Recipient  |
+| ---------------------- | ------------------ | ---------- |
+| Wayler accepts         | `ORDER_ACCEPTED`   | **Sender** |
+| Wayler starts transit  | `ORDER_IN_TRANSIT` | **Sender** |
+| Wayler submits proof   | `PROOF_SUBMITTED`  | **Sender** |
+| Wayler marks delivered | `ORDER_DELIVERED`  | **Sender** |
+
+**Not dispatched in the current version:**
+
+- **No Wayler self-action notifications** — Waylers are not notified for their own accept/transit/proof/deliver actions.
+- **No cancel notification** — Sender cancel (DRAFT/OPEN) does not create `ORDER_CANCELLED` yet.
+- **No KYC / system / publish notifications** — enum values exist; dispatch comes later.
+
+### Frontend behavior (`/app` header)
+
+| Feature           | Behavior                                                                   |
+| ----------------- | -------------------------------------------------------------------------- |
+| **Bell**          | Outline button with bell icon; placed next to language selector / sign out |
+| **Unread badge**  | Shown when `unreadTotal > 0` (caps display at `99+`)                       |
+| **On app load**   | `api.notifications.unreadCount()` once after login (no polling)            |
+| **Dropdown open** | Loads latest **10** via `api.notifications.list({ page: 1, limit: 10 })`   |
+| **Loading**       | Translated loading message while list fetches                              |
+| **Empty**         | Translated empty state when user has no notifications                      |
+| **Error**         | Small translated error in dropdown; main app remains usable                |
+| **Each item**     | Title, optional body, `createdAt`, read/unread pill, mark-read if unread   |
+| **Refresh**       | Reloads list; disabled while loading or an action is in progress           |
+| **Mark all read** | `api.notifications.markAllRead()` then refresh; disabled when no unread    |
+| **Mark one read** | `api.notifications.markRead(id)` then refresh list + unread count          |
+| **KYC**           | **Not required** to open bell or read notifications                        |
+
+i18n keys under `app.notifications.*` (8 locales).
+
+### Manual testing checklist (notifications)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler):
+
+- [ ] **User A** publishes an order
+- [ ] **User B** accepts → **User A** receives `ORDER_ACCEPTED` (check bell badge / dropdown)
+- [ ] **User B** starts transit → **User A** receives `ORDER_IN_TRANSIT`
+- [ ] **User B** submits proof → **User A** receives `PROOF_SUBMITTED`
+- [ ] **User B** marks delivered → **User A** receives `ORDER_DELIVERED`
+- [ ] **User A** opens bell → sees notifications with title, body (if any), timestamps
+- [ ] **User A** marks **one** notification read → unread badge count decreases
+- [ ] **User A** marks **all** read → unread badge disappears
+- [ ] **User B** does **not** receive notifications for own accept/transit/proof/deliver actions
+- [ ] User with **no notifications** sees empty state
+- [ ] **KYC-unapproved** authenticated user can still open bell and read notifications
+
+### Future milestones (notifications)
+
+- **Polling or WebSocket/SSE** — real-time unread count and list updates without manual refresh
+- **Email / push notifications** — FCM, transactional email for offline users
+- **Notification preferences** — per-type opt-in/out, quiet hours
+- **KYC notifications** — `KYC_APPROVED`, `KYC_REJECTED` on provider/mock outcomes
+- **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
+- **Admin / system notifications** — `SYSTEM` type, operator broadcasts
+- **Localized notification templates** — server-side title/body per user locale
 
 ### Future milestones (marketplace)
 
@@ -715,8 +838,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`. ✅ (core loop + cancellation + lifecycle + metadata proof complete; photo/signature proof, payments/chat/disputes later)
-- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`). ✅ (core loop + cancellation + lifecycle + metadata proof + in-app notifications complete; photo/signature proof, real-time/push/email notifications, payments/chat/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, real-time/push/email notifications + preferences, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
