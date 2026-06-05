@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`) are complete. Photo/signature proof, payments, escrow, chat, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`, **lightweight polling** for unread badge and open dropdown) are complete. Photo/signature proof, payments, escrow, chat, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -162,18 +162,18 @@ Marketing landing page (`/`) is not translated yet.
 
 ### Current M1 status
 
-| Area                                                           | Status                          |
-| -------------------------------------------------------------- | ------------------------------- |
-| Auth backend (register, login, refresh, logout, `/users/me`)   | Complete                        |
-| Auth frontend (`/login`, `/register`, `/app`, session restore) | Complete                        |
-| Password visibility toggle                                     | Complete                        |
-| Basic language support (8 locales, localStorage preference)    | Complete                        |
-| KYC mock flow (schema, API, SDK, `/app` panel)                 | Complete (M2)                   |
-| Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
-| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)  | Complete (M4)                   |
-| Proof of delivery (metadata note + confirmation code)          | Complete (M4)                   |
-| In-app notifications (schema, API, SDK, bell/dropdown)         | Complete (M4)                   |
-| Payments, escrow, chat, disputes, admin                        | Not started (future milestones) |
+| Area                                                            | Status                          |
+| --------------------------------------------------------------- | ------------------------------- |
+| Auth backend (register, login, refresh, logout, `/users/me`)    | Complete                        |
+| Auth frontend (`/login`, `/register`, `/app`, session restore)  | Complete                        |
+| Password visibility toggle                                      | Complete                        |
+| Basic language support (8 locales, localStorage preference)     | Complete                        |
+| KYC mock flow (schema, API, SDK, `/app` panel)                  | Complete (M2)                   |
+| Real KYC provider (Sumsub)                                      | Not started (future M2 batch)   |
+| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)   | Complete (M4)                   |
+| Proof of delivery (metadata note + confirmation code)           | Complete (M4)                   |
+| In-app notifications (schema, API, SDK, bell/dropdown, polling) | Complete (M4)                   |
+| Payments, escrow, chat, disputes, admin                         | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
 
@@ -353,6 +353,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Notification schema + API + SDK                                           | Complete |
 | Automatic Sender lifecycle notifications (accept/transit/proof/delivered) | Complete |
 | Frontend notification bell/dropdown on `/app`                             | Complete |
+| Notification bell polling (30s unread / 60s list, visibility-aware)       | Complete |
 | Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
 | Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
 | Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
@@ -689,7 +690,23 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Notifications
 
-Notifications keep users aware of **order lifecycle events** and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app` — no polling, WebSocket/SSE, email, or push yet. Real-time delivery and outbound channels are planned for later milestones.
+Notifications keep users aware of **order lifecycle events** and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. **WebSocket/SSE, email, and push** are not implemented yet — those are planned for later milestones.
+
+### Current notification flow
+
+```text
+Order lifecycle action (backend)
+        ↓
+NotificationsService.createForUser()  →  Notification row in DB
+        ↓
+Notification API  (/api/v1/notifications*)
+        ↓
+@wayly/sdk  (api.notifications.*)
+        ↓
+NotificationBell on /app  (badge + dropdown)
+        ↓
+Polling refresh  (unread count every 30s; list every 60s while open)
+```
 
 ### Schema (`Notification`)
 
@@ -761,22 +778,38 @@ The backend creates notifications **internally** when order lifecycle actions su
 
 ### Frontend behavior (`/app` header)
 
-| Feature           | Behavior                                                                   |
-| ----------------- | -------------------------------------------------------------------------- |
-| **Bell**          | Outline button with bell icon; placed next to language selector / sign out |
-| **Unread badge**  | Shown when `unreadTotal > 0` (caps display at `99+`)                       |
-| **On app load**   | `api.notifications.unreadCount()` once after login (no polling)            |
-| **Dropdown open** | Loads latest **10** via `api.notifications.list({ page: 1, limit: 10 })`   |
-| **Loading**       | Translated loading message while list fetches                              |
-| **Empty**         | Translated empty state when user has no notifications                      |
-| **Error**         | Small translated error in dropdown; main app remains usable                |
-| **Each item**     | Title, optional body, `createdAt`, read/unread pill, mark-read if unread   |
-| **Refresh**       | Reloads list; disabled while loading or an action is in progress           |
-| **Mark all read** | `api.notifications.markAllRead()` then refresh; disabled when no unread    |
-| **Mark one read** | `api.notifications.markRead(id)` then refresh list + unread count          |
-| **KYC**           | **Not required** to open bell or read notifications                        |
+| Feature           | Behavior                                                                                              |
+| ----------------- | ----------------------------------------------------------------------------------------------------- |
+| **Bell**          | Outline button with bell icon; placed next to language selector / sign out                            |
+| **Unread badge**  | Shown when `unreadTotal > 0` (caps display at `99+`)                                                  |
+| **On app load**   | `api.notifications.unreadCount()` on mount; then polls every **30s** while tab visible                |
+| **Dropdown open** | Loads latest **10** via `api.notifications.list({ page: 1, limit: 10 })`; also refreshes unread count |
+| **List polling**  | While dropdown is open **and** tab visible, list polls every **60s** (silent background refresh)      |
+| **Loading**       | Translated loading message on foreground list fetches only                                            |
+| **Empty**         | Translated empty state when user has no notifications                                                 |
+| **Error**         | Foreground list/action errors shown in dropdown; background poll failures are silent                  |
+| **Each item**     | Title, optional body, `createdAt`, read/unread pill, mark-read if unread                              |
+| **Refresh**       | Reloads list; disabled while loading or an action is in progress                                      |
+| **Mark all read** | `api.notifications.markAllRead()` then refresh; disabled when no unread                               |
+| **Mark one read** | `api.notifications.markRead(id)` then refresh list + unread count                                     |
+| **KYC**           | **Not required** to open bell or read notifications                                                   |
 
 i18n keys under `app.notifications.*` (8 locales).
+
+### Polling behavior
+
+| Behavior              | Detail                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **Unread count**      | `api.notifications.unreadCount()` on mount, then every **30 seconds** while user is on `/app` and tab is **visible**      |
+| **List refresh**      | Every **60 seconds** while dropdown is **open** and tab is **visible** (`api.notifications.list({ page: 1, limit: 10 })`) |
+| **Tab hidden**        | Polling **paused** when `document.visibilityState` is `hidden` (intervals cleared)                                        |
+| **Tab visible**       | Polling **resumed** when tab becomes visible again (immediate unread fetch + intervals restart)                           |
+| **Overlap guard**     | Skips a new unread-count or list request if the same request type is already in flight                                    |
+| **Also refreshes**    | Unread count after dropdown open, mark read, mark all read, and manual Refresh                                            |
+| **Background errors** | Silent — badge/list keep last known values; main app unaffected                                                           |
+| **Foreground errors** | Dropdown list loads and user actions (mark read / mark all read) still show translated errors                             |
+
+No WebSocket/SSE, email, push, or notification preferences in the current version.
 
 ### Manual testing checklist (notifications)
 
@@ -794,15 +827,23 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] User with **no notifications** sees empty state
 - [ ] **KYC-unapproved** authenticated user can still open bell and read notifications
 
+**Polling (auto-refresh):**
+
+- [ ] **User A** on `/app`; **User B** triggers an order action → **User A** badge updates within **30 seconds** without page refresh
+- [ ] **User A** opens dropdown → list loads; new notifications appear within **60 seconds** while dropdown stays open (no manual Refresh)
+- [ ] **User A** switches to another browser tab (document hidden) → polling pauses
+- [ ] **User A** returns to tab → polling resumes; badge updates again within 30 seconds if new notifications exist
+- [ ] **User A** marks **all** read → badge stays at **0** after subsequent polls
+
 ### Future milestones (notifications)
 
-- **Polling or WebSocket/SSE** — real-time unread count and list updates without manual refresh
+- **WebSocket/SSE real-time delivery** — instant unread count and list updates (lightweight **polling exists today**)
 - **Email / push notifications** — FCM, transactional email for offline users
 - **Notification preferences** — per-type opt-in/out, quiet hours
+- **Localized notification templates** — server-side title/body per user locale
 - **KYC notifications** — `KYC_APPROVED`, `KYC_REJECTED` on provider/mock outcomes
 - **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
 - **Admin / system notifications** — `SYSTEM` type, operator broadcasts
-- **Localized notification templates** — server-side title/body per user locale
 
 ### Future milestones (marketplace)
 
@@ -838,8 +879,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`). ✅ (core loop + cancellation + lifecycle + metadata proof + in-app notifications complete; photo/signature proof, real-time/push/email notifications, payments/chat/disputes later)
-- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, real-time/push/email notifications + preferences, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, Sender lifecycle dispatch, bell/dropdown on `/app`, **polling** — 30s unread / 60s list, visibility-aware). ✅ (core loop + cancellation + lifecycle + metadata proof + in-app notifications + polling complete; photo/signature proof, WebSocket/SSE/push/email, payments/chat/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE/push/email notifications + preferences, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
