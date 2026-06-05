@@ -12,6 +12,7 @@ import type {
   DisputeListResponse,
   DisputeMessageSummary,
 } from '@wayly/types';
+import { NotificationType } from '@wayly/types';
 import type {
   AddDisputeEvidenceInput,
   AddDisputeMessageInput,
@@ -22,6 +23,7 @@ import type {
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import {
   toDisputeDetail,
@@ -41,9 +43,14 @@ const ACTIVE_DISPUTE_STATUSES: PrismaDisputeStatus[] = [
   PrismaDisputeStatus.UNDER_REVIEW,
 ];
 
+const DISPUTE_MESSAGE_PREVIEW_MAX = 80;
+
 @Injectable()
 export class DisputesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async open(user: RequestUser, body: OpenDisputeInput): Promise<DisputeDetail> {
     requireKycApproved(user);
@@ -70,6 +77,17 @@ export class DisputesService {
         description: body.description,
       },
     });
+
+    const recipientId = this.getOtherOrderParticipant(order, user.id);
+    if (recipientId) {
+      await this.notifications.createForUser({
+        userId: recipientId,
+        type: NotificationType.SYSTEM,
+        title: 'Dispute opened',
+        body: 'A dispute was opened for one of your deliveries.',
+        relatedOrderId: order.id,
+      });
+    }
 
     return toDisputeDetail(dispute, [], []);
   }
@@ -148,6 +166,17 @@ export class DisputesService {
       },
     });
 
+    const recipientId = this.getOtherOrderParticipant(dispute.order, user.id);
+    if (recipientId) {
+      await this.notifications.createForUser({
+        userId: recipientId,
+        type: NotificationType.SYSTEM,
+        title: 'New dispute message',
+        body: this.buildDisputeMessageNotificationBody(body.body),
+        relatedOrderId: dispute.orderId,
+      });
+    }
+
     return toDisputeMessageSummary(message);
   }
 
@@ -171,6 +200,17 @@ export class DisputesService {
         fileUrl: body.fileUrl ?? null,
       },
     });
+
+    const recipientId = this.getOtherOrderParticipant(dispute.order, user.id);
+    if (recipientId) {
+      await this.notifications.createForUser({
+        userId: recipientId,
+        type: NotificationType.SYSTEM,
+        title: 'New dispute evidence',
+        body: 'New evidence was added to a dispute.',
+        relatedOrderId: dispute.orderId,
+      });
+    }
 
     return toDisputeEvidenceSummary(evidence);
   }
@@ -234,5 +274,32 @@ export class DisputesService {
     if (!ACTIVE_DISPUTE_STATUSES.includes(dispute.status)) {
       throw new ConflictException('Dispute is not open for new messages or evidence');
     }
+  }
+
+  private getOtherOrderParticipant(
+    order: Pick<DeliveryOrder, 'senderId' | 'acceptedWaylerId'>,
+    actorId: string,
+  ): string | null {
+    if (order.senderId === actorId && order.acceptedWaylerId) {
+      return order.acceptedWaylerId;
+    }
+    if (order.acceptedWaylerId === actorId) {
+      return order.senderId;
+    }
+    return null;
+  }
+
+  private buildDisputeMessageNotificationBody(messageBody: string): string {
+    const trimmed = messageBody.trim();
+    if (!trimmed) {
+      return 'A new message was added to a dispute.';
+    }
+
+    const preview =
+      trimmed.length > DISPUTE_MESSAGE_PREVIEW_MAX
+        ? `${trimmed.slice(0, DISPUTE_MESSAGE_PREVIEW_MAX)}…`
+        : trimmed;
+
+    return `A new message was added to a dispute: "${preview}"`;
   }
 }
