@@ -104,3 +104,45 @@ export const PackageSize = {
   OVERSIZED: 'OVERSIZED',
 } as const;
 export type PackageSize = (typeof PackageSize)[keyof typeof PackageSize];
+
+/** Payment intent lifecycle (escrow/Stripe processing lands in a later batch). */
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  AUTHORIZED: 'AUTHORIZED',
+  HELD_IN_ESCROW: 'HELD_IN_ESCROW',
+  RELEASED: 'RELEASED',
+  REFUNDED: 'REFUNDED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+} as const;
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus];
+
+/** Payment/payout provider (Stripe integration lands in a later batch). */
+export const PaymentProvider = {
+  MANUAL: 'MANUAL',
+  STRIPE: 'STRIPE',
+  OTHER: 'OTHER',
+} as const;
+export type PaymentProvider = (typeof PaymentProvider)[keyof typeof PaymentProvider];
+
+/** Wayler payout lifecycle. */
+export const PayoutStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  PAID: 'PAID',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED',
+} as const;
+export type PayoutStatus = (typeof PayoutStatus)[keyof typeof PayoutStatus];
+
+/** Ledger line categories for payment/escrow audit trail. */
+export const LedgerEntryType = {
+  PAYMENT_AUTHORIZED: 'PAYMENT_AUTHORIZED',
+  ESCROW_HELD: 'ESCROW_HELD',
+  PLATFORM_FEE_CHARGED: 'PLATFORM_FEE_CHARGED',
+  PAYOUT_CREATED: 'PAYOUT_CREATED',
+  PAYOUT_PAID: 'PAYOUT_PAID',
+  REFUND_CREATED: 'REFUND_CREATED',
+  ADJUSTMENT: 'ADJUSTMENT',
+} as const;
+export type LedgerEntryType = (typeof LedgerEntryType)[keyof typeof LedgerEntryType];

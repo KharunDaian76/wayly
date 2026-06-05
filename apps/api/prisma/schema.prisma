@@ -5,7 +5,8 @@
 // M4 Batch 1: DeliveryOrder foundation (API/UI land in later batches).
 // Notification foundation (routes/dispatch land in a later batch).
 // Chat foundation (routes/WebSocket land in a later batch).
-// Payments/Disputes/etc. arrive in later milestones.
+// Payment/escrow foundation (routes/Stripe land in a later batch).
+// Disputes/etc. arrive in later milestones.
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
 // geographic radius queries (geography(Point)) from M4/M5.
@@ -74,6 +75,41 @@ enum NotificationType {
   SYSTEM
 }
 
+// Payment intent lifecycle (Stripe/manual processing lands in a later batch).
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  HELD_IN_ESCROW
+  RELEASED
+  REFUNDED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  MANUAL
+  STRIPE
+  OTHER
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum LedgerEntryType {
+  PAYMENT_AUTHORIZED
+  ESCROW_HELD
+  PLATFORM_FEE_CHARGED
+  PAYOUT_CREATED
+  PAYOUT_PAID
+  REFUND_CREATED
+  ADJUSTMENT
+}
+
 // --- Models ------------------------------------------------------------------
 
 model User {
@@ -113,6 +149,10 @@ model User {
   sentConversations             Conversation[] @relation("ConversationSender")
   waylerConversations           Conversation[] @relation("ConversationWayler")
   chatMessages                  ChatMessage[]  @relation("ChatMessageSender")
+  paymentIntentsAsPayer         PaymentIntent[] @relation("PaymentIntentPayer")
+  paymentIntentsAsPayee         PaymentIntent[] @relation("PaymentIntentPayee")
+  payouts                       Payout[]        @relation("PayoutUser")
+  ledgerEntries                 LedgerEntry[]   @relation("LedgerEntryUser")
 
   @@index([deletedAt])
   @@map("users")
@@ -229,6 +269,8 @@ model DeliveryOrder {
   proofSubmittedBy       User?     @relation("ProofSubmittedDeliveryOrders", fields: [proofSubmittedById], references: [id], onDelete: SetNull)
   notifications          Notification[]
   conversation           Conversation?
+  paymentIntent          PaymentIntent?
+  ledgerEntries          LedgerEntry[]
 
   @@index([senderId])
   @@index([acceptedWaylerId])
@@ -301,4 +343,96 @@ model ChatMessage {
   @@index([createdAt])
   @@index([readAt])
   @@map("chat_messages")
+}
+
+// Per-order payment intent (one per delivery order; escrow/Stripe in later batches).
+model PaymentIntent {
+  id                String          @id @default(uuid()) @db.Uuid
+  orderId           String          @unique @db.Uuid
+  order             DeliveryOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  payerId           String          @db.Uuid
+  payer             User            @relation("PaymentIntentPayer", fields: [payerId], references: [id], onDelete: Restrict)
+  payeeId           String?         @db.Uuid
+  payee             User?           @relation("PaymentIntentPayee", fields: [payeeId], references: [id], onDelete: SetNull)
+  provider          PaymentProvider @default(MANUAL)
+  status            PaymentStatus   @default(PENDING)
+  currency          String
+  amount            Decimal         @db.Decimal(12, 2)
+  platformFeeAmount Decimal?        @db.Decimal(12, 2)
+  escrowAmount      Decimal?        @db.Decimal(12, 2)
+  providerPaymentId String?
+  authorizedAt      DateTime?
+  escrowedAt        DateTime?
+  releasedAt        DateTime?
+  refundedAt        DateTime?
+  failedAt          DateTime?
+  cancelledAt       DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  payouts       Payout[]
+  ledgerEntries LedgerEntry[]
+
+  @@index([orderId])
+  @@index([payerId])
+  @@index([payeeId])
+  @@index([status])
+  @@index([provider])
+  @@index([createdAt])
+  @@map("payment_intents")
+}
+
+// Wayler payout linked to a payment intent (provider transfer in a later batch).
+model Payout {
+  id                String          @id @default(uuid()) @db.Uuid
+  paymentIntentId   String?         @db.Uuid
+  paymentIntent     PaymentIntent?  @relation(fields: [paymentIntentId], references: [id], onDelete: SetNull)
+  userId            String          @db.Uuid
+  user              User            @relation("PayoutUser", fields: [userId], references: [id], onDelete: Restrict)
+  status            PayoutStatus    @default(PENDING)
+  currency          String
+  amount            Decimal         @db.Decimal(12, 2)
+  provider          PaymentProvider @default(MANUAL)
+  providerPayoutId  String?
+  processedAt       DateTime?
+  paidAt            DateTime?
+  failedAt          DateTime?
+  cancelledAt       DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  ledgerEntries LedgerEntry[]
+
+  @@index([paymentIntentId])
+  @@index([userId])
+  @@index([status])
+  @@index([provider])
+  @@index([createdAt])
+  @@map("payouts")
+}
+
+// Immutable ledger line for payment/escrow audit trail (append-only in later batches).
+model LedgerEntry {
+  id              String          @id @default(uuid()) @db.Uuid
+  paymentIntentId String?         @db.Uuid
+  paymentIntent   PaymentIntent?  @relation(fields: [paymentIntentId], references: [id], onDelete: SetNull)
+  payoutId        String?         @db.Uuid
+  payout          Payout?         @relation(fields: [payoutId], references: [id], onDelete: SetNull)
+  orderId         String?         @db.Uuid
+  order           DeliveryOrder?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  userId          String?         @db.Uuid
+  user            User?           @relation("LedgerEntryUser", fields: [userId], references: [id], onDelete: SetNull)
+  type            LedgerEntryType
+  currency        String
+  amount          Decimal         @db.Decimal(12, 2)
+  description     String?
+  createdAt       DateTime        @default(now())
+
+  @@index([paymentIntentId])
+  @@index([payoutId])
+  @@index([orderId])
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("ledger_entries")
 }

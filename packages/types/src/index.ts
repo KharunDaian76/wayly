@@ -5,3 +5,4 @@ export * from './kyc';
 export * from './delivery-order';
 export * from './notification';
 export * from './chat';
+export * from './payment';
