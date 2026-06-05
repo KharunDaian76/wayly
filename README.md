@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dispute notifications, payment hold/refund integration, resolution workflow, and admin/arbitrator panel are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute notification types, payment hold/refund integration, resolution workflow, and admin/arbitrator panel are future milestones.
 
 ## Tech stack
 
@@ -185,6 +185,7 @@ Marketing landing page (`/`) is not translated yet.
 | Dispute/arbitration schema foundation (Prisma + shared types)                    | Complete (M6)                   |
 | Disputes API + SDK (`DisputesModule`, `api.disputes.*`)                          | Complete (M6)                   |
 | Sender/Wayler Accepted dispute UI (open/view modal, messages, evidence metadata) | Complete (M6)                   |
+| Dispute in-app notifications (other-participant dispatch, `SYSTEM`)              | Complete (M6)                   |
 | Stripe, checkout, real payout processing, refunds, payout dashboard              | Not started (future milestones) |
 | Admin/arbitrator panel, dispute resolution, payment hold on dispute              | Not started (future milestones) |
 
@@ -714,12 +715,12 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Notifications
 
-Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order, payment, and chat notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
+Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, **dispute events**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order, payment, chat, and dispute notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
 
 ### Current notification flow
 
 ```text
-Order lifecycle action OR mock payment action OR chat message sent (backend)
+Order lifecycle action OR mock payment action OR chat message sent OR dispute action (backend)
         ↓
 NotificationsService.createForUser()  →  Notification row in DB
         ↓
@@ -732,7 +733,7 @@ NotificationBell on /app  (badge + dropdown)
 Polling refresh  (unread count every 30s; list every 60s while open)
 ```
 
-Payment and chat notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate payment or chat inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
+Payment, chat, and dispute notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate payment, chat, or dispute inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
 
 ### Schema (`Notification`)
 
@@ -751,17 +752,17 @@ Shared types: `NotificationSummary`, `NotificationListResponse` (`@wayly/types`)
 
 ### `NotificationType` enum
 
-| Value              | Notes (current dispatch)                                                                                                                                                                      |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                                                                                                 |
-| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                                                                                   |
-| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                                                                                   |
-| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                                                                                                 |
-| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                                                                                                  |
-| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                                                                                                  |
-| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                                                                                     |
-| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                                                                                     |
-| `SYSTEM`           | **Dispatched** → other chat participant on new message; **Wayler on mock payment events** (authorize / hold / release — until dedicated payment types exist); admin/system reserved for later |
+| Value              | Notes (current dispatch)                                                                                                                                                                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                                                                                                                                                                             |
+| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                                                                                                                                                               |
+| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                                                                                                                                                               |
+| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                                                                                                                                                                             |
+| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                                                                                                                                                                              |
+| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                                                                                                                                                                              |
+| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                                                                                                                                                                 |
+| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                                                                                                                                                                 |
+| `SYSTEM`           | **Dispatched** → other chat participant on new message; **Wayler on mock payment events** (authorize / hold / release); **other dispute participant** on open dispute / new message / new evidence (until dedicated dispute types exist); admin/system reserved for later |
 
 ### API routes
 
@@ -787,7 +788,7 @@ api.notifications.markAllRead();  // POST /notifications/read-all
 
 ### Dispatch behavior (automatic creation)
 
-The backend creates notifications **internally** when order lifecycle actions, mock payment actions, or chat messages succeed. Failures to create a notification are logged and do **not** block the underlying action. Notifications are created **only after a successful state change** — idempotent/no-op payment calls do **not** duplicate notifications.
+The backend creates notifications **internally** when order lifecycle actions, mock payment actions, chat messages, or dispute actions succeed. Failures to create a notification are logged and do **not** block the underlying action. Notifications are created **only after a successful state change** — validation failures, **409** conflicts, and idempotent/no-op payment calls do **not** create notifications.
 
 **Order lifecycle** (after successful order transition):
 
@@ -825,13 +826,33 @@ Chat notification payload:
 
 A dedicated `CHAT_MESSAGE` enum value is planned for a later batch; `SYSTEM` is used today to avoid a schema migration.
 
+**Dispute events** (after successful `DisputesService` write — see **Dispute and arbitration foundation**):
+
+| Dispute event         | `NotificationType` | Recipient                               | Title                | Body                                                               |
+| --------------------- | ------------------ | --------------------------------------- | -------------------- | ------------------------------------------------------------------ |
+| Open dispute          | `SYSTEM`           | **Other participant** (Sender ↔ Wayler) | Dispute opened       | A dispute was opened for one of your deliveries.                   |
+| Add dispute message   | `SYSTEM`           | **Other participant** (Sender ↔ Wayler) | New dispute message  | `A new message was added to a dispute: "{preview}"` (max 80 chars) |
+| Add evidence metadata | `SYSTEM`           | **Other participant** (Sender ↔ Wayler) | New dispute evidence | New evidence was added to a dispute.                               |
+
+Dispute notification payload:
+
+- **`relatedOrderId`:** linked delivery order on every dispute notification
+- **No self-notification** — the user who opened the dispute, sent the message, or submitted evidence is not notified
+- **Sender opens dispute** → **Wayler** notified; **Wayler opens dispute** → **Sender** notified
+- **Sender adds message/evidence** → **Wayler** notified; **Wayler adds message/evidence** → **Sender** notified
+- No dedicated dispute `NotificationType` enum values yet — `SYSTEM` is used to avoid a schema migration
+- **Arbitrator notifications** — not dispatched yet (assignment/resolution workflow is future)
+
+**Duplicate prevention:** notifications are created only **after** successful Prisma writes. Failed validation or **409** (e.g. duplicate active dispute) does **not** create a notification. Notification insert failures are logged and do **not** roll back the dispute action.
+
 **Not dispatched in the current version:**
 
 - **No Wayler self-action notifications** — Waylers are not notified for their own accept/transit/proof/deliver actions.
 - **No Sender payment-action notifications** — Senders are not notified when they authorize or hold escrow (Wayler is notified instead).
 - **No cancel notification** — Sender cancel (DRAFT/OPEN) does not create `ORDER_CANCELLED` yet.
 - **No KYC / publish notifications** — enum values exist; dispatch comes later.
-- **No admin/system broadcasts** — `SYSTEM` is used for chat and mock payment today; operator messages later.
+- **No admin/system broadcasts** — `SYSTEM` is used for chat, mock payment, and dispute dispatch today; operator messages later.
+- **No dispute resolution / arbitrator notifications** — open, message, and evidence only; assignment and resolution outcomes are future.
 
 ### Frontend behavior (`/app` header)
 
@@ -910,6 +931,18 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] Re-clicking authorize when already `AUTHORIZED`/`HELD_IN_ESCROW` does **not** create duplicate notifications
 - [ ] **User B**'s unread badge updates within **30 seconds** via existing bell polling (no frontend changes)
 
+**Dispute notifications:**
+
+- [ ] **User A** publishes order; **User B** accepts
+- [ ] **User A** opens dispute → **User B** sees `SYSTEM` notification (“Dispute opened”) with `relatedOrderId`
+- [ ] **User A** does **not** receive a notification for own open action
+- [ ] **User B** adds dispute message → **User A** sees “New dispute message” (with preview when body is non-empty)
+- [ ] **User B** does **not** receive a notification for own message
+- [ ] **User A** adds evidence metadata → **User B** sees “New dispute evidence”
+- [ ] **User A** does **not** receive a notification for own evidence submission
+- [ ] Duplicate open attempt (**409**) does **not** create a second notification
+- [ ] **User B**'s unread badge updates within **30 seconds** via existing bell polling (no frontend changes)
+
 ### Future milestones (notifications)
 
 - **Dedicated payment notification types** — e.g. `PAYMENT_AUTHORIZED`, `ESCROW_HELD`, `PAYOUT_CREATED` (replace `SYSTEM` for payment dispatch)
@@ -920,7 +953,10 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **Localized notification templates** — server-side title/body per user locale (order, payment, chat)
 - **Real Stripe/payment notifications** — checkout, capture, webhook-driven status updates
 - **Payout failure notifications** — Wayler/Sender alerts when payout processing fails
-- **Refund/dispute notifications** — holds, reversals, arbitrator outcomes
+- **Dedicated dispute notification types** — e.g. `DISPUTE_OPENED`, `DISPUTE_MESSAGE`, `DISPUTE_EVIDENCE` (replace `SYSTEM` for dispute dispatch)
+- **Dispute resolution notifications** — arbitrator assignment, resolve/reject outcomes
+- **Admin/arbitrator dispute notifications** — queue assignment, escalation alerts
+- **Payment/refund notifications after dispute resolution** — holds, reversals, payout blocks
 - **KYC notifications** — `KYC_APPROVED`, `KYC_REJECTED` on provider/mock outcomes
 - **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
 - **Admin / system notifications** — operator broadcasts (separate from chat `SYSTEM` dispatch today)
@@ -1103,7 +1139,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - **Stripe checkout & real payout processing** — provider integration (mock/manual API + Sender/Wayler payment UI complete — see **Payment and escrow foundation**)
 - **Dispute resolution workflow** — arbitrator assignment, resolve/reject, `DisputeResolution` outcomes (schema + API + SDK + Sender/Wayler UI complete — see **Dispute and arbitration foundation**)
 - **Payment hold/refund/release on dispute outcome** — tie `PaymentIntent` / ledger to arbitrator resolution
-- **Dispute notifications** — in-app (and later push/email) for open, message, assignment, resolution
+- **Dedicated dispute notification types** — replace `SYSTEM` for dispute dispatch; localized templates; push/email
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
 - **Admin / arbitrator panel** — assignment, review queue, resolution actions, audit visibility
 - **Subscriptions / paywall**
@@ -1472,7 +1508,7 @@ Mock API, two-sided payment UI, and Wayler in-app notifications today exercise t
 
 ## Dispute and arbitration foundation
 
-Wayly is building a **safety structure for order problems** before real payments go live. The current implementation includes **database schema**, **shared types**, **`DisputesModule` API + SDK**, and **Sender/Wayler Accepted dispute UI** on `/app` — so Senders and Waylers can open disputes, view detail, add messages, and attach evidence metadata on eligible orders. **No admin/arbitrator panel, resolution workflow, payment hold/refund integration, file upload, or dispute notifications yet.**
+Wayly is building a **safety structure for order problems** before real payments go live. The current implementation includes **database schema**, **shared types**, **`DisputesModule` API + SDK**, **Sender/Wayler Accepted dispute UI** on `/app`, and **in-app dispute notifications** to the other participant (open, message, evidence — via `SYSTEM` until dedicated types exist). **No admin/arbitrator panel, resolution workflow, payment hold/refund integration, or file upload yet.**
 
 ### Purpose
 
@@ -1548,6 +1584,8 @@ Parties add messages (OPEN or UNDER_REVIEW only)
         ↓
 Parties add evidence metadata — title, optional description, optional fileUrl
         ↓
+Other participant notified in-app (bell/dropdown via SYSTEM + relatedOrderId)
+        ↓
 Arbitrator/admin review + resolution (future)
         ↓
 Payment/escrow handling depends on dispute result (future)
@@ -1611,6 +1649,32 @@ Shown only for orders in **ACCEPTED**, **IN_TRANSIT**, or **DELIVERED**. **DRAFT
 
 i18n keys: `app.disputes.*` (8 locales), including reason and status labels.
 
+### Dispute notification behavior
+
+After each successful dispute write, `DisputesService` notifies the **other order participant** via `NotificationsService.createForUser()`. Dispute notifications appear in the **same bell/dropdown** as order, payment, and chat notifications — existing **30s unread polling** picks them up without frontend changes.
+
+| Actor action                  | Recipient notified | Self-notification |
+| ----------------------------- | ------------------ | ----------------- |
+| Sender opens dispute          | **Wayler**         | No                |
+| Wayler opens dispute          | **Sender**         | No                |
+| Sender adds dispute message   | **Wayler**         | No                |
+| Wayler adds dispute message   | **Sender**         | No                |
+| Sender adds evidence metadata | **Wayler**         | No                |
+| Wayler adds evidence metadata | **Sender**         | No                |
+
+| Event        | Title                  | Body (summary)                                     |
+| ------------ | ---------------------- | -------------------------------------------------- |
+| Open dispute | `Dispute opened`       | `A dispute was opened for one of your deliveries.` |
+| Add message  | `New dispute message`  | Preview up to 80 characters when available         |
+| Add evidence | `New dispute evidence` | `New evidence was added to a dispute.`             |
+
+- **Type:** `NotificationType.SYSTEM` (no dispute-specific enum yet)
+- **`relatedOrderId`:** set on every dispute notification
+- **Failure handling:** notification insert failures are logged; dispute action still succeeds
+- **No duplicates on failure:** notifications only after successful DB writes; validation/**409** does not notify
+
+See **Notifications** for bell polling, API routes, and full manual test steps.
+
 ### Rules
 
 | Rule                    | Behavior                                                                                                                        |
@@ -1625,24 +1689,26 @@ i18n keys: `app.disputes.*` (8 locales), including reason and status labels.
 
 ### Current scope
 
-| Included                                                            | Not included (yet)                     |
-| ------------------------------------------------------------------- | -------------------------------------- |
-| Prisma enums + models + migration                                   | Admin/arbitrator dashboard             |
-| `@wayly/types` dispute summaries                                    | Assign arbitrator workflow             |
-| `DisputesModule` API + Swagger                                      | Resolve/reject dispute workflow        |
-| `@wayly/validation` dispute schemas                                 | Payment hold/refund/release on outcome |
-| SDK `api.disputes.*`                                                | File/photo evidence upload             |
-| Sender/Wayler Accepted **Open/View dispute** buttons                | Dispute notifications                  |
-| `DisputePanel` modal (open + detail + messages + evidence metadata) | Dispute timeline UI                    |
-| Duplicate active dispute handling                                   | Arbitration notes / audit log UI       |
-| i18n `app.disputes.*` (8 locales)                                   |                                        |
+| Included                                                            | Not included (yet)                          |
+| ------------------------------------------------------------------- | ------------------------------------------- |
+| Prisma enums + models + migration                                   | Admin/arbitrator dashboard                  |
+| `@wayly/types` dispute summaries                                    | Assign arbitrator workflow                  |
+| `DisputesModule` API + Swagger                                      | Resolve/reject dispute workflow             |
+| `@wayly/validation` dispute schemas                                 | Payment hold/refund/release on outcome      |
+| SDK `api.disputes.*`                                                | File/photo evidence upload                  |
+| Sender/Wayler Accepted **Open/View dispute** buttons                | Dispute timeline UI                         |
+| `DisputePanel` modal (open + detail + messages + evidence metadata) | Dedicated dispute `NotificationType` values |
+| Dispute in-app notifications (other-participant, `SYSTEM`)          | Push/email dispute alerts                   |
+| Duplicate active dispute handling                                   | Arbitration notes / audit log UI            |
+| i18n `app.disputes.*` (8 locales)                                   |                                             |
 
 ### Current limitations
 
 - **No admin/arbitrator workflow** — `assignedArbitratorId` exists on schema but no admin UI or assignment API yet
 - **No payment/refund/release integration** — dispute outcome does not block or change `PaymentIntent` / ledger
 - **No file upload** — `fileUrl` is optional metadata string only
-- **No dispute notifications** — no in-app, push, or email dispatch on open/message/resolution
+- **No dedicated dispute notification types** — `SYSTEM` used for open/message/evidence dispatch; no localized templates or push/email
+- **No resolution notifications** — arbitrator assignment and resolve/reject outcomes not dispatched yet
 - **No resolution workflow** — `DisputeResolution`, `resolutionNote`, `resolvedAt` not settable via API yet
 
 ### Manual verification (schema + API)
@@ -1668,9 +1734,29 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **DRAFT** / **OPEN** orders do **not** show dispute button
 - [ ] No file-upload UI appears in dispute modal
 
+### Manual testing checklist (dispute notifications)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler) on `/app`:
+
+- [ ] **User A** publishes order; **User B** accepts
+- [ ] **User A** opens dispute → **User B** sees “Dispute opened” in bell (`SYSTEM`, `relatedOrderId` set)
+- [ ] **User A** does **not** receive notification for own open action
+- [ ] **User B** adds dispute message → **User A** sees “New dispute message” with preview
+- [ ] **User B** does **not** receive notification for own message
+- [ ] **User A** adds evidence metadata → **User B** sees “New dispute evidence”
+- [ ] **User A** does **not** receive notification for own evidence submission
+- [ ] Duplicate open attempt (**409**) does **not** create a second notification
+- [ ] Recipient unread badge updates within **30s** via existing bell polling (no frontend changes)
+
 ### Future milestones (disputes & arbitration)
 
-- **Dispute notifications** — in-app (and later push/email) for open, message, assignment, resolution
+- **Dedicated dispute notification types** — replace `SYSTEM` for open/message/evidence dispatch
+- **Localized dispute notification templates** — per-user locale for title/body
+- **Push/email dispute notifications** — offline alerts beyond in-app bell
+- **Admin/arbitrator notifications** — assignment, queue, escalation
+- **Dispute resolution notifications** — resolve/reject outcomes to parties
+- **Payment/refund/release notifications after resolution** — holds, reversals, payout blocks
+- **Notification preferences** — per-type opt-in/out for dispute events
 - **Admin/arbitrator dashboard** — review queue, order/payment context, resolution actions
 - **Assign arbitrator** — set `assignedArbitratorId`; queue for `ADMIN`/`ARBITRATOR` roles
 - **Resolve dispute** — set `resolution`, `resolutionNote`, `resolvedAt`; transition `DisputeStatus`
@@ -1761,7 +1847,7 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
 - **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
-- **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales). ✅ (schema + API + SDK + two-sided UI complete; no admin, resolution, notifications, payment hooks, file upload). Next: dispute notifications, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs.
+- **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales), **dispute in-app notifications** (other-participant dispatch on open/message/evidence via `SYSTEM` + `relatedOrderId`; no self-notify; failure-safe). ✅ (schema + API + SDK + two-sided UI + in-app notifications complete; no admin, resolution, dedicated notification types, payment hooks, file upload). Next: dedicated dispute notification types, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs, push/email.
 - **M7–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds**, subscriptions/paywall, offline + PDF agreements, WebSocket/SSE notification preferences, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
