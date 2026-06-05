@@ -213,6 +213,37 @@ export class OrdersService {
     return toDeliveryOrderDetail(updated);
   }
 
+  async cancel(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record || record.senderId !== user.id) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.status === PrismaDeliveryOrderStatus.CANCELLED) {
+      throw new ConflictException('Delivery order is already cancelled');
+    }
+
+    if (
+      record.status !== PrismaDeliveryOrderStatus.DRAFT &&
+      record.status !== PrismaDeliveryOrderStatus.OPEN
+    ) {
+      throw new ConflictException('Only draft or open delivery orders can be cancelled');
+    }
+
+    const cancelledAt = new Date();
+    const updated = await this.prisma.deliveryOrder.update({
+      where: { id },
+      data: {
+        status: PrismaDeliveryOrderStatus.CANCELLED,
+        cancelledAt,
+      },
+    });
+
+    return toDeliveryOrderDetail(updated);
+  }
+
   async markDelivered(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
     requireKycApproved(user);
 

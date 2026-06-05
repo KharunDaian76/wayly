@@ -51,6 +51,8 @@ export interface OrdersApi {
   startTransit(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   /** Mark an IN_TRANSIT delivery order as DELIVERED (accepted Wayler only). */
   markDelivered(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
+  /** Cancel a DRAFT or OPEN delivery order (Sender only). */
+  cancel(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   /** List delivery orders accepted by the authenticated Wayler. */
   accepted(accessToken?: string | null): Promise<AcceptedDeliveryOrderSummary[]>;
 }

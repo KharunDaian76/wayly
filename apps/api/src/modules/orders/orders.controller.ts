@@ -169,6 +169,23 @@ export class OrdersController {
     return this.orders.markDelivered(user, id);
   }
 
+  @Post(':id/cancel')
+  @ApiOperation({ summary: 'Cancel a draft or open delivery order (Sender only)' })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  @ApiNotFoundResponse({ description: 'Delivery order not found' })
+  @ApiConflictResponse({
+    description:
+      'Order is already cancelled, or not in DRAFT/OPEN status (accepted/in-transit/delivered cannot be cancelled)',
+  })
+  cancel(
+    @CurrentUser() user: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<DeliveryOrderDetail> {
+    return this.orders.cancel(user, id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a delivery order by id' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })

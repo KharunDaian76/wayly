@@ -74,6 +74,13 @@ export function createOrdersApi(request: Requester): OrdersApi {
         accessToken,
       }),
 
+    cancel: (id: string, accessToken?: string | null) =>
+      request<DeliveryOrderDetail>(`/orders/${id}/cancel`, {
+        method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+
     accepted: (accessToken?: string | null) =>
       request<AcceptedDeliveryOrderSummary[]>('/orders/accepted', {
         method: 'GET',
