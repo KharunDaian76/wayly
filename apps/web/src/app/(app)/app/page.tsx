@@ -53,6 +53,8 @@ type WaylerAcceptedOrderRow = AcceptedDeliveryOrderSummary & {
   proofNote?: string | null;
   proofConfirmationCode?: string | null;
   proofSubmittedAt?: string | null;
+  paymentIntent: PaymentIntentSummary | null;
+  paymentLoadFailed: boolean;
 };
 
 type ProofInputDraft = {
@@ -360,6 +362,47 @@ async function fetchPaymentIntentForOrder(
   }
 }
 
+function waylerPaymentStatusLabel(
+  intent: PaymentIntentSummary | null,
+  t: (key: TranslationKey) => string,
+): string {
+  if (!intent) {
+    return t('app.waylerFeed.acceptedPanel.payment.notAuthorized');
+  }
+  switch (intent.status) {
+    case PaymentStatus.AUTHORIZED:
+      return t('app.waylerFeed.acceptedPanel.payment.authorized');
+    case PaymentStatus.HELD_IN_ESCROW:
+      return t('app.waylerFeed.acceptedPanel.payment.heldInEscrow');
+    case PaymentStatus.RELEASED:
+      return t('app.waylerFeed.acceptedPanel.payment.released');
+    case PaymentStatus.REFUNDED:
+      return t('app.waylerFeed.acceptedPanel.payment.refunded');
+    case PaymentStatus.FAILED:
+      return t('app.waylerFeed.acceptedPanel.payment.failed');
+    case PaymentStatus.CANCELLED:
+      return t('app.waylerFeed.acceptedPanel.payment.cancelled');
+    default:
+      return t('app.waylerFeed.acceptedPanel.payment.notAuthorized');
+  }
+}
+
+function waylerPaymentStatusNote(
+  intent: PaymentIntentSummary,
+  t: (key: TranslationKey) => string,
+): string | null {
+  switch (intent.status) {
+    case PaymentStatus.AUTHORIZED:
+      return t('app.waylerFeed.acceptedPanel.payment.authorizedNote');
+    case PaymentStatus.HELD_IN_ESCROW:
+      return t('app.waylerFeed.acceptedPanel.payment.heldNote');
+    case PaymentStatus.RELEASED:
+      return t('app.waylerFeed.acceptedPanel.payment.releasedNote');
+    default:
+      return null;
+  }
+}
+
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
@@ -604,23 +647,23 @@ export default function AppHomePage() {
       const items = await api.orders.accepted();
       const enriched = await Promise.all(
         items.map(async (order): Promise<WaylerAcceptedOrderRow> => {
-          if (
-            order.status !== DeliveryOrderStatus.IN_TRANSIT &&
-            order.status !== DeliveryOrderStatus.DELIVERED
-          ) {
-            return order;
-          }
-          try {
-            const detail = await api.orders.detail(order.id);
-            return {
-              ...order,
-              proofNote: detail.proofNote,
-              proofConfirmationCode: detail.proofConfirmationCode,
-              proofSubmittedAt: detail.proofSubmittedAt,
-            };
-          } catch {
-            return order;
-          }
+          const needsProofDetail =
+            order.status === DeliveryOrderStatus.IN_TRANSIT ||
+            order.status === DeliveryOrderStatus.DELIVERED;
+          const [payment, detail] = await Promise.all([
+            fetchPaymentIntentForOrder(order.id),
+            needsProofDetail
+              ? api.orders.detail(order.id).catch(() => null)
+              : Promise.resolve(null),
+          ]);
+          return {
+            ...order,
+            proofNote: detail?.proofNote,
+            proofConfirmationCode: detail?.proofConfirmationCode,
+            proofSubmittedAt: detail?.proofSubmittedAt,
+            paymentIntent: payment.intent,
+            paymentLoadFailed: payment.loadFailed,
+          };
         }),
       );
       setAcceptedOrders(enriched);
@@ -1425,6 +1468,10 @@ export default function AppHomePage() {
                       const showProofForm =
                         order.status === DeliveryOrderStatus.IN_TRANSIT ||
                         order.status === DeliveryOrderStatus.DELIVERED;
+                      const paymentIntent = order.paymentIntent;
+                      const paymentStatusNote = paymentIntent
+                        ? waylerPaymentStatusNote(paymentIntent, t)
+                        : null;
 
                       return (
                         <li key={order.id} className={ORDER_CARD_CLASS}>
@@ -1470,6 +1517,82 @@ export default function AppHomePage() {
                               </dd>
                             </div>
                           </dl>
+                          {order.paymentLoadFailed ? (
+                            <p className="mt-2 text-sm text-destructive">
+                              {t('app.waylerFeed.acceptedPanel.payment.loadFailed')}
+                            </p>
+                          ) : null}
+                          {!order.paymentLoadFailed && !paymentIntent ? (
+                            <p className="mt-2 text-sm text-muted-foreground">
+                              {t('app.waylerFeed.acceptedPanel.payment.notAuthorized')}
+                            </p>
+                          ) : null}
+                          {paymentIntent ? (
+                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                              <p className="text-sm font-medium">
+                                {t('app.waylerFeed.acceptedPanel.payment.title')}
+                              </p>
+                              <p className="mt-1 text-sm font-medium">
+                                {waylerPaymentStatusLabel(paymentIntent, t)}
+                              </p>
+                              {paymentStatusNote ? (
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                  {paymentStatusNote}
+                                </p>
+                              ) : null}
+                              <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                  <dt className="text-muted-foreground">
+                                    {t('app.waylerFeed.acceptedPanel.payment.provider')}
+                                  </dt>
+                                  <dd>{paymentIntent.provider}</dd>
+                                </div>
+                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                  <dt className="text-muted-foreground">
+                                    {t('app.waylerFeed.acceptedPanel.payment.status')}
+                                  </dt>
+                                  <dd>{waylerPaymentStatusLabel(paymentIntent, t)}</dd>
+                                </div>
+                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                  <dt className="text-muted-foreground">
+                                    {t('app.waylerFeed.acceptedPanel.payment.amount')}
+                                  </dt>
+                                  <dd>
+                                    {formatPaymentAmount(
+                                      paymentIntent.amount,
+                                      paymentIntent.currency,
+                                    )}
+                                  </dd>
+                                </div>
+                                {paymentIntent.platformFeeAmount ? (
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.waylerFeed.acceptedPanel.payment.platformFee')}
+                                    </dt>
+                                    <dd>
+                                      {formatPaymentAmount(
+                                        paymentIntent.platformFeeAmount,
+                                        paymentIntent.currency,
+                                      )}
+                                    </dd>
+                                  </div>
+                                ) : null}
+                                {paymentIntent.escrowAmount ? (
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.waylerFeed.acceptedPanel.payment.escrowAmount')}
+                                    </dt>
+                                    <dd>
+                                      {formatPaymentAmount(
+                                        paymentIntent.escrowAmount,
+                                        paymentIntent.currency,
+                                      )}
+                                    </dd>
+                                  </div>
+                                ) : null}
+                              </dl>
+                            </div>
+                          ) : null}
                           {order.status === DeliveryOrderStatus.ACCEPTED ? (
                             <>
                               <Button
