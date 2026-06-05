@@ -2,7 +2,12 @@
 
 import { ApiError } from '@wayly/sdk';
 import type { AcceptedDeliveryOrderSummary, OrdersListQuery } from '@wayly/sdk';
-import type { DeliveryOrderSummary, KycStatusView, PaymentIntentSummary } from '@wayly/types';
+import type {
+  DeliveryOrderSummary,
+  DisputeSummary,
+  KycStatusView,
+  PaymentIntentSummary,
+} from '@wayly/types';
 import { DeliveryOrderStatus, DeliveryOrderType, KycStatus, PaymentStatus } from '@wayly/types';
 import {
   Button,
@@ -22,6 +27,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
 import { ConversationPanel } from '@/components/app/conversation-panel';
+import { DisputePanel } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
@@ -480,6 +486,12 @@ export default function AppHomePage() {
   const [chatOrderId, setChatOrderId] = useState<string | null>(null);
   const [openingChatOrderId, setOpeningChatOrderId] = useState<string | null>(null);
   const [chatOpenError, setChatOpenError] = useState<string | null>(null);
+  const [disputesByOrderId, setDisputesByOrderId] = useState<Record<string, DisputeSummary>>({});
+  const [disputesListLoadFailed, setDisputesListLoadFailed] = useState(false);
+  const [disputeOpen, setDisputeOpen] = useState(false);
+  const [disputeOrderId, setDisputeOrderId] = useState<string | null>(null);
+  const [disputeOrderTitle, setDisputeOrderTitle] = useState<string | null>(null);
+  const [disputeId, setDisputeId] = useState<string | null>(null);
   const [paymentActionOrderId, setPaymentActionOrderId] = useState<string | null>(null);
   const [paymentAction, setPaymentAction] = useState<'authorize' | 'hold' | 'release' | null>(null);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -545,6 +557,26 @@ export default function AppHomePage() {
     }
   }, [t]);
 
+  const loadUserDisputes = useCallback(async () => {
+    try {
+      const result = await api.disputes.list({ limit: 100 });
+      const map: Record<string, DisputeSummary> = {};
+      for (const item of result.items) {
+        const existing = map[item.orderId];
+        if (
+          !existing ||
+          new Date(item.createdAt).getTime() > new Date(existing.createdAt).getTime()
+        ) {
+          map[item.orderId] = item;
+        }
+      }
+      setDisputesByOrderId(map);
+      setDisputesListLoadFailed(false);
+    } catch {
+      setDisputesListLoadFailed(true);
+    }
+  }, []);
+
   const loadSenderAcceptedOrders = useCallback(async () => {
     setSenderAcceptedLoading(true);
     setSenderAcceptedError(null);
@@ -583,12 +615,13 @@ export default function AppHomePage() {
         return timeB - timeA;
       });
       setSenderAcceptedOrders(withTimestamps);
+      await loadUserDisputes();
     } catch {
       setSenderAcceptedError(t('app.senderPanel.acceptedLoadFailed'));
     } finally {
       setSenderAcceptedLoading(false);
     }
-  }, [t]);
+  }, [loadUserDisputes, t]);
 
   const loadFeedOrders = useCallback(async () => {
     setFeedLoading(true);
@@ -667,12 +700,13 @@ export default function AppHomePage() {
         }),
       );
       setAcceptedOrders(enriched);
+      await loadUserDisputes();
     } catch {
       setAcceptedError(t('app.waylerFeed.acceptedPanel.loadFailed'));
     } finally {
       setAcceptedLoading(false);
     }
-  }, [t]);
+  }, [loadUserDisputes, t]);
 
   useEffect(() => {
     if (user && mode === 'sender' && canViewSenderOrders) {
@@ -881,6 +915,26 @@ export default function AppHomePage() {
     setChatConversationId(null);
     setChatOrderTitle(null);
     setChatOrderId(null);
+  }
+
+  function handleOpenDispute(orderId: string, orderTitle: string) {
+    const existing = disputesByOrderId[orderId];
+    setDisputeOrderId(orderId);
+    setDisputeOrderTitle(orderTitle);
+    setDisputeId(existing?.id ?? null);
+    setDisputeOpen(true);
+  }
+
+  function handleCloseDispute() {
+    setDisputeOpen(false);
+    setDisputeOrderId(null);
+    setDisputeOrderTitle(null);
+    setDisputeId(null);
+  }
+
+  function handleDisputeOpened(id: string) {
+    setDisputeId(id);
+    void loadUserDisputes();
   }
 
   async function handleMockAuthorizePayment(orderId: string) {
@@ -1444,6 +1498,9 @@ export default function AppHomePage() {
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
+                {disputesListLoadFailed ? (
+                  <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
+                ) : null}
                 {isApproved && acceptedLoading ? (
                   <>
                     <p className="sr-only">{t('app.waylerFeed.acceptedPanel.loading')}</p>
@@ -1627,19 +1684,33 @@ export default function AppHomePage() {
                               {t('app.waylerFeed.acceptedPanel.delivered')}
                             </p>
                           ) : null}
-                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
-                            <Button
-                              className="mt-3 w-full sm:w-auto"
-                              variant="outline"
-                              size="sm"
-                              disabled={openingChatOrderId !== null}
-                              onClick={() => void handleOpenChat(order.id, order.title)}
-                            >
-                              {openingChatOrderId === order.id
-                                ? t('app.chat.loading')
-                                : t('app.chat.open')}
-                            </Button>
-                          ) : null}
+                          <div className="wayly-action-group mt-3">
+                            {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                              <>
+                                <Button
+                                  className="w-full sm:w-auto"
+                                  variant="outline"
+                                  size="sm"
+                                  disabled={openingChatOrderId !== null}
+                                  onClick={() => void handleOpenChat(order.id, order.title)}
+                                >
+                                  {openingChatOrderId === order.id
+                                    ? t('app.chat.loading')
+                                    : t('app.chat.open')}
+                                </Button>
+                                <Button
+                                  className="w-full sm:w-auto"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleOpenDispute(order.id, order.title)}
+                                >
+                                  {disputesByOrderId[order.id]
+                                    ? t('app.disputes.view')
+                                    : t('app.disputes.open')}
+                                </Button>
+                              </>
+                            ) : null}
+                          </div>
                           {showProofForm ? (
                             <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
                               <p className="text-sm font-medium">
@@ -2114,6 +2185,9 @@ export default function AppHomePage() {
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
+                {disputesListLoadFailed ? (
+                  <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
+                ) : null}
                 {canViewSenderOrders && senderAcceptedLoading ? (
                   <>
                     <p className="sr-only">{t('app.senderPanel.acceptedLoading')}</p>
@@ -2374,19 +2448,33 @@ export default function AppHomePage() {
                               </div>
                             ) : null}
                           </div>
-                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
-                            <Button
-                              className="mt-3 w-full sm:w-auto"
-                              variant="outline"
-                              size="sm"
-                              disabled={openingChatOrderId !== null}
-                              onClick={() => void handleOpenChat(order.id, order.title)}
-                            >
-                              {openingChatOrderId === order.id
-                                ? t('app.chat.loading')
-                                : t('app.chat.open')}
-                            </Button>
-                          ) : null}
+                          <div className="wayly-action-group mt-3">
+                            {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                              <>
+                                <Button
+                                  className="w-full sm:w-auto"
+                                  variant="outline"
+                                  size="sm"
+                                  disabled={openingChatOrderId !== null}
+                                  onClick={() => void handleOpenChat(order.id, order.title)}
+                                >
+                                  {openingChatOrderId === order.id
+                                    ? t('app.chat.loading')
+                                    : t('app.chat.open')}
+                                </Button>
+                                <Button
+                                  className="w-full sm:w-auto"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleOpenDispute(order.id, order.title)}
+                                >
+                                  {disputesByOrderId[order.id]
+                                    ? t('app.disputes.view')
+                                    : t('app.disputes.open')}
+                                </Button>
+                              </>
+                            ) : null}
+                          </div>
                         </li>
                       );
                     })}
@@ -2404,6 +2492,17 @@ export default function AppHomePage() {
           orderTitle={chatOrderTitle}
           orderId={chatOrderId}
           currentUserId={user.id}
+        />
+
+        <DisputePanel
+          open={disputeOpen}
+          onClose={handleCloseDispute}
+          orderId={disputeOrderId}
+          orderTitle={disputeOrderTitle}
+          disputeId={disputeId}
+          currentUserId={user.id}
+          onDisputeOpened={handleDisputeOpened}
+          onDisputeChanged={() => void loadUserDisputes()}
         />
 
         <Card className={APP_PANEL_CLASS}>
