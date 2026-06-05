@@ -3,7 +3,7 @@
 import { ApiError } from '@wayly/sdk';
 import type { AcceptedDeliveryOrderSummary, OrdersListQuery } from '@wayly/sdk';
 import type { DeliveryOrderSummary, KycStatusView } from '@wayly/types';
-import { DeliveryOrderType, KycStatus } from '@wayly/types';
+import { DeliveryOrderStatus, DeliveryOrderType, KycStatus } from '@wayly/types';
 import {
   Button,
   Card,
@@ -257,6 +257,12 @@ export default function AppHomePage() {
   const [acceptedOrders, setAcceptedOrders] = useState<AcceptedDeliveryOrderSummary[]>([]);
   const [acceptedLoading, setAcceptedLoading] = useState(false);
   const [acceptedError, setAcceptedError] = useState<string | null>(null);
+  const [progressingOrderId, setProgressingOrderId] = useState<string | null>(null);
+  const [progressAction, setProgressAction] = useState<'start-transit' | 'mark-delivered' | null>(
+    null,
+  );
+  const [progressError, setProgressError] = useState<string | null>(null);
+  const [progressSuccess, setProgressSuccess] = useState<'transit' | 'delivered' | null>(null);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -472,6 +478,48 @@ export default function AppHomePage() {
   }
 
   const hasPendingVerification = kycStatus?.latestVerification?.status === KycStatus.PENDING;
+
+  async function handleStartTransit(orderId: string) {
+    setProgressError(null);
+    setProgressSuccess(null);
+    setProgressingOrderId(orderId);
+    setProgressAction('start-transit');
+    try {
+      await api.orders.startTransit(orderId);
+      setProgressSuccess('transit');
+      await loadAcceptedOrders();
+    } catch (err) {
+      setProgressError(
+        err instanceof ApiError
+          ? err.message || t('app.waylerFeed.acceptedPanel.progressFailed')
+          : t('app.waylerFeed.acceptedPanel.progressFailed'),
+      );
+    } finally {
+      setProgressingOrderId(null);
+      setProgressAction(null);
+    }
+  }
+
+  async function handleMarkDelivered(orderId: string) {
+    setProgressError(null);
+    setProgressSuccess(null);
+    setProgressingOrderId(orderId);
+    setProgressAction('mark-delivered');
+    try {
+      await api.orders.markDelivered(orderId);
+      setProgressSuccess('delivered');
+      await loadAcceptedOrders();
+    } catch (err) {
+      setProgressError(
+        err instanceof ApiError
+          ? err.message || t('app.waylerFeed.acceptedPanel.progressFailed')
+          : t('app.waylerFeed.acceptedPanel.progressFailed'),
+      );
+    } finally {
+      setProgressingOrderId(null);
+      setProgressAction(null);
+    }
+  }
 
   async function handleAcceptOrder(orderId: string) {
     setAcceptError(null);
@@ -900,7 +948,7 @@ export default function AppHomePage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={!isApproved || acceptedLoading}
+                  disabled={!isApproved || acceptedLoading || progressingOrderId !== null}
                   onClick={() => void loadAcceptedOrders()}
                 >
                   {t('app.waylerFeed.acceptedPanel.refresh')}
@@ -910,6 +958,21 @@ export default function AppHomePage() {
                 {!kycLoading && !isApproved ? (
                   <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
                     {t('app.waylerFeed.kycRequired')}
+                  </p>
+                ) : null}
+                {progressSuccess === 'transit' ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.waylerFeed.acceptedPanel.transitStarted')}
+                  </p>
+                ) : null}
+                {progressSuccess === 'delivered' ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.waylerFeed.acceptedPanel.deliveredSuccess')}
+                  </p>
+                ) : null}
+                {progressError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {progressError}
                   </p>
                 ) : null}
                 {acceptedError ? (
@@ -928,47 +991,89 @@ export default function AppHomePage() {
                   </p>
                 ) : isApproved ? (
                   <ul className="flex flex-col gap-4">
-                    {acceptedOrders.map((order) => (
-                      <li
-                        key={order.id}
-                        className="rounded-lg border border-border/60 px-4 py-3 text-sm"
-                      >
-                        <p className="font-medium">{order.title}</p>
-                        <p className="text-muted-foreground">{order.type}</p>
-                        <dl className="mt-2 flex flex-col gap-1">
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">{t('app.orders.labelRoute')}</dt>
-                            <dd>
-                              {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
-                              {t('app.orders.routeSeparator')}{' '}
-                              {formatLocation(order.dropoffCity, order.dropoffCountry)}
-                            </dd>
-                          </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">{t('app.orders.labelReward')}</dt>
-                            <dd>
-                              {formatReward(
-                                order.offeredRewardAmount,
-                                order.currency,
-                                t('app.orders.rewardNone'),
-                              )}
-                            </dd>
-                          </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.waylerFeed.acceptedPanel.labelAcceptedAt')}
-                            </dt>
-                            <dd>
-                              {order.acceptedAt ? new Date(order.acceptedAt).toLocaleString() : '—'}
-                            </dd>
-                          </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
-                            <dd>{order.status}</dd>
-                          </div>
-                        </dl>
-                      </li>
-                    ))}
+                    {acceptedOrders.map((order) => {
+                      const isProgressing = progressingOrderId === order.id;
+                      const progressDisabled = progressingOrderId !== null;
+
+                      return (
+                        <li
+                          key={order.id}
+                          className="rounded-lg border border-border/60 px-4 py-3 text-sm"
+                        >
+                          <p className="font-medium">{order.title}</p>
+                          <p className="text-muted-foreground">{order.type}</p>
+                          <dl className="mt-2 flex flex-col gap-1">
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelRoute')}
+                              </dt>
+                              <dd>
+                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                {t('app.orders.routeSeparator')}{' '}
+                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelReward')}
+                              </dt>
+                              <dd>
+                                {formatReward(
+                                  order.offeredRewardAmount,
+                                  order.currency,
+                                  t('app.orders.rewardNone'),
+                                )}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.waylerFeed.acceptedPanel.labelAcceptedAt')}
+                              </dt>
+                              <dd>
+                                {order.acceptedAt
+                                  ? new Date(order.acceptedAt).toLocaleString()
+                                  : '—'}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelStatus')}
+                              </dt>
+                              <dd>{order.status}</dd>
+                            </div>
+                          </dl>
+                          {order.status === DeliveryOrderStatus.ACCEPTED ? (
+                            <Button
+                              className="mt-3 w-full sm:w-auto"
+                              size="sm"
+                              disabled={progressDisabled}
+                              onClick={() => void handleStartTransit(order.id)}
+                            >
+                              {isProgressing && progressAction === 'start-transit'
+                                ? t('app.waylerFeed.acceptedPanel.startingTransit')
+                                : t('app.waylerFeed.acceptedPanel.startTransit')}
+                            </Button>
+                          ) : null}
+                          {order.status === DeliveryOrderStatus.IN_TRANSIT ? (
+                            <Button
+                              className="mt-3 w-full sm:w-auto"
+                              size="sm"
+                              disabled={progressDisabled}
+                              onClick={() => void handleMarkDelivered(order.id)}
+                            >
+                              {isProgressing && progressAction === 'mark-delivered'
+                                ? t('app.waylerFeed.acceptedPanel.markingDelivered')
+                                : t('app.waylerFeed.acceptedPanel.markDelivered')}
+                            </Button>
+                          ) : null}
+                          {order.status === DeliveryOrderStatus.DELIVERED ? (
+                            <p className="mt-3 text-sm text-muted-foreground">
+                              {t('app.waylerFeed.acceptedPanel.delivered')}
+                            </p>
+                          ) : null}
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : null}
               </CardContent>
