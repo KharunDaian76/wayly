@@ -58,6 +58,9 @@ type FeedSort = 'rewardDesc' | 'publishedDesc' | 'routeAsc';
 type SenderAcceptedOrderRow = DeliveryOrderSummary & {
   acceptedAt: string | null;
   deliveredAt: string | null;
+  proofNote?: string | null;
+  proofConfirmationCode?: string | null;
+  proofSubmittedAt?: string | null;
 };
 
 const SENDER_LIFECYCLE_STATUSES = new Set<DeliveryOrderSummary['status']>([
@@ -434,6 +437,9 @@ export default function AppHomePage() {
             ...order,
             acceptedAt: detail.acceptedAt,
             deliveredAt: detail.deliveredAt,
+            proofNote: detail.proofNote,
+            proofConfirmationCode: detail.proofConfirmationCode,
+            proofSubmittedAt: detail.proofSubmittedAt,
           };
         }),
       );
@@ -1909,6 +1915,47 @@ export default function AppHomePage() {
                               </div>
                             ) : null}
                           </dl>
+                          {order.proofSubmittedAt ? (
+                            <div className="mt-3 rounded-md border border-border/60 p-3">
+                              <p className="text-sm font-medium">
+                                {t('app.senderPanel.proofTitle')}
+                              </p>
+                              <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                {order.proofNote ? (
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.senderPanel.proofNote')}
+                                    </dt>
+                                    <dd>{order.proofNote}</dd>
+                                  </div>
+                                ) : null}
+                                {order.proofConfirmationCode ? (
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.senderPanel.proofConfirmationCode')}
+                                    </dt>
+                                    <dd className="font-mono text-xs">
+                                      {order.proofConfirmationCode}
+                                    </dd>
+                                  </div>
+                                ) : null}
+                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                  <dt className="text-muted-foreground">
+                                    {t('app.senderPanel.proofSubmittedAt')}
+                                  </dt>
+                                  <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                                </div>
+                              </dl>
+                            </div>
+                          ) : order.status === DeliveryOrderStatus.IN_TRANSIT ? (
+                            <p className="mt-3 text-sm text-muted-foreground">
+                              {t('app.senderPanel.proofPending')}
+                            </p>
+                          ) : order.status === DeliveryOrderStatus.DELIVERED ? (
+                            <p className="mt-3 text-sm text-muted-foreground">
+                              {t('app.senderPanel.proofMissing')}
+                            </p>
+                          ) : null}
                         </li>
                       );
                     })}

@@ -213,6 +213,12 @@ const en = {
   'app.senderPanel.cancelSuccess': 'Delivery request cancelled successfully.',
   'app.senderPanel.cancelFailed': 'Could not cancel delivery request. Try again.',
   'app.senderPanel.cancelUnavailable': 'This delivery request can no longer be cancelled.',
+  'app.senderPanel.proofTitle': 'Proof of delivery',
+  'app.senderPanel.proofNote': 'Note',
+  'app.senderPanel.proofConfirmationCode': 'Confirmation code',
+  'app.senderPanel.proofSubmittedAt': 'Submitted',
+  'app.senderPanel.proofPending': 'Proof has not been submitted yet.',
+  'app.senderPanel.proofMissing': 'No proof submitted yet.',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -431,6 +437,12 @@ const ru: Dictionary = {
   'app.senderPanel.cancelSuccess': 'Заявка на доставку успешно отменена.',
   'app.senderPanel.cancelFailed': 'Не удалось отменить заявку. Попробуйте снова.',
   'app.senderPanel.cancelUnavailable': 'Эту заявку больше нельзя отменить.',
+  'app.senderPanel.proofTitle': 'Подтверждение доставки',
+  'app.senderPanel.proofNote': 'Заметка',
+  'app.senderPanel.proofConfirmationCode': 'Код подтверждения',
+  'app.senderPanel.proofSubmittedAt': 'Отправлено',
+  'app.senderPanel.proofPending': 'Подтверждение доставки ещё не отправлено.',
+  'app.senderPanel.proofMissing': 'Подтверждение доставки отсутствует.',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -649,6 +661,12 @@ const es: Dictionary = {
   'app.senderPanel.cancelSuccess': 'Solicitud de entrega cancelada correctamente.',
   'app.senderPanel.cancelFailed': 'No se pudo cancelar la solicitud. Inténtalo de nuevo.',
   'app.senderPanel.cancelUnavailable': 'Esta solicitud ya no se puede cancelar.',
+  'app.senderPanel.proofTitle': 'Prueba de entrega',
+  'app.senderPanel.proofNote': 'Nota',
+  'app.senderPanel.proofConfirmationCode': 'Código de confirmación',
+  'app.senderPanel.proofSubmittedAt': 'Enviado',
+  'app.senderPanel.proofPending': 'La prueba de entrega aún no se ha enviado.',
+  'app.senderPanel.proofMissing': 'No se ha enviado ninguna prueba.',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -872,6 +890,12 @@ const fr: Dictionary = {
   'app.senderPanel.cancelSuccess': 'Demande de livraison annulée avec succès.',
   'app.senderPanel.cancelFailed': "Impossible d'annuler la demande. Réessayez.",
   'app.senderPanel.cancelUnavailable': 'Cette demande ne peut plus être annulée.',
+  'app.senderPanel.proofTitle': 'Preuve de livraison',
+  'app.senderPanel.proofNote': 'Note',
+  'app.senderPanel.proofConfirmationCode': 'Code de confirmation',
+  'app.senderPanel.proofSubmittedAt': 'Soumis',
+  'app.senderPanel.proofPending': "La preuve de livraison n'a pas encore été soumise.",
+  'app.senderPanel.proofMissing': 'Aucune preuve de livraison soumise.',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -1103,6 +1127,12 @@ const de: Dictionary = {
   'app.senderPanel.cancelFailed':
     'Lieferanfrage konnte nicht storniert werden. Bitte erneut versuchen.',
   'app.senderPanel.cancelUnavailable': 'Diese Lieferanfrage kann nicht mehr storniert werden.',
+  'app.senderPanel.proofTitle': 'Liefernachweis',
+  'app.senderPanel.proofNote': 'Notiz',
+  'app.senderPanel.proofConfirmationCode': 'Bestätigungscode',
+  'app.senderPanel.proofSubmittedAt': 'Eingereicht',
+  'app.senderPanel.proofPending': 'Der Liefernachweis wurde noch nicht eingereicht.',
+  'app.senderPanel.proofMissing': 'Kein Liefernachweis eingereicht.',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -1318,6 +1348,12 @@ const tr: Dictionary = {
   'app.senderPanel.cancelSuccess': 'Teslimat talebi başarıyla iptal edildi.',
   'app.senderPanel.cancelFailed': 'Teslimat talebi iptal edilemedi. Tekrar deneyin.',
   'app.senderPanel.cancelUnavailable': 'Bu teslimat talebi artık iptal edilemez.',
+  'app.senderPanel.proofTitle': 'Teslimat kanıtı',
+  'app.senderPanel.proofNote': 'Not',
+  'app.senderPanel.proofConfirmationCode': 'Onay kodu',
+  'app.senderPanel.proofSubmittedAt': 'Gönderildi',
+  'app.senderPanel.proofPending': 'Teslimat kanıtı henüz gönderilmedi.',
+  'app.senderPanel.proofMissing': 'Henüz teslimat kanıtı gönderilmedi.',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -1526,6 +1562,12 @@ const ar: Dictionary = {
   'app.senderPanel.cancelSuccess': 'تم إلغاء طلب التوصيل بنجاح.',
   'app.senderPanel.cancelFailed': 'تعذر إلغاء طلب التوصيل. حاول مرة أخرى.',
   'app.senderPanel.cancelUnavailable': 'لم يعد بإمكان إلغاء طلب التوصيل هذا.',
+  'app.senderPanel.proofTitle': 'إثبات التسليم',
+  'app.senderPanel.proofNote': 'ملاحظة',
+  'app.senderPanel.proofConfirmationCode': 'رمز التأكيد',
+  'app.senderPanel.proofSubmittedAt': 'تم الإرسال',
+  'app.senderPanel.proofPending': 'لم يُرسل إثبات التسليم بعد.',
+  'app.senderPanel.proofMissing': 'لم يُرسل أي إثبات تسليم.',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -1733,6 +1775,12 @@ const zh: Dictionary = {
   'app.senderPanel.cancelSuccess': '配送请求已成功取消。',
   'app.senderPanel.cancelFailed': '无法取消配送请求。请重试。',
   'app.senderPanel.cancelUnavailable': '该配送请求已无法取消。',
+  'app.senderPanel.proofTitle': '送达证明',
+  'app.senderPanel.proofNote': '备注',
+  'app.senderPanel.proofConfirmationCode': '确认码',
+  'app.senderPanel.proofSubmittedAt': '提交时间',
+  'app.senderPanel.proofPending': '送达证明尚未提交。',
+  'app.senderPanel.proofMissing': '尚未提交送达证明。',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 
