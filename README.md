@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`) are complete. Photo/signature proof, payments, escrow, real-time chat/push, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**) are complete. Photo/signature proof, payments, escrow, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -175,6 +175,7 @@ Marketing landing page (`/`) is not translated yet.
 | In-app notifications (schema, API, SDK, bell/dropdown, polling) | Complete (M4)                   |
 | Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)  | Complete (M4)                   |
 | Chat message in-app notifications (other participant only)      | Complete (M4)                   |
+| Chat modal polling (10s while open, visibility-aware)           | Complete (M4)                   |
 | Payments, escrow, disputes, admin                               | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -359,6 +360,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Chat schema + API + SDK (Conversation / ChatMessage)                      | Complete |
 | Frontend chat modal on `/app` (Sender/Wayler Accepted panels)             | Complete |
 | Chat message notifications (`SYSTEM` type → bell/dropdown)                | Complete |
+| Chat modal polling (10s detail refresh, visibility-aware)                 | Complete |
 | Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
 | Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
 | Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
@@ -714,7 +716,7 @@ NotificationBell on /app  (badge + dropdown)
 Polling refresh  (unread count every 30s; list every 60s while open)
 ```
 
-Chat message notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate chat inbox.
+Chat message notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate chat inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
 
 ### Schema (`Notification`)
 
@@ -883,13 +885,27 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Chat / contact between Sender and Wayler
 
-Chat lets the **Sender** and **accepted Wayler** coordinate delivery details for an order. The current version is **order-based in-app chat** — one conversation per accepted order, opened from Accepted panels on `/app`. When a message is sent, the **other participant** receives an **in-app notification** in the shared bell/dropdown (`SYSTEM` type until `CHAT_MESSAGE` exists). **WebSocket/SSE, chat polling, push/email, attachments, and read-receipt UI** are not implemented yet; the chat modal uses **manual refresh** only.
+Chat lets the **Sender** and **accepted Wayler** coordinate delivery details for an order. The current version is **order-based in-app chat** — one conversation per accepted order, opened from Accepted panels on `/app`. The open chat modal **polls for new messages every 10 seconds** (visibility-aware). When a message is sent, the **other participant** receives an **in-app notification** in the shared bell/dropdown (`SYSTEM` type until `CHAT_MESSAGE` exists). **WebSocket/SSE, push/email, attachments, and read-receipt UI** are not implemented yet.
+
+### Current chat flow
+
+```text
+Accepted order (ACCEPTED / IN_TRANSIT / DELIVERED)
+        ↓
+Open chat  (Sender or Wayler Accepted panel → api.conversations.forOrder)
+        ↓
+Send / read messages  (detail + send + markRead)
+        ↓
+Chat modal polling  (detail every 10s while open + tab visible → markRead)
+        ↓
+Other participant notified  (in-app bell/dropdown via SYSTEM notification)
+```
 
 ### Purpose
 
 - Coordinate pickup, handoff, and delivery questions between the two parties on an active job.
 - Tied to a single `DeliveryOrder` — not a global inbox or open-marketplace chat.
-- Real-time delivery and push/email alerts are planned for later milestones.
+- Lightweight **10s polling** keeps the open modal up to date; WebSocket/SSE and push/email alerts are planned for later milestones.
 
 ### Schema
 
@@ -952,7 +968,7 @@ api.conversations.markRead(id);                   // POST /conversations/:id/rea
 - **One conversation per order** — `orderId` is unique; `forOrder` returns existing conversation if already created.
 - **Message body** — trimmed, min 1, max 2000 characters (`sendChatMessageSchema`).
 - **Mark read** — sets `readAt` on messages where `senderId !== currentUser` and `readAt` is null.
-- **No WebSocket/SSE** — clients refresh manually; no chat polling in the current frontend.
+- **No WebSocket/SSE** — live updates use lightweight client polling in the open modal (see **Polling behavior** below).
 
 ### Chat notification behavior
 
@@ -966,21 +982,40 @@ When `POST /api/v1/conversations/:id/messages` succeeds:
 - Notification type: **`SYSTEM`** (dedicated `CHAT_MESSAGE` planned later).
 - **relatedOrderId:** linked to the conversation's order.
 - Notification creation failure does **not** block message send (same pattern as order lifecycle dispatch).
-- Recipient sees the notification in the **same bell/dropdown** as order notifications; existing **30s unread polling** picks up new chat alerts without frontend changes.
+- Recipient sees the notification in the **same bell/dropdown** as order notifications; existing **30s unread polling** picks up new chat alerts without page refresh.
+- Recipient with chat modal open also sees new messages via **10s chat modal polling** (see below).
+
+### Polling behavior (chat modal)
+
+| Behavior              | Detail                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Detail refresh**    | `api.conversations.detail(id)` every **10 seconds** while modal is **open** and tab is **visible**           |
+| **Mark read**         | `api.conversations.markRead(id)` after each **successful** background poll (and on open / Refresh / send)    |
+| **Tab hidden**        | Polling **paused** when `document.visibilityState` is `hidden` (interval cleared)                            |
+| **Tab visible**       | Polling **resumed** when tab becomes visible again (immediate catch-up poll + interval restarts)             |
+| **Overlap guard**     | Skips a new detail request if one is already in flight; `markRead` skipped if already in flight              |
+| **Manual Refresh**    | Still available — foreground reload with translated errors on failure                                        |
+| **After send**        | Immediate foreground refresh after successful `sendMessage` (unchanged)                                      |
+| **Background errors** | Silent — existing messages stay visible; input draft is not cleared                                          |
+| **Foreground errors** | Open, Refresh, and send failures still show translated errors (`loadFailed`, `markReadFailed`, `sendFailed`) |
+| **Typing**            | Background polls do **not** set loading state — message input stays enabled while polling                    |
+
+No WebSocket/SSE in the current version.
 
 ### Frontend behavior (`/app`)
 
-| Feature             | Behavior                                                               |
-| ------------------- | ---------------------------------------------------------------------- |
-| **Open chat**       | Button on **Sender Accepted Orders** and **Wayler Accepted** panels    |
-| **Eligible orders** | `ACCEPTED`, `IN_TRANSIT`, `DELIVERED` only — no button on DRAFT/OPEN   |
-| **Open flow**       | `api.conversations.forOrder(order.id)` → opens compact chat modal      |
-| **On open**         | `api.conversations.detail(id)` + `api.conversations.markRead(id)`      |
-| **Message list**    | You/Other bubbles, `createdAt`, empty state                            |
-| **Send**            | Textarea max 2000 chars; Send disabled when body empty/whitespace-only |
-| **After send**      | Clear input, reload detail, mark read                                  |
-| **Refresh**         | Reload detail + mark read                                              |
-| **Close**           | Dismiss modal; click outside to close                                  |
+| Feature             | Behavior                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| **Open chat**       | Button on **Sender Accepted Orders** and **Wayler Accepted** panels                         |
+| **Eligible orders** | `ACCEPTED`, `IN_TRANSIT`, `DELIVERED` only — no button on DRAFT/OPEN                        |
+| **Open flow**       | `api.conversations.forOrder(order.id)` → opens compact chat modal                           |
+| **On open**         | Foreground `api.conversations.detail(id)` + `api.conversations.markRead(id)`                |
+| **Polling**         | Background detail refresh every **10s** while open + tab visible (see **Polling behavior**) |
+| **Message list**    | You/Other bubbles, `createdAt`, empty state                                                 |
+| **Send**            | Textarea max 2000 chars; Send disabled when body empty/whitespace-only                      |
+| **After send**      | Clear input, immediate foreground reload + mark read                                        |
+| **Refresh**         | Manual foreground reload detail + mark read                                                 |
+| **Close**           | Dismiss modal; click outside to close; polling stops                                        |
 
 i18n keys under `app.chat.*` (8 locales).
 
@@ -994,7 +1029,11 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - [ ] **User A** sends a message
 - [ ] **User B** (Wayler Accepted panel) → **Open chat** → sees **User A**'s message
 - [ ] **User B** replies
-- [ ] **User A** clicks **Refresh** in chat → sees **User B**'s reply
+- [ ] **User A** (chat modal open) sees **User B**'s reply within **10 seconds** without clicking Refresh
+- [ ] **User A** clicks **Refresh** in chat → still works; sees latest messages
+- [ ] **User A** switches to another browser tab (document hidden) → chat polling pauses
+- [ ] **User A** returns to tab → chat polling resumes; new messages appear within **10 seconds**
+- [ ] **User A** types a draft message while polling runs → input is **not** interrupted or cleared
 - [ ] **User A** sends message → **User B** sees `SYSTEM` chat notification in bell (A does not)
 - [ ] **User B** replies → **User A** sees chat notification in bell
 - [ ] Bell unread badge updates within **30 seconds** without page refresh
@@ -1006,14 +1045,14 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 ### Future milestones (chat)
 
 - **Dedicated `CHAT_MESSAGE` notification type** — replace `SYSTEM` for chat dispatch
-- **Polling or WebSocket/SSE** — live message updates in chat modal without manual refresh
+- **WebSocket/SSE** — instant message delivery (lightweight **10s polling exists today**)
 - **Push / email notifications** for chat — offline alerts beyond in-app bell
 - **Notification preferences** — per-type opt-in/out for chat vs order events
 - **Typing indicators** — show when the other party is composing
 - **Read receipt UI** — visual read state beyond backend `readAt` + `markRead`
 - **File / image attachments** — proof photos, location pins, etc.
 - **Moderation / reporting** — flag abusive messages
-- **Admin / arbitrator visibility** — dispute evidence access during disputes
+- **Admin / arbitrator access** — visibility during disputes
 - **Localized system messages** — server-side templates for automated chat events
 
 ### Future milestones (marketplace)
@@ -1049,8 +1088,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, chat real-time, payments/disputes later)
-- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, chat real-time/polling/push/email, moderation, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payments/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
