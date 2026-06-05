@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import type { Prisma } from '@prisma/client';
-import type { NotificationListResponse, NotificationSummary } from '@wayly/types';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { NotificationType as PrismaNotificationType, type Prisma } from '@prisma/client';
+import type { NotificationListResponse, NotificationSummary, NotificationType } from '@wayly/types';
 import type { NotificationsListQueryInput } from '@wayly/validation';
 
 import { PrismaService } from '../../infra/prisma/prisma.service';
@@ -16,9 +16,40 @@ export interface NotificationsMarkAllReadResult {
   unreadTotal: number;
 }
 
+export interface CreateNotificationInput {
+  userId: string;
+  type: NotificationType;
+  title: string;
+  body?: string | null;
+  relatedOrderId?: string | null;
+}
+
 @Injectable()
 export class NotificationsService {
+  private readonly logger = new Logger(NotificationsService.name);
+
   constructor(private readonly prisma: PrismaService) {}
+
+  /** Internal helper for dispatching notifications; failures are logged, not thrown. */
+  async createForUser(input: CreateNotificationInput): Promise<void> {
+    try {
+      await this.prisma.notification.create({
+        data: {
+          userId: input.userId,
+          type: input.type as PrismaNotificationType,
+          title: input.title,
+          body: input.body ?? null,
+          relatedOrderId: input.relatedOrderId ?? null,
+        },
+      });
+    } catch (error) {
+      this.logger.warn(
+        `Failed to create notification for user ${input.userId} (${input.type}): ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
 
   async list(
     userId: string,

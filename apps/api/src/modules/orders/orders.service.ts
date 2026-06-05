@@ -10,7 +10,7 @@ import {
   Prisma,
 } from '@prisma/client';
 import type { DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
-import { DeliveryOrderStatus } from '@wayly/types';
+import { DeliveryOrderStatus, NotificationType } from '@wayly/types';
 import type {
   CreateDeliveryOrderInput,
   DeliveryOrderQueryInput,
@@ -20,6 +20,7 @@ import type {
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { toDeliveryOrderDetail, toDeliveryOrderSummary } from './orders.mapper';
 
@@ -48,7 +49,10 @@ export interface AcceptedOrderSummary extends DeliveryOrderSummary {
 
 @Injectable()
 export class OrdersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(user: RequestUser, input: CreateDeliveryOrderInput): Promise<DeliveryOrderDetail> {
     requireKycApproved(user);
@@ -186,6 +190,14 @@ export class OrdersService {
       },
     });
 
+    await this.notifications.createForUser({
+      userId: updated.senderId,
+      type: NotificationType.ORDER_ACCEPTED,
+      title: 'Your delivery request was accepted',
+      body: `Your delivery request "${updated.title}" was accepted.`,
+      relatedOrderId: updated.id,
+    });
+
     return toDeliveryOrderDetail(updated);
   }
 
@@ -212,6 +224,14 @@ export class OrdersService {
       data: {
         status: PrismaDeliveryOrderStatus.IN_TRANSIT,
       },
+    });
+
+    await this.notifications.createForUser({
+      userId: updated.senderId,
+      type: NotificationType.ORDER_IN_TRANSIT,
+      title: 'Your delivery is in transit',
+      body: `Your delivery "${updated.title}" is now in transit.`,
+      relatedOrderId: updated.id,
     });
 
     return toDeliveryOrderDetail(updated);
@@ -288,6 +308,14 @@ export class OrdersService {
       },
     });
 
+    await this.notifications.createForUser({
+      userId: updated.senderId,
+      type: NotificationType.PROOF_SUBMITTED,
+      title: 'Proof of delivery was submitted',
+      body: `Proof of delivery was submitted for "${updated.title}".`,
+      relatedOrderId: updated.id,
+    });
+
     return toDeliveryOrderDetail(updated);
   }
 
@@ -316,6 +344,14 @@ export class OrdersService {
         status: PrismaDeliveryOrderStatus.DELIVERED,
         deliveredAt,
       },
+    });
+
+    await this.notifications.createForUser({
+      userId: updated.senderId,
+      type: NotificationType.ORDER_DELIVERED,
+      title: 'Your delivery was marked delivered',
+      body: `Your delivery "${updated.title}" was marked as delivered.`,
+      relatedOrderId: updated.id,
     });
 
     return toDeliveryOrderDetail(updated);
