@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish → Wayler OPEN feed → accept → **in-transit → delivered**, Sender/Wayler tracking panels, Wayler filters/maps) are complete. Payments, escrow, chat, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, Sender/Wayler tracking panels, Wayler filters/maps) are complete. Payments, escrow, chat, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -170,7 +170,7 @@ Marketing landing page (`/`) is not translated yet.
 | Basic language support (8 locales, localStorage preference)    | Complete                        |
 | KYC mock flow (schema, API, SDK, `/app` panel)                 | Complete (M2)                   |
 | Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
-| Marketplace orders (M4 draft/publish/accept/lifecycle)         | Complete (M4)                   |
+| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)  | Complete (M4)                   |
 | Payments, escrow, chat, disputes, admin                        | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -335,6 +335,8 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | -------------------------------------------------------------------- | -------- |
 | `DeliveryOrder` schema (Prisma)                                      | Complete |
 | Create draft (`POST /orders`)                                        | Complete |
+| Cancel DRAFT/OPEN (`POST /orders/:id/cancel`, Sender only)           | Complete |
+| Sender Cancel UI (Drafts + Published panels)                         | Complete |
 | Publish draft → OPEN (`POST /orders/:id/publish`)                    | Complete |
 | Wayler OPEN feed (`GET /orders`, default `status=OPEN`)              | Complete |
 | Accept OPEN order (`POST /orders/:id/accept`)                        | Complete |
@@ -359,24 +361,26 @@ All routes require JWT + KYC approval (`JwtAuthGuard`, `VerificationGuard`). Bas
 | GET    | `/api/v1/orders/accepted`           | List orders **accepted by the current Wayler** (includes `acceptedAt`)                                                 |
 | GET    | `/api/v1/orders/:id`                | Order detail; other users' DRAFTs return 404                                                                           |
 | POST   | `/api/v1/orders/:id/publish`        | Sender publishes own DRAFT → OPEN                                                                                      |
+| POST   | `/api/v1/orders/:id/cancel`         | Sender cancels own DRAFT or OPEN → CANCELLED (sets `cancelledAt`)                                                      |
 | POST   | `/api/v1/orders/:id/accept`         | Wayler accepts OPEN order → ACCEPTED                                                                                   |
 | POST   | `/api/v1/orders/:id/start-transit`  | Accepted Wayler moves ACCEPTED → IN_TRANSIT                                                                            |
 | POST   | `/api/v1/orders/:id/mark-delivered` | Accepted Wayler moves IN_TRANSIT → DELIVERED (sets `deliveredAt`)                                                      |
 
 Interactive docs: http://localhost:4000/docs (tag **orders**).
 
-SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `accept`, `startTransit`, `markDelivered`.
+SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `cancel`, `accept`, `startTransit`, `markDelivered`.
 
 ### User flow
 
 **Sender (mode: Sender on `/app`)**
 
 1. Create a **draft** delivery request (title, type, route, reward, etc.).
-2. **Publish** the draft → status becomes **OPEN** (visible on the Wayler marketplace).
-3. Track orders in three panels:
-   - **Drafts** — `api.orders.mine({ status: 'DRAFT' })`
-   - **Published** — `api.orders.mine({ status: 'OPEN' })`
-   - **Accepted** — merged `api.orders.mine` for `ACCEPTED`, `IN_TRANSIT`, and `DELIVERED` (+ `detail` for `acceptedAt` / `deliveredAt`); status badges and lifecycle notes on `/app`
+2. **Cancel** a draft or published (OPEN) order before acceptance — **Cancel** button in Drafts / Published panels → `api.orders.cancel(id)`.
+3. **Publish** the draft → status becomes **OPEN** (visible on the Wayler marketplace).
+4. Track orders in three panels:
+   - **Drafts** — `api.orders.mine({ status: 'DRAFT' })`; **Cancel** per draft
+   - **Published** — `api.orders.mine({ status: 'OPEN' })`; **Cancel** per open order
+   - **Accepted** — merged `api.orders.mine` for `ACCEPTED`, `IN_TRANSIT`, and `DELIVERED` (+ `detail` for `acceptedAt` / `deliveredAt`); status badges and lifecycle notes; **no Cancel** (post-accept orders cannot be cancelled via this flow)
 
 **Wayler (mode: Wayler on `/app`)**
 
@@ -392,7 +396,7 @@ SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `acce
 - **DRAFT orders are private** — `GET /orders?status=DRAFT` is scoped to the current sender on the backend; other users cannot read another sender's drafts via `GET /orders/:id`.
 - **Sender panels use `/orders/mine`** — the browser never receives other users' sent orders; no client-side `senderId` filtering.
 - **Wayler marketplace feed** uses `GET /orders` with **OPEN** only (global feed for browsing/accepting).
-- **KYC approval is required** to create orders, browse the Wayler feed, accept orders, progress delivery (start transit / mark delivered), and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
+- **KYC approval is required** to create orders, cancel orders, browse the Wayler feed, accept orders, progress delivery (start transit / mark delivered), and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
 
 ### Manual testing checklist
 
@@ -410,6 +414,83 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User A** (Sender): refresh **Accepted Orders** → **IN_TRANSIT** badge and note
 - [ ] **User B** (Wayler): **Mark delivered** → status **DELIVERED**
 - [ ] **User A** (Sender): refresh **Accepted Orders** → **DELIVERED** badge, note, and `deliveredAt` when set
+- [ ] **User A**: create DRAFT → **Cancel** in Drafts → order disappears
+- [ ] **User A**: create + publish OPEN → **Cancel** in Published → order disappears
+- [ ] **User B** (Wayler): refresh OPEN feed → cancelled order **not** visible
+- [ ] **Accepted / IN_TRANSIT / DELIVERED** orders in Sender Accepted panel have **no Cancel** button
+
+## Order cancellation
+
+Senders can cancel their own delivery requests **before acceptance** — while status is **DRAFT** or **OPEN**. Once a Wayler accepts, cancellation through the normal Sender cancel flow is blocked (**409 Conflict**).
+
+### Lifecycle diagram (with cancellation)
+
+```text
+                    cancel (Sender)
+DRAFT ──────────────────────────────→ CANCELLED
+  │
+  │ publish (Sender)
+  ▼
+OPEN ───────────────────────────────→ CANCELLED
+  │              cancel (Sender)
+  │ accept (Wayler)
+  ▼
+ACCEPTED → IN_TRANSIT → DELIVERED
+              ↑            ↑
+       start-transit   mark-delivered
+         (Wayler)        (Wayler)
+```
+
+### API route
+
+| Method | Path                        | Transition                |
+| ------ | --------------------------- | ------------------------- |
+| POST   | `/api/v1/orders/:id/cancel` | DRAFT or OPEN → CANCELLED |
+
+Requires JWT + **KYC approved**. Returns safe `DeliveryOrderDetail`.
+
+### SDK
+
+```typescript
+api.orders.cancel(id); // POST /api/v1/orders/:id/cancel → DeliveryOrderDetail
+```
+
+### Rules
+
+- **Sender only** — `senderId` must match the authenticated user; non-senders receive **404** (same privacy pattern as publish).
+- **KYC required** — same `VerificationGuard` as create/publish/accept.
+- **DRAFT and OPEN** can be cancelled.
+- **ACCEPTED**, **IN_TRANSIT**, **DELIVERED**, and **already CANCELLED** return **409 Conflict** with a clear message.
+- **`cancelledAt`** is set on successful cancel.
+- **Visibility after cancel** — cancelled orders no longer appear in Sender **Drafts** (`status=DRAFT`), **Published** (`status=OPEN`), or Wayler **OPEN** feed after refresh.
+
+### Frontend behavior
+
+| Panel                | Behavior                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| **Sender Drafts**    | **Cancel** button per DRAFT; loading state **Cancelling…**; success removes order from list |
+| **Sender Published** | **Cancel** button per OPEN order; same loading/success behavior                             |
+| **Sender Accepted**  | **No Cancel** — ACCEPTED / IN_TRANSIT / DELIVERED are not cancellable here                  |
+
+Publish and Cancel buttons are disabled while another Sender list action (publish or cancel) is in progress.
+
+### Manual testing checklist (cancellation)
+
+Use KYC-approved **User A** (Sender) and **User B** (Wayler):
+
+- [ ] Create **DRAFT** → click **Cancel** in Drafts → order disappears
+- [ ] Create + **publish** OPEN → click **Cancel** in Published → order disappears
+- [ ] **User B** refreshes Wayler OPEN feed → cancelled order is **not** visible
+- [ ] After **User B** accepts an order, **User A** has **no Cancel** on Sender Accepted panel
+- [ ] **IN_TRANSIT** / **DELIVERED** orders likewise have **no Cancel** button
+
+### Future milestones (cancellation)
+
+- **Cancellation reasons** — structured reason codes / free-text from Sender
+- **Refund / payment handling** — escrow reversal when payments exist
+- **Dispute-based cancellation** after acceptance
+- **Admin / arbitrator cancellation** — operator overrides
+- **Notifications** to affected Waylers when an OPEN order is cancelled
 
 ## Delivery lifecycle after acceptance
 
@@ -419,9 +500,11 @@ Once a Wayler accepts an OPEN order, both parties track progress through **ACCEP
 
 ```text
 DRAFT → OPEN → ACCEPTED → IN_TRANSIT → DELIVERED
-         ↑        ↑            ↑            ↑
-      publish   accept    start-transit  mark-delivered
-      (Sender)  (Wayler)  (Wayler)       (Wayler)
+  │       │        ↑            ↑            ↑
+  │    publish  accept    start-transit  mark-delivered
+  │   (Sender) (Wayler)    (Wayler)       (Wayler)
+  └── cancel ──→ CANCELLED
+      (Sender; DRAFT or OPEN only — see Order cancellation)
 ```
 
 ### Who can do what
@@ -429,6 +512,7 @@ DRAFT → OPEN → ACCEPTED → IN_TRANSIT → DELIVERED
 | Actor               | Action                                                                                    |
 | ------------------- | ----------------------------------------------------------------------------------------- |
 | **Sender**          | Create draft                                                                              |
+| **Sender**          | Cancel DRAFT or OPEN → CANCELLED (before acceptance)                                      |
 | **Sender**          | Publish draft → OPEN                                                                      |
 | **Wayler**          | Accept OPEN order → ACCEPTED                                                              |
 | **Accepted Wayler** | Start transit → IN_TRANSIT                                                                |
@@ -481,7 +565,6 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **Payment release** after delivery (escrow / Stripe)
 - **Disputes / arbitration** on delivery completion
 - **Notifications** (push/email) on status changes
-- **Cancelled** status transitions and operator overrides
 
 ### Future milestones (marketplace)
 
@@ -517,8 +600,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, Wayler accepted panel controls, Sender lifecycle visibility, private `GET /orders/mine`. ✅ (core loop + post-accept lifecycle complete; payments/chat/disputes later)
-- **M5–M15:** pickup/proof-of-delivery, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`. ✅ (core loop + cancellation + post-accept lifecycle complete; payments/chat/disputes later)
+- **M5–M15:** cancellation reasons/refunds, pickup/proof-of-delivery, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
