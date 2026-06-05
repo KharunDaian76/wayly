@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, and **M3 Sender/Wayler mode switcher** (frontend-only on `/app`) are complete. Real orders, payments, chat, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish → Wayler OPEN feed → accept, Sender tracking panels, Wayler filters/maps) are complete. Payments, escrow, chat, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -170,7 +170,8 @@ Marketing landing page (`/`) is not translated yet.
 | Basic language support (8 locales, localStorage preference)    | Complete                        |
 | KYC mock flow (schema, API, SDK, `/app` panel)                 | Complete (M2)                   |
 | Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
-| Orders, payments, chat, admin                                  | Not started (future milestones) |
+| Marketplace orders (M4 draft/publish/accept)                   | Complete (M4)                   |
+| Payments, escrow, chat, disputes, admin                        | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
 
@@ -302,7 +303,7 @@ Wayly users can act as **Senders** (create delivery requests) or **Waylers** (ca
 | Sender/Wayler mode is a UI preference            | Yes — **not** a security role                   |
 | Security roles                                   | **USER**, **ADMIN**, **ARBITRATOR** (unchanged) |
 | Backend mode persistence                         | Not implemented                                 |
-| Real order creation / browsing                   | Not implemented                                 |
+| Real order creation / browsing (M4)              | Complete — see **M4 Marketplace flow** below    |
 
 Prerequisites are the same as M1/M2: `pnpm dev` running and a logged-in user.
 
@@ -313,15 +314,103 @@ Prerequisites are the same as M1/M2: `pnpm dev` running and a logged-in user.
 - [ ] Switch **Sender ↔ Wayler** — placeholder dashboard card updates (title, description, button label)
 - [ ] **Refresh the page** — selected mode persists (`localStorage`)
 - [ ] **Change language** — mode switcher and dashboard text translate (8 locales)
-- [ ] Confirm **Create delivery request** / **Browse delivery requests** buttons are **disabled placeholders only** (no real flows)
+- [ ] Confirm mode switcher and dashboard cards still work after M4 (Sender/Wayler panels load when KYC is approved)
 
-If KYC is not approved, each mode shows an informational note about verification — this is display-only; no order blocking exists yet.
+If KYC is not approved, each mode shows a verification notice; M4 enforces KYC on create, browse, accept, and Sender/Wayler marketplace panels.
 
 ### Future milestones (Sender/Wayler)
 
-- **Sender mode** will later create real delivery requests
-- **Wayler mode** will later browse and accept delivery requests
-- **KYC, subscription, and payment gates** will apply when those business features are built (flags and notes exist today; enforcement comes with orders)
+- **Backend mode persistence** — optional server-side preference (today: `localStorage` only)
+- **Subscription and payment gates** — apply when those business features are built
+
+## M4 Marketplace flow: Sender to Wayler
+
+M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`. **No payments, escrow, chat, disputes, admin, or subscriptions yet.**
+
+Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm dev` up, and **KYC approved** (mock approve in dev) for marketplace actions.
+
+### Current marketplace status
+
+| Area                                                         | Status   |
+| ------------------------------------------------------------ | -------- |
+| `DeliveryOrder` schema (Prisma)                              | Complete |
+| Create draft (`POST /orders`)                                | Complete |
+| Publish draft → OPEN (`POST /orders/:id/publish`)            | Complete |
+| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)      | Complete |
+| Accept OPEN order (`POST /orders/:id/accept`)                | Complete |
+| Wayler accepted panel (`GET /orders/accepted`)               | Complete |
+| Sender tracking panels (Drafts / Published / Accepted)       | Complete |
+| Wayler feed filters & sort (type, location, reward, sort)    | Complete |
+| Wayler map route previews (Leaflet + city/country geocoding) | Complete |
+| Sender privacy endpoint (`GET /orders/mine`)                 | Complete |
+
+### API routes (orders)
+
+All routes require JWT + KYC approval (`JwtAuthGuard`, `VerificationGuard`). Base path: `/api/v1`.
+
+| Method | Path                         | Description                                                                                                            |
+| ------ | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/v1/orders`             | Create a delivery order as DRAFT (Sender)                                                                              |
+| GET    | `/api/v1/orders`             | List orders — defaults to **OPEN** (Wayler marketplace feed); supports `status`, `type`, location filters, pagination  |
+| GET    | `/api/v1/orders/mine`        | List **current user's sent orders** only (`senderId` = authenticated user); optional `status`, `type`, `page`, `limit` |
+| GET    | `/api/v1/orders/accepted`    | List orders **accepted by the current Wayler** (includes `acceptedAt`)                                                 |
+| GET    | `/api/v1/orders/:id`         | Order detail; other users' DRAFTs return 404                                                                           |
+| POST   | `/api/v1/orders/:id/publish` | Sender publishes own DRAFT → OPEN                                                                                      |
+| POST   | `/api/v1/orders/:id/accept`  | Wayler accepts OPEN order → ACCEPTED                                                                                   |
+
+Interactive docs: http://localhost:4000/docs (tag **orders**).
+
+SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `accept`.
+
+### User flow
+
+**Sender (mode: Sender on `/app`)**
+
+1. Create a **draft** delivery request (title, type, route, reward, etc.).
+2. **Publish** the draft → status becomes **OPEN** (visible on the Wayler marketplace).
+3. Track orders in three panels:
+   - **Drafts** — `api.orders.mine({ status: 'DRAFT' })`
+   - **Published** — `api.orders.mine({ status: 'OPEN' })`
+   - **Accepted** — `api.orders.mine({ status: 'ACCEPTED' })` (+ `detail` for `acceptedAt`)
+
+**Wayler (mode: Wayler on `/app`)**
+
+1. Browse the **OPEN** feed — `api.orders.list({ status: 'OPEN', ...filters })`.
+2. **Filter & sort** by type, pickup/dropoff, reward range; sort by reward, published date, or route.
+3. **Map preview** on each card (pickup → dropoff markers and route line; geocoded from city/country).
+4. **Accept** an OPEN order (not own order; KYC required).
+5. Track **Accepted delivery requests** — `api.orders.accepted()`.
+
+### Privacy and KYC notes
+
+- **DRAFT orders are private** — `GET /orders?status=DRAFT` is scoped to the current sender on the backend; other users cannot read another sender's drafts via `GET /orders/:id`.
+- **Sender panels use `/orders/mine`** — the browser never receives other users' sent orders; no client-side `senderId` filtering.
+- **Wayler marketplace feed** uses `GET /orders` with **OPEN** only (global feed for browsing/accepting).
+- **KYC approval is required** to create orders, browse the Wayler feed, accept orders, and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
+
+### Manual testing checklist
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler):
+
+- [ ] **User A** (Sender mode): create a draft, then **publish** it
+- [ ] **User B** (Sender mode): Drafts / Published / Accepted panels do **not** show A's orders
+- [ ] **User B** (Wayler mode): OPEN feed shows A's published order
+- [ ] **User B** accepts A's OPEN order
+- [ ] **User B** (Wayler): order appears in **Accepted delivery requests** panel after refresh
+- [ ] **User A** (Sender): order appears in **Accepted Orders** panel after refresh
+- [ ] **User B** (Sender): Accepted panel does **not** show A's sent order (only B's own sent orders via `/orders/mine`)
+- [ ] **Map preview** visible on Wayler OPEN cards when pickup and dropoff city/country are set
+
+### Future milestones (marketplace)
+
+- **In-transit / delivered / cancelled** status transitions and Sender/Wayler tracking
+- **Chat / contact** between Sender and Wayler after accept
+- **Payments & escrow** (Stripe, offline flows)
+- **Disputes & arbitration**
+- **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
+- **Admin / arbitrator panel**
+- **Subscriptions / paywall**
+- **Mobile / PWA polish** and premium redesign
 
 ## Common scripts
 
@@ -346,8 +435,9 @@ If KYC is not approved, each mode shows an informational note about verification
 - **M0 — Foundation:** monorepo, tooling, shared config, design tokens, Docker Compose. ✅
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
-- **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅ (Batch 1); landing, PWA, International toggle, and real order flows later
-- **M4–M15:** orders, geo/maps, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider swap, hardening, launch.
+- **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, Wayler accepted panel, Sender Drafts/Published/Accepted panels, private `GET /orders/mine`. ✅ (core loop complete; payments/chat/disputes later)
+- **M5–M15:** in-transit/delivered lifecycle, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
