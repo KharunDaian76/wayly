@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**) are complete. Photo/signature proof, payments, escrow, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**) are complete. Photo/signature proof, payments, escrow, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -176,9 +176,10 @@ Marketing landing page (`/`) is not translated yet.
 | Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)  | Complete (M4)                   |
 | Chat message in-app notifications (other participant only)      | Complete (M4)                   |
 | Chat modal polling (10s while open, visibility-aware)           | Complete (M4)                   |
+| Premium `/app` dashboard UI foundation (visual polish)          | Complete (M4)                   |
 | Payments, escrow, disputes, admin                               | Not started (future milestones) |
 
-The current frontend is a **functional foundation**, not final premium design.
+The `/app` dashboard has a **premium UI foundation** (shell, cards, badges, alerts); full landing/onboarding redesign is a future milestone.
 
 ### Local development workflow
 
@@ -364,6 +365,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
 | Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
 | Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
+| Premium `/app` dashboard UI foundation (shell, cards, badges, alerts)     | Complete |
 
 ### API routes (orders)
 
@@ -1062,7 +1064,62 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
 - **Admin / arbitrator panel**
 - **Subscriptions / paywall**
-- **Mobile / PWA polish** and premium redesign
+- **Mobile / PWA polish** and premium redesign (see **Premium dashboard UI foundation** — foundation pass complete)
+
+## Premium dashboard UI foundation
+
+The authenticated **`/app` dashboard** has a **premium visual foundation** so the product feels like a real commercial global P2P delivery marketplace — not a prototype wireframe. The pass improves **visual hierarchy**, **readability**, **mobile layout**, and **user confidence** while keeping all **business logic unchanged**.
+
+### Purpose
+
+- Make `/app` feel like a serious, modern delivery product users can trust.
+- Strengthen section hierarchy, card separation, and status clarity across Sender and Wayler modes.
+- Improve mobile spacing and prevent horizontal overflow on narrow viewports.
+- **No changes** to data loading, API calls, KYC gates, chat, notifications, maps, or form validation.
+
+### Current UI improvements
+
+| Area               | What shipped                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------ |
+| **App shell**      | Premium background — subtle radial gradients + faint dot grid (`wayly-app-shell`)                      |
+| **Header**         | Glass-style header with backdrop blur; wrapping language, notification bell, and sign-out actions      |
+| **Panels / cards** | Consistent glass-style panels on Sender/Wayler, KYC, Account, and order sections (`wayly-app-panel`)   |
+| **Order cards**    | Unified order list cards across feed, drafts, published, and accepted panels (`wayly-order-card`)      |
+| **Status badges**  | Color-coded pills for **DRAFT**, **OPEN**, **ACCEPTED**, **IN_TRANSIT**, **DELIVERED**, **CANCELLED**  |
+| **Alerts**         | Standardized success / danger / info alert styles for errors, KYC notices, and success messages        |
+| **Actions**        | Consistent action button grouping (`wayly-action-group`) — primary, secondary, outline/danger patterns |
+| **Mobile**         | Tighter responsive spacing, `min-w-0` / `truncate` / `flex-wrap`, `overflow-x: clip` on shell          |
+
+Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps/web/src/app/globals.css`.
+
+### Scope note
+
+- **Frontend visual polish only** — CSS/className and presentational structure on `/app`.
+- **No API, SDK, Prisma, backend, or business logic changes** in this batch.
+- Not a full design system or landing-page redesign — a focused dashboard foundation pass.
+
+### Manual visual checklist
+
+- [ ] `/app` loads normally after sign-in
+- [ ] **Sender mode** — create draft, drafts/published/accepted panels render with new cards and badges
+- [ ] **Wayler mode** — OPEN feed, accepted panel, maps, and filters render correctly
+- [ ] **Notification bell** opens and dropdown works
+- [ ] **Chat modal** opens from Accepted panels and send/refresh works
+- [ ] **Maps** still render in Wayler feed cards
+- [ ] **Forms** (create order, proof, filters) remain usable; inputs not obscured
+- [ ] **Mobile width** (~375px) — no horizontal overflow; header actions wrap cleanly
+- [ ] **Text contrast** — status badges, alerts, and body text remain readable in light mode
+
+### Future UI milestones
+
+- **Full landing page redesign** — marketing site polish beyond functional foundation
+- **Premium onboarding / KYC flow** — guided verification UX
+- **World-map hero / dashboard** — optional global logistics visual on dashboard or home
+- **Mobile / PWA polish** — install prompts, touch targets, offline shell refinements
+- **Empty-state illustrations** — drafts, feed, notifications, chat
+- **Animation / microinteraction pass** — transitions, loading states, feed enter/exit polish
+- **Design system components** — shared primitives beyond ad-hoc `/app` utilities
+- **Dark mode** — optional later; token architecture already supports `.dark`
 
 ## Common scripts
 
@@ -1088,8 +1145,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payments/disputes later)
-- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payments/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin panel, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
