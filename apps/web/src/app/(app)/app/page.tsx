@@ -35,6 +35,24 @@ const isDev = process.env.NODE_ENV !== 'production';
 const FEED_SELECT_CLASS =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm';
 
+const PROOF_TEXTAREA_CLASS = cn(
+  'flex min-h-[72px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm',
+  'ring-offset-background placeholder:text-muted-foreground',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  'disabled:cursor-not-allowed disabled:opacity-50',
+);
+
+type WaylerAcceptedOrderRow = AcceptedDeliveryOrderSummary & {
+  proofNote?: string | null;
+  proofConfirmationCode?: string | null;
+  proofSubmittedAt?: string | null;
+};
+
+type ProofInputDraft = {
+  note: string;
+  confirmationCode: string;
+};
+
 type FeedSort = 'rewardDesc' | 'publishedDesc' | 'routeAsc';
 
 type SenderAcceptedOrderRow = DeliveryOrderSummary & {
@@ -326,7 +344,7 @@ export default function AppHomePage() {
   const [acceptingOrderId, setAcceptingOrderId] = useState<string | null>(null);
   const [acceptError, setAcceptError] = useState<string | null>(null);
   const [acceptSuccess, setAcceptSuccess] = useState(false);
-  const [acceptedOrders, setAcceptedOrders] = useState<AcceptedDeliveryOrderSummary[]>([]);
+  const [acceptedOrders, setAcceptedOrders] = useState<WaylerAcceptedOrderRow[]>([]);
   const [acceptedLoading, setAcceptedLoading] = useState(false);
   const [acceptedError, setAcceptedError] = useState<string | null>(null);
   const [progressingOrderId, setProgressingOrderId] = useState<string | null>(null);
@@ -335,6 +353,10 @@ export default function AppHomePage() {
   );
   const [progressError, setProgressError] = useState<string | null>(null);
   const [progressSuccess, setProgressSuccess] = useState<'transit' | 'delivered' | null>(null);
+  const [proofInputs, setProofInputs] = useState<Record<string, ProofInputDraft>>({});
+  const [submittingProofOrderId, setSubmittingProofOrderId] = useState<string | null>(null);
+  const [proofError, setProofError] = useState<string | null>(null);
+  const [proofSuccessOrderId, setProofSuccessOrderId] = useState<string | null>(null);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -483,7 +505,28 @@ export default function AppHomePage() {
     setAcceptedError(null);
     try {
       const items = await api.orders.accepted();
-      setAcceptedOrders(items);
+      const enriched = await Promise.all(
+        items.map(async (order): Promise<WaylerAcceptedOrderRow> => {
+          if (
+            order.status !== DeliveryOrderStatus.IN_TRANSIT &&
+            order.status !== DeliveryOrderStatus.DELIVERED
+          ) {
+            return order;
+          }
+          try {
+            const detail = await api.orders.detail(order.id);
+            return {
+              ...order,
+              proofNote: detail.proofNote,
+              proofConfirmationCode: detail.proofConfirmationCode,
+              proofSubmittedAt: detail.proofSubmittedAt,
+            };
+          } catch {
+            return order;
+          }
+        }),
+      );
+      setAcceptedOrders(enriched);
     } catch {
       setAcceptedError(t('app.waylerFeed.acceptedPanel.loadFailed'));
     } finally {
@@ -567,6 +610,8 @@ export default function AppHomePage() {
   async function handleStartTransit(orderId: string) {
     setProgressError(null);
     setProgressSuccess(null);
+    setProofError(null);
+    setProofSuccessOrderId(null);
     setProgressingOrderId(orderId);
     setProgressAction('start-transit');
     try {
@@ -588,6 +633,8 @@ export default function AppHomePage() {
   async function handleMarkDelivered(orderId: string) {
     setProgressError(null);
     setProgressSuccess(null);
+    setProofError(null);
+    setProofSuccessOrderId(null);
     setProgressingOrderId(orderId);
     setProgressAction('mark-delivered');
     try {
@@ -603,6 +650,69 @@ export default function AppHomePage() {
     } finally {
       setProgressingOrderId(null);
       setProgressAction(null);
+    }
+  }
+
+  function getProofDraft(order: WaylerAcceptedOrderRow): ProofInputDraft {
+    return (
+      proofInputs[order.id] ?? {
+        note: order.proofNote ?? '',
+        confirmationCode: order.proofConfirmationCode ?? '',
+      }
+    );
+  }
+
+  function updateProofDraft(orderId: string, patch: Partial<ProofInputDraft>) {
+    setProofInputs((prev) => {
+      const existing = prev[orderId];
+      if (existing) {
+        return { ...prev, [orderId]: { ...existing, ...patch } };
+      }
+      const order = acceptedOrders.find((item) => item.id === orderId);
+      const base: ProofInputDraft = {
+        note: order?.proofNote ?? '',
+        confirmationCode: order?.proofConfirmationCode ?? '',
+      };
+      return { ...prev, [orderId]: { ...base, ...patch } };
+    });
+  }
+
+  async function handleSubmitProof(orderId: string) {
+    const order = acceptedOrders.find((item) => item.id === orderId);
+    if (!order) {
+      return;
+    }
+    const draft = getProofDraft(order);
+    const note = draft.note.trim();
+    const confirmationCode = draft.confirmationCode.trim();
+    if (!note && !confirmationCode) {
+      return;
+    }
+
+    setProofError(null);
+    setProofSuccessOrderId(null);
+    setProgressError(null);
+    setProgressSuccess(null);
+    setSubmittingProofOrderId(orderId);
+    try {
+      const body: { note?: string; confirmationCode?: string } = {};
+      if (note) {
+        body.note = note;
+      }
+      if (confirmationCode) {
+        body.confirmationCode = confirmationCode;
+      }
+      await api.orders.submitProof(orderId, body);
+      setProofSuccessOrderId(orderId);
+      await loadAcceptedOrders();
+    } catch (err) {
+      setProofError(
+        err instanceof ApiError
+          ? err.message || t('app.waylerFeed.acceptedPanel.proofFailed')
+          : t('app.waylerFeed.acceptedPanel.proofFailed'),
+      );
+    } finally {
+      setSubmittingProofOrderId(null);
     }
   }
 
@@ -1074,7 +1184,12 @@ export default function AppHomePage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={!isApproved || acceptedLoading || progressingOrderId !== null}
+                  disabled={
+                    !isApproved ||
+                    acceptedLoading ||
+                    progressingOrderId !== null ||
+                    submittingProofOrderId !== null
+                  }
                   onClick={() => void loadAcceptedOrders()}
                 >
                   {t('app.waylerFeed.acceptedPanel.refresh')}
@@ -1106,6 +1221,11 @@ export default function AppHomePage() {
                     {acceptedError}
                   </p>
                 ) : null}
+                {proofError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {proofError}
+                  </p>
+                ) : null}
                 {isApproved && acceptedLoading ? (
                   <>
                     <p className="sr-only">{t('app.waylerFeed.acceptedPanel.loading')}</p>
@@ -1119,7 +1239,17 @@ export default function AppHomePage() {
                   <ul className="flex flex-col gap-4">
                     {acceptedOrders.map((order) => {
                       const isProgressing = progressingOrderId === order.id;
-                      const progressDisabled = progressingOrderId !== null;
+                      const isSubmittingProof = submittingProofOrderId === order.id;
+                      const actionDisabled =
+                        progressingOrderId !== null || submittingProofOrderId !== null;
+                      const proofDraft = getProofDraft(order);
+                      const proofNoteValue = proofDraft.note.trim();
+                      const proofCodeValue = proofDraft.confirmationCode.trim();
+                      const canSubmitProof = proofNoteValue.length > 0 || proofCodeValue.length > 0;
+                      const hasExistingProof = Boolean(order.proofSubmittedAt);
+                      const showProofForm =
+                        order.status === DeliveryOrderStatus.IN_TRANSIT ||
+                        order.status === DeliveryOrderStatus.DELIVERED;
 
                       return (
                         <li
@@ -1169,22 +1299,27 @@ export default function AppHomePage() {
                             </div>
                           </dl>
                           {order.status === DeliveryOrderStatus.ACCEPTED ? (
-                            <Button
-                              className="mt-3 w-full sm:w-auto"
-                              size="sm"
-                              disabled={progressDisabled}
-                              onClick={() => void handleStartTransit(order.id)}
-                            >
-                              {isProgressing && progressAction === 'start-transit'
-                                ? t('app.waylerFeed.acceptedPanel.startingTransit')
-                                : t('app.waylerFeed.acceptedPanel.startTransit')}
-                            </Button>
+                            <>
+                              <Button
+                                className="mt-3 w-full sm:w-auto"
+                                size="sm"
+                                disabled={actionDisabled}
+                                onClick={() => void handleStartTransit(order.id)}
+                              >
+                                {isProgressing && progressAction === 'start-transit'
+                                  ? t('app.waylerFeed.acceptedPanel.startingTransit')
+                                  : t('app.waylerFeed.acceptedPanel.startTransit')}
+                              </Button>
+                              <p className="mt-2 text-sm text-muted-foreground">
+                                {t('app.waylerFeed.acceptedPanel.proofTransitRequired')}
+                              </p>
+                            </>
                           ) : null}
                           {order.status === DeliveryOrderStatus.IN_TRANSIT ? (
                             <Button
                               className="mt-3 w-full sm:w-auto"
                               size="sm"
-                              disabled={progressDisabled}
+                              disabled={actionDisabled}
                               onClick={() => void handleMarkDelivered(order.id)}
                             >
                               {isProgressing && progressAction === 'mark-delivered'
@@ -1196,6 +1331,100 @@ export default function AppHomePage() {
                             <p className="mt-3 text-sm text-muted-foreground">
                               {t('app.waylerFeed.acceptedPanel.delivered')}
                             </p>
+                          ) : null}
+                          {showProofForm ? (
+                            <div className="mt-3 rounded-md border border-border/60 p-3">
+                              <p className="text-sm font-medium">
+                                {t('app.waylerFeed.acceptedPanel.proofTitle')}
+                              </p>
+                              {order.proofNote ||
+                              order.proofConfirmationCode ||
+                              order.proofSubmittedAt ? (
+                                <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                  {order.proofNote ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.waylerFeed.acceptedPanel.proofNote')}
+                                      </dt>
+                                      <dd>{order.proofNote}</dd>
+                                    </div>
+                                  ) : null}
+                                  {order.proofConfirmationCode ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.waylerFeed.acceptedPanel.proofConfirmationCode')}
+                                      </dt>
+                                      <dd className="font-mono text-xs">
+                                        {order.proofConfirmationCode}
+                                      </dd>
+                                    </div>
+                                  ) : null}
+                                  {order.proofSubmittedAt ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.waylerFeed.acceptedPanel.proofSubmittedAt')}
+                                      </dt>
+                                      <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                                    </div>
+                                  ) : null}
+                                </dl>
+                              ) : null}
+                              {proofSuccessOrderId === order.id ? (
+                                <p
+                                  className="mt-2 rounded-md border border-accent/30 bg-accent/10 px-2 py-1.5 text-sm text-foreground"
+                                  role="status"
+                                >
+                                  {t('app.waylerFeed.acceptedPanel.proofSuccess')}
+                                </p>
+                              ) : null}
+                              <div className="mt-3 flex flex-col gap-3">
+                                <label className="flex flex-col gap-1.5 text-sm">
+                                  <span className="font-medium">
+                                    {t('app.waylerFeed.acceptedPanel.proofNote')}
+                                  </span>
+                                  <textarea
+                                    className={PROOF_TEXTAREA_CLASS}
+                                    value={proofDraft.note}
+                                    onChange={(e) =>
+                                      updateProofDraft(order.id, { note: e.target.value })
+                                    }
+                                    disabled={actionDisabled}
+                                    rows={3}
+                                  />
+                                </label>
+                                <label className="flex flex-col gap-1.5 text-sm">
+                                  <span className="font-medium">
+                                    {t('app.waylerFeed.acceptedPanel.proofConfirmationCode')}
+                                  </span>
+                                  <Input
+                                    value={proofDraft.confirmationCode}
+                                    onChange={(e) =>
+                                      updateProofDraft(order.id, {
+                                        confirmationCode: e.target.value,
+                                      })
+                                    }
+                                    disabled={actionDisabled}
+                                  />
+                                </label>
+                                {!canSubmitProof ? (
+                                  <p className="text-xs text-muted-foreground">
+                                    {t('app.waylerFeed.acceptedPanel.proofAtLeastOne')}
+                                  </p>
+                                ) : null}
+                                <Button
+                                  className="w-full sm:w-auto"
+                                  size="sm"
+                                  disabled={actionDisabled || !canSubmitProof}
+                                  onClick={() => void handleSubmitProof(order.id)}
+                                >
+                                  {isSubmittingProof
+                                    ? t('app.waylerFeed.acceptedPanel.submittingProof')
+                                    : hasExistingProof
+                                      ? t('app.waylerFeed.acceptedPanel.updateProof')
+                                      : t('app.waylerFeed.acceptedPanel.submitProof')}
+                                </Button>
+                              </div>
+                            </div>
                           ) : null}
                         </li>
                       );
