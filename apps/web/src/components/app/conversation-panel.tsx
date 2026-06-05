@@ -3,13 +3,14 @@
 import { ApiError } from '@wayly/sdk';
 import type { ChatMessageSummary } from '@wayly/types';
 import { Button } from '@wayly/ui';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
 const MAX_MESSAGE_LENGTH = 2000;
+const DETAIL_POLL_MS = 10_000;
 
 type ConversationPanelProps = {
   open: boolean;
@@ -29,6 +30,14 @@ export function ConversationPanel({
   currentUserId,
 }: ConversationPanelProps) {
   const { t } = useI18n();
+  const detailInFlightRef = useRef(false);
+  const markReadInFlightRef = useRef(false);
+  const wasVisibleRef = useRef(
+    typeof document !== 'undefined' && document.visibilityState === 'visible',
+  );
+  const [visible, setVisible] = useState(
+    () => typeof document !== 'undefined' && document.visibilityState === 'visible',
+  );
   const [messages, setMessages] = useState<ChatMessageSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
@@ -45,33 +54,93 @@ export function ConversationPanel({
     !loading &&
     conversationId !== null;
 
-  const loadConversation = useCallback(async () => {
-    if (!conversationId) {
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    setMarkReadError(null);
-    try {
-      const detail = await api.conversations.detail(conversationId);
-      setMessages(detail.messages);
+  const markRead = useCallback(
+    async (foreground: boolean) => {
+      if (!conversationId || markReadInFlightRef.current) {
+        return;
+      }
+      markReadInFlightRef.current = true;
       try {
         await api.conversations.markRead(conversationId);
       } catch {
-        setMarkReadError(t('app.chat.markReadFailed'));
+        if (foreground) {
+          setMarkReadError(t('app.chat.markReadFailed'));
+        }
+      } finally {
+        markReadInFlightRef.current = false;
       }
-    } catch {
-      setError(t('app.chat.loadFailed'));
-    } finally {
-      setLoading(false);
+    },
+    [conversationId, t],
+  );
+
+  const refreshConversation = useCallback(
+    async (foreground: boolean) => {
+      if (!conversationId) {
+        return;
+      }
+      if (!foreground && detailInFlightRef.current) {
+        return;
+      }
+      detailInFlightRef.current = true;
+      if (foreground) {
+        setLoading(true);
+        setError(null);
+        setMarkReadError(null);
+      }
+      try {
+        const detail = await api.conversations.detail(conversationId);
+        setMessages(detail.messages);
+        await markRead(foreground);
+      } catch {
+        if (foreground) {
+          setError(t('app.chat.loadFailed'));
+        }
+      } finally {
+        if (foreground) {
+          setLoading(false);
+        }
+        detailInFlightRef.current = false;
+      }
+    },
+    [conversationId, markRead, t],
+  );
+
+  const loadConversation = useCallback(() => refreshConversation(true), [refreshConversation]);
+
+  useEffect(() => {
+    function handleVisibilityChange() {
+      setVisible(document.visibilityState === 'visible');
     }
-  }, [conversationId, t]);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
 
   useEffect(() => {
     if (open && conversationId) {
-      void loadConversation();
+      void refreshConversation(true);
     }
-  }, [open, conversationId, loadConversation]);
+  }, [open, conversationId, refreshConversation]);
+
+  useEffect(() => {
+    if (!open || !conversationId || !visible) {
+      return;
+    }
+    const intervalId = window.setInterval(() => {
+      void refreshConversation(false);
+    }, DETAIL_POLL_MS);
+    return () => window.clearInterval(intervalId);
+  }, [open, conversationId, visible, refreshConversation]);
+
+  useEffect(() => {
+    if (!open || !conversationId) {
+      return;
+    }
+    const resumed = wasVisibleRef.current === false && visible;
+    wasVisibleRef.current = visible;
+    if (resumed) {
+      void refreshConversation(false);
+    }
+  }, [open, conversationId, visible, refreshConversation]);
 
   useEffect(() => {
     if (!open) {
@@ -91,7 +160,7 @@ export function ConversationPanel({
     try {
       await api.conversations.sendMessage(conversationId, { body: trimmedDraft });
       setDraft('');
-      await loadConversation();
+      await refreshConversation(true);
     } catch (err) {
       setError(
         err instanceof ApiError
