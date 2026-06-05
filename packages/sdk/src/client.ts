@@ -2,6 +2,8 @@ import { createAuthApi } from './auth';
 import type { AuthApi, UsersApi } from './auth.types';
 import { createConversationsApi } from './conversations';
 import type { ConversationsApi } from './conversations.types';
+import { createDisputesApi } from './disputes';
+import type { DisputesApi } from './disputes.types';
 import { ApiError } from './errors';
 import { createHealthApi, type HealthApi } from './health';
 import { createKycApi } from './kyc';
@@ -52,6 +54,9 @@ export class ApiClient {
   /** Mock/manual payment endpoints (local testing only; no real money movement). */
   readonly payments: PaymentsApi;
 
+  /** Dispute and arbitration endpoints. */
+  readonly disputes: DisputesApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -74,6 +79,7 @@ export class ApiClient {
     this.notifications = createNotificationsApi((path, opts) => this.request(path, opts));
     this.conversations = createConversationsApi((path, opts) => this.request(path, opts));
     this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
+    this.disputes = createDisputesApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {

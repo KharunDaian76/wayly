@@ -25,6 +25,14 @@ export {
 } from './notifications.types';
 export { createPaymentsApi } from './payments';
 export { type PaymentsApi } from './payments.types';
+export { createDisputesApi } from './disputes';
+export {
+  type AddDisputeEvidenceInput,
+  type AddDisputeMessageInput,
+  type DisputesApi,
+  type DisputesListQuery,
+  type OpenDisputeInput,
+} from './disputes.types';
 export { createOrdersApi } from './orders';
 export {
   type AcceptedDeliveryOrderSummary,
@@ -41,6 +49,10 @@ export type {
   ChatMessageSummary,
   ConversationDetail,
   ConversationListResponse,
+  DisputeDetail,
+  DisputeEvidenceSummary,
+  DisputeListResponse,
+  DisputeMessageSummary,
   KycStatusView,
   KycVerificationSummary,
   NotificationListResponse,

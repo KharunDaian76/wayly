@@ -1,0 +1,238 @@
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  DeliveryOrderStatus as PrismaDeliveryOrderStatus,
+  DisputeStatus as PrismaDisputeStatus,
+  type DeliveryOrder,
+  type Dispute,
+  type Prisma,
+} from '@prisma/client';
+import type {
+  DisputeDetail,
+  DisputeEvidenceSummary,
+  DisputeListResponse,
+  DisputeMessageSummary,
+} from '@wayly/types';
+import type {
+  AddDisputeEvidenceInput,
+  AddDisputeMessageInput,
+  DisputesListQueryInput,
+  OpenDisputeInput,
+} from '@wayly/validation';
+
+import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
+import type { RequestUser } from '../../common/types/request-user.type';
+import { PrismaService } from '../../infra/prisma/prisma.service';
+
+import {
+  toDisputeDetail,
+  toDisputeEvidenceSummary,
+  toDisputeMessageSummary,
+  toDisputeSummary,
+} from './disputes.mapper';
+
+const DISPUTE_ELIGIBLE_ORDER_STATUSES: PrismaDeliveryOrderStatus[] = [
+  PrismaDeliveryOrderStatus.ACCEPTED,
+  PrismaDeliveryOrderStatus.IN_TRANSIT,
+  PrismaDeliveryOrderStatus.DELIVERED,
+];
+
+const ACTIVE_DISPUTE_STATUSES: PrismaDisputeStatus[] = [
+  PrismaDisputeStatus.OPEN,
+  PrismaDisputeStatus.UNDER_REVIEW,
+];
+
+@Injectable()
+export class DisputesService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async open(user: RequestUser, body: OpenDisputeInput): Promise<DisputeDetail> {
+    requireKycApproved(user);
+
+    const order = await this.findOrderForParticipantOrThrow(user.id, body.orderId);
+    this.assertOrderDisputeEligible(order);
+
+    const existingActive = await this.prisma.dispute.findFirst({
+      where: {
+        orderId: order.id,
+        status: { in: ACTIVE_DISPUTE_STATUSES },
+      },
+    });
+    if (existingActive) {
+      throw new ConflictException('An active dispute already exists for this delivery order');
+    }
+
+    const dispute = await this.prisma.dispute.create({
+      data: {
+        orderId: order.id,
+        openedById: user.id,
+        status: PrismaDisputeStatus.OPEN,
+        reason: body.reason,
+        description: body.description,
+      },
+    });
+
+    return toDisputeDetail(dispute, [], []);
+  }
+
+  async list(user: RequestUser, query: DisputesListQueryInput): Promise<DisputeListResponse> {
+    requireKycApproved(user);
+
+    const participantFilter: Prisma.DisputeWhereInput = {
+      OR: [
+        { openedById: user.id },
+        { order: { senderId: user.id } },
+        { order: { acceptedWaylerId: user.id } },
+      ],
+    };
+
+    const where: Prisma.DisputeWhereInput = query.status
+      ? { AND: [participantFilter, { status: query.status }] }
+      : participantFilter;
+
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.dispute.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+      }),
+      this.prisma.dispute.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toDisputeSummary),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
+  }
+
+  async getDetail(user: RequestUser, id: string): Promise<DisputeDetail> {
+    requireKycApproved(user);
+
+    const dispute = await this.findDisputeWithOrderOrThrow(id);
+    this.assertDisputeAccess(dispute, user.id);
+
+    const [messages, evidence] = await Promise.all([
+      this.prisma.disputeMessage.findMany({
+        where: { disputeId: dispute.id },
+        orderBy: { createdAt: 'asc' },
+      }),
+      this.prisma.disputeEvidence.findMany({
+        where: { disputeId: dispute.id },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+
+    return toDisputeDetail(dispute, messages, evidence);
+  }
+
+  async addMessage(
+    user: RequestUser,
+    id: string,
+    body: AddDisputeMessageInput,
+  ): Promise<DisputeMessageSummary> {
+    requireKycApproved(user);
+
+    const dispute = await this.findDisputeWithOrderOrThrow(id);
+    this.assertDisputeAccess(dispute, user.id);
+    this.assertDisputeAcceptsUpdates(dispute);
+
+    const message = await this.prisma.disputeMessage.create({
+      data: {
+        disputeId: dispute.id,
+        senderId: user.id,
+        body: body.body,
+      },
+    });
+
+    return toDisputeMessageSummary(message);
+  }
+
+  async addEvidence(
+    user: RequestUser,
+    id: string,
+    body: AddDisputeEvidenceInput,
+  ): Promise<DisputeEvidenceSummary> {
+    requireKycApproved(user);
+
+    const dispute = await this.findDisputeWithOrderOrThrow(id);
+    this.assertDisputeAccess(dispute, user.id);
+    this.assertDisputeAcceptsUpdates(dispute);
+
+    const evidence = await this.prisma.disputeEvidence.create({
+      data: {
+        disputeId: dispute.id,
+        submittedById: user.id,
+        title: body.title,
+        description: body.description ?? null,
+        fileUrl: body.fileUrl ?? null,
+      },
+    });
+
+    return toDisputeEvidenceSummary(evidence);
+  }
+
+  private async findOrderForParticipantOrThrow(
+    userId: string,
+    orderId: string,
+  ): Promise<DeliveryOrder> {
+    const order = await this.prisma.deliveryOrder.findUnique({ where: { id: orderId } });
+    if (!order || !this.isOrderParticipant(order, userId)) {
+      throw new NotFoundException('Delivery order not found');
+    }
+    return order;
+  }
+
+  private assertOrderDisputeEligible(order: DeliveryOrder): void {
+    if (!DISPUTE_ELIGIBLE_ORDER_STATUSES.includes(order.status)) {
+      throw new ConflictException(
+        'Disputes can only be opened for accepted, in-transit, or delivered orders',
+      );
+    }
+  }
+
+  private isOrderParticipant(order: DeliveryOrder, userId: string): boolean {
+    return order.senderId === userId || order.acceptedWaylerId === userId;
+  }
+
+  private async findDisputeWithOrderOrThrow(
+    disputeId: string,
+  ): Promise<Dispute & { order: Pick<DeliveryOrder, 'senderId' | 'acceptedWaylerId'> }> {
+    const dispute = await this.prisma.dispute.findUnique({
+      where: { id: disputeId },
+      include: {
+        order: {
+          select: { senderId: true, acceptedWaylerId: true },
+        },
+      },
+    });
+    if (!dispute) {
+      throw new NotFoundException('Dispute not found');
+    }
+    return dispute;
+  }
+
+  private assertDisputeAccess(
+    dispute: Dispute & { order: Pick<DeliveryOrder, 'senderId' | 'acceptedWaylerId'> },
+    userId: string,
+  ): void {
+    const isParticipant =
+      dispute.openedById === userId ||
+      dispute.order.senderId === userId ||
+      dispute.order.acceptedWaylerId === userId ||
+      dispute.assignedArbitratorId === userId;
+
+    if (!isParticipant) {
+      throw new NotFoundException('Dispute not found');
+    }
+  }
+
+  private assertDisputeAcceptsUpdates(dispute: Dispute): void {
+    if (!ACTIVE_DISPUTE_STATUSES.includes(dispute.status)) {
+      throw new ConflictException('Dispute is not open for new messages or evidence');
+    }
+  }
+}

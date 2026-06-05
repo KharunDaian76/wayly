@@ -12,6 +12,7 @@ import { InfraModule } from './infra/infra.module';
 import { LoggerModule } from './infra/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConversationsModule } from './modules/conversations/conversations.module';
+import { DisputesModule } from './modules/disputes/disputes.module';
 import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
@@ -45,6 +46,7 @@ import { UsersModule } from './modules/users/users.module';
     NotificationsModule,
     ConversationsModule,
     PaymentsModule,
+    DisputesModule,
     // ---------------------------------------------------------------------
     // Future business modules:
     //   GeoModule,           // M5
@@ -54,7 +56,6 @@ import { UsersModule } from './modules/users/users.module';
     //   AgreementsModule,    // M9
     //   ChatModule WebSocket, // later batch
     //   Notifications dispatch / WebSocket, // later batch
-    //   DisputesModule,      // M10
     //   AdminModule,         // M12
     //   AuditModule,
     // ---------------------------------------------------------------------
