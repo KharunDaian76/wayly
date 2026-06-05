@@ -34,8 +34,13 @@ import { cn } from '@/lib/utils';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
+const APP_PANEL_CLASS = 'wayly-app-panel';
+const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
+const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
+const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
+
 const FEED_SELECT_CLASS =
-  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm';
+  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
 
 const PROOF_TEXTAREA_CLASS = cn(
   'flex min-h-[72px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm',
@@ -74,9 +79,9 @@ const SENDER_LIFECYCLE_STATUSES = new Set<DeliveryOrderSummary['status']>([
 const FEED_EXIT_MS = 280;
 const SENDER_LIST_LIMIT = 100;
 
-const SENDER_ORDER_CARD_CLASS = cn(
-  'rounded-lg border border-border/60 px-4 py-3 text-sm',
-  'transition-all duration-200 ease-out hover:shadow-md hover:scale-[1.01]',
+const ORDER_CARD_CLASS = cn(
+  'wayly-order-card rounded-xl px-4 py-4 text-sm',
+  'transition-all duration-200 ease-out hover:scale-[1.005]',
   'wayly-feed-item-enter',
 );
 
@@ -86,9 +91,9 @@ const WaylerMap = dynamic(() => import('@/components/wayler-map').then((mod) => 
 
 function StatusRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-0.5 rounded-lg border border-border/40 bg-muted/15 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
       <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="text-sm font-medium">{value}</dd>
+      <dd className="break-words text-sm font-medium">{value}</dd>
     </div>
   );
 }
@@ -181,7 +186,7 @@ function OrdersListSkeleton() {
   return (
     <ul className="flex flex-col gap-4" aria-hidden>
       {[0, 1, 2].map((key) => (
-        <li key={key} className="rounded-lg border border-border/60 px-4 py-3">
+        <li key={key} className="wayly-order-card rounded-xl px-4 py-4">
           <Skeleton className="mb-2 h-4 w-3/5 max-w-xs" />
           <Skeleton className="mb-3 h-3 w-24" />
           <div className="flex flex-col gap-2">
@@ -207,7 +212,7 @@ function AcceptedOrdersSkeleton() {
   return (
     <ul className="flex flex-col gap-4" aria-hidden>
       {[0, 1].map((key) => (
-        <li key={key} className="rounded-lg border border-border/60 px-4 py-3">
+        <li key={key} className="wayly-order-card rounded-xl px-4 py-4">
           <Skeleton className="mb-2 h-4 w-3/5 max-w-xs" />
           <Skeleton className="mb-3 h-3 w-24" />
           <div className="flex flex-col gap-2">
@@ -221,24 +226,33 @@ function AcceptedOrdersSkeleton() {
   );
 }
 
-function senderStatusBadgeClass(status: DeliveryOrderSummary['status']): string {
+function orderStatusBadgeClass(status: DeliveryOrderSummary['status']): string {
+  const base = 'wayly-status-badge';
   switch (status) {
+    case DeliveryOrderStatus.DRAFT:
+      return cn(base, 'wayly-status-draft');
+    case DeliveryOrderStatus.OPEN:
+      return cn(base, 'wayly-status-open');
     case DeliveryOrderStatus.ACCEPTED:
-      return 'border-accent/40 bg-accent/15 text-foreground';
+      return cn(base, 'wayly-status-accepted');
     case DeliveryOrderStatus.IN_TRANSIT:
-      return 'border-primary/40 bg-primary/10 text-foreground';
+      return cn(base, 'wayly-status-in-transit');
     case DeliveryOrderStatus.DELIVERED:
-      return 'border-emerald-500/40 bg-emerald-500/10 text-foreground';
+      return cn(base, 'wayly-status-delivered');
+    case DeliveryOrderStatus.CANCELLED:
+      return cn(base, 'wayly-status-cancelled');
     default:
-      return 'border-border bg-muted text-muted-foreground';
+      return cn(base, 'wayly-status-default');
   }
 }
 
-function senderStatusLabel(
+function orderStatusLabel(
   status: DeliveryOrderSummary['status'],
   t: (key: TranslationKey) => string,
 ): string {
   switch (status) {
+    case DeliveryOrderStatus.OPEN:
+      return t('app.senderPanel.statusOpen');
     case DeliveryOrderStatus.ACCEPTED:
       return t('app.senderPanel.statusAccepted');
     case DeliveryOrderStatus.IN_TRANSIT:
@@ -248,6 +262,16 @@ function senderStatusLabel(
     default:
       return status;
   }
+}
+
+function OrderStatusBadge({
+  status,
+  label,
+}: {
+  status: DeliveryOrderSummary['status'];
+  label: string;
+}) {
+  return <span className={orderStatusBadgeClass(status)}>{label}</span>;
 }
 
 function senderStatusNote(
@@ -907,14 +931,18 @@ export default function AppHomePage() {
   }
 
   return (
-    <div className="border-b border-border/60 bg-background">
-      <Container className="flex flex-col gap-8 py-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{t('app.signedInAs')}</p>
-            <h1 className="font-display text-2xl font-bold tracking-tight">{user.displayName}</h1>
+    <div className="wayly-app-shell">
+      <Container className="relative flex min-w-0 flex-col gap-6 py-6 sm:gap-8 sm:py-10">
+        <header className="wayly-app-header flex flex-col gap-4 rounded-2xl border px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="min-w-0">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              {t('app.signedInAs')}
+            </p>
+            <h1 className="truncate font-display text-2xl font-bold tracking-tight sm:text-3xl">
+              {user.displayName}
+            </h1>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <LanguageSelect />
             <NotificationBell />
             <Button variant="outline" asChild>
@@ -924,17 +952,13 @@ export default function AppHomePage() {
               {loggingOut ? t('app.signingOut') : t('app.signOut')}
             </Button>
           </div>
-        </div>
+        </header>
 
-        {error ? (
-          <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-            {error}
-          </p>
-        ) : null}
+        {error ? <p className={ALERT_ERROR_CLASS}>{error}</p> : null}
 
         <ModeSwitcher />
 
-        <Card>
+        <Card className={APP_PANEL_CLASS}>
           <CardHeader>
             <CardTitle>
               {mode === 'sender'
@@ -949,7 +973,7 @@ export default function AppHomePage() {
                 : t('app.mode.waylerDashboard.description')}
             </p>
             {!kycLoading && !isApproved ? (
-              <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+              <p className={ALERT_INFO_CLASS}>
                 {mode === 'sender'
                   ? t('app.mode.senderDashboard.kycRequired')
                   : t('app.mode.waylerDashboard.kycRequired')}
@@ -960,7 +984,7 @@ export default function AppHomePage() {
 
         {mode === 'wayler' ? (
           <>
-            <Card>
+            <Card className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.waylerFeed.title')}</CardTitle>
                 <Button
@@ -974,13 +998,11 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {!kycLoading && !isApproved ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                    {t('app.waylerFeed.kycRequired')}
-                  </p>
+                  <p className={ALERT_INFO_CLASS}>{t('app.waylerFeed.kycRequired')}</p>
                 ) : null}
                 {isApproved ? (
                   <fieldset
-                    className="flex flex-col gap-4 rounded-lg border border-border/60 p-4"
+                    className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4"
                     disabled={feedLoading}
                   >
                     <legend className="px-1 text-sm font-medium">
@@ -1083,21 +1105,12 @@ export default function AppHomePage() {
                     </div>
                   </fieldset>
                 ) : null}
-                {feedError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {feedError}
-                  </p>
-                ) : null}
+                {feedError ? <p className="wayly-alert wayly-alert-danger">{feedError}</p> : null}
                 {acceptError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {acceptError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{acceptError}</p>
                 ) : null}
                 {acceptSuccess ? (
-                  <p
-                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
-                    role="status"
-                  >
+                  <p className="wayly-alert wayly-alert-success" role="status">
                     {t('app.waylerFeed.acceptSuccess')}
                   </p>
                 ) : null}
@@ -1125,13 +1138,18 @@ export default function AppHomePage() {
                         <li
                           key={order.id}
                           className={cn(
-                            'rounded-lg border border-border/60 px-4 py-3 text-sm',
-                            'transition-all duration-200 ease-out hover:shadow-md hover:scale-[1.01]',
-                            isExiting ? 'wayly-feed-item-exit' : 'wayly-feed-item-enter',
+                            ORDER_CARD_CLASS,
+                            isExiting ? 'wayly-feed-item-exit' : undefined,
                           )}
                         >
-                          <p className="font-medium">{order.title}</p>
-                          <p className="text-muted-foreground">{order.type}</p>
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium">{order.title}</p>
+                            <OrderStatusBadge
+                              status={DeliveryOrderStatus.OPEN}
+                              label={t('app.waylerFeed.statusOpen')}
+                            />
+                          </div>
+                          <p className="mt-1 text-muted-foreground">{order.type}</p>
                           <WaylerMap
                             feedReady={!feedLoading}
                             pickupCity={order.pickupCity}
@@ -1183,16 +1201,10 @@ export default function AppHomePage() {
                                 {new Date(order.publishedAt ?? order.createdAt).toLocaleString()}
                               </dd>
                             </div>
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.orders.labelStatus')}
-                              </dt>
-                              <dd>{t('app.waylerFeed.statusOpen')}</dd>
-                            </div>
                           </dl>
-                          <div className="mt-3 flex flex-col gap-2">
+                          <div className="wayly-action-group flex-col sm:flex-row">
                             <Button
-                              variant="secondary"
+                              variant="primary"
                               size="sm"
                               className="transition-all duration-200 ease-out"
                               disabled={acceptDisabled}
@@ -1220,7 +1232,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.waylerFeed.acceptedPanel.title')}</CardTitle>
                 <Button
@@ -1239,39 +1251,27 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {!kycLoading && !isApproved ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                    {t('app.waylerFeed.kycRequired')}
-                  </p>
+                  <p className={ALERT_INFO_CLASS}>{t('app.waylerFeed.kycRequired')}</p>
                 ) : null}
                 {progressSuccess === 'transit' ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                  <p className="wayly-alert wayly-alert-success">
                     {t('app.waylerFeed.acceptedPanel.transitStarted')}
                   </p>
                 ) : null}
                 {progressSuccess === 'delivered' ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                  <p className="wayly-alert wayly-alert-success">
                     {t('app.waylerFeed.acceptedPanel.deliveredSuccess')}
                   </p>
                 ) : null}
                 {progressError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {progressError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{progressError}</p>
                 ) : null}
                 {acceptedError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {acceptedError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{acceptedError}</p>
                 ) : null}
-                {proofError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {proofError}
-                  </p>
-                ) : null}
+                {proofError ? <p className="wayly-alert wayly-alert-danger">{proofError}</p> : null}
                 {chatOpenError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {chatOpenError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
                 {isApproved && acceptedLoading ? (
                   <>
@@ -1299,12 +1299,15 @@ export default function AppHomePage() {
                         order.status === DeliveryOrderStatus.DELIVERED;
 
                       return (
-                        <li
-                          key={order.id}
-                          className="rounded-lg border border-border/60 px-4 py-3 text-sm"
-                        >
-                          <p className="font-medium">{order.title}</p>
-                          <p className="text-muted-foreground">{order.type}</p>
+                        <li key={order.id} className={ORDER_CARD_CLASS}>
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium">{order.title}</p>
+                            <OrderStatusBadge
+                              status={order.status}
+                              label={orderStatusLabel(order.status, t)}
+                            />
+                          </div>
+                          <p className="mt-1 text-muted-foreground">{order.type}</p>
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -1337,12 +1340,6 @@ export default function AppHomePage() {
                                   ? new Date(order.acceptedAt).toLocaleString()
                                   : '—'}
                               </dd>
-                            </div>
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.orders.labelStatus')}
-                              </dt>
-                              <dd>{order.status}</dd>
                             </div>
                           </dl>
                           {order.status === DeliveryOrderStatus.ACCEPTED ? (
@@ -1393,7 +1390,7 @@ export default function AppHomePage() {
                             </Button>
                           ) : null}
                           {showProofForm ? (
-                            <div className="mt-3 rounded-md border border-border/60 p-3">
+                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
                               <p className="text-sm font-medium">
                                 {t('app.waylerFeed.acceptedPanel.proofTitle')}
                               </p>
@@ -1431,7 +1428,7 @@ export default function AppHomePage() {
                               ) : null}
                               {proofSuccessOrderId === order.id ? (
                                 <p
-                                  className="mt-2 rounded-md border border-accent/30 bg-accent/10 px-2 py-1.5 text-sm text-foreground"
+                                  className={cn('mt-2', ALERT_SUCCESS_CLASS, 'px-2 py-1.5')}
                                   role="status"
                                 >
                                   {t('app.waylerFeed.acceptedPanel.proofSuccess')}
@@ -1498,27 +1495,18 @@ export default function AppHomePage() {
 
         {mode === 'sender' ? (
           <>
-            <Card>
+            <Card className={APP_PANEL_CLASS}>
               <CardHeader>
                 <CardTitle>{t('app.orders.createTitle')}</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 <p className="text-sm text-muted-foreground">{t('app.orders.createDescription')}</p>
                 {!kycLoading && !isApproved ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                    {t('app.orders.kycRequiredNote')}
-                  </p>
+                  <p className={ALERT_INFO_CLASS}>{t('app.orders.kycRequiredNote')}</p>
                 ) : null}
-                {orderError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {orderError}
-                  </p>
-                ) : null}
+                {orderError ? <p className="wayly-alert wayly-alert-danger">{orderError}</p> : null}
                 {orderSuccess ? (
-                  <p
-                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
-                    role="status"
-                  >
+                  <p className="wayly-alert wayly-alert-success" role="status">
                     {t('app.orders.createSuccess')}{' '}
                     <span className="font-mono text-xs">
                       {orderSuccess.id} ({orderSuccess.status})
@@ -1538,7 +1526,7 @@ export default function AppHomePage() {
                   <label className="flex flex-col gap-1.5 text-sm">
                     <span className="font-medium">{t('app.orders.fieldType')}</span>
                     <select
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      className={FEED_SELECT_CLASS}
                       value={orderType}
                       onChange={(e) => setOrderType(e.target.value as 'LOCAL' | 'INTERNATIONAL')}
                       disabled={!isApproved || orderSubmitting}
@@ -1622,7 +1610,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.senderPanel.draftsTitle')}</CardTitle>
                 <Button
@@ -1636,40 +1624,26 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {!kycLoading && !canViewSenderOrders ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                    {t('app.senderPanel.kycRequired')}
-                  </p>
+                  <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
                 ) : null}
                 {cancelError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {cancelError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{cancelError}</p>
                 ) : null}
                 {cancelSuccessPanel === 'draft' ? (
-                  <p
-                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
-                    role="status"
-                  >
+                  <p className="wayly-alert wayly-alert-success" role="status">
                     {t('app.senderPanel.cancelSuccess')}
                   </p>
                 ) : null}
                 {publishError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {publishError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{publishError}</p>
                 ) : null}
                 {publishSuccess ? (
-                  <p
-                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
-                    role="status"
-                  >
+                  <p className="wayly-alert wayly-alert-success" role="status">
                     {t('app.senderPanel.publishSuccess')}
                   </p>
                 ) : null}
                 {draftsError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {draftsError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{draftsError}</p>
                 ) : null}
                 {canViewSenderOrders && draftsLoading ? (
                   <>
@@ -1687,13 +1661,16 @@ export default function AppHomePage() {
                       return (
                         <li
                           key={order.id}
-                          className={cn(
-                            SENDER_ORDER_CARD_CLASS,
-                            isExitingDraft && 'wayly-feed-item-exit',
-                          )}
+                          className={cn(ORDER_CARD_CLASS, isExitingDraft && 'wayly-feed-item-exit')}
                         >
-                          <p className="font-medium">{order.title}</p>
-                          <p className="text-muted-foreground">{order.type}</p>
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium">{order.title}</p>
+                            <OrderStatusBadge
+                              status={DeliveryOrderStatus.DRAFT}
+                              label={orderStatusLabel(DeliveryOrderStatus.DRAFT, t)}
+                            />
+                          </div>
+                          <p className="mt-1 text-muted-foreground">{order.type}</p>
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -1724,7 +1701,7 @@ export default function AppHomePage() {
                               <dd>{new Date(order.createdAt).toLocaleString()}</dd>
                             </div>
                           </dl>
-                          <div className="mt-3 flex flex-wrap gap-2">
+                          <div className="wayly-action-group">
                             <Button
                               variant="secondary"
                               size="sm"
@@ -1755,7 +1732,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.senderPanel.publishedTitle')}</CardTitle>
                 <Button
@@ -1769,27 +1746,18 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {!kycLoading && !canViewSenderOrders ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                    {t('app.senderPanel.kycRequired')}
-                  </p>
+                  <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
                 ) : null}
                 {cancelError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {cancelError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{cancelError}</p>
                 ) : null}
                 {cancelSuccessPanel === 'published' ? (
-                  <p
-                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
-                    role="status"
-                  >
+                  <p className="wayly-alert wayly-alert-success" role="status">
                     {t('app.senderPanel.cancelSuccess')}
                   </p>
                 ) : null}
                 {publishedError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {publishedError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{publishedError}</p>
                 ) : null}
                 {canViewSenderOrders && publishedLoading ? (
                   <>
@@ -1809,12 +1777,18 @@ export default function AppHomePage() {
                         <li
                           key={order.id}
                           className={cn(
-                            SENDER_ORDER_CARD_CLASS,
+                            ORDER_CARD_CLASS,
                             isExitingPublished && 'wayly-feed-item-exit',
                           )}
                         >
-                          <p className="font-medium">{order.title}</p>
-                          <p className="text-muted-foreground">{order.type}</p>
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium">{order.title}</p>
+                            <OrderStatusBadge
+                              status={DeliveryOrderStatus.OPEN}
+                              label={orderStatusLabel(DeliveryOrderStatus.OPEN, t)}
+                            />
+                          </div>
+                          <p className="mt-1 text-muted-foreground">{order.type}</p>
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -1846,14 +1820,8 @@ export default function AppHomePage() {
                                 {new Date(order.publishedAt ?? order.createdAt).toLocaleString()}
                               </dd>
                             </div>
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.orders.labelStatus')}
-                              </dt>
-                              <dd>{t('app.senderPanel.statusOpen')}</dd>
-                            </div>
                           </dl>
-                          <div className="mt-3">
+                          <div className="wayly-action-group">
                             <Button
                               variant="outline"
                               size="sm"
@@ -1873,7 +1841,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.senderPanel.acceptedTitle')}</CardTitle>
                 <Button
@@ -1887,19 +1855,13 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {!kycLoading && !canViewSenderOrders ? (
-                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
-                    {t('app.senderPanel.kycRequired')}
-                  </p>
+                  <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
                 ) : null}
                 {senderAcceptedError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {senderAcceptedError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{senderAcceptedError}</p>
                 ) : null}
                 {chatOpenError ? (
-                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                    {chatOpenError}
-                  </p>
+                  <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
                 {canViewSenderOrders && senderAcceptedLoading ? (
                   <>
@@ -1916,21 +1878,17 @@ export default function AppHomePage() {
                       const statusNote = senderStatusNote(order.status, t);
 
                       return (
-                        <li key={order.id} className={SENDER_ORDER_CARD_CLASS}>
+                        <li key={order.id} className={ORDER_CARD_CLASS}>
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-medium">{order.title}</p>
-                            <span
-                              className={cn(
-                                'shrink-0 rounded-full border px-2 py-0.5 text-xs font-medium',
-                                senderStatusBadgeClass(order.status),
-                              )}
-                            >
-                              {senderStatusLabel(order.status, t)}
-                            </span>
+                            <OrderStatusBadge
+                              status={order.status}
+                              label={orderStatusLabel(order.status, t)}
+                            />
                           </div>
-                          <p className="text-muted-foreground">{order.type}</p>
+                          <p className="mt-1 text-muted-foreground">{order.type}</p>
                           {statusNote ? (
-                            <p className="mt-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
+                            <p className="wayly-inline-note mt-2 rounded-lg border px-3 py-2 text-sm text-muted-foreground">
                               {statusNote}
                             </p>
                           ) : null}
@@ -1975,7 +1933,7 @@ export default function AppHomePage() {
                             ) : null}
                           </dl>
                           {order.proofSubmittedAt ? (
-                            <div className="mt-3 rounded-md border border-border/60 p-3">
+                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
                               <p className="text-sm font-medium">
                                 {t('app.senderPanel.proofTitle')}
                               </p>
@@ -2047,7 +2005,7 @@ export default function AppHomePage() {
           currentUserId={user.id}
         />
 
-        <Card>
+        <Card className={APP_PANEL_CLASS}>
           <CardHeader>
             <CardTitle>{t('app.yourAccount')}</CardTitle>
           </CardHeader>
@@ -2069,7 +2027,7 @@ export default function AppHomePage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className={APP_PANEL_CLASS}>
           <CardHeader>
             <CardTitle>{t('app.kycPanel.title')}</CardTitle>
           </CardHeader>
@@ -2124,11 +2082,7 @@ export default function AppHomePage() {
               </>
             ) : null}
 
-            {kycError ? (
-              <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
-                {kycError}
-              </p>
-            ) : null}
+            {kycError ? <p className="wayly-alert wayly-alert-danger">{kycError}</p> : null}
 
             {isApproved ? (
               <p className="text-sm text-muted-foreground">{t('app.kycPanel.approvedHelper')}</p>
@@ -2182,10 +2136,7 @@ export default function AppHomePage() {
           </CardContent>
         </Card>
 
-        <div
-          className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-foreground"
-          role="status"
-        >
+        <div className={cn('wayly-alert wayly-alert-info rounded-2xl px-4 py-3')} role="status">
           {t('app.kycNotice')}
         </div>
 
