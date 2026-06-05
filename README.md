@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`) are complete. Photo/signature proof, payments, escrow, real-time chat/push, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`) are complete. Photo/signature proof, payments, escrow, real-time chat/push, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -174,6 +174,7 @@ Marketing landing page (`/`) is not translated yet.
 | Proof of delivery (metadata note + confirmation code)           | Complete (M4)                   |
 | In-app notifications (schema, API, SDK, bell/dropdown, polling) | Complete (M4)                   |
 | Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)  | Complete (M4)                   |
+| Chat message in-app notifications (other participant only)      | Complete (M4)                   |
 | Payments, escrow, disputes, admin                               | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -357,6 +358,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Notification bell polling (30s unread / 60s list, visibility-aware)       | Complete |
 | Chat schema + API + SDK (Conversation / ChatMessage)                      | Complete |
 | Frontend chat modal on `/app` (Sender/Wayler Accepted panels)             | Complete |
+| Chat message notifications (`SYSTEM` type → bell/dropdown)                | Complete |
 | Wayler feed filters & sort (type, location, reward, sort)                 | Complete |
 | Wayler map route previews (Leaflet + city/country geocoding)              | Complete |
 | Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
@@ -694,12 +696,12 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Notifications
 
-Notifications keep users aware of **order lifecycle events** and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. **WebSocket/SSE, email, and push** are not implemented yet — those are planned for later milestones.
+Notifications keep users aware of **order lifecycle events**, **new chat messages**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order and chat notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
 
 ### Current notification flow
 
 ```text
-Order lifecycle action (backend)
+Order lifecycle action OR chat message sent (backend)
         ↓
 NotificationsService.createForUser()  →  Notification row in DB
         ↓
@@ -711,6 +713,8 @@ NotificationBell on /app  (badge + dropdown)
         ↓
 Polling refresh  (unread count every 30s; list every 60s while open)
 ```
+
+Chat message notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate chat inbox.
 
 ### Schema (`Notification`)
 
@@ -729,17 +733,17 @@ Shared types: `NotificationSummary`, `NotificationListResponse` (`@wayly/types`)
 
 ### `NotificationType` enum
 
-| Value              | Notes (current dispatch)                      |
-| ------------------ | --------------------------------------------- |
-| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                 |
-| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts   |
-| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts   |
-| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered |
-| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent  |
-| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted  |
-| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent     |
-| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent     |
-| `SYSTEM`           | Reserved — admin/system messages later        |
+| Value              | Notes (current dispatch)                                                                                                   |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                              |
+| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                |
+| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                |
+| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                              |
+| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                               |
+| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                               |
+| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                  |
+| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                  |
+| `SYSTEM`           | **Dispatched** → other chat participant on new message (until `CHAT_MESSAGE` type exists); admin/system reserved for later |
 
 ### API routes
 
@@ -765,7 +769,9 @@ api.notifications.markAllRead();  // POST /notifications/read-all
 
 ### Dispatch behavior (automatic creation)
 
-The backend creates notifications **internally** when order lifecycle actions succeed. Failures to create a notification are logged and do **not** block the order action.
+The backend creates notifications **internally** when order lifecycle actions or chat messages succeed. Failures to create a notification are logged and do **not** block the underlying action.
+
+**Order lifecycle** (after successful order transition):
 
 | Order event            | `NotificationType` | Recipient  |
 | ---------------------- | ------------------ | ---------- |
@@ -774,11 +780,27 @@ The backend creates notifications **internally** when order lifecycle actions su
 | Wayler submits proof   | `PROOF_SUBMITTED`  | **Sender** |
 | Wayler marks delivered | `ORDER_DELIVERED`  | **Sender** |
 
+**Chat messages** (after `POST /conversations/:id/messages` succeeds):
+
+| Event            | `NotificationType` | Recipient                               |
+| ---------------- | ------------------ | --------------------------------------- |
+| New chat message | `SYSTEM`           | **Other participant** (Sender ↔ Wayler) |
+
+Chat notification payload:
+
+- **title:** `New chat message`
+- **body:** `You received a new message about a delivery.` — or with a short message preview (max 80 chars) when available
+- **relatedOrderId:** `conversation.orderId`
+- **No self-notification** — the user who sent the message is not notified
+
+A dedicated `CHAT_MESSAGE` enum value is planned for a later batch; `SYSTEM` is used today to avoid a schema migration.
+
 **Not dispatched in the current version:**
 
 - **No Wayler self-action notifications** — Waylers are not notified for their own accept/transit/proof/deliver actions.
 - **No cancel notification** — Sender cancel (DRAFT/OPEN) does not create `ORDER_CANCELLED` yet.
-- **No KYC / system / publish notifications** — enum values exist; dispatch comes later.
+- **No KYC / publish notifications** — enum values exist; dispatch comes later.
+- **No admin/system broadcasts** — `SYSTEM` is used for chat today; operator messages later.
 
 ### Frontend behavior (`/app` header)
 
@@ -839,19 +861,29 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User A** returns to tab → polling resumes; badge updates again within 30 seconds if new notifications exist
 - [ ] **User A** marks **all** read → badge stays at **0** after subsequent polls
 
+**Chat message notifications:**
+
+- [ ] **User A** and **User B** have an accepted-order conversation (see **Chat / contact**)
+- [ ] **User A** sends a chat message → **User B** sees a new notification in bell/dropdown (`SYSTEM`, title “New chat message”)
+- [ ] **User A** does **not** receive a notification for their own message
+- [ ] **User B** replies → **User A** receives a notification
+- [ ] **User B**'s unread badge updates within **30 seconds** via existing bell polling (no page refresh)
+
 ### Future milestones (notifications)
 
+- **Dedicated `CHAT_MESSAGE` type** — replace `SYSTEM` for chat dispatch (schema enum addition)
 - **WebSocket/SSE real-time delivery** — instant unread count and list updates (lightweight **polling exists today**)
 - **Email / push notifications** — FCM, transactional email for offline users
 - **Notification preferences** — per-type opt-in/out, quiet hours
 - **Localized notification templates** — server-side title/body per user locale
 - **KYC notifications** — `KYC_APPROVED`, `KYC_REJECTED` on provider/mock outcomes
 - **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
-- **Admin / system notifications** — `SYSTEM` type, operator broadcasts
+- **Admin / system notifications** — operator broadcasts (separate from chat `SYSTEM` dispatch today)
+- **Push/email for chat** — offline chat alerts
 
 ## Chat / contact between Sender and Wayler
 
-Chat lets the **Sender** and **accepted Wayler** coordinate delivery details for an order. The current version is **order-based in-app chat** — one conversation per accepted order, opened from Accepted panels on `/app`. **WebSocket/SSE, polling, chat notifications, attachments, and read-receipt UI** are not implemented yet.
+Chat lets the **Sender** and **accepted Wayler** coordinate delivery details for an order. The current version is **order-based in-app chat** — one conversation per accepted order, opened from Accepted panels on `/app`. When a message is sent, the **other participant** receives an **in-app notification** in the shared bell/dropdown (`SYSTEM` type until `CHAT_MESSAGE` exists). **WebSocket/SSE, chat polling, push/email, attachments, and read-receipt UI** are not implemented yet; the chat modal uses **manual refresh** only.
 
 ### Purpose
 
@@ -922,6 +954,20 @@ api.conversations.markRead(id);                   // POST /conversations/:id/rea
 - **Mark read** — sets `readAt` on messages where `senderId !== currentUser` and `readAt` is null.
 - **No WebSocket/SSE** — clients refresh manually; no chat polling in the current frontend.
 
+### Chat notification behavior
+
+When `POST /api/v1/conversations/:id/messages` succeeds:
+
+| Sender                  | Recipient notified      | Self-notification |
+| ----------------------- | ----------------------- | ----------------- |
+| **Sender** (`senderId`) | **Wayler** (`waylerId`) | **No**            |
+| **Wayler** (`waylerId`) | **Sender** (`senderId`) | **No**            |
+
+- Notification type: **`SYSTEM`** (dedicated `CHAT_MESSAGE` planned later).
+- **relatedOrderId:** linked to the conversation's order.
+- Notification creation failure does **not** block message send (same pattern as order lifecycle dispatch).
+- Recipient sees the notification in the **same bell/dropdown** as order notifications; existing **30s unread polling** picks up new chat alerts without frontend changes.
+
 ### Frontend behavior (`/app`)
 
 | Feature             | Behavior                                                               |
@@ -949,6 +995,9 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - [ ] **User B** (Wayler Accepted panel) → **Open chat** → sees **User A**'s message
 - [ ] **User B** replies
 - [ ] **User A** clicks **Refresh** in chat → sees **User B**'s reply
+- [ ] **User A** sends message → **User B** sees `SYSTEM` chat notification in bell (A does not)
+- [ ] **User B** replies → **User A** sees chat notification in bell
+- [ ] Bell unread badge updates within **30 seconds** without page refresh
 - [ ] **User C** (not participant) → `POST /conversations/order/:orderId` or `GET /conversations/:id` → **404**
 - [ ] DRAFT/OPEN orders → **no Open chat button** (not in Accepted panels / ineligible status)
 - [ ] Empty/whitespace message → Send disabled
@@ -956,13 +1005,15 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 
 ### Future milestones (chat)
 
-- **Chat notifications** — alert recipient when a new message arrives (in-app / push / email)
-- **Polling or WebSocket/SSE** — live message updates without manual refresh
+- **Dedicated `CHAT_MESSAGE` notification type** — replace `SYSTEM` for chat dispatch
+- **Polling or WebSocket/SSE** — live message updates in chat modal without manual refresh
+- **Push / email notifications** for chat — offline alerts beyond in-app bell
+- **Notification preferences** — per-type opt-in/out for chat vs order events
 - **Typing indicators** — show when the other party is composing
 - **Read receipt UI** — visual read state beyond backend `readAt` + `markRead`
 - **File / image attachments** — proof photos, location pins, etc.
 - **Moderation / reporting** — flag abusive messages
-- **Admin / arbitrator visibility** — dispute evidence access
+- **Admin / arbitrator visibility** — dispute evidence access during disputes
 - **Localized system messages** — server-side templates for automated chat events
 
 ### Future milestones (marketplace)
@@ -998,8 +1049,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, dispatch, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat foundation complete; photo/signature proof, WebSocket/SSE/push/email, chat real-time/notifications, payments/disputes later)
-- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, chat real-time/polling/notifications/attachments, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE/push/email notification preferences, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, chat real-time, payments/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, chat real-time/polling/push/email, moderation, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
