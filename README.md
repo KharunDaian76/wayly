@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish → Wayler OPEN feed → accept, Sender tracking panels, Wayler filters/maps) are complete. Payments, escrow, chat, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish → Wayler OPEN feed → accept → **in-transit → delivered**, Sender/Wayler tracking panels, Wayler filters/maps) are complete. Payments, escrow, chat, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -170,7 +170,7 @@ Marketing landing page (`/`) is not translated yet.
 | Basic language support (8 locales, localStorage preference)    | Complete                        |
 | KYC mock flow (schema, API, SDK, `/app` panel)                 | Complete (M2)                   |
 | Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
-| Marketplace orders (M4 draft/publish/accept)                   | Complete (M4)                   |
+| Marketplace orders (M4 draft/publish/accept/lifecycle)         | Complete (M4)                   |
 | Payments, escrow, chat, disputes, admin                        | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -331,36 +331,41 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 
 ### Current marketplace status
 
-| Area                                                         | Status   |
-| ------------------------------------------------------------ | -------- |
-| `DeliveryOrder` schema (Prisma)                              | Complete |
-| Create draft (`POST /orders`)                                | Complete |
-| Publish draft → OPEN (`POST /orders/:id/publish`)            | Complete |
-| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)      | Complete |
-| Accept OPEN order (`POST /orders/:id/accept`)                | Complete |
-| Wayler accepted panel (`GET /orders/accepted`)               | Complete |
-| Sender tracking panels (Drafts / Published / Accepted)       | Complete |
-| Wayler feed filters & sort (type, location, reward, sort)    | Complete |
-| Wayler map route previews (Leaflet + city/country geocoding) | Complete |
-| Sender privacy endpoint (`GET /orders/mine`)                 | Complete |
+| Area                                                                 | Status   |
+| -------------------------------------------------------------------- | -------- |
+| `DeliveryOrder` schema (Prisma)                                      | Complete |
+| Create draft (`POST /orders`)                                        | Complete |
+| Publish draft → OPEN (`POST /orders/:id/publish`)                    | Complete |
+| Wayler OPEN feed (`GET /orders`, default `status=OPEN`)              | Complete |
+| Accept OPEN order (`POST /orders/:id/accept`)                        | Complete |
+| Start transit (`POST /orders/:id/start-transit`)                     | Complete |
+| Mark delivered (`POST /orders/:id/mark-delivered`)                   | Complete |
+| Wayler accepted panel (`GET /orders/accepted`) + progression         | Complete |
+| Sender tracking panels (Drafts / Published / Accepted)               | Complete |
+| Sender Accepted lifecycle visibility (ACCEPTED/IN_TRANSIT/DELIVERED) | Complete |
+| Wayler feed filters & sort (type, location, reward, sort)            | Complete |
+| Wayler map route previews (Leaflet + city/country geocoding)         | Complete |
+| Sender privacy endpoint (`GET /orders/mine`)                         | Complete |
 
 ### API routes (orders)
 
 All routes require JWT + KYC approval (`JwtAuthGuard`, `VerificationGuard`). Base path: `/api/v1`.
 
-| Method | Path                         | Description                                                                                                            |
-| ------ | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| POST   | `/api/v1/orders`             | Create a delivery order as DRAFT (Sender)                                                                              |
-| GET    | `/api/v1/orders`             | List orders — defaults to **OPEN** (Wayler marketplace feed); supports `status`, `type`, location filters, pagination  |
-| GET    | `/api/v1/orders/mine`        | List **current user's sent orders** only (`senderId` = authenticated user); optional `status`, `type`, `page`, `limit` |
-| GET    | `/api/v1/orders/accepted`    | List orders **accepted by the current Wayler** (includes `acceptedAt`)                                                 |
-| GET    | `/api/v1/orders/:id`         | Order detail; other users' DRAFTs return 404                                                                           |
-| POST   | `/api/v1/orders/:id/publish` | Sender publishes own DRAFT → OPEN                                                                                      |
-| POST   | `/api/v1/orders/:id/accept`  | Wayler accepts OPEN order → ACCEPTED                                                                                   |
+| Method | Path                                | Description                                                                                                            |
+| ------ | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/v1/orders`                    | Create a delivery order as DRAFT (Sender)                                                                              |
+| GET    | `/api/v1/orders`                    | List orders — defaults to **OPEN** (Wayler marketplace feed); supports `status`, `type`, location filters, pagination  |
+| GET    | `/api/v1/orders/mine`               | List **current user's sent orders** only (`senderId` = authenticated user); optional `status`, `type`, `page`, `limit` |
+| GET    | `/api/v1/orders/accepted`           | List orders **accepted by the current Wayler** (includes `acceptedAt`)                                                 |
+| GET    | `/api/v1/orders/:id`                | Order detail; other users' DRAFTs return 404                                                                           |
+| POST   | `/api/v1/orders/:id/publish`        | Sender publishes own DRAFT → OPEN                                                                                      |
+| POST   | `/api/v1/orders/:id/accept`         | Wayler accepts OPEN order → ACCEPTED                                                                                   |
+| POST   | `/api/v1/orders/:id/start-transit`  | Accepted Wayler moves ACCEPTED → IN_TRANSIT                                                                            |
+| POST   | `/api/v1/orders/:id/mark-delivered` | Accepted Wayler moves IN_TRANSIT → DELIVERED (sets `deliveredAt`)                                                      |
 
 Interactive docs: http://localhost:4000/docs (tag **orders**).
 
-SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `accept`.
+SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `accept`, `startTransit`, `markDelivered`.
 
 ### User flow
 
@@ -371,7 +376,7 @@ SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `acce
 3. Track orders in three panels:
    - **Drafts** — `api.orders.mine({ status: 'DRAFT' })`
    - **Published** — `api.orders.mine({ status: 'OPEN' })`
-   - **Accepted** — `api.orders.mine({ status: 'ACCEPTED' })` (+ `detail` for `acceptedAt`)
+   - **Accepted** — merged `api.orders.mine` for `ACCEPTED`, `IN_TRANSIT`, and `DELIVERED` (+ `detail` for `acceptedAt` / `deliveredAt`); status badges and lifecycle notes on `/app`
 
 **Wayler (mode: Wayler on `/app`)**
 
@@ -379,14 +384,15 @@ SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `acce
 2. **Filter & sort** by type, pickup/dropoff, reward range; sort by reward, published date, or route.
 3. **Map preview** on each card (pickup → dropoff markers and route line; geocoded from city/country).
 4. **Accept** an OPEN order (not own order; KYC required).
-5. Track **Accepted delivery requests** — `api.orders.accepted()`.
+5. Track **Accepted delivery requests** — `api.orders.accepted()` (all statuses where `acceptedWaylerId` = current user).
+6. **Progress delivery** — **Start transit** (ACCEPTED → IN_TRANSIT), **Mark delivered** (IN_TRANSIT → DELIVERED) from the Wayler Accepted panel.
 
 ### Privacy and KYC notes
 
 - **DRAFT orders are private** — `GET /orders?status=DRAFT` is scoped to the current sender on the backend; other users cannot read another sender's drafts via `GET /orders/:id`.
 - **Sender panels use `/orders/mine`** — the browser never receives other users' sent orders; no client-side `senderId` filtering.
 - **Wayler marketplace feed** uses `GET /orders` with **OPEN** only (global feed for browsing/accepting).
-- **KYC approval is required** to create orders, browse the Wayler feed, accept orders, and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
+- **KYC approval is required** to create orders, browse the Wayler feed, accept orders, progress delivery (start transit / mark delivered), and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
 
 ### Manual testing checklist
 
@@ -400,10 +406,85 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User A** (Sender): order appears in **Accepted Orders** panel after refresh
 - [ ] **User B** (Sender): Accepted panel does **not** show A's sent order (only B's own sent orders via `/orders/mine`)
 - [ ] **Map preview** visible on Wayler OPEN cards when pickup and dropoff city/country are set
+- [ ] **User B** (Wayler): **Start transit** on accepted order → status **IN_TRANSIT**
+- [ ] **User A** (Sender): refresh **Accepted Orders** → **IN_TRANSIT** badge and note
+- [ ] **User B** (Wayler): **Mark delivered** → status **DELIVERED**
+- [ ] **User A** (Sender): refresh **Accepted Orders** → **DELIVERED** badge, note, and `deliveredAt` when set
+
+## Delivery lifecycle after acceptance
+
+Once a Wayler accepts an OPEN order, both parties track progress through **ACCEPTED → IN_TRANSIT → DELIVERED**. Only the **accepted Wayler** can advance status after accept; the Sender monitors via the **Accepted Orders** panel.
+
+### Lifecycle diagram
+
+```text
+DRAFT → OPEN → ACCEPTED → IN_TRANSIT → DELIVERED
+         ↑        ↑            ↑            ↑
+      publish   accept    start-transit  mark-delivered
+      (Sender)  (Wayler)  (Wayler)       (Wayler)
+```
+
+### Who can do what
+
+| Actor               | Action                                                                                    |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| **Sender**          | Create draft                                                                              |
+| **Sender**          | Publish draft → OPEN                                                                      |
+| **Wayler**          | Accept OPEN order → ACCEPTED                                                              |
+| **Accepted Wayler** | Start transit → IN_TRANSIT                                                                |
+| **Accepted Wayler** | Mark delivered → DELIVERED                                                                |
+| **Sender**          | Track lifecycle in **Sender Accepted** panel (badges, notes, `acceptedAt`, `deliveredAt`) |
+
+The Sender **cannot** start transit or mark delivered. Wrong users (non-accepted Waylers) receive **403**; invalid status transitions return **409 Conflict**.
+
+### API routes (post-accept progression)
+
+| Method | Path                                | Transition             |
+| ------ | ----------------------------------- | ---------------------- |
+| POST   | `/api/v1/orders/:id/start-transit`  | ACCEPTED → IN_TRANSIT  |
+| POST   | `/api/v1/orders/:id/mark-delivered` | IN_TRANSIT → DELIVERED |
+
+Both routes require JWT + **KYC approved**. Only the order's `acceptedWaylerId` may call them.
+
+### Rules
+
+- **Only the accepted Wayler** can start transit or mark delivered.
+- **Sender cannot progress** delivery status.
+- **Wrong status transitions** (e.g. OPEN → start-transit, ACCEPTED → mark-delivered) return **409 Conflict**.
+- **KYC required** for progression endpoints (same `VerificationGuard` as create/browse/accept).
+
+### Frontend behavior
+
+| Panel                                                                          | Behavior                                                                                                                                            |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Wayler Accepted** (`GET /orders/accepted`)                                   | **Start transit** when `ACCEPTED`; **Mark delivered** when `IN_TRANSIT`; **Delivered** note when `DELIVERED`; buttons disabled while an action runs |
+| **Sender Accepted** (`GET /orders/mine` for ACCEPTED / IN_TRANSIT / DELIVERED) | Status badges, contextual notes, `acceptedAt` and `deliveredAt` when available                                                                      |
+
+Wayler OPEN feed, Sender Drafts/Published panels, filters, maps, and KYC gating are unchanged.
+
+### Manual testing checklist (lifecycle)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler):
+
+- [ ] **User A** publishes an order
+- [ ] **User B** accepts it (ACCEPTED)
+- [ ] **User B** clicks **Start transit** in Wayler Accepted panel
+- [ ] **User A** refreshes Sender Accepted panel → sees **IN_TRANSIT** badge and note
+- [ ] **User B** clicks **Mark delivered**
+- [ ] **User A** refreshes Sender Accepted panel → sees **DELIVERED** badge, note, and **deliveredAt** when set
+
+### Future milestones (delivery lifecycle)
+
+- **Pickup timestamp** field (`pickedUpAt`) if product needs explicit pickup time
+- **Confirmation code / proof of delivery**
+- **Photo / signature proof** of handoff
+- **Payment release** after delivery (escrow / Stripe)
+- **Disputes / arbitration** on delivery completion
+- **Notifications** (push/email) on status changes
+- **Cancelled** status transitions and operator overrides
 
 ### Future milestones (marketplace)
 
-- **In-transit / delivered / cancelled** status transitions and Sender/Wayler tracking
 - **Chat / contact** between Sender and Wayler after accept
 - **Payments & escrow** (Stripe, offline flows)
 - **Disputes & arbitration**
@@ -436,8 +517,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, Wayler accepted panel, Sender Drafts/Published/Accepted panels, private `GET /orders/mine`. ✅ (core loop complete; payments/chat/disputes later)
-- **M5–M15:** in-transit/delivered lifecycle, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, Wayler accepted panel controls, Sender lifecycle visibility, private `GET /orders/mine`. ✅ (core loop + post-accept lifecycle complete; payments/chat/disputes later)
+- **M5–M15:** pickup/proof-of-delivery, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
