@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, Sender/Wayler tracking panels, Wayler filters/maps) are complete. Payments, escrow, chat, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps) are complete. Photo/signature proof, payments, escrow, chat, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -171,6 +171,7 @@ Marketing landing page (`/`) is not translated yet.
 | KYC mock flow (schema, API, SDK, `/app` panel)                 | Complete (M2)                   |
 | Real KYC provider (Sumsub)                                     | Not started (future M2 batch)   |
 | Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)  | Complete (M4)                   |
+| Proof of delivery (metadata note + confirmation code)          | Complete (M4)                   |
 | Payments, escrow, chat, disputes, admin                        | Not started (future milestones) |
 
 The current frontend is a **functional foundation**, not final premium design.
@@ -345,6 +346,9 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Wayler accepted panel (`GET /orders/accepted`) + progression         | Complete |
 | Sender tracking panels (Drafts / Published / Accepted)               | Complete |
 | Sender Accepted lifecycle visibility (ACCEPTED/IN_TRANSIT/DELIVERED) | Complete |
+| Proof-of-delivery schema + submit API + SDK                          | Complete |
+| Wayler proof submit/update UI (IN_TRANSIT / DELIVERED)               | Complete |
+| Sender proof read-only visibility                                    | Complete |
 | Wayler feed filters & sort (type, location, reward, sort)            | Complete |
 | Wayler map route previews (Leaflet + city/country geocoding)         | Complete |
 | Sender privacy endpoint (`GET /orders/mine`)                         | Complete |
@@ -365,10 +369,11 @@ All routes require JWT + KYC approval (`JwtAuthGuard`, `VerificationGuard`). Bas
 | POST   | `/api/v1/orders/:id/accept`         | Wayler accepts OPEN order → ACCEPTED                                                                                   |
 | POST   | `/api/v1/orders/:id/start-transit`  | Accepted Wayler moves ACCEPTED → IN_TRANSIT                                                                            |
 | POST   | `/api/v1/orders/:id/mark-delivered` | Accepted Wayler moves IN_TRANSIT → DELIVERED (sets `deliveredAt`)                                                      |
+| POST   | `/api/v1/orders/:id/proof`          | Accepted Wayler submits/updates proof-of-delivery metadata (IN_TRANSIT or DELIVERED)                                   |
 
 Interactive docs: http://localhost:4000/docs (tag **orders**).
 
-SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `cancel`, `accept`, `startTransit`, `markDelivered`.
+SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `cancel`, `accept`, `startTransit`, `markDelivered`, `submitProof`.
 
 ### User flow
 
@@ -380,7 +385,7 @@ SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `canc
 4. Track orders in three panels:
    - **Drafts** — `api.orders.mine({ status: 'DRAFT' })`; **Cancel** per draft
    - **Published** — `api.orders.mine({ status: 'OPEN' })`; **Cancel** per open order
-   - **Accepted** — merged `api.orders.mine` for `ACCEPTED`, `IN_TRANSIT`, and `DELIVERED` (+ `detail` for `acceptedAt` / `deliveredAt`); status badges and lifecycle notes; **no Cancel** (post-accept orders cannot be cancelled via this flow)
+   - **Accepted** — merged `api.orders.mine` for `ACCEPTED`, `IN_TRANSIT`, and `DELIVERED` (+ `detail` for `acceptedAt`, `deliveredAt`, and proof fields); status badges and lifecycle notes; **read-only proof** when submitted; pending/missing proof notes when appropriate; **no Cancel** (post-accept orders cannot be cancelled via this flow)
 
 **Wayler (mode: Wayler on `/app`)**
 
@@ -390,13 +395,14 @@ SDK: `api.orders.create`, `list`, `mine`, `accepted`, `detail`, `publish`, `canc
 4. **Accept** an OPEN order (not own order; KYC required).
 5. Track **Accepted delivery requests** — `api.orders.accepted()` (all statuses where `acceptedWaylerId` = current user).
 6. **Progress delivery** — **Start transit** (ACCEPTED → IN_TRANSIT), **Mark delivered** (IN_TRANSIT → DELIVERED) from the Wayler Accepted panel.
+7. **Submit proof of delivery** — when **IN_TRANSIT** or **DELIVERED**, submit or update metadata proof (note + confirmation code) via `api.orders.submitProof(id, body)` from the Wayler Accepted panel.
 
 ### Privacy and KYC notes
 
 - **DRAFT orders are private** — `GET /orders?status=DRAFT` is scoped to the current sender on the backend; other users cannot read another sender's drafts via `GET /orders/:id`.
 - **Sender panels use `/orders/mine`** — the browser never receives other users' sent orders; no client-side `senderId` filtering.
 - **Wayler marketplace feed** uses `GET /orders` with **OPEN** only (global feed for browsing/accepting).
-- **KYC approval is required** to create orders, cancel orders, browse the Wayler feed, accept orders, progress delivery (start transit / mark delivered), and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
+- **KYC approval is required** to create orders, cancel orders, browse the Wayler feed, accept orders, progress delivery (start transit / mark delivered), submit proof of delivery, and load Sender/Wayler marketplace panels (enforced by `VerificationGuard` + `requireKycApproved`).
 
 ### Manual testing checklist
 
@@ -505,6 +511,9 @@ DRAFT → OPEN → ACCEPTED → IN_TRANSIT → DELIVERED
   │   (Sender) (Wayler)    (Wayler)       (Wayler)
   └── cancel ──→ CANCELLED
       (Sender; DRAFT or OPEN only — see Order cancellation)
+
+Proof of delivery (metadata): accepted Wayler may submit/update while IN_TRANSIT or DELIVERED
+— see Proof of delivery section.
 ```
 
 ### Who can do what
@@ -517,7 +526,9 @@ DRAFT → OPEN → ACCEPTED → IN_TRANSIT → DELIVERED
 | **Wayler**          | Accept OPEN order → ACCEPTED                                                              |
 | **Accepted Wayler** | Start transit → IN_TRANSIT                                                                |
 | **Accepted Wayler** | Mark delivered → DELIVERED                                                                |
+| **Accepted Wayler** | Submit/update proof of delivery (IN_TRANSIT or DELIVERED)                                 |
 | **Sender**          | Track lifecycle in **Sender Accepted** panel (badges, notes, `acceptedAt`, `deliveredAt`) |
+| **Sender**          | View proof read-only when submitted (cannot edit)                                         |
 
 The Sender **cannot** start transit or mark delivered. Wrong users (non-accepted Waylers) receive **403**; invalid status transitions return **409 Conflict**.
 
@@ -539,10 +550,10 @@ Both routes require JWT + **KYC approved**. Only the order's `acceptedWaylerId` 
 
 ### Frontend behavior
 
-| Panel                                                                          | Behavior                                                                                                                                            |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Wayler Accepted** (`GET /orders/accepted`)                                   | **Start transit** when `ACCEPTED`; **Mark delivered** when `IN_TRANSIT`; **Delivered** note when `DELIVERED`; buttons disabled while an action runs |
-| **Sender Accepted** (`GET /orders/mine` for ACCEPTED / IN_TRANSIT / DELIVERED) | Status badges, contextual notes, `acceptedAt` and `deliveredAt` when available                                                                      |
+| Panel                                                                          | Behavior                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Wayler Accepted** (`GET /orders/accepted`)                                   | **Start transit** when `ACCEPTED`; **Mark delivered** when `IN_TRANSIT`; proof form when `IN_TRANSIT` / `DELIVERED`; **Delivered** note when `DELIVERED`; buttons disabled while an action runs |
+| **Sender Accepted** (`GET /orders/mine` for ACCEPTED / IN_TRANSIT / DELIVERED) | Status badges, contextual notes, `acceptedAt` and `deliveredAt` when available; read-only proof section when submitted; pending/missing proof notes otherwise                                   |
 
 Wayler OPEN feed, Sender Drafts/Published panels, filters, maps, and KYC gating are unchanged.
 
@@ -560,11 +571,115 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 ### Future milestones (delivery lifecycle)
 
 - **Pickup timestamp** field (`pickedUpAt`) if product needs explicit pickup time
-- **Confirmation code / proof of delivery**
-- **Photo / signature proof** of handoff
+- **Photo / signature proof** of handoff — see **Proof of delivery** future milestones
 - **Payment release** after delivery (escrow / Stripe)
 - **Disputes / arbitration** on delivery completion
 - **Notifications** (push/email) on status changes
+
+## Proof of delivery
+
+Proof-of-delivery metadata supports **later payment release**, **disputes**, **admin/arbitrator review**, and **delivery confirmation** between Sender and Wayler. The current implementation is **metadata-only**: optional **note** and **confirmation code**. **Photo and signature proof** are planned for a later milestone.
+
+### Schema fields (`DeliveryOrder`)
+
+| Field                   | Type        | Description                                     |
+| ----------------------- | ----------- | ----------------------------------------------- |
+| `proofNote`             | `String?`   | Free-text delivery note from the Wayler         |
+| `proofConfirmationCode` | `String?`   | Confirmation code (e.g. recipient handoff code) |
+| `proofSubmittedAt`      | `DateTime?` | When proof was last submitted/updated           |
+| `proofSubmittedById`    | `UUID?`     | User who submitted proof (accepted Wayler)      |
+
+Proof fields are exposed on safe `DeliveryOrderDetail` responses and mapped in the orders API. The Wayler **accepted** list does not include proof fields; the frontend enriches IN_TRANSIT/DELIVERED rows via existing `GET /orders/:id` detail calls.
+
+### API route
+
+| Method | Path                       | Description                                            |
+| ------ | -------------------------- | ------------------------------------------------------ |
+| POST   | `/api/v1/orders/:id/proof` | Submit or update proof metadata (accepted Wayler only) |
+
+Requires JWT + **KYC approved**. Body (at least one field required):
+
+```json
+{
+  "note": "Left with building concierge",
+  "confirmationCode": "AB12CD"
+}
+```
+
+Validation (`submitDeliveryProofSchema`): `note` optional, trim, max 1000 chars; `confirmationCode` optional, trim, max 64 chars; **at least one** must be present; empty strings rejected.
+
+Returns safe `DeliveryOrderDetail` on success.
+
+### SDK
+
+```typescript
+api.orders.submitProof(id, {
+  note?: string;
+  confirmationCode?: string;
+}); // POST /api/v1/orders/:id/proof → DeliveryOrderDetail
+```
+
+Type: `SubmitDeliveryProofInput` (from `@wayly/validation`, re-exported by `@wayly/sdk`).
+
+### Rules
+
+- **KYC required** — same `VerificationGuard` as other marketplace actions.
+- **Accepted Wayler only** — `acceptedWaylerId` must match the authenticated user; others receive **403**.
+- **Allowed statuses:** **IN_TRANSIT** and **DELIVERED** only.
+- **ACCEPTED is too early** — returns **409** with message that delivery must be in transit first.
+- **DRAFT / OPEN / CANCELLED** — **409** (proof only for in-transit or delivered orders).
+- **Empty proof body rejected** — **400** if neither `note` nor `confirmationCode` is provided (after trim).
+- **Re-submit/update allowed** — Wayler can submit again; omitted fields keep existing values; `proofSubmittedAt` refreshes.
+- **Sender can view proof but cannot edit** — read-only in Sender Accepted panel; no submit/update controls for Senders.
+
+### Frontend behavior
+
+**Wayler (Accepted delivery requests panel)**
+
+| Status         | Behavior                                                                                                       |
+| -------------- | -------------------------------------------------------------------------------------------------------------- |
+| **ACCEPTED**   | Shows “Start transit before submitting proof”; no proof form                                                   |
+| **IN_TRANSIT** | Proof section with note + confirmation code inputs; **Submit proof** or **Update proof**; existing proof shown |
+| **DELIVERED**  | Same proof UI — proof remains visible and updateable by the Wayler                                             |
+
+At least one non-empty field required before submit. Loading state while submitting; success message and panel refresh on success.
+
+**Sender (Accepted Orders panel)**
+
+| State                    | Behavior                                                                               |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| **Proof submitted**      | Compact read-only “Proof of delivery” section: note, confirmation code, submitted time |
+| **IN_TRANSIT, no proof** | “Proof has not been submitted yet.”                                                    |
+| **DELIVERED, no proof**  | “No proof submitted yet.”                                                              |
+| **ACCEPTED**             | No proof section (proof not applicable before transit)                                 |
+
+Sender panels use existing `api.orders.detail()` enrichment — no additional API calls.
+
+### Manual testing checklist (proof of delivery)
+
+Use two KYC-approved users (**A** = Sender, **B** = Wayler):
+
+- [ ] **User A** publishes an order
+- [ ] **User B** accepts it
+- [ ] **User B** tries proof before transit → API **409**; UI shows “Start transit before submitting proof” (no submit button)
+- [ ] **User B** clicks **Start transit**
+- [ ] **User B** submits proof with **note** + **confirmation code** → proof fields and timestamp appear in Wayler Accepted panel
+- [ ] **User A** refreshes **Sender Accepted** panel → sees read-only proof (note, code, submitted time)
+- [ ] **User B** updates proof (e.g. revised note) → timestamp refreshes; Sender sees updated proof after refresh
+- [ ] **User B** marks **delivered** → proof section still visible and updateable on Wayler side
+- [ ] **User A** can view proof but has **no edit** controls
+- [ ] Empty proof body (both fields blank) → submit button disabled / API **400**
+
+### Future milestones (proof of delivery)
+
+- **`proofPhotoUrl`** — photo of handoff or package at delivery
+- **`recipientSignatureUrl`** — captured signature image
+- **Confirmation-code verification** by Sender or recipient (validate code matches)
+- **Proof required before mark-delivered** — if product rules require proof before completion
+- **Payment release** after proof and/or delivery (escrow / Stripe)
+- **Dispute evidence bundle** — attach proof to dispute records
+- **Admin / arbitrator proof review** — operator review of submitted proof
+- **Notifications** — alert Sender when proof is submitted or updated
 
 ### Future milestones (marketplace)
 
@@ -600,8 +715,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **M1 — Auth & Users:** JWT auth, refresh sessions (httpOnly cookie), users profile, SDK + frontend auth, password toggle, basic i18n. ✅ (foundation complete; polish ongoing)
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
-- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`. ✅ (core loop + cancellation + post-accept lifecycle complete; payments/chat/disputes later)
-- **M5–M15:** cancellation reasons/refunds, pickup/proof-of-delivery, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
+- **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`. ✅ (core loop + cancellation + lifecycle + metadata proof complete; photo/signature proof, payments/chat/disputes later)
+- **M5–M15:** photo/signature proof, confirmation-code verification, cancellation reasons/refunds, pickup timestamps, production geocoding, realtime chat, subscriptions, escrow/Stripe, offline + PDF agreements, disputes, notifications, admin panel, real-provider KYC swap, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
