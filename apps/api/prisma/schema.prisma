@@ -6,7 +6,7 @@
 // Notification foundation (routes/dispatch land in a later batch).
 // Chat foundation (routes/WebSocket land in a later batch).
 // Payment/escrow foundation (routes/Stripe land in a later batch).
-// Disputes/etc. arrive in later milestones.
+// Dispute/arbitration foundation (routes/admin UI land in a later batch).
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
 // geographic radius queries (geography(Point)) from M4/M5.
@@ -110,6 +110,32 @@ enum LedgerEntryType {
   ADJUSTMENT
 }
 
+// Dispute lifecycle (API/arbitrator UI land in a later batch).
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  REJECTED
+  CANCELLED
+}
+
+enum DisputeReason {
+  ITEM_NOT_DELIVERED
+  ITEM_DAMAGED
+  WRONG_ITEM
+  PAYMENT_ISSUE
+  SAFETY_CONCERN
+  OTHER
+}
+
+enum DisputeResolution {
+  REFUND_SENDER
+  RELEASE_TO_WAYLER
+  PARTIAL_REFUND
+  NO_ACTION
+  OTHER
+}
+
 // --- Models ------------------------------------------------------------------
 
 model User {
@@ -153,6 +179,10 @@ model User {
   paymentIntentsAsPayee         PaymentIntent[] @relation("PaymentIntentPayee")
   payouts                       Payout[]        @relation("PayoutUser")
   ledgerEntries                 LedgerEntry[]   @relation("LedgerEntryUser")
+  disputesOpened                Dispute[]       @relation("DisputesOpened")
+  disputesAssigned              Dispute[]       @relation("DisputesAssigned")
+  disputeMessages               DisputeMessage[] @relation("DisputeMessagesSent")
+  disputeEvidence               DisputeEvidence[] @relation("DisputeEvidenceSubmitted")
 
   @@index([deletedAt])
   @@map("users")
@@ -271,6 +301,7 @@ model DeliveryOrder {
   conversation           Conversation?
   paymentIntent          PaymentIntent?
   ledgerEntries          LedgerEntry[]
+  disputes               Dispute[]
 
   @@index([senderId])
   @@index([acceptedWaylerId])
@@ -435,4 +466,66 @@ model LedgerEntry {
   @@index([type])
   @@index([createdAt])
   @@map("ledger_entries")
+}
+
+// Per-order dispute opened by Sender or Wayler (arbitration routes land in a later batch).
+model Dispute {
+  id                   String             @id @default(uuid()) @db.Uuid
+  orderId              String             @db.Uuid
+  order                DeliveryOrder      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  openedById           String             @db.Uuid
+  openedBy             User               @relation("DisputesOpened", fields: [openedById], references: [id], onDelete: Restrict)
+  assignedArbitratorId String?            @db.Uuid
+  assignedArbitrator   User?              @relation("DisputesAssigned", fields: [assignedArbitratorId], references: [id], onDelete: SetNull)
+  status               DisputeStatus      @default(OPEN)
+  reason               DisputeReason
+  description          String
+  resolution           DisputeResolution?
+  resolutionNote       String?
+  resolvedAt           DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  messages  DisputeMessage[]
+  evidence  DisputeEvidence[]
+
+  @@index([orderId])
+  @@index([openedById])
+  @@index([assignedArbitratorId])
+  @@index([status])
+  @@index([reason])
+  @@index([createdAt])
+  @@map("disputes")
+}
+
+model DisputeMessage {
+  id        String   @id @default(uuid()) @db.Uuid
+  disputeId String   @db.Uuid
+  dispute   Dispute  @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  senderId  String   @db.Uuid
+  sender    User     @relation("DisputeMessagesSent", fields: [senderId], references: [id], onDelete: Restrict)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([disputeId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@map("dispute_messages")
+}
+
+model DisputeEvidence {
+  id            String   @id @default(uuid()) @db.Uuid
+  disputeId     String   @db.Uuid
+  dispute       Dispute  @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  submittedById String   @db.Uuid
+  submittedBy   User     @relation("DisputeEvidenceSubmitted", fields: [submittedById], references: [id], onDelete: Restrict)
+  title         String
+  description   String?
+  fileUrl       String?
+  createdAt     DateTime @default(now())
+
+  @@index([disputeId])
+  @@index([submittedById])
+  @@index([createdAt])
+  @@map("dispute_evidence")
 }

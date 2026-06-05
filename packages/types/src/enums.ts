@@ -146,3 +146,34 @@ export const LedgerEntryType = {
   ADJUSTMENT: 'ADJUSTMENT',
 } as const;
 export type LedgerEntryType = (typeof LedgerEntryType)[keyof typeof LedgerEntryType];
+
+/** Dispute lifecycle (API/arbitrator UI lands in a later batch). */
+export const DisputeStatus = {
+  OPEN: 'OPEN',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  RESOLVED: 'RESOLVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED',
+} as const;
+export type DisputeStatus = (typeof DisputeStatus)[keyof typeof DisputeStatus];
+
+/** Why a dispute was opened. */
+export const DisputeReason = {
+  ITEM_NOT_DELIVERED: 'ITEM_NOT_DELIVERED',
+  ITEM_DAMAGED: 'ITEM_DAMAGED',
+  WRONG_ITEM: 'WRONG_ITEM',
+  PAYMENT_ISSUE: 'PAYMENT_ISSUE',
+  SAFETY_CONCERN: 'SAFETY_CONCERN',
+  OTHER: 'OTHER',
+} as const;
+export type DisputeReason = (typeof DisputeReason)[keyof typeof DisputeReason];
+
+/** Arbitrator outcome for a resolved dispute. */
+export const DisputeResolution = {
+  REFUND_SENDER: 'REFUND_SENDER',
+  RELEASE_TO_WAYLER: 'RELEASE_TO_WAYLER',
+  PARTIAL_REFUND: 'PARTIAL_REFUND',
+  NO_ACTION: 'NO_ACTION',
+  OTHER: 'OTHER',
+} as const;
+export type DisputeResolution = (typeof DisputeResolution)[keyof typeof DisputeResolution];
