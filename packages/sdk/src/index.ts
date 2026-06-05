@@ -23,6 +23,8 @@ export {
   type NotificationsMarkAllReadResponse,
   type NotificationsUnreadCountResponse,
 } from './notifications.types';
+export { createPaymentsApi } from './payments';
+export { type PaymentsApi } from './payments.types';
 export { createOrdersApi } from './orders';
 export {
   type AcceptedDeliveryOrderSummary,
@@ -43,6 +45,7 @@ export type {
   KycVerificationSummary,
   NotificationListResponse,
   NotificationSummary,
+  PaymentIntentSummary,
   UserProfile,
 } from '@wayly/types';
 export type { SendChatMessageInput } from '@wayly/validation';

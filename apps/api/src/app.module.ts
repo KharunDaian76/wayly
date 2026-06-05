@@ -16,6 +16,7 @@ import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -43,12 +44,13 @@ import { UsersModule } from './modules/users/users.module';
     OrdersModule,
     NotificationsModule,
     ConversationsModule,
+    PaymentsModule,
     // ---------------------------------------------------------------------
     // Future business modules:
     //   GeoModule,           // M5
     //   TripsModule,         // M4
     //   SubscriptionsModule, // M7
-    //   PaymentsModule,      // M8
+    //   PaymentsModule (Stripe/real processing), // M8+
     //   AgreementsModule,    // M9
     //   ChatModule WebSocket, // later batch
     //   Notifications dispatch / WebSocket, // later batch

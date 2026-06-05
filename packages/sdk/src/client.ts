@@ -10,6 +10,8 @@ import { createNotificationsApi } from './notifications';
 import type { NotificationsApi } from './notifications.types';
 import { createOrdersApi } from './orders';
 import type { OrdersApi } from './orders.types';
+import { createPaymentsApi } from './payments';
+import type { PaymentsApi } from './payments.types';
 import type { ApiClientOptions, RequestOptions } from './types';
 import { createUsersApi } from './users';
 
@@ -47,6 +49,9 @@ export class ApiClient {
   /** Order-based conversation endpoints. */
   readonly conversations: ConversationsApi;
 
+  /** Mock/manual payment endpoints (local testing only; no real money movement). */
+  readonly payments: PaymentsApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -68,6 +73,7 @@ export class ApiClient {
     this.orders = createOrdersApi((path, opts) => this.request(path, opts));
     this.notifications = createNotificationsApi((path, opts) => this.request(path, opts));
     this.conversations = createConversationsApi((path, opts) => this.request(path, opts));
+    this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
