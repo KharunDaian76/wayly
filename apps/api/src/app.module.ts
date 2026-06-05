@@ -13,6 +13,7 @@ import { LoggerModule } from './infra/logger/logger.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -39,6 +40,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     KycModule,
     OrdersModule,
+    NotificationsModule,
     // ---------------------------------------------------------------------
     // Future business modules:
     //   GeoModule,           // M5
@@ -47,7 +49,7 @@ import { UsersModule } from './modules/users/users.module';
     //   PaymentsModule,      // M8
     //   AgreementsModule,    // M9
     //   ChatModule,          // M6
-    //   NotificationsModule, // M11
+    //   Notifications dispatch / WebSocket, // later batch
     //   DisputesModule,      // M10
     //   AdminModule,         // M12
     //   AuditModule,

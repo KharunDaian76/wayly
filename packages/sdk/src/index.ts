@@ -10,6 +10,13 @@ export {
 } from './auth.types';
 export { createKycApi } from './kyc';
 export { type KycApi, type KycMockRejectBody, type KycStartBody } from './kyc.types';
+export { createNotificationsApi } from './notifications';
+export {
+  type NotificationsApi,
+  type NotificationsListQuery,
+  type NotificationsMarkAllReadResponse,
+  type NotificationsUnreadCountResponse,
+} from './notifications.types';
 export { createOrdersApi } from './orders';
 export {
   type AcceptedDeliveryOrderSummary,
@@ -21,4 +28,11 @@ export {
 } from './orders.types';
 export { type HealthApi } from './health';
 export type { ApiClientOptions, RequestOptions, TokenProvider, HealthResult } from './types';
-export type { AuthResult, KycStatusView, KycVerificationSummary, UserProfile } from '@wayly/types';
+export type {
+  AuthResult,
+  KycStatusView,
+  KycVerificationSummary,
+  NotificationListResponse,
+  NotificationSummary,
+  UserProfile,
+} from '@wayly/types';

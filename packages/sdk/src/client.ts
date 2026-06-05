@@ -4,6 +4,8 @@ import { ApiError } from './errors';
 import { createHealthApi, type HealthApi } from './health';
 import { createKycApi } from './kyc';
 import type { KycApi } from './kyc.types';
+import { createNotificationsApi } from './notifications';
+import type { NotificationsApi } from './notifications.types';
 import { createOrdersApi } from './orders';
 import type { OrdersApi } from './orders.types';
 import type { ApiClientOptions, RequestOptions } from './types';
@@ -37,6 +39,9 @@ export class ApiClient {
   /** Delivery order endpoints. */
   readonly orders: OrdersApi;
 
+  /** In-app notification endpoints. */
+  readonly notifications: NotificationsApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -56,6 +61,7 @@ export class ApiClient {
     this.users = createUsersApi((path, opts) => this.request(path, opts));
     this.kyc = createKycApi((path, opts) => this.request(path, opts));
     this.orders = createOrdersApi((path, opts) => this.request(path, opts));
+    this.notifications = createNotificationsApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
