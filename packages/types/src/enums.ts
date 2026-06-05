@@ -63,14 +63,16 @@ export const UserRole = {
 } as const;
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
-/** Notification categories routed across push / in-app / email. */
+/** In-app notification categories (dispatch routes land in a later batch). */
 export const NotificationType = {
-  ORDER_UPDATE: 'ORDER_UPDATE',
-  OFFER_RECEIVED: 'OFFER_RECEIVED',
-  PAYMENT_UPDATE: 'PAYMENT_UPDATE',
-  CHAT_MESSAGE: 'CHAT_MESSAGE',
-  DISPUTE_UPDATE: 'DISPUTE_UPDATE',
-  KYC_UPDATE: 'KYC_UPDATE',
+  ORDER_PUBLISHED: 'ORDER_PUBLISHED',
+  ORDER_ACCEPTED: 'ORDER_ACCEPTED',
+  ORDER_IN_TRANSIT: 'ORDER_IN_TRANSIT',
+  ORDER_DELIVERED: 'ORDER_DELIVERED',
+  ORDER_CANCELLED: 'ORDER_CANCELLED',
+  PROOF_SUBMITTED: 'PROOF_SUBMITTED',
+  KYC_APPROVED: 'KYC_APPROVED',
+  KYC_REJECTED: 'KYC_REJECTED',
   SYSTEM: 'SYSTEM',
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];

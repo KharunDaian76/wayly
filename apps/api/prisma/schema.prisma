@@ -3,6 +3,7 @@
 // M1: User, RefreshToken, PasswordResetToken.
 // M2 Batch 1: KycVerification (provider integration lands in a later batch).
 // M4 Batch 1: DeliveryOrder foundation (API/UI land in later batches).
+// Notification foundation (routes/dispatch land in a later batch).
 // Payments/Chat/Disputes/etc. arrive in later milestones.
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
@@ -59,6 +60,19 @@ enum PackageSize {
   OVERSIZED
 }
 
+// In-app notification categories (dispatch/WebSocket land in a later batch).
+enum NotificationType {
+  ORDER_PUBLISHED
+  ORDER_ACCEPTED
+  ORDER_IN_TRANSIT
+  ORDER_DELIVERED
+  ORDER_CANCELLED
+  PROOF_SUBMITTED
+  KYC_APPROVED
+  KYC_REJECTED
+  SYSTEM
+}
+
 // --- Models ------------------------------------------------------------------
 
 model User {
@@ -94,6 +108,7 @@ model User {
   sentDeliveryOrders            DeliveryOrder[] @relation("SentDeliveryOrders")
   acceptedDeliveryOrders        DeliveryOrder[] @relation("AcceptedDeliveryOrders")
   proofSubmittedDeliveryOrders  DeliveryOrder[] @relation("ProofSubmittedDeliveryOrders")
+  notifications                 Notification[]
 
   @@index([deletedAt])
   @@map("users")
@@ -208,6 +223,7 @@ model DeliveryOrder {
   proofSubmittedAt       DateTime?
   proofSubmittedById     String?   @db.Uuid
   proofSubmittedBy       User?     @relation("ProofSubmittedDeliveryOrders", fields: [proofSubmittedById], references: [id], onDelete: SetNull)
+  notifications          Notification[]
 
   @@index([senderId])
   @@index([acceptedWaylerId])
@@ -221,4 +237,25 @@ model DeliveryOrder {
   @@index([publishedAt])
   @@index([proofSubmittedById])
   @@map("delivery_orders")
+}
+
+// In-app notification for a user (email/push/WebSocket dispatch in later batches).
+model Notification {
+  id             String           @id @default(uuid()) @db.Uuid
+  userId         String           @db.Uuid
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type           NotificationType
+  title          String
+  body           String?
+  relatedOrderId String?          @db.Uuid
+  relatedOrder   DeliveryOrder?   @relation(fields: [relatedOrderId], references: [id], onDelete: SetNull)
+  readAt         DateTime?
+  createdAt      DateTime         @default(now())
+
+  @@index([userId])
+  @@index([readAt])
+  @@index([createdAt])
+  @@index([type])
+  @@index([relatedOrderId])
+  @@map("notifications")
 }
