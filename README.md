@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema foundation**) are complete. Photo/signature proof, payment API/Stripe/checkout, escrow release, payouts, refunds, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK**) are complete. Photo/signature proof, Stripe/checkout, payout processing, refunds, frontend payment UI, WebSocket/SSE real-time chat/push, disputes, and admin are future milestones.
 
 ## Tech stack
 
@@ -177,8 +177,9 @@ Marketing landing page (`/`) is not translated yet.
 | Chat message in-app notifications (other participant only)      | Complete (M4)                   |
 | Chat modal polling (10s while open, visibility-aware)           | Complete (M4)                   |
 | Premium `/app` dashboard UI foundation (visual polish)          | Complete (M4)                   |
-| Payment/escrow schema foundation (Prisma + shared types)        | Complete (M5 foundation)        |
-| Payment API, Stripe, checkout, payouts, refunds                 | Not started (future milestones) |
+| Payment/escrow schema foundation (Prisma + shared types)        | Complete (M5)                   |
+| Mock/manual payment API + SDK (`MANUAL` provider)               | Complete (M5)                   |
+| Stripe, checkout, payout processing, refunds, payment UI        | Not started (future milestones) |
 | Disputes, admin                                                 | Not started (future milestones) |
 
 The `/app` dashboard has a **premium UI foundation** (shell, cards, badges, alerts); full landing/onboarding redesign is a future milestone.
@@ -333,7 +334,7 @@ If KYC is not approved, each mode shows a verification notice; M4 enforces KYC o
 
 ## M4 Marketplace flow: Sender to Wayler
 
-M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **Payment/escrow database foundation** exists (see **Payment and escrow foundation**); **no payment API, Stripe, checkout, payout processing, disputes, admin, or subscriptions yet.**
+M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **Mock/manual payment API** exists for local testing (see **Payment and escrow foundation**); **no Stripe, checkout UI, payout processing, disputes, admin, or subscriptions yet.**
 
 Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm dev` up, and **KYC approved** (mock approve in dev) for marketplace actions.
 
@@ -369,6 +370,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Sender privacy endpoint (`GET /orders/mine`)                              | Complete |
 | Premium `/app` dashboard UI foundation (shell, cards, badges, alerts)     | Complete |
 | Payment/escrow schema (`PaymentIntent`, `Payout`, `LedgerEntry`)          | Complete |
+| Mock/manual payment API + SDK (`MANUAL` provider)                         | Complete |
 
 ### API routes (orders)
 
@@ -1062,7 +1064,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 
 ### Future milestones (marketplace)
 
-- **Payments & escrow processing** — API, Stripe, checkout, release rules (schema foundation complete — see **Payment and escrow foundation**)
+- **Stripe checkout & payout processing** — real provider integration (mock/manual API complete — see **Payment and escrow foundation**)
 - **Disputes & arbitration**
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
 - **Admin / arbitrator panel**
@@ -1071,14 +1073,15 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 
 ## Payment and escrow foundation
 
-Wayly is preparing for **monetization** with a database and shared-type foundation for **payments**, **escrow**, **platform fees**, **payouts**, **refunds**, and an **audit ledger**. The current version is **schema and types only** — **no real payment processing**, no Stripe, and no money movement.
+Wayly is preparing for **monetization** with a database foundation, shared types, and a **mock/manual payment API** for **payments**, **escrow**, **platform fees**, **payouts**, **refunds**, and an **audit ledger**. The current version uses provider **`MANUAL` only** — **no Stripe**, **no checkout UI**, and **no real money movement**. Suitable for **local and business-flow testing** only.
 
 ### Purpose
 
 - Prepare the data model for Sender → platform → Wayler money flows tied to `DeliveryOrder`.
-- Support future **platform fee** calculation, **escrow hold/release**, **Wayler payouts**, and **refunds**.
-- Provide an append-only-style **ledger** for audit and dispute evidence.
-- **Business logic unchanged** — orders still use `offeredRewardAmount` / `currency` placeholders; no checkout UI yet.
+- Exercise **authorize → hold escrow → release** transitions via mock API before Stripe integration.
+- Record **platform fee** (mock 10%), **escrow hold**, and **payout creation** in the ledger.
+- Provide an append-only-style **ledger** for audit and future dispute evidence.
+- **No frontend payment UI yet** — test via API/SDK or Swagger (`/docs`, tag **payments**).
 
 ### Schema
 
@@ -1135,59 +1138,125 @@ Wayly is preparing for **monetization** with a database and shared-type foundati
 
 Migration: `apps/api/prisma/migrations/20260605163921_payment_escrow_foundation/migration.sql`
 
-### Intended future flow
+### Current mock payment lifecycle
 
 ```text
-Sender pays for delivery (checkout / Stripe)
+Order ACCEPTED or IN_TRANSIT (with reward + currency, accepted Wayler)
         ↓
-PaymentIntent created (PENDING → AUTHORIZED)
+Sender: POST mock-authorize  →  PaymentIntent AUTHORIZED (MANUAL)
+        ↓  LedgerEntry: PAYMENT_AUTHORIZED
+Sender: POST mock-hold-escrow  →  HELD_IN_ESCROW
+        ↓  LedgerEntry: ESCROW_HELD, PLATFORM_FEE_CHARGED (10% mock fee)
+Wayler: transit → submit proof → mark DELIVERED
         ↓
-Funds held in escrow (HELD_IN_ESCROW) — platform fee calculated
-        ↓
-LedgerEntry: PAYMENT_AUTHORIZED, ESCROW_HELD, PLATFORM_FEE_CHARGED
-        ↓
-Delivery completes + proof (DELIVERED / proof submitted)
-        ↓
-Escrow released (RELEASED) → Payout to Wayler (PAYOUT_CREATED → PAID)
-        ↓
-LedgerEntry: PAYOUT_CREATED, PAYOUT_PAID
-        ↓
-Refunds / disputes (later) → REFUNDED, holds, arbitrator review
+Sender: POST mock-release  →  RELEASED + Payout PENDING (MANUAL)
+        ↓  LedgerEntry: PAYOUT_CREATED
 ```
 
-Today: **no steps above are executed** — only tables and types exist.
+**Fee split (mock):** `amount` = `offeredRewardAmount`; `platformFeeAmount` = 10%; `escrowAmount` = remainder.
+
+### API routes
+
+All routes require **JWT + KYC approved**. Base path: `/api/v1`. Provider is **`MANUAL` only** — no Stripe calls.
+
+| Method | Path                                              | Description                                                    |
+| ------ | ------------------------------------------------- | -------------------------------------------------------------- |
+| POST   | `/api/v1/payments/orders/:orderId/mock-authorize` | Sender creates/updates intent → `AUTHORIZED`                   |
+| POST   | `/api/v1/payments/:id/mock-hold-escrow`           | Payer moves `AUTHORIZED` → `HELD_IN_ESCROW`                    |
+| POST   | `/api/v1/payments/:id/mock-release`               | Payer/Sender releases escrow → `RELEASED` + `Payout` `PENDING` |
+| GET    | `/api/v1/payments/orders/:orderId`                | Sender or accepted Wayler reads intent (`404` if none)         |
+
+Interactive docs: http://localhost:4000/docs (tag **payments**).
+
+### SDK
+
+```typescript
+api.payments.mockAuthorizeOrder(orderId); // POST /payments/orders/:orderId/mock-authorize
+api.payments.mockHoldEscrow(paymentIntentId); // POST /payments/:id/mock-hold-escrow
+api.payments.mockRelease(paymentIntentId); // POST /payments/:id/mock-release
+api.payments.forOrder(orderId); // GET /payments/orders/:orderId
+```
+
+Returns `PaymentIntentSummary` from `@wayly/types`.
+
+### Rules (mock/manual)
+
+| Step                 | Rules                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **mock-authorize**   | Caller must be **order Sender** (`senderId`). Order **ACCEPTED** or **IN_TRANSIT** only (not DRAFT/OPEN/CANCELLED/DELIVERED). Requires `acceptedWaylerId`, `offeredRewardAmount`, and `currency` (else **409**). Creates or updates one `PaymentIntent` per order. **409** if already `RELEASED`/`REFUNDED`. Idempotent return if already `AUTHORIZED`/`HELD_IN_ESCROW`. |
+| **mock-hold-escrow** | Caller must be **payerId**. Status must be **AUTHORIZED** → sets **HELD_IN_ESCROW**, `escrowedAt`.                                                                                                                                                                                                                                                                       |
+| **mock-release**     | Caller must be **payerId** or **order Sender**. Status **HELD_IN_ESCROW**. Order **DELIVERED** and **`proofSubmittedAt`** required (else **409**). Sets **RELEASED**, creates **Payout** (`PENDING`, `MANUAL`, amount = `escrowAmount`).                                                                                                                                 |
+| **forOrder (GET)**   | Caller must be **Sender** or **accepted Wayler**.                                                                                                                                                                                                                                                                                                                        |
+
+**Ledger entries created:**
+
+| Action           | `LedgerEntryType`                                                    |
+| ---------------- | -------------------------------------------------------------------- |
+| mock-authorize   | `PAYMENT_AUTHORIZED` (full amount)                                   |
+| mock-hold-escrow | `ESCROW_HELD` (escrow amount); `PLATFORM_FEE_CHARGED` (platform fee) |
+| mock-release     | `PAYOUT_CREATED` (escrow amount, payee user)                         |
+
+### Safety notes
+
+- **`MANUAL` provider only** — no payment processor integration.
+- **No Stripe** — no env vars, webhooks, or Connect calls.
+- **No checkout UI** — API/SDK/Swagger testing only.
+- **No real money movement** — database state transitions for business-flow validation.
+- **For local/business-flow testing only** — not production payment processing.
 
 ### Current scope
 
-| Included                          | Not included (yet)              |
-| --------------------------------- | ------------------------------- |
-| Prisma enums + models + migration | Payment API module / routes     |
-| `@wayly/types` payment summaries  | SDK payment methods             |
-| User / `DeliveryOrder` relations  | Frontend checkout or payment UI |
-|                                   | Stripe / Connect integration    |
-|                                   | Escrow release rules            |
-|                                   | Payout / refund processing      |
-|                                   | Subscription / paywall          |
-|                                   | Real money movement             |
+| Included                                 | Not included (yet)           |
+| ---------------------------------------- | ---------------------------- |
+| Prisma enums + models + migration        | Stripe / Connect integration |
+| `@wayly/types` payment summaries         | Frontend payment UI          |
+| Mock/manual payment API + SDK            | Checkout flow                |
+| Escrow release rules (mock, proof-gated) | Payout processing (`PAID`)   |
+| Ledger on authorize/hold/release         | Refund workflow              |
+|                                          | Payment webhooks             |
+|                                          | Subscription / paywall       |
+|                                          | Real money movement          |
 
-### Manual verification
+### Manual testing checklist (mock payments)
 
-- [ ] Migration `payment_escrow_foundation` applied (`pnpm --filter @wayly/api exec prisma migrate dev`)
-- [ ] Prisma client generated (`pnpm --filter @wayly/api db:generate`)
-- [ ] `pnpm build` passes
-- [ ] `pnpm lint` passes
-- [ ] `pnpm typecheck` passes
+Use two KYC-approved users (**A** = Sender, **B** = Wayler):
+
+- [ ] **User A** creates order with **reward amount** and **currency**
+- [ ] **User B** accepts → order `ACCEPTED`
+- [ ] **User A** `POST mock-authorize` → `PaymentIntent` **AUTHORIZED**, `provider` **MANUAL**
+- [ ] **User A** `POST mock-hold-escrow` → status **HELD_IN_ESCROW**
+- [ ] **User B** starts transit
+- [ ] **User B** submits proof
+- [ ] **User B** marks delivered
+- [ ] **User A** `POST mock-release` → status **RELEASED**; **Payout** created **PENDING**
+- [ ] `GET /payments/orders/:orderId` returns intent for **A** and **B**
+- [ ] **User B** cannot `mock-authorize` (not payer) → **403**
+- [ ] `mock-release` before **DELIVERED** or without **proof** → **409**
+- [ ] `pnpm build`, `pnpm lint`, `pnpm typecheck` pass
+
+### Intended production flow (future)
+
+```text
+Sender pays via Stripe checkout
+        ↓
+AUTHORIZED → HELD_IN_ESCROW (platform fee)
+        ↓
+DELIVERED + proof → RELEASED → Payout PAID
+        ↓
+Refunds / disputes → holds, arbitrator review
+```
+
+Mock API today exercises the middle lifecycle without a payment processor.
 
 ### Future milestones (payments & monetization)
 
-- **Payment API module** — create/read payment intents, status transitions (server-enforced)
-- **Mock / manual payment flow** — dev-friendly path before Stripe (provider `MANUAL`)
-- **Stripe checkout / PaymentIntent** — authorize and capture; map `providerPaymentId`
-- **Escrow release rules** — release after `DELIVERED` + proof (configurable policy)
-- **Platform fee settings** — percentage/fixed fee; populate `platformFeeAmount`
-- **Payout workflow** — Wayler Connect payouts; `Payout` status machine
+- **Frontend mock payment controls** — Sender actions on `/app` (authorize / hold / release)
+- **Stripe checkout / PaymentIntent** — real authorize and capture; `provider` **STRIPE**
+- **Stripe webhooks** — async status sync
+- **Payout processing** — Wayler Connect; `Payout` → `PAID`
 - **Refund workflow** — partial/full refunds; `REFUNDED` + ledger lines
 - **Dispute-aware payment hold** — block release while order `DISPUTED`
+- **Platform fee settings** — configurable percentage/fixed (today: hard-coded 10% mock)
 - **Admin / arbitrator payment review** — ledger + intent visibility during disputes
 - **Subscriptions / paywall** — Wayler access packages (separate from per-order escrow)
 
@@ -1271,8 +1340,8 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
-- **M5 — Payments & escrow (foundation started):** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types (`PaymentIntentSummary`, `PayoutSummary`, `LedgerEntrySummary`). ✅ (schema/types only). Next: payment API, mock/manual flow, Stripe, escrow release, payouts, refunds.
-- **M6–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **payment API + Stripe + escrow release + payouts + refunds**, subscriptions/paywall, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin/arbitrator panel, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
+- **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order). ✅ (schema + mock API complete; no Stripe/real money). Next: frontend payment UI, Stripe, webhooks, payout processing, refunds.
+- **M6–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds**, subscriptions/paywall, offline + PDF agreements, disputes, WebSocket/SSE notification preferences, admin/arbitrator panel, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
