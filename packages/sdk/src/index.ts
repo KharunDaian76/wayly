@@ -16,6 +16,7 @@ export {
   type DeliveryOrderListResult,
   type OrdersApi,
   type OrdersListQuery,
+  type OrdersMineQuery,
 } from './orders.types';
 export { type HealthApi } from './health';
 export type { ApiClientOptions, RequestOptions, TokenProvider, HealthResult } from './types';

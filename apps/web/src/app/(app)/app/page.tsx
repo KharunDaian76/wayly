@@ -280,13 +280,12 @@ export default function AppHomePage() {
   const isApproved = kycStatus?.verified && kycStatus?.kycStatus === KycStatus.APPROVED;
   const canViewSenderOrders =
     Boolean(user?.verified) && kycStatus?.kycStatus === KycStatus.APPROVED;
-  const currentUserId = user?.id;
 
   const loadDraftOrders = useCallback(async () => {
     setDraftsLoading(true);
     setDraftsError(null);
     try {
-      const result = await api.orders.list({ status: 'DRAFT' });
+      const result = await api.orders.mine({ status: 'DRAFT' });
       setDraftOrders(result.items);
     } catch {
       setDraftsError(t('app.senderPanel.draftsLoadFailed'));
@@ -296,38 +295,31 @@ export default function AppHomePage() {
   }, [t]);
 
   const loadPublishedOrders = useCallback(async () => {
-    if (!currentUserId) {
-      return;
-    }
     setPublishedLoading(true);
     setPublishedError(null);
     try {
-      const result = await api.orders.list({ status: 'OPEN', limit: SENDER_LIST_LIMIT });
-      const mine = result.items.filter((order) => order.senderId === currentUserId);
-      mine.sort((a, b) => {
+      const result = await api.orders.mine({ status: 'OPEN', limit: SENDER_LIST_LIMIT });
+      const items = [...result.items];
+      items.sort((a, b) => {
         const timeA = new Date(a.publishedAt ?? a.createdAt).getTime();
         const timeB = new Date(b.publishedAt ?? b.createdAt).getTime();
         return timeB - timeA;
       });
-      setPublishedOrders(mine);
+      setPublishedOrders(items);
     } catch {
       setPublishedError(t('app.senderPanel.publishedLoadFailed'));
     } finally {
       setPublishedLoading(false);
     }
-  }, [t, currentUserId]);
+  }, [t]);
 
   const loadSenderAcceptedOrders = useCallback(async () => {
-    if (!currentUserId) {
-      return;
-    }
     setSenderAcceptedLoading(true);
     setSenderAcceptedError(null);
     try {
-      const result = await api.orders.list({ status: 'ACCEPTED', limit: SENDER_LIST_LIMIT });
-      const mine = result.items.filter((order) => order.senderId === currentUserId);
+      const result = await api.orders.mine({ status: 'ACCEPTED', limit: SENDER_LIST_LIMIT });
       const withAcceptedAt = await Promise.all(
-        mine.map(async (order) => {
+        result.items.map(async (order) => {
           const detail = await api.orders.detail(order.id);
           return { ...order, acceptedAt: detail.acceptedAt };
         }),
@@ -343,7 +335,7 @@ export default function AppHomePage() {
     } finally {
       setSenderAcceptedLoading(false);
     }
-  }, [t, currentUserId]);
+  }, [t]);
 
   const loadFeedOrders = useCallback(async () => {
     setFeedLoading(true);

@@ -21,7 +21,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import type { DeliveryOrderDetail } from '@wayly/types';
-import { createDeliveryOrderSchema, deliveryOrderQuerySchema } from '@wayly/validation';
+import { DeliveryOrderStatus, DeliveryOrderType } from '@wayly/types';
+import { createDeliveryOrderSchema, deliveryOrderQuerySchema, enumSchema } from '@wayly/validation';
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
@@ -43,6 +44,13 @@ const ordersListQuerySchema = deliveryOrderQuerySchema
     page: z.coerce.number().int().min(1).default(1),
   })
   .omit({ cursor: true });
+
+const ordersMineQuerySchema = z.object({
+  status: enumSchema(DeliveryOrderStatus).optional(),
+  type: enumSchema(DeliveryOrderType).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});
 
 @ApiTags('orders')
 @ApiBearerAuth('access-token')
@@ -85,6 +93,18 @@ export class OrdersController {
   @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
   listAccepted(@CurrentUser() user: RequestUser) {
     return this.orders.listAcceptedByWayler(user);
+  }
+
+  @Get('mine')
+  @ApiOperation({ summary: 'List delivery orders sent by the current user (Sender)' })
+  @ApiOkResponse({ type: DeliveryOrderListResponseDto })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  listMine(
+    @CurrentUser() user: RequestUser,
+    @Query(zodQuery(ordersMineQuerySchema)) query: z.infer<typeof ordersMineQuerySchema>,
+  ): Promise<DeliveryOrderListResult> {
+    return this.orders.listMine(user, query);
   }
 
   @Post(':id/publish')

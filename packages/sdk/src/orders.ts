@@ -5,6 +5,7 @@ import type {
   DeliveryOrderListResult,
   OrdersApi,
   OrdersListQuery,
+  OrdersMineQuery,
 } from './orders.types';
 import type { RequestOptions } from './types';
 
@@ -24,6 +25,14 @@ export function createOrdersApi(request: Requester): OrdersApi {
 
     list: (query?: OrdersListQuery, accessToken?: string | null) =>
       request<DeliveryOrderListResult>('/orders', {
+        method: 'GET',
+        query: query as RequestOptions['query'],
+        ...withCookies,
+        accessToken,
+      }),
+
+    mine: (query?: OrdersMineQuery, accessToken?: string | null) =>
+      request<DeliveryOrderListResult>('/orders/mine', {
         method: 'GET',
         query: query as RequestOptions['query'],
         ...withCookies,
@@ -60,4 +69,9 @@ export function createOrdersApi(request: Requester): OrdersApi {
   };
 }
 
-export type { OrdersApi, OrdersListQuery, DeliveryOrderListResult } from './orders.types';
+export type {
+  OrdersApi,
+  OrdersListQuery,
+  OrdersMineQuery,
+  DeliveryOrderListResult,
+} from './orders.types';

@@ -18,6 +18,14 @@ export interface OrdersListQuery {
   limit?: number;
 }
 
+/** GET /orders/mine query parameters (Sender's own sent orders). */
+export interface OrdersMineQuery {
+  status?: DeliveryOrderStatus;
+  type?: DeliveryOrderType;
+  page?: number;
+  limit?: number;
+}
+
 export interface DeliveryOrderListResult {
   items: DeliveryOrderSummary[];
   page: number;
@@ -33,6 +41,8 @@ export interface AcceptedDeliveryOrderSummary extends DeliveryOrderSummary {
 export interface OrdersApi {
   create(body: CreateDeliveryOrderInput, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   list(query?: OrdersListQuery, accessToken?: string | null): Promise<DeliveryOrderListResult>;
+  /** List delivery orders sent by the authenticated user (Sender dashboard). */
+  mine(query?: OrdersMineQuery, accessToken?: string | null): Promise<DeliveryOrderListResult>;
   detail(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   publish(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   /** Accept an OPEN delivery order as the current Wayler. Returns updated order detail. */

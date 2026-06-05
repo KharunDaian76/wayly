@@ -18,6 +18,13 @@ export interface OrdersListQuery extends DeliveryOrderQueryInput {
   page: number;
 }
 
+export interface OrdersMineQuery {
+  status?: DeliveryOrderStatus;
+  type?: DeliveryOrderQueryInput['type'];
+  page: number;
+  limit: number;
+}
+
 export interface DeliveryOrderListResult {
   items: DeliveryOrderSummary[];
   page: number;
@@ -49,6 +56,35 @@ export class OrdersService {
 
     const status = query.status ?? DeliveryOrderStatus.OPEN;
     const where = this.buildListWhere(query, status, user.id);
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.deliveryOrder.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+      }),
+      this.prisma.deliveryOrder.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toDeliveryOrderSummary),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
+  }
+
+  /** List delivery orders sent by the authenticated user (Sender dashboard). */
+  async listMine(user: RequestUser, query: OrdersMineQuery): Promise<DeliveryOrderListResult> {
+    requireKycApproved(user);
+
+    const where: Prisma.DeliveryOrderWhereInput = {
+      senderId: user.id,
+      ...(query.status ? { status: query.status as PrismaDeliveryOrderStatus } : {}),
+      ...(query.type ? { type: query.type as PrismaDeliveryOrderType } : {}),
+    };
     const skip = (query.page - 1) * query.limit;
 
     const [records, total] = await Promise.all([
