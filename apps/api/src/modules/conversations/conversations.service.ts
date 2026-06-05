@@ -11,11 +11,13 @@ import type {
   ConversationDetail,
   ConversationListResponse,
 } from '@wayly/types';
+import { NotificationType } from '@wayly/types';
 import type { ConversationsListQueryInput, SendChatMessageInput } from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import {
   toChatMessageSummary,
@@ -30,6 +32,7 @@ const CHAT_ELIGIBLE_STATUSES: PrismaDeliveryOrderStatus[] = [
 ];
 
 const MESSAGE_HISTORY_LIMIT = 100;
+const CHAT_NOTIFICATION_PREVIEW_MAX = 80;
 
 export interface MarkConversationReadResult {
   updatedCount: number;
@@ -37,7 +40,10 @@ export interface MarkConversationReadResult {
 
 @Injectable()
 export class ConversationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async forOrder(user: RequestUser, orderId: string): Promise<ConversationDetail> {
     requireKycApproved(user);
@@ -135,6 +141,17 @@ export class ConversationsService {
       }),
     ]);
 
+    const recipientId =
+      user.id === conversation.senderId ? conversation.waylerId : conversation.senderId;
+
+    await this.notifications.createForUser({
+      userId: recipientId,
+      type: NotificationType.SYSTEM,
+      title: 'New chat message',
+      body: this.buildChatNotificationBody(body.body),
+      relatedOrderId: conversation.orderId,
+    });
+
     return toChatMessageSummary(message);
   }
 
@@ -194,6 +211,20 @@ export class ConversationsService {
       throw new NotFoundException('Conversation not found');
     }
     return conversation;
+  }
+
+  private buildChatNotificationBody(messageBody: string): string {
+    const trimmed = messageBody.trim();
+    if (!trimmed) {
+      return 'You received a new message about a delivery.';
+    }
+
+    const preview =
+      trimmed.length > CHAT_NOTIFICATION_PREVIEW_MAX
+        ? `${trimmed.slice(0, CHAT_NOTIFICATION_PREVIEW_MAX)}…`
+        : trimmed;
+
+    return `You received a new message about a delivery: "${preview}"`;
   }
 
   private async loadMessagesAsc(conversationId: string): Promise<ChatMessage[]> {
