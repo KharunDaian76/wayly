@@ -137,6 +137,38 @@ export class OrdersController {
     return this.orders.accept(user, id);
   }
 
+  @Post(':id/start-transit')
+  @ApiOperation({ summary: 'Move an accepted delivery order to in transit (accepted Wayler)' })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({
+    description: 'KYC approval required, or caller is not the accepted Wayler',
+  })
+  @ApiNotFoundResponse({ description: 'Delivery order not found' })
+  @ApiConflictResponse({ description: 'Order is not in ACCEPTED status' })
+  startTransit(
+    @CurrentUser() user: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<DeliveryOrderDetail> {
+    return this.orders.startTransit(user, id);
+  }
+
+  @Post(':id/mark-delivered')
+  @ApiOperation({ summary: 'Mark an in-transit delivery order as delivered (accepted Wayler)' })
+  @ApiOkResponse({ type: DeliveryOrderDetailDto })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
+  @ApiForbiddenResponse({
+    description: 'KYC approval required, or caller is not the accepted Wayler',
+  })
+  @ApiNotFoundResponse({ description: 'Delivery order not found' })
+  @ApiConflictResponse({ description: 'Order is not in IN_TRANSIT status' })
+  markDelivered(
+    @CurrentUser() user: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<DeliveryOrderDetail> {
+    return this.orders.markDelivered(user, id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a delivery order by id' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })

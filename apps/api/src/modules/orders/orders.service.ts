@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   DeliveryOrderStatus as PrismaDeliveryOrderStatus,
   DeliveryOrderType as PrismaDeliveryOrderType,
@@ -174,6 +179,64 @@ export class OrdersService {
         status: PrismaDeliveryOrderStatus.ACCEPTED,
         acceptedWaylerId: user.id,
         acceptedAt,
+      },
+    });
+
+    return toDeliveryOrderDetail(updated);
+  }
+
+  async startTransit(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.acceptedWaylerId !== user.id) {
+      throw new ForbiddenException(
+        'Only the accepted Wayler can start transit for this delivery order',
+      );
+    }
+
+    if (record.status !== PrismaDeliveryOrderStatus.ACCEPTED) {
+      throw new ConflictException('Only accepted delivery orders can be moved to in transit');
+    }
+
+    const updated = await this.prisma.deliveryOrder.update({
+      where: { id },
+      data: {
+        status: PrismaDeliveryOrderStatus.IN_TRANSIT,
+      },
+    });
+
+    return toDeliveryOrderDetail(updated);
+  }
+
+  async markDelivered(user: RequestUser, id: string): Promise<DeliveryOrderDetail> {
+    requireKycApproved(user);
+
+    const record = await this.prisma.deliveryOrder.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException('Delivery order not found');
+    }
+
+    if (record.acceptedWaylerId !== user.id) {
+      throw new ForbiddenException(
+        'Only the accepted Wayler can mark this delivery order as delivered',
+      );
+    }
+
+    if (record.status !== PrismaDeliveryOrderStatus.IN_TRANSIT) {
+      throw new ConflictException('Only in-transit delivery orders can be marked as delivered');
+    }
+
+    const deliveredAt = new Date();
+    const updated = await this.prisma.deliveryOrder.update({
+      where: { id },
+      data: {
+        status: PrismaDeliveryOrderStatus.DELIVERED,
+        deliveredAt,
       },
     });
 

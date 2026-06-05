@@ -47,6 +47,10 @@ export interface OrdersApi {
   publish(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   /** Accept an OPEN delivery order as the current Wayler. Returns updated order detail. */
   accept(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
+  /** Move an ACCEPTED delivery order to IN_TRANSIT (accepted Wayler only). */
+  startTransit(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
+  /** Mark an IN_TRANSIT delivery order as DELIVERED (accepted Wayler only). */
+  markDelivered(id: string, accessToken?: string | null): Promise<DeliveryOrderDetail>;
   /** List delivery orders accepted by the authenticated Wayler. */
   accepted(accessToken?: string | null): Promise<AcceptedDeliveryOrderSummary[]>;
 }

@@ -60,6 +60,20 @@ export function createOrdersApi(request: Requester): OrdersApi {
         accessToken,
       }),
 
+    startTransit: (id: string, accessToken?: string | null) =>
+      request<DeliveryOrderDetail>(`/orders/${id}/start-transit`, {
+        method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+
+    markDelivered: (id: string, accessToken?: string | null) =>
+      request<DeliveryOrderDetail>(`/orders/${id}/mark-delivered`, {
+        method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+
     accepted: (accessToken?: string | null) =>
       request<AcceptedDeliveryOrderSummary[]>('/orders/accepted', {
         method: 'GET',
