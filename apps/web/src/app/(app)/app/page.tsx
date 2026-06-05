@@ -243,6 +243,17 @@ function senderStatusNote(
   }
 }
 
+function resolveCancelError(err: unknown, t: (key: TranslationKey) => string): string {
+  if (!(err instanceof ApiError)) {
+    return t('app.senderPanel.cancelFailed');
+  }
+  const message = err.message.toLowerCase();
+  if (message.includes('already cancelled') || message.includes('only draft or open')) {
+    return t('app.senderPanel.cancelUnavailable');
+  }
+  return err.message || t('app.senderPanel.cancelFailed');
+}
+
 function resolveAcceptError(err: unknown, t: (key: TranslationKey) => string): string {
   if (!(err instanceof ApiError)) {
     return t('app.waylerFeed.acceptFailed');
@@ -290,9 +301,16 @@ export default function AppHomePage() {
   const [senderAcceptedLoading, setSenderAcceptedLoading] = useState(false);
   const [senderAcceptedError, setSenderAcceptedError] = useState<string | null>(null);
   const [publishingOrderId, setPublishingOrderId] = useState<string | null>(null);
+  const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [publishSuccess, setPublishSuccess] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const [cancelSuccessPanel, setCancelSuccessPanel] = useState<'draft' | 'published' | null>(null);
   const [exitingDraftIds, setExitingDraftIds] = useState<ReadonlySet<string>>(() => new Set());
+  const [exitingPublishedIds, setExitingPublishedIds] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
+  const senderListActionBusy = publishingOrderId !== null || cancellingOrderId !== null;
   const [feedOrders, setFeedOrders] = useState<DeliveryOrderSummary[]>([]);
   const [feedLoading, setFeedLoading] = useState(false);
   const [feedError, setFeedError] = useState<string | null>(null);
@@ -611,9 +629,50 @@ export default function AppHomePage() {
     }
   }
 
+  async function handleCancelOrder(orderId: string, panel: 'draft' | 'published') {
+    setCancelError(null);
+    setCancelSuccessPanel(null);
+    setPublishError(null);
+    setPublishSuccess(false);
+    setCancellingOrderId(orderId);
+    try {
+      await api.orders.cancel(orderId);
+      setCancelSuccessPanel(panel);
+      if (panel === 'draft') {
+        setExitingDraftIds((prev) => new Set(prev).add(orderId));
+      } else {
+        setExitingPublishedIds((prev) => new Set(prev).add(orderId));
+      }
+      await new Promise((resolve) => setTimeout(resolve, FEED_EXIT_MS));
+      if (panel === 'draft') {
+        setDraftOrders((prev) => prev.filter((order) => order.id !== orderId));
+        setExitingDraftIds((prev) => {
+          const next = new Set(prev);
+          next.delete(orderId);
+          return next;
+        });
+        await loadDraftOrders();
+      } else {
+        setPublishedOrders((prev) => prev.filter((order) => order.id !== orderId));
+        setExitingPublishedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(orderId);
+          return next;
+        });
+        await loadPublishedOrders();
+      }
+    } catch (err) {
+      setCancelError(resolveCancelError(err, t));
+    } finally {
+      setCancellingOrderId(null);
+    }
+  }
+
   async function handlePublishDraft(orderId: string) {
     setPublishError(null);
     setPublishSuccess(false);
+    setCancelError(null);
+    setCancelSuccessPanel(null);
     setPublishingOrderId(orderId);
     try {
       await api.orders.publish(orderId);
@@ -1280,7 +1339,7 @@ export default function AppHomePage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={!canViewSenderOrders || draftsLoading}
+                  disabled={!canViewSenderOrders || draftsLoading || senderListActionBusy}
                   onClick={() => void loadDraftOrders()}
                 >
                   {t('app.senderPanel.refresh')}
@@ -1290,6 +1349,19 @@ export default function AppHomePage() {
                 {!kycLoading && !canViewSenderOrders ? (
                   <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
                     {t('app.senderPanel.kycRequired')}
+                  </p>
+                ) : null}
+                {cancelError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {cancelError}
+                  </p>
+                ) : null}
+                {cancelSuccessPanel === 'draft' ? (
+                  <p
+                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
+                    role="status"
+                  >
+                    {t('app.senderPanel.cancelSuccess')}
                   </p>
                 ) : null}
                 {publishError ? (
@@ -1363,17 +1435,27 @@ export default function AppHomePage() {
                               <dd>{new Date(order.createdAt).toLocaleString()}</dd>
                             </div>
                           </dl>
-                          <div className="mt-3">
+                          <div className="mt-3 flex flex-wrap gap-2">
                             <Button
                               variant="secondary"
                               size="sm"
                               className="transition-all duration-200 ease-out"
-                              disabled={!canViewSenderOrders || publishingOrderId !== null}
+                              disabled={!canViewSenderOrders || senderListActionBusy}
                               onClick={() => void handlePublishDraft(order.id)}
                             >
                               {publishingOrderId === order.id
                                 ? t('app.senderPanel.publishing')
                                 : t('app.orders.publish')}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              disabled={!canViewSenderOrders || senderListActionBusy}
+                              onClick={() => void handleCancelOrder(order.id, 'draft')}
+                            >
+                              {cancellingOrderId === order.id
+                                ? t('app.senderPanel.cancelling')
+                                : t('app.senderPanel.cancel')}
                             </Button>
                           </div>
                         </li>
@@ -1390,7 +1472,7 @@ export default function AppHomePage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={!canViewSenderOrders || publishedLoading}
+                  disabled={!canViewSenderOrders || publishedLoading || senderListActionBusy}
                   onClick={() => void loadPublishedOrders()}
                 >
                   {t('app.senderPanel.refresh')}
@@ -1400,6 +1482,19 @@ export default function AppHomePage() {
                 {!kycLoading && !canViewSenderOrders ? (
                   <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
                     {t('app.senderPanel.kycRequired')}
+                  </p>
+                ) : null}
+                {cancelError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {cancelError}
+                  </p>
+                ) : null}
+                {cancelSuccessPanel === 'published' ? (
+                  <p
+                    className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
+                    role="status"
+                  >
+                    {t('app.senderPanel.cancelSuccess')}
                   </p>
                 ) : null}
                 {publishedError ? (
@@ -1418,48 +1513,72 @@ export default function AppHomePage() {
                   </p>
                 ) : canViewSenderOrders ? (
                   <ul className="flex flex-col gap-4">
-                    {publishedOrders.map((order) => (
-                      <li key={order.id} className={SENDER_ORDER_CARD_CLASS}>
-                        <p className="font-medium">{order.title}</p>
-                        <p className="text-muted-foreground">{order.type}</p>
-                        <dl className="mt-2 flex flex-col gap-1">
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.senderPanel.labelRoute')}
-                            </dt>
-                            <dd>
-                              {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
-                              {t('app.orders.routeSeparator')}{' '}
-                              {formatLocation(order.dropoffCity, order.dropoffCountry)}
-                            </dd>
+                    {publishedOrders.map((order) => {
+                      const isExitingPublished = exitingPublishedIds.has(order.id);
+
+                      return (
+                        <li
+                          key={order.id}
+                          className={cn(
+                            SENDER_ORDER_CARD_CLASS,
+                            isExitingPublished && 'wayly-feed-item-exit',
+                          )}
+                        >
+                          <p className="font-medium">{order.title}</p>
+                          <p className="text-muted-foreground">{order.type}</p>
+                          <dl className="mt-2 flex flex-col gap-1">
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelRoute')}
+                              </dt>
+                              <dd>
+                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                {t('app.orders.routeSeparator')}{' '}
+                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelReward')}
+                              </dt>
+                              <dd>
+                                {formatReward(
+                                  order.offeredRewardAmount,
+                                  order.currency,
+                                  t('app.orders.rewardNone'),
+                                )}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelPublishedAt')}
+                              </dt>
+                              <dd>
+                                {new Date(order.publishedAt ?? order.createdAt).toLocaleString()}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.orders.labelStatus')}
+                              </dt>
+                              <dd>{t('app.senderPanel.statusOpen')}</dd>
+                            </div>
+                          </dl>
+                          <div className="mt-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              disabled={!canViewSenderOrders || senderListActionBusy}
+                              onClick={() => void handleCancelOrder(order.id, 'published')}
+                            >
+                              {cancellingOrderId === order.id
+                                ? t('app.senderPanel.cancelling')
+                                : t('app.senderPanel.cancel')}
+                            </Button>
                           </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.senderPanel.labelReward')}
-                            </dt>
-                            <dd>
-                              {formatReward(
-                                order.offeredRewardAmount,
-                                order.currency,
-                                t('app.orders.rewardNone'),
-                              )}
-                            </dd>
-                          </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">
-                              {t('app.senderPanel.labelPublishedAt')}
-                            </dt>
-                            <dd>
-                              {new Date(order.publishedAt ?? order.createdAt).toLocaleString()}
-                            </dd>
-                          </div>
-                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
-                            <dd>{t('app.senderPanel.statusOpen')}</dd>
-                          </div>
-                        </dl>
-                      </li>
-                    ))}
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : null}
               </CardContent>

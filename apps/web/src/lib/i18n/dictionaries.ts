@@ -197,6 +197,11 @@ const en = {
   'app.senderPanel.inTransitNote': 'Delivery is currently in transit.',
   'app.senderPanel.deliveredNote': 'Delivery has been marked as delivered.',
   'app.senderPanel.labelDeliveredAt': 'Delivered',
+  'app.senderPanel.cancel': 'Cancel',
+  'app.senderPanel.cancelling': 'Cancelling…',
+  'app.senderPanel.cancelSuccess': 'Delivery request cancelled successfully.',
+  'app.senderPanel.cancelFailed': 'Could not cancel delivery request. Try again.',
+  'app.senderPanel.cancelUnavailable': 'This delivery request can no longer be cancelled.',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -397,6 +402,11 @@ const ru: Dictionary = {
   'app.senderPanel.inTransitNote': 'Доставка сейчас в пути.',
   'app.senderPanel.deliveredNote': 'Доставка отмечена как завершённая.',
   'app.senderPanel.labelDeliveredAt': 'Доставлено',
+  'app.senderPanel.cancel': 'Отменить',
+  'app.senderPanel.cancelling': 'Отмена…',
+  'app.senderPanel.cancelSuccess': 'Заявка на доставку успешно отменена.',
+  'app.senderPanel.cancelFailed': 'Не удалось отменить заявку. Попробуйте снова.',
+  'app.senderPanel.cancelUnavailable': 'Эту заявку больше нельзя отменить.',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -598,6 +608,11 @@ const es: Dictionary = {
   'app.senderPanel.inTransitNote': 'La entrega está actualmente en tránsito.',
   'app.senderPanel.deliveredNote': 'La entrega ha sido marcada como entregada.',
   'app.senderPanel.labelDeliveredAt': 'Entregado',
+  'app.senderPanel.cancel': 'Cancelar',
+  'app.senderPanel.cancelling': 'Cancelando…',
+  'app.senderPanel.cancelSuccess': 'Solicitud de entrega cancelada correctamente.',
+  'app.senderPanel.cancelFailed': 'No se pudo cancelar la solicitud. Inténtalo de nuevo.',
+  'app.senderPanel.cancelUnavailable': 'Esta solicitud ya no se puede cancelar.',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -804,6 +819,11 @@ const fr: Dictionary = {
   'app.senderPanel.inTransitNote': 'La livraison est actuellement en transit.',
   'app.senderPanel.deliveredNote': 'La livraison a été marquée comme livrée.',
   'app.senderPanel.labelDeliveredAt': 'Livrée',
+  'app.senderPanel.cancel': 'Annuler',
+  'app.senderPanel.cancelling': 'Annulation…',
+  'app.senderPanel.cancelSuccess': 'Demande de livraison annulée avec succès.',
+  'app.senderPanel.cancelFailed': "Impossible d'annuler la demande. Réessayez.",
+  'app.senderPanel.cancelUnavailable': 'Cette demande ne peut plus être annulée.',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -1015,6 +1035,12 @@ const de: Dictionary = {
   'app.senderPanel.inTransitNote': 'Die Lieferung ist derzeit unterwegs.',
   'app.senderPanel.deliveredNote': 'Die Lieferung wurde als zugestellt markiert.',
   'app.senderPanel.labelDeliveredAt': 'Zugestellt',
+  'app.senderPanel.cancel': 'Stornieren',
+  'app.senderPanel.cancelling': 'Wird storniert…',
+  'app.senderPanel.cancelSuccess': 'Lieferanfrage erfolgreich storniert.',
+  'app.senderPanel.cancelFailed':
+    'Lieferanfrage konnte nicht storniert werden. Bitte erneut versuchen.',
+  'app.senderPanel.cancelUnavailable': 'Diese Lieferanfrage kann nicht mehr storniert werden.',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -1213,6 +1239,11 @@ const tr: Dictionary = {
   'app.senderPanel.inTransitNote': 'Teslimat şu anda yolda.',
   'app.senderPanel.deliveredNote': 'Teslimat teslim edildi olarak işaretlendi.',
   'app.senderPanel.labelDeliveredAt': 'Teslim edildi',
+  'app.senderPanel.cancel': 'İptal et',
+  'app.senderPanel.cancelling': 'İptal ediliyor…',
+  'app.senderPanel.cancelSuccess': 'Teslimat talebi başarıyla iptal edildi.',
+  'app.senderPanel.cancelFailed': 'Teslimat talebi iptal edilemedi. Tekrar deneyin.',
+  'app.senderPanel.cancelUnavailable': 'Bu teslimat talebi artık iptal edilemez.',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -1405,6 +1436,11 @@ const ar: Dictionary = {
   'app.senderPanel.inTransitNote': 'التوصيل قيد النقل حالياً.',
   'app.senderPanel.deliveredNote': 'تم تعيين التوصيل كمُسلَّم.',
   'app.senderPanel.labelDeliveredAt': 'تم التسليم',
+  'app.senderPanel.cancel': 'إلغاء',
+  'app.senderPanel.cancelling': 'جارٍ الإلغاء…',
+  'app.senderPanel.cancelSuccess': 'تم إلغاء طلب التوصيل بنجاح.',
+  'app.senderPanel.cancelFailed': 'تعذر إلغاء طلب التوصيل. حاول مرة أخرى.',
+  'app.senderPanel.cancelUnavailable': 'لم يعد بإمكان إلغاء طلب التوصيل هذا.',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -1596,6 +1632,11 @@ const zh: Dictionary = {
   'app.senderPanel.inTransitNote': '配送正在运输中。',
   'app.senderPanel.deliveredNote': '配送已标记为已送达。',
   'app.senderPanel.labelDeliveredAt': '送达时间',
+  'app.senderPanel.cancel': '取消',
+  'app.senderPanel.cancelling': '正在取消…',
+  'app.senderPanel.cancelSuccess': '配送请求已成功取消。',
+  'app.senderPanel.cancelFailed': '无法取消配送请求。请重试。',
+  'app.senderPanel.cancelUnavailable': '该配送请求已无法取消。',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 
