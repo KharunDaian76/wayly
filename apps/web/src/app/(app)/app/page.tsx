@@ -14,9 +14,12 @@ import {
   Input,
   Skeleton,
 } from '@wayly/ui';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+
+import type { WaylerMapLabels } from '@/components/wayler-map';
 
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
@@ -34,7 +37,20 @@ const FEED_SELECT_CLASS =
 
 type FeedSort = 'rewardDesc' | 'publishedDesc' | 'routeAsc';
 
+type SenderAcceptedOrderRow = DeliveryOrderSummary & { acceptedAt: string | null };
+
 const FEED_EXIT_MS = 280;
+const SENDER_LIST_LIMIT = 100;
+
+const SENDER_ORDER_CARD_CLASS = cn(
+  'rounded-lg border border-border/60 px-4 py-3 text-sm',
+  'transition-all duration-200 ease-out hover:shadow-md hover:scale-[1.01]',
+  'wayly-feed-item-enter',
+);
+
+const WaylerMap = dynamic(() => import('@/components/wayler-map').then((mod) => mod.WaylerMap), {
+  ssr: false,
+});
 
 function StatusRow({ label, value }: { label: string; value: string }) {
   return (
@@ -129,7 +145,7 @@ function filterFeedOrdersByReward(
   });
 }
 
-function FeedOrdersSkeleton() {
+function OrdersListSkeleton() {
   return (
     <ul className="flex flex-col gap-4" aria-hidden>
       {[0, 1, 2].map((key) => (
@@ -145,6 +161,14 @@ function FeedOrdersSkeleton() {
       ))}
     </ul>
   );
+}
+
+function FeedOrdersSkeleton() {
+  return <OrdersListSkeleton />;
+}
+
+function SenderOrdersSkeleton() {
+  return <OrdersListSkeleton />;
 }
 
 function AcceptedOrdersSkeleton() {
@@ -205,9 +229,16 @@ export default function AppHomePage() {
   const [draftOrders, setDraftOrders] = useState<DeliveryOrderSummary[]>([]);
   const [draftsLoading, setDraftsLoading] = useState(false);
   const [draftsError, setDraftsError] = useState<string | null>(null);
+  const [publishedOrders, setPublishedOrders] = useState<DeliveryOrderSummary[]>([]);
+  const [publishedLoading, setPublishedLoading] = useState(false);
+  const [publishedError, setPublishedError] = useState<string | null>(null);
+  const [senderAcceptedOrders, setSenderAcceptedOrders] = useState<SenderAcceptedOrderRow[]>([]);
+  const [senderAcceptedLoading, setSenderAcceptedLoading] = useState(false);
+  const [senderAcceptedError, setSenderAcceptedError] = useState<string | null>(null);
   const [publishingOrderId, setPublishingOrderId] = useState<string | null>(null);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [publishSuccess, setPublishSuccess] = useState(false);
+  const [exitingDraftIds, setExitingDraftIds] = useState<ReadonlySet<string>>(() => new Set());
   const [feedOrders, setFeedOrders] = useState<DeliveryOrderSummary[]>([]);
   const [feedLoading, setFeedLoading] = useState(false);
   const [feedError, setFeedError] = useState<string | null>(null);
@@ -247,6 +278,9 @@ export default function AppHomePage() {
   }, [user, loadKycStatus]);
 
   const isApproved = kycStatus?.verified && kycStatus?.kycStatus === KycStatus.APPROVED;
+  const canViewSenderOrders =
+    Boolean(user?.verified) && kycStatus?.kycStatus === KycStatus.APPROVED;
+  const currentUserId = user?.id;
 
   const loadDraftOrders = useCallback(async () => {
     setDraftsLoading(true);
@@ -255,11 +289,61 @@ export default function AppHomePage() {
       const result = await api.orders.list({ status: 'DRAFT' });
       setDraftOrders(result.items);
     } catch {
-      setDraftsError(t('app.orders.draftsLoadFailed'));
+      setDraftsError(t('app.senderPanel.draftsLoadFailed'));
     } finally {
       setDraftsLoading(false);
     }
   }, [t]);
+
+  const loadPublishedOrders = useCallback(async () => {
+    if (!currentUserId) {
+      return;
+    }
+    setPublishedLoading(true);
+    setPublishedError(null);
+    try {
+      const result = await api.orders.list({ status: 'OPEN', limit: SENDER_LIST_LIMIT });
+      const mine = result.items.filter((order) => order.senderId === currentUserId);
+      mine.sort((a, b) => {
+        const timeA = new Date(a.publishedAt ?? a.createdAt).getTime();
+        const timeB = new Date(b.publishedAt ?? b.createdAt).getTime();
+        return timeB - timeA;
+      });
+      setPublishedOrders(mine);
+    } catch {
+      setPublishedError(t('app.senderPanel.publishedLoadFailed'));
+    } finally {
+      setPublishedLoading(false);
+    }
+  }, [t, currentUserId]);
+
+  const loadSenderAcceptedOrders = useCallback(async () => {
+    if (!currentUserId) {
+      return;
+    }
+    setSenderAcceptedLoading(true);
+    setSenderAcceptedError(null);
+    try {
+      const result = await api.orders.list({ status: 'ACCEPTED', limit: SENDER_LIST_LIMIT });
+      const mine = result.items.filter((order) => order.senderId === currentUserId);
+      const withAcceptedAt = await Promise.all(
+        mine.map(async (order) => {
+          const detail = await api.orders.detail(order.id);
+          return { ...order, acceptedAt: detail.acceptedAt };
+        }),
+      );
+      withAcceptedAt.sort((a, b) => {
+        const timeA = a.acceptedAt ? new Date(a.acceptedAt).getTime() : 0;
+        const timeB = b.acceptedAt ? new Date(b.acceptedAt).getTime() : 0;
+        return timeB - timeA;
+      });
+      setSenderAcceptedOrders(withAcceptedAt);
+    } catch {
+      setSenderAcceptedError(t('app.senderPanel.acceptedLoadFailed'));
+    } finally {
+      setSenderAcceptedLoading(false);
+    }
+  }, [t, currentUserId]);
 
   const loadFeedOrders = useCallback(async () => {
     setFeedLoading(true);
@@ -299,6 +383,18 @@ export default function AppHomePage() {
     return sortFeedOrders(rewardFiltered, feedSort);
   }, [feedOrders, feedRewardMin, feedRewardMax, feedSort]);
 
+  const waylerMapLabels = useMemo(
+    (): WaylerMapLabels => ({
+      pickup: t('app.waylerFeed.map.pickup'),
+      dropoff: t('app.waylerFeed.map.dropoff'),
+      route: t('app.waylerFeed.map.route'),
+      mapLoading: t('app.waylerFeed.map.mapLoading'),
+      mapLoadFailed: t('app.waylerFeed.map.mapLoadFailed'),
+      mapUnavailable: t('app.waylerFeed.map.mapUnavailable'),
+    }),
+    [t],
+  );
+
   const loadAcceptedOrders = useCallback(async () => {
     setAcceptedLoading(true);
     setAcceptedError(null);
@@ -313,10 +409,19 @@ export default function AppHomePage() {
   }, [t]);
 
   useEffect(() => {
-    if (user && mode === 'sender' && isApproved) {
+    if (user && mode === 'sender' && canViewSenderOrders) {
       void loadDraftOrders();
+      void loadPublishedOrders();
+      void loadSenderAcceptedOrders();
     }
-  }, [user, mode, isApproved, loadDraftOrders]);
+  }, [
+    user,
+    mode,
+    canViewSenderOrders,
+    loadDraftOrders,
+    loadPublishedOrders,
+    loadSenderAcceptedOrders,
+  ]);
 
   useEffect(() => {
     if (user && mode === 'wayler' && isApproved) {
@@ -406,9 +511,17 @@ export default function AppHomePage() {
     try {
       await api.orders.publish(orderId);
       setPublishSuccess(true);
-      await loadDraftOrders();
+      setExitingDraftIds((prev) => new Set(prev).add(orderId));
+      await new Promise((resolve) => setTimeout(resolve, FEED_EXIT_MS));
+      setDraftOrders((prev) => prev.filter((order) => order.id !== orderId));
+      setExitingDraftIds((prev) => {
+        const next = new Set(prev);
+        next.delete(orderId);
+        return next;
+      });
+      await Promise.all([loadDraftOrders(), loadPublishedOrders()]);
     } catch (err) {
-      setPublishError(err instanceof ApiError ? err.message : t('app.orders.publishFailed'));
+      setPublishError(err instanceof ApiError ? err.message : t('app.senderPanel.publishFailed'));
     } finally {
       setPublishingOrderId(null);
     }
@@ -701,6 +814,26 @@ export default function AppHomePage() {
                         >
                           <p className="font-medium">{order.title}</p>
                           <p className="text-muted-foreground">{order.type}</p>
+                          <WaylerMap
+                            feedReady={!feedLoading}
+                            pickupCity={order.pickupCity}
+                            pickupCountry={order.pickupCountry}
+                            dropoffCity={order.dropoffCity}
+                            dropoffCountry={order.dropoffCountry}
+                            labels={waylerMapLabels}
+                            orderInfo={{
+                              title: order.title,
+                              type: order.type,
+                              rewardText: formatReward(
+                                order.offeredRewardAmount,
+                                order.currency,
+                                t('app.orders.rewardNone'),
+                              ),
+                              publishedText: new Date(
+                                order.publishedAt ?? order.createdAt,
+                              ).toLocaleString(),
+                            }}
+                          />
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -978,11 +1111,23 @@ export default function AppHomePage() {
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>{t('app.orders.draftsTitle')}</CardTitle>
+              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <CardTitle>{t('app.senderPanel.draftsTitle')}</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!canViewSenderOrders || draftsLoading}
+                  onClick={() => void loadDraftOrders()}
+                >
+                  {t('app.senderPanel.refresh')}
+                </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                <p className="text-sm text-muted-foreground">{t('app.orders.publishedNote')}</p>
+                {!kycLoading && !canViewSenderOrders ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.senderPanel.kycRequired')}
+                  </p>
+                ) : null}
                 {publishError ? (
                   <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
                     {publishError}
@@ -993,29 +1138,131 @@ export default function AppHomePage() {
                     className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground"
                     role="status"
                   >
-                    {t('app.orders.publishSuccess')}
+                    {t('app.senderPanel.publishSuccess')}
                   </p>
                 ) : null}
-                {draftsLoading ? (
-                  <p className="text-sm text-muted-foreground">{t('app.orders.draftsLoading')}</p>
-                ) : draftsError ? (
+                {draftsError ? (
                   <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
                     {draftsError}
                   </p>
-                ) : draftOrders.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">{t('app.orders.draftsEmpty')}</p>
-                ) : (
+                ) : null}
+                {canViewSenderOrders && draftsLoading ? (
+                  <>
+                    <p className="sr-only">{t('app.senderPanel.draftsLoading')}</p>
+                    <SenderOrdersSkeleton />
+                  </>
+                ) : canViewSenderOrders && draftOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t('app.senderPanel.draftsEmpty')}
+                  </p>
+                ) : canViewSenderOrders ? (
                   <ul className="flex flex-col gap-4">
-                    {draftOrders.map((order) => (
-                      <li
-                        key={order.id}
-                        className="rounded-lg border border-border/60 px-4 py-3 text-sm"
-                      >
+                    {draftOrders.map((order) => {
+                      const isExitingDraft = exitingDraftIds.has(order.id);
+                      return (
+                        <li
+                          key={order.id}
+                          className={cn(
+                            SENDER_ORDER_CARD_CLASS,
+                            isExitingDraft && 'wayly-feed-item-exit',
+                          )}
+                        >
+                          <p className="font-medium">{order.title}</p>
+                          <p className="text-muted-foreground">{order.type}</p>
+                          <dl className="mt-2 flex flex-col gap-1">
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelRoute')}
+                              </dt>
+                              <dd>
+                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                {t('app.orders.routeSeparator')}{' '}
+                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelReward')}
+                              </dt>
+                              <dd>
+                                {formatReward(
+                                  order.offeredRewardAmount,
+                                  order.currency,
+                                  t('app.orders.rewardNone'),
+                                )}
+                              </dd>
+                            </div>
+                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                              <dt className="text-muted-foreground">
+                                {t('app.senderPanel.labelCreatedAt')}
+                              </dt>
+                              <dd>{new Date(order.createdAt).toLocaleString()}</dd>
+                            </div>
+                          </dl>
+                          <div className="mt-3">
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              className="transition-all duration-200 ease-out"
+                              disabled={!canViewSenderOrders || publishingOrderId !== null}
+                              onClick={() => void handlePublishDraft(order.id)}
+                            >
+                              {publishingOrderId === order.id
+                                ? t('app.senderPanel.publishing')
+                                : t('app.orders.publish')}
+                            </Button>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <CardTitle>{t('app.senderPanel.publishedTitle')}</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!canViewSenderOrders || publishedLoading}
+                  onClick={() => void loadPublishedOrders()}
+                >
+                  {t('app.senderPanel.refresh')}
+                </Button>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {!kycLoading && !canViewSenderOrders ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.senderPanel.kycRequired')}
+                  </p>
+                ) : null}
+                {publishedError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {publishedError}
+                  </p>
+                ) : null}
+                {canViewSenderOrders && publishedLoading ? (
+                  <>
+                    <p className="sr-only">{t('app.senderPanel.publishedLoading')}</p>
+                    <SenderOrdersSkeleton />
+                  </>
+                ) : canViewSenderOrders && publishedOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t('app.senderPanel.publishedEmpty')}
+                  </p>
+                ) : canViewSenderOrders ? (
+                  <ul className="flex flex-col gap-4">
+                    {publishedOrders.map((order) => (
+                      <li key={order.id} className={SENDER_ORDER_CARD_CLASS}>
                         <p className="font-medium">{order.title}</p>
                         <p className="text-muted-foreground">{order.type}</p>
                         <dl className="mt-2 flex flex-col gap-1">
                           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">{t('app.orders.labelRoute')}</dt>
+                            <dt className="text-muted-foreground">
+                              {t('app.senderPanel.labelRoute')}
+                            </dt>
                             <dd>
                               {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
                               {t('app.orders.routeSeparator')}{' '}
@@ -1023,7 +1270,9 @@ export default function AppHomePage() {
                             </dd>
                           </div>
                           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                            <dt className="text-muted-foreground">{t('app.orders.labelReward')}</dt>
+                            <dt className="text-muted-foreground">
+                              {t('app.senderPanel.labelReward')}
+                            </dt>
                             <dd>
                               {formatReward(
                                 order.offeredRewardAmount,
@@ -1034,31 +1283,100 @@ export default function AppHomePage() {
                           </div>
                           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                             <dt className="text-muted-foreground">
-                              {t('app.orders.labelCreatedAt')}
+                              {t('app.senderPanel.labelPublishedAt')}
                             </dt>
-                            <dd>{new Date(order.createdAt).toLocaleString()}</dd>
+                            <dd>
+                              {new Date(order.publishedAt ?? order.createdAt).toLocaleString()}
+                            </dd>
                           </div>
                           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                             <dt className="text-muted-foreground">{t('app.orders.labelStatus')}</dt>
-                            <dd>{order.status}</dd>
+                            <dd>{t('app.senderPanel.statusOpen')}</dd>
                           </div>
                         </dl>
-                        <div className="mt-3">
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            disabled={!isApproved || publishingOrderId !== null}
-                            onClick={() => void handlePublishDraft(order.id)}
-                          >
-                            {publishingOrderId === order.id
-                              ? t('app.orders.publishing')
-                              : t('app.orders.publish')}
-                          </Button>
-                        </div>
                       </li>
                     ))}
                   </ul>
-                )}
+                ) : null}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <CardTitle>{t('app.senderPanel.acceptedTitle')}</CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={!canViewSenderOrders || senderAcceptedLoading}
+                  onClick={() => void loadSenderAcceptedOrders()}
+                >
+                  {t('app.senderPanel.refresh')}
+                </Button>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {!kycLoading && !canViewSenderOrders ? (
+                  <p className="rounded-md border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-foreground">
+                    {t('app.senderPanel.kycRequired')}
+                  </p>
+                ) : null}
+                {senderAcceptedError ? (
+                  <p className="rounded-md border border-danger/30 bg-danger/10 px-3 py-2 text-sm text-danger">
+                    {senderAcceptedError}
+                  </p>
+                ) : null}
+                {canViewSenderOrders && senderAcceptedLoading ? (
+                  <>
+                    <p className="sr-only">{t('app.senderPanel.acceptedLoading')}</p>
+                    <SenderOrdersSkeleton />
+                  </>
+                ) : canViewSenderOrders && senderAcceptedOrders.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {t('app.senderPanel.acceptedEmpty')}
+                  </p>
+                ) : canViewSenderOrders ? (
+                  <ul className="flex flex-col gap-4">
+                    {senderAcceptedOrders.map((order) => (
+                      <li key={order.id} className={SENDER_ORDER_CARD_CLASS}>
+                        <p className="font-medium">{order.title}</p>
+                        <p className="text-muted-foreground">{order.type}</p>
+                        <dl className="mt-2 flex flex-col gap-1">
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">
+                              {t('app.senderPanel.labelRoute')}
+                            </dt>
+                            <dd>
+                              {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                              {t('app.orders.routeSeparator')}{' '}
+                              {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">
+                              {t('app.senderPanel.labelReward')}
+                            </dt>
+                            <dd>
+                              {formatReward(
+                                order.offeredRewardAmount,
+                                order.currency,
+                                t('app.orders.rewardNone'),
+                              )}
+                            </dd>
+                          </div>
+                          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                            <dt className="text-muted-foreground">
+                              {t('app.senderPanel.labelAcceptedAt')}
+                            </dt>
+                            <dd>
+                              {order.acceptedAt
+                                ? new Date(order.acceptedAt).toLocaleString()
+                                : t('common.none')}
+                            </dd>
+                          </div>
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </CardContent>
             </Card>
           </>
