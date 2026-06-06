@@ -2,7 +2,7 @@
 
 Cross-platform **P2P delivery platform** connecting Senders and Waylers directly — international/intercity and local city delivery — with mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute notification types, payment hold/refund integration, resolution workflow, and admin/arbitrator panel are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings schema foundation** — Prisma + shared types for two-sided marketplace discovery; no API/SDK/UI/paywall yet) are complete. Photo/signature proof, Stripe/checkout, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, Wayler publish/browse availability UI, active courier counts, daily work access fee, and platform fee adjustment toward 5% are future milestones.
 
 ## Tech stack
 
@@ -186,6 +186,10 @@ Marketing landing page (`/`) is not translated yet.
 | Disputes API + SDK (`DisputesModule`, `api.disputes.*`)                          | Complete (M6)                   |
 | Sender/Wayler Accepted dispute UI (open/view modal, messages, evidence metadata) | Complete (M6)                   |
 | Dispute in-app notifications (other-participant dispatch, `SYSTEM`)              | Complete (M6)                   |
+| Wayler availability / trip listings schema foundation (Prisma + shared types)    | Complete (foundation)           |
+| Wayler availability API, SDK, publish/browse UI, active courier counts           | Not started (future milestones) |
+| Daily work access fee / Wayler paywall before accept/contact/chat                | Not started (future milestones) |
+| Platform fee adjustment (mock 10% → planned ~5%)                                 | Not started (future milestones) |
 | Stripe, checkout, real payout processing, refunds, payout dashboard              | Not started (future milestones) |
 | Admin/arbitrator panel, dispute resolution, payment hold on dispute              | Not started (future milestones) |
 
@@ -341,7 +345,7 @@ If KYC is not approved, each mode shows a verification notice; M4 enforces KYC o
 
 ## M4 Marketplace flow: Sender to Wayler
 
-M4 delivers the first end-to-end **marketplace loop**: Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **Mock/manual payment API + two-sided payment UI** (Sender controls, Wayler read-only visibility) exist for local testing (see **Payment and escrow foundation**). **Dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** let parties open disputes, exchange messages, and attach evidence metadata on eligible orders (see **Dispute and arbitration foundation**); **no Stripe, checkout, real payout processing, admin/arbitrator panel, dispute resolution workflow, or subscriptions yet.**
+M4 delivers the first end-to-end **marketplace loop** (Sender-initiated orders): Senders create and publish delivery requests; Waylers browse the public OPEN feed, preview routes on a map, and accept jobs. Both sides have tracking panels on `/app`, in-app notifications, and **order-based chat** after accept. **Two-sided discovery** (Wayler-published availability and trip routes) is prepared in schema — see **Wayler availability and trip listings foundation**; API/UI land in later milestones. **Mock/manual payment API + two-sided payment UI** (Sender controls, Wayler read-only visibility) exist for local testing (see **Payment and escrow foundation**). **Dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** let parties open disputes, exchange messages, and attach evidence metadata on eligible orders (see **Dispute and arbitration foundation**); **no Stripe, checkout, real payout processing, admin/arbitrator panel, dispute resolution workflow, or subscriptions yet.**
 
 Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm dev` up, and **KYC approved** (mock approve in dev) for marketplace actions.
 
@@ -1136,13 +1140,21 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 
 ### Future milestones (marketplace)
 
+- **Two-sided discovery** — Waylers publish local availability and trip routes; Senders browse active couriers/trips (schema foundation complete — see **Wayler availability and trip listings foundation**)
+- **Wayler availability API + SDK** — create, publish, pause, cancel, list, and filter `WaylerAvailability`
+- **Wayler publish/edit/pause/cancel UI** — “available today in Bishkek”, “Madrid → Jakarta on June 5”, return/flexible trips
+- **Sender browse active Waylers/trips** — discovery feed alongside existing Sender-created OPEN orders
+- **Active Wayler count by city/region/country** — e.g. “20 couriers active today in this city”
+- **Location filters for orders and Waylers** — shared country/city/region selectors on both sides
+- **Matching recommendations** — suggest Sender requests that fit a Wayler trip or local availability window
+- **Map-based availability visualization** — trip routes and local coverage on dashboard maps
 - **Stripe checkout & real payout processing** — provider integration (mock/manual API + Sender/Wayler payment UI complete — see **Payment and escrow foundation**)
 - **Dispute resolution workflow** — arbitrator assignment, resolve/reject, `DisputeResolution` outcomes (schema + API + SDK + Sender/Wayler UI complete — see **Dispute and arbitration foundation**)
 - **Payment hold/refund/release on dispute outcome** — tie `PaymentIntent` / ledger to arbitrator resolution
 - **Dedicated dispute notification types** — replace `SYSTEM` for dispute dispatch; localized templates; push/email
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
 - **Admin / arbitrator panel** — assignment, review queue, resolution actions, audit visibility
-- **Subscriptions / paywall**
+- **Daily work access fee / Wayler paywall** — e.g. ~€1/day before accept, contact, or chat (see **Payment and escrow foundation** monetization roadmap)
 - **Mobile / PWA polish** and premium redesign (see **Premium dashboard UI foundation** — foundation pass complete)
 
 ## Payment and escrow foundation
@@ -1502,9 +1514,10 @@ Mock API, two-sided payment UI, and Wayler in-app notifications today exercise t
 - **Stripe webhooks** — async status sync
 - **Refund workflow** — partial/full refunds; `REFUNDED` + ledger lines
 - **Dispute-aware payout hold** — block release/payout while order `DISPUTED`
-- **Platform fee settings** — configurable percentage/fixed (today: hard-coded 10% mock)
+- **Platform fee settings** — configurable percentage/fixed (today: hard-coded **10% mock**; stakeholder direction: move toward **~5%** platform commission)
+- **Daily work access fee** — Wayler must pay for daily work access (e.g. **~€1/day**) before accept, contact, or chat; separate from per-order escrow
+- **Wayler paywall / subscription UI** — purchase and renew daily access; gate marketplace actions until paid
 - **Admin / arbitrator payout review** — ledger + intent + payout visibility during disputes
-- **Subscriptions / paywall UI** — Wayler access packages (separate from per-order escrow)
 
 ## Dispute and arbitration foundation
 
@@ -1766,6 +1779,110 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) on `/app`:
 - **Arbitration notes** — internal arbitrator commentary separate from party messages
 - **Audit logs** — immutable record of dispute state changes for compliance
 
+## Wayler availability and trip listings foundation
+
+Wayly is evolving from a **Sender-initiated order marketplace** into a **two-sided P2P delivery marketplace**. Stakeholders require that **Waylers and Senders discover each other from both directions** — not only via Sender-created delivery requests. The current batch delivers **database schema** and **shared types** only so Waylers can later publish **local availability** or **travel routes**, and Senders can later browse **active couriers and trips**.
+
+### Purpose
+
+- Support **two-sided marketplace discovery** — complement Sender-created `DeliveryOrder` posts with Wayler-published availability.
+- Let Waylers later publish **local availability** (“I am available today in Bishkek / this region from date X to Y”).
+- Let Waylers later publish **trip routes** (“I fly Madrid → Jakarta on June 5”, one-way / return / flexible).
+- Let Senders later browse **active couriers and trips** — e.g. “20 couriers are active today in this city”.
+- Let the system later expose **active courier counts** by country, city, and region.
+- Preserve today’s **Wayler browse of Sender OPEN orders** by country/city/region — both discovery directions coexist.
+- Prepare for later **monetization**: daily work access fee before accept/contact/chat, and platform fee direction toward **~5%** (not implemented in this batch).
+
+### Schema
+
+**Enums** (mirror `@wayly/types`):
+
+| Enum                       | Values                                              |
+| -------------------------- | --------------------------------------------------- |
+| `WaylerAvailabilityStatus` | `DRAFT`, `ACTIVE`, `PAUSED`, `EXPIRED`, `CANCELLED` |
+| `WaylerAvailabilityType`   | `LOCAL_AVAILABILITY`, `TRIP_ROUTE`                  |
+| `TripDirection`            | `ONE_WAY`, `RETURN`, `FLEXIBLE`                     |
+
+**`WaylerAvailability`** (`wayler_availabilities`) — Wayler-published local coverage or travel route
+
+| Field group     | Fields                                                                                         |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| **Identity**    | `id`, `waylerId` → `User` (cascade delete)                                                     |
+| **Type/status** | `type` (`WaylerAvailabilityType`), `status` (default `DRAFT`)                                  |
+| **Origin**      | `originCountry`, `originCity`, `originRegion` (all optional)                                   |
+| **Destination** | `destinationCountry`, `destinationCity`, `destinationRegion` (optional — used for trip routes) |
+| **Dates**       | `availableFrom`, `availableTo`, `departureDate`, `returnDate`                                  |
+| **Trip**        | `tripDirection` (`TripDirection`, optional)                                                    |
+| **Capacity**    | `maxPackages`, `maxWeightKg` (`Decimal(8,2)`), `notes`                                         |
+| **Discovery**   | `isPublic` (default `false`), `publishedAt`, `pausedAt`, `cancelledAt`, `expiresAt`            |
+| **Timestamps**  | `createdAt`, `updatedAt`                                                                       |
+
+**Indexes:** `waylerId`, `type`, `status`, `isPublic`, origin/destination country/city/region, `availableFrom`, `availableTo`, `departureDate`, `expiresAt`, `createdAt`.
+
+**Relations:**
+
+- `User` — `waylerAvailabilities` (`@relation("WaylerAvailabilities")`)
+
+**Shared types** (`@wayly/types`):
+
+| Type                             | Description                                        |
+| -------------------------------- | -------------------------------------------------- |
+| `WaylerAvailabilitySummary`      | Compact listing for feeds and discovery            |
+| `WaylerAvailabilityDetail`       | Full payload (same fields as summary for now)      |
+| `WaylerAvailabilityListResponse` | Paginated list — `items`, `page`, `limit`, `total` |
+| `ActiveWaylerCountSummary`       | `country`, `city`, `region`, `activeCount`         |
+
+Dates serialize as `ISODateString`; `maxWeightKg` as `DecimalString` (matches existing project style).
+
+Migration: `apps/api/prisma/migrations/20260602143000_wayler_availability_foundation/migration.sql`
+
+### Intended future flows
+
+| Flow                   | Example                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------- |
+| **Local availability** | “I am available today in Bishkek / this region.”                                   |
+| **Trip route**         | “I fly Madrid → Jakarta on June 5.”                                                |
+| **Return / flexible**  | “I travel there and back between these dates.” (`ONE_WAY` / `RETURN` / `FLEXIBLE`) |
+| **Sender discovery**   | “There are 20 active couriers today in this city.”                                 |
+| **Wayler discovery**   | “Here are open Sender orders in my selected country/city/region.”                  |
+
+Today’s M4 loop (Sender publishes → Wayler browses OPEN orders → accept → lifecycle) remains unchanged. Future batches add the **reverse discovery lane** without replacing order-based matching.
+
+### Current scope
+
+| Included                                       | Not included (yet)                           |
+| ---------------------------------------------- | -------------------------------------------- |
+| Prisma enums + `WaylerAvailability` model      | Availability API routes                      |
+| Migration `wayler_availability_foundation`     | SDK methods (`api.waylerAvailability.*`)     |
+| `User.waylerAvailabilities` relation           | Frontend publish/edit/pause/cancel UI        |
+| `@wayly/types` summaries + list/count types    | Sender browse active Waylers/trips UI        |
+| Indexed location/date fields for future search | Active courier counts endpoint               |
+|                                                | Location selector UI for Waylers/Senders     |
+|                                                | Daily work access fee / paywall              |
+|                                                | Platform fee change (mock 10% → planned ~5%) |
+|                                                | Notifications on availability publish/expiry |
+|                                                | Matching recommendations engine              |
+
+### Manual verification
+
+- [ ] Migration applied successfully (`wayler_availability_foundation`)
+- [ ] Prisma client generated (`pnpm --filter @wayly/api db:generate`)
+- [ ] `pnpm build`, `pnpm lint`, `pnpm typecheck` pass
+
+### Future milestones (Wayler availability & two-sided marketplace)
+
+- **Wayler availability API** — CRUD, publish, pause, cancel, expire; KYC-gated; Swagger tag
+- **Wayler availability SDK** — typed client methods for web/mobile consumers
+- **Wayler publish/edit/pause/cancel UI** — dashboard forms for local availability and trip routes
+- **Sender browse active Waylers/trips** — discovery panel alongside Sender order creation
+- **Active Wayler count by city/region/country** — aggregate endpoint + Sender dashboard callouts
+- **Location filters for orders and Waylers** — unified country/city/region filters on both modes
+- **Daily work access fee / paywall** — Wayler cannot accept, contact, or chat until daily fee paid (e.g. ~€1/day)
+- **Platform fee adjustment** — move from mock **10%** toward planned **~5%** commission
+- **Matching recommendations** — suggest Sender requests that align with a Wayler trip or local window
+- **Map-based availability visualization** — routes and local coverage on Wayler/Sender maps
+- **Availability notifications** — publish, pause, expiry, and match alerts via in-app bell (and later push/email)
+
 ## Premium dashboard UI foundation
 
 The authenticated **`/app` dashboard** has a **premium visual foundation** so the product feels like a real commercial global P2P delivery marketplace — not a prototype wireframe. The pass improves **visual hierarchy**, **readability**, **mobile layout**, and **user confidence** while keeping all **business logic unchanged**.
@@ -1848,7 +1965,8 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
 - **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
 - **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales), **dispute in-app notifications** (other-participant dispatch on open/message/evidence via `SYSTEM` + `relatedOrderId`; no self-notify; failure-safe). ✅ (schema + API + SDK + two-sided UI + in-app notifications complete; no admin, resolution, dedicated notification types, payment hooks, file upload). Next: dedicated dispute notification types, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs, push/email.
-- **M7–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds**, subscriptions/paywall, offline + PDF agreements, WebSocket/SSE notification preferences, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
+- **M7 — Wayler availability & two-sided discovery (foundation):** **`WaylerAvailability` schema** (`WaylerAvailabilityStatus`, `WaylerAvailabilityType`, `TripDirection` enums), `User.waylerAvailabilities`, shared types (`WaylerAvailabilitySummary`, `WaylerAvailabilityDetail`, `WaylerAvailabilityListResponse`, `ActiveWaylerCountSummary`), migration `wayler_availability_foundation`. ✅ (database + shared types only — stakeholder two-sided marketplace prep). Next: availability API + SDK, Wayler publish/edit/pause/cancel UI, Sender browse active Waylers/trips, active courier counts by location, location filters, **daily work access fee paywall** (~€1/day before accept/contact/chat), **platform fee toward ~5%**, matching recommendations, map-based availability visualization.
+- **M8–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds**, offline + PDF agreements, WebSocket/SSE notification preferences, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
 
