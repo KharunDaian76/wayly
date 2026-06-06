@@ -204,3 +204,24 @@ export const TripDirection = {
   FLEXIBLE: 'FLEXIBLE',
 } as const;
 export type TripDirection = (typeof TripDirection)[keyof typeof TripDirection];
+
+/** Daily Wayler work access pass lifecycle (paywall/API land in a later batch). */
+export const WaylerAccessPassStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+  FAILED: 'FAILED',
+} as const;
+export type WaylerAccessPassStatus =
+  (typeof WaylerAccessPassStatus)[keyof typeof WaylerAccessPassStatus];
+
+/** Payment provider for daily Wayler work access passes. */
+export const WaylerAccessPassProvider = {
+  MANUAL: 'MANUAL',
+  STRIPE: 'STRIPE',
+  OTHER: 'OTHER',
+} as const;
+export type WaylerAccessPassProvider =
+  (typeof WaylerAccessPassProvider)[keyof typeof WaylerAccessPassProvider];

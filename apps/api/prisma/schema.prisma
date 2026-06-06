@@ -7,6 +7,7 @@
 // Chat foundation (routes/WebSocket land in a later batch).
 // Payment/escrow foundation (routes/Stripe land in a later batch).
 // Wayler availability / trip listing foundation (routes/discovery UI land in a later batch).
+// Wayler daily work access pass foundation (routes/paywall gating land in a later batch).
 // Dispute/arbitration foundation (routes/admin UI land in a later batch).
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
@@ -157,6 +158,22 @@ enum TripDirection {
   FLEXIBLE
 }
 
+// Daily Wayler work access pass lifecycle (paywall/API land in a later batch).
+enum WaylerAccessPassStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  REFUNDED
+  FAILED
+}
+
+enum WaylerAccessPassProvider {
+  MANUAL
+  STRIPE
+  OTHER
+}
+
 // --- Models ------------------------------------------------------------------
 
 model User {
@@ -205,6 +222,7 @@ model User {
   disputeMessages               DisputeMessage[] @relation("DisputeMessagesSent")
   disputeEvidence               DisputeEvidence[] @relation("DisputeEvidenceSubmitted")
   waylerAvailabilities          WaylerAvailability[] @relation("WaylerAvailabilities")
+  waylerAccessPasses            WaylerAccessPass[]   @relation("WaylerAccessPasses")
 
   @@index([deletedAt])
   @@map("users")
@@ -604,4 +622,40 @@ model WaylerAvailability {
   @@index([expiresAt])
   @@index([createdAt])
   @@map("wayler_availabilities")
+}
+
+// Daily Wayler work access fee pass — gates accept/contact/chat until paid (API/paywall land in a later batch).
+// accessDate is the normalized calendar day (day-start UTC) the pass covers; one pass per Wayler per day.
+model WaylerAccessPass {
+  id       String @id @default(uuid()) @db.Uuid
+  waylerId String @db.Uuid
+  wayler   User   @relation("WaylerAccessPasses", fields: [waylerId], references: [id], onDelete: Cascade)
+
+  status   WaylerAccessPassStatus   @default(PENDING)
+  provider WaylerAccessPassProvider @default(MANUAL)
+  currency String                   @default("EUR")
+  amount   Decimal                  @default(1.00) @db.Decimal(12, 2)
+  providerPaymentId String?
+
+  accessDate DateTime
+  startsAt   DateTime
+  expiresAt  DateTime
+
+  activatedAt DateTime?
+  cancelledAt DateTime?
+  refundedAt  DateTime?
+  failedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([waylerId, accessDate])
+  @@index([waylerId])
+  @@index([status])
+  @@index([provider])
+  @@index([accessDate])
+  @@index([startsAt])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("wayler_access_passes")
 }

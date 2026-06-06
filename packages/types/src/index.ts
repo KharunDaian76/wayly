@@ -8,3 +8,4 @@ export * from './chat';
 export * from './payment';
 export * from './dispute';
 export * from './wayler-availability';
+export * from './wayler-access-pass';
