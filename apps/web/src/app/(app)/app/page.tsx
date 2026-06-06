@@ -30,6 +30,7 @@ import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DisputePanel } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
+import { WaylerAccessPanel } from '@/components/app/wayler-access-panel';
 import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
@@ -1211,6 +1212,15 @@ export default function AppHomePage() {
 
         {mode === 'wayler' ? (
           <>
+            <Card className={APP_PANEL_CLASS}>
+              <CardHeader>
+                <CardTitle>{t('app.waylerAccess.title')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WaylerAccessPanel isApproved={!!isApproved} kycLoading={kycLoading} />
+              </CardContent>
+            </Card>
+
             <Card className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.waylerFeed.title')}</CardTitle>
