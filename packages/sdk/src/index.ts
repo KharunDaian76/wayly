@@ -26,6 +26,7 @@ export {
 export { createPaymentsApi } from './payments';
 export { type PaymentsApi } from './payments.types';
 export { createDisputesApi } from './disputes';
+export { createWaylerAvailabilitiesApi } from './wayler-availabilities';
 export {
   type AddDisputeEvidenceInput,
   type AddDisputeMessageInput,
@@ -49,6 +50,7 @@ export type {
   ChatMessageSummary,
   ConversationDetail,
   ConversationListResponse,
+  ActiveWaylerCountSummary,
   DisputeDetail,
   DisputeEvidenceSummary,
   DisputeListResponse,
@@ -59,5 +61,7 @@ export type {
   NotificationSummary,
   PaymentIntentSummary,
   UserProfile,
+  WaylerAvailabilityDetail,
+  WaylerAvailabilityListResponse,
 } from '@wayly/types';
 export type { SendChatMessageInput } from '@wayly/validation';

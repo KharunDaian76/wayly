@@ -16,6 +16,8 @@ import { createPaymentsApi } from './payments';
 import type { PaymentsApi } from './payments.types';
 import type { ApiClientOptions, RequestOptions } from './types';
 import { createUsersApi } from './users';
+import { createWaylerAvailabilitiesApi } from './wayler-availabilities';
+import type { WaylerAvailabilitiesApi } from './wayler-availabilities.types';
 
 const API_PREFIX = '/api/v1';
 
@@ -57,6 +59,9 @@ export class ApiClient {
   /** Dispute and arbitration endpoints. */
   readonly disputes: DisputesApi;
 
+  /** Wayler availability and trip listing endpoints. */
+  readonly waylerAvailabilities: WaylerAvailabilitiesApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -80,6 +85,9 @@ export class ApiClient {
     this.conversations = createConversationsApi((path, opts) => this.request(path, opts));
     this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
     this.disputes = createDisputesApi((path, opts) => this.request(path, opts));
+    this.waylerAvailabilities = createWaylerAvailabilitiesApi((path, opts) =>
+      this.request(path, opts),
+    );
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {
