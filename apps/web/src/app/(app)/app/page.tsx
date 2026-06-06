@@ -29,6 +29,7 @@ import type { WaylerMapLabels } from '@/components/wayler-map';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DisputePanel } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
+import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
@@ -1810,6 +1811,15 @@ export default function AppHomePage() {
                     })}
                   </ul>
                 ) : null}
+              </CardContent>
+            </Card>
+
+            <Card className={APP_PANEL_CLASS}>
+              <CardHeader>
+                <CardTitle>{t('app.waylerAvailability.title')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WaylerAvailabilityPanel isApproved={!!isApproved} kycLoading={kycLoading} />
               </CardContent>
             </Card>
           </>
