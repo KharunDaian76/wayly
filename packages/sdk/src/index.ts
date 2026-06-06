@@ -26,6 +26,8 @@ export {
 export { createPaymentsApi } from './payments';
 export { type PaymentsApi } from './payments.types';
 export { createDisputesApi } from './disputes';
+export { createWaylerAccessApi } from './wayler-access';
+export { type WaylerAccessApi, type WaylerAccessPassesListQuery } from './wayler-access.types';
 export { createWaylerAvailabilitiesApi } from './wayler-availabilities';
 export {
   type AddDisputeEvidenceInput,
@@ -61,6 +63,9 @@ export type {
   NotificationSummary,
   PaymentIntentSummary,
   UserProfile,
+  WaylerAccessPassListResponse,
+  WaylerAccessPassSummary,
+  WaylerAccessState,
   WaylerAvailabilityDetail,
   WaylerAvailabilityListResponse,
 } from '@wayly/types';

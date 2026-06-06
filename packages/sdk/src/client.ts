@@ -16,6 +16,8 @@ import { createPaymentsApi } from './payments';
 import type { PaymentsApi } from './payments.types';
 import type { ApiClientOptions, RequestOptions } from './types';
 import { createUsersApi } from './users';
+import { createWaylerAccessApi } from './wayler-access';
+import type { WaylerAccessApi } from './wayler-access.types';
 import { createWaylerAvailabilitiesApi } from './wayler-availabilities';
 import type { WaylerAvailabilitiesApi } from './wayler-availabilities.types';
 
@@ -62,6 +64,9 @@ export class ApiClient {
   /** Wayler availability and trip listing endpoints. */
   readonly waylerAvailabilities: WaylerAvailabilitiesApi;
 
+  /** Daily Wayler work access pass endpoints (mock/manual; no real payment). */
+  readonly waylerAccess: WaylerAccessApi;
+
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.getAuthToken = options.getAuthToken;
@@ -88,6 +93,7 @@ export class ApiClient {
     this.waylerAvailabilities = createWaylerAvailabilitiesApi((path, opts) =>
       this.request(path, opts),
     );
+    this.waylerAccess = createWaylerAccessApi((path, opts) => this.request(path, opts));
   }
 
   async request<T>(path: string, options: RequestOptions = {}): Promise<T> {

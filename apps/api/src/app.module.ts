@@ -19,6 +19,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { OrdersModule } from './modules/orders/orders.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { UsersModule } from './modules/users/users.module';
+import { WaylerAccessModule } from './modules/wayler-access/wayler-access.module';
 import { WaylerAvailabilitiesModule } from './modules/wayler-availabilities/wayler-availabilities.module';
 
 @Module({
@@ -49,6 +50,7 @@ import { WaylerAvailabilitiesModule } from './modules/wayler-availabilities/wayl
     PaymentsModule,
     DisputesModule,
     WaylerAvailabilitiesModule,
+    WaylerAccessModule,
     // ---------------------------------------------------------------------
     // Future business modules:
     //   GeoModule,           // M5
