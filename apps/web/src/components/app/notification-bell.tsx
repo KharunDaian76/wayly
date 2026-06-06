@@ -170,7 +170,7 @@ export function NotificationBell() {
       : undefined;
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative z-[60]">
       <Button
         type="button"
         variant="outline"
@@ -194,7 +194,7 @@ export function NotificationBell() {
 
       {open ? (
         <div
-          className="absolute right-0 z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-lg border border-border bg-background shadow-lg"
+          className="absolute right-0 z-[100] mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-lg border border-border bg-background shadow-lg"
           role="dialog"
           aria-label={t('app.notifications.title')}
         >

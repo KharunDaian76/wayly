@@ -156,6 +156,8 @@
   }
 
   .wayly-app-header {
+    position: relative;
+    z-index: 50;
     border-color: hsl(var(--border) / 0.45);
     background: hsl(var(--card) / 0.72);
     box-shadow: 0 2px 20px hsl(var(--foreground) / 0.05);
