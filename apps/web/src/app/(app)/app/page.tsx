@@ -29,6 +29,7 @@ import type { WaylerMapLabels } from '@/components/wayler-map';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DisputePanel } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
+import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
@@ -2490,6 +2491,15 @@ export default function AppHomePage() {
                     })}
                   </ul>
                 ) : null}
+              </CardContent>
+            </Card>
+
+            <Card className={APP_PANEL_CLASS}>
+              <CardHeader>
+                <CardTitle>{t('app.senderWaylers.title')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <SenderWaylersPanel canBrowse={!!canViewSenderOrders} kycLoading={kycLoading} />
               </CardContent>
             </Card>
           </>
