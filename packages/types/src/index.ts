@@ -7,3 +7,4 @@ export * from './notification';
 export * from './chat';
 export * from './payment';
 export * from './dispute';
+export * from './wayler-availability';

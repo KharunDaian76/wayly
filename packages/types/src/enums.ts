@@ -177,3 +177,30 @@ export const DisputeResolution = {
   OTHER: 'OTHER',
 } as const;
 export type DisputeResolution = (typeof DisputeResolution)[keyof typeof DisputeResolution];
+
+/** Wayler availability / trip listing lifecycle (API/discovery land in a later batch). */
+export const WaylerAvailabilityStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED',
+} as const;
+export type WaylerAvailabilityStatus =
+  (typeof WaylerAvailabilityStatus)[keyof typeof WaylerAvailabilityStatus];
+
+/** Local city availability vs published travel route. */
+export const WaylerAvailabilityType = {
+  LOCAL_AVAILABILITY: 'LOCAL_AVAILABILITY',
+  TRIP_ROUTE: 'TRIP_ROUTE',
+} as const;
+export type WaylerAvailabilityType =
+  (typeof WaylerAvailabilityType)[keyof typeof WaylerAvailabilityType];
+
+/** Trip route direction for Wayler-published routes. */
+export const TripDirection = {
+  ONE_WAY: 'ONE_WAY',
+  RETURN: 'RETURN',
+  FLEXIBLE: 'FLEXIBLE',
+} as const;
+export type TripDirection = (typeof TripDirection)[keyof typeof TripDirection];

@@ -6,6 +6,7 @@
 // Notification foundation (routes/dispatch land in a later batch).
 // Chat foundation (routes/WebSocket land in a later batch).
 // Payment/escrow foundation (routes/Stripe land in a later batch).
+// Wayler availability / trip listing foundation (routes/discovery UI land in a later batch).
 // Dispute/arbitration foundation (routes/admin UI land in a later batch).
 //
 // PostGIS is enabled because local city-delivery feed/search relies on
@@ -136,6 +137,26 @@ enum DisputeResolution {
   OTHER
 }
 
+// Wayler-published availability or travel route (API/discovery land in a later batch).
+enum WaylerAvailabilityStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  EXPIRED
+  CANCELLED
+}
+
+enum WaylerAvailabilityType {
+  LOCAL_AVAILABILITY
+  TRIP_ROUTE
+}
+
+enum TripDirection {
+  ONE_WAY
+  RETURN
+  FLEXIBLE
+}
+
 // --- Models ------------------------------------------------------------------
 
 model User {
@@ -183,6 +204,7 @@ model User {
   disputesAssigned              Dispute[]       @relation("DisputesAssigned")
   disputeMessages               DisputeMessage[] @relation("DisputeMessagesSent")
   disputeEvidence               DisputeEvidence[] @relation("DisputeEvidenceSubmitted")
+  waylerAvailabilities          WaylerAvailability[] @relation("WaylerAvailabilities")
 
   @@index([deletedAt])
   @@map("users")
@@ -528,4 +550,58 @@ model DisputeEvidence {
   @@index([submittedById])
   @@index([createdAt])
   @@map("dispute_evidence")
+}
+
+// Wayler-published local availability or trip route for marketplace discovery (API lands in a later batch).
+model WaylerAvailability {
+  id       String @id @default(uuid()) @db.Uuid
+  waylerId String @db.Uuid
+  wayler   User   @relation("WaylerAvailabilities", fields: [waylerId], references: [id], onDelete: Cascade)
+
+  type   WaylerAvailabilityType
+  status WaylerAvailabilityStatus @default(DRAFT)
+
+  originCountry      String?
+  originCity         String?
+  originRegion       String?
+  destinationCountry String?
+  destinationCity    String?
+  destinationRegion  String?
+
+  availableFrom DateTime
+  availableTo   DateTime?
+  departureDate DateTime?
+  returnDate    DateTime?
+
+  tripDirection TripDirection?
+
+  maxPackages Int?
+  maxWeightKg Decimal? @db.Decimal(8, 2)
+  notes       String?
+
+  isPublic    Boolean   @default(false)
+  publishedAt DateTime?
+  pausedAt    DateTime?
+  cancelledAt DateTime?
+  expiresAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([waylerId])
+  @@index([type])
+  @@index([status])
+  @@index([isPublic])
+  @@index([originCountry])
+  @@index([originCity])
+  @@index([originRegion])
+  @@index([destinationCountry])
+  @@index([destinationCity])
+  @@index([destinationRegion])
+  @@index([availableFrom])
+  @@index([availableTo])
+  @@index([departureDate])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("wayler_availabilities")
 }
