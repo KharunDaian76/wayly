@@ -32,6 +32,7 @@ type ActionKind = 'accept' | 'decline';
 type WaylerIncomingRequestsPanelProps = {
   isApproved: boolean;
   kycLoading: boolean;
+  waylerHasActiveAccess: boolean;
 };
 
 function formatLocation(city: string, country: string): string {
@@ -104,6 +105,9 @@ function resolveActionError(
   if (err.code === 'AVAILABILITY_REQUEST_FORBIDDEN') {
     return t('app.availabilityRequests.requestForbidden');
   }
+  if (action === 'accept' && err.code === 'WAYLER_ACCESS_REQUIRED') {
+    return t('app.availabilityRequests.accessRequiredAcceptRequestFailed');
+  }
   return t('app.availabilityRequests.updateFailed');
 }
 
@@ -115,6 +119,7 @@ function optionalResponseMessage(draft: string): { responseMessage?: string } {
 export function WaylerIncomingRequestsPanel({
   isApproved,
   kycLoading,
+  waylerHasActiveAccess,
 }: WaylerIncomingRequestsPanelProps) {
   const { t } = useI18n();
 
@@ -231,6 +236,7 @@ export function WaylerIncomingRequestsPanel({
                 const isDeclining =
                   actionBusy?.id === request.id && actionBusy.action === 'decline';
                 const actionDisabled = actionBusy !== null;
+                const acceptDisabled = actionDisabled || !waylerHasActiveAccess;
 
                 return (
                   <li key={request.id} className={REQUEST_CARD_CLASS}>
@@ -303,11 +309,11 @@ export function WaylerIncomingRequestsPanel({
                             onChange={(e) => updateResponseDraft(request.id, e.target.value)}
                           />
                         </label>
-                        <div className="wayly-action-group">
+                        <div className="wayly-action-group flex-col sm:flex-row">
                           <Button
                             variant="primary"
                             size="sm"
-                            disabled={actionDisabled}
+                            disabled={acceptDisabled}
                             onClick={() => void handleAccept(request.id)}
                           >
                             {isAccepting
@@ -324,6 +330,11 @@ export function WaylerIncomingRequestsPanel({
                               ? t('app.senderWaylers.loading')
                               : t('app.availabilityRequests.declineRequest')}
                           </Button>
+                          {!waylerHasActiveAccess ? (
+                            <p className="text-xs text-muted-foreground" role="note">
+                              {t('app.availabilityRequests.accessRequiredForAcceptRequest')}
+                            </p>
+                          ) : null}
                         </div>
                       </div>
                     ) : null}

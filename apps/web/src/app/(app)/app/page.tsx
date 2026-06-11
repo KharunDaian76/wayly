@@ -1902,7 +1902,11 @@ export default function AppHomePage() {
                 <CardTitle>{t('app.availabilityRequests.incomingRequests')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <WaylerIncomingRequestsPanel isApproved={!!isApproved} kycLoading={kycLoading} />
+                <WaylerIncomingRequestsPanel
+                  isApproved={!!isApproved}
+                  kycLoading={kycLoading}
+                  waylerHasActiveAccess={waylerHasActiveAccess}
+                />
               </CardContent>
             </Card>
           </>

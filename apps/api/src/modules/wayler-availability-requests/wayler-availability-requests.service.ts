@@ -26,6 +26,7 @@ import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
 import {
   toWaylerAvailabilityRequestDetail,
@@ -37,6 +38,7 @@ export class WaylerAvailabilityRequestsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly waylerAccess: WaylerAccessService,
   ) {}
 
   async create(
@@ -137,6 +139,11 @@ export class WaylerAvailabilityRequestsService {
     const record = await this.findByIdOrThrow(id);
     this.assertWayler(record, user.id);
     this.assertPending(record);
+
+    await this.waylerAccess.requireActiveAccess(
+      user,
+      'Active Wayler work access is required before accepting Sender requests',
+    );
 
     const updated = await this.prisma.waylerAvailabilityRequest.update({
       where: { id: record.id },
