@@ -6,6 +6,7 @@ import { WaylerAvailabilityRequestStatus } from '@wayly/types';
 import { Button, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -294,6 +295,12 @@ export function WaylerIncomingRequestsPanel({
                         </span>
                         {request.responseMessage}
                       </p>
+                    ) : null}
+
+                    {request.deliveryOrderId ? (
+                      <AvailabilityRequestConvertedOrder
+                        deliveryOrderId={request.deliveryOrderId}
+                      />
                     ) : null}
 
                     {isPending ? (

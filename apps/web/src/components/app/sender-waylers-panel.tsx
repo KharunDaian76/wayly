@@ -19,6 +19,7 @@ import type {
 import { Button, Input, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
+import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -1143,6 +1144,11 @@ export function SenderWaylersPanel({ canBrowse, kycLoading }: SenderWaylersPanel
                         </span>
                         {request.responseMessage}
                       </p>
+                    ) : null}
+                    {request.deliveryOrderId ? (
+                      <AvailabilityRequestConvertedOrder
+                        deliveryOrderId={request.deliveryOrderId}
+                      />
                     ) : null}
                     {request.status === WaylerAvailabilityRequestStatus.PENDING ? (
                       <div className="wayly-action-group mt-3">

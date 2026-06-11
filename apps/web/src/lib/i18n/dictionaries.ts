@@ -504,6 +504,9 @@ const en = {
     "Activate today's Wayler work access before accepting Sender requests.",
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     'Active Wayler work access is required before accepting this request.',
+  'app.availabilityRequests.convertedToOrder': 'Converted to order',
+  'app.availabilityRequests.linkedOrder': 'Linked delivery order',
+  'app.availabilityRequests.orderReference': 'Order reference',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -1048,6 +1051,9 @@ const ru: Dictionary = {
     'Активируйте доступ курьера на сегодня перед принятием запросов отправителей.',
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     'Для принятия этого запроса требуется активный доступ курьера к работе.',
+  'app.availabilityRequests.convertedToOrder': 'Преобразовано в заказ',
+  'app.availabilityRequests.linkedOrder': 'Связанный заказ на доставку',
+  'app.availabilityRequests.orderReference': 'Номер заказа',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -1592,6 +1598,9 @@ const es: Dictionary = {
     'Activa el acceso de trabajo del Wayler de hoy antes de aceptar solicitudes de remitentes.',
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     'Se requiere acceso activo de trabajo Wayler antes de aceptar esta solicitud.',
+  'app.availabilityRequests.convertedToOrder': 'Convertido en pedido',
+  'app.availabilityRequests.linkedOrder': 'Pedido de entrega vinculado',
+  'app.availabilityRequests.orderReference': 'Referencia del pedido',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -2144,6 +2153,9 @@ const fr: Dictionary = {
     "Activez l'accès de travail Wayler du jour avant d'accepter les demandes d'expéditeurs.",
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     "Un accès de travail Wayler actif est requis avant d'accepter cette demande.",
+  'app.availabilityRequests.convertedToOrder': 'Converti en commande',
+  'app.availabilityRequests.linkedOrder': 'Commande de livraison liée',
+  'app.availabilityRequests.orderReference': 'Référence de commande',
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -2707,6 +2719,9 @@ const de: Dictionary = {
     'Aktivieren Sie den heutigen Wayler-Arbeitszugang, bevor Sie Absenderanfragen annehmen.',
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     'Aktiver Wayler-Arbeitszugang ist erforderlich, bevor diese Anfrage angenommen werden kann.',
+  'app.availabilityRequests.convertedToOrder': 'In Auftrag umgewandelt',
+  'app.availabilityRequests.linkedOrder': 'Verknüpfter Lieferauftrag',
+  'app.availabilityRequests.orderReference': 'Auftragsreferenz',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -3248,6 +3263,9 @@ const tr: Dictionary = {
     'Gönderici taleplerini kabul etmeden önce bugünkü Wayler iş erişimini etkinleştirin.',
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     'Bu talebi kabul etmeden önce aktif Wayler iş erişimi gereklidir.',
+  'app.availabilityRequests.convertedToOrder': 'Siparişe dönüştürüldü',
+  'app.availabilityRequests.linkedOrder': 'Bağlı teslimat siparişi',
+  'app.availabilityRequests.orderReference': 'Sipariş referansı',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -3773,6 +3791,9 @@ const ar: Dictionary = {
     'فعّل وصول عمل الوايلر لليوم قبل قبول طلبات المرسل.',
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     'مطلوب وصول عمل وايلر نشط قبل قبول هذا الطلب.',
+  'app.availabilityRequests.convertedToOrder': 'تم تحويله إلى طلب',
+  'app.availabilityRequests.linkedOrder': 'طلب توصيل مرتبط',
+  'app.availabilityRequests.orderReference': 'مرجع الطلب',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -4291,6 +4312,9 @@ const zh: Dictionary = {
     '接受发件人请求前请先激活今日 Wayler 工作权限。',
   'app.availabilityRequests.accessRequiredAcceptRequestFailed':
     '接受此请求需要有效的 Wayler 工作权限。',
+  'app.availabilityRequests.convertedToOrder': '已转为订单',
+  'app.availabilityRequests.linkedOrder': '关联配送订单',
+  'app.availabilityRequests.orderReference': '订单参考号',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',
