@@ -16,11 +16,13 @@ import type {
   WaylerAccessPassSummary,
   WaylerAccessState,
 } from '@wayly/types';
+import { NotificationType } from '@wayly/types';
 import type { WaylerAccessPassesListQueryInput } from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import { toWaylerAccessPassSummary, toWaylerAccessState } from './wayler-access.mapper';
 
@@ -38,7 +40,10 @@ function nextUtcDayStart(date: Date = new Date()): Date {
 
 @Injectable()
 export class WaylerAccessService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async getTodayState(user: RequestUser): Promise<WaylerAccessState> {
     requireKycApproved(user);
@@ -125,6 +130,13 @@ export class WaylerAccessService {
       },
     });
 
+    await this.notifications.createForUser({
+      userId: user.id,
+      type: NotificationType.SYSTEM,
+      title: 'Wayler work access active',
+      body: 'Your Wayler work access is active for today.',
+    });
+
     return toWaylerAccessPassSummary(record);
   }
 
@@ -148,6 +160,8 @@ export class WaylerAccessService {
       throw new ConflictException('Access pass cannot be cancelled in its current status');
     }
 
+    const wasActive = record.status === PrismaWaylerAccessPassStatus.ACTIVE;
+
     const updated = await this.prisma.waylerAccessPass.update({
       where: { id },
       data: {
@@ -155,6 +169,15 @@ export class WaylerAccessService {
         cancelledAt: now,
       },
     });
+
+    if (wasActive) {
+      await this.notifications.createForUser({
+        userId: user.id,
+        type: NotificationType.SYSTEM,
+        title: 'Wayler work access cancelled',
+        body: 'Your Wayler work access for today was cancelled.',
+      });
+    }
 
     return toWaylerAccessPassSummary(updated);
   }
