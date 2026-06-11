@@ -2,7 +2,7 @@
 
 Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Waylers directly — Senders post delivery requests; Waylers publish local availability and trip routes — with international/intercity and local city delivery, mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request in-app notifications + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels** (`SYSTEM` on create/accept/decline/cancel; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set — no order detail link yet), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, and platform fee adjustment toward 5% are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request in-app notifications + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels** (`SYSTEM` on create/accept/decline/cancel; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted — no clickable detail links yet), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, and platform fee adjustment toward 5% are future milestones.
 
 ## Tech stack
 
@@ -197,6 +197,7 @@ Marketing landing page (`/`) is not translated yet.
 | Availability request in-app notifications (`SYSTEM` on create/accept/decline/cancel)                    | Complete (M7)                   |
 | DeliveryOrder conversion from accepted availability request (backend — transactional)                   | Complete (M7)                   |
 | Converted-order badge + short order reference on request panels (Sender + Wayler)                       | Complete (M7)                   |
+| Order source badge on Accepted panels (“From Wayler request” + short request reference)                 | Complete (M7)                   |
 | Daily Wayler work access pass schema foundation (`WaylerAccessPass`, shared types)                      | Complete (M8)                   |
 | Wayler access pass API + SDK (`WaylerAccessModule`, `api.waylerAccess.*`)                               | Complete (M8)                   |
 | Wayler access panel UI on `/app` (active/inactive, mock activate, cancel, history)                      | Complete (M8)                   |
@@ -406,6 +407,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Availability request in-app notifications (`SYSTEM` on create/accept/decline/cancel)                    | Complete (M7) |
 | DeliveryOrder conversion on availability-request accept (`ACCEPTED` order + traceability fields)        | Complete (M7) |
 | Converted-order UI on request panels (“Converted to order” badge + short order reference)               | Complete (M7) |
+| Order source badge on Accepted panels (“From Wayler request” + short request reference)                 | Complete (M7) |
 | Daily Wayler work access pass schema (`WaylerAccessPass`, migration `wayler_access_pass_foundation`)    | Complete (M8) |
 | Wayler access pass API + SDK (`WaylerAccessModule`, `api.waylerAccess.*` — mock/manual only)            | Complete (M8) |
 | Wayler access panel UI (`/app` Wayler mode — active/inactive, mock activate, cancel, history)           | Complete (M8) |
@@ -574,7 +576,7 @@ Once a Wayler accepts a job, both parties track progress through **ACCEPTED → 
 | **Sender-posted order**  | Sender publishes → Wayler accepts OPEN order (`POST /orders/:id/accept`)                                                 | `SENDER_POSTED_ORDER` (default) |
 | **Availability request** | Sender requests published Wayler listing → Wayler accepts request → backend creates `DeliveryOrder` already **ACCEPTED** | `WAYLER_AVAILABILITY_REQUEST`   |
 
-Availability-request orders skip **DRAFT** / **OPEN** — the match happens when the Wayler accepts the Sender’s request. They use the same post-accept lifecycle (transit, delivered, proof, mock payment UI, disputes, chat when opened manually). Traceability: `DeliveryOrder.availabilityRequestId` → `WaylerAvailabilityRequest.id` (1:1 unique). See **Sender ↔ Wayler availability requests** → **DeliveryOrder conversion**.
+Availability-request orders skip **DRAFT** / **OPEN** — the match happens when the Wayler accepts the Sender’s request. They use the same post-accept lifecycle (transit, delivered, proof, mock payment UI, disputes, chat when opened manually). Traceability: `DeliveryOrder.availabilityRequestId` → `WaylerAvailabilityRequest.id` (1:1 unique). **Accepted order panels** show a **“From Wayler request”** source badge + short request reference when `sourceType=WAYLER_AVAILABILITY_REQUEST` (see **Sender ↔ Wayler availability requests** → **Order source badge**). Sender-posted orders show **no** source badge by default. See **DeliveryOrder conversion**.
 
 ### Lifecycle diagram
 
@@ -1934,7 +1936,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) on `/app`:
 
 ## Wayler availability and trip listings foundation
 
-Wayly is evolving from a **Sender-initiated order marketplace** into a **two-sided P2P delivery marketplace**. Stakeholders require that **Waylers and Senders discover each other from both directions** — not only via Sender-created delivery requests. The current implementation includes **database schema**, **shared types**, **`WaylerAvailabilitiesModule` API + SDK**, **`WaylerAvailabilityRequestsModule` API + SDK**, **KYC-gated business rules**, a **Wayler management UI** on `/app` (create/publish/pause/cancel own listings), a **Sender browse UI** on `/app` (search public active listings, active courier counts, **request delivery from a listing**, **“My requests to Waylers”**, cancel pending), a **Wayler incoming requests UI** on `/app` (accept/decline pending requests with optional response message), **in-app notifications** on request create/accept/decline/cancel (`SYSTEM` via existing bell — see **Notifications**), and **backend DeliveryOrder conversion on accept** (transactional — `ACCEPTED` order with `sourceType=WAYLER_AVAILABILITY_REQUEST` + `availabilityRequestId`). **No automatic payment/escrow, automatic chat, expiry automation, request detail page, or admin moderation yet.** **Daily work access** gating applies when a Wayler **accepts a job** — posted OPEN orders **or** incoming Sender availability requests — plus order contact/chat (see **Daily Wayler work access foundation**); **declining** incoming requests and **viewing** the incoming list do **not** require active access.
+Wayly is evolving from a **Sender-initiated order marketplace** into a **two-sided P2P delivery marketplace**. Stakeholders require that **Waylers and Senders discover each other from both directions** — not only via Sender-created delivery requests. The current implementation includes **database schema**, **shared types**, **`WaylerAvailabilitiesModule` API + SDK**, **`WaylerAvailabilityRequestsModule` API + SDK**, **KYC-gated business rules**, a **Wayler management UI** on `/app` (create/publish/pause/cancel own listings), a **Sender browse UI** on `/app` (search public active listings, active courier counts, **request delivery from a listing**, **“My requests to Waylers”**, cancel pending), a **Wayler incoming requests UI** on `/app` (accept/decline pending requests with optional response message), **in-app notifications** on request create/accept/decline/cancel (`SYSTEM` via existing bell — see **Notifications**), **backend DeliveryOrder conversion on accept** (transactional — `ACCEPTED` order with `sourceType=WAYLER_AVAILABILITY_REQUEST` + `availabilityRequestId`), **converted-order UI on request panels** (“Converted to order” + order reference), and **order source badge on Accepted panels** (“From Wayler request” + request reference). **No automatic payment/escrow, automatic chat, clickable detail navigation, expiry automation, request detail page, or admin moderation yet.** **Daily work access** gating applies when a Wayler **accepts a job** — posted OPEN orders **or** incoming Sender availability requests — plus order contact/chat (see **Daily Wayler work access foundation**); **declining** incoming requests and **viewing** the incoming list do **not** require active access.
 
 ### Purpose
 
@@ -2213,7 +2215,7 @@ When a Wayler **accepts** a `PENDING` `WaylerAvailabilityRequest`, `WaylerAvaila
 
 **Response:** accept returns `WaylerAvailabilityRequestDetail` with **`deliveryOrderId`** (null while pending/declined/cancelled). List/detail endpoints also include `deliveryOrderId` when linked.
 
-**Order visibility:** converted orders appear in existing lists where applicable — e.g. Wayler **`GET /orders/accepted`**, Sender **`GET /orders/mine`** (filter by status as needed). Same post-accept lifecycle (transit, delivered, proof, mock payment UI, disputes) as Sender-posted orders. **Request panels** also surface conversion via **`deliveryOrderId`** (see **Converted order UI** below); **Accepted / Sender Accepted order panels** do not yet show a `sourceType` origin badge.
+**Order visibility:** converted orders appear in existing lists where applicable — e.g. Wayler **`GET /orders/accepted`**, Sender **`GET /orders/mine`** (filter by status as needed). Same post-accept lifecycle (transit, delivered, proof, mock payment UI, disputes) as Sender-posted orders. **Request panels** surface conversion via **`deliveryOrderId`** (see **Converted order UI** below); **Accepted order panels** surface origin via **`sourceType`** (see **Order source badge** below). Draft, published, and OPEN feed cards are unchanged.
 
 **Duplicate prevention:** second accept on non-`PENDING` → **409** `AVAILABILITY_REQUEST_NOT_PENDING`; unique `availabilityRequestId` prevents two orders per request; race-safe via transaction + `P2002` fallback fetch.
 
@@ -2241,8 +2243,32 @@ When a request has a linked **`deliveryOrderId`** (typically after Wayler **acce
 **Not implemented (converted-order UI — future):**
 
 - Clickable link from badge to order detail page
-- `sourceType` / “from availability request” badge on **Accepted order list** rows (order panels unchanged)
 - Auto-open chat or payment from the conversion notice
+
+#### Order source badge (accepted panels)
+
+When a **`DeliveryOrder`** in an **Accepted** list has `sourceType = WAYLER_AVAILABILITY_REQUEST`, both **Sender** and **Wayler** accepted panels show a compact source notice — implemented in `delivery-order-source-badge.tsx`, wired in `apps/web/src/app/(app)/app/page.tsx`.
+
+| Panel      | Location                                       | When shown                                 | UI                                                                                                                                                     |
+| ---------- | ---------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Sender** | **“Accepted delivery requests”** (Sender mode) | `sourceType = WAYLER_AVAILABILITY_REQUEST` | **“From Wayler request”** badge + **“Request reference: `abc12345…`”** when `availabilityRequestId` is set (short id — dashes stripped, first 8 chars) |
+| **Wayler** | **“Accepted delivery requests”** (Wayler mode) | `sourceType = WAYLER_AVAILABILITY_REQUEST` | Same badge + reference block                                                                                                                           |
+
+**Behavior:**
+
+- **`SENDER_POSTED_ORDER`** (or missing `sourceType`) → **no** source badge — avoids clutter on normal posted orders.
+- **`WAYLER_AVAILABILITY_REQUEST`** → badge shown; request reference when `availabilityRequestId` is non-null.
+- **Draft / published / OPEN feed** cards → **unchanged** — converted orders never appear there (they enter at **ACCEPTED**).
+- **Not clickable** — no navigation to order detail or request detail.
+- **Does not** start payment, chat, or disputes — informational only; existing card content (status, route, reward, proof, payment, chat actions) unchanged.
+
+**i18n** (`app.orders.*`, 8 locales): `fromWaylerRequest`, `requestReference` (`postedOrder` reserved for future use).
+
+**Not implemented (order source badge — future):**
+
+- Clickable link from badge to order or request detail page
+- Dedicated converted-order detail page / route
+- Auto-open chat or payment from the source badge
 
 #### Daily access gating (accept incoming requests)
 
@@ -2303,7 +2329,7 @@ All routes require **JWT + KYC approval**.
 
 Validation: `@wayly/validation` — `createWaylerAvailabilityRequestSchema`, `respondWaylerAvailabilityRequestSchema`, `waylerAvailabilityRequestsListQuerySchema`.
 
-i18n: **`app.availabilityRequests.*`** (8 locales) for request form, my requests, incoming panel, accept/decline, errors, status labels, and **converted-order** strings (`convertedToOrder`, `linkedOrder`, `orderReference`).
+i18n: **`app.availabilityRequests.*`** (8 locales) for request form, my requests, incoming panel, accept/decline, errors, status labels, and **converted-order** strings (`convertedToOrder`, `linkedOrder`, `orderReference`); **`app.orders.fromWaylerRequest`**, **`app.orders.requestReference`** for accepted-panel source badge (see **Order source badge**).
 
 #### In-app notifications (availability requests)
 
@@ -2331,10 +2357,9 @@ After each successful request write, `WaylerAvailabilityRequestsService` notifie
 - **No Stripe / real payment** — mock/manual `MANUAL` provider only
 - **No automatic chat** — no `Conversation` is created on accept; Wayler must open chat manually (with active daily access)
 - **No automatic dispute** — disputes open manually on eligible orders like any other accepted order
-- **No clickable order detail from conversion badge** — short order reference is display-only; no link to order detail route
-- **No `sourceType` badge on Accepted order list panels** — conversion is visible on **request** cards only, not on Wayler/Sender **Accepted delivery requests** order rows
-- **Conversion badge does not start payment or chat** — informational only; Sender still mock-authorizes / opens chat from order panels manually
-- **No request-to-order detail page** — list/card views only; `get(id)` returns `deliveryOrderId` but no dedicated conversion UI route
+- **No clickable order/request detail from badges** — request-panel and accepted-panel references are display-only
+- **Source badge does not start payment or chat** — informational only; parties use existing Accepted panel actions manually
+- **No dedicated converted-order detail page** — list/card views only
 - **No expiry automation** — `EXPIRED` status exists but nothing sets it yet
 - **No request detail page** — list/card views only; `get(id)` exists in API/SDK but no dedicated UI route
 - **No admin moderation** for availability requests
@@ -2489,9 +2514,10 @@ Validation: `@wayly/validation` — `createWaylerAvailabilitySchema`, `waylerAva
 | `WaylerAvailabilitiesModule` + `WaylerAvailabilityRequestsModule` API + Swagger                   | Request detail page UI                                           |
 | SDK `api.waylerAvailabilities.*` + `api.waylerAvailabilityRequests.*`                             | Admin moderation for requests                                    |
 | Create / mine / public / active-counts / detail / publish / pause / cancel                        | Dedicated availability-request notification types / entity links |
-| Request create / mine / accept / decline / cancel / detail + **in-app notifications**             | Clickable order detail link from conversion badge                |
-| **DeliveryOrder conversion on accept** (transactional backend)                                    | `sourceType` badge on Accepted order list panels                 |
+| Request create / mine / accept / decline / cancel / detail + **in-app notifications**             | Clickable order/request detail link from badges                  |
+| **DeliveryOrder conversion on accept** (transactional backend)                                    | Dedicated converted-order detail page                            |
 | **Converted-order UI** on request panels (badge + short order reference)                          | Platform fee change (mock 10% → planned ~5%)                     |
+| **Order source badge** on Accepted panels (`fromWaylerRequest` + request reference)               | Auto payment/chat from source badge                              |
 | KYC-gated access + owner/privacy rules                                                            | Matching recommendations engine                                  |
 | `@wayly/validation` availability + request schemas                                                | Map-based availability visualization                             |
 | **Wayler management UI** — create, my listings, publish/pause/cancel                              | Matching recommendations engine                                  |
@@ -2506,9 +2532,8 @@ Validation: `@wayly/validation` — `createWaylerAvailabilitySchema`, `waylerAva
 - **No Stripe / real payment** — mock/manual `MANUAL` provider only
 - **No automatic chat** — no `Conversation` on accept; parties open chat manually (Wayler needs active daily access)
 - **No automatic dispute** — disputes open manually on eligible orders
-- **No clickable order detail from conversion badge** — request cards show reference only
-- **No `sourceType` badge on Accepted order list panels** — see request panels for conversion notice
-- **Conversion badge does not trigger payment or chat**
+- **No clickable order/request detail from badges** — request and accepted panel references are display-only
+- **Source badge does not trigger payment or chat**
 - **Availability-request notifications are `SYSTEM` only** — no dedicated type, `relatedOrderId` on accept, push/email, or localized backend templates (see **Notifications**)
 - **No expiry automation** — `EXPIRED` status exists but no cron/job sets it yet
 - **No request detail page** — list/card views only; `get(id)` exists in API/SDK but no dedicated UI route
@@ -2596,6 +2621,15 @@ Use two **KYC-approved** users (**W** = Wayler, **S** = Sender):
 - [ ] Conversion notice is **not** a link — no navigation to order detail
 - [ ] **Accepted** converted requests: **no** accept/decline buttons on Wayler panel
 
+**Order source badge (accepted panels):**
+
+- [ ] **User S**: create/publish a normal order → **User W** accepts from OPEN feed → **no** source badge on either **Accepted delivery requests** panel
+- [ ] **User S** sends availability request → **User W** accepts → converted order appears in **Sender Accepted** and **Wayler Accepted** panels
+- [ ] Both panels show **“From Wayler request”** badge + short **request reference** (`availabilityRequestId`)
+- [ ] Badge is **not** a link — no navigation to order or request detail
+- [ ] Existing order card content (status, route, reward, proof, payment, chat, disputes) still renders correctly
+- [ ] Draft, published, and OPEN feed cards unchanged (no source badge)
+
 **DeliveryOrder conversion on accept** (API/DB verification):
 
 - [ ] **User W** publishes availability/trip; **User S** sends **PENDING** request
@@ -2644,8 +2678,8 @@ Use **User W** (Wayler) and **User S** (Sender), both KYC-approved:
 
 ### Future milestones (Wayler availability & two-sided marketplace)
 
-- **Clickable order detail from conversion badge** — deep-link from request card to order detail / Accepted panel row
-- **Source-type badge on Accepted order lists** — show `WAYLER_AVAILABILITY_REQUEST` origin on order panels
+- **Clickable order/request detail from badges** — deep-link from request card or accepted order row to detail page
+- **Dedicated converted-order detail page** — unified view linking request ↔ order
 - **Auto payment / escrow on accept** — create or prompt `PaymentIntent` when availability request converts to order
 - **Automatic chat on accept** — open `Conversation` when request converts (may tie to daily work access rules)
 - **Dedicated availability-request notification types + entity links** — replace `SYSTEM`; deep-link from bell when schema supports it
@@ -2997,16 +3031,16 @@ The authenticated **`/app` dashboard** has a **premium visual foundation** so th
 
 ### Current UI improvements
 
-| Area               | What shipped                                                                                           |
-| ------------------ | ------------------------------------------------------------------------------------------------------ |
-| **App shell**      | Premium background — subtle radial gradients + faint dot grid (`wayly-app-shell`)                      |
-| **Header**         | Glass-style header with backdrop blur; wrapping language, notification bell, and sign-out actions      |
-| **Panels / cards** | Consistent glass-style panels on Sender/Wayler, KYC, Account, and order sections (`wayly-app-panel`)   |
-| **Order cards**    | Unified order list cards across feed, drafts, published, and accepted panels (`wayly-order-card`)      |
-| **Status badges**  | Color-coded pills for **DRAFT**, **OPEN**, **ACCEPTED**, **IN_TRANSIT**, **DELIVERED**, **CANCELLED**  |
-| **Alerts**         | Standardized success / danger / info alert styles for errors, KYC notices, and success messages        |
-| **Actions**        | Consistent action button grouping (`wayly-action-group`) — primary, secondary, outline/danger patterns |
-| **Mobile**         | Tighter responsive spacing, `min-w-0` / `truncate` / `flex-wrap`, `overflow-x: clip` on shell          |
+| Area               | What shipped                                                                                                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **App shell**      | Premium background — subtle radial gradients + faint dot grid (`wayly-app-shell`)                                                                                                  |
+| **Header**         | Glass-style header with backdrop blur; wrapping language, notification bell, and sign-out actions                                                                                  |
+| **Panels / cards** | Consistent glass-style panels on Sender/Wayler, KYC, Account, and order sections (`wayly-app-panel`)                                                                               |
+| **Order cards**    | Unified order list cards across feed, drafts, published, and accepted panels (`wayly-order-card`); **source badge** on accepted rows when `sourceType=WAYLER_AVAILABILITY_REQUEST` |
+| **Status badges**  | Color-coded pills for **DRAFT**, **OPEN**, **ACCEPTED**, **IN_TRANSIT**, **DELIVERED**, **CANCELLED**                                                                              |
+| **Alerts**         | Standardized success / danger / info alert styles for errors, KYC notices, and success messages                                                                                    |
+| **Actions**        | Consistent action button grouping (`wayly-action-group`) — primary, secondary, outline/danger patterns                                                                             |
+| **Mobile**         | Tighter responsive spacing, `min-w-0` / `truncate` / `flex-wrap`, `overflow-x: clip` on shell                                                                                      |
 
 Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps/web/src/app/globals.css`.
 
@@ -3066,7 +3100,7 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
 - **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
 - **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales), **dispute in-app notifications** (other-participant dispatch on open/message/evidence via `SYSTEM` + `relatedOrderId`; no self-notify; failure-safe). ✅ (schema + API + SDK + two-sided UI + in-app notifications complete; no admin, resolution, dedicated notification types, payment hooks, file upload). Next: dedicated dispute notification types, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs, push/email.
-- **M7 — Wayler availability & two-sided discovery:** **`WaylerAvailability` + `WaylerAvailabilityRequest` schemas**, migrations `wayler_availability_foundation` + `add_wayler_availability_requests` + `add_delivery_order_source_for_availability_requests`, **`WaylerAvailabilitiesModule` + `WaylerAvailabilityRequestsModule` API + SDK**, **Wayler management UI**, **Sender browse + request UI** (“Request this Wayler”, “My requests to Waylers”, cancel), **Wayler incoming accept/decline UI**, **availability-request in-app notifications** (`SYSTEM` on create/accept/decline/cancel), **DeliveryOrder conversion on accept** (transactional — `ACCEPTED` order, `sourceType=WAYLER_AVAILABILITY_REQUEST`, `availabilityRequestId`, `deliveryOrderId` in response), **converted-order UI on request panels** (“Converted to order” badge + short order reference on Sender **My requests** and Wayler **Incoming requests**; i18n `convertedToOrder` / `linkedOrder` / `orderReference`). ✅ (schema + API + SDK + two-sided discovery + request flow + notifications + order conversion + request-panel conversion UI complete). Next: clickable order detail from badge, `sourceType` on order list panels, auto payment/chat on convert, dedicated notification types/entity links (`relatedOrderId` on accept), expiry automation, request detail page, admin moderation, matching, map visualization, availability listing notifications.
+- **M7 — Wayler availability & two-sided discovery:** **`WaylerAvailability` + `WaylerAvailabilityRequest` schemas**, migrations `wayler_availability_foundation` + `add_wayler_availability_requests` + `add_delivery_order_source_for_availability_requests`, **`WaylerAvailabilitiesModule` + `WaylerAvailabilityRequestsModule` API + SDK**, **Wayler management UI**, **Sender browse + request UI** (“Request this Wayler”, “My requests to Waylers”, cancel), **Wayler incoming accept/decline UI**, **availability-request in-app notifications** (`SYSTEM` on create/accept/decline/cancel), **DeliveryOrder conversion on accept** (transactional — `ACCEPTED` order, `sourceType=WAYLER_AVAILABILITY_REQUEST`, `availabilityRequestId`, `deliveryOrderId` in response), **converted-order UI on request panels** (“Converted to order” badge + short order reference; i18n `convertedToOrder` / `linkedOrder` / `orderReference`), **order source badge on Accepted panels** (“From Wayler request” + short request reference on Sender/Wayler **Accepted delivery requests**; i18n `fromWaylerRequest` / `requestReference`; `delivery-order-source-badge.tsx`). ✅ (schema + API + SDK + two-sided discovery + request flow + notifications + order conversion + request-panel + accepted-panel source UI complete). Next: clickable detail from badges, dedicated converted-order page, auto payment/chat on convert, dedicated notification types/entity links (`relatedOrderId` on accept), expiry automation, request detail page, admin moderation, matching, map visualization, availability listing notifications.
 - **M8 — Daily Wayler work access:** **`WaylerAccessPass` schema** (`WaylerAccessPassStatus`, `WaylerAccessPassProvider` enums), `User.waylerAccessPasses`, shared types, migration `wayler_access_pass_foundation`, **`WaylerAccessModule` API + SDK** (`api.waylerAccess.*` — today, mine, mockActivateToday, cancel; KYC-gated; `MANUAL` mock only; unique one pass per Wayler per UTC `accessDate`; default **EUR / €1.00**), **Wayler access panel UI** on `/app` (active/inactive, mock activate/cancel, recent history; i18n 8 locales), **accept gating** (`POST /orders/:id/accept` + Wayler OPEN feed accept button; **`POST /wayler-availability-requests/:id/accept` + incoming Accept request button** — `WAYLER_ACCESS_REQUIRED`), **contact/chat/message gating** (`ConversationsService` + Wayler Open chat / send — `WAYLER_ACCESS_REQUIRED`; Sender chat unaffected; read not gated; decline incoming requests not gated), **activate/cancel in-app notifications** (`SYSTEM` to Wayler on mock activate/cancel — idempotent-safe; plain English title/body; bell picks up via existing polling). ✅ (schema + API + SDK + panel UI + paywall enforcement + access notifications complete — mock/manual activation only). Next: **Stripe checkout for real daily access**, scheduled expiry notification, access history detail page, refunds, admin pricing, **platform fee toward ~5%**.
 - **M9–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds** (order escrow), offline + PDF agreements, WebSocket/SSE notification preferences, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
