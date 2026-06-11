@@ -45,9 +45,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
       } else if (response && typeof response === 'object') {
         const body = response as Record<string, unknown>;
         message = (body.message as string) ?? exception.message;
+        if (typeof body.code === 'string') {
+          code = body.code;
+        }
         details = body.message ?? body.details;
       }
-      code = exception.name.replace(/Exception$/, '').toUpperCase() || code;
+      if (code === 'INTERNAL_SERVER_ERROR') {
+        code = exception.name.replace(/Exception$/, '').toUpperCase() || code;
+      }
     }
 
     const body: ErrorResponseBody = {

@@ -132,7 +132,10 @@ export class OrdersController {
   @ApiOperation({ summary: 'Accept an open delivery order (Wayler)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
-  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  @ApiForbiddenResponse({
+    description:
+      'KYC approval required (code: KYC_REQUIRED) or active Wayler work access required (code: WAYLER_ACCESS_REQUIRED)',
+  })
   @ApiNotFoundResponse({ description: 'Delivery order not found' })
   @ApiConflictResponse({
     description: 'Order is not OPEN, already accepted, or sender cannot accept their own order',

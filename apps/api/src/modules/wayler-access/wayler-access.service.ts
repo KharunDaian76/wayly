@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   WaylerAccessPassStatus as PrismaWaylerAccessPassStatus,
   WaylerAccessPassProvider as PrismaWaylerAccessPassProvider,
@@ -152,6 +157,22 @@ export class WaylerAccessService {
     });
 
     return toWaylerAccessPassSummary(updated);
+  }
+
+  /** Throws when the Wayler has no valid active daily work access pass. */
+  async requireActiveAccess(user: RequestUser): Promise<void> {
+    requireKycApproved(user);
+
+    const now = new Date();
+    const accessDate = utcDayStart(now);
+    const activePass = await this.findActivePass(user.id, now, accessDate);
+
+    if (!activePass) {
+      throw new ForbiddenException({
+        code: 'WAYLER_ACCESS_REQUIRED',
+        message: 'Active Wayler work access is required before accepting orders',
+      });
+    }
   }
 
   private async findActivePass(

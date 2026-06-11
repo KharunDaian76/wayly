@@ -22,6 +22,7 @@ const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
 type WaylerAccessPanelProps = {
   isApproved: boolean;
   kycLoading: boolean;
+  onAccessChanged?: (hasActiveAccess: boolean) => void;
 };
 
 function formatDateTime(value: string | null): string {
@@ -123,7 +124,11 @@ function PassHistoryRow({
   );
 }
 
-export function WaylerAccessPanel({ isApproved, kycLoading }: WaylerAccessPanelProps) {
+export function WaylerAccessPanel({
+  isApproved,
+  kycLoading,
+  onAccessChanged,
+}: WaylerAccessPanelProps) {
   const { t } = useI18n();
 
   const [accessState, setAccessState] = useState<WaylerAccessState | null>(null);
@@ -166,6 +171,12 @@ export function WaylerAccessPanel({ isApproved, kycLoading }: WaylerAccessPanelP
       void loadAccess();
     }
   }, [kycLoading, isApproved, loadAccess]);
+
+  useEffect(() => {
+    if (accessState && onAccessChanged) {
+      onAccessChanged(accessState.hasActiveAccess);
+    }
+  }, [accessState, onAccessChanged]);
 
   const handleMockActivate = async () => {
     if (!isApproved || activating) {

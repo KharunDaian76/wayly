@@ -128,8 +128,9 @@ function canAcceptOpenOrder(
   order: DeliveryOrderSummary,
   currentUserId: string,
   kycApproved: boolean,
+  hasActiveAccess: boolean,
 ): boolean {
-  return kycApproved && order.senderId !== currentUserId;
+  return kycApproved && hasActiveAccess && order.senderId !== currentUserId;
 }
 
 function parseRewardAmount(amount: string | null): number | null {
@@ -318,7 +319,13 @@ function resolveAcceptError(err: unknown, t: (key: TranslationKey) => string): s
   if (!(err instanceof ApiError)) {
     return t('app.waylerFeed.acceptFailed');
   }
+  if (err.code === 'WAYLER_ACCESS_REQUIRED') {
+    return t('app.waylerFeed.accessRequiredAcceptFailed');
+  }
   const message = err.message.toLowerCase();
+  if (message.includes('work access')) {
+    return t('app.waylerFeed.accessRequiredAcceptFailed');
+  }
   if (message.includes('own delivery order')) {
     return t('app.waylerFeed.senderCannotAcceptOwn');
   }
@@ -470,6 +477,7 @@ export default function AppHomePage() {
   const [acceptingOrderId, setAcceptingOrderId] = useState<string | null>(null);
   const [acceptError, setAcceptError] = useState<string | null>(null);
   const [acceptSuccess, setAcceptSuccess] = useState(false);
+  const [waylerHasActiveAccess, setWaylerHasActiveAccess] = useState(false);
   const [acceptedOrders, setAcceptedOrders] = useState<WaylerAcceptedOrderRow[]>([]);
   const [acceptedLoading, setAcceptedLoading] = useState(false);
   const [acceptedError, setAcceptedError] = useState<string | null>(null);
@@ -659,6 +667,19 @@ export default function AppHomePage() {
     }
   }, [t, feedType, feedPickupCountry, feedPickupCity, feedDropoffCountry, feedDropoffCity]);
 
+  const loadWaylerAccessState = useCallback(async () => {
+    if (!isApproved) {
+      setWaylerHasActiveAccess(false);
+      return;
+    }
+    try {
+      const state = await api.waylerAccess.today();
+      setWaylerHasActiveAccess(state.hasActiveAccess);
+    } catch {
+      setWaylerHasActiveAccess(false);
+    }
+  }, [isApproved]);
+
   const displayedFeedOrders = useMemo(() => {
     const rewardFiltered = filterFeedOrdersByReward(feedOrders, feedRewardMin, feedRewardMax);
     return sortFeedOrders(rewardFiltered, feedSort);
@@ -729,8 +750,9 @@ export default function AppHomePage() {
   useEffect(() => {
     if (user && mode === 'wayler' && isApproved) {
       void loadAcceptedOrders();
+      void loadWaylerAccessState();
     }
-  }, [user, mode, isApproved, loadAcceptedOrders]);
+  }, [user, mode, isApproved, loadAcceptedOrders, loadWaylerAccessState]);
 
   useEffect(() => {
     if (!user || mode !== 'wayler' || !isApproved) {
@@ -1217,7 +1239,11 @@ export default function AppHomePage() {
                 <CardTitle>{t('app.waylerAccess.title')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <WaylerAccessPanel isApproved={!!isApproved} kycLoading={kycLoading} />
+                <WaylerAccessPanel
+                  isApproved={!!isApproved}
+                  kycLoading={kycLoading}
+                  onAccessChanged={setWaylerHasActiveAccess}
+                />
               </CardContent>
             </Card>
 
@@ -1366,7 +1392,13 @@ export default function AppHomePage() {
                   <ul className="flex flex-col gap-4">
                     {displayedFeedOrders.map((order) => {
                       const isOwnOrder = order.senderId === user.id;
-                      const canAccept = canAcceptOpenOrder(order, user.id, isApproved);
+                      const canAcceptEligible = !!isApproved && !isOwnOrder;
+                      const canAccept = canAcceptOpenOrder(
+                        order,
+                        user.id,
+                        !!isApproved,
+                        waylerHasActiveAccess,
+                      );
                       const isAccepting = acceptingOrderId === order.id;
                       const acceptDisabled = !canAccept || acceptingOrderId !== null;
                       const isExiting = exitingOrderIds.has(order.id);
@@ -1458,6 +1490,10 @@ export default function AppHomePage() {
                             ) : !isApproved ? (
                               <p className="text-xs text-muted-foreground" role="note">
                                 {t('app.waylerFeed.acceptDisabledKyc')}
+                              </p>
+                            ) : canAcceptEligible && !waylerHasActiveAccess ? (
+                              <p className="text-xs text-muted-foreground" role="note">
+                                {t('app.waylerFeed.accessRequiredForAccept')}
                               </p>
                             ) : null}
                           </div>

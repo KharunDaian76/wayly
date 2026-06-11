@@ -190,6 +190,11 @@ const en = {
   'app.waylerFeed.acceptReadOnly': 'Only open requests can be accepted.',
   'app.waylerFeed.acceptDisabledKyc':
     'Verification must be approved before you can accept requests.',
+  'app.waylerFeed.accessRequired': 'Wayler work access required',
+  'app.waylerFeed.accessRequiredForAccept':
+    "Activate today's Wayler work access before accepting orders.",
+  'app.waylerFeed.accessRequiredAcceptFailed':
+    'Active Wayler work access is required before accepting this order.',
   'app.waylerFeed.map.pickup': 'Pickup',
   'app.waylerFeed.map.dropoff': 'Drop-off',
   'app.waylerFeed.map.route': 'Delivery route',
@@ -660,6 +665,11 @@ const ru: Dictionary = {
   'app.waylerFeed.emptyFiltered': 'Нет открытых заявок по вашим фильтрам.',
   'app.waylerFeed.acceptReadOnly': 'Принять можно только открытые заявки.',
   'app.waylerFeed.acceptDisabledKyc': 'Для принятия заявок требуется одобренная верификация.',
+  'app.waylerFeed.accessRequired': 'Требуется доступ курьера к работе',
+  'app.waylerFeed.accessRequiredForAccept':
+    'Активируйте доступ курьера на сегодня перед принятием заявок.',
+  'app.waylerFeed.accessRequiredAcceptFailed':
+    'Для принятия этой заявки нужен активный доступ курьера к работе.',
   'app.waylerFeed.map.pickup': 'Отправление',
   'app.waylerFeed.map.dropoff': 'Назначение',
   'app.waylerFeed.map.route': 'Маршрут доставки',
@@ -1133,6 +1143,11 @@ const es: Dictionary = {
   'app.waylerFeed.emptyFiltered': 'Ninguna solicitud abierta coincide con tus filtros.',
   'app.waylerFeed.acceptReadOnly': 'Solo se pueden aceptar solicitudes abiertas.',
   'app.waylerFeed.acceptDisabledKyc': 'Se requiere verificación aprobada para aceptar solicitudes.',
+  'app.waylerFeed.accessRequired': 'Se requiere acceso de trabajo del Wayler',
+  'app.waylerFeed.accessRequiredForAccept':
+    'Activa el acceso de trabajo del Wayler de hoy antes de aceptar pedidos.',
+  'app.waylerFeed.accessRequiredAcceptFailed':
+    'Se requiere acceso activo de trabajo del Wayler para aceptar este pedido.',
   'app.waylerFeed.map.pickup': 'Recogida',
   'app.waylerFeed.map.dropoff': 'Entrega',
   'app.waylerFeed.map.route': 'Ruta de entrega',
@@ -1610,6 +1625,11 @@ const fr: Dictionary = {
   'app.waylerFeed.acceptReadOnly': 'Seules les demandes ouvertes peuvent être acceptées.',
   'app.waylerFeed.acceptDisabledKyc':
     'La vérification doit être approuvée pour accepter des demandes.',
+  'app.waylerFeed.accessRequired': 'Accès de travail Wayler requis',
+  'app.waylerFeed.accessRequiredForAccept':
+    "Activez l'accès de travail Wayler du jour avant d'accepter des commandes.",
+  'app.waylerFeed.accessRequiredAcceptFailed':
+    'Un accès de travail Wayler actif est requis pour accepter cette commande.',
   'app.waylerFeed.map.pickup': 'Collecte',
   'app.waylerFeed.map.dropoff': 'Livraison',
   'app.waylerFeed.map.route': 'Itinéraire de livraison',
@@ -2095,6 +2115,11 @@ const de: Dictionary = {
   'app.waylerFeed.acceptReadOnly': 'Nur offene Anfragen können angenommen werden.',
   'app.waylerFeed.acceptDisabledKyc':
     'Zur Annahme von Anfragen ist eine genehmigte Verifizierung erforderlich.',
+  'app.waylerFeed.accessRequired': 'Wayler-Arbeitszugang erforderlich',
+  'app.waylerFeed.accessRequiredForAccept':
+    'Aktivieren Sie den heutigen Wayler-Arbeitszugang, bevor Sie Aufträge annehmen.',
+  'app.waylerFeed.accessRequiredAcceptFailed':
+    'Aktiver Wayler-Arbeitszugang ist erforderlich, um diesen Auftrag anzunehmen.',
   'app.waylerFeed.map.pickup': 'Abholung',
   'app.waylerFeed.map.dropoff': 'Zustellung',
   'app.waylerFeed.map.route': 'Lieferroute',
@@ -2570,6 +2595,11 @@ const tr: Dictionary = {
   'app.waylerFeed.acceptReadOnly': 'Yalnızca açık talepler kabul edilebilir.',
   'app.waylerFeed.acceptDisabledKyc':
     'Talep kabul etmek için doğrulamanın onaylanmış olması gerekir.',
+  'app.waylerFeed.accessRequired': 'Wayler iş erişimi gerekli',
+  'app.waylerFeed.accessRequiredForAccept':
+    'Sipariş kabul etmeden önce bugünkü Wayler iş erişimini etkinleştirin.',
+  'app.waylerFeed.accessRequiredAcceptFailed':
+    'Bu siparişi kabul etmek için aktif Wayler iş erişimi gerekir.',
   'app.waylerFeed.map.pickup': 'Alım',
   'app.waylerFeed.map.dropoff': 'Teslimat',
   'app.waylerFeed.map.route': 'Teslimat rotası',
@@ -3033,6 +3063,9 @@ const ar: Dictionary = {
   'app.waylerFeed.emptyFiltered': 'لا توجد طلبات مفتوحة تطابق عوامل التصفية.',
   'app.waylerFeed.acceptReadOnly': 'يمكن قبول الطلبات المفتوحة فقط.',
   'app.waylerFeed.acceptDisabledKyc': 'يجب الموافقة على التحقق قبل قبول الطلبات.',
+  'app.waylerFeed.accessRequired': 'مطلوب وصول عمل الوايلر',
+  'app.waylerFeed.accessRequiredForAccept': 'فعّل وصول عمل الوايلر لليوم قبل قبول الطلبات.',
+  'app.waylerFeed.accessRequiredAcceptFailed': 'مطلوب وصول عمل وايلر نشط قبل قبول هذا الطلب.',
   'app.waylerFeed.map.pickup': 'الاستلام',
   'app.waylerFeed.map.dropoff': 'التسليم',
   'app.waylerFeed.map.route': 'مسار التوصيل',
@@ -3489,6 +3522,9 @@ const zh: Dictionary = {
   'app.waylerFeed.emptyFiltered': '没有符合筛选条件的开放配送请求。',
   'app.waylerFeed.acceptReadOnly': '只能接受开放中的请求。',
   'app.waylerFeed.acceptDisabledKyc': '接受请求前须完成并通过身份验证。',
+  'app.waylerFeed.accessRequired': '需要 Wayler 工作权限',
+  'app.waylerFeed.accessRequiredForAccept': '接单前请先激活今日 Wayler 工作权限。',
+  'app.waylerFeed.accessRequiredAcceptFailed': '接受此订单需要有效的 Wayler 工作权限。',
   'app.waylerFeed.map.pickup': '取件',
   'app.waylerFeed.map.dropoff': '送达',
   'app.waylerFeed.map.route': '配送路线',

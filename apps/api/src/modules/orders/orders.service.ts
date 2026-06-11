@@ -21,6 +21,7 @@ import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
 import { toDeliveryOrderDetail, toDeliveryOrderSummary } from './orders.mapper';
 
@@ -52,6 +53,7 @@ export class OrdersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly waylerAccess: WaylerAccessService,
   ) {}
 
   async create(user: RequestUser, input: CreateDeliveryOrderInput): Promise<DeliveryOrderDetail> {
@@ -179,6 +181,8 @@ export class OrdersService {
     if (record.status !== PrismaDeliveryOrderStatus.OPEN) {
       throw new ConflictException('Only open delivery orders can be accepted');
     }
+
+    await this.waylerAccess.requireActiveAccess(user);
 
     const acceptedAt = new Date();
     const updated = await this.prisma.deliveryOrder.update({
