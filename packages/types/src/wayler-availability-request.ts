@@ -1,7 +1,7 @@
 import type { ISODateString } from './common';
 import type { WaylerAvailabilityRequestStatus } from './enums';
 
-/** Compact Sender request to a published Wayler availability/trip (API routes land in a later batch). */
+/** Compact Sender request to a published Wayler availability/trip. */
 export interface WaylerAvailabilityRequestSummary {
   id: string;
   availabilityId: string;
@@ -32,5 +32,13 @@ export interface WaylerAvailabilityRequestSummary {
   updatedAt: ISODateString;
 }
 
-/** Full Sender availability request payload (API routes land in a later batch). */
+/** Full Sender availability request payload. */
 export type WaylerAvailabilityRequestDetail = WaylerAvailabilityRequestSummary;
+
+/** Paginated Wayler availability request list. */
+export interface WaylerAvailabilityRequestListResponse {
+  items: WaylerAvailabilityRequestSummary[];
+  page: number;
+  limit: number;
+  total: number;
+}

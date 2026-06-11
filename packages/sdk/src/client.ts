@@ -20,6 +20,8 @@ import { createWaylerAccessApi } from './wayler-access';
 import type { WaylerAccessApi } from './wayler-access.types';
 import { createWaylerAvailabilitiesApi } from './wayler-availabilities';
 import type { WaylerAvailabilitiesApi } from './wayler-availabilities.types';
+import { createWaylerAvailabilityRequestsApi } from './wayler-availability-requests';
+import type { WaylerAvailabilityRequestsApi } from './wayler-availability-requests.types';
 
 const API_PREFIX = '/api/v1';
 
@@ -64,6 +66,9 @@ export class ApiClient {
   /** Wayler availability and trip listing endpoints. */
   readonly waylerAvailabilities: WaylerAvailabilitiesApi;
 
+  /** Sender-to-Wayler availability request endpoints. */
+  readonly waylerAvailabilityRequests: WaylerAvailabilityRequestsApi;
+
   /** Daily Wayler work access pass endpoints (mock/manual; no real payment). */
   readonly waylerAccess: WaylerAccessApi;
 
@@ -91,6 +96,9 @@ export class ApiClient {
     this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
     this.disputes = createDisputesApi((path, opts) => this.request(path, opts));
     this.waylerAvailabilities = createWaylerAvailabilitiesApi((path, opts) =>
+      this.request(path, opts),
+    );
+    this.waylerAvailabilityRequests = createWaylerAvailabilityRequestsApi((path, opts) =>
       this.request(path, opts),
     );
     this.waylerAccess = createWaylerAccessApi((path, opts) => this.request(path, opts));

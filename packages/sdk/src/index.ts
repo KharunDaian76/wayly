@@ -29,6 +29,7 @@ export { createDisputesApi } from './disputes';
 export { createWaylerAccessApi } from './wayler-access';
 export { type WaylerAccessApi, type WaylerAccessPassesListQuery } from './wayler-access.types';
 export { createWaylerAvailabilitiesApi } from './wayler-availabilities';
+export { createWaylerAvailabilityRequestsApi } from './wayler-availability-requests';
 export {
   type AddDisputeEvidenceInput,
   type AddDisputeMessageInput,
@@ -68,5 +69,15 @@ export type {
   WaylerAccessState,
   WaylerAvailabilityDetail,
   WaylerAvailabilityListResponse,
+  WaylerAvailabilityRequestDetail,
+  WaylerAvailabilityRequestListResponse,
 } from '@wayly/types';
-export type { SendChatMessageInput } from '@wayly/validation';
+export type {
+  CreateWaylerAvailabilityRequestInput,
+  RespondWaylerAvailabilityRequestInput,
+  SendChatMessageInput,
+} from '@wayly/validation';
+export type {
+  WaylerAvailabilityRequestsApi,
+  WaylerAvailabilityRequestsListQuery,
+} from './wayler-availability-requests.types';

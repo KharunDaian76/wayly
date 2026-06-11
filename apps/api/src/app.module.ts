@@ -21,6 +21,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { UsersModule } from './modules/users/users.module';
 import { WaylerAccessModule } from './modules/wayler-access/wayler-access.module';
 import { WaylerAvailabilitiesModule } from './modules/wayler-availabilities/wayler-availabilities.module';
+import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-requests/wayler-availability-requests.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { WaylerAvailabilitiesModule } from './modules/wayler-availabilities/wayl
     PaymentsModule,
     DisputesModule,
     WaylerAvailabilitiesModule,
+    WaylerAvailabilityRequestsModule,
     WaylerAccessModule,
     // ---------------------------------------------------------------------
     // Future business modules:
