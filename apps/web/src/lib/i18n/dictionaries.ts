@@ -281,6 +281,15 @@ const en = {
   'app.chat.you': 'You',
   'app.chat.other': 'Other',
   'app.chat.charactersRemaining': '{count} characters remaining',
+  'app.chat.accessRequired': 'Wayler work access required',
+  'app.chat.accessRequiredForContact':
+    "Activate today's Wayler work access before contacting Senders.",
+  'app.chat.accessRequiredForMessage':
+    "Activate today's Wayler work access before sending messages.",
+  'app.chat.accessRequiredContactFailed':
+    'Active Wayler work access is required before contacting this Sender.',
+  'app.chat.accessRequiredMessageFailed':
+    'Active Wayler work access is required before sending messages.',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -758,6 +767,15 @@ const ru: Dictionary = {
   'app.chat.you': 'Вы',
   'app.chat.other': 'Собеседник',
   'app.chat.charactersRemaining': 'Осталось символов: {count}',
+  'app.chat.accessRequired': 'Требуется доступ курьера к работе',
+  'app.chat.accessRequiredForContact':
+    'Активируйте сегодняшний доступ курьера к работе, прежде чем связываться с отправителями.',
+  'app.chat.accessRequiredForMessage':
+    'Активируйте сегодняшний доступ курьера к работе, прежде чем отправлять сообщения.',
+  'app.chat.accessRequiredContactFailed':
+    'Для связи с этим отправителем требуется активный доступ курьера к работе.',
+  'app.chat.accessRequiredMessageFailed':
+    'Для отправки сообщений требуется активный доступ курьера к работе.',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -1234,6 +1252,15 @@ const es: Dictionary = {
   'app.chat.you': 'Tú',
   'app.chat.other': 'Otro',
   'app.chat.charactersRemaining': '{count} caracteres restantes',
+  'app.chat.accessRequired': 'Se requiere acceso de trabajo del Wayler',
+  'app.chat.accessRequiredForContact':
+    'Activa el acceso de trabajo del Wayler de hoy antes de contactar a los Senders.',
+  'app.chat.accessRequiredForMessage':
+    'Activa el acceso de trabajo del Wayler de hoy antes de enviar mensajes.',
+  'app.chat.accessRequiredContactFailed':
+    'Se requiere acceso de trabajo Wayler activo antes de contactar a este Sender.',
+  'app.chat.accessRequiredMessageFailed':
+    'Se requiere acceso de trabajo Wayler activo antes de enviar mensajes.',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -1718,6 +1745,15 @@ const fr: Dictionary = {
   'app.chat.you': 'Vous',
   'app.chat.other': 'Autre',
   'app.chat.charactersRemaining': '{count} caractères restants',
+  'app.chat.accessRequired': 'Accès de travail Wayler requis',
+  'app.chat.accessRequiredForContact':
+    "Activez l'accès de travail Wayler du jour avant de contacter les Senders.",
+  'app.chat.accessRequiredForMessage':
+    "Activez l'accès de travail Wayler du jour avant d'envoyer des messages.",
+  'app.chat.accessRequiredContactFailed':
+    'Un accès de travail Wayler actif est requis avant de contacter ce Sender.',
+  'app.chat.accessRequiredMessageFailed':
+    "Un accès de travail Wayler actif est requis avant d'envoyer des messages.",
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -2212,6 +2248,15 @@ const de: Dictionary = {
   'app.chat.you': 'Sie',
   'app.chat.other': 'Andere',
   'app.chat.charactersRemaining': '{count} Zeichen verbleibend',
+  'app.chat.accessRequired': 'Wayler-Arbeitszugang erforderlich',
+  'app.chat.accessRequiredForContact':
+    'Aktivieren Sie den heutigen Wayler-Arbeitszugang, bevor Sie Sender kontaktieren.',
+  'app.chat.accessRequiredForMessage':
+    'Aktivieren Sie den heutigen Wayler-Arbeitszugang, bevor Sie Nachrichten senden.',
+  'app.chat.accessRequiredContactFailed':
+    'Aktiver Wayler-Arbeitszugang ist erforderlich, bevor Sie diesen Sender kontaktieren.',
+  'app.chat.accessRequiredMessageFailed':
+    'Aktiver Wayler-Arbeitszugang ist erforderlich, bevor Sie Nachrichten senden.',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -2688,6 +2733,14 @@ const tr: Dictionary = {
   'app.chat.you': 'Siz',
   'app.chat.other': 'Diğer',
   'app.chat.charactersRemaining': '{count} karakter kaldı',
+  'app.chat.accessRequired': 'Wayler iş erişimi gerekli',
+  'app.chat.accessRequiredForContact':
+    'Göndericilerle iletişime geçmeden önce bugünün Wayler iş erişimini etkinleştirin.',
+  'app.chat.accessRequiredForMessage':
+    'Mesaj göndermeden önce bugünün Wayler iş erişimini etkinleştirin.',
+  'app.chat.accessRequiredContactFailed':
+    'Bu Göndericiyle iletişime geçmeden önce aktif Wayler iş erişimi gerekir.',
+  'app.chat.accessRequiredMessageFailed': 'Mesaj göndermeden önce aktif Wayler iş erişimi gerekir.',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -3152,6 +3205,11 @@ const ar: Dictionary = {
   'app.chat.you': 'أنت',
   'app.chat.other': 'الطرف الآخر',
   'app.chat.charactersRemaining': '{count} حرفًا متبقيًا',
+  'app.chat.accessRequired': 'مطلوب وصول عمل الوايلر',
+  'app.chat.accessRequiredForContact': 'فعّل وصول عمل الوايلر لليوم قبل التواصل مع المرسلين.',
+  'app.chat.accessRequiredForMessage': 'فعّل وصول عمل الوايلر لليوم قبل إرسال الرسائل.',
+  'app.chat.accessRequiredContactFailed': 'مطلوب وصول عمل وايلر نشط قبل التواصل مع هذا المرسل.',
+  'app.chat.accessRequiredMessageFailed': 'مطلوب وصول عمل وايلر نشط قبل إرسال الرسائل.',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -3611,6 +3669,11 @@ const zh: Dictionary = {
   'app.chat.you': '你',
   'app.chat.other': '对方',
   'app.chat.charactersRemaining': '剩余 {count} 个字符',
+  'app.chat.accessRequired': '需要 Wayler 工作权限',
+  'app.chat.accessRequiredForContact': '联系 Sender 前请先激活今日 Wayler 工作权限。',
+  'app.chat.accessRequiredForMessage': '发送消息前请先激活今日 Wayler 工作权限。',
+  'app.chat.accessRequiredContactFailed': '联系此 Sender 需要有效的 Wayler 工作权限。',
+  'app.chat.accessRequiredMessageFailed': '发送消息需要有效的 Wayler 工作权限。',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',

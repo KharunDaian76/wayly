@@ -18,6 +18,7 @@ import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
 import {
   toChatMessageSummary,
@@ -34,6 +35,11 @@ const CHAT_ELIGIBLE_STATUSES: PrismaDeliveryOrderStatus[] = [
 const MESSAGE_HISTORY_LIMIT = 100;
 const CHAT_NOTIFICATION_PREVIEW_MAX = 80;
 
+const WAYLER_CONTACT_ACCESS_MESSAGE =
+  'Active Wayler work access is required before contacting Senders';
+const WAYLER_MESSAGE_ACCESS_MESSAGE =
+  'Active Wayler work access is required before sending messages';
+
 export interface MarkConversationReadResult {
   updatedCount: number;
 }
@@ -43,6 +49,7 @@ export class ConversationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly waylerAccess: WaylerAccessService,
   ) {}
 
   async forOrder(user: RequestUser, orderId: string): Promise<ConversationDetail> {
@@ -50,6 +57,10 @@ export class ConversationsService {
 
     const order = await this.findOrderOrThrow(user.id, orderId);
     this.assertOrderChatEligible(order);
+
+    if (order.acceptedWaylerId === user.id) {
+      await this.waylerAccess.requireActiveAccess(user, WAYLER_CONTACT_ACCESS_MESSAGE);
+    }
 
     const existing = await this.prisma.conversation.findUnique({
       where: { orderId },
@@ -125,6 +136,11 @@ export class ConversationsService {
     requireKycApproved(user);
 
     const conversation = await this.findConversationForParticipantOrThrow(user.id, id);
+
+    if (user.id === conversation.waylerId) {
+      await this.waylerAccess.requireActiveAccess(user, WAYLER_MESSAGE_ACCESS_MESSAGE);
+    }
+
     const now = new Date();
 
     const [message] = await this.prisma.$transaction([

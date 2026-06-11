@@ -160,7 +160,10 @@ export class WaylerAccessService {
   }
 
   /** Throws when the Wayler has no valid active daily work access pass. */
-  async requireActiveAccess(user: RequestUser): Promise<void> {
+  async requireActiveAccess(
+    user: RequestUser,
+    message = 'Active Wayler work access is required before accepting orders',
+  ): Promise<void> {
     requireKycApproved(user);
 
     const now = new Date();
@@ -170,7 +173,7 @@ export class WaylerAccessService {
     if (!activePass) {
       throw new ForbiddenException({
         code: 'WAYLER_ACCESS_REQUIRED',
-        message: 'Active Wayler work access is required before accepting orders',
+        message,
       });
     }
   }

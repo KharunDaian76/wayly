@@ -19,6 +19,7 @@ type ConversationPanelProps = {
   orderTitle: string | null;
   orderId: string | null;
   currentUserId: string;
+  waylerSendBlocked?: boolean;
 };
 
 export function ConversationPanel({
@@ -28,6 +29,7 @@ export function ConversationPanel({
   orderTitle,
   orderId,
   currentUserId,
+  waylerSendBlocked = false,
 }: ConversationPanelProps) {
   const { t } = useI18n();
   const detailInFlightRef = useRef(false);
@@ -52,6 +54,7 @@ export function ConversationPanel({
     draft.length <= MAX_MESSAGE_LENGTH &&
     !sending &&
     !loading &&
+    !waylerSendBlocked &&
     conversationId !== null;
 
   const markRead = useCallback(
@@ -162,11 +165,18 @@ export function ConversationPanel({
       setDraft('');
       await refreshConversation(true);
     } catch (err) {
-      setError(
-        err instanceof ApiError
-          ? err.message || t('app.chat.sendFailed')
-          : t('app.chat.sendFailed'),
-      );
+      if (err instanceof ApiError && err.code === 'WAYLER_ACCESS_REQUIRED') {
+        setError(t('app.chat.accessRequiredMessageFailed'));
+      } else if (err instanceof ApiError) {
+        const message = err.message.toLowerCase();
+        if (message.includes('work access') || message.includes('sending messages')) {
+          setError(t('app.chat.accessRequiredMessageFailed'));
+        } else {
+          setError(err.message || t('app.chat.sendFailed'));
+        }
+      } else {
+        setError(t('app.chat.sendFailed'));
+      }
     } finally {
       setSending(false);
     }
@@ -270,6 +280,11 @@ export function ConversationPanel({
         </div>
 
         <div className="border-t border-border/60 p-3">
+          {waylerSendBlocked ? (
+            <p className="mb-2 text-xs text-muted-foreground" role="note">
+              {t('app.chat.accessRequiredForMessage')}
+            </p>
+          ) : null}
           <label className="flex flex-col gap-1.5 text-sm">
             <textarea
               className={cn(
@@ -281,7 +296,7 @@ export function ConversationPanel({
               value={draft}
               maxLength={MAX_MESSAGE_LENGTH}
               placeholder={t('app.chat.messagePlaceholder')}
-              disabled={loading || sending || !conversationId}
+              disabled={loading || sending || !conversationId || waylerSendBlocked}
               onChange={(event) => setDraft(event.target.value)}
               rows={3}
             />

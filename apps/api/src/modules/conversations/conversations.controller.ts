@@ -56,7 +56,10 @@ export class ConversationsController {
   @ApiOperation({ summary: 'Create or fetch the conversation for an accepted delivery order' })
   @ApiCreatedResponse({ type: ConversationDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
-  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  @ApiForbiddenResponse({
+    description:
+      'KYC approval required (code: KYC_REQUIRED) or active Wayler work access required for Wayler contact (code: WAYLER_ACCESS_REQUIRED)',
+  })
   @ApiNotFoundResponse({ description: 'Delivery order not found' })
   @ApiConflictResponse({
     description: 'Order has no accepted Wayler or status is not eligible for chat',
@@ -99,7 +102,10 @@ export class ConversationsController {
   @ApiBody({ type: SendChatMessageBodyDto })
   @ApiCreatedResponse({ type: ChatMessageSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
-  @ApiForbiddenResponse({ description: 'KYC approval required (code: KYC_REQUIRED)' })
+  @ApiForbiddenResponse({
+    description:
+      'KYC approval required (code: KYC_REQUIRED) or active Wayler work access required for Wayler messages (code: WAYLER_ACCESS_REQUIRED)',
+  })
   @ApiNotFoundResponse({ description: 'Conversation not found' })
   sendMessage(
     @CurrentUser() user: RequestUser,

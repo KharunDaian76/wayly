@@ -335,6 +335,31 @@ function resolveAcceptError(err: unknown, t: (key: TranslationKey) => string): s
   return err.message || t('app.waylerFeed.acceptFailed');
 }
 
+function resolveChatAccessError(
+  err: unknown,
+  t: (key: TranslationKey) => string,
+  context: 'contact' | 'message',
+): string {
+  if (!(err instanceof ApiError)) {
+    return context === 'contact' ? t('app.chat.loadFailed') : t('app.chat.sendFailed');
+  }
+  if (err.code === 'WAYLER_ACCESS_REQUIRED') {
+    return context === 'contact'
+      ? t('app.chat.accessRequiredContactFailed')
+      : t('app.chat.accessRequiredMessageFailed');
+  }
+  const message = err.message.toLowerCase();
+  if (message.includes('work access') || message.includes('contacting')) {
+    return t('app.chat.accessRequiredContactFailed');
+  }
+  if (message.includes('sending messages')) {
+    return t('app.chat.accessRequiredMessageFailed');
+  }
+  return (
+    err.message || (context === 'contact' ? t('app.chat.loadFailed') : t('app.chat.sendFailed'))
+  );
+}
+
 function formatPaymentAmount(amount: string | null | undefined, currency: string): string {
   return amount ? `${amount} ${currency}` : '—';
 }
@@ -925,11 +950,7 @@ export default function AppHomePage() {
       setChatOrderId(conversation.orderId);
       setChatOpen(true);
     } catch (err) {
-      setChatOpenError(
-        err instanceof ApiError
-          ? err.message || t('app.chat.loadFailed')
-          : t('app.chat.loadFailed'),
-      );
+      setChatOpenError(resolveChatAccessError(err, t, 'contact'));
     } finally {
       setOpeningChatOrderId(null);
     }
@@ -1739,13 +1760,18 @@ export default function AppHomePage() {
                                   className="w-full sm:w-auto"
                                   variant="outline"
                                   size="sm"
-                                  disabled={openingChatOrderId !== null}
+                                  disabled={openingChatOrderId !== null || !waylerHasActiveAccess}
                                   onClick={() => void handleOpenChat(order.id, order.title)}
                                 >
                                   {openingChatOrderId === order.id
                                     ? t('app.chat.loading')
                                     : t('app.chat.open')}
                                 </Button>
+                                {!waylerHasActiveAccess ? (
+                                  <p className="text-xs text-muted-foreground" role="note">
+                                    {t('app.chat.accessRequiredForContact')}
+                                  </p>
+                                ) : null}
                                 <Button
                                   className="w-full sm:w-auto"
                                   variant="outline"
@@ -2558,6 +2584,7 @@ export default function AppHomePage() {
           orderTitle={chatOrderTitle}
           orderId={chatOrderId}
           currentUserId={user.id}
+          waylerSendBlocked={mode === 'wayler' && !waylerHasActiveAccess}
         />
 
         <DisputePanel
