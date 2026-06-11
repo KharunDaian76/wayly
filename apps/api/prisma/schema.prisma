@@ -152,6 +152,15 @@ enum WaylerAvailabilityType {
   TRIP_ROUTE
 }
 
+// Sender request to a published Wayler availability/trip (API/UI land in a later batch).
+enum WaylerAvailabilityRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+  EXPIRED
+}
+
 enum TripDirection {
   ONE_WAY
   RETURN
@@ -223,6 +232,8 @@ model User {
   disputeEvidence               DisputeEvidence[] @relation("DisputeEvidenceSubmitted")
   waylerAvailabilities          WaylerAvailability[] @relation("WaylerAvailabilities")
   waylerAccessPasses            WaylerAccessPass[]   @relation("WaylerAccessPasses")
+  availabilityRequestsSent      WaylerAvailabilityRequest[] @relation("AvailabilityRequestSender")
+  availabilityRequestsAsWayler  WaylerAvailabilityRequest[] @relation("AvailabilityRequestWayler")
 
   @@index([deletedAt])
   @@map("users")
@@ -622,6 +633,63 @@ model WaylerAvailability {
   @@index([expiresAt])
   @@index([createdAt])
   @@map("wayler_availabilities")
+
+  availabilityRequests WaylerAvailabilityRequest[]
+}
+
+// Sender delivery request sent to a published Wayler availability/trip (API/UI land in a later batch).
+model WaylerAvailabilityRequest {
+  id             String @id @default(uuid()) @db.Uuid
+  availabilityId String @db.Uuid
+  availability   WaylerAvailability @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
+
+  senderId String @db.Uuid
+  sender   User   @relation("AvailabilityRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  waylerId String @db.Uuid
+  wayler   User   @relation("AvailabilityRequestWayler", fields: [waylerId], references: [id], onDelete: Cascade)
+
+  status WaylerAvailabilityRequestStatus @default(PENDING)
+
+  title              String
+  packageDescription String
+
+  pickupCountry  String
+  pickupCity     String
+  pickupAddress  String?
+
+  dropoffCountry  String
+  dropoffCity     String
+  dropoffAddress  String?
+
+  desiredPickupFrom    DateTime?
+  desiredPickupTo      DateTime?
+  desiredDeliveryFrom  DateTime?
+  desiredDeliveryTo    DateTime?
+
+  proposedRewardCents Int
+  currency            String @default("EUR")
+
+  message         String?
+  responseMessage String?
+
+  acceptedAt  DateTime?
+  declinedAt  DateTime?
+  cancelledAt DateTime?
+  expiresAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([availabilityId])
+  @@index([senderId])
+  @@index([waylerId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([waylerId, status])
+  @@index([senderId, status])
+  @@index([availabilityId, status])
+  @@map("wayler_availability_requests")
 }
 
 // Daily Wayler work access fee pass — gates accept/contact/chat until paid (API/paywall land in a later batch).

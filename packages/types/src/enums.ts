@@ -197,6 +197,17 @@ export const WaylerAvailabilityType = {
 export type WaylerAvailabilityType =
   (typeof WaylerAvailabilityType)[keyof typeof WaylerAvailabilityType];
 
+/** Sender request to a published Wayler availability/trip lifecycle (API/UI land in a later batch). */
+export const WaylerAvailabilityRequestStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED',
+} as const;
+export type WaylerAvailabilityRequestStatus =
+  (typeof WaylerAvailabilityRequestStatus)[keyof typeof WaylerAvailabilityRequestStatus];
+
 /** Trip route direction for Wayler-published routes. */
 export const TripDirection = {
   ONE_WAY: 'ONE_WAY',
