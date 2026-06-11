@@ -2,12 +2,13 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import {
   WaylerAvailabilityStatus as PrismaWaylerAvailabilityStatus,
   WaylerAvailabilityRequestStatus as PrismaWaylerAvailabilityRequestStatus,
-  type Prisma,
+  Prisma,
   type WaylerAvailability,
   type WaylerAvailabilityRequest,
 } from '@prisma/client';
@@ -28,10 +29,17 @@ import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
+import { toDeliveryOrderCreateFromAvailabilityRequest } from './availability-request-order.mapper';
 import {
   toWaylerAvailabilityRequestDetail,
   toWaylerAvailabilityRequestSummary,
 } from './wayler-availability-requests.mapper';
+
+const deliveryOrderIdSelect = { deliveryOrder: { select: { id: true } } } as const;
+
+type AvailabilityRequestWithDeliveryOrder = WaylerAvailabilityRequest & {
+  deliveryOrder: { id: string } | null;
+};
 
 @Injectable()
 export class WaylerAvailabilityRequestsService {
@@ -145,13 +153,63 @@ export class WaylerAvailabilityRequestsService {
       'Active Wayler work access is required before accepting Sender requests',
     );
 
-    const updated = await this.prisma.waylerAvailabilityRequest.update({
-      where: { id: record.id },
-      data: {
-        status: PrismaWaylerAvailabilityRequestStatus.ACCEPTED,
-        acceptedAt: new Date(),
-        responseMessage: body.responseMessage ?? null,
-      },
+    const acceptedAt = new Date();
+
+    const { updated, deliveryOrderId } = await this.prisma.$transaction(async (tx) => {
+      const current = await tx.waylerAvailabilityRequest.findUnique({
+        where: { id: record.id },
+        include: deliveryOrderIdSelect,
+      });
+      if (!current) {
+        throw new NotFoundException({
+          code: 'AVAILABILITY_REQUEST_NOT_FOUND',
+          message: 'Wayler availability request not found',
+        });
+      }
+      if (current.status !== PrismaWaylerAvailabilityRequestStatus.PENDING) {
+        throw new ConflictException({
+          code: 'AVAILABILITY_REQUEST_NOT_PENDING',
+          message: 'This availability request is no longer pending',
+        });
+      }
+
+      const updatedRequest = await tx.waylerAvailabilityRequest.update({
+        where: { id: record.id },
+        data: {
+          status: PrismaWaylerAvailabilityRequestStatus.ACCEPTED,
+          acceptedAt,
+          responseMessage: body.responseMessage ?? null,
+        },
+      });
+
+      if (current.deliveryOrder) {
+        return { updated: updatedRequest, deliveryOrderId: current.deliveryOrder.id };
+      }
+
+      try {
+        const order = await tx.deliveryOrder.create({
+          data: toDeliveryOrderCreateFromAvailabilityRequest(updatedRequest, acceptedAt),
+        });
+        return { updated: updatedRequest, deliveryOrderId: order.id };
+      } catch (error) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002' &&
+          current.id
+        ) {
+          const existing = await tx.deliveryOrder.findUnique({
+            where: { availabilityRequestId: current.id },
+            select: { id: true },
+          });
+          if (existing) {
+            return { updated: updatedRequest, deliveryOrderId: existing.id };
+          }
+        }
+        throw new InternalServerErrorException({
+          code: 'ORDER_CREATION_FAILED',
+          message: 'Failed to create delivery order from availability request',
+        });
+      }
     });
 
     await this.notifications.createForUser({
@@ -161,7 +219,10 @@ export class WaylerAvailabilityRequestsService {
       body: 'Your delivery request was accepted by the Wayler.',
     });
 
-    return toWaylerAvailabilityRequestDetail(updated);
+    return toWaylerAvailabilityRequestDetail({
+      ...updated,
+      deliveryOrder: { id: deliveryOrderId },
+    });
   }
 
   async decline(
@@ -235,6 +296,7 @@ export class WaylerAvailabilityRequestsService {
         orderBy: { createdAt: 'desc' },
         skip,
         take: query.limit,
+        include: deliveryOrderIdSelect,
       }),
       this.prisma.waylerAvailabilityRequest.count({ where }),
     ]);
@@ -247,8 +309,11 @@ export class WaylerAvailabilityRequestsService {
     };
   }
 
-  private async findByIdOrThrow(id: string): Promise<WaylerAvailabilityRequest> {
-    const record = await this.prisma.waylerAvailabilityRequest.findUnique({ where: { id } });
+  private async findByIdOrThrow(id: string): Promise<AvailabilityRequestWithDeliveryOrder> {
+    const record = await this.prisma.waylerAvailabilityRequest.findUnique({
+      where: { id },
+      include: deliveryOrderIdSelect,
+    });
     if (!record) {
       throw new NotFoundException({
         code: 'AVAILABILITY_REQUEST_NOT_FOUND',

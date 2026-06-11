@@ -5,13 +5,17 @@ import type {
 } from '@wayly/types';
 import { WaylerAvailabilityRequestStatus } from '@wayly/types';
 
+type AvailabilityRequestRecord = WaylerAvailabilityRequest & {
+  deliveryOrder?: { id: string } | null;
+};
+
 function toIso(value: Date | null): string | null {
   return value?.toISOString() ?? null;
 }
 
 /** Maps a Prisma WaylerAvailabilityRequest to the safe API summary shape. */
 export function toWaylerAvailabilityRequestSummary(
-  record: WaylerAvailabilityRequest,
+  record: AvailabilityRequestRecord,
 ): WaylerAvailabilityRequestSummary {
   return {
     id: record.id,
@@ -41,12 +45,13 @@ export function toWaylerAvailabilityRequestSummary(
     expiresAt: toIso(record.expiresAt),
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
+    deliveryOrderId: record.deliveryOrder?.id ?? null,
   };
 }
 
 /** Maps a Prisma WaylerAvailabilityRequest to the safe API detail shape. */
 export function toWaylerAvailabilityRequestDetail(
-  record: WaylerAvailabilityRequest,
+  record: AvailabilityRequestRecord,
 ): WaylerAvailabilityRequestDetail {
   return toWaylerAvailabilityRequestSummary(record);
 }

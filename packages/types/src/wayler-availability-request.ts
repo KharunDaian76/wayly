@@ -30,6 +30,8 @@ export interface WaylerAvailabilityRequestSummary {
   expiresAt: ISODateString | null;
   createdAt: ISODateString;
   updatedAt: ISODateString;
+  /** Linked DeliveryOrder after Wayler accept (null while pending or declined/cancelled). */
+  deliveryOrderId: string | null;
 }
 
 /** Full Sender availability request payload. */
