@@ -27,6 +27,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
 import { ConversationPanel } from '@/components/app/conversation-panel';
+import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { DisputePanel } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
@@ -1610,6 +1611,10 @@ export default function AppHomePage() {
                             />
                           </div>
                           <p className="mt-1 text-muted-foreground">{order.type}</p>
+                          <DeliveryOrderSourceBadge
+                            sourceType={order.sourceType}
+                            availabilityRequestId={order.availabilityRequestId}
+                          />
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -2336,6 +2341,10 @@ export default function AppHomePage() {
                             />
                           </div>
                           <p className="mt-1 text-muted-foreground">{order.type}</p>
+                          <DeliveryOrderSourceBadge
+                            sourceType={order.sourceType}
+                            availabilityRequestId={order.availabilityRequestId}
+                          />
                           {statusNote ? (
                             <p className="wayly-inline-note mt-2 rounded-lg border px-3 py-2 text-sm text-muted-foreground">
                               {statusNote}
