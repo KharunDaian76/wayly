@@ -32,6 +32,7 @@ import { NotificationBell } from '@/components/app/notification-bell';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { WaylerAccessPanel } from '@/components/app/wayler-access-panel';
 import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
+import { WaylerIncomingRequestsPanel } from '@/components/app/wayler-incoming-requests-panel';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
@@ -1893,6 +1894,15 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent>
                 <WaylerAvailabilityPanel isApproved={!!isApproved} kycLoading={kycLoading} />
+              </CardContent>
+            </Card>
+
+            <Card className={APP_PANEL_CLASS}>
+              <CardHeader>
+                <CardTitle>{t('app.availabilityRequests.incomingRequests')}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WaylerIncomingRequestsPanel isApproved={!!isApproved} kycLoading={kycLoading} />
               </CardContent>
             </Card>
           </>
