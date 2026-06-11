@@ -34,6 +34,8 @@ type WaylerIncomingRequestsPanelProps = {
   isApproved: boolean;
   kycLoading: boolean;
   waylerHasActiveAccess: boolean;
+  /** Refresh parent accepted-order lists after accept creates a DeliveryOrder. */
+  onRequestAccepted?: () => void;
 };
 
 function formatLocation(city: string, country: string): string {
@@ -121,6 +123,7 @@ export function WaylerIncomingRequestsPanel({
   isApproved,
   kycLoading,
   waylerHasActiveAccess,
+  onRequestAccepted,
 }: WaylerIncomingRequestsPanelProps) {
   const { t } = useI18n();
 
@@ -175,6 +178,7 @@ export function WaylerIncomingRequestsPanel({
         return next;
       });
       await loadRequests();
+      onRequestAccepted?.();
     } catch (err) {
       setActionError(resolveActionError(err, t, 'accept'));
     } finally {

@@ -1911,6 +1911,7 @@ export default function AppHomePage() {
                   isApproved={!!isApproved}
                   kycLoading={kycLoading}
                   waylerHasActiveAccess={waylerHasActiveAccess}
+                  onRequestAccepted={() => void loadAcceptedOrders()}
                 />
               </CardContent>
             </Card>
@@ -2594,7 +2595,11 @@ export default function AppHomePage() {
                 <CardTitle>{t('app.senderWaylers.title')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <SenderWaylersPanel canBrowse={!!canViewSenderOrders} kycLoading={kycLoading} />
+                <SenderWaylersPanel
+                  canBrowse={!!canViewSenderOrders}
+                  kycLoading={kycLoading}
+                  onAcceptedOrdersRefresh={() => void loadSenderAcceptedOrders()}
+                />
               </CardContent>
             </Card>
           </>

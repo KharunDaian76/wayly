@@ -94,6 +94,8 @@ const INITIAL_FILTERS: FilterState = {
 type SenderWaylersPanelProps = {
   canBrowse: boolean;
   kycLoading: boolean;
+  /** Refresh parent Sender accepted-order list when converted requests are present. */
+  onAcceptedOrdersRefresh?: () => void;
 };
 
 function normalizeCountry(value: string): string | undefined {
@@ -326,7 +328,11 @@ function resolveRequestError(err: unknown, t: (key: TranslationKey) => string): 
   return err.message || t('app.availabilityRequests.requestFailed');
 }
 
-export function SenderWaylersPanel({ canBrowse, kycLoading }: SenderWaylersPanelProps) {
+export function SenderWaylersPanel({
+  canBrowse,
+  kycLoading,
+  onAcceptedOrdersRefresh,
+}: SenderWaylersPanelProps) {
   const { t } = useI18n();
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
@@ -411,12 +417,15 @@ export function SenderWaylersPanel({ canBrowse, kycLoading }: SenderWaylersPanel
     try {
       const result = await api.waylerAvailabilityRequests.mineAsSender({ limit: 5 });
       setMyRequests(result.items);
+      if (result.items.some((request) => request.deliveryOrderId)) {
+        onAcceptedOrdersRefresh?.();
+      }
     } catch {
       setMyRequestsError(t('app.availabilityRequests.requestsLoadFailed'));
     } finally {
       setMyRequestsLoading(false);
     }
-  }, [canBrowse, t]);
+  }, [canBrowse, t, onAcceptedOrdersRefresh]);
 
   const runSearch = useCallback(
     async (filterState: FilterState) => {
