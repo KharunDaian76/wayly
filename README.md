@@ -2,7 +2,7 @@
 
 Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Waylers directly — Senders post delivery requests; Waylers publish local availability and trip routes — with international/intercity and local city delivery, mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept/contact/chat gating** (`WAYLER_ACCESS_REQUIRED`; mock/manual activate only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, direct Sender request-to-Wayler flow, matching recommendations, access activation/expiry notifications, admin pricing controls, and platform fee adjustment toward 5% are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept/contact/chat gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, direct Sender request-to-Wayler flow, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, and platform fee adjustment toward 5% are future milestones.
 
 ## Tech stack
 
@@ -195,6 +195,7 @@ Marketing landing page (`/`) is not translated yet.
 | Wayler access panel UI on `/app` (active/inactive, mock activate, cancel, history)         | Complete (M8)                   |
 | Accept gating behind active daily Wayler access (order accept)                             | Complete (M8)                   |
 | Contact / chat / message gating behind active daily Wayler access                          | Complete (M8)                   |
+| Wayler access activate/cancel in-app notifications (`SYSTEM` on mock flow)                 | Complete (M8)                   |
 | Platform fee adjustment (mock 10% → planned ~5%)                                           | Not started (future milestones) |
 | Stripe, checkout, real payout processing, refunds, payout dashboard                        | Not started (future milestones) |
 | Admin/arbitrator panel, dispute resolution, payment hold on dispute                        | Not started (future milestones) |
@@ -399,6 +400,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Accept gating — `POST /orders/:id/accept` + Wayler accept button (active pass required)              | Complete (M8) |
 | Contact/chat gating — `POST /conversations/order/:id` + Wayler Open chat (active pass required)      | Complete (M8) |
 | Message gating — `POST /conversations/:id/messages` as Wayler (active pass required)                 | Complete (M8) |
+| Wayler access activate/cancel in-app notifications (`SYSTEM` on mock activate/cancel)                | Complete (M8) |
 
 ### API routes (orders)
 
@@ -736,12 +738,12 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Notifications
 
-Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, **dispute events**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order, payment, chat, and dispute notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
+Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, **dispute events**, **Wayler daily work access activation/cancellation**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Order, payment, chat, dispute, and Wayler access notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
 
 ### Current notification flow
 
 ```text
-Order lifecycle action OR mock payment action OR chat message sent OR dispute action (backend)
+Order lifecycle action OR mock payment action OR chat message sent OR dispute action OR Wayler access activate/cancel (backend)
         ↓
 NotificationsService.createForUser()  →  Notification row in DB
         ↓
@@ -754,7 +756,7 @@ NotificationBell on /app  (badge + dropdown)
 Polling refresh  (unread count every 30s; list every 60s while open)
 ```
 
-Payment, chat, and dispute notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate payment, chat, or dispute inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
+Payment, chat, dispute, and Wayler access notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate payment, chat, dispute, or access inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
 
 ### Schema (`Notification`)
 
@@ -773,17 +775,17 @@ Shared types: `NotificationSummary`, `NotificationListResponse` (`@wayly/types`)
 
 ### `NotificationType` enum
 
-| Value              | Notes (current dispatch)                                                                                                                                                                                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                                                                                                                                                                             |
-| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                                                                                                                                                               |
-| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                                                                                                                                                               |
-| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                                                                                                                                                                             |
-| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                                                                                                                                                                              |
-| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                                                                                                                                                                              |
-| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                                                                                                                                                                 |
-| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                                                                                                                                                                 |
-| `SYSTEM`           | **Dispatched** → other chat participant on new message; **Wayler on mock payment events** (authorize / hold / release); **other dispute participant** on open dispute / new message / new evidence (until dedicated dispute types exist); admin/system reserved for later |
+| Value              | Notes (current dispatch)                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ORDER_PUBLISHED`  | Reserved — not dispatched yet                                                                                                                                                                                                                                                                                                                                            |
+| `ORDER_ACCEPTED`   | **Dispatched** → Sender when Wayler accepts                                                                                                                                                                                                                                                                                                                              |
+| `ORDER_IN_TRANSIT` | **Dispatched** → Sender when transit starts                                                                                                                                                                                                                                                                                                                              |
+| `ORDER_DELIVERED`  | **Dispatched** → Sender when marked delivered                                                                                                                                                                                                                                                                                                                            |
+| `ORDER_CANCELLED`  | Reserved — cancel notifications not yet sent                                                                                                                                                                                                                                                                                                                             |
+| `PROOF_SUBMITTED`  | **Dispatched** → Sender when proof submitted                                                                                                                                                                                                                                                                                                                             |
+| `KYC_APPROVED`     | Reserved — KYC notifications not yet sent                                                                                                                                                                                                                                                                                                                                |
+| `KYC_REJECTED`     | Reserved — KYC notifications not yet sent                                                                                                                                                                                                                                                                                                                                |
+| `SYSTEM`           | **Dispatched** → other chat participant on new message; **Wayler on mock payment events** (authorize / hold / release); **Wayler on mock daily access activate/cancel** (see **Daily Wayler work access foundation**); **other dispute participant** on open dispute / new message / new evidence (until dedicated dispute types exist); admin/system reserved for later |
 
 ### API routes
 
@@ -809,7 +811,7 @@ api.notifications.markAllRead();  // POST /notifications/read-all
 
 ### Dispatch behavior (automatic creation)
 
-The backend creates notifications **internally** when order lifecycle actions, mock payment actions, chat messages, or dispute actions succeed. Failures to create a notification are logged and do **not** block the underlying action. Notifications are created **only after a successful state change** — validation failures, **409** conflicts, and idempotent/no-op payment calls do **not** create notifications.
+The backend creates notifications **internally** when order lifecycle actions, mock payment actions, chat messages, dispute actions, or Wayler daily access activate/cancel succeed. Failures to create a notification are logged and do **not** block the underlying action. Notifications are created **only after a successful state change** — validation failures, **409** conflicts, and idempotent/no-op calls do **not** create notifications.
 
 **Order lifecycle** (after successful order transition):
 
@@ -865,6 +867,31 @@ Dispute notification payload:
 - **Arbitrator notifications** — not dispatched yet (assignment/resolution workflow is future)
 
 **Duplicate prevention:** notifications are created only **after** successful Prisma writes. Failed validation or **409** (e.g. duplicate active dispute) does **not** create a notification. Notification insert failures are logged and do **not** roll back the dispute action.
+
+**Wayler daily work access** (after successful `WaylerAccessService` transition — see **Daily Wayler work access foundation**):
+
+| Access event              | `NotificationType` | Recipient  | Title                        | Body                                             |
+| ------------------------- | ------------------ | ---------- | ---------------------------- | ------------------------------------------------ |
+| `mock-activate-today`     | `SYSTEM`           | **Wayler** | Wayler work access active    | Your Wayler work access is active for today.     |
+| `cancel` (was **ACTIVE**) | `SYSTEM`           | **Wayler** | Wayler work access cancelled | Your Wayler work access for today was cancelled. |
+
+Wayler access notification payload:
+
+- **Plain English** title/body stored in DB — no server-side i18n templates yet (same pattern as other `SYSTEM` dispatch today)
+- **No `relatedOrderId`** — access pass is not tied to a delivery order; notification schema has no `entityType` / `entityId` fields yet
+- **Self-notification only** — the Wayler who activated or cancelled receives the alert (not Senders or admins)
+- **Mock/business-flow only** — not Stripe webhook or payment-provider confirmation notifications
+
+**Duplicate prevention:**
+
+- **`mock-activate-today`** — if a valid **ACTIVE** pass already exists for today, the service returns early **without** creating a notification (idempotent activate)
+- **`cancel`** — notification only when status changes **ACTIVE → CANCELLED**; cancelling **PENDING** does not notify; repeat cancel on **CANCELLED** returns **409** before any notification
+
+**Not dispatched (Wayler access — future):**
+
+- **No scheduled expiry notification** — pass expiry at end of day does not auto-notify yet
+- **No Stripe payment confirmation** — real checkout/webhook success notifications are future
+- **No admin-configured templates** — hard-coded English title/body only
 
 **Not dispatched in the current version:**
 
@@ -964,6 +991,17 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] Duplicate open attempt (**409**) does **not** create a second notification
 - [ ] **User B**'s unread badge updates within **30 seconds** via existing bell polling (no frontend changes)
 
+**Wayler daily work access notifications:**
+
+Use a **KYC-approved Wayler** on `/app` (Wayler mode):
+
+- [ ] **Mock activate** today's access → bell/dropdown shows `SYSTEM` notification — title **"Wayler work access active"**, body **"Your Wayler work access is active for today."**
+- [ ] **Mock activate again** while already active → **no duplicate** activation notification
+- [ ] **Cancel access** (from **ACTIVE**) → cancellation notification — title **"Wayler work access cancelled"**, body **"Your Wayler work access for today was cancelled."**
+- [ ] **Cancel again** (already **CANCELLED**) → **409**; **no duplicate** cancellation notification
+- [ ] Unread badge updates within **30 seconds** via existing bell polling (no frontend changes)
+- [ ] Accept/chat gating still works after activate/cancel (see **Daily Wayler work access foundation**)
+
 ### Future milestones (notifications)
 
 - **Dedicated payment notification types** — e.g. `PAYMENT_AUTHORIZED`, `ESCROW_HELD`, `PAYOUT_CREATED` (replace `SYSTEM` for payment dispatch)
@@ -971,8 +1009,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **WebSocket/SSE real-time delivery** — instant unread count and list updates (lightweight **polling exists today**)
 - **Email / push notifications** — FCM, transactional email for offline users
 - **Notification preferences** — per-type opt-in/out, quiet hours
-- **Localized notification templates** — server-side title/body per user locale (order, payment, chat)
-- **Real Stripe/payment notifications** — checkout, capture, webhook-driven status updates
+- **Localized notification templates** — server-side title/body per user locale (order, payment, chat, Wayler access)
+- **Real Stripe/payment notifications** — checkout, capture, webhook-driven status updates (order escrow and **daily access purchase confirmation**)
 - **Payout failure notifications** — Wayler/Sender alerts when payout processing fails
 - **Dedicated dispute notification types** — e.g. `DISPUTE_OPENED`, `DISPUTE_MESSAGE`, `DISPUTE_EVIDENCE` (replace `SYSTEM` for dispute dispatch)
 - **Dispute resolution notifications** — arbitrator assignment, resolve/reject outcomes
@@ -982,6 +1020,8 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - **Cancellation notifications** — `ORDER_CANCELLED` if post-accept cancellation is added later; notify Wayler when OPEN order is cancelled (see **Order cancellation**)
 - **Admin / system notifications** — operator broadcasts (separate from chat `SYSTEM` dispatch today)
 - **Push/email for chat** — offline chat alerts
+- **Scheduled Wayler access expiry notification** — alert when daily pass expires (end of access window)
+- **Dedicated `WAYLER_ACCESS` notification type** — replace `SYSTEM` for access dispatch (schema enum addition; optional entity link when schema supports it)
 
 ## Chat / contact between Sender and Wayler
 
@@ -1185,7 +1225,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler) and optional **User 
 - **Dedicated dispute notification types** — replace `SYSTEM` for dispute dispatch; localized templates; push/email
 - **Production geocoding** — backend geocoding cache / Mapbox (or other provider); lat/lng on create
 - **Admin / arbitrator panel** — assignment, review queue, resolution actions, audit visibility
-- **Daily work access fee / Wayler paywall** — schema + API + SDK + panel UI + **accept/contact/message gating complete** (see **Daily Wayler work access foundation**); Stripe checkout for real paid daily access is future — e.g. ~€1/day before accept, contact, or chat
+- **Daily work access fee / Wayler paywall** — schema + API + SDK + panel UI + **accept/contact/message gating + activate/cancel notifications complete** (see **Daily Wayler work access foundation**); Stripe checkout for real paid daily access is future — e.g. ~€1/day before accept, contact, or chat
 - **Mobile / PWA polish** and premium redesign (see **Premium dashboard UI foundation** — foundation pass complete)
 
 ## Payment and escrow foundation
@@ -1446,20 +1486,21 @@ See **Notifications** for bell polling, mark-read, and full manual test steps.
 
 ### Current scope
 
-| Included                                                                                        | Not included (yet)                   |
-| ----------------------------------------------------------------------------------------------- | ------------------------------------ |
-| Prisma enums + models + migration                                                               | Stripe / Connect integration         |
-| `@wayly/types` payment summaries                                                                | Real Wayler payout dashboard         |
-| Mock/manual payment API + SDK                                                                   | Checkout flow / card forms           |
-| Sender Accepted mock payment UI (authorize / hold / release)                                    | Payout method setup                  |
-| Wayler Accepted read-only payment/payout visibility                                             | Payout processing (`PAID`)           |
-| Escrow release rules (mock, proof-gated)                                                        | Refund workflow                      |
-| Ledger on authorize/hold/release                                                                | Payment webhooks                     |
-| Two-sided mock payment UI (Sender acts, Wayler observes)                                        | Payout history / failure handling    |
-| Mock payment in-app notifications (Wayler, `SYSTEM` type)                                       | Dedicated payment notification types |
-| Wayler access panel UI (mock/manual daily access — see **Daily Wayler work access foundation**) | Stripe checkout for daily access     |
-| Accept / contact / message gating behind active daily Wayler access                             | Real paid subscription / auto-renew  |
-|                                                                                                 | Real money movement                  |
+| Included                                                                                        | Not included (yet)                       |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Prisma enums + models + migration                                                               | Stripe / Connect integration             |
+| `@wayly/types` payment summaries                                                                | Real Wayler payout dashboard             |
+| Mock/manual payment API + SDK                                                                   | Checkout flow / card forms               |
+| Sender Accepted mock payment UI (authorize / hold / release)                                    | Payout method setup                      |
+| Wayler Accepted read-only payment/payout visibility                                             | Payout processing (`PAID`)               |
+| Escrow release rules (mock, proof-gated)                                                        | Refund workflow                          |
+| Ledger on authorize/hold/release                                                                | Payment webhooks                         |
+| Two-sided mock payment UI (Sender acts, Wayler observes)                                        | Payout history / failure handling        |
+| Mock payment in-app notifications (Wayler, `SYSTEM` type)                                       | Dedicated payment notification types     |
+| Wayler access panel UI (mock/manual daily access — see **Daily Wayler work access foundation**) | Stripe checkout for daily access         |
+| Accept / contact / message gating behind active daily Wayler access                             | Real paid subscription / auto-renew      |
+| Wayler access activate/cancel in-app notifications (`SYSTEM`)                                   | Stripe payment-confirmation notification |
+|                                                                                                 | Real money movement                      |
 
 ### Manual testing checklist (mock payments — API)
 
@@ -1547,7 +1588,7 @@ Mock API, two-sided payment UI, and Wayler in-app notifications today exercise t
 - **Refund workflow** — partial/full refunds; `REFUNDED` + ledger lines
 - **Dispute-aware payout hold** — block release/payout while order `DISPUTED`
 - **Platform fee settings** — configurable percentage/fixed (today: hard-coded **10% mock**; stakeholder direction: move toward **~5%** platform commission)
-- **Daily work access fee** — Wayler must activate **today's work access** (e.g. **~€1/day**) before accept, contact, or chat; separate from per-order escrow and platform commission (~5% direction) — **`WaylerAccessPass` schema + API + SDK + panel UI + accept/contact/message gating complete** (see **Daily Wayler work access foundation**); mock/manual activate/cancel on `/app` today; **Stripe checkout for real payment not implemented yet**
+- **Daily work access fee** — Wayler must activate **today's work access** (e.g. **~€1/day**) before accept, contact, or chat; separate from per-order escrow and platform commission (~5% direction) — **`WaylerAccessPass` schema + API + SDK + panel UI + accept/contact/message gating + activate/cancel in-app notifications complete** (see **Daily Wayler work access foundation**); mock/manual activate/cancel on `/app` today; **Stripe checkout for real payment not implemented yet**
 - **Stripe checkout for daily access** — replace mock activate with real payment; webhooks confirm `WaylerAccessPass` activation
 - **Admin / arbitrator payout review** — ledger + intent + payout visibility during disputes
 
@@ -2179,7 +2220,7 @@ Use two KYC-approved users (**W** = Wayler, **S** = Sender) and Swagger or SDK:
 
 ## Daily Wayler work access foundation
 
-Wayly stakeholders require that **Waylers can browse the marketplace** (OPEN order feed, filters, maps) but **cannot accept orders, contact/chat with Senders, or send messages** until they have **active daily work access** — e.g. **€1 for today’s access**. This is **separate from platform commission** on completed deliveries (stakeholder direction: move from mock **10%** toward **~5%**). The current implementation includes **database schema**, **shared types**, **`WaylerAccessModule` API + SDK**, **Wayler access panel UI** on `/app` (Wayler mode), **mock/manual activation**, and **backend + frontend enforcement** of accept/contact/message gating — part of the **monetization / paywall foundation**. **No Stripe, real paid subscription, admin pricing controls, or access notifications yet.**
+Wayly stakeholders require that **Waylers can browse the marketplace** (OPEN order feed, filters, maps) but **cannot accept orders, contact/chat with Senders, or send messages** until they have **active daily work access** — e.g. **€1 for today’s access**. This is **separate from platform commission** on completed deliveries (stakeholder direction: move from mock **10%** toward **~5%**). The current implementation includes **database schema**, **shared types**, **`WaylerAccessModule` API + SDK**, **Wayler access panel UI** on `/app` (Wayler mode), **mock/manual activation**, **backend + frontend enforcement** of accept/contact/message gating, and **in-app notifications on activate/cancel** — part of the **monetization / paywall foundation**. **No Stripe, real paid subscription, admin pricing controls, scheduled expiry notifications, or Stripe payment-confirmation notifications yet.**
 
 ### Purpose
 
@@ -2251,7 +2292,7 @@ GET /wayler-access/today → WaylerAccessState (hasActiveAccess, activePass, che
         ↓
 If inactive → POST /wayler-access/mock-activate-today (MANUAL, EUR 1.00, no real payment)
         ↓
-Pass becomes ACTIVE for current UTC day (startsAt ≤ now, expiresAt > now)
+Pass becomes ACTIVE → SYSTEM notification to Wayler ("Wayler work access active")
         ↓
 GET /wayler-access/today → hasActiveAccess true → accept / open chat / send enabled (Wayler)
         ↓
@@ -2259,10 +2300,12 @@ GET /wayler-access/mine → access history (paginated)
         ↓
 POST /wayler-access/:id/cancel → CANCELLED (owner, ACTIVE/PENDING, non-expired)
         ↓
+If was ACTIVE → SYSTEM notification to Wayler ("Wayler work access cancelled")
+        ↓
 GET /wayler-access/today → inactive again → accept / contact / send blocked again
 ```
 
-Repeated `mock-activate-today` returns the **existing active pass** — no duplicate (unique `[waylerId, accessDate]`). **Mock/manual only** — future **Stripe checkout** will create/confirm the same `WaylerAccessPass` record after real payment.
+Repeated `mock-activate-today` returns the **existing active pass** — no duplicate row and **no duplicate activation notification** (unique `[waylerId, accessDate]`). **Mock/manual only** — future **Stripe checkout** will create/confirm the same `WaylerAccessPass` record after real payment (Stripe confirmation notification is future).
 
 ### Current UI flow (`/app`, Wayler mode)
 
@@ -2358,44 +2401,75 @@ Validation: `@wayly/validation` — `waylerAccessPassesListQuerySchema` (`page`,
 
 ### Business / access rules
 
-| Rule                    | Behavior                                                                             |
-| ----------------------- | ------------------------------------------------------------------------------------ |
-| **Auth**                | JWT + KYC required on all routes (`403` `KYC_REQUIRED` when unapproved)              |
-| **Today normalization** | `accessDate` = UTC day start; `expiresAt` = next UTC day start on mock activate      |
-| **Active pass**         | `status=ACTIVE`, `startsAt <= now`, `expiresAt > now`, matches today's `accessDate`  |
-| **mockActivateToday**   | `provider=MANUAL`, `currency=EUR`, `amount=1.00`; upsert on `[waylerId, accessDate]` |
-| **Idempotent activate** | If valid ACTIVE pass exists for today → return existing; no duplicate row            |
-| **Cancel**              | Owner only; status must be `ACTIVE` or `PENDING`; pass must not be expired           |
-| **No real payment**     | Mock/manual only — no Stripe, checkout, webhooks, or money movement in this batch    |
-| **Accept gating**       | `OrdersService.accept` + Wayler accept button require active pass                    |
-| **Contact gating**      | `ConversationsService.forOrder` when user is accepted Wayler                         |
-| **Message gating**      | `ConversationsService.sendMessage` when user is conversation Wayler                  |
-| **Read not gated**      | List/detail/markRead conversations unchanged for Waylers without active pass         |
-| **Sender unaffected**   | Sender accept N/A; Sender chat open/send never blocked by Wayler access              |
+| Rule                      | Behavior                                                                             |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| **Auth**                  | JWT + KYC required on all routes (`403` `KYC_REQUIRED` when unapproved)              |
+| **Today normalization**   | `accessDate` = UTC day start; `expiresAt` = next UTC day start on mock activate      |
+| **Active pass**           | `status=ACTIVE`, `startsAt <= now`, `expiresAt > now`, matches today's `accessDate`  |
+| **mockActivateToday**     | `provider=MANUAL`, `currency=EUR`, `amount=1.00`; upsert on `[waylerId, accessDate]` |
+| **Idempotent activate**   | If valid ACTIVE pass exists for today → return existing; no duplicate row            |
+| **Cancel**                | Owner only; status must be `ACTIVE` or `PENDING`; pass must not be expired           |
+| **No real payment**       | Mock/manual only — no Stripe, checkout, webhooks, or money movement in this batch    |
+| **Accept gating**         | `OrdersService.accept` + Wayler accept button require active pass                    |
+| **Contact gating**        | `ConversationsService.forOrder` when user is accepted Wayler                         |
+| **Message gating**        | `ConversationsService.sendMessage` when user is conversation Wayler                  |
+| **Read not gated**        | List/detail/markRead conversations unchanged for Waylers without active pass         |
+| **Sender unaffected**     | Sender accept N/A; Sender chat open/send never blocked by Wayler access              |
+| **Activate notification** | `SYSTEM` to Wayler after successful mock activate (not on idempotent re-activate)    |
+| **Cancel notification**   | `SYSTEM` to Wayler only when **ACTIVE → CANCELLED** (not for PENDING cancel)         |
+
+### Access notification behavior
+
+When `POST /wayler-access/mock-activate-today` creates or re-activates a pass to **ACTIVE** (not when returning an already-active pass):
+
+| Field         | Value                                          |
+| ------------- | ---------------------------------------------- |
+| **type**      | `SYSTEM`                                       |
+| **title**     | `Wayler work access active`                    |
+| **body**      | `Your Wayler work access is active for today.` |
+| **recipient** | Current Wayler (`user.id`)                     |
+
+When `POST /wayler-access/:id/cancel` succeeds and the pass was **ACTIVE**:
+
+| Field         | Value                                              |
+| ------------- | -------------------------------------------------- |
+| **type**      | `SYSTEM`                                           |
+| **title**     | `Wayler work access cancelled`                     |
+| **body**      | `Your Wayler work access for today was cancelled.` |
+| **recipient** | Current Wayler (`user.id`)                         |
+
+Notifications use `NotificationsService.createForUser` (same as mock payment/chat/dispute dispatch). Failures are logged and do **not** block activate/cancel. The existing **notification bell** on `/app` displays title + body — **no frontend changes required**.
+
+**Duplicate prevention:** idempotent `mock-activate-today` (already active) skips notification; repeat `cancel` on **CANCELLED** returns **409** before notification.
+
+**Not implemented:** scheduled expiry alerts, Stripe payment confirmation, admin-configured templates, dedicated `WAYLER_ACCESS` notification type (see **Notifications**).
 
 ### Current scope
 
-| Included                                                                                            | Not included (yet)            |
-| --------------------------------------------------------------------------------------------------- | ----------------------------- |
-| Prisma enums + `WaylerAccessPass` model + migration                                                 | Stripe checkout / webhooks    |
-| `User.waylerAccessPasses` relation                                                                  | Real money movement           |
-| `@wayly/types` summaries + list/state types                                                         | Real paid subscription        |
-| `WaylerAccessModule` API + Swagger                                                                  | Access pass notifications     |
-| SDK `api.waylerAccess.*`                                                                            | Admin pricing configuration   |
-| Mock/manual activate + today state + list + cancel                                                  | Configurable daily price UI   |
-| **Wayler access panel UI** — active/inactive, mock activate, cancel, history                        | Access history detail page    |
-| **Accept gating** — API + Wayler accept button                                                      | Refund workflow beyond cancel |
-| **Contact/chat gating** — API + Wayler Open chat button                                             |                               |
-| **Message gating** — API + chat modal send/input                                                    |                               |
-| Unique one pass per Wayler per `accessDate`                                                         |                               |
-| KYC-gated access (API + UI)                                                                         |                               |
-| i18n `app.waylerAccess.*`, `app.waylerFeed.accessRequired*`, `app.chat.accessRequired*` (8 locales) |                               |
+| Included                                                                                            | Not included (yet)                       |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| Prisma enums + `WaylerAccessPass` model + migration                                                 | Stripe checkout / webhooks               |
+| `User.waylerAccessPasses` relation                                                                  | Real money movement                      |
+| `@wayly/types` summaries + list/state types                                                         | Real paid subscription                   |
+| `WaylerAccessModule` API + Swagger                                                                  | Admin pricing configuration              |
+| SDK `api.waylerAccess.*`                                                                            | Configurable daily price UI              |
+| Mock/manual activate + today state + list + cancel                                                  | Access history detail page               |
+| **Wayler access panel UI** — active/inactive, mock activate, cancel, history                        | Refund workflow beyond cancel            |
+| **Accept gating** — API + Wayler accept button                                                      | Scheduled expiry notification            |
+| **Contact/chat gating** — API + Wayler Open chat button                                             | Stripe payment confirmation notification |
+| **Message gating** — API + chat modal send/input                                                    |                                          |
+| **Activate/cancel in-app notifications** — `SYSTEM` to Wayler on state change (idempotent-safe)     |                                          |
+| Unique one pass per Wayler per `accessDate`                                                         |                                          |
+| KYC-gated access (API + UI)                                                                         |                                          |
+| i18n `app.waylerAccess.*`, `app.waylerFeed.accessRequired*`, `app.chat.accessRequired*` (8 locales) |                                          |
 
 ### Current limitations
 
 - **No real Stripe/checkout** — panel uses mock/manual activate only; `STRIPE` provider reserved for later
 - **No real money movement** — no payment capture, webhooks, or provider payment IDs in normal flow
-- **No access notifications** — activate/cancel/expiry do not dispatch in-app alerts
+- **No scheduled expiry notification** — pass expiry at end of day does not auto-alert the Wayler
+- **No Stripe payment-confirmation notification** — mock activate only; webhook-driven alerts are future
+- **No admin-configured notification templates** — activate/cancel stored as plain English `SYSTEM` messages
 - **No admin pricing controls** — hard-coded EUR 1.00 default; no per-market configuration
 - **No configurable pricing UI** — daily price not editable in admin or Wayler settings
 - **Read paths not gated** — Waylers without access can still list/read conversations (send/contact blocked only)
@@ -2413,9 +2487,10 @@ Use a **KYC-approved Wayler** and Swagger or SDK:
 - [ ] `GET /wayler-access/today` → `hasActiveAccess: false`, `activePass: null`
 - [ ] `POST /wayler-access/mock-activate-today` → `ACTIVE` pass, `provider: MANUAL`, `amount: 1.00`, `currency: EUR`
 - [ ] `GET /wayler-access/today` → `hasActiveAccess: true`, `activePass` populated
-- [ ] Repeat `POST /wayler-access/mock-activate-today` → same pass returned, no duplicate
+- [ ] Repeat `POST /wayler-access/mock-activate-today` → same pass returned, no duplicate notification
 - [ ] `GET /wayler-access/mine` → pass appears in list
-- [ ] `POST /wayler-access/:id/cancel` → status `CANCELLED`
+- [ ] `POST /wayler-access/:id/cancel` → status `CANCELLED`; `GET /notifications` includes cancellation alert for Wayler
+- [ ] Repeat cancel on same pass → **409**; no second cancellation notification
 - [ ] `GET /wayler-access/today` → `hasActiveAccess: false` after cancel
 - [ ] KYC-unapproved user on any route → **403** `KYC_REQUIRED`
 
@@ -2426,10 +2501,11 @@ Use a **KYC-approved Wayler** on `/app` (Wayler mode):
 - [ ] Login as KYC-approved Wayler → switch to **Wayler mode**
 - [ ] **“Today’s Wayler work access”** panel loads near top of Wayler stack (before order feed)
 - [ ] No pass → **Inactive** state + mock activate button visible
-- [ ] Click **mock activate** → **Active** with EUR 1.00 / MANUAL; success message shown
+- [ ] Click **mock activate** → **Active** with EUR 1.00 / MANUAL; success message shown; bell shows activation notification
+- [ ] Click **mock activate** again while active → **no second** activation notification
 - [ ] Refresh page → **Active** state persists
 - [ ] **Recent access history** lists the pass (status, provider, amount, dates)
-- [ ] Click **Cancel access** → **Inactive** again; history shows `CANCELLED`
+- [ ] Click **Cancel access** → **Inactive** again; history shows `CANCELLED`; bell shows cancellation notification
 - [ ] Without active pass: OPEN feed still visible; **Accept** and **Open chat** disabled + notes
 - [ ] Mock activate → **Accept** and **Open chat** enabled; Wayler can send chat message
 - [ ] Cancel access again → send disabled in open chat modal; accept/chat blocked
@@ -2449,8 +2525,10 @@ Use a **KYC-approved Wayler** (`demo.wayler@wayly.app` if seeded) and a **KYC-ap
 
 ### Future milestones (daily Wayler work access)
 
-- **Stripe checkout for real daily access** — `WaylerAccessPassProvider.STRIPE`, webhooks confirm activation
-- **Access notifications** — activation/expiry/cancel alerts via in-app bell
+- **Stripe checkout for real daily access** — `WaylerAccessPassProvider.STRIPE`, webhooks confirm activation + payment-confirmation notification
+- **Scheduled access expiry notification** — alert Wayler when daily pass expires (end of access window)
+- **Dedicated `WAYLER_ACCESS` notification type** — replace `SYSTEM` for access dispatch (optional schema link to pass id)
+- **Localized access notification templates** — server-side title/body per user locale
 - **Access history detail page** — full paginated pass history beyond panel preview
 - **Refund / cancellation handling** — `REFUNDED` lifecycle beyond simple cancel
 - **Admin pricing controls** — support visibility and per-market price configuration
@@ -2541,7 +2619,7 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
 - **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales), **dispute in-app notifications** (other-participant dispatch on open/message/evidence via `SYSTEM` + `relatedOrderId`; no self-notify; failure-safe). ✅ (schema + API + SDK + two-sided UI + in-app notifications complete; no admin, resolution, dedicated notification types, payment hooks, file upload). Next: dedicated dispute notification types, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs, push/email.
 - **M7 — Wayler availability & two-sided discovery:** **`WaylerAvailability` schema**, `User.waylerAvailabilities`, shared types, migration `wayler_availability_foundation`, **`WaylerAvailabilitiesModule` API + SDK**, **Wayler management UI**, **Sender browse UI** (read-only). ✅ (schema + API + SDK + both-side discovery UI complete). Next: direct Sender request-to-Wayler flow, contact/chat from availability, matching, map visualization, availability notifications.
-- **M8 — Daily Wayler work access:** **`WaylerAccessPass` schema** (`WaylerAccessPassStatus`, `WaylerAccessPassProvider` enums), `User.waylerAccessPasses`, shared types, migration `wayler_access_pass_foundation`, **`WaylerAccessModule` API + SDK** (`api.waylerAccess.*` — today, mine, mockActivateToday, cancel; KYC-gated; `MANUAL` mock only; unique one pass per Wayler per UTC `accessDate`; default **EUR / €1.00**), **Wayler access panel UI** on `/app` (active/inactive, mock activate/cancel, recent history; i18n 8 locales), **accept gating** (`POST /orders/:id/accept` + Wayler accept button — `WAYLER_ACCESS_REQUIRED`), **contact/chat/message gating** (`ConversationsService` + Wayler Open chat / send — `WAYLER_ACCESS_REQUIRED`; Sender chat unaffected; read not gated). ✅ (schema + API + SDK + panel UI + paywall enforcement complete — mock/manual activation only). Next: **Stripe checkout for real daily access**, access notifications, access history detail page, refunds, admin pricing, **platform fee toward ~5%**.
+- **M8 — Daily Wayler work access:** **`WaylerAccessPass` schema** (`WaylerAccessPassStatus`, `WaylerAccessPassProvider` enums), `User.waylerAccessPasses`, shared types, migration `wayler_access_pass_foundation`, **`WaylerAccessModule` API + SDK** (`api.waylerAccess.*` — today, mine, mockActivateToday, cancel; KYC-gated; `MANUAL` mock only; unique one pass per Wayler per UTC `accessDate`; default **EUR / €1.00**), **Wayler access panel UI** on `/app` (active/inactive, mock activate/cancel, recent history; i18n 8 locales), **accept gating** (`POST /orders/:id/accept` + Wayler accept button — `WAYLER_ACCESS_REQUIRED`), **contact/chat/message gating** (`ConversationsService` + Wayler Open chat / send — `WAYLER_ACCESS_REQUIRED`; Sender chat unaffected; read not gated), **activate/cancel in-app notifications** (`SYSTEM` to Wayler on mock activate/cancel — idempotent-safe; plain English title/body; bell picks up via existing polling). ✅ (schema + API + SDK + panel UI + paywall enforcement + access notifications complete — mock/manual activation only). Next: **Stripe checkout for real daily access**, scheduled expiry notification, access history detail page, refunds, admin pricing, **platform fee toward ~5%**.
 - **M9–M15:** photo/signature proof, confirmation-code verification, cancellation reasons, pickup timestamps, production geocoding, `CHAT_MESSAGE` type, WebSocket/SSE chat, push/email, moderation, **Stripe checkout + webhooks + payout processing + refunds** (order escrow), offline + PDF agreements, WebSocket/SSE notification preferences, real-provider KYC swap, **full landing/onboarding UI redesign**, world-map hero, empty-state illustrations, design system expansion, hardening, launch.
 
 ### Reserved for a future milestone — Reputation System
