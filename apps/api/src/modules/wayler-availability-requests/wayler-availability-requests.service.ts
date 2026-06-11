@@ -15,6 +15,7 @@ import type {
   WaylerAvailabilityRequestDetail,
   WaylerAvailabilityRequestListResponse,
 } from '@wayly/types';
+import { NotificationType } from '@wayly/types';
 import type {
   CreateWaylerAvailabilityRequestInput,
   RespondWaylerAvailabilityRequestInput,
@@ -24,6 +25,7 @@ import type {
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 import {
   toWaylerAvailabilityRequestDetail,
@@ -32,7 +34,10 @@ import {
 
 @Injectable()
 export class WaylerAvailabilityRequestsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(
     user: RequestUser,
@@ -88,6 +93,13 @@ export class WaylerAvailabilityRequestsService {
       },
     });
 
+    await this.notifications.createForUser({
+      userId: record.waylerId,
+      type: NotificationType.SYSTEM,
+      title: 'New delivery request',
+      body: 'A Sender sent you a delivery request for your Wayler availability.',
+    });
+
     return toWaylerAvailabilityRequestDetail(record);
   }
 
@@ -135,6 +147,13 @@ export class WaylerAvailabilityRequestsService {
       },
     });
 
+    await this.notifications.createForUser({
+      userId: updated.senderId,
+      type: NotificationType.SYSTEM,
+      title: 'Delivery request accepted',
+      body: 'Your delivery request was accepted by the Wayler.',
+    });
+
     return toWaylerAvailabilityRequestDetail(updated);
   }
 
@@ -158,6 +177,13 @@ export class WaylerAvailabilityRequestsService {
       },
     });
 
+    await this.notifications.createForUser({
+      userId: updated.senderId,
+      type: NotificationType.SYSTEM,
+      title: 'Delivery request declined',
+      body: 'Your delivery request was declined by the Wayler.',
+    });
+
     return toWaylerAvailabilityRequestDetail(updated);
   }
 
@@ -174,6 +200,13 @@ export class WaylerAvailabilityRequestsService {
         status: PrismaWaylerAvailabilityRequestStatus.CANCELLED,
         cancelledAt: new Date(),
       },
+    });
+
+    await this.notifications.createForUser({
+      userId: updated.waylerId,
+      type: NotificationType.SYSTEM,
+      title: 'Delivery request cancelled',
+      body: 'A Sender cancelled a delivery request.',
     });
 
     return toWaylerAvailabilityRequestDetail(updated);
