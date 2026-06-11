@@ -1,7 +1,12 @@
 import type { DeliveryOrder } from '@prisma/client';
 import type { Decimal } from '@prisma/client/runtime/library';
 import type { DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
-import { DeliveryOrderStatus, DeliveryOrderType, PackageSize } from '@wayly/types';
+import {
+  DeliveryOrderSource,
+  DeliveryOrderStatus,
+  DeliveryOrderType,
+  PackageSize,
+} from '@wayly/types';
 
 function decimalToString(value: Decimal | null | undefined): string | null {
   if (value == null) {
@@ -22,6 +27,8 @@ export function toDeliveryOrderSummary(record: DeliveryOrder): DeliveryOrderSumm
     acceptedWaylerId: record.acceptedWaylerId,
     status: record.status as DeliveryOrderStatus,
     type: record.type as DeliveryOrderType,
+    sourceType: record.sourceType as DeliveryOrderSource,
+    availabilityRequestId: record.availabilityRequestId,
     title: record.title,
     pickupCountry: record.pickupCountry,
     pickupCity: record.pickupCity,

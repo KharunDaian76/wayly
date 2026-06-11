@@ -1,5 +1,10 @@
 import type { ISODateString } from './common';
-import type { DeliveryOrderStatus, DeliveryOrderType, PackageSize } from './enums';
+import type {
+  DeliveryOrderSource,
+  DeliveryOrderStatus,
+  DeliveryOrderType,
+  PackageSize,
+} from './enums';
 
 /**
  * Decimal amounts serialized as strings in JSON (matches Prisma Decimal mapping).
@@ -13,6 +18,8 @@ export interface DeliveryOrderSummary {
   acceptedWaylerId: string | null;
   status: DeliveryOrderStatus;
   type: DeliveryOrderType;
+  sourceType: DeliveryOrderSource;
+  availabilityRequestId: string | null;
   title: string;
   pickupCountry: string | null;
   pickupCity: string | null;
@@ -32,6 +39,8 @@ export interface DeliveryOrderDetail {
   acceptedWaylerId: string | null;
   status: DeliveryOrderStatus;
   type: DeliveryOrderType;
+  sourceType: DeliveryOrderSource;
+  availabilityRequestId: string | null;
   title: string;
   description: string | null;
   packageSize: PackageSize | null;

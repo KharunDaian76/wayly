@@ -96,6 +96,13 @@ export const DeliveryOrderType = {
 } as const;
 export type DeliveryOrderType = (typeof DeliveryOrderType)[keyof typeof DeliveryOrderType];
 
+/** How a delivery order was created (Sender-posted vs availability-request conversion). */
+export const DeliveryOrderSource = {
+  SENDER_POSTED_ORDER: 'SENDER_POSTED_ORDER',
+  WAYLER_AVAILABILITY_REQUEST: 'WAYLER_AVAILABILITY_REQUEST',
+} as const;
+export type DeliveryOrderSource = (typeof DeliveryOrderSource)[keyof typeof DeliveryOrderSource];
+
 /** Approximate package size category for a delivery request. */
 export const PackageSize = {
   SMALL: 'SMALL',

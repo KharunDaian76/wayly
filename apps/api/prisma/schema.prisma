@@ -57,6 +57,12 @@ enum DeliveryOrderType {
   INTERNATIONAL
 }
 
+// How a DeliveryOrder was created (Sender-posted vs converted from availability request).
+enum DeliveryOrderSource {
+  SENDER_POSTED_ORDER
+  WAYLER_AVAILABILITY_REQUEST
+}
+
 enum PackageSize {
   SMALL
   MEDIUM
@@ -309,6 +315,9 @@ model DeliveryOrder {
   acceptedWayler   User?               @relation("AcceptedDeliveryOrders", fields: [acceptedWaylerId], references: [id], onDelete: SetNull)
   status           DeliveryOrderStatus @default(DRAFT)
   type             DeliveryOrderType
+  sourceType       DeliveryOrderSource @default(SENDER_POSTED_ORDER)
+  availabilityRequestId String?        @unique @db.Uuid
+  availabilityRequest   WaylerAvailabilityRequest? @relation(fields: [availabilityRequestId], references: [id], onDelete: SetNull)
   title            String
   description      String?
   packageSize      PackageSize?
@@ -358,6 +367,7 @@ model DeliveryOrder {
   @@index([acceptedWaylerId])
   @@index([status])
   @@index([type])
+  @@index([sourceType])
   @@index([pickupCountry])
   @@index([pickupCity])
   @@index([dropoffCountry])
@@ -680,6 +690,8 @@ model WaylerAvailabilityRequest {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  deliveryOrder DeliveryOrder?
 
   @@index([availabilityId])
   @@index([senderId])
