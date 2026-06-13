@@ -130,6 +130,7 @@ const en = {
   'app.waylerFeed.acceptTrackingNote': 'Accepted orders will be tracked in a later milestone.',
   'app.waylerFeed.acceptedPanel.title': 'Accepted delivery requests',
   'app.waylerFeed.acceptedPanel.refresh': 'Refresh',
+  'app.waylerFeed.acceptedPanel.refreshing': 'Refreshing…',
   'app.waylerFeed.acceptedPanel.loading': 'Loading accepted delivery requests…',
   'app.waylerFeed.acceptedPanel.empty': "You haven't accepted any delivery requests yet.",
   'app.waylerFeed.acceptedPanel.loadFailed': 'Failed to load accepted delivery requests.',
@@ -172,6 +173,8 @@ const en = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'Escrow is held; payout can be released after delivery and proof.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'Mock payout has been created.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'Use Refresh to update payment status after Sender payment actions.',
   'app.waylerFeed.filtersTitle': 'Filters & sort',
   'app.waylerFeed.filterStatus': 'Status',
   'app.waylerFeed.filterStatusOpen': 'Open',
@@ -676,6 +679,7 @@ const ru: Dictionary = {
   'app.waylerFeed.acceptTrackingNote': 'Принятые заявки будут отслеживаться в следующем этапе.',
   'app.waylerFeed.acceptedPanel.title': 'Принятые заявки на доставку',
   'app.waylerFeed.acceptedPanel.refresh': 'Обновить',
+  'app.waylerFeed.acceptedPanel.refreshing': 'Обновление…',
   'app.waylerFeed.acceptedPanel.loading': 'Загрузка принятых заявок…',
   'app.waylerFeed.acceptedPanel.empty': 'Вы ещё не приняли ни одной заявки на доставку.',
   'app.waylerFeed.acceptedPanel.loadFailed': 'Не удалось загрузить принятые заявки.',
@@ -721,6 +725,8 @@ const ru: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'Средства в эскроу; выплата будет доступна после доставки и подтверждения.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'Mock-выплата создана.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'Нажмите «Обновить», чтобы увидеть статус оплаты после действий отправителя.',
   'app.waylerFeed.filtersTitle': 'Фильтры и сортировка',
   'app.waylerFeed.filterStatus': 'Статус',
   'app.waylerFeed.filterStatusOpen': 'Открыта',
@@ -1228,6 +1234,7 @@ const es: Dictionary = {
     'Las solicitudes aceptadas se rastrearán en un hito posterior.',
   'app.waylerFeed.acceptedPanel.title': 'Solicitudes de entrega aceptadas',
   'app.waylerFeed.acceptedPanel.refresh': 'Actualizar',
+  'app.waylerFeed.acceptedPanel.refreshing': 'Actualizando…',
   'app.waylerFeed.acceptedPanel.loading': 'Cargando solicitudes aceptadas…',
   'app.waylerFeed.acceptedPanel.empty': 'Aún no has aceptado ninguna solicitud de entrega.',
   'app.waylerFeed.acceptedPanel.loadFailed': 'No se pudieron cargar las solicitudes aceptadas.',
@@ -1272,6 +1279,8 @@ const es: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'El depósito está retenido; el pago se puede liberar tras la entrega y la prueba.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'Se ha creado un pago mock.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'Use Actualizar para ver el estado del pago tras las acciones del remitente.',
   'app.waylerFeed.filtersTitle': 'Filtros y orden',
   'app.waylerFeed.filterStatus': 'Estado',
   'app.waylerFeed.filterStatusOpen': 'Abierta',
@@ -1781,6 +1790,7 @@ const fr: Dictionary = {
     'Les demandes acceptées seront suivies dans un jalon ultérieur.',
   'app.waylerFeed.acceptedPanel.title': 'Demandes de livraison acceptées',
   'app.waylerFeed.acceptedPanel.refresh': 'Actualiser',
+  'app.waylerFeed.acceptedPanel.refreshing': 'Actualisation…',
   'app.waylerFeed.acceptedPanel.loading': 'Chargement des demandes acceptées…',
   'app.waylerFeed.acceptedPanel.empty': "Vous n'avez encore accepté aucune demande de livraison.",
   'app.waylerFeed.acceptedPanel.loadFailed': 'Impossible de charger les demandes acceptées.',
@@ -1826,6 +1836,8 @@ const fr: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'Séquestre retenu ; le versement peut être libéré après livraison et preuve.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'Versement mock créé.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'Utilisez Actualiser pour mettre à jour le statut de paiement après les actions de l’expéditeur.',
   'app.waylerFeed.filtersTitle': 'Filtres et tri',
   'app.waylerFeed.filterStatus': 'Statut',
   'app.waylerFeed.filterStatusOpen': 'Ouverte',
@@ -2342,6 +2354,7 @@ const de: Dictionary = {
     'Angenommene Anfragen werden in einem späteren Meilenstein nachverfolgt.',
   'app.waylerFeed.acceptedPanel.title': 'Angenommene Lieferanfragen',
   'app.waylerFeed.acceptedPanel.refresh': 'Aktualisieren',
+  'app.waylerFeed.acceptedPanel.refreshing': 'Wird aktualisiert…',
   'app.waylerFeed.acceptedPanel.loading': 'Angenommene Anfragen werden geladen…',
   'app.waylerFeed.acceptedPanel.empty': 'Sie haben noch keine Lieferanfragen angenommen.',
   'app.waylerFeed.acceptedPanel.loadFailed': 'Angenommene Anfragen konnten nicht geladen werden.',
@@ -2390,6 +2403,8 @@ const de: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'Treuhand gehalten; Auszahlung nach Lieferung und Nachweis möglich.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'Mock-Auszahlung erstellt.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'Aktualisieren nutzen, um den Zahlungsstatus nach Absender-Aktionen zu aktualisieren.',
   'app.waylerFeed.filtersTitle': 'Filter & Sortierung',
   'app.waylerFeed.filterStatus': 'Status',
   'app.waylerFeed.filterStatusOpen': 'Offen',
@@ -2902,6 +2917,7 @@ const tr: Dictionary = {
   'app.waylerFeed.acceptTrackingNote': 'Kabul edilen talepler daha sonraki aşamada takip edilecek.',
   'app.waylerFeed.acceptedPanel.title': 'Kabul edilen teslimat talepleri',
   'app.waylerFeed.acceptedPanel.refresh': 'Yenile',
+  'app.waylerFeed.acceptedPanel.refreshing': 'Yenileniyor…',
   'app.waylerFeed.acceptedPanel.loading': 'Kabul edilen talepler yükleniyor…',
   'app.waylerFeed.acceptedPanel.empty': 'Henüz bir teslimat talebi kabul etmediniz.',
   'app.waylerFeed.acceptedPanel.loadFailed': 'Kabul edilen talepler yüklenemedi.',
@@ -2945,6 +2961,8 @@ const tr: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'Emanet tutuluyor; teslimat ve kanıttan sonra ödeme serbest bırakılabilir.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'Mock ödeme çıkışı oluşturuldu.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'Gönderici ödeme işlemlerinden sonra durumu görmek için Yenile’yi kullanın.',
   'app.waylerFeed.filtersTitle': 'Filtreler ve sıralama',
   'app.waylerFeed.filterStatus': 'Durum',
   'app.waylerFeed.filterStatusOpen': 'Açık',
@@ -3445,6 +3463,7 @@ const ar: Dictionary = {
   'app.waylerFeed.acceptTrackingNote': 'سيتم تتبع الطلبات المقبولة في مرحلة لاحقة.',
   'app.waylerFeed.acceptedPanel.title': 'طلبات التوصيل المقبولة',
   'app.waylerFeed.acceptedPanel.refresh': 'تحديث',
+  'app.waylerFeed.acceptedPanel.refreshing': 'جارٍ التحديث…',
   'app.waylerFeed.acceptedPanel.loading': 'جارٍ تحميل الطلبات المقبولة…',
   'app.waylerFeed.acceptedPanel.empty': 'لم تقبل أي طلب توصيل بعد.',
   'app.waylerFeed.acceptedPanel.loadFailed': 'تعذر تحميل الطلبات المقبولة.',
@@ -3486,6 +3505,8 @@ const ar: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.heldNote':
     'الضمان محتجز؛ يمكن صرف الدفع بعد التسليم والإثبات.',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': 'تم إنشاء صرف mock.',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    'استخدم تحديث لعرض حالة الدفع بعد إجراءات المرسل.',
   'app.waylerFeed.filtersTitle': 'التصفية والترتيب',
   'app.waylerFeed.filterStatus': 'الحالة',
   'app.waylerFeed.filterStatusOpen': 'مفتوح',
@@ -3973,6 +3994,7 @@ const zh: Dictionary = {
   'app.waylerFeed.acceptTrackingNote': '已接受的订单将在后续里程碑中跟踪。',
   'app.waylerFeed.acceptedPanel.title': '已接受的配送请求',
   'app.waylerFeed.acceptedPanel.refresh': '刷新',
+  'app.waylerFeed.acceptedPanel.refreshing': '刷新中…',
   'app.waylerFeed.acceptedPanel.loading': '正在加载已接受的配送请求…',
   'app.waylerFeed.acceptedPanel.empty': '您还没有接受任何配送请求。',
   'app.waylerFeed.acceptedPanel.loadFailed': '无法加载已接受的配送请求。',
@@ -4013,6 +4035,8 @@ const zh: Dictionary = {
   'app.waylerFeed.acceptedPanel.payment.authorizedNote': '发件人已授权付款。',
   'app.waylerFeed.acceptedPanel.payment.heldNote': '资金已托管；送达并提交证明后可释放付款。',
   'app.waylerFeed.acceptedPanel.payment.releasedNote': '已创建 mock 付款。',
+  'app.waylerFeed.acceptedPanel.payment.refreshHint':
+    '发件人付款操作后，请点击刷新以更新付款状态。',
   'app.waylerFeed.filtersTitle': '筛选与排序',
   'app.waylerFeed.filterStatus': '状态',
   'app.waylerFeed.filterStatusOpen': '开放',

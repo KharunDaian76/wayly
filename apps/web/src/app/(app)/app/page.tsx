@@ -1529,11 +1529,19 @@ export default function AppHomePage() {
             </Card>
 
             <Card className={APP_PANEL_CLASS}>
-              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <CardTitle>{t('app.waylerFeed.acceptedPanel.title')}</CardTitle>
+              <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex flex-col gap-1">
+                  <CardTitle>{t('app.waylerFeed.acceptedPanel.title')}</CardTitle>
+                  {isApproved && acceptedOrders.length > 0 ? (
+                    <p className="text-xs text-muted-foreground">
+                      {t('app.waylerFeed.acceptedPanel.payment.refreshHint')}
+                    </p>
+                  ) : null}
+                </div>
                 <Button
                   variant="outline"
                   size="sm"
+                  className="shrink-0"
                   disabled={
                     !isApproved ||
                     acceptedLoading ||
@@ -1542,7 +1550,9 @@ export default function AppHomePage() {
                   }
                   onClick={() => void loadAcceptedOrders()}
                 >
-                  {t('app.waylerFeed.acceptedPanel.refresh')}
+                  {acceptedLoading
+                    ? t('app.waylerFeed.acceptedPanel.refreshing')
+                    : t('app.waylerFeed.acceptedPanel.refresh')}
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
