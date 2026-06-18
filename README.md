@@ -2,7 +2,7 @@
 
 Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Waylers directly — Senders post delivery requests; Waylers publish local availability and trip routes — with international/intercity and local city delivery, mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility**, **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request in-app notifications + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels + Accepted-panel auto-refresh after request accept + converted-order chat via existing `DeliveryOrder.id` flow + converted-order mock payment via existing `DeliveryOrder.id` flow** (`SYSTEM` on create/accept/decline/cancel; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted; chat uses **`POST /conversations/order/:deliveryOrderId`** — lazy conversation create, no auto-chat on accept; mock payment uses **`POST /payments/orders/:deliveryOrderId/mock-authorize`** — no `sourceType` filter, verified compatible with no code changes), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, platform fee adjustment toward 5%, and production deployment are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility + Wayler Accepted payment refresh helper** (Refresh reloads orders + per-order payment status; panel hint + “Refreshing…” button label), **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request in-app notifications + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels + Accepted-panel auto-refresh after request accept + converted-order chat via existing `DeliveryOrder.id` flow + converted-order mock payment via existing `DeliveryOrder.id` flow** (`SYSTEM` on create/accept/decline/cancel; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted; chat uses **`POST /conversations/order/:deliveryOrderId`** — lazy conversation create, no auto-chat on accept; mock payment uses **`POST /payments/orders/:deliveryOrderId/mock-authorize`** — no `sourceType` filter, verified compatible with no code changes), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, **realtime Wayler payment panel updates**, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, platform fee adjustment toward 5%, and production deployment are future milestones.
 
 ## Tech stack
 
@@ -201,6 +201,7 @@ Marketing landing page (`/`) is not translated yet.
 | Accepted-panel auto-refresh after availability-request accept (Wayler + Sender)                         | Complete (M7)                   |
 | Converted-order chat via existing order flow (`DeliveryOrder.id`, lazy conversation create)             | Complete (M7)                   |
 | Converted-order mock payment via existing order flow (`DeliveryOrder.id`; no sourceType filter)         | Complete (M7)                   |
+| Wayler Accepted payment refresh helper (Refresh reloads orders + payment status; panel hint UI)         | Complete (M5)                   |
 | Daily Wayler work access pass schema foundation (`WaylerAccessPass`, shared types)                      | Complete (M8)                   |
 | Wayler access pass API + SDK (`WaylerAccessModule`, `api.waylerAccess.*`)                               | Complete (M8)                   |
 | Wayler access panel UI on `/app` (active/inactive, mock activate, cancel, history)                      | Complete (M8)                   |
@@ -402,6 +403,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Mock/manual payment API + SDK (`MANUAL` provider)                                                       | Complete      |
 | Sender Accepted mock payment UI (authorize / hold / release)                                            | Complete      |
 | Wayler Accepted read-only payment/payout visibility                                                     | Complete      |
+| Wayler Accepted payment refresh helper (Refresh + hint; reloads payment per order)                      | Complete      |
 | Mock payment in-app notifications (Wayler dispatch on authorize/hold/release)                           | Complete      |
 | Wayler availability management UI (`/app` Wayler mode — create, listings, publish/pause/cancel)         | Complete (M7) |
 | Sender browse active Waylers UI (`/app` Sender mode — filters, listings, active counts, request flow)   | Complete (M7) |
@@ -1448,6 +1450,8 @@ User A (Sender)                          User B (Wayler)
 
 - **Sender** controls mock **authorize**, **hold escrow**, and **release** from **Accepted Orders**.
 - **Wayler** **observes** status in Accepted panel and via **in-app notifications** — **no payment action buttons**.
+- **Sender payment actions** auto-refresh the Sender **Accepted delivery requests** panel after authorize / hold / release — **unchanged**.
+- **Wayler payment status** does **not** update in real time — use panel **Refresh** (see **Wayler Accepted panel payment refresh** below).
 - **Release** requires order **DELIVERED** and **`proofSubmittedAt`** (matches API).
 - **Released** means a **Payout** was created in mock/manual mode (`PENDING`, provider **MANUAL**).
 
@@ -1534,9 +1538,26 @@ On `/app` in **Wayler mode**, each job in **Accepted delivery requests** include
 - **Read-only** — Waylers cannot authorize, hold, or release payments in this batch.
 - **Missing intent** — `404` from `forOrder` → **Payment not authorized yet**, not a panel-breaking error.
 - **Non-404 load failures** — per-order `loadFailed` message; panel otherwise continues.
-- **Refresh** — Wayler must refresh **Accepted delivery requests** to see Sender payment updates.
 
 i18n keys: `app.waylerFeed.acceptedPanel.payment.*` (8 locales).
+
+### Wayler Accepted panel payment refresh
+
+Waylers do **not** see Sender payment updates automatically in the Accepted panel. After the Sender mock-authorizes, holds escrow, or releases payout, the Wayler must click **Refresh** on **Accepted delivery requests** to reload payment/escrow status.
+
+| Topic               | Behavior                                                                                                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Refresh button**  | Header **Refresh** on Wayler **Accepted delivery requests** → calls `loadAcceptedOrders()`                                                                             |
+| **While loading**   | Button label **Refreshing…**; button disabled (same as other in-flight panel actions)                                                                                  |
+| **What reloads**    | `api.orders.accepted()` **and** `api.payments.forOrder(order.id)` per row — orders + payment status together                                                           |
+| **Applies to**      | Normal Sender-posted accepted orders **and** converted availability-request orders (`sourceType` irrelevant)                                                           |
+| **Panel hint**      | When at least one accepted order is shown: _“Use Refresh to update payment status after Sender payment actions.”_ (`app.waylerFeed.acceptedPanel.payment.refreshHint`) |
+| **Sender side**     | Sender **Payment** actions still call `loadSenderAcceptedOrders()` after success — **no change**                                                                       |
+| **Not implemented** | No WebSocket/SSE, no payment-panel polling, no auto-refresh when another user pays                                                                                     |
+
+**i18n:** `app.waylerFeed.acceptedPanel.refresh`, `app.waylerFeed.acceptedPanel.refreshing`, `app.waylerFeed.acceptedPanel.payment.refreshHint` (8 locales).
+
+See **Converted DeliveryOrders (mock payment compatibility)** and **Sender ↔ Wayler availability requests** → **Mock payment for converted DeliveryOrders** — same Refresh flow for converted orders.
 
 ### Converted DeliveryOrders (mock payment compatibility)
 
@@ -1550,7 +1571,7 @@ Orders created from **`WAYLER_AVAILABILITY_REQUEST`** accept use the **same mock
 | **Wayler UI**                 | Same read-only **Payment / payout** section on **Accepted delivery requests** (Wayler mode) — **no authorize buttons**                                                                                  |
 | **Reward/currency**           | Converted orders map `proposedRewardCents` ÷ 100 and `currency` from the availability request — required for mock authorize                                                                             |
 | **No auto payment on accept** | **`PaymentIntent` is not created** during availability-request accept; Sender triggers mock actions manually (same as posted orders)                                                                    |
-| **Wayler refresh**            | After Sender payment actions, Wayler must **refresh Accepted panel** to see status updates (same as posted orders — Sender panel auto-reloads after actions)                                            |
+| **Wayler refresh**            | Click panel **Refresh** after Sender payment actions — reloads orders + `api.payments.forOrder(order.id)` per row (see **Wayler Accepted panel payment refresh**); same for posted and converted orders |
 
 See **Sender ↔ Wayler availability requests** → **Mock payment for converted DeliveryOrders** for conversion context and manual test steps.
 
@@ -1609,6 +1630,7 @@ See **Notifications** for bell polling, mark-read, and full manual test steps.
 - **No checkout UI** — no card forms, payment links, or Stripe Elements.
 - **No real money movement** — database state transitions for business-flow validation.
 - **No real payout processing** — `Payout` stays **PENDING** / **MANUAL** after mock release.
+- **No realtime Wayler payment panel updates** — Accepted panel payment status refreshes on manual **Refresh** only (no WebSocket/SSE/polling on payment rows); Wayler may still see **bell** notifications for authorize/hold/release.
 - **For local/business-flow testing only** — not production payment processing.
 
 ### Current scope
@@ -1625,6 +1647,7 @@ See **Notifications** for bell polling, mark-read, and full manual test steps.
 | Two-sided mock payment UI (Sender acts, Wayler observes)                                        | Payout history / failure handling                   |
 | Mock payment in-app notifications (Wayler, `SYSTEM` type)                                       | Dedicated payment notification types                |
 | Converted-order mock payment (verified — same `DeliveryOrder.id` flow; no sourceType filter)    | Auto `PaymentIntent` on availability-request accept |
+| Wayler Accepted payment refresh helper (Refresh + hint; reloads orders + payment status)        | Realtime payment status in Accepted panel           |
 | Wayler access panel UI (mock/manual daily access — see **Daily Wayler work access foundation**) | Stripe checkout for daily access                    |
 | Accept / contact / message gating behind active daily Wayler access                             | Real paid subscription / auto-renew                 |
 | Wayler access activate/cancel in-app notifications (`SYSTEM`)                                   | Stripe payment-confirmation notification            |
@@ -1665,13 +1688,34 @@ On `/app` in **Sender mode** with the same two users:
 On `/app` in **Wayler mode** with the same two users (**A** = Sender, **B** = Wayler):
 
 - [ ] **User A** creates order with **reward** and **currency**; **User B** accepts
-- [ ] **User B** opens **Accepted delivery requests** → **Payment not authorized yet**
+- [ ] **User B** opens **Accepted delivery requests** → helper text: _“Use Refresh to update payment status after Sender payment actions.”_
+- [ ] **User B** sees **Payment not authorized yet**
 - [ ] **User A** mock-authorizes and mock-holds escrow
-- [ ] **User B** refreshes → status **Held in escrow** with **amount**, **platform fee**, **escrow amount**, **currency**, **provider**
+- [ ] **User B** clicks **Refresh** → button shows **Refreshing…** while loading
+- [ ] After load: status **Held in escrow** with **amount**, **platform fee**, **escrow amount**, **currency**, **provider**
 - [ ] **User B** delivers with proof; **User A** mock-releases payout
-- [ ] **User B** refreshes → status **Released** / **mock payout created** note
+- [ ] **User B** clicks **Refresh** again → status **Released** / **mock payout created** note
 - [ ] **User B** panel has **no** payment action buttons (authorize / hold / release)
 - [ ] No Stripe, checkout, or card-form UI on Wayler panel
+
+### Manual testing checklist (Wayler Accepted payment refresh)
+
+Use two **KYC-approved** users (**S** = Sender, **W** = Wayler):
+
+**Posted order:**
+
+- [ ] **User S** creates/publishes order → **User W** accepts
+- [ ] **User S** mock-authorizes payment (Sender Accepted panel auto-refreshes)
+- [ ] **User W**: payment still shows **not authorized** until **Refresh**
+- [ ] **User W** clicks **Refresh** → updated **Authorized** (or **Held in escrow** after hold)
+- [ ] **User S** mock payment actions still work (regression)
+
+**Converted availability-request order:**
+
+- [ ] **User S** sends request → **User W** accepts → converted order in **Accepted delivery requests**
+- [ ] **User S** mock-authorizes payment
+- [ ] **User W** clicks **Refresh** → updated payment status on converted order row
+- [ ] Same helper text and **Refreshing…** button behavior as posted orders
 
 ### Manual testing checklist (converted DeliveryOrders — mock payment)
 
@@ -1683,7 +1727,7 @@ Use two **KYC-approved** users (**S** = Sender, **W** = Wayler):
 - [ ] **User S**: **Payment** panel shows **Not authorized** → **Mock authorize payment** succeeds
 - [ ] Network: `POST /api/v1/payments/orders/{deliveryOrderId}/mock-authorize` — uses **`DeliveryOrder.id`**, not availability request id
 - [ ] **User S**: **Mock hold escrow** → **Held in escrow**; amounts match `offeredRewardAmount` from request
-- [ ] **User W**: refresh **Accepted delivery requests** → **Payment / payout** shows **Authorized** or **Held in escrow** (read-only)
+- [ ] **User W**: refresh **Accepted delivery requests** → **Payment / payout** shows **Authorized** or **Held in escrow** (read-only); **Refresh** button shows **Refreshing…** while loading
 - [ ] **User W** panel has **no** payment action buttons
 - [ ] **User W** delivers with proof; **User S** mock-releases → **User W** refreshes → **Released** / mock payout note
 - [ ] Posted-order mock payment flow unchanged (regression)
@@ -1717,6 +1761,7 @@ Mock API, two-sided payment UI, and Wayler in-app notifications today exercise t
 
 ### Future milestones (payments & monetization)
 
+- **Realtime Wayler payment status in Accepted panel** — WebSocket/SSE or lightweight polling (today: manual **Refresh** + bell notifications only)
 - **Dedicated payment notification types** — replace `SYSTEM` for authorize/hold/release dispatch
 - **Localized payment notification templates** — per-user locale for title/body
 - **Push/email for payment events** — offline Wayler/Sender alerts
@@ -2367,16 +2412,16 @@ See **Chat / contact between Sender and Wayler** for full API, SDK, polling, and
 
 Converted orders (`sourceType = WAYLER_AVAILABILITY_REQUEST`) use the **same order-based mock payment flow** as Sender-posted accepted orders — **verified compatible; no backend or frontend changes required** for this batch.
 
-| Topic                           | Behavior                                                                                                                                                      |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Authorize endpoint**          | `POST /api/v1/payments/orders/:orderId/mock-authorize` where **`orderId` = `DeliveryOrder.id`** — **not** `availabilityRequestId`                             |
-| **Read endpoint**               | `GET /api/v1/payments/orders/:orderId` — same `DeliveryOrder.id`                                                                                              |
-| **Hold / release**              | `POST /api/v1/payments/:id/mock-hold-escrow` and `mock-release` by `paymentIntentId` after authorize (same as posted orders)                                  |
-| **No `sourceType` restriction** | `PaymentsService` checks `senderId`, `acceptedWaylerId`, status (`ACCEPTED` / `IN_TRANSIT`), and reward/currency only                                         |
-| **Sender UI**                   | **Payment** panel on Sender **Accepted delivery requests** — **Mock authorize payment**, hold, release when eligible (`handleMockAuthorizePayment(order.id)`) |
-| **Wayler UI**                   | Read-only **Payment / payout** on Wayler **Accepted delivery requests** — status + amounts; **no payment action buttons**                                     |
-| **No auto payment on accept**   | No `PaymentIntent` created during conversion — Sender mock-authorizes manually from Accepted panel                                                            |
-| **Wayler refresh**              | Wayler must **refresh Accepted panel** after Sender payment actions to see updates (same as posted orders)                                                    |
+| Topic                           | Behavior                                                                                                                                                                          |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Authorize endpoint**          | `POST /api/v1/payments/orders/:orderId/mock-authorize` where **`orderId` = `DeliveryOrder.id`** — **not** `availabilityRequestId`                                                 |
+| **Read endpoint**               | `GET /api/v1/payments/orders/:orderId` — same `DeliveryOrder.id`                                                                                                                  |
+| **Hold / release**              | `POST /api/v1/payments/:id/mock-hold-escrow` and `mock-release` by `paymentIntentId` after authorize (same as posted orders)                                                      |
+| **No `sourceType` restriction** | `PaymentsService` checks `senderId`, `acceptedWaylerId`, status (`ACCEPTED` / `IN_TRANSIT`), and reward/currency only                                                             |
+| **Sender UI**                   | **Payment** panel on Sender **Accepted delivery requests** — **Mock authorize payment**, hold, release when eligible (`handleMockAuthorizePayment(order.id)`)                     |
+| **Wayler UI**                   | Read-only **Payment / payout** on Wayler **Accepted delivery requests** — status + amounts; **no payment action buttons**                                                         |
+| **No auto payment on accept**   | No `PaymentIntent` created during conversion — Sender mock-authorizes manually from Accepted panel                                                                                |
+| **Wayler refresh**              | Panel **Refresh** reloads orders + payment status (see **Payment and escrow foundation** → **Wayler Accepted panel payment refresh**); applies to converted orders same as posted |
 
 **Not implemented (converted-order payment — future):**
 
@@ -2639,7 +2684,8 @@ Validation: `@wayly/validation` — `createWaylerAvailabilitySchema`, `waylerAva
 | **Order source badge** on Accepted panels (`fromWaylerRequest` + request reference)               | Auto payment/chat from source badge                              |
 | **Accepted-panel auto-refresh** after availability-request accept                                 | Production deployment                                            |
 | **Converted-order chat** (existing `DeliveryOrder.id` flow; lazy conversation create)             | Chat notification on conversion                                  |
-| **Converted-order mock payment** (existing `DeliveryOrder.id` flow; verified compatible)          | Stripe / real payment provider                                   |
+| **Converted-order mock payment** (existing `DeliveryOrder.id` flow; verified compatible)          | Realtime payment status in Accepted panel                        |
+| **Wayler Accepted payment refresh helper** (Refresh + hint; reloads orders + payment)             | Stripe / real payment provider                                   |
 | KYC-gated access + owner/privacy rules                                                            | Matching recommendations engine                                  |
 | `@wayly/validation` availability + request schemas                                                | Map-based availability visualization                             |
 | **Wayler management UI** — create, my listings, publish/pause/cancel                              | Matching recommendations engine                                  |
@@ -2653,6 +2699,7 @@ Validation: `@wayly/validation` — `createWaylerAvailabilitySchema`, `waylerAva
 - **No automatic payment / escrow on accept** — converted `DeliveryOrder` exists, but **`PaymentIntent` is not auto-created**; Sender mock-authorizes manually (see **Payment and escrow foundation**)
 - **No Stripe / real payment provider** — mock/manual `MANUAL` only; no checkout, webhooks, or real money movement
 - **No automatic escrow capture/release on conversion** — Sender must mock hold/release manually like posted orders
+- **No realtime Wayler payment panel updates** — payment/escrow status updates on manual **Refresh** only (see **Wayler Accepted panel payment refresh**)
 - **No automatic chat on accept** — converted orders use existing chat UI; conversation created lazily on first **Open chat**
 - **No chat notification on conversion** — only after first message is sent
 - **No production deployment** — local development only (see **Deployment** when added)
@@ -2774,7 +2821,7 @@ Use two **KYC-approved** users (**W** = Wayler, **S** = Sender):
 - [ ] **User S**: **Payment** panel → **Mock authorize payment** succeeds
 - [ ] Network: `POST /payments/orders/{deliveryOrderId}/mock-authorize` — **`DeliveryOrder.id`**, not availability request id
 - [ ] **User S**: **Mock hold escrow** → **Held in escrow**
-- [ ] **User W**: refresh **Accepted delivery requests** → read-only payment status (authorized / held / released)
+- [ ] **User W**: click **Refresh** on **Accepted delivery requests** → read-only payment status (authorized / held / released); helper text + **Refreshing…** visible
 - [ ] **User W** has **no** payment action buttons on converted order
 - [ ] Posted-order payment flow unchanged (regression)
 
@@ -3246,7 +3293,7 @@ Implementation: `apps/web/src/app/(app)/app/page.tsx` + utility classes in `apps
 - **M2 — KYC gate (mocked):** schema + mock backend, SDK, `/app` status panel, dev-only mock approve/reject. ✅ (mock flow complete; real Sumsub/provider swap later)
 - **M3 — Design system & app shell:** Sender/Wayler mode switcher on `/app` (frontend-only, localStorage). ✅
 - **M4 — Marketplace (Sender → Wayler):** `DeliveryOrder` schema, draft/create/publish/**cancel**, Wayler OPEN feed (filters, sort, Leaflet map previews), accept, **ACCEPTED → IN_TRANSIT → DELIVERED** progression, **metadata proof-of-delivery** (submit + read-only Sender view), Wayler accepted panel controls, Sender lifecycle visibility + cancel UI, private `GET /orders/mine`, **in-app notifications** (schema, API, SDK, order lifecycle dispatch, **chat message dispatch** via `SYSTEM`, bell/dropdown, polling), **order-based chat** (schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **10s chat modal polling**), **premium `/app` dashboard UI foundation** (shell, cards, badges, alerts). ✅ (core loop + cancellation + lifecycle + metadata proof + notifications + chat + chat in-app alerts + chat polling + dashboard visual foundation complete; photo/signature proof, WebSocket/SSE/push/email, `CHAT_MESSAGE` type, payment processing/disputes later)
-- **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler notifications complete; no Stripe/real money). Next: dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
+- **M5 — Payments & escrow:** **payment/escrow schema** (`PaymentIntent`, `Payout`, `LedgerEntry`, enums), shared types, **mock/manual payment API + SDK** (`MANUAL` provider — authorize, hold escrow, release, read by order), **Sender Accepted mock payment UI** (authorize / hold / release, proof-gated release; auto-refresh after actions), **Wayler Accepted read-only payment/payout visibility** (status + amounts, no action buttons), **Wayler Accepted payment refresh helper** (panel **Refresh** reloads orders + per-order payment via `loadAcceptedOrders()`; hint `payment.refreshHint`; button **Refreshing…** while loading), **mock payment in-app notifications** (Wayler dispatch on authorize/hold/release via `SYSTEM` + `relatedOrderId`; no Sender self-notify; idempotent-safe). ✅ (schema + mock API + two-sided UI + Wayler refresh polish + Wayler notifications complete; no Stripe/real money/realtime payment panel). Next: realtime payment status in Accepted panel, dedicated payment notification types, real Wayler payout dashboard, Stripe checkout, Connect/payout processing, webhooks, refunds.
 - **M6 — Disputes & arbitration:** **dispute schema** (`Dispute`, `DisputeMessage`, `DisputeEvidence`, enums), shared types, **`DisputesModule` API + SDK** (open, list, detail, messages, evidence metadata), **Sender/Wayler Accepted dispute UI** on `/app` (`DisputePanel` modal — open/view, reason + description, messages, evidence metadata, duplicate-active handling; i18n 8 locales), **dispute in-app notifications** (other-participant dispatch on open/message/evidence via `SYSTEM` + `relatedOrderId`; no self-notify; failure-safe). ✅ (schema + API + SDK + two-sided UI + in-app notifications complete; no admin, resolution, dedicated notification types, payment hooks, file upload). Next: dedicated dispute notification types, admin/arbitrator dashboard, assign arbitrator, resolve dispute, payment hold/refund/release integration, file/photo upload, dispute timeline, arbitration notes, audit logs, push/email.
 - **M7 — Wayler availability & two-sided discovery:** **`WaylerAvailability` + `WaylerAvailabilityRequest` schemas**, migrations `wayler_availability_foundation` + `add_wayler_availability_requests` + `add_delivery_order_source_for_availability_requests`, **`WaylerAvailabilitiesModule` + `WaylerAvailabilityRequestsModule` API + SDK**, **Wayler management UI**, **Sender browse + request UI** (“Request this Wayler”, “My requests to Waylers”, cancel), **Wayler incoming accept/decline UI**, **availability-request in-app notifications** (`SYSTEM` on create/accept/decline/cancel), **DeliveryOrder conversion on accept** (transactional — `ACCEPTED` order, `sourceType=WAYLER_AVAILABILITY_REQUEST`, `availabilityRequestId`, `deliveryOrderId` in response), **converted-order UI on request panels** (“Converted to order” badge + short order reference; i18n `convertedToOrder` / `linkedOrder` / `orderReference`), **order source badge on Accepted panels** (“From Wayler request” + short request reference; i18n `fromWaylerRequest` / `requestReference`; `delivery-order-source-badge.tsx`), **Accepted-panel auto-refresh after request accept** (`onRequestAccepted` / `onAcceptedOrdersRefresh`), **converted-order chat** (existing `DeliveryOrder.id` flow — lazy conversation create; Wayler daily-access gate unchanged), **converted-order mock payment** (existing `DeliveryOrder.id` flow — authorize/hold/release; no `sourceType` filter; verified compatible — no code changes). ✅ (schema + API + SDK + two-sided discovery + request flow + notifications + order conversion + request-panel + accepted-panel source UI + refresh + chat + payment polish complete). Next: clickable detail from badges, dedicated converted-order page, auto payment/chat on convert, dedicated notification types/entity links (`relatedOrderId` on accept), expiry automation, request detail page, admin moderation, matching, map visualization, availability listing notifications, Stripe/real payment, production deployment.
 - **M8 — Daily Wayler work access:** **`WaylerAccessPass` schema** (`WaylerAccessPassStatus`, `WaylerAccessPassProvider` enums), `User.waylerAccessPasses`, shared types, migration `wayler_access_pass_foundation`, **`WaylerAccessModule` API + SDK** (`api.waylerAccess.*` — today, mine, mockActivateToday, cancel; KYC-gated; `MANUAL` mock only; unique one pass per Wayler per UTC `accessDate`; default **EUR / €1.00**), **Wayler access panel UI** on `/app` (active/inactive, mock activate/cancel, recent history; i18n 8 locales), **accept gating** (`POST /orders/:id/accept` + Wayler OPEN feed accept button; **`POST /wayler-availability-requests/:id/accept` + incoming Accept request button** — `WAYLER_ACCESS_REQUIRED`), **contact/chat/message gating** (`ConversationsService` + Wayler Open chat / send — `WAYLER_ACCESS_REQUIRED`; Sender chat unaffected; read not gated; decline incoming requests not gated), **activate/cancel in-app notifications** (`SYSTEM` to Wayler on mock activate/cancel — idempotent-safe; plain English title/body; bell picks up via existing polling). ✅ (schema + API + SDK + panel UI + paywall enforcement + access notifications complete — mock/manual activation only). Next: **Stripe checkout for real daily access**, scheduled expiry notification, access history detail page, refunds, admin pricing, **platform fee toward ~5%**.
