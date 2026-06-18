@@ -214,9 +214,10 @@ export class WaylerAvailabilityRequestsService {
 
     await this.notifications.createForUser({
       userId: updated.senderId,
-      type: NotificationType.SYSTEM,
-      title: 'Delivery request accepted',
-      body: 'Your delivery request was accepted by the Wayler.',
+      type: NotificationType.ORDER_ACCEPTED,
+      title: 'Your delivery request was accepted',
+      body: `Your delivery request "${updated.title}" was accepted and a delivery order was created.`,
+      relatedOrderId: deliveryOrderId,
     });
 
     return toWaylerAvailabilityRequestDetail({
