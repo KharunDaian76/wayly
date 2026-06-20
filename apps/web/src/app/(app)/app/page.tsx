@@ -110,6 +110,7 @@ function toAcceptedOrderDetailsInput(order: AcceptedOrderRowForDetails): Accepte
     offeredRewardAmount: order.offeredRewardAmount,
     acceptedAt: order.acceptedAt ?? null,
     deliveredAt: 'deliveredAt' in order ? (order.deliveredAt ?? null) : null,
+    paymentStatus: order.paymentLoadFailed ? undefined : (order.paymentIntent?.status ?? null),
   };
 }
 
@@ -1879,24 +1880,7 @@ export default function AppHomePage() {
                               variant="outline"
                               size="sm"
                               onClick={() =>
-                                handleOpenOrderDetails(
-                                  {
-                                    id: order.id,
-                                    title: order.title,
-                                    status: order.status,
-                                    type: order.type,
-                                    sourceType: order.sourceType,
-                                    availabilityRequestId: order.availabilityRequestId,
-                                    pickupCountry: order.pickupCountry,
-                                    pickupCity: order.pickupCity,
-                                    dropoffCountry: order.dropoffCountry,
-                                    dropoffCity: order.dropoffCity,
-                                    currency: order.currency,
-                                    offeredRewardAmount: order.offeredRewardAmount,
-                                    acceptedAt: order.acceptedAt,
-                                  },
-                                  'wayler',
-                                )
+                                handleOpenOrderDetails(toAcceptedOrderDetailsInput(order), 'wayler')
                               }
                             >
                               {t('app.orders.viewDetails')}
@@ -2710,25 +2694,7 @@ export default function AppHomePage() {
                               variant="outline"
                               size="sm"
                               onClick={() =>
-                                handleOpenOrderDetails(
-                                  {
-                                    id: order.id,
-                                    title: order.title,
-                                    status: order.status,
-                                    type: order.type,
-                                    sourceType: order.sourceType,
-                                    availabilityRequestId: order.availabilityRequestId,
-                                    pickupCountry: order.pickupCountry,
-                                    pickupCity: order.pickupCity,
-                                    dropoffCountry: order.dropoffCountry,
-                                    dropoffCity: order.dropoffCity,
-                                    currency: order.currency,
-                                    offeredRewardAmount: order.offeredRewardAmount,
-                                    acceptedAt: order.acceptedAt,
-                                    deliveredAt: order.deliveredAt,
-                                  },
-                                  'sender',
-                                )
+                                handleOpenOrderDetails(toAcceptedOrderDetailsInput(order), 'sender')
                               }
                             >
                               {t('app.orders.viewDetails')}
