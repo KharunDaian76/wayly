@@ -2,7 +2,7 @@
 
 Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Waylers directly — Senders post delivery requests; Waylers publish local availability and trip routes — with international/intercity and local city delivery, mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-linked notification click navigation** (mark unread as read, close popover, focus Accepted delivery requests panel, scroll/highlight matching card via **`DeliveryOrder.id`** — not `availabilityRequestId`), **Accepted Order Details drawer** (View details on Sender/Wayler accepted cards — frontend-only drawer/modal on `/app`, existing `GET /orders/:id` enrich; posted + converted orders; no route), **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility + Wayler Accepted payment refresh helper** (Refresh reloads orders + per-order payment status; panel hint + “Refreshing…” button label), **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request in-app notifications (**`SYSTEM`** on create/decline/cancel; **`ORDER_ACCEPTED`** + **`relatedOrderId`** = **`DeliveryOrder.id`** on accept — not **`availabilityRequestId`**) + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels + Accepted-panel auto-refresh after request accept + converted-order chat via existing `DeliveryOrder.id` flow + converted-order mock payment via existing `DeliveryOrder.id` flow** (`SYSTEM` on create/decline/cancel; **`ORDER_ACCEPTED`** + `relatedOrderId` = created **`DeliveryOrder.id`** on accept; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted; chat uses **`POST /conversations/order/:deliveryOrderId`** — lazy conversation create, no auto-chat on accept; mock payment uses **`POST /payments/orders/:deliveryOrderId/mock-authorize`** — no `sourceType` filter, verified compatible with no code changes), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, **realtime Wayler payment panel updates**, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, platform fee adjustment toward 5%, and production deployment are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, polling, **order-linked notification click navigation** (mark unread as read, close popover, focus Accepted delivery requests panel, scroll/highlight matching card, **open Accepted Order Details drawer** for the same **`DeliveryOrder.id`** — not `availabilityRequestId`), **Accepted Order Details drawer** (View details on Sender/Wayler accepted cards — frontend-only drawer/modal on `/app`, existing `GET /orders/:id` enrich; posted + converted orders; notification click opens same drawer after focus; no route), **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility + Wayler Accepted payment refresh helper** (Refresh reloads orders + per-order payment status; panel hint + “Refreshing…” button label), **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + Sender browse), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request in-app notifications (**`SYSTEM`** on create/decline/cancel; **`ORDER_ACCEPTED`** + **`relatedOrderId`** = **`DeliveryOrder.id`** on accept — not **`availabilityRequestId`**) + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels + Accepted-panel auto-refresh after request accept + converted-order chat via existing `DeliveryOrder.id` flow + converted-order mock payment via existing `DeliveryOrder.id` flow** (`SYSTEM` on create/decline/cancel; **`ORDER_ACCEPTED`** + `relatedOrderId` = created **`DeliveryOrder.id`** on accept; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted; chat uses **`POST /conversations/order/:deliveryOrderId`** — lazy conversation create, no auto-chat on accept; mock payment uses **`POST /payments/orders/:deliveryOrderId/mock-authorize`** — no `sourceType` filter, verified compatible with no code changes), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, **realtime Wayler payment panel updates**, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, platform fee adjustment toward 5%, and production deployment are future milestones.
 
 ## Tech stack
 
@@ -162,57 +162,57 @@ Marketing landing page (`/`) is not translated yet.
 
 ### Current M1 status
 
-| Area                                                                                                                         | Status                          |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| Auth backend (register, login, refresh, logout, `/users/me`)                                                                 | Complete                        |
-| Auth frontend (`/login`, `/register`, `/app`, session restore)                                                               | Complete                        |
-| Password visibility toggle                                                                                                   | Complete                        |
-| Basic language support (8 locales, localStorage preference)                                                                  | Complete                        |
-| KYC mock flow (schema, API, SDK, `/app` panel)                                                                               | Complete (M2)                   |
-| Real KYC provider (Sumsub)                                                                                                   | Not started (future M2 batch)   |
-| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)                                                                | Complete (M4)                   |
-| Proof of delivery (metadata note + confirmation code)                                                                        | Complete (M4)                   |
-| In-app notifications (schema, API, SDK, bell/dropdown, polling)                                                              | Complete (M4)                   |
-| Order-linked notification click navigation (bell → Accepted panel focus/scroll/highlight via `DeliveryOrder.id`)             | Complete (M4)                   |
-| Accepted Order Details drawer (View details on Sender/Wayler accepted cards; frontend-only; no route)                        | Complete (M4)                   |
-| Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)                                                               | Complete (M4)                   |
-| Chat message in-app notifications (other participant only)                                                                   | Complete (M4)                   |
-| Chat modal polling (10s while open, visibility-aware)                                                                        | Complete (M4)                   |
-| Premium `/app` dashboard UI foundation (visual polish)                                                                       | Complete (M4)                   |
-| Payment/escrow schema foundation (Prisma + shared types)                                                                     | Complete (M5)                   |
-| Mock/manual payment API + SDK (`MANUAL` provider)                                                                            | Complete (M5)                   |
-| Sender Accepted mock payment UI (authorize / hold / release)                                                                 | Complete (M5)                   |
-| Wayler Accepted read-only payment/payout visibility                                                                          | Complete (M5)                   |
-| Mock payment in-app notifications (Wayler dispatch, `SYSTEM`)                                                                | Complete (M5)                   |
-| Dispute/arbitration schema foundation (Prisma + shared types)                                                                | Complete (M6)                   |
-| Disputes API + SDK (`DisputesModule`, `api.disputes.*`)                                                                      | Complete (M6)                   |
-| Sender/Wayler Accepted dispute UI (open/view modal, messages, evidence metadata)                                             | Complete (M6)                   |
-| Dispute in-app notifications (other-participant dispatch, `SYSTEM`)                                                          | Complete (M6)                   |
-| Wayler availability / trip listings schema foundation (Prisma + shared types)                                                | Complete (M7)                   |
-| Wayler availability API + SDK (`WaylerAvailabilitiesModule`, `api.waylerAvailabilities.*`)                                   | Complete (M7)                   |
-| Wayler availability management UI on `/app` (create, my listings, publish/pause/cancel)                                      | Complete (M7)                   |
-| Sender browse active Waylers/trips UI + active courier count cards on `/app`                                                 | Complete (M7)                   |
-| Wayler availability request schema (`WaylerAvailabilityRequest`, shared types)                                               | Complete (M7)                   |
-| Availability request API + SDK (`WaylerAvailabilityRequestsModule`, `api.waylerAvailabilityRequests.*`)                      | Complete (M7)                   |
-| Sender request-to-Wayler UI (browse → request form, “My requests to Waylers”, cancel)                                        | Complete (M7)                   |
-| Wayler incoming availability request UI (accept/decline + optional response message)                                         | Complete (M7)                   |
-| Availability request in-app notifications (`SYSTEM` on create/decline/cancel; `ORDER_ACCEPTED` + `relatedOrderId` on accept) | Complete (M7)                   |
-| DeliveryOrder conversion from accepted availability request (backend — transactional)                                        | Complete (M7)                   |
-| Converted-order badge + short order reference on request panels (Sender + Wayler)                                            | Complete (M7)                   |
-| Order source badge on Accepted panels (“From Wayler request” + short request reference)                                      | Complete (M7)                   |
-| Accepted-panel auto-refresh after availability-request accept (Wayler + Sender)                                              | Complete (M7)                   |
-| Converted-order chat via existing order flow (`DeliveryOrder.id`, lazy conversation create)                                  | Complete (M7)                   |
-| Converted-order mock payment via existing order flow (`DeliveryOrder.id`; no sourceType filter)                              | Complete (M7)                   |
-| Wayler Accepted payment refresh helper (Refresh reloads orders + payment status; panel hint UI)                              | Complete (M5)                   |
-| Daily Wayler work access pass schema foundation (`WaylerAccessPass`, shared types)                                           | Complete (M8)                   |
-| Wayler access pass API + SDK (`WaylerAccessModule`, `api.waylerAccess.*`)                                                    | Complete (M8)                   |
-| Wayler access panel UI on `/app` (active/inactive, mock activate, cancel, history)                                           | Complete (M8)                   |
-| Accept gating behind active daily Wayler access (order accept + incoming availability request accept)                        | Complete (M8)                   |
-| Contact / chat / message gating behind active daily Wayler access                                                            | Complete (M8)                   |
-| Wayler access activate/cancel in-app notifications (`SYSTEM` on mock flow)                                                   | Complete (M8)                   |
-| Platform fee adjustment (mock 10% → planned ~5%)                                                                             | Not started (future milestones) |
-| Stripe, checkout, real payout processing, refunds, payout dashboard                                                          | Not started (future milestones) |
-| Admin/arbitrator panel, dispute resolution, payment hold on dispute                                                          | Not started (future milestones) |
+| Area                                                                                                                                   | Status                          |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| Auth backend (register, login, refresh, logout, `/users/me`)                                                                           | Complete                        |
+| Auth frontend (`/login`, `/register`, `/app`, session restore)                                                                         | Complete                        |
+| Password visibility toggle                                                                                                             | Complete                        |
+| Basic language support (8 locales, localStorage preference)                                                                            | Complete                        |
+| KYC mock flow (schema, API, SDK, `/app` panel)                                                                                         | Complete (M2)                   |
+| Real KYC provider (Sumsub)                                                                                                             | Not started (future M2 batch)   |
+| Marketplace orders (M4 draft/publish/cancel/accept/lifecycle)                                                                          | Complete (M4)                   |
+| Proof of delivery (metadata note + confirmation code)                                                                                  | Complete (M4)                   |
+| In-app notifications (schema, API, SDK, bell/dropdown, polling)                                                                        | Complete (M4)                   |
+| Order-linked notification click navigation (bell → Accepted panel focus/scroll/highlight + open details drawer via `DeliveryOrder.id`) | Complete (M4)                   |
+| Accepted Order Details drawer (View details on Sender/Wayler accepted cards; frontend-only; no route)                                  | Complete (M4)                   |
+| Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI)                                                                         | Complete (M4)                   |
+| Chat message in-app notifications (other participant only)                                                                             | Complete (M4)                   |
+| Chat modal polling (10s while open, visibility-aware)                                                                                  | Complete (M4)                   |
+| Premium `/app` dashboard UI foundation (visual polish)                                                                                 | Complete (M4)                   |
+| Payment/escrow schema foundation (Prisma + shared types)                                                                               | Complete (M5)                   |
+| Mock/manual payment API + SDK (`MANUAL` provider)                                                                                      | Complete (M5)                   |
+| Sender Accepted mock payment UI (authorize / hold / release)                                                                           | Complete (M5)                   |
+| Wayler Accepted read-only payment/payout visibility                                                                                    | Complete (M5)                   |
+| Mock payment in-app notifications (Wayler dispatch, `SYSTEM`)                                                                          | Complete (M5)                   |
+| Dispute/arbitration schema foundation (Prisma + shared types)                                                                          | Complete (M6)                   |
+| Disputes API + SDK (`DisputesModule`, `api.disputes.*`)                                                                                | Complete (M6)                   |
+| Sender/Wayler Accepted dispute UI (open/view modal, messages, evidence metadata)                                                       | Complete (M6)                   |
+| Dispute in-app notifications (other-participant dispatch, `SYSTEM`)                                                                    | Complete (M6)                   |
+| Wayler availability / trip listings schema foundation (Prisma + shared types)                                                          | Complete (M7)                   |
+| Wayler availability API + SDK (`WaylerAvailabilitiesModule`, `api.waylerAvailabilities.*`)                                             | Complete (M7)                   |
+| Wayler availability management UI on `/app` (create, my listings, publish/pause/cancel)                                                | Complete (M7)                   |
+| Sender browse active Waylers/trips UI + active courier count cards on `/app`                                                           | Complete (M7)                   |
+| Wayler availability request schema (`WaylerAvailabilityRequest`, shared types)                                                         | Complete (M7)                   |
+| Availability request API + SDK (`WaylerAvailabilityRequestsModule`, `api.waylerAvailabilityRequests.*`)                                | Complete (M7)                   |
+| Sender request-to-Wayler UI (browse → request form, “My requests to Waylers”, cancel)                                                  | Complete (M7)                   |
+| Wayler incoming availability request UI (accept/decline + optional response message)                                                   | Complete (M7)                   |
+| Availability request in-app notifications (`SYSTEM` on create/decline/cancel; `ORDER_ACCEPTED` + `relatedOrderId` on accept)           | Complete (M7)                   |
+| DeliveryOrder conversion from accepted availability request (backend — transactional)                                                  | Complete (M7)                   |
+| Converted-order badge + short order reference on request panels (Sender + Wayler)                                                      | Complete (M7)                   |
+| Order source badge on Accepted panels (“From Wayler request” + short request reference)                                                | Complete (M7)                   |
+| Accepted-panel auto-refresh after availability-request accept (Wayler + Sender)                                                        | Complete (M7)                   |
+| Converted-order chat via existing order flow (`DeliveryOrder.id`, lazy conversation create)                                            | Complete (M7)                   |
+| Converted-order mock payment via existing order flow (`DeliveryOrder.id`; no sourceType filter)                                        | Complete (M7)                   |
+| Wayler Accepted payment refresh helper (Refresh reloads orders + payment status; panel hint UI)                                        | Complete (M5)                   |
+| Daily Wayler work access pass schema foundation (`WaylerAccessPass`, shared types)                                                     | Complete (M8)                   |
+| Wayler access pass API + SDK (`WaylerAccessModule`, `api.waylerAccess.*`)                                                              | Complete (M8)                   |
+| Wayler access panel UI on `/app` (active/inactive, mock activate, cancel, history)                                                     | Complete (M8)                   |
+| Accept gating behind active daily Wayler access (order accept + incoming availability request accept)                                  | Complete (M8)                   |
+| Contact / chat / message gating behind active daily Wayler access                                                                      | Complete (M8)                   |
+| Wayler access activate/cancel in-app notifications (`SYSTEM` on mock flow)                                                             | Complete (M8)                   |
+| Platform fee adjustment (mock 10% → planned ~5%)                                                                                       | Not started (future milestones) |
+| Stripe, checkout, real payout processing, refunds, payout dashboard                                                                    | Not started (future milestones) |
+| Admin/arbitrator panel, dispute resolution, payment hold on dispute                                                                    | Not started (future milestones) |
 
 The `/app` dashboard has a **premium UI foundation** (shell, cards, badges, alerts); full landing/onboarding redesign is a future milestone.
 
@@ -393,7 +393,7 @@ Prerequisites: same as M1/M2/M3 — Docker running, migrations applied, `pnpm de
 | Automatic Sender lifecycle notifications (accept/transit/proof/delivered)                                                    | Complete      |
 | Frontend notification bell/dropdown on `/app`                                                                                | Complete      |
 | Notification bell polling (30s unread / 60s list, visibility-aware)                                                          | Complete      |
-| Order-linked notification click (bell → Accepted panel, scroll/highlight card via `DeliveryOrder.id`)                        | Complete      |
+| Order-linked notification click (bell → Accepted panel, scroll/highlight card, open details drawer via `DeliveryOrder.id`)   | Complete      |
 | Accepted Order Details drawer (View details; Sender + Wayler accepted cards; frontend-only)                                  | Complete      |
 | Chat schema + API + SDK (Conversation / ChatMessage)                                                                         | Complete      |
 | Frontend chat modal on `/app` (Sender/Wayler Accepted panels)                                                                | Complete      |
@@ -638,10 +638,10 @@ Both routes require JWT + **KYC approved**. Only the order's `acceptedWaylerId` 
 
 ### Frontend behavior
 
-| Panel                                                                          | Behavior                                                                                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Wayler Accepted** (`GET /orders/accepted`)                                   | **View details** opens Accepted Order Details drawer; **Start transit** when `ACCEPTED`; **Mark delivered** when `IN_TRANSIT`; proof form when `IN_TRANSIT` / `DELIVERED`; **Delivered** note when `DELIVERED`; each card has `id="accepted-order-{DeliveryOrder.id}"` for notification focus/highlight; chat/payment/proof actions remain on card; buttons disabled while an action runs |
-| **Sender Accepted** (`GET /orders/mine` for ACCEPTED / IN_TRANSIT / DELIVERED) | **View details** opens drawer; status badges, contextual notes, `acceptedAt` and `deliveredAt` when available; read-only proof section when submitted; same `accepted-order-{id}` DOM ids for bell click navigation; chat/payment/proof on card; pending/missing proof notes otherwise                                                                                                    |
+| Panel                                                                          | Behavior                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Wayler Accepted** (`GET /orders/accepted`)                                   | **View details** opens Accepted Order Details drawer; order-linked bell click opens the same drawer after focus/highlight; **Start transit** when `ACCEPTED`; **Mark delivered** when `IN_TRANSIT`; proof form when `IN_TRANSIT` / `DELIVERED`; **Delivered** note when `DELIVERED`; each card has `id="accepted-order-{DeliveryOrder.id}"` for notification focus/highlight; chat/payment/proof actions remain on card; buttons disabled while an action runs |
+| **Sender Accepted** (`GET /orders/mine` for ACCEPTED / IN_TRANSIT / DELIVERED) | **View details** opens drawer; order-linked bell click opens the same drawer after focus/highlight; status badges, contextual notes, `acceptedAt` and `deliveredAt` when available; read-only proof section when submitted; same `accepted-order-{id}` DOM ids for bell click navigation; chat/payment/proof on card; pending/missing proof notes otherwise                                                                                                    |
 
 Wayler OPEN feed, Sender Drafts/Published panels, filters, maps, and KYC gating are unchanged.
 
@@ -687,13 +687,13 @@ Accepted order cards on **Sender** and **Wayler** **Accepted delivery requests**
 
 **Explicitly not in drawer:** chat, mock payment, proof submit, dispute actions — those remain on the accepted card (unchanged).
 
-**Notification compatibility:** Order-linked bell click still **scrolls/highlights** the accepted card (`#accepted-order-{DeliveryOrder.id}`). It does **not** auto-open the details drawer (future batch).
+**Notification compatibility:** Order-linked bell click **scrolls/highlights** the accepted card (`#accepted-order-{DeliveryOrder.id}`) **and opens the Accepted Order Details drawer** for that same **`DeliveryOrder.id`** — same drawer as **View details**, opened after focus (~50ms scroll delay). Matching uses **`DeliveryOrder.id` only** — never `availabilityRequestId`. If the order is not found in either Accepted list, focus fails safely (panel scroll only; **no drawer**). Normal `/app` load and optional `?focusOrderId=` URL focus **do not** auto-open the drawer unless the user clicks an order-linked notification or **View details**.
 
 **Current limitations:**
 
-- **No full order detail page/route** — drawer is the inspection surface today
+- **No full order detail page/route** — drawer is the inspection surface today (no `/app/orders/:id` deep link)
 - **No drawer actions** — read-only inspection; operational actions stay on card
-- **Notification focus unchanged** — highlights card only, not drawer
+- **No URL deep link to drawer** — notification click and **View details** only; `?focusOrderId=` highlights card without opening drawer
 - **Nothing deployed yet** — local development only
 
 **i18n** (`app.orders.*`, 8 locales): `viewDetails`, `orderDetails`, `closeDetails`, `orderReference`, `route`, `pickup`, `dropoff`, `reward`, `notes`, plus loading/error/role/deadline labels.
@@ -710,8 +710,11 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] Drawer closes via **backdrop** click
 - [ ] Converted order (`WAYLER_AVAILABILITY_REQUEST`) → drawer shows **From Wayler request** badge + request reference
 - [ ] **Chat**, **payment**, and **proof** buttons still on card and work after closing drawer
-- [ ] **User A** clicks order-linked notification → card scrolls/highlights; drawer does **not** auto-open
-- [ ] Normal `/app` load without query params works unchanged
+- [ ] **User A** clicks posted-order **`ORDER_ACCEPTED`** notification → card scrolls/highlights; **Accepted Order Details drawer opens** for same **`DeliveryOrder.id`**
+- [ ] **User S** clicks converted availability-request **`ORDER_ACCEPTED`** notification → same (read, close bell, focus, highlight, **drawer opens**)
+- [ ] Drawer closes via **Close** / **Escape** / **backdrop** after notification open
+- [ ] Notification **without** `relatedOrderId` → **no drawer**, no navigation
+- [ ] Normal `/app` load without query params → **no drawer** auto-open
 
 ### Manual testing checklist (lifecycle)
 
@@ -724,13 +727,13 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 - [ ] **User B** clicks **Mark delivered**
 - [ ] **User A** refreshes Sender Accepted panel → sees **DELIVERED** badge, note, and **deliveredAt** when set
 - [ ] **User A** opens the notification bell → sees lifecycle notifications (see **Notifications** section)
-- [ ] **User A** clicks an **`ORDER_ACCEPTED`** (or other order-linked) notification → marks read, closes bell, focuses Sender Accepted panel, scrolls/highlights the order card (see **Notifications** → **Order-linked notification click behavior**)
+- [ ] **User A** clicks an **`ORDER_ACCEPTED`** (or other order-linked) notification → marks read, closes bell, focuses Sender Accepted panel, scrolls/highlights the order card, **opens Accepted Order Details drawer** (see **Notifications** → **Order-linked notification click behavior**)
 - [ ] **User A** and **User B** can open chat from Accepted panels after accept (see **Chat / contact** section)
 
 ### Future milestones (delivery lifecycle)
 
-- **Dedicated order detail page/route** — full `/app/orders/:id` (or similar) with deep links from bell, badges, and notifications (drawer exists today)
-- **Auto-open details drawer from notification click** — optional after dedicated route exists
+- **Dedicated order detail page/route** — full `/app/orders/:id` (or similar) with deep links from bell, badges, and notifications (drawer exists today; bell already opens drawer after focus)
+- **URL deep link to drawer** — e.g. `?focusOrderId=` could optionally open drawer (today: highlight only on URL focus)
 - **Pickup timestamp** field (`pickedUpAt`) if product needs explicit pickup time
 - **Photo / signature proof** of handoff — see **Proof of delivery** future milestones
 - **Payment release** after delivery (escrow / Stripe)
@@ -854,7 +857,7 @@ Use two KYC-approved users (**A** = Sender, **B** = Wayler):
 
 ## Notifications
 
-Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, **dispute events**, **Wayler daily work access activation/cancellation**, **Sender ↔ Wayler availability request events**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Notifications with **`relatedOrderId`** are **clickable** — they mark as read when unread, close the popover, switch to the correct Sender/Wayler mode, reload the **Accepted delivery requests** panel, and **scroll/highlight** the matching order card (always **`DeliveryOrder.id`**, never `availabilityRequestId`). Notifications **without** `relatedOrderId` stay display-only with the existing mark-as-read action — no invented navigation. Order, payment, chat, dispute, Wayler access, and availability-request notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
+Notifications keep users aware of **order lifecycle events**, **mock payment events**, **new chat messages**, **dispute events**, **Wayler daily work access activation/cancellation**, **Sender ↔ Wayler availability request events**, and other platform activity. The current version is an **in-app notification list** in a bell/dropdown on `/app`, refreshed by **lightweight client-side polling** while the tab is visible. Notifications with **`relatedOrderId`** are **clickable** — they mark as read when unread, close the popover, switch to the correct Sender/Wayler mode, reload the **Accepted delivery requests** panel, **scroll/highlight** the matching order card, and **open the Accepted Order Details drawer** for that same order (always **`DeliveryOrder.id`**, never `availabilityRequestId`). Notifications **without** `relatedOrderId` stay display-only with the existing mark-as-read action — no invented navigation, no drawer. Order, payment, chat, dispute, Wayler access, and availability-request notifications share the same bell, API, and SDK — **WebSocket/SSE, email, and push** are not implemented yet.
 
 ### Current notification flow
 
@@ -873,7 +876,7 @@ Polling refresh  (unread count every 30s; list every 60s while open)
         ↓
 User clicks order-linked item  (relatedOrderId = DeliveryOrder.id)
         ↓
-markRead (if unread)  →  close popover  →  focus Accepted panel  →  scroll/highlight card
+markRead (if unread)  →  close popover  →  focus Accepted panel  →  scroll/highlight card  →  open Accepted Order Details drawer (same DeliveryOrder.id)
 ```
 
 Payment, chat, dispute, Wayler access, and availability-request notifications appear in the **same bell/dropdown** as order lifecycle notifications — no separate payment, chat, dispute, access, or availability-request inbox. Recipients with the chat modal open also pick up new messages via **chat modal polling** (10s) without relying on the bell alone.
@@ -1023,7 +1026,7 @@ Availability request notification payload:
 - **`relatedOrderId` on accept:** set to the created **`DeliveryOrder.id`** — **not** `availabilityRequestId`; same field as posted-order **`ORDER_ACCEPTED`** notifications
 - **No self-notification** — the user who performed the action is not notified (Sender create/cancel does not notify Sender; Wayler accept/decline does not notify Wayler)
 - **Plain English** title/body stored in DB — no server-side i18n templates yet (same pattern as other dispatch today)
-- **Same bell/dropdown** — existing **30s unread polling** picks up new alerts; **accept `ORDER_ACCEPTED`** notifications are **clickable** and focus the Accepted panel via **`DeliveryOrder.id`** (see **Order-linked notification click behavior**)
+- **Same bell/dropdown** — existing **30s unread polling** picks up new alerts; **accept `ORDER_ACCEPTED`** notifications are **clickable** and focus the Accepted panel + open the details drawer via **`DeliveryOrder.id`** (see **Order-linked notification click behavior**)
 
 **Duplicate prevention:**
 
@@ -1058,22 +1061,22 @@ Availability request notification payload:
 
 ### Frontend behavior (`/app` header)
 
-| Feature              | Behavior                                                                                                                                                                                                                                                                                                                     |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Bell**             | Outline button with bell icon; placed next to language selector / sign out                                                                                                                                                                                                                                                   |
-| **Unread badge**     | Shown when `unreadTotal > 0` (caps display at `99+`)                                                                                                                                                                                                                                                                         |
-| **On app load**      | `api.notifications.unreadCount()` on mount; then polls every **30s** while tab visible                                                                                                                                                                                                                                       |
-| **Dropdown open**    | Loads latest **10** via `api.notifications.list({ page: 1, limit: 10 })`; also refreshes unread count                                                                                                                                                                                                                        |
-| **List polling**     | While dropdown is open **and** tab visible, list polls every **60s** (silent background refresh)                                                                                                                                                                                                                             |
-| **Loading**          | Translated loading message on foreground list fetches only                                                                                                                                                                                                                                                                   |
-| **Empty**            | Translated empty state when user has no notifications                                                                                                                                                                                                                                                                        |
-| **Error**            | Foreground list/action errors shown in dropdown; background poll failures are silent                                                                                                                                                                                                                                         |
-| **Each item**        | Title, optional body, `createdAt`, read/unread pill; **order-linked** items (`relatedOrderId` set) render as a full-width clickable row with “View in accepted deliveries” hint; others show mark-read button when unread                                                                                                    |
-| **Refresh**          | Reloads list; disabled while loading or an action is in progress                                                                                                                                                                                                                                                             |
-| **Mark all read**    | `api.notifications.markAllRead()` then refresh; disabled when no unread                                                                                                                                                                                                                                                      |
-| **Mark one read**    | `api.notifications.markRead(id)` then refresh list + unread count (non-linked unread items, or explicit button)                                                                                                                                                                                                              |
-| **Click navigation** | **Implemented for `relatedOrderId`** — marks unread as read, closes popover, switches Sender/Wayler mode, reloads Accepted orders, scrolls to matching card (`accepted-order-{DeliveryOrder.id}`), temporary primary ring highlight (~2.5s). **No navigation** when `relatedOrderId` is null — safe display + mark-read only |
-| **KYC**              | **Not required** to open bell or read notifications                                                                                                                                                                                                                                                                          |
+| Feature              | Behavior                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Bell**             | Outline button with bell icon; placed next to language selector / sign out                                                                                                                                                                                                                                                                                                                          |
+| **Unread badge**     | Shown when `unreadTotal > 0` (caps display at `99+`)                                                                                                                                                                                                                                                                                                                                                |
+| **On app load**      | `api.notifications.unreadCount()` on mount; then polls every **30s** while tab visible                                                                                                                                                                                                                                                                                                              |
+| **Dropdown open**    | Loads latest **10** via `api.notifications.list({ page: 1, limit: 10 })`; also refreshes unread count                                                                                                                                                                                                                                                                                               |
+| **List polling**     | While dropdown is open **and** tab visible, list polls every **60s** (silent background refresh)                                                                                                                                                                                                                                                                                                    |
+| **Loading**          | Translated loading message on foreground list fetches only                                                                                                                                                                                                                                                                                                                                          |
+| **Empty**            | Translated empty state when user has no notifications                                                                                                                                                                                                                                                                                                                                               |
+| **Error**            | Foreground list/action errors shown in dropdown; background poll failures are silent                                                                                                                                                                                                                                                                                                                |
+| **Each item**        | Title, optional body, `createdAt`, read/unread pill; **order-linked** items (`relatedOrderId` set) render as a full-width clickable row with “View in accepted deliveries” hint; others show mark-read button when unread                                                                                                                                                                           |
+| **Refresh**          | Reloads list; disabled while loading or an action is in progress                                                                                                                                                                                                                                                                                                                                    |
+| **Mark all read**    | `api.notifications.markAllRead()` then refresh; disabled when no unread                                                                                                                                                                                                                                                                                                                             |
+| **Mark one read**    | `api.notifications.markRead(id)` then refresh list + unread count (non-linked unread items, or explicit button)                                                                                                                                                                                                                                                                                     |
+| **Click navigation** | **Implemented for `relatedOrderId`** — marks unread as read, closes popover, switches Sender/Wayler mode, reloads Accepted orders, scrolls to matching card (`accepted-order-{DeliveryOrder.id}`), temporary primary ring highlight (~2.5s), **opens Accepted Order Details drawer** for that order. **No navigation** when `relatedOrderId` is null — safe display + mark-read only; **no drawer** |
+| **KYC**              | **Not required** to open bell or read notifications                                                                                                                                                                                                                                                                                                                                                 |
 
 i18n keys under `app.notifications.*` (8 locales).
 
@@ -1097,26 +1100,39 @@ When a notification includes **`relatedOrderId`**, the bell treats it as an orde
 2. **Close popover** — bell dropdown closes immediately
 3. **Choose panel** — `getAcceptedPanelForNotification(type)` picks Sender vs Wayler Accepted panel (e.g. `ORDER_ACCEPTED` → Sender; mock payment → Wayler); tries the other panel if the order is not found
 4. **Reload Accepted lists** — `loadSenderAcceptedOrders()` or `loadAcceptedOrders()` so the card exists in DOM
-5. **Scroll + highlight** — smooth scroll to `#accepted-order-{DeliveryOrder.id}`; temporary primary ring on the card (~2.5s). If the order is not in either list, scrolls to the Accepted panel header only. **Does not auto-open** the Accepted Order Details drawer (see **Delivery lifecycle after acceptance** → **Accepted Order Details drawer**).
+5. **Scroll + highlight** — smooth scroll to `#accepted-order-{DeliveryOrder.id}`; temporary primary ring on the card (~2.5s). If the order is not in either list, scrolls to the Accepted panel header only — **no drawer**, no crash, no retry loop.
+6. **Open details drawer** — when the order is found, opens the **Accepted Order Details drawer** for that same **`DeliveryOrder.id`** (same component/state as **View details** on the card). Drawer loads enriched fields via existing **`GET /orders/:id`**. **Not** opened when the order is missing from both Accepted lists.
 
-**Frontend modules:** `notification-bell.tsx`, `notification-order-focus.ts`, `use-focus-accepted-order.ts`, wired from `apps/web/src/app/(app)/app/page.tsx` (`NotificationBell onFocusOrder={focusAcceptedOrder}`). Accepted order cards expose `id={acceptedOrderElementId(order.id)}` on both Sender and Wayler panels.
+**Frontend modules:** `notification-bell.tsx`, `notification-order-focus.ts`, `use-focus-accepted-order.ts` (`openDetails` + `onOpenDetails` callback), wired from `apps/web/src/app/(app)/app/page.tsx` (`NotificationBell onFocusOrder={focusAcceptedOrderFromNotification}`). Accepted order cards expose `id={acceptedOrderElementId(order.id)}` on both Sender and Wayler panels.
 
 **Notifications without `relatedOrderId`:**
 
 - **No click navigation** — e.g. Wayler daily access activate/cancel, availability request create/decline/cancel
+- **No drawer** — bell does not open Accepted Order Details drawer
 - **Existing mark-as-read** button remains for unread items
 - **No broken routes** — the bell does not invent order or request URLs
 
+**Safe behavior when order not found:**
+
+- Accepted panel still switches and scrolls to panel header
+- **No drawer** opens (avoids broken/empty drawer state)
+- No infinite retry; single load attempt per panel (primary hint, then fallback panel)
+
+**Normal `/app` load:**
+
+- Does **not** auto-open the drawer
+- Optional URL focus `?focusOrderId={DeliveryOrder.id}&focusPanel=sender|wayler` scrolls/highlights only — **does not** open drawer (notification click and **View details** are the drawer entry points today)
+
 **Current limitations:**
 
-- **No dedicated order detail page/route** — notification click focuses Accepted panel/card; users inspect via **View details** drawer on the card (not auto-opened from bell)
-- **No auto-open drawer from notification** — scroll/highlight only
+- **No dedicated order detail page/route** — notification click opens frontend drawer after focus; no full `/app/orders/:id` page
+- **No URL deep link to drawer** — `?focusOrderId=` highlights card only
 - **No deep link for decline/cancel availability requests** — no order id to link
 - **No email/SMS/mobile push/Firebase/APNs**
 - **No WebSocket/realtime notification delivery** — polling only
 - **Nothing deployed yet** — local development only
 
-Optional URL focus on `/app` load: `?focusOrderId={DeliveryOrder.id}&focusPanel=sender|wayler` (consumed once, then stripped from the URL).
+Optional URL focus on `/app` load: `?focusOrderId={DeliveryOrder.id}&focusPanel=sender|wayler` (consumed once, then stripped from the URL; highlight only — no drawer).
 
 ### Polling behavior
 
@@ -1224,25 +1240,27 @@ Use **User A** (Sender) and **User B** (Wayler), KYC-approved:
 - [ ] Bell **popover closes**
 - [ ] Dashboard switches to **Sender mode** and **Accepted delivery requests** panel is in view
 - [ ] Matching accepted order card **scrolls into view** and shows a **temporary highlight ring**
-- [ ] Card actions (payment, chat, etc.) remain usable after highlight clears
+- [ ] **Accepted Order Details drawer opens** for the same **`DeliveryOrder.id`**
+- [ ] Drawer closes via **Close** / **Escape** / **backdrop**
+- [ ] Card actions (payment, chat, proof, **View details**) remain usable after closing drawer
 
 **Order-linked notification click (converted availability request):**
 
 - [ ] **User S** sends availability request → **User W** accepts → **User S** receives **`ORDER_ACCEPTED`** with **`relatedOrderId`** = created **`DeliveryOrder.id`** (not `availabilityRequestId`)
-- [ ] **User S** clicks that notification → same behavior as posted-order case (read, close bell, focus Sender Accepted panel, scroll/highlight converted order card)
+- [ ] **User S** clicks that notification → same behavior as posted-order case (read, close bell, focus Sender Accepted panel, scroll/highlight converted order card, **open Accepted Order Details drawer**)
 
 **Notifications without `relatedOrderId` (safe behavior):**
 
 - [ ] **User W** receives **`SYSTEM`** “New delivery request” (create) — **not** a full-row order link; unread shows **Mark as read** only
-- [ ] Clicking the notification body does **not** navigate away or open a broken route
+- [ ] Clicking the notification body does **not** navigate away, open a broken route, or open a drawer
 - [ ] **Mark as read** still works; unread count updates correctly
 - [ ] **Wayler access** activate/cancel notifications behave the same — no order navigation
 
 **Regression:**
 
-- [ ] Normal `/app` load **without** `focusOrderId` / `focusPanel` query params works unchanged
+- [ ] Normal `/app` load **without** `focusOrderId` / `focusPanel` query params works unchanged — **no drawer** auto-open
 - [ ] Manual Refresh, mark-all-read, and polling still work after using order-linked clicks
-- [ ] Order-linked notification click **does not auto-open** Accepted Order Details drawer (card highlight only)
+- [ ] **View details** on accepted card still opens drawer independently of notification flow
 
 ### Future milestones (notifications)
 
@@ -1265,7 +1283,7 @@ Use **User A** (Sender) and **User B** (Wayler), KYC-approved:
 - **Scheduled Wayler access expiry notification** — alert when daily pass expires (end of access window)
 - **Dedicated `WAYLER_ACCESS` notification type** — replace `SYSTEM` for access dispatch (schema enum addition; optional entity link when schema supports it)
 - **Dedicated availability-request notification types** — e.g. `AVAILABILITY_REQUEST_CREATED`, `DECLINED`, `CANCELLED` (replace `SYSTEM` for create/decline/cancel; accept already uses **`ORDER_ACCEPTED`**)
-- **Dedicated order detail page/route + bell deep link** — full order detail route from notification (today: Accepted panel/card focus + optional **View details** drawer on card; drawer not auto-opened from bell)
+- **Dedicated order detail page/route + bell deep link** — full order detail route from notification (today: Accepted panel/card focus + **Accepted Order Details drawer** opens from bell click and **View details**; no dedicated route yet)
 - **Related entity link for availability requests** — optional `relatedAvailabilityRequestId` or generic entity reference for decline/cancel deep links
 - **Push/email for availability requests** — offline alerts for new/accepted/declined/cancelled requests
 
@@ -2478,7 +2496,7 @@ When a Wayler **accepts** a `PENDING` `WaylerAvailabilityRequest`, `WaylerAvaila
 
 **Response:** accept returns `WaylerAvailabilityRequestDetail` with **`deliveryOrderId`** (null while pending/declined/cancelled). List/detail endpoints also include `deliveryOrderId` when linked.
 
-**Order visibility:** converted orders appear in existing lists where applicable — e.g. Wayler **`GET /orders/accepted`**, Sender **`GET /orders/mine`** (filter by status as needed). Same post-accept lifecycle (transit, delivered, proof, mock payment UI, disputes, **chat when opened manually**) as Sender-posted orders. **Request panels** surface conversion via **`deliveryOrderId`** (see **Converted order UI** below); **Accepted order panels** surface origin via **`sourceType`** (see **Order source badge** below) and expose the same **Open chat** and **Payment** actions as posted orders. Draft, published, and OPEN feed cards are unchanged.
+**Order visibility:** converted orders appear in existing lists where applicable — e.g. Wayler **`GET /orders/accepted`**, Sender **`GET /orders/mine`** (filter by status as needed). Same post-accept lifecycle (transit, delivered, proof, mock payment UI, disputes, **chat when opened manually**) as Sender-posted orders. **Request panels** surface conversion via **`deliveryOrderId`** (see **Converted order UI** below); **Accepted order panels** surface origin via **`sourceType`** (see **Order source badge** below) and expose **View details** (drawer), **Open chat**, and **Payment** actions like posted orders. Sender **`ORDER_ACCEPTED`** notification uses **`relatedOrderId`** = created **`DeliveryOrder.id`**; bell click focuses the card and **opens Accepted Order Details drawer** (see **Notifications** → **Order-linked notification click behavior**). Draft, published, and OPEN feed cards are unchanged.
 
 **Accepted-panel refresh (after request accept):** when a Wayler accepts an incoming Sender request, the UI refreshes Accepted order lists so the converted `DeliveryOrder` and its actions (including **Open chat** and **mock payment**) appear **without manual page refresh**:
 
@@ -2493,15 +2511,15 @@ Implementation: `wayler-incoming-requests-panel.tsx`, `sender-waylers-panel.tsx`
 
 **Sender acceptance notification** (after successful accept **and** `DeliveryOrder` creation — notification failures do **not** roll back the transaction):
 
-| Field                  | Value                                                                                                                                                                                                                                |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Recipient**          | **Sender** only — Wayler is **not** notified for their own accept                                                                                                                                                                    |
-| **`NotificationType`** | **`ORDER_ACCEPTED`** (same as posted-order accept — not `SYSTEM`)                                                                                                                                                                    |
-| **Title**              | Your delivery request was accepted                                                                                                                                                                                                   |
-| **Body**               | `Your delivery request "{title}" was accepted and a delivery order was created.`                                                                                                                                                     |
-| **`relatedOrderId`**   | Created **`DeliveryOrder.id`** — **not** `availabilityRequestId`                                                                                                                                                                     |
-| **Click from bell**    | Sender can click the notification → marks read, closes bell, focuses **Sender Accepted delivery requests** panel, scrolls/highlights the converted order card (see **Notifications** → **Order-linked notification click behavior**) |
-| **Duplicates**         | Re-accept on non-`PENDING` → **409** before notification; exactly **one** notification per successful accept                                                                                                                         |
+| Field                  | Value                                                                                                                                                                                                                                                                                                            |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Recipient**          | **Sender** only — Wayler is **not** notified for their own accept                                                                                                                                                                                                                                                |
+| **`NotificationType`** | **`ORDER_ACCEPTED`** (same as posted-order accept — not `SYSTEM`)                                                                                                                                                                                                                                                |
+| **Title**              | Your delivery request was accepted                                                                                                                                                                                                                                                                               |
+| **Body**               | `Your delivery request "{title}" was accepted and a delivery order was created.`                                                                                                                                                                                                                                 |
+| **`relatedOrderId`**   | Created **`DeliveryOrder.id`** — **not** `availabilityRequestId`                                                                                                                                                                                                                                                 |
+| **Click from bell**    | Sender can click the notification → marks read, closes bell, focuses **Sender Accepted delivery requests** panel, scrolls/highlights the converted order card, **opens Accepted Order Details drawer** for created **`DeliveryOrder.id`** (see **Notifications** → **Order-linked notification click behavior**) |
+| **Duplicates**         | Re-accept on non-`PENDING` → **409** before notification; exactly **one** notification per successful accept                                                                                                                                                                                                     |
 
 Not sent when daily access check fails (**403** `WAYLER_ACCESS_REQUIRED` before accept runs).
 
@@ -2543,7 +2561,7 @@ When a **`DeliveryOrder`** in an **Accepted** list has `sourceType = WAYLER_AVAI
 - **`SENDER_POSTED_ORDER`** (or missing `sourceType`) → **no** source badge — avoids clutter on normal posted orders.
 - **`WAYLER_AVAILABILITY_REQUEST`** → badge shown; request reference when `availabilityRequestId` is non-null.
 - **Draft / published / OPEN feed** cards → **unchanged** — converted orders never appear there (they enter at **ACCEPTED**).
-- **Not clickable from badge** — no navigation to order detail or request detail; use **View details** on the accepted card for inspection (drawer); **order-linked notifications** can still focus the card via **`DeliveryOrder.id`** (see **Notifications** → **Order-linked notification click behavior**).
+- **Not clickable from badge** — no navigation to order detail or request detail; use **View details** on the accepted card or click the **`ORDER_ACCEPTED`** notification to open the drawer; **order-linked notifications** focus the card and open the drawer via **`DeliveryOrder.id`** (see **Notifications** → **Order-linked notification click behavior**).
 - **Does not** start payment, chat, or disputes — informational only; existing card content (status, route, reward, proof, payment, chat actions) unchanged.
 
 **i18n** (`app.orders.*`, 8 locales): `fromWaylerRequest`, `requestReference` (`postedOrder` reserved for future use).
@@ -2678,7 +2696,7 @@ After each successful request write, `WaylerAvailabilityRequestsService` notifie
 
 - **Accept uses `ORDER_ACCEPTED`** — create/decline/cancel remain plain **`SYSTEM`** (no dedicated availability-request enum values yet)
 - **`relatedOrderId` on accept only** — links to **`DeliveryOrder.id`**, not `availabilityRequestId`; decline/cancel have no order to link
-- **Order-linked click on accept** — Sender **`ORDER_ACCEPTED`** notifications focus Accepted panel via **`DeliveryOrder.id`** (see **Notifications** → **Order-linked notification click behavior**); create/decline/cancel remain display + mark-read only
+- **Order-linked click on accept** — Sender **`ORDER_ACCEPTED`** notifications focus Accepted panel, highlight card, and **open Accepted Order Details drawer** via **`DeliveryOrder.id`** (see **Notifications** → **Order-linked notification click behavior**); create/decline/cancel remain display + mark-read only
 - **No push/email** — in-app bell polling only (no Firebase/APNs)
 - **No localized backend templates** — hard-coded English title/body
 
@@ -2839,31 +2857,31 @@ Validation: `@wayly/validation` — `createWaylerAvailabilitySchema`, `waylerAva
 
 ### Current scope
 
-| Included                                                                                          | Not included (yet)                                                                   |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Prisma enums + `WaylerAvailability` + `WaylerAvailabilityRequest` models + migrations             | Auto payment/escrow on accept                                                        |
-| `DeliveryOrderSource` + `availabilityRequestId` on `DeliveryOrder` + conversion on accept         | Automatic chat on accept                                                             |
-| `@wayly/types` summaries + list/count types (+ `deliveryOrderId` on requests)                     | Request expiry automation (`EXPIRED`)                                                |
-| `WaylerAvailabilitiesModule` + `WaylerAvailabilityRequestsModule` API + Swagger                   | Request detail page UI                                                               |
-| SDK `api.waylerAvailabilities.*` + `api.waylerAvailabilityRequests.*`                             | Admin moderation for requests                                                        |
-| Create / mine / public / active-counts / detail / publish / pause / cancel                        | Dedicated availability-request notification types for create/decline/cancel          |
-| Request create / mine / accept / decline / cancel / detail + **in-app notifications**             | Dedicated availability-request notification types for create/decline/cancel          |
-| **Order-linked notification click** from bell (`relatedOrderId` → Accepted panel focus/highlight) | Dedicated order detail page/route from bell (drawer via card **View details** today) |
-| **Accepted Order Details drawer** (View details; Sender + Wayler; frontend-only)                  | Full order detail page/route                                                         |
-| **DeliveryOrder conversion on accept** (transactional backend)                                    | Auto payment/chat from source badge                                                  |
-| **Converted-order UI** on request panels (badge + short order reference)                          | Platform fee change (mock 10% → planned ~5%)                                         |
-| **Order source badge** on Accepted panels (`fromWaylerRequest` + request reference)               | Auto payment/chat from source badge                                                  |
-| **Accepted-panel auto-refresh** after availability-request accept                                 | Production deployment                                                                |
-| **Converted-order chat** (existing `DeliveryOrder.id` flow; lazy conversation create)             | Chat notification on conversion                                                      |
-| **Converted-order mock payment** (existing `DeliveryOrder.id` flow; verified compatible)          | Realtime payment status in Accepted panel                                            |
-| **Wayler Accepted payment refresh helper** (Refresh + hint; reloads orders + payment)             | Stripe / real payment provider                                                       |
-| KYC-gated access + owner/privacy rules                                                            | Matching recommendations engine                                                      |
-| `@wayly/validation` availability + request schemas                                                | Map-based availability visualization                                                 |
-| **Wayler management UI** — create, my listings, publish/pause/cancel                              | Matching recommendations engine                                                      |
-| **Sender browse UI** — filters, public listings, active counts, request form, my requests, cancel | Map-based availability visualization                                                 |
-| **Wayler incoming requests UI** — accept/decline + optional response                              | Edit availability form / edit API                                                    |
-| i18n `app.waylerAvailability.*`, `app.senderWaylers.*`, `app.availabilityRequests.*` (8 locales)  | Active count widgets on landing/dashboard                                            |
-| Two-sided discovery + request flow (both lanes documented above)                                  | Location filters for Wayler order feed (UI)                                          |
+| Included                                                                                                                | Not included (yet)                                                                       |
+| ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Prisma enums + `WaylerAvailability` + `WaylerAvailabilityRequest` models + migrations                                   | Auto payment/escrow on accept                                                            |
+| `DeliveryOrderSource` + `availabilityRequestId` on `DeliveryOrder` + conversion on accept                               | Automatic chat on accept                                                                 |
+| `@wayly/types` summaries + list/count types (+ `deliveryOrderId` on requests)                                           | Request expiry automation (`EXPIRED`)                                                    |
+| `WaylerAvailabilitiesModule` + `WaylerAvailabilityRequestsModule` API + Swagger                                         | Request detail page UI                                                                   |
+| SDK `api.waylerAvailabilities.*` + `api.waylerAvailabilityRequests.*`                                                   | Admin moderation for requests                                                            |
+| Create / mine / public / active-counts / detail / publish / pause / cancel                                              | Dedicated availability-request notification types for create/decline/cancel              |
+| Request create / mine / accept / decline / cancel / detail + **in-app notifications**                                   | Dedicated availability-request notification types for create/decline/cancel              |
+| **Order-linked notification click** from bell (`relatedOrderId` → Accepted panel focus/highlight + open details drawer) | Dedicated order detail page/route from bell (full `/app/orders/:id`; drawer opens today) |
+| **Accepted Order Details drawer** (View details; Sender + Wayler; frontend-only)                                        | Full order detail page/route                                                             |
+| **DeliveryOrder conversion on accept** (transactional backend)                                                          | Auto payment/chat from source badge                                                      |
+| **Converted-order UI** on request panels (badge + short order reference)                                                | Platform fee change (mock 10% → planned ~5%)                                             |
+| **Order source badge** on Accepted panels (`fromWaylerRequest` + request reference)                                     | Auto payment/chat from source badge                                                      |
+| **Accepted-panel auto-refresh** after availability-request accept                                                       | Production deployment                                                                    |
+| **Converted-order chat** (existing `DeliveryOrder.id` flow; lazy conversation create)                                   | Chat notification on conversion                                                          |
+| **Converted-order mock payment** (existing `DeliveryOrder.id` flow; verified compatible)                                | Realtime payment status in Accepted panel                                                |
+| **Wayler Accepted payment refresh helper** (Refresh + hint; reloads orders + payment)                                   | Stripe / real payment provider                                                           |
+| KYC-gated access + owner/privacy rules                                                                                  | Matching recommendations engine                                                          |
+| `@wayly/validation` availability + request schemas                                                                      | Map-based availability visualization                                                     |
+| **Wayler management UI** — create, my listings, publish/pause/cancel                                                    | Matching recommendations engine                                                          |
+| **Sender browse UI** — filters, public listings, active counts, request form, my requests, cancel                       | Map-based availability visualization                                                     |
+| **Wayler incoming requests UI** — accept/decline + optional response                                                    | Edit availability form / edit API                                                        |
+| i18n `app.waylerAvailability.*`, `app.senderWaylers.*`, `app.availabilityRequests.*` (8 locales)                        | Active count widgets on landing/dashboard                                                |
+| Two-sided discovery + request flow (both lanes documented above)                                                        | Location filters for Wayler order feed (UI)                                              |
 
 ### Current limitations
 
@@ -2878,7 +2896,7 @@ Validation: `@wayly/validation` — `createWaylerAvailabilitySchema`, `waylerAva
 - **No clickable order/request detail from badges** — badge references are display-only; accepted cards have **View details** drawer (see **Delivery lifecycle after acceptance** → **Accepted Order Details drawer**)
 - **Source badge does not trigger payment or chat**
 - **No dedicated order detail page/route** — drawer on accepted cards today; not a full `/app/orders/:id` route
-- **Availability-request accept notification uses `ORDER_ACCEPTED`** — create/decline/cancel remain **`SYSTEM`**; **`relatedOrderId`** = **`DeliveryOrder.id`** on accept only (not `availabilityRequestId`); **accept notifications are clickable** and focus Accepted panel (see **Notifications**); push/email and localized backend templates are future
+- **Availability-request accept notification uses `ORDER_ACCEPTED`** — create/decline/cancel remain **`SYSTEM`**; **`relatedOrderId`** = **`DeliveryOrder.id`** on accept only (not `availabilityRequestId`); **accept notifications are clickable** — focus Accepted panel, highlight card, **open details drawer** (see **Notifications**); push/email and localized backend templates are future
 - **No expiry automation** — `EXPIRED` status exists but no cron/job sets it yet
 - **No request detail page** — list/card views only; `get(id)` exists in API/SDK but no dedicated UI route
 - **No admin moderation** for availability requests
@@ -3056,7 +3074,7 @@ Use **User W** (Wayler) and **User S** (Sender), both KYC-approved:
 - **Auto payment / escrow on accept** — create or prompt `PaymentIntent` when availability request converts to order
 - **Automatic chat on accept** — open `Conversation` when request converts (may tie to daily work access rules)
 - **Dedicated availability-request notification types** — replace `SYSTEM` for create/decline/cancel; accept already uses **`ORDER_ACCEPTED`**
-- **Dedicated order detail page/route + bell deep link** — full route from notification (Accepted panel/card focus + **View details** drawer on card today; drawer not auto-opened from bell)
+- **Dedicated order detail page/route + bell deep link** — full route from notification (Accepted panel/card focus + **Accepted Order Details drawer** opens from bell click and **View details** today; no dedicated route or URL deep link to drawer yet)
 - **Request expiry automation** — cron/job sets `EXPIRED`; UI handling
 - **Request detail page** — dedicated route using `api.waylerAvailabilityRequests.get(id)`
 - **Admin moderation** for availability requests
