@@ -22,7 +22,7 @@ import {
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
@@ -40,6 +40,8 @@ import { useAppMode } from '@/lib/app-mode/app-mode-context';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
+import { acceptedOrderElementId } from '@/lib/notifications/notification-order-focus';
+import { useFocusAcceptedOrder } from '@/lib/notifications/use-focus-accepted-order';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
@@ -538,7 +540,9 @@ export default function AppHomePage() {
   const [paymentSuccessKind, setPaymentSuccessKind] = useState<
     'authorize' | 'hold' | 'release' | null
   >(null);
+  const [highlightedOrderId, setHighlightedOrderId] = useState<string | null>(null);
   const paymentActionBusy = paymentActionOrderId !== null;
+  const focusFromUrlHandledRef = useRef(false);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -654,8 +658,10 @@ export default function AppHomePage() {
       });
       setSenderAcceptedOrders(withTimestamps);
       await loadUserDisputes();
+      return withTimestamps;
     } catch {
       setSenderAcceptedError(t('app.senderPanel.acceptedLoadFailed'));
+      return [];
     } finally {
       setSenderAcceptedLoading(false);
     }
@@ -752,12 +758,41 @@ export default function AppHomePage() {
       );
       setAcceptedOrders(enriched);
       await loadUserDisputes();
+      return enriched;
     } catch {
       setAcceptedError(t('app.waylerFeed.acceptedPanel.loadFailed'));
+      return [];
     } finally {
       setAcceptedLoading(false);
     }
   }, [loadUserDisputes, t]);
+
+  const focusAcceptedOrder = useFocusAcceptedOrder({
+    setHighlightedOrderId,
+    loadSenderAcceptedOrders,
+    loadAcceptedOrders,
+  });
+
+  useEffect(() => {
+    if (focusFromUrlHandledRef.current || !user || !isApproved) {
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('focusOrderId');
+    if (!orderId) {
+      return;
+    }
+    focusFromUrlHandledRef.current = true;
+    const panelParam = params.get('focusPanel');
+    const panelHint =
+      panelParam === 'wayler' ? 'wayler' : panelParam === 'sender' ? 'sender' : undefined;
+    void focusAcceptedOrder(orderId, panelHint).finally(() => {
+      params.delete('focusOrderId');
+      params.delete('focusPanel');
+      const query = params.toString();
+      router.replace(query ? `/app?${query}` : '/app', { scroll: false });
+    });
+  }, [user, isApproved, focusAcceptedOrder, router]);
 
   useEffect(() => {
     if (user && mode === 'sender' && canViewSenderOrders) {
@@ -1217,7 +1252,7 @@ export default function AppHomePage() {
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <LanguageSelect />
-            <NotificationBell />
+            <NotificationBell onFocusOrder={focusAcceptedOrder} />
             <Button variant="outline" asChild>
               <Link href="/">{t('common.backToHome')}</Link>
             </Button>
@@ -1528,7 +1563,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card className={APP_PANEL_CLASS}>
+            <Card id="wayler-accepted-panel" className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex flex-col gap-1">
                   <CardTitle>{t('app.waylerFeed.acceptedPanel.title')}</CardTitle>
@@ -1612,7 +1647,15 @@ export default function AppHomePage() {
                         : null;
 
                       return (
-                        <li key={order.id} className={ORDER_CARD_CLASS}>
+                        <li
+                          key={order.id}
+                          id={acceptedOrderElementId(order.id)}
+                          className={cn(
+                            ORDER_CARD_CLASS,
+                            highlightedOrderId === order.id &&
+                              'ring-2 ring-primary ring-offset-2 ring-offset-background',
+                          )}
+                        >
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-medium">{order.title}</p>
                             <OrderStatusBadge
@@ -2276,7 +2319,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card className={APP_PANEL_CLASS}>
+            <Card id="sender-accepted-panel" className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.senderPanel.acceptedTitle')}</CardTitle>
                 <Button
@@ -2343,7 +2386,15 @@ export default function AppHomePage() {
                           : null;
 
                       return (
-                        <li key={order.id} className={ORDER_CARD_CLASS}>
+                        <li
+                          key={order.id}
+                          id={acceptedOrderElementId(order.id)}
+                          className={cn(
+                            ORDER_CARD_CLASS,
+                            highlightedOrderId === order.id &&
+                              'ring-2 ring-primary ring-offset-2 ring-offset-background',
+                          )}
+                        >
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-medium">{order.title}</p>
                             <OrderStatusBadge

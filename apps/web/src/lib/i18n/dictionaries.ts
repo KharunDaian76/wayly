@@ -354,6 +354,7 @@ const en = {
   'app.notifications.unreadCount': '{count} unread notifications',
   'app.notifications.read': 'Read',
   'app.notifications.unread': 'Unread',
+  'app.notifications.viewAcceptedOrder': 'View in accepted deliveries',
   'app.waylerAvailability.title': 'Your Wayler availability',
   'app.waylerAvailability.subtitle':
     'Publish local availability or travel routes so Senders can discover you.',
@@ -907,6 +908,7 @@ const ru: Dictionary = {
   'app.notifications.unreadCount': '{count} непрочитанных уведомлений',
   'app.notifications.read': 'Прочитано',
   'app.notifications.unread': 'Непрочитано',
+  'app.notifications.viewAcceptedOrder': 'Открыть в принятых доставках',
   'app.waylerAvailability.title': 'Ваша доступность курьера',
   'app.waylerAvailability.subtitle':
     'Публикуйте локальную доступность или маршруты, чтобы отправители могли вас найти.',
@@ -1459,6 +1461,7 @@ const es: Dictionary = {
   'app.notifications.unreadCount': '{count} notificaciones sin leer',
   'app.notifications.read': 'Leída',
   'app.notifications.unread': 'Sin leer',
+  'app.notifications.viewAcceptedOrder': 'Ver en entregas aceptadas',
   'app.waylerAvailability.title': 'Tu disponibilidad como courier',
   'app.waylerAvailability.subtitle':
     'Publica disponibilidad local o rutas de viaje para que los remitentes te encuentren.',
@@ -2019,6 +2022,7 @@ const fr: Dictionary = {
   'app.notifications.unreadCount': '{count} notifications non lues',
   'app.notifications.read': 'Lue',
   'app.notifications.unread': 'Non lue',
+  'app.notifications.viewAcceptedOrder': 'Voir dans les livraisons acceptées',
   'app.waylerAvailability.title': 'Votre disponibilité Wayler',
   'app.waylerAvailability.subtitle':
     'Publiez une disponibilité locale ou des itinéraires pour que les expéditeurs vous trouvent.',
@@ -2590,6 +2594,7 @@ const de: Dictionary = {
   'app.notifications.unreadCount': '{count} ungelesene Benachrichtigungen',
   'app.notifications.read': 'Gelesen',
   'app.notifications.unread': 'Ungelesen',
+  'app.notifications.viewAcceptedOrder': 'In akzeptierten Lieferungen anzeigen',
   'app.waylerAvailability.title': 'Ihre Wayler-Verfügbarkeit',
   'app.waylerAvailability.subtitle':
     'Veröffentlichen Sie lokale Verfügbarkeit oder Reiserouten, damit Sender Sie finden.',
@@ -3143,6 +3148,7 @@ const tr: Dictionary = {
   'app.notifications.unreadCount': '{count} okunmamış bildirim',
   'app.notifications.read': 'Okundu',
   'app.notifications.unread': 'Okunmadı',
+  'app.notifications.viewAcceptedOrder': 'Kabul edilen teslimatlar bölümünde görüntüle',
   'app.waylerAvailability.title': 'Wayler müsaitliğiniz',
   'app.waylerAvailability.subtitle':
     'Göndericilerin sizi bulması için yerel müsaitlik veya seyahat rotaları yayınlayın.',
@@ -3679,6 +3685,7 @@ const ar: Dictionary = {
   'app.notifications.unreadCount': '{count} إشعارات غير مقروءة',
   'app.notifications.read': 'مقروء',
   'app.notifications.unread': 'غير مقروء',
+  'app.notifications.viewAcceptedOrder': 'عرض في الطلبات المقبولة',
   'app.waylerAvailability.title': 'توفرك كساعي توصيل',
   'app.waylerAvailability.subtitle':
     'انشر التوفر المحلي أو مسارات السفر ليتمكن المرسلون من اكتشافك.',
@@ -4209,6 +4216,7 @@ const zh: Dictionary = {
   'app.notifications.unreadCount': '{count} 条未读通知',
   'app.notifications.read': '已读',
   'app.notifications.unread': '未读',
+  'app.notifications.viewAcceptedOrder': '在已接受的配送中查看',
   'app.waylerAvailability.title': '您的快递员可用性',
   'app.waylerAvailability.subtitle': '发布本地可用性或旅行路线，以便寄件人发现您。',
   'app.waylerAvailability.createTitle': '创建可用性',

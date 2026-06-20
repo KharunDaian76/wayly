@@ -7,13 +7,21 @@ import { Bell } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useI18n } from '@/lib/i18n/i18n-context';
+import {
+  getAcceptedPanelForNotification,
+  type AcceptedOrdersPanel,
+} from '@/lib/notifications/notification-order-focus';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
 const UNREAD_COUNT_POLL_MS = 30_000;
 const LIST_POLL_MS = 60_000;
 
-export function NotificationBell() {
+interface NotificationBellProps {
+  onFocusOrder?: (orderId: string, panel: AcceptedOrdersPanel) => void | Promise<void>;
+}
+
+export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
   const { t } = useI18n();
   const containerRef = useRef<HTMLDivElement>(null);
   const countInFlightRef = useRef(false);
@@ -144,6 +152,34 @@ export function NotificationBell() {
     }
   }
 
+  async function handleOrderLinkedNotificationClick(item: NotificationSummary) {
+    if (!item.relatedOrderId || actionBusy) {
+      return;
+    }
+
+    setMarkingReadId(item.id);
+    setError(null);
+    setSuccessMessage(null);
+    setOpen(false);
+
+    try {
+      if (item.readAt === null) {
+        const updated = await api.notifications.markRead(item.id);
+        setItems((prev) => prev.map((entry) => (entry.id === item.id ? updated : entry)));
+        await fetchUnreadCount();
+      }
+      await onFocusOrder?.(item.relatedOrderId, getAcceptedPanelForNotification(item.type));
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message || t('app.notifications.loadFailed')
+          : t('app.notifications.loadFailed'),
+      );
+    } finally {
+      setMarkingReadId(null);
+    }
+  }
+
   async function handleMarkAllRead() {
     setMarkingAll(true);
     setError(null);
@@ -253,50 +289,99 @@ export function NotificationBell() {
                 {items.map((item) => {
                   const isUnread = item.readAt === null;
                   const isMarking = markingReadId === item.id;
+                  const hasOrderLink = item.relatedOrderId !== null;
+                  const orderLinkLabel = hasOrderLink
+                    ? `${item.title}. ${t('app.notifications.viewAcceptedOrder')}`
+                    : undefined;
 
                   return (
                     <li
                       key={item.id}
                       className={cn(
-                        'rounded-md border px-3 py-2 text-sm',
+                        'rounded-md border text-sm',
                         isUnread
                           ? 'border-primary/30 bg-primary/5'
                           : 'border-border/60 bg-muted/20',
                       )}
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="font-medium leading-snug">{item.title}</p>
-                        <span
-                          className={cn(
-                            'shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium',
-                            isUnread
-                              ? 'bg-primary/15 text-foreground'
-                              : 'bg-muted text-muted-foreground',
-                          )}
-                        >
-                          {isUnread ? t('app.notifications.unread') : t('app.notifications.read')}
-                        </span>
-                      </div>
-                      {item.body ? (
-                        <p className="mt-1 text-xs text-muted-foreground">{item.body}</p>
-                      ) : null}
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {new Date(item.createdAt).toLocaleString()}
-                      </p>
-                      {isUnread ? (
-                        <Button
+                      {hasOrderLink ? (
+                        <button
                           type="button"
-                          variant="outline"
-                          size="sm"
-                          className="mt-2 h-7 px-2 text-xs"
+                          className={cn(
+                            'w-full rounded-md px-3 py-2 text-left transition-colors',
+                            'hover:bg-muted/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+                            actionBusy && 'cursor-not-allowed opacity-60',
+                          )}
                           disabled={actionBusy}
-                          onClick={() => void handleMarkRead(item.id)}
+                          aria-label={orderLinkLabel}
+                          onClick={() => void handleOrderLinkedNotificationClick(item)}
                         >
-                          {isMarking
-                            ? t('app.notifications.markingRead')
-                            : t('app.notifications.markRead')}
-                        </Button>
-                      ) : null}
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium leading-snug">{item.title}</p>
+                            <span
+                              className={cn(
+                                'shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium',
+                                isUnread
+                                  ? 'bg-primary/15 text-foreground'
+                                  : 'bg-muted text-muted-foreground',
+                              )}
+                            >
+                              {isUnread
+                                ? t('app.notifications.unread')
+                                : t('app.notifications.read')}
+                            </span>
+                          </div>
+                          {item.body ? (
+                            <p className="mt-1 text-xs text-muted-foreground">{item.body}</p>
+                          ) : null}
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {new Date(item.createdAt).toLocaleString()}
+                          </p>
+                          <p className="mt-2 text-xs font-medium text-primary">
+                            {isMarking
+                              ? t('app.notifications.markingRead')
+                              : t('app.notifications.viewAcceptedOrder')}
+                          </p>
+                        </button>
+                      ) : (
+                        <div className="px-3 py-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium leading-snug">{item.title}</p>
+                            <span
+                              className={cn(
+                                'shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium',
+                                isUnread
+                                  ? 'bg-primary/15 text-foreground'
+                                  : 'bg-muted text-muted-foreground',
+                              )}
+                            >
+                              {isUnread
+                                ? t('app.notifications.unread')
+                                : t('app.notifications.read')}
+                            </span>
+                          </div>
+                          {item.body ? (
+                            <p className="mt-1 text-xs text-muted-foreground">{item.body}</p>
+                          ) : null}
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {new Date(item.createdAt).toLocaleString()}
+                          </p>
+                          {isUnread ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="mt-2 h-7 px-2 text-xs"
+                              disabled={actionBusy}
+                              onClick={() => void handleMarkRead(item.id)}
+                            >
+                              {isMarking
+                                ? t('app.notifications.markingRead')
+                                : t('app.notifications.markRead')}
+                            </Button>
+                          ) : null}
+                        </div>
+                      )}
                     </li>
                   );
                 })}
