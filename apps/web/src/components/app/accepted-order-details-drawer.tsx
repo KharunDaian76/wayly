@@ -1,6 +1,5 @@
 'use client';
 
-import { ApiError } from '@wayly/sdk';
 import type { DeliveryOrderDetail } from '@wayly/types';
 import {
   DeliveryOrderSource,
@@ -9,7 +8,7 @@ import {
   PaymentStatus,
 } from '@wayly/types';
 import { Button } from '@wayly/ui';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 import { formatShortOrderReference } from '@/components/app/availability-request-converted-order';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
@@ -280,6 +279,58 @@ function DeliveryProgressTimeline({ steps }: { steps: TimelineStep[] }) {
   );
 }
 
+function DetailFetchStatus({
+  loading,
+  error,
+  showFallbackNotice,
+  onRetry,
+}: {
+  loading: boolean;
+  error: string | null;
+  showFallbackNotice: boolean;
+  onRetry: () => void;
+}) {
+  const { t } = useI18n();
+
+  if (!loading && !error && !showFallbackNotice) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {loading ? (
+        <p
+          className="rounded-md border border-border/60 bg-muted/20 px-3 py-2 text-xs text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {t('app.orders.detailsLoading')}
+        </p>
+      ) : null}
+      {error ? (
+        <div className="flex flex-col gap-2 rounded-md border border-danger/30 bg-danger/10 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-danger" role="alert">
+            {error}
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-8 shrink-0 text-xs"
+            disabled={loading}
+            onClick={onRetry}
+          >
+            {t('app.orders.retryDetails')}
+          </Button>
+        </div>
+      ) : null}
+      {showFallbackNotice ? (
+        <p className="text-xs text-muted-foreground">{t('app.orders.detailsFallbackNotice')}</p>
+      ) : null}
+    </div>
+  );
+}
+
 export function AcceptedOrderDetailsDrawer({
   open,
   onClose,
@@ -293,45 +344,52 @@ export function AcceptedOrderDetailsDrawer({
   const [detail, setDetail] = useState<DeliveryOrderDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [retryAttempt, setRetryAttempt] = useState(0);
+
+  const loadOrderDetail = useCallback(
+    async (orderId: string, signal: { cancelled: boolean }) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const result = await api.orders.detail(orderId);
+        if (!signal.cancelled) {
+          setDetail(result);
+        }
+      } catch {
+        if (!signal.cancelled) {
+          setError(t('app.orders.detailsLoadFailed'));
+        }
+      } finally {
+        if (!signal.cancelled) {
+          setLoading(false);
+        }
+      }
+    },
+    [t],
+  );
 
   useEffect(() => {
     if (!open || !order) {
       setDetail(null);
       setError(null);
       setLoading(false);
+      setRetryAttempt(0);
       return;
     }
 
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-
-    void api.orders
-      .detail(order.id)
-      .then((result) => {
-        if (!cancelled) {
-          setDetail(result);
-        }
-      })
-      .catch((err) => {
-        if (!cancelled) {
-          setError(
-            err instanceof ApiError
-              ? err.message || t('app.orders.detailsLoadFailed')
-              : t('app.orders.detailsLoadFailed'),
-          );
-        }
-      })
-      .finally(() => {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      });
+    const orderId = order.id;
+    const signal = { cancelled: false };
+    void loadOrderDetail(orderId, signal);
 
     return () => {
-      cancelled = true;
+      signal.cancelled = true;
     };
-  }, [open, order, t]);
+  }, [open, order?.id, retryAttempt, loadOrderDetail, order]);
+
+  const handleRetry = useCallback(() => {
+    setRetryAttempt((attempt) => attempt + 1);
+  }, []);
 
   useEffect(() => {
     if (!open) {
@@ -411,16 +469,12 @@ export function AcceptedOrderDetailsDrawer({
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
-          {error ? (
-            <p className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger">
-              {error}
-            </p>
-          ) : null}
-          {loading ? (
-            <p className="py-4 text-center text-sm text-muted-foreground">
-              {t('app.orders.detailsLoading')}
-            </p>
-          ) : null}
+          <DetailFetchStatus
+            loading={loading}
+            error={error}
+            showFallbackNotice={Boolean(error && !detail)}
+            onRetry={handleRetry}
+          />
 
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn('wayly-status-badge text-xs')}>{statusLabel}</span>
