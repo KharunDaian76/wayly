@@ -26,6 +26,11 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
+import {
+  AcceptedOrderDetailsDrawer,
+  type AcceptedOrderDetailsInput,
+  type AcceptedOrderDetailsPanelRole,
+} from '@/components/app/accepted-order-details-drawer';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { DisputePanel } from '@/components/app/dispute-panel';
@@ -541,6 +546,10 @@ export default function AppHomePage() {
     'authorize' | 'hold' | 'release' | null
   >(null);
   const [highlightedOrderId, setHighlightedOrderId] = useState<string | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [detailsOrder, setDetailsOrder] = useState<AcceptedOrderDetailsInput | null>(null);
+  const [detailsPanelRole, setDetailsPanelRole] = useState<AcceptedOrderDetailsPanelRole>('sender');
+  const [detailsStatusLabel, setDetailsStatusLabel] = useState('');
   const paymentActionBusy = paymentActionOrderId !== null;
   const focusFromUrlHandledRef = useRef(false);
 
@@ -1013,6 +1022,22 @@ export default function AppHomePage() {
     setDisputeOrderId(null);
     setDisputeOrderTitle(null);
     setDisputeId(null);
+  }
+
+  function handleOpenOrderDetails(
+    order: AcceptedOrderDetailsInput,
+    panelRole: AcceptedOrderDetailsPanelRole,
+  ) {
+    setDetailsOrder(order);
+    setDetailsPanelRole(panelRole);
+    setDetailsStatusLabel(orderStatusLabel(order.status, t));
+    setDetailsOpen(true);
+  }
+
+  function handleCloseOrderDetails() {
+    setDetailsOpen(false);
+    setDetailsOrder(null);
+    setDetailsStatusLabel('');
   }
 
   function handleDisputeOpened(id: string) {
@@ -1813,6 +1838,33 @@ export default function AppHomePage() {
                             </p>
                           ) : null}
                           <div className="wayly-action-group mt-3">
+                            <Button
+                              className="w-full sm:w-auto"
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                handleOpenOrderDetails(
+                                  {
+                                    id: order.id,
+                                    title: order.title,
+                                    status: order.status,
+                                    type: order.type,
+                                    sourceType: order.sourceType,
+                                    availabilityRequestId: order.availabilityRequestId,
+                                    pickupCountry: order.pickupCountry,
+                                    pickupCity: order.pickupCity,
+                                    dropoffCountry: order.dropoffCountry,
+                                    dropoffCity: order.dropoffCity,
+                                    currency: order.currency,
+                                    offeredRewardAmount: order.offeredRewardAmount,
+                                    acceptedAt: order.acceptedAt,
+                                  },
+                                  'wayler',
+                                )
+                              }
+                            >
+                              {t('app.orders.viewDetails')}
+                            </Button>
                             {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
                               <>
                                 <Button
@@ -2617,6 +2669,34 @@ export default function AppHomePage() {
                             ) : null}
                           </div>
                           <div className="wayly-action-group mt-3">
+                            <Button
+                              className="w-full sm:w-auto"
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                handleOpenOrderDetails(
+                                  {
+                                    id: order.id,
+                                    title: order.title,
+                                    status: order.status,
+                                    type: order.type,
+                                    sourceType: order.sourceType,
+                                    availabilityRequestId: order.availabilityRequestId,
+                                    pickupCountry: order.pickupCountry,
+                                    pickupCity: order.pickupCity,
+                                    dropoffCountry: order.dropoffCountry,
+                                    dropoffCity: order.dropoffCity,
+                                    currency: order.currency,
+                                    offeredRewardAmount: order.offeredRewardAmount,
+                                    acceptedAt: order.acceptedAt,
+                                    deliveredAt: order.deliveredAt,
+                                  },
+                                  'sender',
+                                )
+                              }
+                            >
+                              {t('app.orders.viewDetails')}
+                            </Button>
                             {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
                               <>
                                 <Button
@@ -2685,6 +2765,14 @@ export default function AppHomePage() {
           currentUserId={user.id}
           onDisputeOpened={handleDisputeOpened}
           onDisputeChanged={() => void loadUserDisputes()}
+        />
+
+        <AcceptedOrderDetailsDrawer
+          open={detailsOpen}
+          onClose={handleCloseOrderDetails}
+          order={detailsOrder}
+          panelRole={detailsPanelRole}
+          statusLabel={detailsStatusLabel}
         />
 
         <Card className={APP_PANEL_CLASS}>

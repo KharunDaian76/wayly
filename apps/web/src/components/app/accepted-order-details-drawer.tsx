@@ -1,0 +1,284 @@
+'use client';
+
+import { ApiError } from '@wayly/sdk';
+import type { DeliveryOrderDetail } from '@wayly/types';
+import { DeliveryOrderSource, DeliveryOrderType } from '@wayly/types';
+import { Button } from '@wayly/ui';
+import { useEffect, useId, useRef, useState } from 'react';
+
+import { formatShortOrderReference } from '@/components/app/availability-request-converted-order';
+import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
+import { useI18n } from '@/lib/i18n/i18n-context';
+import { api } from '@/lib/sdk';
+import { cn } from '@/lib/utils';
+
+export type AcceptedOrderDetailsPanelRole = 'sender' | 'wayler';
+
+export type AcceptedOrderDetailsInput = {
+  id: string;
+  title: string;
+  status: DeliveryOrderDetail['status'];
+  type: DeliveryOrderDetail['type'];
+  sourceType: DeliveryOrderDetail['sourceType'];
+  availabilityRequestId: string | null;
+  pickupCountry: string | null;
+  pickupCity: string | null;
+  dropoffCountry: string | null;
+  dropoffCity: string | null;
+  currency: string;
+  offeredRewardAmount: string | null;
+  acceptedAt?: string | null;
+  deliveredAt?: string | null;
+};
+
+type AcceptedOrderDetailsDrawerProps = {
+  open: boolean;
+  onClose: () => void;
+  order: AcceptedOrderDetailsInput | null;
+  panelRole: AcceptedOrderDetailsPanelRole;
+  statusLabel: string;
+};
+
+function formatLocation(city: string | null, country: string | null): string {
+  const parts = [city, country].filter(Boolean);
+  return parts.length > 0 ? parts.join(', ') : '—';
+}
+
+function formatReward(amount: string | null, currency: string, noneLabel: string): string {
+  return amount ? `${amount} ${currency}` : noneLabel;
+}
+
+function formatDate(value: string | null | undefined): string | null {
+  if (!value) {
+    return null;
+  }
+  return new Date(value).toLocaleString();
+}
+
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col gap-0.5 rounded-lg border border-border/40 bg-muted/15 px-3 py-2.5 sm:flex-row sm:items-start sm:justify-between">
+      <dt className="shrink-0 text-sm text-muted-foreground">{label}</dt>
+      <dd className="break-words text-sm font-medium sm:max-w-[65%] sm:text-right">{value}</dd>
+    </div>
+  );
+}
+
+export function AcceptedOrderDetailsDrawer({
+  open,
+  onClose,
+  order,
+  panelRole,
+  statusLabel,
+}: AcceptedOrderDetailsDrawerProps) {
+  const { t } = useI18n();
+  const titleId = useId();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [detail, setDetail] = useState<DeliveryOrderDetail | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open || !order) {
+      setDetail(null);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    void api.orders
+      .detail(order.id)
+      .then((result) => {
+        if (!cancelled) {
+          setDetail(result);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(
+            err instanceof ApiError
+              ? err.message || t('app.orders.detailsLoadFailed')
+              : t('app.orders.detailsLoadFailed'),
+          );
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, order, t]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    closeButtonRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, onClose]);
+
+  if (!open || !order) {
+    return null;
+  }
+
+  const pickupCity = detail?.pickupCity ?? order.pickupCity;
+  const pickupCountry = detail?.pickupCountry ?? order.pickupCountry;
+  const dropoffCity = detail?.dropoffCity ?? order.dropoffCity;
+  const dropoffCountry = detail?.dropoffCountry ?? order.dropoffCountry;
+  const acceptedAt = detail?.acceptedAt ?? order.acceptedAt;
+  const deliveredAt = detail?.deliveredAt ?? order.deliveredAt;
+  const typeLabel =
+    (detail?.type ?? order.type) === DeliveryOrderType.LOCAL
+      ? t('app.orders.typeLocal')
+      : t('app.orders.typeInternational');
+  const roleLabel =
+    panelRole === 'sender' ? t('app.orders.detailsRoleSender') : t('app.orders.detailsRoleWayler');
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        className={cn(
+          'flex max-h-[90vh] w-full flex-col border border-border bg-background shadow-lg',
+          'rounded-t-xl sm:max-w-lg sm:rounded-lg',
+        )}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-2 border-b border-border/60 px-4 py-3">
+          <div className="min-w-0">
+            <p id={titleId} className="text-sm font-semibold">
+              {t('app.orders.orderDetails')}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">{order.title}</p>
+          </div>
+          <Button
+            ref={closeButtonRef}
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 shrink-0 px-2 text-xs"
+            onClick={onClose}
+          >
+            {t('app.orders.closeDetails')}
+          </Button>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
+          {error ? (
+            <p className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger">
+              {error}
+            </p>
+          ) : null}
+          {loading ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">
+              {t('app.orders.detailsLoading')}
+            </p>
+          ) : null}
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={cn('wayly-status-badge text-xs')}>{statusLabel}</span>
+            <span className="text-xs text-muted-foreground">{typeLabel}</span>
+          </div>
+
+          <p className="text-xs text-muted-foreground">{roleLabel}</p>
+
+          <p className="text-xs text-muted-foreground">
+            {t('app.orders.orderReference')}:{' '}
+            <span className="font-mono text-foreground">{formatShortOrderReference(order.id)}</span>
+          </p>
+
+          {order.sourceType === DeliveryOrderSource.WAYLER_AVAILABILITY_REQUEST ? (
+            <DeliveryOrderSourceBadge
+              sourceType={order.sourceType}
+              availabilityRequestId={order.availabilityRequestId}
+            />
+          ) : (
+            <span className="wayly-status-badge wayly-status-default w-fit text-xs">
+              {t('app.orders.postedOrder')}
+            </span>
+          )}
+
+          <dl className="flex flex-col gap-2">
+            <DetailRow
+              label={t('app.orders.route')}
+              value={`${formatLocation(pickupCity, pickupCountry)} ${t('app.orders.routeSeparator')} ${formatLocation(dropoffCity, dropoffCountry)}`}
+            />
+            {detail?.pickupAddressText ? (
+              <DetailRow label={t('app.orders.pickup')} value={detail.pickupAddressText} />
+            ) : null}
+            {detail?.dropoffAddressText ? (
+              <DetailRow label={t('app.orders.dropoff')} value={detail.dropoffAddressText} />
+            ) : null}
+            <DetailRow
+              label={t('app.orders.reward')}
+              value={formatReward(
+                detail?.offeredRewardAmount ?? order.offeredRewardAmount,
+                detail?.currency ?? order.currency,
+                t('app.orders.rewardNone'),
+              )}
+            />
+            {acceptedAt ? (
+              <DetailRow
+                label={t('app.senderPanel.labelAcceptedAt')}
+                value={formatDate(acceptedAt) ?? acceptedAt}
+              />
+            ) : null}
+            {deliveredAt ? (
+              <DetailRow
+                label={t('app.senderPanel.labelDeliveredAt')}
+                value={formatDate(deliveredAt) ?? deliveredAt}
+              />
+            ) : null}
+            {detail?.pickupDateFrom ? (
+              <DetailRow
+                label={t('app.orders.labelPickupFrom')}
+                value={formatDate(detail.pickupDateFrom) ?? detail.pickupDateFrom}
+              />
+            ) : null}
+            {detail?.pickupDateTo ? (
+              <DetailRow
+                label={t('app.orders.labelPickupTo')}
+                value={formatDate(detail.pickupDateTo) ?? detail.pickupDateTo}
+              />
+            ) : null}
+            {detail?.deliveryDeadline ? (
+              <DetailRow
+                label={t('app.orders.labelDeadline')}
+                value={formatDate(detail.deliveryDeadline) ?? detail.deliveryDeadline}
+              />
+            ) : null}
+            {detail?.description ? (
+              <DetailRow label={t('app.orders.fieldDescription')} value={detail.description} />
+            ) : null}
+            {detail?.notes ? (
+              <DetailRow label={t('app.orders.notes')} value={detail.notes} />
+            ) : null}
+          </dl>
+        </div>
+      </div>
+    </div>
+  );
+}
