@@ -13,17 +13,22 @@ import {
 const HIGHLIGHT_MS = 2500;
 const SCROLL_DELAY_MS = 50;
 
-interface UseFocusAcceptedOrderOptions {
-  setHighlightedOrderId: (orderId: string | null) => void;
-  loadSenderAcceptedOrders: () => Promise<readonly { id: string }[]>;
-  loadAcceptedOrders: () => Promise<readonly { id: string }[]>;
+export interface FocusAcceptedOrderCallOptions<T extends { id: string }> {
+  openDetails?: boolean;
+  onOpenDetails?: (order: T, panel: AcceptedOrdersPanel) => void;
 }
 
-export function useFocusAcceptedOrder({
+interface UseFocusAcceptedOrderOptions<T extends { id: string }> {
+  setHighlightedOrderId: (orderId: string | null) => void;
+  loadSenderAcceptedOrders: () => Promise<readonly T[]>;
+  loadAcceptedOrders: () => Promise<readonly T[]>;
+}
+
+export function useFocusAcceptedOrder<T extends { id: string }>({
   setHighlightedOrderId,
   loadSenderAcceptedOrders,
   loadAcceptedOrders,
-}: UseFocusAcceptedOrderOptions) {
+}: UseFocusAcceptedOrderOptions<T>) {
   const { setMode } = useAppMode();
   const scrollTimeoutRef = useRef<number | null>(null);
   const highlightTimeoutRef = useRef<number | null>(null);
@@ -40,7 +45,11 @@ export function useFocusAcceptedOrder({
   }, []);
 
   const focusAcceptedOrder = useCallback(
-    async (orderId: string, panelHint?: AcceptedOrdersPanel) => {
+    async (
+      orderId: string,
+      panelHint?: AcceptedOrdersPanel,
+      callOptions?: FocusAcceptedOrderCallOptions<T>,
+    ) => {
       if (highlightTimeoutRef.current !== null) {
         window.clearTimeout(highlightTimeoutRef.current);
         highlightTimeoutRef.current = null;
@@ -54,11 +63,18 @@ export function useFocusAcceptedOrder({
       const primary: AcceptedOrdersPanel = panelHint ?? 'sender';
       const secondary: AcceptedOrdersPanel = primary === 'sender' ? 'wayler' : 'sender';
 
+      let matchedOrder: T | undefined;
+
       const loadPanel = async (panel: AcceptedOrdersPanel): Promise<boolean> => {
         setMode(panel);
         const orders =
           panel === 'sender' ? await loadSenderAcceptedOrders() : await loadAcceptedOrders();
-        return orders.some((order) => order.id === orderId);
+        const order = orders.find((item) => item.id === orderId);
+        if (order) {
+          matchedOrder = order;
+          return true;
+        }
+        return false;
       };
 
       let targetPanel = primary;
@@ -77,6 +93,10 @@ export function useFocusAcceptedOrder({
             setHighlightedOrderId(null);
             highlightTimeoutRef.current = null;
           }, HIGHLIGHT_MS);
+
+          if (matchedOrder && callOptions?.openDetails && callOptions.onOpenDetails) {
+            callOptions.onOpenDetails(matchedOrder, targetPanel);
+          }
         } else {
           scrollToAcceptedPanel(targetPanel);
         }

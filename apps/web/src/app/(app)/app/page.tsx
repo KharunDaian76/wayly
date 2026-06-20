@@ -92,6 +92,27 @@ type SenderAcceptedOrderRow = DeliveryOrderSummary & {
   paymentLoadFailed: boolean;
 };
 
+type AcceptedOrderRowForDetails = WaylerAcceptedOrderRow | SenderAcceptedOrderRow;
+
+function toAcceptedOrderDetailsInput(order: AcceptedOrderRowForDetails): AcceptedOrderDetailsInput {
+  return {
+    id: order.id,
+    title: order.title,
+    status: order.status,
+    type: order.type,
+    sourceType: order.sourceType,
+    availabilityRequestId: order.availabilityRequestId,
+    pickupCountry: order.pickupCountry,
+    pickupCity: order.pickupCity,
+    dropoffCountry: order.dropoffCountry,
+    dropoffCity: order.dropoffCity,
+    currency: order.currency,
+    offeredRewardAmount: order.offeredRewardAmount,
+    acceptedAt: order.acceptedAt ?? null,
+    deliveredAt: 'deliveredAt' in order ? (order.deliveredAt ?? null) : null,
+  };
+}
+
 const SENDER_LIFECYCLE_STATUSES = new Set<DeliveryOrderSummary['status']>([
   DeliveryOrderStatus.ACCEPTED,
   DeliveryOrderStatus.IN_TRANSIT,
@@ -776,11 +797,26 @@ export default function AppHomePage() {
     }
   }, [loadUserDisputes, t]);
 
-  const focusAcceptedOrder = useFocusAcceptedOrder({
+  const focusAcceptedOrder = useFocusAcceptedOrder<AcceptedOrderRowForDetails>({
     setHighlightedOrderId,
     loadSenderAcceptedOrders,
     loadAcceptedOrders,
   });
+
+  const focusAcceptedOrderFromNotification = useCallback(
+    (orderId: string, panelHint?: 'sender' | 'wayler') =>
+      focusAcceptedOrder(orderId, panelHint, {
+        openDetails: true,
+        onOpenDetails: (order, panel) => {
+          const input = toAcceptedOrderDetailsInput(order);
+          setDetailsOrder(input);
+          setDetailsPanelRole(panel);
+          setDetailsStatusLabel(orderStatusLabel(input.status, t));
+          setDetailsOpen(true);
+        },
+      }),
+    [focusAcceptedOrder, t],
+  );
 
   useEffect(() => {
     if (focusFromUrlHandledRef.current || !user || !isApproved) {
@@ -1277,7 +1313,7 @@ export default function AppHomePage() {
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <LanguageSelect />
-            <NotificationBell onFocusOrder={focusAcceptedOrder} />
+            <NotificationBell onFocusOrder={focusAcceptedOrderFromNotification} />
             <Button variant="outline" asChild>
               <Link href="/">{t('common.backToHome')}</Link>
             </Button>
