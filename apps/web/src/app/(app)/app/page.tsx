@@ -435,6 +435,23 @@ async function fetchPaymentIntentForOrder(
   }
 }
 
+type OrderPaymentRow = {
+  id: string;
+  paymentIntent: PaymentIntentSummary | null;
+  paymentLoadFailed: boolean;
+};
+
+function mergeOrderPaymentFromPrevious<T extends OrderPaymentRow>(orders: T[], previous: T[]): T[] {
+  const prevById = new Map(previous.map((order) => [order.id, order]));
+  return orders.map((order) => {
+    const prior = prevById.get(order.id);
+    if (order.paymentLoadFailed && prior?.paymentIntent && !order.paymentIntent) {
+      return { ...order, paymentIntent: prior.paymentIntent };
+    }
+    return order;
+  });
+}
+
 function waylerPaymentStatusLabel(
   intent: PaymentIntentSummary | null,
   t: (key: TranslationKey) => string,
@@ -568,6 +585,9 @@ export default function AppHomePage() {
   const [paymentSuccessKind, setPaymentSuccessKind] = useState<
     'authorize' | 'hold' | 'release' | null
   >(null);
+  const [paymentStatusLoadingOrderIds, setPaymentStatusLoadingOrderIds] = useState<
+    ReadonlySet<string>
+  >(() => new Set());
   const [highlightedOrderId, setHighlightedOrderId] = useState<string | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [detailsOrder, setDetailsOrder] = useState<AcceptedOrderDetailsInput | null>(null);
@@ -688,7 +708,9 @@ export default function AppHomePage() {
         const timeB = b.acceptedAt ? new Date(b.acceptedAt).getTime() : 0;
         return timeB - timeA;
       });
-      setSenderAcceptedOrders(withTimestamps);
+      setSenderAcceptedOrders((previous) =>
+        mergeOrderPaymentFromPrevious(withTimestamps, previous),
+      );
       await loadUserDisputes();
       return withTimestamps;
     } catch {
@@ -788,7 +810,7 @@ export default function AppHomePage() {
           };
         }),
       );
-      setAcceptedOrders(enriched);
+      setAcceptedOrders((previous) => mergeOrderPaymentFromPrevious(enriched, previous));
       await loadUserDisputes();
       return enriched;
     } catch {
@@ -798,6 +820,80 @@ export default function AppHomePage() {
       setAcceptedLoading(false);
     }
   }, [loadUserDisputes, t]);
+
+  const setPaymentStatusLoading = useCallback((orderId: string, loading: boolean) => {
+    setPaymentStatusLoadingOrderIds((previous) => {
+      const next = new Set(previous);
+      if (loading) {
+        next.add(orderId);
+      } else {
+        next.delete(orderId);
+      }
+      return next;
+    });
+  }, []);
+
+  const refreshSenderOrderPayment = useCallback(
+    async (orderId: string) => {
+      setPaymentStatusLoading(orderId, true);
+      try {
+        const payment = await fetchPaymentIntentForOrder(orderId);
+        setSenderAcceptedOrders((previous) =>
+          previous.map((order) => {
+            if (order.id !== orderId) {
+              return order;
+            }
+            if (payment.loadFailed) {
+              return {
+                ...order,
+                paymentLoadFailed: true,
+                paymentIntent: order.paymentIntent,
+              };
+            }
+            return {
+              ...order,
+              paymentIntent: payment.intent,
+              paymentLoadFailed: false,
+            };
+          }),
+        );
+      } finally {
+        setPaymentStatusLoading(orderId, false);
+      }
+    },
+    [setPaymentStatusLoading],
+  );
+
+  const refreshWaylerOrderPayment = useCallback(
+    async (orderId: string) => {
+      setPaymentStatusLoading(orderId, true);
+      try {
+        const payment = await fetchPaymentIntentForOrder(orderId);
+        setAcceptedOrders((previous) =>
+          previous.map((order) => {
+            if (order.id !== orderId) {
+              return order;
+            }
+            if (payment.loadFailed) {
+              return {
+                ...order,
+                paymentLoadFailed: true,
+                paymentIntent: order.paymentIntent,
+              };
+            }
+            return {
+              ...order,
+              paymentIntent: payment.intent,
+              paymentLoadFailed: false,
+            };
+          }),
+        );
+      } finally {
+        setPaymentStatusLoading(orderId, false);
+      }
+    },
+    [setPaymentStatusLoading],
+  );
 
   const focusAcceptedOrder = useFocusAcceptedOrder<AcceptedOrderRowForDetails>({
     setHighlightedOrderId,
@@ -1794,11 +1890,37 @@ export default function AppHomePage() {
                             </div>
                           </dl>
                           {order.paymentLoadFailed ? (
-                            <p className="mt-2 text-sm text-destructive">
-                              {t('app.waylerFeed.acceptedPanel.payment.loadFailed')}
+                            <div className="mt-2">
+                              <PanelErrorState
+                                message={t('app.waylerFeed.acceptedPanel.payment.loadFailed')}
+                                retryLabel={t(
+                                  'app.waylerFeed.acceptedPanel.payment.retryPaymentStatus',
+                                )}
+                                onRetry={() => void refreshWaylerOrderPayment(order.id)}
+                                retryDisabled={
+                                  paymentStatusLoadingOrderIds.has(order.id) ||
+                                  acceptedLoading ||
+                                  paymentActionBusy
+                                }
+                              />
+                            </div>
+                          ) : null}
+                          {paymentStatusLoadingOrderIds.has(order.id) ||
+                          (acceptedLoading && acceptedOrders.length > 0) ? (
+                            <p
+                              className="mt-2 text-xs text-muted-foreground"
+                              role="status"
+                              aria-live="polite"
+                            >
+                              {paymentIntent
+                                ? t('app.waylerFeed.acceptedPanel.payment.paymentRefreshing')
+                                : t('app.waylerFeed.acceptedPanel.payment.paymentLoading')}
                             </p>
                           ) : null}
-                          {!order.paymentLoadFailed && !paymentIntent ? (
+                          {!order.paymentLoadFailed &&
+                          !paymentIntent &&
+                          !paymentStatusLoadingOrderIds.has(order.id) &&
+                          !(acceptedLoading && acceptedOrders.length > 0) ? (
                             <p className="mt-2 text-sm text-muted-foreground">
                               {t('app.waylerFeed.acceptedPanel.payment.notAuthorized')}
                             </p>
@@ -2626,10 +2748,42 @@ export default function AppHomePage() {
                             <p className="text-sm font-medium">
                               {t('app.senderPanel.payment.title')}
                             </p>
-                            {order.paymentLoadFailed ? (
-                              <p className="mt-2 text-sm text-destructive">
-                                {t('app.senderPanel.payment.loadFailed')}
+                            {senderAcceptedLoading && senderAcceptedOrders.length > 0 ? (
+                              <p
+                                className="mt-1 text-xs text-muted-foreground"
+                                role="status"
+                                aria-live="polite"
+                              >
+                                {paymentIntent
+                                  ? t('app.senderPanel.payment.paymentRefreshing')
+                                  : t('app.senderPanel.payment.paymentLoading')}
                               </p>
+                            ) : null}
+                            {paymentStatusLoadingOrderIds.has(order.id) &&
+                            !senderAcceptedLoading ? (
+                              <p
+                                className="mt-1 text-xs text-muted-foreground"
+                                role="status"
+                                aria-live="polite"
+                              >
+                                {paymentIntent
+                                  ? t('app.senderPanel.payment.paymentRefreshing')
+                                  : t('app.senderPanel.payment.paymentLoading')}
+                              </p>
+                            ) : null}
+                            {order.paymentLoadFailed ? (
+                              <div className="mt-2">
+                                <PanelErrorState
+                                  message={t('app.senderPanel.payment.loadFailed')}
+                                  retryLabel={t('app.senderPanel.payment.retryPaymentStatus')}
+                                  onRetry={() => void refreshSenderOrderPayment(order.id)}
+                                  retryDisabled={
+                                    paymentStatusLoadingOrderIds.has(order.id) ||
+                                    senderAcceptedLoading ||
+                                    paymentActionBusy
+                                  }
+                                />
+                              </div>
                             ) : null}
                             {paymentSuccessMessage ? (
                               <p className={cn(ALERT_SUCCESS_CLASS, 'mt-2 text-sm')}>
@@ -2637,7 +2791,7 @@ export default function AppHomePage() {
                               </p>
                             ) : null}
                             {paymentErrorOrderId === order.id && paymentError ? (
-                              <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')}>
+                              <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')} role="alert">
                                 {paymentError}
                               </p>
                             ) : null}
@@ -2723,7 +2877,7 @@ export default function AppHomePage() {
                                     }
                                   >
                                     {paymentActionOrderId === order.id && paymentAction === 'hold'
-                                      ? t('app.senderPanel.payment.mockHoldingEscrow')
+                                      ? t('app.senderPanel.payment.capturing')
                                       : t('app.senderPanel.payment.mockHoldEscrow')}
                                   </Button>
                                 ) : null}
