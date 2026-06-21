@@ -726,7 +726,7 @@ export default function AppHomePage() {
       const result = await api.orders.list(query);
       setFeedOrders(result.items);
     } catch {
-      setFeedError(t('app.waylerFeed.loadFailed'));
+      setFeedError(t('app.waylerFeed.openOrdersLoadFailed'));
     } finally {
       setFeedLoading(false);
     }
@@ -1377,7 +1377,9 @@ export default function AppHomePage() {
                   disabled={!isApproved || feedLoading}
                   onClick={() => void loadFeedOrders()}
                 >
-                  {t('app.waylerFeed.refresh')}
+                  {feedLoading && feedOrders.length > 0
+                    ? t('app.waylerFeed.openOrdersRefreshing')
+                    : t('app.waylerFeed.refresh')}
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
@@ -1489,7 +1491,14 @@ export default function AppHomePage() {
                     </div>
                   </fieldset>
                 ) : null}
-                {feedError ? <p className="wayly-alert wayly-alert-danger">{feedError}</p> : null}
+                {feedError ? (
+                  <PanelErrorState
+                    message={feedError}
+                    retryLabel={t('app.waylerFeed.retryOpenOrders')}
+                    onRetry={() => void loadFeedOrders()}
+                    retryDisabled={feedLoading}
+                  />
+                ) : null}
                 {acceptError ? (
                   <p className="wayly-alert wayly-alert-danger">{acceptError}</p>
                 ) : null}
@@ -1498,18 +1507,26 @@ export default function AppHomePage() {
                     {t('app.waylerFeed.acceptSuccess')}
                   </p>
                 ) : null}
-                {isApproved && feedLoading ? (
-                  <>
-                    <p className="sr-only">{t('app.waylerFeed.loading')}</p>
+                {isApproved && feedLoading && feedOrders.length === 0 ? (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                      {t('app.waylerFeed.openOrdersLoading')}
+                    </p>
                     <FeedOrdersSkeleton />
-                  </>
-                ) : isApproved && feedOrders.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">{t('app.waylerFeed.empty')}</p>
-                ) : isApproved && displayedFeedOrders.length === 0 ? (
+                  </div>
+                ) : isApproved && !feedLoading && !feedError && feedOrders.length === 0 ? (
+                  <PanelEmptyState
+                    title={t('app.waylerFeed.openOrdersEmptyTitle')}
+                    body={t('app.waylerFeed.openOrdersEmptyBody')}
+                  />
+                ) : isApproved &&
+                  !feedError &&
+                  feedOrders.length > 0 &&
+                  displayedFeedOrders.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
                     {t('app.waylerFeed.emptyFiltered')}
                   </p>
-                ) : isApproved ? (
+                ) : isApproved && displayedFeedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">
                     {displayedFeedOrders.map((order) => {
                       const isOwnOrder = order.senderId === user.id;
