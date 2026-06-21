@@ -6,6 +6,11 @@ import { Button } from '@wayly/ui';
 import { Bell } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import {
   getAcceptedPanelForNotification,
@@ -68,6 +73,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
         const result = await api.notifications.list({ page: 1, limit: 10 });
         setItems(result.items);
         setUnreadTotal(result.unreadTotal);
+        setError(null);
       } catch {
         if (foreground) {
           setError(t('app.notifications.loadFailed'));
@@ -205,6 +211,10 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
       ? t('app.notifications.unreadCount').replace('{count}', String(unreadTotal))
       : undefined;
 
+  const showInitialLoading = loading && items.length === 0;
+  const showEmpty = !loading && !error && items.length === 0;
+  const isRefreshing = loading && items.length > 0;
+
   return (
     <div ref={containerRef} className="relative z-[60]">
       <Button
@@ -245,7 +255,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                 disabled={loading || actionBusy}
                 onClick={() => void fetchList(true)}
               >
-                {t('app.notifications.refresh')}
+                {isRefreshing ? t('app.notifications.refreshing') : t('app.notifications.refresh')}
               </Button>
               <Button
                 type="button"
@@ -256,7 +266,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                 onClick={() => void handleMarkAllRead()}
               >
                 {markingAll
-                  ? t('app.notifications.markingRead')
+                  ? t('app.notifications.markAllReadLoading')
                   : t('app.notifications.markAllRead')}
               </Button>
             </div>
@@ -264,9 +274,14 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
 
           <div className="max-h-80 overflow-y-auto p-2">
             {error ? (
-              <p className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger">
-                {error}
-              </p>
+              <div className="mb-2">
+                <PanelErrorState
+                  message={error}
+                  retryLabel={t('app.notifications.retry')}
+                  onRetry={() => void fetchList(true)}
+                  retryDisabled={loading}
+                />
+              </div>
             ) : null}
             {successMessage ? (
               <p
@@ -276,15 +291,20 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                 {successMessage}
               </p>
             ) : null}
-            {loading ? (
-              <p className="px-2 py-4 text-center text-sm text-muted-foreground">
-                {t('app.notifications.loading')}
-              </p>
-            ) : items.length === 0 ? (
-              <p className="px-2 py-4 text-center text-sm text-muted-foreground">
-                {t('app.notifications.empty')}
-              </p>
-            ) : (
+            {showInitialLoading ? (
+              <div className="flex flex-col gap-2 px-1 py-2">
+                <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                  {t('app.notifications.loading')}
+                </p>
+                <RequestsListSkeleton rows={3} itemClassName="h-14 w-full rounded-md" />
+              </div>
+            ) : showEmpty ? (
+              <PanelEmptyState
+                title={t('app.notifications.emptyTitle')}
+                body={t('app.notifications.emptyBody')}
+              />
+            ) : null}
+            {items.length > 0 ? (
               <ul className="flex flex-col gap-2">
                 {items.map((item) => {
                   const isUnread = item.readAt === null;
@@ -339,7 +359,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                           </p>
                           <p className="mt-2 text-xs font-medium text-primary">
                             {isMarking
-                              ? t('app.notifications.markingRead')
+                              ? t('app.notifications.markReadLoading')
                               : t('app.notifications.viewAcceptedOrder')}
                           </p>
                         </button>
@@ -376,7 +396,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                               onClick={() => void handleMarkRead(item.id)}
                             >
                               {isMarking
-                                ? t('app.notifications.markingRead')
+                                ? t('app.notifications.markReadLoading')
                                 : t('app.notifications.markRead')}
                             </Button>
                           ) : null}
@@ -386,7 +406,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                   );
                 })}
               </ul>
-            )}
+            ) : null}
           </div>
         </div>
       ) : null}
