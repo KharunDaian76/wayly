@@ -26,6 +26,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
+import { AdminOperationsDashboard } from '@/components/app/admin-operations-dashboard';
 import {
   AppDashboardBootstrapError,
   AppDashboardLoadingShell,
@@ -52,6 +53,7 @@ import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-pa
 import { WaylerIncomingRequestsPanel } from '@/components/app/wayler-incoming-requests-panel';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
+import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
 import { useAuth } from '@/lib/auth/auth-context';
 import { demoToolsEnabled } from '@/lib/demo-tools';
@@ -1715,6 +1717,8 @@ export default function AppHomePage() {
     }
   }
 
+  const showOperationsDashboard = hasOperationsDashboardAccess(user.roles);
+
   return (
     <div className="wayly-app-shell">
       <Container className="relative flex min-w-0 flex-col gap-6 py-6 sm:gap-8 sm:py-10">
@@ -1742,6 +1746,8 @@ export default function AppHomePage() {
         {error ? <p className={ALERT_ERROR_CLASS}>{error}</p> : null}
 
         <ModeSwitcher />
+
+        {showOperationsDashboard ? <AdminOperationsDashboard roles={user.roles} /> : null}
 
         <Card className={APP_PANEL_CLASS}>
           <CardHeader>

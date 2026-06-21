@@ -141,6 +141,31 @@ const en = {
     'Viewing your orders is unavailable while verification is pending.',
   'app.kycGate.actionViewSenderOrdersRejected':
     'Viewing your orders is blocked until verification is resolved.',
+  'app.admin.operationsTitle': 'Operations center',
+  'app.admin.operationsSubtitle':
+    'Wayly control center for disputes, verification, orders, trust & safety, payments, and platform health. Backend-connected tools will land in future batches.',
+  'app.admin.adminOnly': 'Operations access',
+  'app.admin.comingSoon': 'Coming soon',
+  'app.admin.roleAdmin': 'Admin',
+  'app.admin.roleArbitrator': 'Arbitrator',
+  'app.admin.disputesQueueTitle': 'Disputes & cases',
+  'app.admin.disputesQueueBody':
+    'Review open disputes, case timelines, and arbitration outcomes. Connects to dispute APIs in a future batch.',
+  'app.admin.kycReviewTitle': 'KYC review queue',
+  'app.admin.kycReviewBody':
+    'Monitor pending and flagged identity verifications. Provider review tools will connect here later.',
+  'app.admin.ordersMonitoringTitle': 'Orders monitoring',
+  'app.admin.ordersMonitoringBody':
+    'Track marketplace delivery orders, lifecycle anomalies, and escalations across Senders and Waylers.',
+  'app.admin.usersSafetyTitle': 'Users & trust & safety',
+  'app.admin.usersSafetyBody':
+    'User lookup, trust signals, and safety actions will appear here when admin APIs are available.',
+  'app.admin.paymentsMonitoringTitle': 'Payments & escrow',
+  'app.admin.paymentsMonitoringBody':
+    'Escrow status, payout holds, and payment exceptions will be monitored from this panel later.',
+  'app.admin.systemHealthTitle': 'System health & audit',
+  'app.admin.systemHealthBody':
+    'Platform health snapshots and audit activity logs will surface here for operations staff.',
   'app.mode.title': 'Choose how you want to use Wayly',
   'app.mode.sender': 'Sender mode',
   'app.mode.wayler': 'Wayler mode',
@@ -907,6 +932,31 @@ const ru: Dictionary = {
     'Просмотр заказов недоступен, пока верификация на рассмотрении.',
   'app.kycGate.actionViewSenderOrdersRejected':
     'Просмотр заказов заблокирован, пока верификация не решена.',
+  'app.admin.operationsTitle': 'Операционный центр',
+  'app.admin.operationsSubtitle':
+    'Центр управления Wayly: споры, верификация, заказы, доверие и безопасность, платежи и здоровье платформы. Инструменты с бэкендом появятся в следующих этапах.',
+  'app.admin.adminOnly': 'Доступ для операций',
+  'app.admin.comingSoon': 'Скоро',
+  'app.admin.roleAdmin': 'Администратор',
+  'app.admin.roleArbitrator': 'Арбитр',
+  'app.admin.disputesQueueTitle': 'Споры и дела',
+  'app.admin.disputesQueueBody':
+    'Просмотр открытых споров, хронологии дел и решений арбитража. Подключение к API споров — в будущем.',
+  'app.admin.kycReviewTitle': 'Очередь KYC',
+  'app.admin.kycReviewBody':
+    'Мониторинг ожидающих и помеченных верификаций. Инструменты провайдера подключатся позже.',
+  'app.admin.ordersMonitoringTitle': 'Мониторинг заказов',
+  'app.admin.ordersMonitoringBody':
+    'Отслеживание заказов на доставку, аномалий жизненного цикла и эскалаций.',
+  'app.admin.usersSafetyTitle': 'Пользователи и безопасность',
+  'app.admin.usersSafetyBody':
+    'Поиск пользователей, сигналы доверия и действия безопасности появятся при готовности admin API.',
+  'app.admin.paymentsMonitoringTitle': 'Платежи и эскроу',
+  'app.admin.paymentsMonitoringBody':
+    'Статус эскроу, удержания выплат и исключения по платежам будут здесь позже.',
+  'app.admin.systemHealthTitle': 'Здоровье системы и аудит',
+  'app.admin.systemHealthBody':
+    'Снимки состояния платформы и журналы аудита для операционного персонала.',
   'app.mode.title': 'Выберите, как использовать Wayly',
   'app.mode.sender': 'Режим отправителя',
   'app.mode.wayler': 'Режим курьера',
@@ -1677,6 +1727,31 @@ const es: Dictionary = {
     'Ver sus pedidos no está disponible mientras la verificación está pendiente.',
   'app.kycGate.actionViewSenderOrdersRejected':
     'Ver sus pedidos está bloqueado hasta resolver la verificación.',
+  'app.admin.operationsTitle': 'Centro de operaciones',
+  'app.admin.operationsSubtitle':
+    'Centro de control de Wayly para disputas, verificación, pedidos, confianza y seguridad, pagos y salud de la plataforma. Las herramientas conectadas al backend llegarán en lotes futuros.',
+  'app.admin.adminOnly': 'Acceso operativo',
+  'app.admin.comingSoon': 'Próximamente',
+  'app.admin.roleAdmin': 'Administrador',
+  'app.admin.roleArbitrator': 'Árbitro',
+  'app.admin.disputesQueueTitle': 'Disputas y casos',
+  'app.admin.disputesQueueBody':
+    'Revise disputas abiertas, cronologías de casos y resultados de arbitraje. Se conectará a las API de disputas más adelante.',
+  'app.admin.kycReviewTitle': 'Cola de revisión KYC',
+  'app.admin.kycReviewBody':
+    'Supervise verificaciones pendientes y marcadas. Las herramientas del proveedor se conectarán aquí.',
+  'app.admin.ordersMonitoringTitle': 'Monitoreo de pedidos',
+  'app.admin.ordersMonitoringBody':
+    'Supervise pedidos de entrega, anomalías del ciclo de vida y escalaciones entre Senders y Waylers.',
+  'app.admin.usersSafetyTitle': 'Usuarios y confianza',
+  'app.admin.usersSafetyBody':
+    'Búsqueda de usuarios, señales de confianza y acciones de seguridad cuando existan API de admin.',
+  'app.admin.paymentsMonitoringTitle': 'Pagos y depósito',
+  'app.admin.paymentsMonitoringBody':
+    'Estado de depósito, retenciones de pago y excepciones se monitorearán aquí más adelante.',
+  'app.admin.systemHealthTitle': 'Salud del sistema y auditoría',
+  'app.admin.systemHealthBody':
+    'Instantáneas de salud de la plataforma y registros de auditoría para el personal de operaciones.',
   'app.mode.title': 'Elige cómo quieres usar Wayly',
   'app.mode.sender': 'Modo remitente',
   'app.mode.wayler': 'Modo repartidor',
@@ -2450,6 +2525,31 @@ const fr: Dictionary = {
     'Voir vos commandes est indisponible tant que la vérification est en attente.',
   'app.kycGate.actionViewSenderOrdersRejected':
     'Voir vos commandes est bloqué jusqu’à résolution de la vérification.',
+  'app.admin.operationsTitle': 'Centre des opérations',
+  'app.admin.operationsSubtitle':
+    'Centre de contrôle Wayly pour litiges, vérification, commandes, confiance et sécurité, paiements et santé plateforme. Les outils connectés au backend arriveront plus tard.',
+  'app.admin.adminOnly': 'Accès opérations',
+  'app.admin.comingSoon': 'Bientôt disponible',
+  'app.admin.roleAdmin': 'Administrateur',
+  'app.admin.roleArbitrator': 'Arbitre',
+  'app.admin.disputesQueueTitle': 'Litiges et dossiers',
+  'app.admin.disputesQueueBody':
+    'Examiner les litiges ouverts, chronologies et décisions d’arbitrage. Connexion aux API litiges à venir.',
+  'app.admin.kycReviewTitle': 'File de revue KYC',
+  'app.admin.kycReviewBody':
+    'Suivre les vérifications en attente ou signalées. Les outils fournisseur seront connectés ici.',
+  'app.admin.ordersMonitoringTitle': 'Suivi des commandes',
+  'app.admin.ordersMonitoringBody':
+    'Suivre les commandes de livraison, anomalies de cycle de vie et escalades marketplace.',
+  'app.admin.usersSafetyTitle': 'Utilisateurs et confiance',
+  'app.admin.usersSafetyBody':
+    'Recherche utilisateurs, signaux de confiance et actions sécurité quand les API admin existeront.',
+  'app.admin.paymentsMonitoringTitle': 'Paiements et séquestre',
+  'app.admin.paymentsMonitoringBody':
+    'Statut séquestre, retenues de paiement et exceptions seront monitorés ici plus tard.',
+  'app.admin.systemHealthTitle': 'Santé système et audit',
+  'app.admin.systemHealthBody':
+    'Instantanés de santé plateforme et journaux d’audit pour l’équipe opérations.',
   'app.mode.title': 'Choisissez comment utiliser Wayly',
   'app.mode.sender': 'Mode expéditeur',
   'app.mode.wayler': 'Mode livreur',
@@ -3239,6 +3339,31 @@ const de: Dictionary = {
     'Eigene Aufträge ansehen ist nicht verfügbar, solange die Verifizierung aussteht.',
   'app.kycGate.actionViewSenderOrdersRejected':
     'Eigene Aufträge ansehen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.admin.operationsTitle': 'Operationszentrale',
+  'app.admin.operationsSubtitle':
+    'Wayly-Kontrollzentrum für Streitfälle, Verifizierung, Aufträge, Vertrauen & Sicherheit, Zahlungen und Plattformgesundheit. Backend-Tools folgen in späteren Batches.',
+  'app.admin.adminOnly': 'Operationszugang',
+  'app.admin.comingSoon': 'Demnächst',
+  'app.admin.roleAdmin': 'Administrator',
+  'app.admin.roleArbitrator': 'Schiedsrichter',
+  'app.admin.disputesQueueTitle': 'Streitfälle & Fälle',
+  'app.admin.disputesQueueBody':
+    'Offene Streitfälle, Fallverläufe und Schiedssprüche prüfen. Anbindung an Dispute-APIs folgt.',
+  'app.admin.kycReviewTitle': 'KYC-Prüfwarteschlange',
+  'app.admin.kycReviewBody':
+    'Ausstehende und markierte Identitätsprüfungen überwachen. Provider-Tools werden hier angebunden.',
+  'app.admin.ordersMonitoringTitle': 'Auftragsüberwachung',
+  'app.admin.ordersMonitoringBody':
+    'Lieferaufträge, Lebenszyklus-Anomalien und Eskalationen im Marketplace verfolgen.',
+  'app.admin.usersSafetyTitle': 'Nutzer & Vertrauen',
+  'app.admin.usersSafetyBody':
+    'Nutzersuche, Vertrauenssignale und Sicherheitsaktionen erscheinen mit Admin-APIs.',
+  'app.admin.paymentsMonitoringTitle': 'Zahlungen & Treuhand',
+  'app.admin.paymentsMonitoringBody':
+    'Treuhandstatus, Auszahlungssperren und Zahlungsausnahmen werden hier später überwacht.',
+  'app.admin.systemHealthTitle': 'Systemgesundheit & Audit',
+  'app.admin.systemHealthBody':
+    'Plattform-Gesundheitssnapshots und Audit-Protokolle für Operations-Mitarbeiter.',
   'app.mode.title': 'Wählen Sie, wie Sie Wayly nutzen möchten',
   'app.mode.sender': 'Absender-Modus',
   'app.mode.wayler': 'Wayler-Modus',
@@ -4025,6 +4150,31 @@ const tr: Dictionary = {
   'app.kycGate.actionViewSenderOrdersPending': 'Doğrulama beklerken siparişler görüntülenemez.',
   'app.kycGate.actionViewSenderOrdersRejected':
     'Doğrulama çözülene kadar sipariş görüntüleme engellenir.',
+  'app.admin.operationsTitle': 'Operasyon merkezi',
+  'app.admin.operationsSubtitle':
+    'Wayly kontrol merkezi: anlaşmazlıklar, doğrulama, siparişler, güven ve güvenlik, ödemeler ve platform sağlığı. Backend bağlantılı araçlar sonraki aşamalarda gelecek.',
+  'app.admin.adminOnly': 'Operasyon erişimi',
+  'app.admin.comingSoon': 'Yakında',
+  'app.admin.roleAdmin': 'Yönetici',
+  'app.admin.roleArbitrator': 'Hakem',
+  'app.admin.disputesQueueTitle': 'Anlaşmazlıklar ve dosyalar',
+  'app.admin.disputesQueueBody':
+    'Açık anlaşmazlıkları, dosya zaman çizelgelerini ve hakem kararlarını inceleyin. Dispute API’leri daha sonra bağlanacak.',
+  'app.admin.kycReviewTitle': 'KYC inceleme kuyruğu',
+  'app.admin.kycReviewBody':
+    'Bekleyen ve işaretli kimlik doğrulamalarını izleyin. Sağlayıcı araçları buraya bağlanacak.',
+  'app.admin.ordersMonitoringTitle': 'Sipariş izleme',
+  'app.admin.ordersMonitoringBody':
+    'Pazar yeri teslimat siparişlerini, yaşam döngüsü anomalilerini ve eskalasyonları takip edin.',
+  'app.admin.usersSafetyTitle': 'Kullanıcılar ve güvenlik',
+  'app.admin.usersSafetyBody':
+    'Kullanıcı arama, güven sinyalleri ve güvenlik işlemleri admin API’leri hazır olunca burada olacak.',
+  'app.admin.paymentsMonitoringTitle': 'Ödemeler ve emanet',
+  'app.admin.paymentsMonitoringBody':
+    'Emanet durumu, ödeme bekletmeleri ve istisnalar daha sonra buradan izlenecek.',
+  'app.admin.systemHealthTitle': 'Sistem sağlığı ve denetim',
+  'app.admin.systemHealthBody':
+    'Platform sağlık anlık görüntüleri ve denetim günlükleri operasyon ekibi için burada olacak.',
   'app.mode.title': "Wayly'yi nasıl kullanmak istediğinizi seçin",
   'app.mode.sender': 'Gönderici modu',
   'app.mode.wayler': 'Wayler modu',
@@ -4773,6 +4923,30 @@ const ar: Dictionary = {
   'app.kycGate.actionViewSenderOrdersRequired': 'عرض طلباتك يتطلب تحققًا معتمدًا.',
   'app.kycGate.actionViewSenderOrdersPending': 'عرض الطلبات غير متاح أثناء انتظار التحقق.',
   'app.kycGate.actionViewSenderOrdersRejected': 'عرض الطلبات محظور حتى حل التحقق.',
+  'app.admin.operationsTitle': 'مركز العمليات',
+  'app.admin.operationsSubtitle':
+    'مركز تحكم Wayly للنزاعات والتحقق والطلبات والثقة والسلامة والمدفوعات وصحة المنصة. ستصل أدوات متصلة بالخادم في دفعات لاحقة.',
+  'app.admin.adminOnly': 'وصول العمليات',
+  'app.admin.comingSoon': 'قريبًا',
+  'app.admin.roleAdmin': 'مسؤول',
+  'app.admin.roleArbitrator': 'محكّم',
+  'app.admin.disputesQueueTitle': 'النزاعات والقضايا',
+  'app.admin.disputesQueueBody':
+    'مراجعة النزاعات المفتوحة وجداول القضايا ونتائج التحكيم. سيتصل بواجهات النزاع لاحقًا.',
+  'app.admin.kycReviewTitle': 'قائمة مراجعة KYC',
+  'app.admin.kycReviewBody':
+    'مراقبة التحققات المعلقة والمُبلّغ عنها. ستُربط أدوات المزود هنا لاحقًا.',
+  'app.admin.ordersMonitoringTitle': 'مراقبة الطلبات',
+  'app.admin.ordersMonitoringBody':
+    'تتبع طلبات التسليم وحالات دورة الحياة والتصعيدات بين المرسلين وWaylers.',
+  'app.admin.usersSafetyTitle': 'المستخدمون والثقة والسلامة',
+  'app.admin.usersSafetyBody':
+    'بحث المستخدمين وإشارات الثقة وإجراءات السلامة ستظهر عند توفر واجهات الإدارة.',
+  'app.admin.paymentsMonitoringTitle': 'المدفوعات والضمان',
+  'app.admin.paymentsMonitoringBody':
+    'حالة الضمان وتعليق المدفوعات والاستثناءات ستُراقب من هنا لاحقًا.',
+  'app.admin.systemHealthTitle': 'صحة النظام والتدقيق',
+  'app.admin.systemHealthBody': 'لقطات صحة المنصة وسجلات التدقيق لفريق العمليات.',
   'app.mode.title': 'اختر كيف تريد استخدام Wayly',
   'app.mode.sender': 'وضع المرسل',
   'app.mode.wayler': 'وضع الناقل',
@@ -5495,6 +5669,26 @@ const zh: Dictionary = {
   'app.kycGate.actionViewSenderOrdersRequired': '查看您的订单需要已通过验证。',
   'app.kycGate.actionViewSenderOrdersPending': '验证审核期间无法查看订单。',
   'app.kycGate.actionViewSenderOrdersRejected': '验证问题解决前无法查看订单。',
+  'app.admin.operationsTitle': '运营中心',
+  'app.admin.operationsSubtitle':
+    'Wayly 控制中心：争议、验证、订单、信任与安全、支付与平台健康。后端连接工具将在后续批次提供。',
+  'app.admin.adminOnly': '运营访问',
+  'app.admin.comingSoon': '即将推出',
+  'app.admin.roleAdmin': '管理员',
+  'app.admin.roleArbitrator': '仲裁员',
+  'app.admin.disputesQueueTitle': '争议与案件',
+  'app.admin.disputesQueueBody': '审查开放争议、案件时间线和仲裁结果。未来将连接争议 API。',
+  'app.admin.kycReviewTitle': 'KYC 审核队列',
+  'app.admin.kycReviewBody': '监控待处理和标记的身份验证。提供商审核工具将在此连接。',
+  'app.admin.ordersMonitoringTitle': '订单监控',
+  'app.admin.ordersMonitoringBody':
+    '跟踪 marketplace 配送订单、生命周期异常和 Sender/Wayler 升级。',
+  'app.admin.usersSafetyTitle': '用户与信任安全',
+  'app.admin.usersSafetyBody': '用户查找、信任信号和安全操作将在管理 API 可用后显示。',
+  'app.admin.paymentsMonitoringTitle': '支付与托管',
+  'app.admin.paymentsMonitoringBody': '托管状态、付款冻结和支付异常将在此后续监控。',
+  'app.admin.systemHealthTitle': '系统健康与审计',
+  'app.admin.systemHealthBody': '平台健康快照和审计日志将供运营人员使用。',
   'app.mode.title': '选择您使用 Wayly 的方式',
   'app.mode.sender': '发件人模式',
   'app.mode.wayler': '配送员模式',
