@@ -43,6 +43,7 @@ import {
   KycMarketplaceGateNotice,
   type KycGateProps,
 } from '@/components/app/kyc-marketplace-gate';
+import { KycIdentityPanel } from '@/components/app/kyc-identity-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
@@ -59,8 +60,6 @@ import { acceptedOrderElementId } from '@/lib/notifications/notification-order-f
 import { useFocusAcceptedOrder } from '@/lib/notifications/use-focus-accepted-order';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
-
-const isDev = process.env.NODE_ENV !== 'production';
 
 const APP_PANEL_CLASS = 'wayly-app-panel';
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
@@ -151,10 +150,6 @@ function StatusRow({ label, value }: { label: string; value: string }) {
       <dd className="break-words text-sm font-medium">{value}</dd>
     </div>
   );
-}
-
-function flagLabel(value: boolean, yes: string, no: string): string {
-  return value ? yes : no;
 }
 
 function formatLocation(city: string | null, country: string | null): string {
@@ -627,7 +622,6 @@ export default function AppHomePage() {
   const [kycStatus, setKycStatus] = useState<KycStatusView | null>(null);
   const [kycLoading, setKycLoading] = useState(true);
   const [kycError, setKycError] = useState<string | null>(null);
-  const [action, setAction] = useState<'start' | 'approve' | 'reject' | null>(null);
   const [orderTitle, setOrderTitle] = useState('');
   const [orderType, setOrderType] = useState<'LOCAL' | 'INTERNATIONAL'>('LOCAL');
   const [orderDescription, setOrderDescription] = useState('');
@@ -1326,31 +1320,6 @@ export default function AppHomePage() {
   if (!user) {
     return <AppDashboardLoadingShell statusMessage={bootstrapStatusMessage} />;
   }
-
-  async function handleKycAction(
-    type: 'start' | 'approve' | 'reject',
-    run: () => Promise<KycStatusView | void>,
-  ) {
-    setError(null);
-    setKycError(null);
-    setAction(type);
-    try {
-      const result = await run();
-      if (result) {
-        setKycStatus(result);
-      } else {
-        await loadKycStatus();
-      }
-      await refreshUser();
-    } catch (err) {
-      const message = err instanceof ApiError ? err.message : t('app.kycPanel.actionFailed');
-      setKycError(message);
-    } finally {
-      setAction(null);
-    }
-  }
-
-  const hasPendingVerification = kycStatus?.latestVerification?.status === KycStatus.PENDING;
 
   async function handleStartTransit(orderId: string) {
     setProgressError(null);
@@ -3466,122 +3435,16 @@ export default function AppHomePage() {
           </CardContent>
         </Card>
 
-        <Card className={APP_PANEL_CLASS}>
-          <CardHeader>
-            <CardTitle>{t('app.kycPanel.title')}</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            {kycError ? (
-              <PanelErrorState
-                message={kycError}
-                retryLabel={t('app.kycGate.retryKycStatus')}
-                onRetry={() => void loadKycStatus()}
-                retryDisabled={kycLoading}
-              />
-            ) : null}
-            {kycLoading ? (
-              <p className="text-sm text-muted-foreground" role="status" aria-live="polite">
-                {t('app.kycGate.kycLoading')}
-              </p>
-            ) : kycStatus ? (
-              <>
-                <dl className="flex flex-col gap-4">
-                  <StatusRow
-                    label={t('app.verified')}
-                    value={kycStatus.verified ? t('common.yes') : t('common.no')}
-                  />
-                  <StatusRow label={t('app.kycStatus')} value={kycStatus.kycStatus} />
-                  {kycStatus.latestVerification ? (
-                    <StatusRow
-                      label={t('app.kycPanel.latestVerification')}
-                      value={kycStatus.latestVerification.status}
-                    />
-                  ) : null}
-                </dl>
-
-                <div>
-                  <p className="mb-3 text-sm font-medium">{t('app.kycPanel.accessTitle')}</p>
-                  <dl className="flex flex-col gap-3">
-                    <StatusRow
-                      label={t('app.kycPanel.canCreateOrder')}
-                      value={flagLabel(kycStatus.canCreateOrder, t('common.yes'), t('common.no'))}
-                    />
-                    <StatusRow
-                      label={t('app.kycPanel.canBrowseOrders')}
-                      value={flagLabel(kycStatus.canBrowseOrders, t('common.yes'), t('common.no'))}
-                    />
-                    <StatusRow
-                      label={t('app.kycPanel.canAcceptOrder')}
-                      value={flagLabel(kycStatus.canAcceptOrder, t('common.yes'), t('common.no'))}
-                    />
-                    <StatusRow
-                      label={t('app.kycPanel.canChat')}
-                      value={flagLabel(kycStatus.canChat, t('common.yes'), t('common.no'))}
-                    />
-                    <StatusRow
-                      label={t('app.kycPanel.canContact')}
-                      value={flagLabel(kycStatus.canContact, t('common.yes'), t('common.no'))}
-                    />
-                    <StatusRow
-                      label={t('app.kycPanel.canReceivePayout')}
-                      value={flagLabel(kycStatus.canReceivePayout, t('common.yes'), t('common.no'))}
-                    />
-                  </dl>
-                </div>
-              </>
-            ) : null}
-
-            {isApproved ? (
-              <p className="text-sm text-muted-foreground">{t('app.kycPanel.approvedHelper')}</p>
-            ) : null}
-
-            <div className="flex flex-wrap gap-3">
-              <Button
-                onClick={() =>
-                  handleKycAction('start', async () => {
-                    await api.kyc.start({
-                      country: user.country ?? 'US',
-                      levelName: 'basic-kyc',
-                    });
-                  })
-                }
-                disabled={action !== null || isApproved}
-              >
-                {action === 'start'
-                  ? t('app.kycPanel.starting')
-                  : t('app.kycPanel.startVerification')}
-              </Button>
-
-              {isDev ? (
-                <>
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleKycAction('approve', () => api.kyc.mockApprove())}
-                    disabled={action !== null || !hasPendingVerification}
-                  >
-                    {t('app.kycPanel.mockApprove')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      handleKycAction('reject', () =>
-                        api.kyc.mockReject({
-                          rejectionReason: 'Rejected by local mock flow',
-                        }),
-                      )
-                    }
-                    disabled={action !== null || !hasPendingVerification}
-                  >
-                    {t('app.kycPanel.mockReject')}
-                  </Button>
-                  <span className="self-center text-xs text-muted-foreground">
-                    {t('app.kycPanel.devOnly')}
-                  </span>
-                </>
-              ) : null}
-            </div>
-          </CardContent>
-        </Card>
+        <KycIdentityPanel
+          kycLoading={kycLoading}
+          kycLoadError={kycError}
+          kycStatus={kycStatus}
+          defaultCountry={user.country}
+          isApproved={!!isApproved}
+          onRetryLoad={() => void loadKycStatus()}
+          onKycStatusUpdated={setKycStatus}
+          onUserRefresh={refreshUser}
+        />
 
         <div className={cn('wayly-alert wayly-alert-info rounded-2xl px-4 py-3')} role="status">
           {t('app.kycNotice')}
