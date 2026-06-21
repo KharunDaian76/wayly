@@ -2,9 +2,9 @@
 
 Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Waylers directly — Senders post delivery requests; Waylers publish local availability and trip routes — with international/intercity and local city delivery, mandatory KYC, escrow + offline payment flows, real-time chat, maps, and a premium mobile-first PWA experience.
 
-> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **Sender Published Orders panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale cards on error when cached; shared `panel-status-states.tsx`), **Wayler open orders feed panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale cards on error when cached; shared `panel-status-states.tsx`), **Accepted delivery requests panel states** (Sender + Wayler — loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale cards on error when cached), **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, **notification bell / popover panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale notification cards on error when cached; mark-read loading/disabled; shared `panel-status-states.tsx`), polling, **order-linked notification click navigation** (mark unread as read, close popover, focus Accepted delivery requests panel, scroll/highlight matching card, **open Accepted Order Details drawer** for the same **`DeliveryOrder.id`** — not `availabilityRequestId`), **Accepted Order Details drawer** (View details on Sender/Wayler accepted cards — frontend-only drawer/modal on `/app`, existing `GET /orders/:id` enrich; **compact Delivery progress timeline**; **loading skeleton / refreshing with stale detail / error+Retry / missing-detail empty**; **Copy reference** clipboard action for **`DeliveryOrder.id`** + **Copied** feedback; posted + converted orders; notification click opens same drawer after focus; no route), **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **accepted order chat modal panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale messages on error when cached; Sending… + duplicate-send prevention; send-failure banner preserves draft; shared `panel-status-states.tsx`), **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility + Wayler Accepted payment refresh helper** (Refresh reloads orders + per-order payment status; panel hint + “Refreshing…” button label; **per-card payment panel states** — Loading/Refreshing payment…, Retry, Sender processing labels, duplicate action blocked; Wayler read-only unchanged), **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute panel states** (loading/refreshing, no-dispute empty, submit processing, duplicate submit blocked, submit failure preserves draft, existing dispute summary), **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **proof-of-delivery per-card panel states** (Loading/Refreshing proof…, Retry, empty no-proof, submit failure preserves draft, per-card action errors, stale proof preserved), **KYC marketplace access gate UI** (`kyc-marketplace-gate.tsx` — loading/error+Retry/missing/pending/rejected gates + action-specific blocked hints; **Wayler daily-access gating remains separate**), **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + **Wayler availability/trips panel states** on **My listings** — loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale listing cards on error when cached; shared `panel-status-states.tsx`) + **Sender browse Wayler availability / discovery panel states** (Results list — loading skeleton, true empty vs filter-empty, error + Retry, Refresh/Refreshing…; stale listing cards on error when cached; shared `panel-status-states.tsx`)), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request panel states** (Sender **“My requests to Waylers”** + Wayler **“Incoming Sender requests”** — loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale request cards on error when cached; shared `panel-status-states.tsx`) **+ availability-request in-app notifications (**`SYSTEM`** on create/decline/cancel; **`ORDER_ACCEPTED`** + **`relatedOrderId`** = **`DeliveryOrder.id`** on accept — not **`availabilityRequestId`**) + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels + Accepted-panel auto-refresh after request accept + converted-order chat via existing `DeliveryOrder.id` flow + converted-order mock payment via existing `DeliveryOrder.id` flow** (`SYSTEM` on create/decline/cancel; **`ORDER_ACCEPTED`** + `relatedOrderId` = created **`DeliveryOrder.id`** on accept; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted; chat uses **`POST /conversations/order/:deliveryOrderId`** — lazy conversation create, no auto-chat on accept; mock payment uses **`POST /payments/orders/:deliveryOrderId/mock-authorize`** — no `sourceType` filter, verified compatible with no code changes), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. **Repo stability:** root `pnpm build` / `pnpm lint` run Turbo serially (`--concurrency=1`) for reliable Windows local builds — product behavior unchanged; `typecheck` unchanged. **Nothing pushed or deployed yet** (branch ahead of `origin/main`; local development only). Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, **realtime Wayler payment panel updates**, **realtime published-order panel updates**, **realtime open-order feed updates**, **realtime Wayler availability listing panel updates**, **realtime Sender browse Wayler discovery panel updates**, **realtime availability-request panel updates**, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, platform fee adjustment toward 5%, and production deployment are future milestones.
+> **Status:** M1 (Auth & Users), **M2 mock KYC**, **M3 Sender/Wayler mode switcher**, and **M4 marketplace flow** (draft → publish/cancel → Wayler OPEN feed → accept → **in-transit → delivered**, **metadata proof-of-delivery** submit/view, Sender/Wayler tracking panels, Wayler filters/maps, **Sender Published Orders panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale cards on error when cached; shared `panel-status-states.tsx`), **Wayler open orders feed panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale cards on error when cached; shared `panel-status-states.tsx`), **Accepted delivery requests panel states** (Sender + Wayler — loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale cards on error when cached), **in-app notifications** — schema, API, SDK, Sender lifecycle dispatch, **chat message dispatch**, **mock payment dispatch to Wayler**, bell/dropdown, **notification bell / popover panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale notification cards on error when cached; mark-read loading/disabled; shared `panel-status-states.tsx`), polling, **order-linked notification click navigation** (mark unread as read, close popover, focus Accepted delivery requests panel, scroll/highlight matching card, **open Accepted Order Details drawer** for the same **`DeliveryOrder.id`** — not `availabilityRequestId`), **Accepted Order Details drawer** (View details on Sender/Wayler accepted cards — frontend-only drawer/modal on `/app`, existing `GET /orders/:id` enrich; **compact Delivery progress timeline**; **loading skeleton / refreshing with stale detail / error+Retry / missing-detail empty**; **Copy reference** clipboard action for **`DeliveryOrder.id`** + **Copied** feedback; posted + converted orders; notification click opens same drawer after focus; no route), **order-based chat** — schema, API, SDK, Sender/Wayler Accepted panel UI, modal on `/app`, **chat modal polling**, **accepted order chat modal panel states** (loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale messages on error when cached; Sending… + duplicate-send prevention; send-failure banner preserves draft; shared `panel-status-states.tsx`), **premium `/app` dashboard UI foundation**, **payment/escrow schema + mock/manual API + SDK + Sender Accepted payment UI + Wayler Accepted payout visibility + Wayler Accepted payment refresh helper** (Refresh reloads orders + per-order payment status; panel hint + “Refreshing…” button label; **per-card payment panel states** — Loading/Refreshing payment…, Retry, Sender processing labels, duplicate action blocked; Wayler read-only unchanged), **dispute/arbitration schema + API + SDK + Sender/Wayler Accepted dispute UI** — open/view modal, messages, evidence metadata, **dispute panel states** (loading/refreshing, no-dispute empty, submit processing, duplicate submit blocked, submit failure preserves draft, existing dispute summary), **dispute in-app notifications** — other-participant dispatch on open/message/evidence via `SYSTEM`, **proof-of-delivery per-card panel states** (Loading/Refreshing proof…, Retry, empty no-proof, submit failure preserves draft, per-card action errors, stale proof preserved), **KYC marketplace access gate UI** (`kyc-marketplace-gate.tsx` — loading/error+Retry/missing/pending/rejected gates + action-specific blocked hints; **Wayler daily-access gating remains separate**), **App dashboard shell loading/error states** (`app-dashboard-shell.tsx` — profile/mode/KYC bootstrap loading shell; no blank screen or wrong role panel flash before `modeReady`; critical profile bootstrap failure shows dashboard-level error with retry/return; panel-level failures stay panel-level), **KYC identity panel states** (`kyc-identity-panel.tsx` — loading skeleton, load error+Retry, missing/pending/rejected/approved phases, country form+validation, submit processing/success/failure, draft preserved on failure; **KYC gate remains separate from Wayler daily access**), **production-safety demo tools gate** (`demo-tools.ts` — `demoToolsEnabled`; local dev shows mock controls; production default hides KYC mock approve/reject, Wayler mock activate, Sender mock payment buttons; `NEXT_PUBLIC_ENABLE_DEMO_TOOLS=true` for staging demos), **Wayler availability / trip listings** — schema + **`WaylerAvailabilitiesModule` API + SDK** + **two-sided discovery UI** (Wayler management + **Wayler availability/trips panel states** on **My listings** — loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale listing cards on error when cached; shared `panel-status-states.tsx`) + **Sender browse Wayler availability / discovery panel states** (Results list — loading skeleton, true empty vs filter-empty, error + Retry, Refresh/Refreshing…; stale listing cards on error when cached; shared `panel-status-states.tsx`)), **`WaylerAvailabilityRequest` schema + `WaylerAvailabilityRequestsModule` API + SDK + Sender request UI + Wayler incoming accept/decline UI + availability-request panel states** (Sender **“My requests to Waylers”** + Wayler **“Incoming Sender requests”** — loading skeleton, friendly empty, error + Retry, Refresh/Refreshing…; stale request cards on error when cached; shared `panel-status-states.tsx`) **+ availability-request in-app notifications (**`SYSTEM`** on create/decline/cancel; **`ORDER_ACCEPTED`** + **`relatedOrderId`** = **`DeliveryOrder.id`** on accept — not **`availabilityRequestId`**) + DeliveryOrder conversion on accept + “Converted to order” badge/reference on request panels + “From Wayler request” source badge on Accepted order panels + Accepted-panel auto-refresh after request accept + converted-order chat via existing `DeliveryOrder.id` flow + converted-order mock payment via existing `DeliveryOrder.id` flow** (`SYSTEM` on create/decline/cancel; **`ORDER_ACCEPTED`** + `relatedOrderId` = created **`DeliveryOrder.id`** on accept; backend creates **`ACCEPTED` `DeliveryOrder`** with `sourceType=WAYLER_AVAILABILITY_REQUEST` and `availabilityRequestId`; request cards show short linked order reference when `deliveryOrderId` is set; accepted order cards show short request reference when converted; chat uses **`POST /conversations/order/:deliveryOrderId`** — lazy conversation create, no auto-chat on accept; mock payment uses **`POST /payments/orders/:deliveryOrderId/mock-authorize`** — no `sourceType` filter, verified compatible with no code changes), **daily Wayler work access pass** — schema + **`WaylerAccessModule` API + SDK** + **Wayler access panel UI** on `/app` + **accept gating** (posted orders + **incoming Sender availability requests**) + **contact/chat/message gating** + **activate/cancel in-app notifications** (`SYSTEM`; mock/manual only — no Stripe yet) are complete. **Repo stability:** root `pnpm build` / `pnpm lint` run Turbo serially (`--concurrency=1`) for reliable Windows local builds — product behavior unchanged; `typecheck` unchanged. **Nothing pushed or deployed yet** (branch ahead of `origin/main`; local development only). Photo/signature proof, Stripe/checkout, real paid daily access, real payout processing, refunds, Wayler payout dashboard, WebSocket/SSE real-time chat/push, **realtime Wayler payment panel updates**, **realtime published-order panel updates**, **realtime open-order feed updates**, **realtime Wayler availability listing panel updates**, **realtime Sender browse Wayler discovery panel updates**, **realtime availability-request panel updates**, dedicated dispute/availability-request notification types, payment hold/refund integration, resolution workflow, admin/arbitrator panel, request expiry automation, matching recommendations, **scheduled access expiry notifications**, Stripe payment-confirmation notifications for daily access, admin-configured notification templates, admin pricing controls, platform fee adjustment toward 5%, and production deployment are future milestones.
 >
-> **Scope note for recent UI batches:** Payment/proof/dispute/drawer/KYC gate improvements above are **frontend UI-state polish only** unless otherwise stated — **backend contracts unchanged**; **no real Stripe/Stripe Connect escrow**; **no WebSocket/SSE** realtime updates for chat, payment, proof, or dispute panels yet.
+> **Scope note for recent UI batches:** Payment/proof/dispute/drawer/KYC gate/**dashboard shell**/**KYC identity panel**/**demo tools gate** improvements above are **frontend UI-state polish only** unless otherwise stated — **backend contracts unchanged**; **demo tools hidden by default in production builds**; **no real Stripe/Stripe Connect escrow**; **no WebSocket/SSE** realtime updates for chat, payment, proof, or dispute panels yet.
 
 ## Tech stack
 
@@ -185,6 +185,9 @@ Marketing landing page (`/`) is not translated yet.
 | Proof-of-delivery panel states (per-card loading/refreshing, Retry, empty no-proof, submit failure preserves draft, per-card action errors, stale proof)                                                                                    | Complete (M4)                   |
 | Dispute panel states on Accepted cards (loading/refreshing, no-dispute empty, submit processing, duplicate submit blocked, submit failure preserves draft, existing dispute summary)                                                        | Complete (M6)                   |
 | KYC marketplace access gate UI (`kyc-marketplace-gate.tsx` — loading/error+Retry/missing/pending/rejected + action-specific hints; daily access separate)                                                                                   | Complete (M2/M4)                |
+| App dashboard shell loading/error states (`app-dashboard-shell.tsx` — bootstrap loading shell, profile error+retry/return, no wrong role flash)                                                                                             | Complete                        |
+| KYC identity panel states (`kyc-identity-panel.tsx` — loading/error/pending/rejected/approved, country form, submit states)                                                                                                                 | Complete (M2)                   |
+| Production-safety demo tools gate (`demo-tools.ts` — `demoToolsEnabled`; production hides mock UI; `NEXT_PUBLIC_ENABLE_DEMO_TOOLS` for staging)                                                                                             | Complete                        |
 | Repo stability scripts (root `pnpm build` / `pnpm lint` → Turbo `--concurrency=1`; Windows-friendly; product behavior unchanged)                                                                                                            | Complete                        |
 | Order-based chat (schema, API, SDK, Sender/Wayler Accepted UI + **accepted order chat modal panel states**)                                                                                                                                 | Complete (M4)                   |
 | Chat message in-app notifications (other participant only)                                                                                                                                                                                  | Complete (M4)                   |
@@ -255,21 +258,24 @@ This section covers the **mock KYC gate** delivered in M2: Prisma schema, backen
 
 ### Current M2 KYC status
 
-| Area                                       | Status                              |
-| ------------------------------------------ | ----------------------------------- |
-| KYC schema (`KycVerification`, user flags) | Complete                            |
-| Mock backend KYC endpoints                 | Complete                            |
-| SDK KYC methods (`api.kyc.*`)              | Complete                            |
-| `/app` KYC status panel                    | Complete                            |
-| KYC marketplace access gate UI on `/app`   | Complete (frontend-only)            |
-| Real Sumsub / provider integration         | Not implemented (future batch)      |
-| File upload, webhooks, admin review UI     | Not implemented (future milestones) |
+| Area                                        | Status                              |
+| ------------------------------------------- | ----------------------------------- |
+| KYC schema (`KycVerification`, user flags)  | Complete                            |
+| Mock backend KYC endpoints                  | Complete                            |
+| SDK KYC methods (`api.kyc.*`)               | Complete                            |
+| `/app` KYC status panel                     | Complete                            |
+| KYC identity panel states on `/app`         | Complete (frontend-only)            |
+| KYC marketplace access gate UI on `/app`    | Complete (frontend-only)            |
+| App dashboard shell loading/error on `/app` | Complete (frontend-only)            |
+| Production-safety demo tools gate           | Complete (frontend-only)            |
+| Real Sumsub / provider integration          | Not implemented (future batch)      |
+| File upload, webhooks, admin review UI      | Not implemented (future milestones) |
 
 Prerequisites are the same as M1: Docker running, migrations applied, `pnpm dev` up, and a registered user (or use your existing account).
 
 ### KYC marketplace access gate UI (`/app`)
 
-Beyond the **KYC status panel** (start verification, mock approve/reject in dev, access flags), marketplace panels use a shared **frontend-only gate** — **`apps/web/src/components/app/kyc-marketplace-gate.tsx`** — wired from `apps/web/src/app/(app)/app/page.tsx` and marketplace child panels. **No backend/schema/SDK changes**; existing `GET /kyc/status` + `VerificationGuard` rules unchanged.
+Beyond the **KYC identity panel** (`kyc-identity-panel.tsx` — start verification, country form, phase notices; mock approve/reject when demo tools enabled), marketplace panels use a shared **frontend-only gate** — **`apps/web/src/components/app/kyc-marketplace-gate.tsx`** — wired from `apps/web/src/app/(app)/app/page.tsx` and marketplace child panels. **No backend/schema/SDK changes**; existing `GET /kyc/status` + `VerificationGuard` rules unchanged.
 
 | Phase                  | UI behavior                                                                                                                                                                                   |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -285,6 +291,61 @@ Beyond the **KYC status panel** (start verification, mock approve/reject in dev,
 **Separate from Wayler daily access:** KYC gating does **not** replace **`WaylerAccessPass`** paywall — Waylers still need **active daily access** for paid work actions (accept posted order, accept incoming request, contact/chat) when KYC is approved (see **Daily Wayler work access foundation**).
 
 **i18n** (8 locales): `app.kycGate.*` (+ reuses `app.kycPanel.loadFailed` for load errors).
+
+### App dashboard shell loading/error states (`/app`)
+
+**`apps/web/src/components/app/app-dashboard-shell.tsx`** — dashboard-level bootstrap UX on `/app` (frontend-only; **no backend changes**).
+
+| State                         | UI behavior                                                                                                                                                                                                                                   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Bootstrapping**             | **`AppDashboardLoadingShell`** while auth user, **`modeReady`** (localStorage mode hydration), profile bootstrap, and initial KYC status load complete — **avoids blank screen** and **wrong Sender/Wayler panel flash** before mode is known |
+| **Profile bootstrap failure** | **`AppDashboardBootstrapError`** — localized dashboard-level error with **Retry** and **Return to login**; does not wipe unrelated state                                                                                                      |
+| **Panel-level failures**      | Individual panels (orders, feed, KYC refresh, etc.) keep **panel-level** error + Retry — dashboard shell only covers critical bootstrap                                                                                                       |
+
+**i18n** (8 locales): `app.shell.*`.
+
+### KYC identity panel (`/app`)
+
+Dedicated **`apps/web/src/components/app/kyc-identity-panel.tsx`** — identity verification card on `/app` (replaces inline KYC card in `page.tsx`). **Normal KYC user flow unchanged**; **KYC marketplace gate** (`kyc-marketplace-gate.tsx`) remains **separate** from **Wayler daily-access** gating.
+
+| Phase / action              | UI behavior                                                                                                                          |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Loading**                 | Compact loading text + skeleton inside the KYC card — **no premature pending/approved/rejected state** before load finishes          |
+| **Load error**              | `PanelErrorState` + **Retry status**; if stale status exists, **error banner + last-known status** remain visible                    |
+| **Missing / not submitted** | Friendly required explanation + **country code form** (required 2-letter ISO); inline validation (`requiredField`, `invalidCountry`) |
+| **Pending**                 | Pending title/body; **submit form hidden** (backend blocks duplicate pending)                                                        |
+| **Rejected**                | Attention title/body + **rejection reason** when available; **resubmit form** when product logic allows                              |
+| **Approved**                | Approved title/body + access flags; **no extra friction**; approved demo accounts unchanged                                          |
+| **Submit processing**       | Button disabled; **Submitting verification…** label                                                                                  |
+| **Submit success**          | Localized success alert; refreshes KYC status via existing `loadKycStatus()` + user refresh                                          |
+| **Submit failure**          | Localized error; **country draft preserved**; status not faked                                                                       |
+
+Dev-only **Mock approve / Mock reject** buttons (when KYC is pending) are gated by **`demoToolsEnabled`** — see **Production-safety demo tools gate** below.
+
+**i18n** (8 locales): `app.kycPanel.*` (+ reuses `app.kycGate.retryKycStatus` where appropriate).
+
+### Production-safety demo tools gate
+
+Centralized **`apps/web/src/lib/demo-tools.ts`** — **`demoToolsEnabled`** gates all client-side mock/dev-only controls:
+
+```typescript
+export const demoToolsEnabled =
+  process.env.NEXT_PUBLIC_ENABLE_DEMO_TOOLS === 'true' || process.env.NODE_ENV !== 'production';
+```
+
+| Environment                                        | Mock/dev UI                                                                                                                     |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Local dev** (`pnpm dev`, `NODE_ENV=development`) | Demo tools **visible** (KYC mock approve/reject when pending, Wayler mock activate, Sender mock payment authorize/hold/release) |
+| **Production build (default)**                     | Demo tools **hidden** — normal users cannot see dangerous mock shortcuts                                                        |
+| **Staging / demo build**                           | Set **`NEXT_PUBLIC_ENABLE_DEMO_TOOLS=true`** at build time to **explicitly enable** demo tools                                  |
+
+**Gated controls (frontend-only; backend contracts unchanged):**
+
+- **KYC** — mock approve / mock reject (`kyc-identity-panel.tsx`)
+- **Wayler daily access** — mock activate today's access + manual-only note (`wayler-access-panel.tsx`)
+- **Sender payments** — mock authorize / hold escrow / release payout buttons on Accepted orders (`page.tsx`)
+
+**Unchanged:** Real product state displays (payment status labels, access flags, KYC status rows, cancel pass, etc.) — only **interactive mock shortcuts** are gated.
 
 ### Backend KYC routes
 
@@ -303,20 +364,52 @@ Interactive docs: http://localhost:4000/docs (tag **kyc**).
 
 Use this after M1 setup (`pnpm dev`, migrations, registered user):
 
+**App dashboard shell:**
+
+- [ ] **`/app` loading shell** — after login/refresh, localized bootstrap message (not blank) until profile + mode + initial KYC load complete
+- [ ] **No wrong role flash** — Sender/Wayler panels do not appear before **`modeReady`**
+- [ ] **Profile/bootstrap error** (simulate API down during bootstrap) — dashboard-level error with **Retry** and **Return to login**; other panels not required to mount first
+
+**KYC identity panel:**
+
+- [ ] Open **`/app`** — **KYC identity panel** visible (status rows, access flags, phase notice)
+- [ ] **Missing KYC** — required explanation + country form; empty/invalid country shows inline validation
+- [ ] **Start verification** with valid country — **Submitting verification…** → success alert → status moves to **PENDING**
+- [ ] **Submit failure** — error shown; **country draft preserved**
+- [ ] **Pending KYC** — pending notice; form hidden; marketplace gate shows pending
+- [ ] **Rejected KYC** — attention notice + rejection reason when available; resubmit form when allowed
+- [ ] **Approved KYC** — approved notice; no submit form; demo approved accounts work unchanged
+- [ ] **KYC load failure** — error + Retry on identity panel (stale status + banner if cached); `/app` stable
+
+**Demo tools gate:**
+
+- [ ] **`pnpm dev`** — KYC mock approve/reject (when pending), Wayler mock activate, Sender mock payment buttons **visible**
+- [ ] **Production/default** (`pnpm build` + `pnpm start`, no demo flag) — those controls **hidden**
+- [ ] **`NEXT_PUBLIC_ENABLE_DEMO_TOOLS=true`** on production-like build — demo tools **visible** again for staging demos
+
+**KYC marketplace gate + mock flow (dev):**
+
 - [ ] **Login** at `/login`
-- [ ] Open **`/app`** — KYC status panel is visible (status, latest verification, access flags)
-- [ ] Click **Start verification** — status moves to **PENDING** (mock buttons become enabled in dev)
+- [ ] Click **Start verification** — status moves to **PENDING** (mock buttons enabled when demo tools allowed)
 - [ ] Confirm **PENDING** on the panel and in latest verification
-- [ ] Click **Mock approve** (development only) — status becomes **APPROVED**
+- [ ] Click **Mock approve** (development / demo tools only) — status becomes **APPROVED**
 - [ ] Confirm **APPROVED** and all feature flags show **Yes** (`canCreateOrder`, `canBrowseOrders`, `canAcceptOrder`, `canChat`, `canContact`, `canReceivePayout`)
-- [ ] **Refresh the page** — status persists; Start and mock buttons are disabled with the approved helper text
+- [ ] **Refresh the page** — status persists; Start and mock buttons disabled/hidden when approved
 - [ ] **Missing KYC** — marketplace panels show required gate; actions disabled with helper text
 - [ ] **Pending KYC** — pending gate; marketplace actions blocked safely
-- [ ] **Rejected KYC** — attention gate; no invented appeal flow
+- [ ] **Rejected KYC** — attention gate; resubmit via identity panel when allowed
 - [ ] **KYC load failure** — error + Retry on KYC panel and gated marketplace panels; `/app` stable
 - [ ] **Approved KYC** — no gate friction; **Wayler daily access** still separate for accept/chat
 
-To test reject instead of approve: after **Start verification**, use **Mock reject** and confirm status becomes **REJECTED** and flags stay **No**.
+To test reject instead of approve: after **Start verification**, use **Mock reject** (when demo tools enabled) and confirm status becomes **REJECTED** and flags stay **No**.
+
+### Current limitations / deployment note
+
+- **Nothing pushed or deployed yet** — branch ahead of `origin/main`; local development only.
+- **Demo tools hidden by default in production builds** — mock KYC review, Wayler mock activate, and Sender mock payment shortcuts require **`pnpm dev`** or explicit **`NEXT_PUBLIC_ENABLE_DEMO_TOOLS=true`**.
+- **Real Stripe / Stripe Connect escrow** — still future work; current payment UI uses **mock/manual** provider flows for local testing.
+- **No realtime WebSocket/SSE** — chat, payment, proof, dispute, and notification panels use polling/refresh patterns.
+- **Backend mock KYC routes** (`/kyc/mock/*`) remain **development-only** on the API — frontend gating is an additional safety layer.
 
 ### PowerShell manual API test
 
@@ -4160,6 +4253,24 @@ Use after `pnpm build`, `pnpm lint`, and `pnpm typecheck` pass. **Frontend UI-st
 - [ ] **Missing / pending / rejected** gates with friendly copy; actions disabled safely
 - [ ] **Approved KYC** — no extra friction; demo accounts work
 - [ ] **Wayler daily access** still required separately for accept/chat when KYC approved
+
+**App dashboard shell:**
+
+- [ ] **`/app` loading shell** during profile/mode/KYC bootstrap (not blank)
+- [ ] **Profile/bootstrap error** + Retry + Return to login
+- [ ] **No wrong role flash** before `modeReady`
+
+**KYC identity panel:**
+
+- [ ] **Missing / pending / rejected / approved** phase notices render correctly
+- [ ] **Country validation** (required + invalid ISO)
+- [ ] **Submit success** refreshes KYC status; **submit failure preserves draft**
+
+**Production-safety demo tools gate:**
+
+- [ ] **`pnpm dev`** — demo/mock controls visible where expected
+- [ ] **Production build (default)** — KYC mock, Wayler mock activate, Sender mock payment buttons **hidden**
+- [ ] **`NEXT_PUBLIC_ENABLE_DEMO_TOOLS=true`** — demo tools visible on production-like build
 
 **Regression / stability:**
 
