@@ -12,6 +12,11 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 import { formatShortOrderReference } from '@/components/app/availability-request-converted-order';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -104,6 +109,7 @@ async function copyTextToClipboard(text: string): Promise<boolean> {
 function OrderReferenceCopyAction({ orderId }: { orderId: string }) {
   const { t } = useI18n();
   const [feedback, setFeedback] = useState<CopyFeedback>('idle');
+  const [copying, setCopying] = useState(false);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -116,6 +122,7 @@ function OrderReferenceCopyAction({ orderId }: { orderId: string }) {
 
   useEffect(() => {
     setFeedback('idle');
+    setCopying(false);
     if (resetTimerRef.current) {
       clearTimeout(resetTimerRef.current);
       resetTimerRef.current = null;
@@ -123,19 +130,25 @@ function OrderReferenceCopyAction({ orderId }: { orderId: string }) {
   }, [orderId]);
 
   const handleCopy = useCallback(async () => {
+    if (copying || feedback === 'copied') {
+      return;
+    }
+
     if (resetTimerRef.current) {
       clearTimeout(resetTimerRef.current);
       resetTimerRef.current = null;
     }
 
+    setCopying(true);
     const ok = await copyTextToClipboard(orderId);
+    setCopying(false);
     setFeedback(ok ? 'copied' : 'failed');
 
     resetTimerRef.current = setTimeout(() => {
       setFeedback('idle');
       resetTimerRef.current = null;
     }, COPY_FEEDBACK_MS);
-  }, [orderId]);
+  }, [copying, feedback, orderId]);
 
   return (
     <div className="flex flex-col gap-1">
@@ -149,10 +162,15 @@ function OrderReferenceCopyAction({ orderId }: { orderId: string }) {
           variant="outline"
           size="sm"
           className="h-7 shrink-0 px-2 text-xs"
+          disabled={copying || feedback === 'copied'}
           onClick={() => void handleCopy()}
           aria-label={t('app.orders.copyReference')}
         >
-          {t('app.orders.copyReference')}
+          {copying
+            ? t('app.orders.copyReference')
+            : feedback === 'copied'
+              ? t('app.orders.referenceCopied')
+              : t('app.orders.copyReference')}
         </Button>
       </div>
       {feedback === 'copied' ? (
@@ -377,55 +395,63 @@ function DeliveryProgressTimeline({ steps }: { steps: TimelineStep[] }) {
   );
 }
 
-function DetailFetchStatus({
-  loading,
-  error,
-  showFallbackNotice,
-  onRetry,
+function DetailFieldsSection({
+  detail,
+  order,
+  t,
 }: {
-  loading: boolean;
-  error: string | null;
-  showFallbackNotice: boolean;
-  onRetry: () => void;
+  detail: DeliveryOrderDetail | null;
+  order: AcceptedOrderDetailsInput;
+  t: (key: TranslationKey) => string;
 }) {
-  const { t } = useI18n();
-
-  if (!loading && !error && !showFallbackNotice) {
-    return null;
-  }
+  const pickupCity = detail?.pickupCity ?? order.pickupCity;
+  const pickupCountry = detail?.pickupCountry ?? order.pickupCountry;
+  const dropoffCity = detail?.dropoffCity ?? order.dropoffCity;
+  const dropoffCountry = detail?.dropoffCountry ?? order.dropoffCountry;
 
   return (
-    <div className="flex flex-col gap-2">
-      {loading ? (
-        <p
-          className="rounded-md border border-border/60 bg-muted/20 px-3 py-2 text-xs text-muted-foreground"
-          role="status"
-          aria-live="polite"
-        >
-          {t('app.orders.detailsLoading')}
-        </p>
+    <dl className="flex flex-col gap-2">
+      <DetailRow
+        label={t('app.orders.route')}
+        value={`${formatLocation(pickupCity, pickupCountry)} ${t('app.orders.routeSeparator')} ${formatLocation(dropoffCity, dropoffCountry)}`}
+      />
+      {detail?.pickupAddressText ? (
+        <DetailRow label={t('app.orders.pickup')} value={detail.pickupAddressText} />
       ) : null}
-      {error ? (
-        <div className="flex flex-col gap-2 rounded-md border border-danger/30 bg-danger/10 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-danger" role="alert">
-            {error}
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-8 shrink-0 text-xs"
-            disabled={loading}
-            onClick={onRetry}
-          >
-            {t('app.orders.retryDetails')}
-          </Button>
-        </div>
+      {detail?.dropoffAddressText ? (
+        <DetailRow label={t('app.orders.dropoff')} value={detail.dropoffAddressText} />
       ) : null}
-      {showFallbackNotice ? (
-        <p className="text-xs text-muted-foreground">{t('app.orders.detailsFallbackNotice')}</p>
+      <DetailRow
+        label={t('app.orders.reward')}
+        value={formatReward(
+          detail?.offeredRewardAmount ?? order.offeredRewardAmount,
+          detail?.currency ?? order.currency,
+          t('app.orders.rewardNone'),
+        )}
+      />
+      {detail?.pickupDateFrom ? (
+        <DetailRow
+          label={t('app.orders.labelPickupFrom')}
+          value={formatDate(detail.pickupDateFrom) ?? detail.pickupDateFrom}
+        />
       ) : null}
-    </div>
+      {detail?.pickupDateTo ? (
+        <DetailRow
+          label={t('app.orders.labelPickupTo')}
+          value={formatDate(detail.pickupDateTo) ?? detail.pickupDateTo}
+        />
+      ) : null}
+      {detail?.deliveryDeadline ? (
+        <DetailRow
+          label={t('app.orders.labelDeadline')}
+          value={formatDate(detail.deliveryDeadline) ?? detail.deliveryDeadline}
+        />
+      ) : null}
+      {detail?.description ? (
+        <DetailRow label={t('app.orders.fieldDescription')} value={detail.description} />
+      ) : null}
+      {detail?.notes ? <DetailRow label={t('app.orders.notes')} value={detail.notes} /> : null}
+    </dl>
   );
 }
 
@@ -442,7 +468,7 @@ export function AcceptedOrderDetailsDrawer({
   const [detail, setDetail] = useState<DeliveryOrderDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [retryAttempt, setRetryAttempt] = useState(0);
+  const [reloadAttempt, setReloadAttempt] = useState(0);
 
   const loadOrderDetail = useCallback(
     async (orderId: string, signal: { cancelled: boolean }) => {
@@ -453,6 +479,7 @@ export function AcceptedOrderDetailsDrawer({
         const result = await api.orders.detail(orderId);
         if (!signal.cancelled) {
           setDetail(result);
+          setError(null);
         }
       } catch {
         if (!signal.cancelled) {
@@ -472,7 +499,7 @@ export function AcceptedOrderDetailsDrawer({
       setDetail(null);
       setError(null);
       setLoading(false);
-      setRetryAttempt(0);
+      setReloadAttempt(0);
       return;
     }
 
@@ -483,11 +510,14 @@ export function AcceptedOrderDetailsDrawer({
     return () => {
       signal.cancelled = true;
     };
-  }, [open, order?.id, retryAttempt, loadOrderDetail, order]);
+  }, [open, order?.id, reloadAttempt, loadOrderDetail, order]);
 
-  const handleRetry = useCallback(() => {
-    setRetryAttempt((attempt) => attempt + 1);
-  }, []);
+  const handleReload = useCallback(() => {
+    if (loading) {
+      return;
+    }
+    setReloadAttempt((attempt) => attempt + 1);
+  }, [loading]);
 
   useEffect(() => {
     if (!open) {
@@ -510,10 +540,11 @@ export function AcceptedOrderDetailsDrawer({
     return null;
   }
 
-  const pickupCity = detail?.pickupCity ?? order.pickupCity;
-  const pickupCountry = detail?.pickupCountry ?? order.pickupCountry;
-  const dropoffCity = detail?.dropoffCity ?? order.dropoffCity;
-  const dropoffCountry = detail?.dropoffCountry ?? order.dropoffCountry;
+  const showInitialLoading = loading && detail === null;
+  const isRefreshing = loading && detail !== null;
+  const showMissingDetail = !loading && !error && detail === null;
+  const showFallbackSummary = Boolean(error && !detail);
+
   const acceptedAt = detail?.acceptedAt ?? order.acceptedAt;
   const deliveredAt = detail?.deliveredAt ?? order.deliveredAt;
   const typeLabel =
@@ -554,92 +585,95 @@ export function AcceptedOrderDetailsDrawer({
             </p>
             <p className="truncate text-xs text-muted-foreground">{order.title}</p>
           </div>
-          <Button
-            ref={closeButtonRef}
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 shrink-0 px-2 text-xs"
-            onClick={onClose}
-          >
-            {t('app.orders.closeDetails')}
-          </Button>
+          <div className="flex shrink-0 items-center gap-1">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 shrink-0 px-2 text-xs"
+              disabled={loading}
+              onClick={handleReload}
+            >
+              {isRefreshing ? t('app.orders.detailsRefreshing') : t('app.orders.refreshDetails')}
+            </Button>
+            <Button
+              ref={closeButtonRef}
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 shrink-0 px-2 text-xs"
+              onClick={onClose}
+            >
+              {t('app.orders.closeDetails')}
+            </Button>
+          </div>
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
-          <DetailFetchStatus
-            loading={loading}
-            error={error}
-            showFallbackNotice={Boolean(error && !detail)}
-            onRetry={handleRetry}
-          />
-
-          <div className="flex flex-wrap items-center gap-2">
-            <span className={cn('wayly-status-badge text-xs')}>{statusLabel}</span>
-            <span className="text-xs text-muted-foreground">{typeLabel}</span>
-          </div>
-
-          <p className="text-xs text-muted-foreground">{roleLabel}</p>
-
-          <OrderReferenceCopyAction orderId={order.id} />
-
-          {order.sourceType === DeliveryOrderSource.WAYLER_AVAILABILITY_REQUEST ? (
-            <DeliveryOrderSourceBadge
-              sourceType={order.sourceType}
-              availabilityRequestId={order.availabilityRequestId}
+          {error ? (
+            <PanelErrorState
+              message={error}
+              retryLabel={t('app.orders.retryDetails')}
+              onRetry={handleReload}
+              retryDisabled={loading}
             />
-          ) : (
-            <span className="wayly-status-badge wayly-status-default w-fit text-xs">
-              {t('app.orders.postedOrder')}
-            </span>
-          )}
+          ) : null}
+          {isRefreshing ? (
+            <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+              {t('app.orders.detailsRefreshing')}
+            </p>
+          ) : null}
+          {showFallbackSummary ? (
+            <p className="text-xs text-muted-foreground">{t('app.orders.detailsFallbackNotice')}</p>
+          ) : null}
 
-          <DeliveryProgressTimeline steps={timelineSteps} />
+          {showInitialLoading ? (
+            <div className="flex flex-col gap-2">
+              <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                {t('app.orders.detailsLoading')}
+              </p>
+              <RequestsListSkeleton rows={4} itemClassName="h-12 w-full rounded-lg" />
+            </div>
+          ) : null}
 
-          <dl className="flex flex-col gap-2">
-            <DetailRow
-              label={t('app.orders.route')}
-              value={`${formatLocation(pickupCity, pickupCountry)} ${t('app.orders.routeSeparator')} ${formatLocation(dropoffCity, dropoffCountry)}`}
-            />
-            {detail?.pickupAddressText ? (
-              <DetailRow label={t('app.orders.pickup')} value={detail.pickupAddressText} />
-            ) : null}
-            {detail?.dropoffAddressText ? (
-              <DetailRow label={t('app.orders.dropoff')} value={detail.dropoffAddressText} />
-            ) : null}
-            <DetailRow
-              label={t('app.orders.reward')}
-              value={formatReward(
-                detail?.offeredRewardAmount ?? order.offeredRewardAmount,
-                detail?.currency ?? order.currency,
-                t('app.orders.rewardNone'),
+          {!showInitialLoading ? (
+            <>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={cn('wayly-status-badge text-xs')}>{statusLabel}</span>
+                <span className="text-xs text-muted-foreground">{typeLabel}</span>
+              </div>
+
+              <p className="text-xs text-muted-foreground">{roleLabel}</p>
+
+              <OrderReferenceCopyAction orderId={order.id} />
+
+              {order.sourceType === DeliveryOrderSource.WAYLER_AVAILABILITY_REQUEST ? (
+                <DeliveryOrderSourceBadge
+                  sourceType={order.sourceType}
+                  availabilityRequestId={order.availabilityRequestId}
+                />
+              ) : (
+                <span className="wayly-status-badge wayly-status-default w-fit text-xs">
+                  {t('app.orders.postedOrder')}
+                </span>
               )}
-            />
-            {detail?.pickupDateFrom ? (
-              <DetailRow
-                label={t('app.orders.labelPickupFrom')}
-                value={formatDate(detail.pickupDateFrom) ?? detail.pickupDateFrom}
-              />
-            ) : null}
-            {detail?.pickupDateTo ? (
-              <DetailRow
-                label={t('app.orders.labelPickupTo')}
-                value={formatDate(detail.pickupDateTo) ?? detail.pickupDateTo}
-              />
-            ) : null}
-            {detail?.deliveryDeadline ? (
-              <DetailRow
-                label={t('app.orders.labelDeadline')}
-                value={formatDate(detail.deliveryDeadline) ?? detail.deliveryDeadline}
-              />
-            ) : null}
-            {detail?.description ? (
-              <DetailRow label={t('app.orders.fieldDescription')} value={detail.description} />
-            ) : null}
-            {detail?.notes ? (
-              <DetailRow label={t('app.orders.notes')} value={detail.notes} />
-            ) : null}
-          </dl>
+
+              <DeliveryProgressTimeline steps={timelineSteps} />
+
+              {showMissingDetail ? (
+                <PanelEmptyState
+                  title={t('app.orders.detailsMissingTitle')}
+                  body={t('app.orders.detailsMissingBody')}
+                />
+              ) : (
+                <DetailFieldsSection detail={detail} order={order} t={t} />
+              )}
+            </>
+          ) : (
+            <>
+              <OrderReferenceCopyAction orderId={order.id} />
+            </>
+          )}
         </div>
       </div>
     </div>

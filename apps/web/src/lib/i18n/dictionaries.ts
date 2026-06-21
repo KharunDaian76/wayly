@@ -124,8 +124,13 @@ const en = {
   'app.orders.reward': 'Reward',
   'app.orders.notes': 'Notes',
   'app.orders.detailsLoading': 'Loading order details…',
+  'app.orders.detailsRefreshing': 'Refreshing order details…',
   'app.orders.detailsLoadFailed': 'Could not load full order details.',
   'app.orders.retryDetails': 'Retry',
+  'app.orders.refreshDetails': 'Refresh',
+  'app.orders.detailsMissingTitle': 'Full details unavailable',
+  'app.orders.detailsMissingBody':
+    'We could not load the complete order record. Try refreshing or return to your accepted orders list.',
   'app.orders.detailsFallbackNotice':
     'Showing summary from your accepted orders list. Some fields may be unavailable until details load.',
   'app.orders.detailsRoleSender': 'You are viewing this delivery as the Sender.',
@@ -805,8 +810,13 @@ const ru: Dictionary = {
   'app.orders.reward': 'Вознаграждение',
   'app.orders.notes': 'Заметки',
   'app.orders.detailsLoading': 'Загрузка деталей заказа…',
+  'app.orders.detailsRefreshing': 'Обновление деталей заказа…',
   'app.orders.detailsLoadFailed': 'Не удалось загрузить полные детали заказа.',
   'app.orders.retryDetails': 'Повторить',
+  'app.orders.refreshDetails': 'Обновить',
+  'app.orders.detailsMissingTitle': 'Полные детали недоступны',
+  'app.orders.detailsMissingBody':
+    'Не удалось загрузить полную запись заказа. Обновите или вернитесь к списку принятых заказов.',
   'app.orders.detailsFallbackNotice':
     'Показана сводка из списка принятых заказов. Некоторые поля могут быть недоступны, пока детали не загрузятся.',
   'app.orders.detailsRoleSender': 'Вы просматриваете эту доставку как отправитель.',
@@ -1490,8 +1500,13 @@ const es: Dictionary = {
   'app.orders.reward': 'Recompensa',
   'app.orders.notes': 'Notas',
   'app.orders.detailsLoading': 'Cargando detalles del pedido…',
+  'app.orders.detailsRefreshing': 'Actualizando detalles del pedido…',
   'app.orders.detailsLoadFailed': 'No se pudieron cargar los detalles completos del pedido.',
   'app.orders.retryDetails': 'Reintentar',
+  'app.orders.refreshDetails': 'Actualizar',
+  'app.orders.detailsMissingTitle': 'Detalles completos no disponibles',
+  'app.orders.detailsMissingBody':
+    'No pudimos cargar el registro completo del pedido. Actualice o vuelva a sus pedidos aceptados.',
   'app.orders.detailsFallbackNotice':
     'Mostrando el resumen de sus pedidos aceptados. Algunos campos pueden no estar disponibles hasta que se carguen los detalles.',
   'app.orders.detailsRoleSender': 'Está viendo esta entrega como remitente.',
@@ -2176,8 +2191,13 @@ const fr: Dictionary = {
   'app.orders.reward': 'Récompense',
   'app.orders.notes': 'Notes',
   'app.orders.detailsLoading': 'Chargement des détails de la commande…',
+  'app.orders.detailsRefreshing': 'Actualisation des détails de la commande…',
   'app.orders.detailsLoadFailed': 'Impossible de charger les détails complets de la commande.',
   'app.orders.retryDetails': 'Réessayer',
+  'app.orders.refreshDetails': 'Actualiser',
+  'app.orders.detailsMissingTitle': 'Détails complets indisponibles',
+  'app.orders.detailsMissingBody':
+    'Impossible de charger l’enregistrement complet de la commande. Actualisez ou revenez à vos commandes acceptées.',
   'app.orders.detailsFallbackNotice':
     'Résumé affiché depuis votre liste de commandes acceptées. Certains champs peuvent être indisponibles tant que les détails ne sont pas chargés.',
   'app.orders.detailsRoleSender': 'Vous consultez cette livraison en tant qu’expéditeur.',
@@ -2873,8 +2893,13 @@ const de: Dictionary = {
   'app.orders.reward': 'Belohnung',
   'app.orders.notes': 'Notizen',
   'app.orders.detailsLoading': 'Auftragsdetails werden geladen…',
+  'app.orders.detailsRefreshing': 'Auftragsdetails werden aktualisiert…',
   'app.orders.detailsLoadFailed': 'Vollständige Auftragsdetails konnten nicht geladen werden.',
   'app.orders.retryDetails': 'Erneut versuchen',
+  'app.orders.refreshDetails': 'Aktualisieren',
+  'app.orders.detailsMissingTitle': 'Vollständige Details nicht verfügbar',
+  'app.orders.detailsMissingBody':
+    'Der vollständige Auftrag konnte nicht geladen werden. Aktualisieren Sie oder kehren Sie zu Ihren angenommenen Aufträgen zurück.',
   'app.orders.detailsFallbackNotice':
     'Es wird die Zusammenfassung aus Ihrer Liste angenommener Aufträge angezeigt. Einige Felder sind möglicherweise erst nach dem Laden der Details verfügbar.',
   'app.orders.detailsRoleSender': 'Sie sehen diese Lieferung als Absender.',
@@ -3578,8 +3603,13 @@ const tr: Dictionary = {
   'app.orders.reward': 'Ödül',
   'app.orders.notes': 'Notlar',
   'app.orders.detailsLoading': 'Sipariş detayları yükleniyor…',
+  'app.orders.detailsRefreshing': 'Sipariş detayları yenileniyor…',
   'app.orders.detailsLoadFailed': 'Tam sipariş detayları yüklenemedi.',
   'app.orders.retryDetails': 'Yeniden dene',
+  'app.orders.refreshDetails': 'Yenile',
+  'app.orders.detailsMissingTitle': 'Tam detaylar kullanılamıyor',
+  'app.orders.detailsMissingBody':
+    'Tam sipariş kaydı yüklenemedi. Yenileyin veya kabul edilen siparişler listenize dönün.',
   'app.orders.detailsFallbackNotice':
     'Kabul edilen siparişler listenizdeki özet gösteriliyor. Detaylar yüklenene kadar bazı alanlar kullanılamayabilir.',
   'app.orders.detailsRoleSender': 'Bu teslimatı gönderici olarak görüntülüyorsunuz.',
@@ -4257,8 +4287,13 @@ const ar: Dictionary = {
   'app.orders.reward': 'المكافأة',
   'app.orders.notes': 'ملاحظات',
   'app.orders.detailsLoading': 'جارٍ تحميل تفاصيل الطلب…',
+  'app.orders.detailsRefreshing': 'جارٍ تحديث تفاصيل الطلب…',
   'app.orders.detailsLoadFailed': 'تعذر تحميل تفاصيل الطلب الكاملة.',
   'app.orders.retryDetails': 'إعادة المحاولة',
+  'app.orders.refreshDetails': 'تحديث',
+  'app.orders.detailsMissingTitle': 'التفاصيل الكاملة غير متاحة',
+  'app.orders.detailsMissingBody':
+    'تعذّر تحميل سجل الطلب الكامل. حاول التحديث أو ارجع إلى قائمة الطلبات المقبولة.',
   'app.orders.detailsFallbackNotice':
     'يتم عرض الملخص من قائمة الطلبات المقبولة. قد تكون بعض الحقول غير متاحة حتى يتم تحميل التفاصيل.',
   'app.orders.detailsRoleSender': 'أنت تعرض هذا التسليم كمرسل.',
@@ -4918,8 +4953,12 @@ const zh: Dictionary = {
   'app.orders.reward': '报酬',
   'app.orders.notes': '备注',
   'app.orders.detailsLoading': '正在加载订单详情…',
+  'app.orders.detailsRefreshing': '正在刷新订单详情…',
   'app.orders.detailsLoadFailed': '无法加载完整订单详情。',
   'app.orders.retryDetails': '重试',
+  'app.orders.refreshDetails': '刷新',
+  'app.orders.detailsMissingTitle': '完整详情不可用',
+  'app.orders.detailsMissingBody': '无法加载完整订单记录。请刷新或返回已接受订单列表。',
   'app.orders.detailsFallbackNotice':
     '显示的是已接受订单列表中的摘要。部分字段在详情加载完成前可能不可用。',
   'app.orders.detailsRoleSender': '您正在以寄件人身份查看此配送。',
