@@ -7,6 +7,7 @@ import {
   type Prisma,
 } from '@prisma/client';
 import type {
+  AdminDisputeListResponse,
   DisputeDetail,
   DisputeEvidenceSummary,
   DisputeListResponse,
@@ -26,6 +27,7 @@ import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
 import {
+  toAdminDisputeQueueItem,
   toDisputeDetail,
   toDisputeEvidenceSummary,
   toDisputeMessageSummary,
@@ -121,6 +123,42 @@ export class DisputesService {
 
     return {
       items: records.map(toDisputeSummary),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
+  }
+
+  async listForOperations(query: DisputesListQueryInput): Promise<AdminDisputeListResponse> {
+    const where: Prisma.DisputeWhereInput = query.status ? { status: query.status } : {};
+
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.dispute.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+        include: {
+          order: {
+            select: {
+              title: true,
+              pickupCity: true,
+              pickupCountry: true,
+              dropoffCity: true,
+              dropoffCountry: true,
+              sender: { select: { displayName: true, email: true } },
+              acceptedWayler: { select: { displayName: true, email: true } },
+            },
+          },
+        },
+      }),
+      this.prisma.dispute.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toAdminDisputeQueueItem),
       page: query.page,
       limit: query.limit,
       total,

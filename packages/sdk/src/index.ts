@@ -1,5 +1,7 @@
 export { ApiClient, createApiClient } from './client';
 export { ApiError, type ApiErrorBody } from './errors';
+export { createAdminApi } from './admin';
+export { type AdminApi } from './admin.types';
 export { createAuthApi } from './auth';
 export {
   type AuthApi,

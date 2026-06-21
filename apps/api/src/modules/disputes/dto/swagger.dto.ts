@@ -158,3 +158,72 @@ export class AddDisputeEvidenceBodyDto {
   })
   fileUrl?: string;
 }
+
+export class AdminDisputeQueueItemDto {
+  @ApiProperty({ format: 'uuid' })
+  id!: string;
+
+  @ApiProperty({ format: 'uuid' })
+  orderId!: string;
+
+  @ApiPropertyOptional({ example: 'Documents to Berlin' })
+  orderTitle!: string | null;
+
+  @ApiPropertyOptional({ example: 'Paris' })
+  pickupCity!: string | null;
+
+  @ApiPropertyOptional({ example: 'FR' })
+  pickupCountry!: string | null;
+
+  @ApiPropertyOptional({ example: 'Berlin' })
+  dropoffCity!: string | null;
+
+  @ApiPropertyOptional({ example: 'DE' })
+  dropoffCountry!: string | null;
+
+  @ApiProperty({
+    enum: ['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED', 'CANCELLED'],
+  })
+  status!: string;
+
+  @ApiProperty({
+    enum: [
+      'ITEM_NOT_DELIVERED',
+      'ITEM_DAMAGED',
+      'WRONG_ITEM',
+      'PAYMENT_ISSUE',
+      'SAFETY_CONCERN',
+      'OTHER',
+    ],
+  })
+  reason!: string;
+
+  @ApiProperty({ format: 'date-time' })
+  openedAt!: string;
+
+  @ApiPropertyOptional({ example: 'Sender Demo' })
+  senderDisplayName!: string | null;
+
+  @ApiPropertyOptional({ example: 'sender@example.com' })
+  senderEmail!: string | null;
+
+  @ApiPropertyOptional({ example: 'Wayler Demo' })
+  waylerDisplayName!: string | null;
+
+  @ApiPropertyOptional({ example: 'wayler@example.com' })
+  waylerEmail!: string | null;
+}
+
+export class AdminDisputeListResponseDto {
+  @ApiProperty({ type: [AdminDisputeQueueItemDto] })
+  items!: AdminDisputeQueueItemDto[];
+
+  @ApiProperty({ example: 1 })
+  page!: number;
+
+  @ApiProperty({ example: 20 })
+  limit!: number;
+
+  @ApiProperty({ example: 0 })
+  total!: number;
+}

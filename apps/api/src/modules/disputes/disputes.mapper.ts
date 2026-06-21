@@ -1,5 +1,6 @@
 import type { Dispute, DisputeEvidence, DisputeMessage } from '@prisma/client';
 import type {
+  AdminDisputeQueueItem,
   DisputeDetail,
   DisputeEvidenceSummary,
   DisputeMessageSummary,
@@ -9,6 +10,38 @@ import { DisputeReason, DisputeResolution, DisputeStatus } from '@wayly/types';
 
 function toIso(value: Date | null): string | null {
   return value?.toISOString() ?? null;
+}
+
+/** Maps a Prisma Dispute with order parties to the admin operations queue shape. */
+export function toAdminDisputeQueueItem(
+  record: Dispute & {
+    order: {
+      title: string;
+      pickupCity: string | null;
+      pickupCountry: string | null;
+      dropoffCity: string | null;
+      dropoffCountry: string | null;
+      sender: { displayName: string; email: string };
+      acceptedWayler: { displayName: string; email: string } | null;
+    };
+  },
+): AdminDisputeQueueItem {
+  return {
+    id: record.id,
+    orderId: record.orderId,
+    orderTitle: record.order.title,
+    pickupCity: record.order.pickupCity,
+    pickupCountry: record.order.pickupCountry,
+    dropoffCity: record.order.dropoffCity,
+    dropoffCountry: record.order.dropoffCountry,
+    status: record.status as DisputeStatus,
+    reason: record.reason as DisputeReason,
+    openedAt: record.createdAt.toISOString(),
+    senderDisplayName: record.order.sender.displayName,
+    senderEmail: record.order.sender.email,
+    waylerDisplayName: record.order.acceptedWayler?.displayName ?? null,
+    waylerEmail: record.order.acceptedWayler?.email ?? null,
+  };
 }
 
 /** Maps a Prisma Dispute to the safe API summary shape. */

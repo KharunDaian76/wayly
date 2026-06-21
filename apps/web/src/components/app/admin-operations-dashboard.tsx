@@ -4,14 +4,14 @@ import type { UserRole } from '@wayly/types';
 import { UserRole as UserRoleEnum } from '@wayly/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@wayly/ui';
 
+import { AdminDisputesQueuePanel } from '@/components/app/admin-disputes-queue-panel';
 import { PanelEmptyState } from '@/components/app/panel-status-states';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import { cn } from '@/lib/utils';
 
-const OPERATIONS_SECTIONS: ReadonlyArray<{ titleKey: TranslationKey; bodyKey: TranslationKey }> = [
-  { titleKey: 'app.admin.disputesQueueTitle', bodyKey: 'app.admin.disputesQueueBody' },
+const PLACEHOLDER_SECTIONS: ReadonlyArray<{ titleKey: TranslationKey; bodyKey: TranslationKey }> = [
   { titleKey: 'app.admin.kycReviewTitle', bodyKey: 'app.admin.kycReviewBody' },
   { titleKey: 'app.admin.ordersMonitoringTitle', bodyKey: 'app.admin.ordersMonitoringBody' },
   { titleKey: 'app.admin.usersSafetyTitle', bodyKey: 'app.admin.usersSafetyBody' },
@@ -61,7 +61,9 @@ export function AdminOperationsDashboard({ roles }: AdminOperationsDashboardProp
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          {OPERATIONS_SECTIONS.map(({ titleKey, bodyKey }) => (
+          <AdminDisputesQueuePanel roles={roles} />
+
+          {PLACEHOLDER_SECTIONS.map(({ titleKey, bodyKey }) => (
             <section
               key={titleKey}
               className={cn(

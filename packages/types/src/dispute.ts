@@ -50,3 +50,29 @@ export interface DisputeListResponse {
   limit: number;
   total: number;
 }
+
+/** Compact dispute row for admin/arbitrator operations queue (read-only). */
+export interface AdminDisputeQueueItem {
+  id: string;
+  orderId: string;
+  orderTitle: string | null;
+  pickupCity: string | null;
+  pickupCountry: string | null;
+  dropoffCity: string | null;
+  dropoffCountry: string | null;
+  status: DisputeStatus;
+  reason: DisputeReason;
+  openedAt: ISODateString;
+  senderDisplayName: string | null;
+  senderEmail: string | null;
+  waylerDisplayName: string | null;
+  waylerEmail: string | null;
+}
+
+/** Paginated admin dispute queue (GET /admin/disputes). */
+export interface AdminDisputeListResponse {
+  items: AdminDisputeQueueItem[];
+  page: number;
+  limit: number;
+  total: number;
+}

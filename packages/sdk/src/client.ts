@@ -1,3 +1,5 @@
+import { createAdminApi } from './admin';
+import type { AdminApi } from './admin.types';
 import { createAuthApi } from './auth';
 import type { AuthApi, UsersApi } from './auth.types';
 import { createConversationsApi } from './conversations';
@@ -63,6 +65,9 @@ export class ApiClient {
   /** Dispute and arbitration endpoints. */
   readonly disputes: DisputesApi;
 
+  /** Admin / operations endpoints (role-gated; read-only in current batches). */
+  readonly admin: AdminApi;
+
   /** Wayler availability and trip listing endpoints. */
   readonly waylerAvailabilities: WaylerAvailabilitiesApi;
 
@@ -95,6 +100,7 @@ export class ApiClient {
     this.conversations = createConversationsApi((path, opts) => this.request(path, opts));
     this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
     this.disputes = createDisputesApi((path, opts) => this.request(path, opts));
+    this.admin = createAdminApi((path, opts) => this.request(path, opts));
     this.waylerAvailabilities = createWaylerAvailabilitiesApi((path, opts) =>
       this.request(path, opts),
     );
