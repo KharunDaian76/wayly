@@ -198,6 +198,19 @@ function buildCountsQuery(filters: FilterState): Partial<ActiveWaylerCountsQuery
   return query;
 }
 
+function hasActiveFilters(filterState: FilterState): boolean {
+  return (
+    filterState.type !== '' ||
+    filterState.originCountry.trim() !== '' ||
+    filterState.originCity.trim() !== '' ||
+    filterState.originRegion.trim() !== '' ||
+    filterState.destinationCountry.trim() !== '' ||
+    filterState.destinationCity.trim() !== '' ||
+    filterState.destinationRegion.trim() !== '' ||
+    filterState.date.trim() !== ''
+  );
+}
+
 function buildInitialRequestForm(listing: WaylerAvailabilitySummary): RequestFormState {
   const isTrip = listing.type === WaylerAvailabilityType.TRIP_ROUTE;
   return {
@@ -342,6 +355,7 @@ export function SenderWaylersPanel({
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [listings, setListings] = useState<WaylerAvailabilitySummary[]>([]);
+  const [loadedFilters, setLoadedFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [counts, setCounts] = useState<ActiveWaylerCountSummary[]>([]);
   const [listingsLoading, setListingsLoading] = useState(false);
   const [countsLoading, setCountsLoading] = useState(false);
@@ -383,8 +397,9 @@ export function SenderWaylersPanel({
       try {
         const result = await api.waylerAvailabilities.publicList(buildPublicQuery(filterState));
         setListings(result.items);
+        setLoadedFilters(filterState);
       } catch {
-        setListingsError(t('app.senderWaylers.loadFailed'));
+        setListingsError(t('app.senderWaylers.waylersLoadFailed'));
       } finally {
         setListingsLoading(false);
       }
@@ -676,7 +691,9 @@ export function SenderWaylersPanel({
                 {listingsLoading ? t('app.senderWaylers.loading') : t('app.senderWaylers.search')}
               </Button>
               <Button variant="outline" size="sm" disabled={busy} onClick={handleRefresh}>
-                {t('app.senderWaylers.refresh')}
+                {listingsLoading && listings.length > 0
+                  ? t('app.senderWaylers.refreshing')
+                  : t('app.senderWaylers.refresh')}
               </Button>
             </div>
           </div>
@@ -711,21 +728,35 @@ export function SenderWaylersPanel({
 
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold">{t('app.senderWaylers.resultsTitle')}</h3>
-            {listingsError ? <p className={ALERT_ERROR_CLASS}>{listingsError}</p> : null}
+            {listingsError ? (
+              <PanelErrorState
+                message={listingsError}
+                retryLabel={t('app.senderWaylers.retryWaylers')}
+                onRetry={() => void loadListings(filters)}
+                retryDisabled={listingsLoading}
+              />
+            ) : null}
             {requestError ? <p className={ALERT_ERROR_CLASS}>{requestError}</p> : null}
-            {listingsLoading ? (
-              <ul className="flex flex-col gap-4" aria-hidden>
-                {[0, 1].map((key) => (
-                  <li key={key} className="wayly-order-card rounded-xl px-4 py-4">
-                    <Skeleton className="mb-2 h-4 w-3/5 max-w-xs" />
-                    <Skeleton className="mb-3 h-3 w-24" />
-                    <Skeleton className="h-3 w-full" />
-                  </li>
-                ))}
-              </ul>
-            ) : listings.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('app.senderWaylers.empty')}</p>
-            ) : (
+            {listingsLoading && listings.length === 0 ? (
+              <div className="flex flex-col gap-3">
+                <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                  {t('app.senderWaylers.waylersLoading')}
+                </p>
+                <RequestsListSkeleton rows={2} itemClassName="h-24 w-full rounded-xl" />
+              </div>
+            ) : !listingsLoading && !listingsError && listings.length === 0 ? (
+              hasActiveFilters(loadedFilters) ? (
+                <PanelEmptyState
+                  title={t('app.senderWaylers.waylersFilterEmptyTitle')}
+                  body={t('app.senderWaylers.waylersFilterEmptyBody')}
+                />
+              ) : (
+                <PanelEmptyState
+                  title={t('app.senderWaylers.waylersEmptyTitle')}
+                  body={t('app.senderWaylers.waylersEmptyBody')}
+                />
+              )
+            ) : listings.length > 0 ? (
               <ul className="flex flex-col gap-4">
                 {listings.map((listing) => {
                   const isLocalListing = listing.type === WaylerAvailabilityType.LOCAL_AVAILABILITY;
@@ -1112,7 +1143,7 @@ export function SenderWaylersPanel({
                   );
                 })}
               </ul>
-            )}
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-3 border-t border-border pt-6">
