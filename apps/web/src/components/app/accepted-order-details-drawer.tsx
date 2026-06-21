@@ -71,6 +71,104 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+type CopyFeedback = 'idle' | 'copied' | 'failed';
+
+const COPY_FEEDBACK_MS = 2000;
+
+async function copyTextToClipboard(text: string): Promise<boolean> {
+  try {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fall through to legacy fallback
+  }
+
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+function OrderReferenceCopyAction({ orderId }: { orderId: string }) {
+  const { t } = useI18n();
+  const [feedback, setFeedback] = useState<CopyFeedback>('idle');
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    setFeedback('idle');
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+  }, [orderId]);
+
+  const handleCopy = useCallback(async () => {
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+
+    const ok = await copyTextToClipboard(orderId);
+    setFeedback(ok ? 'copied' : 'failed');
+
+    resetTimerRef.current = setTimeout(() => {
+      setFeedback('idle');
+      resetTimerRef.current = null;
+    }, COPY_FEEDBACK_MS);
+  }, [orderId]);
+
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <p className="text-xs text-muted-foreground">
+          {t('app.orders.orderReference')}:{' '}
+          <span className="font-mono text-foreground">{formatShortOrderReference(orderId)}</span>
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-7 shrink-0 px-2 text-xs"
+          onClick={() => void handleCopy()}
+          aria-label={t('app.orders.copyReference')}
+        >
+          {t('app.orders.copyReference')}
+        </Button>
+      </div>
+      {feedback === 'copied' ? (
+        <p className="text-xs text-primary" role="status" aria-live="polite">
+          {t('app.orders.referenceCopied')}
+        </p>
+      ) : null}
+      {feedback === 'failed' ? (
+        <p className="text-xs text-danger" role="alert">
+          {t('app.orders.referenceCopyFailed')}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 type TimelineStepState = 'complete' | 'current' | 'pending';
 
 type TimelineStep = {
@@ -483,10 +581,7 @@ export function AcceptedOrderDetailsDrawer({
 
           <p className="text-xs text-muted-foreground">{roleLabel}</p>
 
-          <p className="text-xs text-muted-foreground">
-            {t('app.orders.orderReference')}:{' '}
-            <span className="font-mono text-foreground">{formatShortOrderReference(order.id)}</span>
-          </p>
+          <OrderReferenceCopyAction orderId={order.id} />
 
           {order.sourceType === DeliveryOrderSource.WAYLER_AVAILABILITY_REQUEST ? (
             <DeliveryOrderSourceBadge
