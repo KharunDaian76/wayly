@@ -72,6 +72,7 @@ type WaylerAcceptedOrderRow = AcceptedDeliveryOrderSummary & {
   proofNote?: string | null;
   proofConfirmationCode?: string | null;
   proofSubmittedAt?: string | null;
+  proofLoadFailed: boolean;
   paymentIntent: PaymentIntentSummary | null;
   paymentLoadFailed: boolean;
 };
@@ -89,6 +90,7 @@ type SenderAcceptedOrderRow = DeliveryOrderSummary & {
   proofNote?: string | null;
   proofConfirmationCode?: string | null;
   proofSubmittedAt?: string | null;
+  proofLoadFailed: boolean;
   paymentIntent: PaymentIntentSummary | null;
   paymentLoadFailed: boolean;
 };
@@ -452,6 +454,56 @@ function mergeOrderPaymentFromPrevious<T extends OrderPaymentRow>(orders: T[], p
   });
 }
 
+type OrderProofRow = {
+  id: string;
+  proofNote?: string | null;
+  proofConfirmationCode?: string | null;
+  proofSubmittedAt?: string | null;
+  proofLoadFailed: boolean;
+};
+
+function mergeOrderProofFromPrevious<T extends OrderProofRow>(orders: T[], previous: T[]): T[] {
+  const prevById = new Map(previous.map((order) => [order.id, order]));
+  return orders.map((order) => {
+    const prior = prevById.get(order.id);
+    if (!order.proofLoadFailed || !prior) {
+      return order;
+    }
+    const hadProof = prior.proofSubmittedAt || prior.proofNote || prior.proofConfirmationCode;
+    if (!hadProof) {
+      return order;
+    }
+    return {
+      ...order,
+      proofNote: prior.proofNote,
+      proofConfirmationCode: prior.proofConfirmationCode,
+      proofSubmittedAt: prior.proofSubmittedAt,
+    };
+  });
+}
+
+function mergeSenderAcceptedFromPrevious(
+  orders: SenderAcceptedOrderRow[],
+  previous: SenderAcceptedOrderRow[],
+): SenderAcceptedOrderRow[] {
+  const prevById = new Map(previous.map((order) => [order.id, order]));
+  const merged = orders.map((order) => {
+    const prior = prevById.get(order.id);
+    if (!order.proofLoadFailed || !prior) {
+      return order;
+    }
+    return {
+      ...order,
+      acceptedAt: order.acceptedAt ?? prior.acceptedAt,
+      deliveredAt: order.deliveredAt ?? prior.deliveredAt,
+      proofNote: order.proofNote ?? prior.proofNote,
+      proofConfirmationCode: order.proofConfirmationCode ?? prior.proofConfirmationCode,
+      proofSubmittedAt: order.proofSubmittedAt ?? prior.proofSubmittedAt,
+    };
+  });
+  return mergeOrderProofFromPrevious(merged, previous);
+}
+
 function waylerPaymentStatusLabel(
   intent: PaymentIntentSummary | null,
   t: (key: TranslationKey) => string,
@@ -564,7 +616,12 @@ export default function AppHomePage() {
   const [proofInputs, setProofInputs] = useState<Record<string, ProofInputDraft>>({});
   const [submittingProofOrderId, setSubmittingProofOrderId] = useState<string | null>(null);
   const [proofError, setProofError] = useState<string | null>(null);
+  const [proofErrorOrderId, setProofErrorOrderId] = useState<string | null>(null);
   const [proofSuccessOrderId, setProofSuccessOrderId] = useState<string | null>(null);
+  const [progressErrorOrderId, setProgressErrorOrderId] = useState<string | null>(null);
+  const [proofDetailLoadingOrderIds, setProofDetailLoadingOrderIds] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
   const [chatOpen, setChatOpen] = useState(false);
   const [chatConversationId, setChatConversationId] = useState<string | null>(null);
   const [chatOrderTitle, setChatOrderTitle] = useState<string | null>(null);
@@ -687,17 +744,21 @@ export default function AppHomePage() {
       ].filter((order) => SENDER_LIFECYCLE_STATUSES.has(order.status));
       const withTimestamps = await Promise.all(
         items.map(async (order) => {
-          const [detail, payment] = await Promise.all([
-            api.orders.detail(order.id),
+          const [detailResult, payment] = await Promise.all([
+            api.orders
+              .detail(order.id)
+              .then((detail) => ({ detail, loadFailed: false as const }))
+              .catch(() => ({ detail: null, loadFailed: true as const })),
             fetchPaymentIntentForOrder(order.id),
           ]);
           return {
             ...order,
-            acceptedAt: detail.acceptedAt,
-            deliveredAt: detail.deliveredAt,
-            proofNote: detail.proofNote,
-            proofConfirmationCode: detail.proofConfirmationCode,
-            proofSubmittedAt: detail.proofSubmittedAt,
+            acceptedAt: detailResult.detail?.acceptedAt ?? null,
+            deliveredAt: detailResult.detail?.deliveredAt ?? null,
+            proofNote: detailResult.detail?.proofNote,
+            proofConfirmationCode: detailResult.detail?.proofConfirmationCode,
+            proofSubmittedAt: detailResult.detail?.proofSubmittedAt,
+            proofLoadFailed: detailResult.loadFailed,
             paymentIntent: payment.intent,
             paymentLoadFailed: payment.loadFailed,
           };
@@ -709,7 +770,10 @@ export default function AppHomePage() {
         return timeB - timeA;
       });
       setSenderAcceptedOrders((previous) =>
-        mergeOrderPaymentFromPrevious(withTimestamps, previous),
+        mergeSenderAcceptedFromPrevious(
+          mergeOrderPaymentFromPrevious(withTimestamps, previous),
+          previous,
+        ),
       );
       await loadUserDisputes();
       return withTimestamps;
@@ -794,23 +858,29 @@ export default function AppHomePage() {
           const needsProofDetail =
             order.status === DeliveryOrderStatus.IN_TRANSIT ||
             order.status === DeliveryOrderStatus.DELIVERED;
-          const [payment, detail] = await Promise.all([
+          const [payment, detailResult] = await Promise.all([
             fetchPaymentIntentForOrder(order.id),
             needsProofDetail
-              ? api.orders.detail(order.id).catch(() => null)
-              : Promise.resolve(null),
+              ? api.orders
+                  .detail(order.id)
+                  .then((detail) => ({ detail, loadFailed: false as const }))
+                  .catch(() => ({ detail: null, loadFailed: true as const }))
+              : Promise.resolve({ detail: null, loadFailed: false as const }),
           ]);
           return {
             ...order,
-            proofNote: detail?.proofNote,
-            proofConfirmationCode: detail?.proofConfirmationCode,
-            proofSubmittedAt: detail?.proofSubmittedAt,
+            proofNote: detailResult.detail?.proofNote,
+            proofConfirmationCode: detailResult.detail?.proofConfirmationCode,
+            proofSubmittedAt: detailResult.detail?.proofSubmittedAt,
+            proofLoadFailed: detailResult.loadFailed,
             paymentIntent: payment.intent,
             paymentLoadFailed: payment.loadFailed,
           };
         }),
       );
-      setAcceptedOrders((previous) => mergeOrderPaymentFromPrevious(enriched, previous));
+      setAcceptedOrders((previous) =>
+        mergeOrderProofFromPrevious(mergeOrderPaymentFromPrevious(enriched, previous), previous),
+      );
       await loadUserDisputes();
       return enriched;
     } catch {
@@ -893,6 +963,102 @@ export default function AppHomePage() {
       }
     },
     [setPaymentStatusLoading],
+  );
+
+  const setProofDetailLoading = useCallback((orderId: string, loading: boolean) => {
+    setProofDetailLoadingOrderIds((previous) => {
+      const next = new Set(previous);
+      if (loading) {
+        next.add(orderId);
+      } else {
+        next.delete(orderId);
+      }
+      return next;
+    });
+  }, []);
+
+  const refreshSenderOrderProof = useCallback(
+    async (orderId: string) => {
+      setProofDetailLoading(orderId, true);
+      try {
+        const detail = await api.orders.detail(orderId);
+        setSenderAcceptedOrders((previous) =>
+          previous.map((order) => {
+            if (order.id !== orderId) {
+              return order;
+            }
+            return {
+              ...order,
+              acceptedAt: detail.acceptedAt ?? order.acceptedAt,
+              deliveredAt: detail.deliveredAt ?? order.deliveredAt,
+              proofNote: detail.proofNote,
+              proofConfirmationCode: detail.proofConfirmationCode,
+              proofSubmittedAt: detail.proofSubmittedAt,
+              proofLoadFailed: false,
+            };
+          }),
+        );
+      } catch {
+        setSenderAcceptedOrders((previous) =>
+          previous.map((order) => {
+            if (order.id !== orderId) {
+              return order;
+            }
+            return {
+              ...order,
+              proofLoadFailed: true,
+              proofNote: order.proofNote,
+              proofConfirmationCode: order.proofConfirmationCode,
+              proofSubmittedAt: order.proofSubmittedAt,
+            };
+          }),
+        );
+      } finally {
+        setProofDetailLoading(orderId, false);
+      }
+    },
+    [setProofDetailLoading],
+  );
+
+  const refreshWaylerOrderProof = useCallback(
+    async (orderId: string) => {
+      setProofDetailLoading(orderId, true);
+      try {
+        const detail = await api.orders.detail(orderId);
+        setAcceptedOrders((previous) =>
+          previous.map((order) => {
+            if (order.id !== orderId) {
+              return order;
+            }
+            return {
+              ...order,
+              proofNote: detail.proofNote,
+              proofConfirmationCode: detail.proofConfirmationCode,
+              proofSubmittedAt: detail.proofSubmittedAt,
+              proofLoadFailed: false,
+            };
+          }),
+        );
+      } catch {
+        setAcceptedOrders((previous) =>
+          previous.map((order) => {
+            if (order.id !== orderId) {
+              return order;
+            }
+            return {
+              ...order,
+              proofLoadFailed: true,
+              proofNote: order.proofNote,
+              proofConfirmationCode: order.proofConfirmationCode,
+              proofSubmittedAt: order.proofSubmittedAt,
+            };
+          }),
+        );
+      } finally {
+        setProofDetailLoading(orderId, false);
+      }
+    },
+    [setProofDetailLoading],
   );
 
   const focusAcceptedOrder = useFocusAcceptedOrder<AcceptedOrderRowForDetails>({
@@ -1013,8 +1179,10 @@ export default function AppHomePage() {
 
   async function handleStartTransit(orderId: string) {
     setProgressError(null);
+    setProgressErrorOrderId(null);
     setProgressSuccess(null);
     setProofError(null);
+    setProofErrorOrderId(null);
     setProofSuccessOrderId(null);
     setProgressingOrderId(orderId);
     setProgressAction('start-transit');
@@ -1023,6 +1191,7 @@ export default function AppHomePage() {
       setProgressSuccess('transit');
       await loadAcceptedOrders();
     } catch (err) {
+      setProgressErrorOrderId(orderId);
       setProgressError(
         err instanceof ApiError
           ? err.message || t('app.waylerFeed.acceptedPanel.progressFailed')
@@ -1036,8 +1205,10 @@ export default function AppHomePage() {
 
   async function handleMarkDelivered(orderId: string) {
     setProgressError(null);
+    setProgressErrorOrderId(null);
     setProgressSuccess(null);
     setProofError(null);
+    setProofErrorOrderId(null);
     setProofSuccessOrderId(null);
     setProgressingOrderId(orderId);
     setProgressAction('mark-delivered');
@@ -1046,6 +1217,7 @@ export default function AppHomePage() {
       setProgressSuccess('delivered');
       await loadAcceptedOrders();
     } catch (err) {
+      setProgressErrorOrderId(orderId);
       setProgressError(
         err instanceof ApiError
           ? err.message || t('app.waylerFeed.acceptedPanel.progressFailed')
@@ -1094,9 +1266,9 @@ export default function AppHomePage() {
     }
 
     setProofError(null);
-    setProofSuccessOrderId(null);
+    setProofErrorOrderId(null);
     setProgressError(null);
-    setProgressSuccess(null);
+    setProgressErrorOrderId(null);
     setSubmittingProofOrderId(orderId);
     try {
       const body: { note?: string; confirmationCode?: string } = {};
@@ -1110,6 +1282,7 @@ export default function AppHomePage() {
       setProofSuccessOrderId(orderId);
       await loadAcceptedOrders();
     } catch (err) {
+      setProofErrorOrderId(orderId);
       setProofError(
         err instanceof ApiError
           ? err.message || t('app.waylerFeed.acceptedPanel.proofFailed')
@@ -1780,10 +1953,6 @@ export default function AppHomePage() {
                     {t('app.waylerFeed.acceptedPanel.deliveredSuccess')}
                   </p>
                 ) : null}
-                {progressError ? (
-                  <p className="wayly-alert wayly-alert-danger">{progressError}</p>
-                ) : null}
-                {proofError ? <p className="wayly-alert wayly-alert-danger">{proofError}</p> : null}
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
@@ -1828,6 +1997,11 @@ export default function AppHomePage() {
                       const showProofForm =
                         order.status === DeliveryOrderStatus.IN_TRANSIT ||
                         order.status === DeliveryOrderStatus.DELIVERED;
+                      const isProofDetailLoading =
+                        proofDetailLoadingOrderIds.has(order.id) ||
+                        (acceptedLoading && acceptedOrders.length > 0 && showProofForm);
+                      const hasKnownProof =
+                        hasExistingProof || Boolean(order.proofNote || order.proofConfirmationCode);
                       const paymentIntent = order.paymentIntent;
                       const paymentStatusNote = paymentIntent
                         ? waylerPaymentStatusNote(paymentIntent, t)
@@ -1993,6 +2167,11 @@ export default function AppHomePage() {
                           ) : null}
                           {order.status === DeliveryOrderStatus.ACCEPTED ? (
                             <>
+                              {progressErrorOrderId === order.id && progressError ? (
+                                <p className={cn(ALERT_ERROR_CLASS, 'mt-3 text-sm')} role="alert">
+                                  {progressError}
+                                </p>
+                              ) : null}
                               <Button
                                 className="mt-3 w-full sm:w-auto"
                                 size="sm"
@@ -2009,16 +2188,23 @@ export default function AppHomePage() {
                             </>
                           ) : null}
                           {order.status === DeliveryOrderStatus.IN_TRANSIT ? (
-                            <Button
-                              className="mt-3 w-full sm:w-auto"
-                              size="sm"
-                              disabled={actionDisabled}
-                              onClick={() => void handleMarkDelivered(order.id)}
-                            >
-                              {isProgressing && progressAction === 'mark-delivered'
-                                ? t('app.waylerFeed.acceptedPanel.markingDelivered')
-                                : t('app.waylerFeed.acceptedPanel.markDelivered')}
-                            </Button>
+                            <>
+                              {progressErrorOrderId === order.id && progressError ? (
+                                <p className={cn(ALERT_ERROR_CLASS, 'mt-3 text-sm')} role="alert">
+                                  {progressError}
+                                </p>
+                              ) : null}
+                              <Button
+                                className="mt-3 w-full sm:w-auto"
+                                size="sm"
+                                disabled={actionDisabled}
+                                onClick={() => void handleMarkDelivered(order.id)}
+                              >
+                                {isProgressing && progressAction === 'mark-delivered'
+                                  ? t('app.waylerFeed.acceptedPanel.markingDelivered')
+                                  : t('app.waylerFeed.acceptedPanel.markDelivered')}
+                              </Button>
+                            </>
                           ) : null}
                           {order.status === DeliveryOrderStatus.DELIVERED ? (
                             <p className="mt-3 text-sm text-muted-foreground">
@@ -2072,6 +2258,29 @@ export default function AppHomePage() {
                               <p className="text-sm font-medium">
                                 {t('app.waylerFeed.acceptedPanel.proofTitle')}
                               </p>
+                              {isProofDetailLoading ? (
+                                <p
+                                  className="mt-1 text-xs text-muted-foreground"
+                                  role="status"
+                                  aria-live="polite"
+                                >
+                                  {hasKnownProof
+                                    ? t('app.waylerFeed.acceptedPanel.proofRefreshing')
+                                    : t('app.waylerFeed.acceptedPanel.proofLoading')}
+                                </p>
+                              ) : null}
+                              {order.proofLoadFailed ? (
+                                <div className="mt-2">
+                                  <PanelErrorState
+                                    message={t('app.waylerFeed.acceptedPanel.proofLoadFailed')}
+                                    retryLabel={t('app.waylerFeed.acceptedPanel.retryProofStatus')}
+                                    onRetry={() => void refreshWaylerOrderProof(order.id)}
+                                    retryDisabled={
+                                      isProofDetailLoading || actionDisabled || paymentActionBusy
+                                    }
+                                  />
+                                </div>
+                              ) : null}
                               {order.proofNote ||
                               order.proofConfirmationCode ||
                               order.proofSubmittedAt ? (
@@ -2103,6 +2312,15 @@ export default function AppHomePage() {
                                     </div>
                                   ) : null}
                                 </dl>
+                              ) : !order.proofLoadFailed &&
+                                !isProofDetailLoading &&
+                                !hasExistingProof ? (
+                                <div className="mt-2">
+                                  <PanelEmptyState
+                                    title={t('app.waylerFeed.acceptedPanel.proofEmptyTitle')}
+                                    body={t('app.waylerFeed.acceptedPanel.proofEmptyBody')}
+                                  />
+                                </div>
                               ) : null}
                               {proofSuccessOrderId === order.id ? (
                                 <p
@@ -2110,6 +2328,11 @@ export default function AppHomePage() {
                                   role="status"
                                 >
                                   {t('app.waylerFeed.acceptedPanel.proofSuccess')}
+                                </p>
+                              ) : null}
+                              {proofErrorOrderId === order.id && proofError ? (
+                                <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')} role="alert">
+                                  {proofError}
                                 </p>
                               ) : null}
                               <div className="mt-3 flex flex-col gap-3">
@@ -2635,6 +2858,18 @@ export default function AppHomePage() {
                                 ? t('app.senderPanel.payment.releaseSuccess')
                                 : null
                           : null;
+                      const showSenderProofPanel =
+                        order.status === DeliveryOrderStatus.IN_TRANSIT ||
+                        order.status === DeliveryOrderStatus.DELIVERED ||
+                        Boolean(order.proofSubmittedAt);
+                      const isSenderProofLoading =
+                        proofDetailLoadingOrderIds.has(order.id) ||
+                        (senderAcceptedLoading &&
+                          senderAcceptedOrders.length > 0 &&
+                          showSenderProofPanel);
+                      const hasSenderKnownProof =
+                        Boolean(order.proofSubmittedAt) ||
+                        Boolean(order.proofNote || order.proofConfirmationCode);
 
                       return (
                         <li
@@ -2703,46 +2938,80 @@ export default function AppHomePage() {
                               </div>
                             ) : null}
                           </dl>
-                          {order.proofSubmittedAt ? (
+                          {showSenderProofPanel ? (
                             <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
                               <p className="text-sm font-medium">
                                 {t('app.senderPanel.proofTitle')}
                               </p>
-                              <dl className="mt-2 flex flex-col gap-1 text-sm">
-                                {order.proofNote ? (
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.senderPanel.proofNote')}
-                                    </dt>
-                                    <dd>{order.proofNote}</dd>
-                                  </div>
-                                ) : null}
-                                {order.proofConfirmationCode ? (
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.senderPanel.proofConfirmationCode')}
-                                    </dt>
-                                    <dd className="font-mono text-xs">
-                                      {order.proofConfirmationCode}
-                                    </dd>
-                                  </div>
-                                ) : null}
-                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                  <dt className="text-muted-foreground">
-                                    {t('app.senderPanel.proofSubmittedAt')}
-                                  </dt>
-                                  <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                              {isSenderProofLoading ? (
+                                <p
+                                  className="mt-1 text-xs text-muted-foreground"
+                                  role="status"
+                                  aria-live="polite"
+                                >
+                                  {hasSenderKnownProof
+                                    ? t('app.senderPanel.proofRefreshing')
+                                    : t('app.senderPanel.proofLoading')}
+                                </p>
+                              ) : null}
+                              {order.proofLoadFailed ? (
+                                <div className="mt-2">
+                                  <PanelErrorState
+                                    message={t('app.senderPanel.proofLoadFailed')}
+                                    retryLabel={t('app.senderPanel.retryProofStatus')}
+                                    onRetry={() => void refreshSenderOrderProof(order.id)}
+                                    retryDisabled={
+                                      isSenderProofLoading ||
+                                      senderAcceptedLoading ||
+                                      paymentActionBusy
+                                    }
+                                  />
                                 </div>
-                              </dl>
+                              ) : null}
+                              {order.proofSubmittedAt ? (
+                                <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                  {order.proofNote ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.senderPanel.proofNote')}
+                                      </dt>
+                                      <dd>{order.proofNote}</dd>
+                                    </div>
+                                  ) : null}
+                                  {order.proofConfirmationCode ? (
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.senderPanel.proofConfirmationCode')}
+                                      </dt>
+                                      <dd className="font-mono text-xs">
+                                        {order.proofConfirmationCode}
+                                      </dd>
+                                    </div>
+                                  ) : null}
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.senderPanel.proofSubmittedAt')}
+                                    </dt>
+                                    <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                                  </div>
+                                </dl>
+                              ) : !order.proofLoadFailed && !isSenderProofLoading ? (
+                                <div className="mt-2">
+                                  <PanelEmptyState
+                                    title={
+                                      order.status === DeliveryOrderStatus.DELIVERED
+                                        ? t('app.senderPanel.proofMissingTitle')
+                                        : t('app.senderPanel.proofPendingTitle')
+                                    }
+                                    body={
+                                      order.status === DeliveryOrderStatus.DELIVERED
+                                        ? t('app.senderPanel.proofMissingBody')
+                                        : t('app.senderPanel.proofPendingBody')
+                                    }
+                                  />
+                                </div>
+                              ) : null}
                             </div>
-                          ) : order.status === DeliveryOrderStatus.IN_TRANSIT ? (
-                            <p className="mt-3 text-sm text-muted-foreground">
-                              {t('app.senderPanel.proofPending')}
-                            </p>
-                          ) : order.status === DeliveryOrderStatus.DELIVERED ? (
-                            <p className="mt-3 text-sm text-muted-foreground">
-                              {t('app.senderPanel.proofMissing')}
-                            </p>
                           ) : null}
                           <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
                             <p className="text-sm font-medium">
