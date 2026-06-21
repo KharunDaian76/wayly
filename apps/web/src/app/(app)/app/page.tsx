@@ -625,7 +625,7 @@ export default function AppHomePage() {
       });
       setPublishedOrders(items);
     } catch {
-      setPublishedError(t('app.senderPanel.publishedLoadFailed'));
+      setPublishedError(t('app.senderPanel.postedOrdersLoadFailed'));
     } finally {
       setPublishedLoading(false);
     }
@@ -2320,7 +2320,9 @@ export default function AppHomePage() {
                   disabled={!canViewSenderOrders || publishedLoading || senderListActionBusy}
                   onClick={() => void loadPublishedOrders()}
                 >
-                  {t('app.senderPanel.refresh')}
+                  {publishedLoading && publishedOrders.length > 0
+                    ? t('app.senderPanel.refreshing')
+                    : t('app.senderPanel.refresh')}
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
@@ -2335,19 +2337,30 @@ export default function AppHomePage() {
                     {t('app.senderPanel.cancelSuccess')}
                   </p>
                 ) : null}
-                {publishedError ? (
-                  <p className="wayly-alert wayly-alert-danger">{publishedError}</p>
+                {canViewSenderOrders && publishedError ? (
+                  <PanelErrorState
+                    message={publishedError}
+                    retryLabel={t('app.senderPanel.retryPostedOrders')}
+                    onRetry={() => void loadPublishedOrders()}
+                    retryDisabled={publishedLoading}
+                  />
                 ) : null}
-                {canViewSenderOrders && publishedLoading ? (
-                  <>
-                    <p className="sr-only">{t('app.senderPanel.publishedLoading')}</p>
+                {canViewSenderOrders && publishedLoading && publishedOrders.length === 0 ? (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                      {t('app.senderPanel.postedOrdersLoading')}
+                    </p>
                     <SenderOrdersSkeleton />
-                  </>
-                ) : canViewSenderOrders && publishedOrders.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    {t('app.senderPanel.publishedEmpty')}
-                  </p>
-                ) : canViewSenderOrders ? (
+                  </div>
+                ) : canViewSenderOrders &&
+                  !publishedLoading &&
+                  !publishedError &&
+                  publishedOrders.length === 0 ? (
+                  <PanelEmptyState
+                    title={t('app.senderPanel.postedOrdersEmptyTitle')}
+                    body={t('app.senderPanel.postedOrdersEmptyBody')}
+                  />
+                ) : canViewSenderOrders && publishedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">
                     {publishedOrders.map((order) => {
                       const isExitingPublished = exitingPublishedIds.has(order.id);

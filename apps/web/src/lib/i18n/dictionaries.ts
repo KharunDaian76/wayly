@@ -260,6 +260,12 @@ const en = {
   'app.senderPanel.acceptedEmptyBody':
     'Accepted deliveries appear here after a Wayler accepts your posted order or an availability request you sent.',
   'app.senderPanel.retryAccepted': 'Retry',
+  'app.senderPanel.postedOrdersLoading': 'Loading published orders…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'No posted delivery requests yet',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'Posted delivery requests will appear here after you create and publish an order. Use the delivery request form above to get started.',
+  'app.senderPanel.postedOrdersLoadFailed': 'Could not load published orders.',
+  'app.senderPanel.retryPostedOrders': 'Retry',
   'app.senderPanel.draftsLoadFailed': 'Failed to load draft orders.',
   'app.senderPanel.publishedLoadFailed': 'Failed to load published orders.',
   'app.senderPanel.acceptedLoadFailed': 'Failed to load accepted orders.',
@@ -866,6 +872,12 @@ const ru: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'Принятые доставки появятся здесь, когда Wayler примет ваш опубликованный заказ или запрос доступности.',
   'app.senderPanel.retryAccepted': 'Повторить',
+  'app.senderPanel.postedOrdersLoading': 'Загрузка опубликованных заказов…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'Пока нет опубликованных заявок на доставку',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'Опубликованные заявки на доставку появятся здесь после создания и публикации заказа. Используйте форму заявки на доставку выше, чтобы начать.',
+  'app.senderPanel.postedOrdersLoadFailed': 'Не удалось загрузить опубликованные заказы.',
+  'app.senderPanel.retryPostedOrders': 'Повторить',
   'app.senderPanel.draftsLoadFailed': 'Не удалось загрузить черновики.',
   'app.senderPanel.publishedLoadFailed': 'Не удалось загрузить опубликованные заказы.',
   'app.senderPanel.acceptedLoadFailed': 'Не удалось загрузить принятые заказы.',
@@ -1475,6 +1487,12 @@ const es: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'Las entregas aceptadas aparecerán aquí cuando un Wayler acepte tu pedido publicado o una solicitud de disponibilidad.',
   'app.senderPanel.retryAccepted': 'Reintentar',
+  'app.senderPanel.postedOrdersLoading': 'Cargando pedidos publicados…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'Aún no hay solicitudes de entrega publicadas',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'Las solicitudes de entrega publicadas aparecerán aquí después de crear y publicar un pedido. Usa el formulario de solicitud de entrega de arriba para empezar.',
+  'app.senderPanel.postedOrdersLoadFailed': 'No se pudieron cargar los pedidos publicados.',
+  'app.senderPanel.retryPostedOrders': 'Reintentar',
   'app.senderPanel.draftsLoadFailed': 'No se pudieron cargar los borradores.',
   'app.senderPanel.publishedLoadFailed': 'No se pudieron cargar los pedidos publicados.',
   'app.senderPanel.acceptedLoadFailed': 'No se pudieron cargar los pedidos aceptados.',
@@ -2090,6 +2108,12 @@ const fr: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'Les livraisons acceptées apparaîtront ici après qu’un Wayler accepte votre commande publiée ou une demande de disponibilité.',
   'app.senderPanel.retryAccepted': 'Réessayer',
+  'app.senderPanel.postedOrdersLoading': 'Chargement des commandes publiées…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'Aucune demande de livraison publiée pour le moment',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'Les demandes de livraison publiées apparaîtront ici après la création et la publication d’une commande. Utilisez le formulaire de demande de livraison ci-dessus pour commencer.',
+  'app.senderPanel.postedOrdersLoadFailed': 'Impossible de charger les commandes publiées.',
+  'app.senderPanel.retryPostedOrders': 'Réessayer',
   'app.senderPanel.draftsLoadFailed': 'Impossible de charger les brouillons.',
   'app.senderPanel.publishedLoadFailed': 'Impossible de charger les commandes publiées.',
   'app.senderPanel.acceptedLoadFailed': 'Impossible de charger les commandes acceptées.',
@@ -2712,6 +2736,13 @@ const de: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'Angenommene Lieferungen erscheinen hier, sobald ein Wayler Ihre veröffentlichte Bestellung oder Verfügbarkeitsanfrage annimmt.',
   'app.senderPanel.retryAccepted': 'Erneut versuchen',
+  'app.senderPanel.postedOrdersLoading': 'Veröffentlichte Bestellungen werden geladen…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'Noch keine veröffentlichten Lieferanfragen',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'Veröffentlichte Lieferanfragen erscheinen hier, nachdem Sie eine Bestellung erstellt und veröffentlicht haben. Nutzen Sie das Lieferanfrage-Formular oben, um zu starten.',
+  'app.senderPanel.postedOrdersLoadFailed':
+    'Veröffentlichte Bestellungen konnten nicht geladen werden.',
+  'app.senderPanel.retryPostedOrders': 'Erneut versuchen',
   'app.senderPanel.draftsLoadFailed': 'Entwürfe konnten nicht geladen werden.',
   'app.senderPanel.publishedLoadFailed':
     'Veröffentlichte Bestellungen konnten nicht geladen werden.',
@@ -3324,6 +3355,12 @@ const tr: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'Bir Wayler yayınladığınız siparişi veya gönderdiğiniz kullanılabilirlik isteğini kabul ettiğinde teslimatlar burada görünür.',
   'app.senderPanel.retryAccepted': 'Yeniden dene',
+  'app.senderPanel.postedOrdersLoading': 'Yayınlanan siparişler yükleniyor…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'Henüz yayınlanmış teslimat talebi yok',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'Yayınlanmış teslimat talepleri, bir sipariş oluşturup yayınladıktan sonra burada görünür. Başlamak için yukarıdaki teslimat talebi formunu kullanın.',
+  'app.senderPanel.postedOrdersLoadFailed': 'Yayınlanan siparişler yüklenemedi.',
+  'app.senderPanel.retryPostedOrders': 'Yeniden dene',
   'app.senderPanel.draftsLoadFailed': 'Taslaklar yüklenemedi.',
   'app.senderPanel.publishedLoadFailed': 'Yayınlanan siparişler yüklenemedi.',
   'app.senderPanel.acceptedLoadFailed': 'Kabul edilen siparişler yüklenemedi.',
@@ -3920,6 +3957,12 @@ const ar: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'ستظهر التوصيلات المقبولة هنا بعد أن يقبل وايلر طلبك المنشور أو طلب التوفر الذي أرسلته.',
   'app.senderPanel.retryAccepted': 'إعادة المحاولة',
+  'app.senderPanel.postedOrdersLoading': 'جارٍ تحميل الطلبات المنشورة…',
+  'app.senderPanel.postedOrdersEmptyTitle': 'لا توجد طلبات توصيل منشورة بعد',
+  'app.senderPanel.postedOrdersEmptyBody':
+    'ستظهر طلبات التوصيل المنشورة هنا بعد إنشاء الطلب ونشره. استخدم نموذج طلب التوصيل أعلاه للبدء.',
+  'app.senderPanel.postedOrdersLoadFailed': 'تعذر تحميل الطلبات المنشورة.',
+  'app.senderPanel.retryPostedOrders': 'إعادة المحاولة',
   'app.senderPanel.draftsLoadFailed': 'تعذر تحميل المسودات.',
   'app.senderPanel.publishedLoadFailed': 'تعذر تحميل الطلبات المنشورة.',
   'app.senderPanel.acceptedLoadFailed': 'تعذر تحميل الطلبات المقبولة.',
@@ -4505,6 +4548,12 @@ const zh: Dictionary = {
   'app.senderPanel.acceptedEmptyBody':
     'Wayler 接受您发布的订单或您发送的可用性请求后，已接受的配送将显示在这里。',
   'app.senderPanel.retryAccepted': '重试',
+  'app.senderPanel.postedOrdersLoading': '正在加载已发布订单…',
+  'app.senderPanel.postedOrdersEmptyTitle': '暂无已发布的配送请求',
+  'app.senderPanel.postedOrdersEmptyBody':
+    '创建并发布订单后，已发布的配送请求将显示在此处。请使用上方的配送请求表单开始。',
+  'app.senderPanel.postedOrdersLoadFailed': '无法加载已发布订单。',
+  'app.senderPanel.retryPostedOrders': '重试',
   'app.senderPanel.draftsLoadFailed': '无法加载草稿订单。',
   'app.senderPanel.publishedLoadFailed': '无法加载已发布订单。',
   'app.senderPanel.acceptedLoadFailed': '无法加载已接受订单。',
