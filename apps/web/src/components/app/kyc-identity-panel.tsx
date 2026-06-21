@@ -12,7 +12,7 @@ import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
 
-const isDev = process.env.NODE_ENV !== 'production';
+import { demoToolsEnabled } from '@/lib/demo-tools';
 
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
 const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
@@ -336,7 +336,7 @@ export function KycIdentityPanel({
           </div>
         ) : null}
 
-        {isDev && kycStatus && !isApproved && hasPendingVerification ? (
+        {demoToolsEnabled && kycStatus && !isApproved && hasPendingVerification ? (
           <div className="flex flex-wrap items-center gap-3 border-t border-border/40 pt-4">
             <Button
               type="button"

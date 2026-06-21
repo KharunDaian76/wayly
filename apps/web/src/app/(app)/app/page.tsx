@@ -54,6 +54,7 @@ import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
 import { useAuth } from '@/lib/auth/auth-context';
+import { demoToolsEnabled } from '@/lib/demo-tools';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { acceptedOrderElementId } from '@/lib/notifications/notification-order-focus';
@@ -3268,7 +3269,9 @@ export default function AppHomePage() {
                                 {t('app.senderPanel.payment.releaseRequirements')}
                               </p>
                             ) : null}
-                            {!terminalPaymentStatus && paymentStatus !== PaymentStatus.RELEASED ? (
+                            {demoToolsEnabled &&
+                            !terminalPaymentStatus &&
+                            paymentStatus !== PaymentStatus.RELEASED ? (
                               <div className="wayly-action-group mt-3">
                                 {canAuthorizePayment ? (
                                   <Button

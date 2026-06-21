@@ -6,6 +6,7 @@ import { Button, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
+import { demoToolsEnabled } from '@/lib/demo-tools';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -279,23 +280,27 @@ export function WaylerAccessPanel({ kycGate, onAccessChanged }: WaylerAccessPane
                   <p className="mt-3 text-sm text-muted-foreground">
                     {t('app.waylerAccess.inactiveNote')}
                   </p>
-                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                    <Button
-                      size="sm"
-                      disabled={activating || loading}
-                      onClick={() => void handleMockActivate()}
-                    >
-                      {activating
-                        ? t('app.waylerAccess.activating')
-                        : t('app.waylerAccess.mockActivate')}
-                    </Button>
-                  </div>
+                  {demoToolsEnabled ? (
+                    <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                      <Button
+                        size="sm"
+                        disabled={activating || loading}
+                        onClick={() => void handleMockActivate()}
+                      >
+                        {activating
+                          ? t('app.waylerAccess.activating')
+                          : t('app.waylerAccess.mockActivate')}
+                      </Button>
+                    </div>
+                  ) : null}
                 </>
               )}
 
-              <p className="mt-3 text-xs text-muted-foreground">
-                {t('app.waylerAccess.manualOnlyNote')}
-              </p>
+              {demoToolsEnabled ? (
+                <p className="mt-3 text-xs text-muted-foreground">
+                  {t('app.waylerAccess.manualOnlyNote')}
+                </p>
+              ) : null}
 
               {activateError ? (
                 <p className={cn('mt-3', ALERT_ERROR_CLASS)}>{activateError}</p>
