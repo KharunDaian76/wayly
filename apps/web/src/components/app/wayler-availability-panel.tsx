@@ -4,9 +4,14 @@ import { ApiError } from '@wayly/sdk';
 import type { WaylerAvailabilitySummary } from '@wayly/types';
 import { TripDirection, WaylerAvailabilityStatus, WaylerAvailabilityType } from '@wayly/types';
 import type { CreateWaylerAvailabilityInput } from '@wayly/validation';
-import { Button, Input, Skeleton } from '@wayly/ui';
+import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -197,7 +202,7 @@ export function WaylerAvailabilityPanel({ isApproved, kycLoading }: WaylerAvaila
       const result = await api.waylerAvailabilities.mine({ limit: 20 });
       setListings(result.items);
     } catch {
-      setListingsError(t('app.waylerAvailability.loadFailed'));
+      setListingsError(t('app.waylerAvailability.availabilityLoadFailed'));
     } finally {
       setListingsLoading(false);
     }
@@ -601,7 +606,19 @@ export function WaylerAvailabilityPanel({ isApproved, kycLoading }: WaylerAvaila
           </form>
 
           <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold">{t('app.waylerAvailability.myListings')}</h3>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h3 className="text-sm font-semibold">{t('app.waylerAvailability.myListings')}</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={listingsLoading || actionDisabled}
+                onClick={() => void loadListings()}
+              >
+                {listingsLoading && listings.length > 0
+                  ? t('app.waylerAvailability.refreshing')
+                  : t('app.waylerAvailability.refresh')}
+              </Button>
+            </div>
 
             {actionError ? <p className={ALERT_ERROR_CLASS}>{actionError}</p> : null}
             {actionSuccess ? (
@@ -609,21 +626,28 @@ export function WaylerAvailabilityPanel({ isApproved, kycLoading }: WaylerAvaila
                 {actionSuccess}
               </p>
             ) : null}
-            {listingsError ? <p className={ALERT_ERROR_CLASS}>{listingsError}</p> : null}
+            {listingsError ? (
+              <PanelErrorState
+                message={listingsError}
+                retryLabel={t('app.waylerAvailability.retryAvailability')}
+                onRetry={() => void loadListings()}
+                retryDisabled={listingsLoading}
+              />
+            ) : null}
 
-            {listingsLoading ? (
-              <ul className="flex flex-col gap-4" aria-hidden>
-                {[0, 1].map((key) => (
-                  <li key={key} className="wayly-order-card rounded-xl px-4 py-4">
-                    <Skeleton className="mb-2 h-4 w-3/5 max-w-xs" />
-                    <Skeleton className="mb-3 h-3 w-24" />
-                    <Skeleton className="h-3 w-full" />
-                  </li>
-                ))}
-              </ul>
-            ) : listings.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('app.waylerAvailability.empty')}</p>
-            ) : (
+            {listingsLoading && listings.length === 0 ? (
+              <div className="flex flex-col gap-3">
+                <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                  {t('app.waylerAvailability.availabilityLoading')}
+                </p>
+                <RequestsListSkeleton rows={2} itemClassName="h-24 w-full rounded-xl" />
+              </div>
+            ) : !listingsLoading && !listingsError && listings.length === 0 ? (
+              <PanelEmptyState
+                title={t('app.waylerAvailability.availabilityEmptyTitle')}
+                body={t('app.waylerAvailability.availabilityEmptyBody')}
+              />
+            ) : listings.length > 0 ? (
               <ul className="flex flex-col gap-4">
                 {listings.map((listing) => {
                   const busy = actionBusy?.id === listing.id ? actionBusy.action : null;
@@ -804,7 +828,7 @@ export function WaylerAvailabilityPanel({ isApproved, kycLoading }: WaylerAvaila
                   );
                 })}
               </ul>
-            )}
+            ) : null}
           </div>
         </>
       ) : null}
