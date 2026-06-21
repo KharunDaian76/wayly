@@ -271,6 +271,48 @@ function AcceptedOrdersSkeleton() {
   );
 }
 
+function AcceptedPanelEmptyState({ title, body }: { title: string; body: string }) {
+  return (
+    <div
+      className="rounded-lg border border-border/60 bg-muted/15 px-4 py-5 text-center sm:text-left"
+      role="status"
+    >
+      <p className="text-sm font-medium text-foreground">{title}</p>
+      <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
+function AcceptedPanelErrorState({
+  message,
+  retryLabel,
+  onRetry,
+  retryDisabled,
+}: {
+  message: string;
+  retryLabel: string;
+  onRetry: () => void;
+  retryDisabled?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-2 rounded-lg border border-danger/30 bg-danger/10 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-sm text-danger" role="alert">
+        {message}
+      </p>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="h-8 shrink-0 text-xs"
+        disabled={retryDisabled}
+        onClick={onRetry}
+      >
+        {retryLabel}
+      </Button>
+    </div>
+  );
+}
+
 function orderStatusBadgeClass(status: DeliveryOrderSummary['status']): string {
   const base = 'wayly-status-badge';
   switch (status) {
@@ -1669,9 +1711,6 @@ export default function AppHomePage() {
                 {progressError ? (
                   <p className="wayly-alert wayly-alert-danger">{progressError}</p>
                 ) : null}
-                {acceptedError ? (
-                  <p className="wayly-alert wayly-alert-danger">{acceptedError}</p>
-                ) : null}
                 {proofError ? <p className="wayly-alert wayly-alert-danger">{proofError}</p> : null}
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
@@ -1679,16 +1718,30 @@ export default function AppHomePage() {
                 {disputesListLoadFailed ? (
                   <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
                 ) : null}
-                {isApproved && acceptedLoading ? (
-                  <>
-                    <p className="sr-only">{t('app.waylerFeed.acceptedPanel.loading')}</p>
+                {isApproved && acceptedError ? (
+                  <AcceptedPanelErrorState
+                    message={acceptedError}
+                    retryLabel={t('app.waylerFeed.acceptedPanel.retry')}
+                    onRetry={() => void loadAcceptedOrders()}
+                    retryDisabled={acceptedLoading}
+                  />
+                ) : null}
+                {isApproved && acceptedLoading && acceptedOrders.length === 0 ? (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                      {t('app.waylerFeed.acceptedPanel.loading')}
+                    </p>
                     <AcceptedOrdersSkeleton />
-                  </>
-                ) : isApproved && acceptedOrders.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    {t('app.waylerFeed.acceptedPanel.empty')}
-                  </p>
-                ) : isApproved ? (
+                  </div>
+                ) : isApproved &&
+                  !acceptedLoading &&
+                  !acceptedError &&
+                  acceptedOrders.length === 0 ? (
+                  <AcceptedPanelEmptyState
+                    title={t('app.waylerFeed.acceptedPanel.emptyTitle')}
+                    body={t('app.waylerFeed.acceptedPanel.emptyBody')}
+                  />
+                ) : isApproved && acceptedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">
                     {acceptedOrders.map((order) => {
                       const isProgressing = progressingOrderId === order.id;
@@ -2400,15 +2453,14 @@ export default function AppHomePage() {
                   disabled={!canViewSenderOrders || senderAcceptedLoading}
                   onClick={() => void loadSenderAcceptedOrders()}
                 >
-                  {t('app.senderPanel.refresh')}
+                  {senderAcceptedLoading
+                    ? t('app.senderPanel.refreshing')
+                    : t('app.senderPanel.refresh')}
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {!kycLoading && !canViewSenderOrders ? (
                   <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
-                ) : null}
-                {senderAcceptedError ? (
-                  <p className="wayly-alert wayly-alert-danger">{senderAcceptedError}</p>
                 ) : null}
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
@@ -2416,16 +2468,32 @@ export default function AppHomePage() {
                 {disputesListLoadFailed ? (
                   <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
                 ) : null}
-                {canViewSenderOrders && senderAcceptedLoading ? (
-                  <>
-                    <p className="sr-only">{t('app.senderPanel.acceptedLoading')}</p>
+                {canViewSenderOrders && senderAcceptedError ? (
+                  <AcceptedPanelErrorState
+                    message={senderAcceptedError}
+                    retryLabel={t('app.senderPanel.retryAccepted')}
+                    onRetry={() => void loadSenderAcceptedOrders()}
+                    retryDisabled={senderAcceptedLoading}
+                  />
+                ) : null}
+                {canViewSenderOrders &&
+                senderAcceptedLoading &&
+                senderAcceptedOrders.length === 0 ? (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                      {t('app.senderPanel.acceptedLoading')}
+                    </p>
                     <SenderOrdersSkeleton />
-                  </>
-                ) : canViewSenderOrders && senderAcceptedOrders.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    {t('app.senderPanel.acceptedEmpty')}
-                  </p>
-                ) : canViewSenderOrders ? (
+                  </div>
+                ) : canViewSenderOrders &&
+                  !senderAcceptedLoading &&
+                  !senderAcceptedError &&
+                  senderAcceptedOrders.length === 0 ? (
+                  <AcceptedPanelEmptyState
+                    title={t('app.senderPanel.acceptedEmptyTitle')}
+                    body={t('app.senderPanel.acceptedEmptyBody')}
+                  />
+                ) : canViewSenderOrders && senderAcceptedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">
                     {senderAcceptedOrders.map((order) => {
                       const statusNote = senderStatusNote(order.status, t);
