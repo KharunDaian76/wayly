@@ -8,6 +8,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 
 const MAX_MESSAGE_LENGTH = 2000;
 const DETAIL_POLL_MS = 10_000;
@@ -43,7 +48,8 @@ export function ConversationPanel({
   const [messages, setMessages] = useState<ChatMessageSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [sendError, setSendError] = useState<string | null>(null);
   const [markReadError, setMarkReadError] = useState<string | null>(null);
   const [draft, setDraft] = useState('');
 
@@ -87,16 +93,17 @@ export function ConversationPanel({
       detailInFlightRef.current = true;
       if (foreground) {
         setLoading(true);
-        setError(null);
+        setLoadError(null);
         setMarkReadError(null);
       }
       try {
         const detail = await api.conversations.detail(conversationId);
         setMessages(detail.messages);
+        setLoadError(null);
         await markRead(foreground);
       } catch {
         if (foreground) {
-          setError(t('app.chat.loadFailed'));
+          setLoadError(t('app.chat.loadFailed'));
         }
       } finally {
         if (foreground) {
@@ -148,7 +155,8 @@ export function ConversationPanel({
   useEffect(() => {
     if (!open) {
       setDraft('');
-      setError(null);
+      setLoadError(null);
+      setSendError(null);
       setMarkReadError(null);
       setMessages([]);
     }
@@ -159,23 +167,23 @@ export function ConversationPanel({
       return;
     }
     setSending(true);
-    setError(null);
+    setSendError(null);
     try {
       await api.conversations.sendMessage(conversationId, { body: trimmedDraft });
       setDraft('');
       await refreshConversation(true);
     } catch (err) {
       if (err instanceof ApiError && err.code === 'WAYLER_ACCESS_REQUIRED') {
-        setError(t('app.chat.accessRequiredMessageFailed'));
+        setSendError(t('app.chat.accessRequiredMessageFailed'));
       } else if (err instanceof ApiError) {
         const message = err.message.toLowerCase();
         if (message.includes('work access') || message.includes('sending messages')) {
-          setError(t('app.chat.accessRequiredMessageFailed'));
+          setSendError(t('app.chat.accessRequiredMessageFailed'));
         } else {
-          setError(err.message || t('app.chat.sendFailed'));
+          setSendError(err.message || t('app.chat.sendFailed'));
         }
       } else {
-        setError(t('app.chat.sendFailed'));
+        setSendError(t('app.chat.sendFailed'));
       }
     } finally {
       setSending(false);
@@ -185,6 +193,10 @@ export function ConversationPanel({
   if (!open) {
     return null;
   }
+
+  const showInitialLoading = loading && messages.length === 0;
+  const showEmpty = !loading && !loadError && messages.length === 0;
+  const isRefreshing = loading && messages.length > 0;
 
   return (
     <div
@@ -217,7 +229,7 @@ export function ConversationPanel({
               disabled={loading || sending}
               onClick={() => void loadConversation()}
             >
-              {t('app.chat.refresh')}
+              {isRefreshing ? t('app.chat.refreshing') : t('app.chat.refresh')}
             </Button>
             <Button
               type="button"
@@ -232,9 +244,20 @@ export function ConversationPanel({
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3">
-          {error ? (
-            <p className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger">
-              {error}
+          {loadError ? (
+            <PanelErrorState
+              message={loadError}
+              retryLabel={t('app.chat.retry')}
+              onRetry={() => void loadConversation()}
+              retryDisabled={loading}
+            />
+          ) : null}
+          {sendError ? (
+            <p
+              className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger"
+              role="alert"
+            >
+              {sendError}
             </p>
           ) : null}
           {markReadError ? (
@@ -242,13 +265,17 @@ export function ConversationPanel({
               {markReadError}
             </p>
           ) : null}
-          {loading ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              {t('app.chat.loading')}
-            </p>
-          ) : messages.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">{t('app.chat.empty')}</p>
-          ) : (
+          {showInitialLoading ? (
+            <div className="flex flex-col gap-2 py-2">
+              <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                {t('app.chat.loading')}
+              </p>
+              <RequestsListSkeleton rows={3} itemClassName="h-12 w-full rounded-md" />
+            </div>
+          ) : showEmpty ? (
+            <PanelEmptyState title={t('app.chat.emptyTitle')} body={t('app.chat.emptyBody')} />
+          ) : null}
+          {messages.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {messages.map((message) => {
                 const isMine = message.senderId === currentUserId;
@@ -276,7 +303,7 @@ export function ConversationPanel({
                 );
               })}
             </ul>
-          )}
+          ) : null}
         </div>
 
         <div className="border-t border-border/60 p-3">
