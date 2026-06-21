@@ -3,10 +3,15 @@
 import { ApiError } from '@wayly/sdk';
 import type { WaylerAvailabilityRequestSummary } from '@wayly/types';
 import { WaylerAvailabilityRequestStatus } from '@wayly/types';
-import { Button, Skeleton } from '@wayly/ui';
+import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -146,7 +151,7 @@ export function WaylerIncomingRequestsPanel({
       const result = await api.waylerAvailabilityRequests.mineAsWayler({ limit: 10 });
       setRequests(result.items);
     } catch {
-      setLoadError(t('app.availabilityRequests.incomingLoadFailed'));
+      setLoadError(t('app.availabilityRequests.waylerLoadFailed'));
     } finally {
       setLoading(false);
     }
@@ -217,23 +222,30 @@ export function WaylerIncomingRequestsPanel({
 
       {actionSuccess ? <p className={ALERT_SUCCESS_CLASS}>{actionSuccess}</p> : null}
       {actionError ? <p className={ALERT_ERROR_CLASS}>{actionError}</p> : null}
-      {loadError ? <p className={ALERT_ERROR_CLASS}>{loadError}</p> : null}
+      {loadError ? (
+        <PanelErrorState
+          message={loadError}
+          retryLabel={t('app.availabilityRequests.retryWaylerRequests')}
+          onRetry={() => void loadRequests()}
+          retryDisabled={loading}
+        />
+      ) : null}
 
       {isApproved ? (
         <>
-          {loading ? (
-            <ul className="flex flex-col gap-2" aria-hidden>
-              {[0, 1].map((key) => (
-                <li key={key}>
-                  <Skeleton className="h-28 w-full rounded-lg" />
-                </li>
-              ))}
-            </ul>
-          ) : requests.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              {t('app.availabilityRequests.noIncomingRequests')}
-            </p>
-          ) : (
+          {loading && requests.length === 0 ? (
+            <div className="flex flex-col gap-3">
+              <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                {t('app.availabilityRequests.waylerLoading')}
+              </p>
+              <RequestsListSkeleton rows={2} itemClassName="h-28 w-full rounded-lg" />
+            </div>
+          ) : !loading && !loadError && requests.length === 0 ? (
+            <PanelEmptyState
+              title={t('app.availabilityRequests.waylerEmptyTitle')}
+              body={t('app.availabilityRequests.waylerEmptyBody')}
+            />
+          ) : requests.length > 0 ? (
             <ul className="flex flex-col gap-3">
               {requests.map((request) => {
                 const isPending = request.status === WaylerAvailabilityRequestStatus.PENDING;
@@ -353,7 +365,7 @@ export function WaylerIncomingRequestsPanel({
                 );
               })}
             </ul>
-          )}
+          ) : null}
 
           <div className="wayly-action-group">
             <Button

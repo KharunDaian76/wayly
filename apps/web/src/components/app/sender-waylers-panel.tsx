@@ -20,6 +20,11 @@ import { Button, Input, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
 import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -421,7 +426,7 @@ export function SenderWaylersPanel({
         onAcceptedOrdersRefresh?.();
       }
     } catch {
-      setMyRequestsError(t('app.availabilityRequests.requestsLoadFailed'));
+      setMyRequestsError(t('app.availabilityRequests.senderLoadFailed'));
     } finally {
       setMyRequestsLoading(false);
     }
@@ -1116,20 +1121,27 @@ export function SenderWaylersPanel({
             </h3>
             {cancelSuccess ? <p className={ALERT_SUCCESS_CLASS}>{cancelSuccess}</p> : null}
             {cancelError ? <p className={ALERT_ERROR_CLASS}>{cancelError}</p> : null}
-            {myRequestsError ? <p className={ALERT_ERROR_CLASS}>{myRequestsError}</p> : null}
-            {myRequestsLoading ? (
-              <ul className="flex flex-col gap-2" aria-hidden>
-                {[0, 1].map((key) => (
-                  <li key={key}>
-                    <Skeleton className="h-20 w-full rounded-lg" />
-                  </li>
-                ))}
-              </ul>
-            ) : myRequests.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                {t('app.availabilityRequests.noRequestsYet')}
-              </p>
-            ) : (
+            {myRequestsError ? (
+              <PanelErrorState
+                message={myRequestsError}
+                retryLabel={t('app.availabilityRequests.retrySenderRequests')}
+                onRetry={() => void loadMyRequests()}
+                retryDisabled={myRequestsLoading}
+              />
+            ) : null}
+            {myRequestsLoading && myRequests.length === 0 ? (
+              <div className="flex flex-col gap-3">
+                <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                  {t('app.availabilityRequests.senderLoading')}
+                </p>
+                <RequestsListSkeleton />
+              </div>
+            ) : !myRequestsLoading && !myRequestsError && myRequests.length === 0 ? (
+              <PanelEmptyState
+                title={t('app.availabilityRequests.senderEmptyTitle')}
+                body={t('app.availabilityRequests.senderEmptyBody')}
+              />
+            ) : myRequests.length > 0 ? (
               <ul className="flex flex-col gap-2">
                 {myRequests.map((request) => (
                   <li key={request.id} className={REQUEST_CARD_CLASS}>
@@ -1176,7 +1188,7 @@ export function SenderWaylersPanel({
                   </li>
                 ))}
               </ul>
-            )}
+            ) : null}
           </div>
         </>
       ) : null}

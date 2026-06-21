@@ -35,6 +35,7 @@ import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { DisputePanel } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
+import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { WaylerAccessPanel } from '@/components/app/wayler-access-panel';
 import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
@@ -268,48 +269,6 @@ function AcceptedOrdersSkeleton() {
         </li>
       ))}
     </ul>
-  );
-}
-
-function AcceptedPanelEmptyState({ title, body }: { title: string; body: string }) {
-  return (
-    <div
-      className="rounded-lg border border-border/60 bg-muted/15 px-4 py-5 text-center sm:text-left"
-      role="status"
-    >
-      <p className="text-sm font-medium text-foreground">{title}</p>
-      <p className="mt-1.5 text-sm text-muted-foreground">{body}</p>
-    </div>
-  );
-}
-
-function AcceptedPanelErrorState({
-  message,
-  retryLabel,
-  onRetry,
-  retryDisabled,
-}: {
-  message: string;
-  retryLabel: string;
-  onRetry: () => void;
-  retryDisabled?: boolean;
-}) {
-  return (
-    <div className="flex flex-col gap-2 rounded-lg border border-danger/30 bg-danger/10 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm text-danger" role="alert">
-        {message}
-      </p>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        className="h-8 shrink-0 text-xs"
-        disabled={retryDisabled}
-        onClick={onRetry}
-      >
-        {retryLabel}
-      </Button>
-    </div>
   );
 }
 
@@ -1719,7 +1678,7 @@ export default function AppHomePage() {
                   <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
                 ) : null}
                 {isApproved && acceptedError ? (
-                  <AcceptedPanelErrorState
+                  <PanelErrorState
                     message={acceptedError}
                     retryLabel={t('app.waylerFeed.acceptedPanel.retry')}
                     onRetry={() => void loadAcceptedOrders()}
@@ -1737,7 +1696,7 @@ export default function AppHomePage() {
                   !acceptedLoading &&
                   !acceptedError &&
                   acceptedOrders.length === 0 ? (
-                  <AcceptedPanelEmptyState
+                  <PanelEmptyState
                     title={t('app.waylerFeed.acceptedPanel.emptyTitle')}
                     body={t('app.waylerFeed.acceptedPanel.emptyBody')}
                   />
@@ -2469,7 +2428,7 @@ export default function AppHomePage() {
                   <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
                 ) : null}
                 {canViewSenderOrders && senderAcceptedError ? (
-                  <AcceptedPanelErrorState
+                  <PanelErrorState
                     message={senderAcceptedError}
                     retryLabel={t('app.senderPanel.retryAccepted')}
                     onRetry={() => void loadSenderAcceptedOrders()}
@@ -2489,7 +2448,7 @@ export default function AppHomePage() {
                   !senderAcceptedLoading &&
                   !senderAcceptedError &&
                   senderAcceptedOrders.length === 0 ? (
-                  <AcceptedPanelEmptyState
+                  <PanelEmptyState
                     title={t('app.senderPanel.acceptedEmptyTitle')}
                     body={t('app.senderPanel.acceptedEmptyBody')}
                   />
