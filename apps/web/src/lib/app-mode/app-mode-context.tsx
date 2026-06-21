@@ -25,18 +25,22 @@ function isAppMode(value: string): value is AppMode {
 interface AppModeContextValue {
   mode: AppMode;
   setMode: (mode: AppMode) => void;
+  /** False until persisted mode is read from localStorage (avoids wrong panel flash). */
+  modeReady: boolean;
 }
 
 const AppModeContext = createContext<AppModeContextValue | null>(null);
 
 export function AppModeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<AppMode>(DEFAULT_APP_MODE);
+  const [modeReady, setModeReady] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(APP_MODE_STORAGE_KEY);
     if (stored && isAppMode(stored)) {
       setModeState(stored);
     }
+    setModeReady(true);
   }, []);
 
   const setMode = useCallback((next: AppMode) => {
@@ -44,7 +48,7 @@ export function AppModeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(APP_MODE_STORAGE_KEY, next);
   }, []);
 
-  const value = useMemo(() => ({ mode, setMode }), [mode, setMode]);
+  const value = useMemo(() => ({ mode, setMode, modeReady }), [mode, setMode, modeReady]);
 
   return <AppModeContext.Provider value={value}>{children}</AppModeContext.Provider>;
 }

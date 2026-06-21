@@ -27,6 +27,10 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import type { WaylerMapLabels } from '@/components/wayler-map';
 
 import {
+  AppDashboardBootstrapError,
+  AppDashboardLoadingShell,
+} from '@/components/app/app-dashboard-shell';
+import {
   AcceptedOrderDetailsDrawer,
   type AcceptedOrderDetailsInput,
   type AcceptedOrderDetailsPanelRole,
@@ -612,9 +616,13 @@ function AcceptedOrderDisputeSection({
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
-  const { mode } = useAppMode();
+  const { mode, modeReady } = useAppMode();
   const { t } = useI18n();
   const [loggingOut, setLoggingOut] = useState(false);
+  const [bootstrapRetrying, setBootstrapRetrying] = useState(false);
+  const [profileBootstrap, setProfileBootstrap] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
   const [error, setError] = useState<string | null>(null);
   const [kycStatus, setKycStatus] = useState<KycStatusView | null>(null);
   const [kycLoading, setKycLoading] = useState(true);
@@ -717,6 +725,7 @@ export default function AppHomePage() {
   const [detailsStatusLabel, setDetailsStatusLabel] = useState('');
   const paymentActionBusy = paymentActionOrderId !== null;
   const focusFromUrlHandledRef = useRef(false);
+  const bootstrapStartedRef = useRef(false);
 
   const loadKycStatus = useCallback(async () => {
     setKycLoading(true);
@@ -730,6 +739,45 @@ export default function AppHomePage() {
       setKycLoading(false);
     }
   }, [t]);
+
+  const runDashboardBootstrap = useCallback(async () => {
+    setProfileBootstrap('loading');
+    try {
+      await refreshUser();
+      setProfileBootstrap('ready');
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        return;
+      }
+      setProfileBootstrap('error');
+    }
+  }, [refreshUser]);
+
+  const retryDashboardBootstrap = useCallback(async () => {
+    setBootstrapRetrying(true);
+    try {
+      await refreshUser();
+      if (kycStatus === null && !kycError) {
+        await loadKycStatus();
+      }
+      setProfileBootstrap('ready');
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        return;
+      }
+      setProfileBootstrap('error');
+    } finally {
+      setBootstrapRetrying(false);
+    }
+  }, [refreshUser, loadKycStatus, kycStatus, kycError]);
+
+  useEffect(() => {
+    if (!user || bootstrapStartedRef.current) {
+      return;
+    }
+    bootstrapStartedRef.current = true;
+    void runDashboardBootstrap();
+  }, [user, runDashboardBootstrap]);
 
   useEffect(() => {
     if (user) {
@@ -1224,9 +1272,25 @@ export default function AppHomePage() {
     return () => clearTimeout(timer);
   }, [user, mode, isApproved, loadFeedOrders]);
 
-  if (!user) {
-    return null;
-  }
+  const isInitialKycPending = kycLoading && kycStatus === null && !kycError;
+  const isDashboardBootstrapping =
+    !user ||
+    !modeReady ||
+    profileBootstrap === 'loading' ||
+    (profileBootstrap === 'ready' && isInitialKycPending);
+
+  const bootstrapStatusMessage = useMemo(() => {
+    if (!modeReady) {
+      return t('app.shell.loadingWorkspace');
+    }
+    if (profileBootstrap === 'loading') {
+      return t('app.shell.profileLoading');
+    }
+    if (isInitialKycPending) {
+      return t('app.shell.dashboardLoading');
+    }
+    return t('app.shell.dashboardLoading');
+  }, [modeReady, profileBootstrap, isInitialKycPending, t]);
 
   async function handleLogout() {
     setError(null);
@@ -1239,6 +1303,28 @@ export default function AppHomePage() {
     } finally {
       setLoggingOut(false);
     }
+  }
+
+  if (profileBootstrap === 'error') {
+    return (
+      <AppDashboardBootstrapError
+        message={t('app.shell.dashboardLoadFailed')}
+        retryLabel={t('app.shell.retryDashboard')}
+        onRetry={() => void retryDashboardBootstrap()}
+        retryDisabled={bootstrapRetrying}
+        returnToLoginLabel={t('app.shell.returnToLogin')}
+        onReturnToLogin={() => void handleLogout()}
+        returnToLoginDisabled={loggingOut}
+      />
+    );
+  }
+
+  if (isDashboardBootstrapping) {
+    return <AppDashboardLoadingShell statusMessage={bootstrapStatusMessage} />;
+  }
+
+  if (!user) {
+    return <AppDashboardLoadingShell statusMessage={bootstrapStatusMessage} />;
   }
 
   async function handleKycAction(
