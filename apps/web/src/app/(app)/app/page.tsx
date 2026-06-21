@@ -33,7 +33,7 @@ import {
 } from '@/components/app/accepted-order-details-drawer';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
-import { DisputePanel } from '@/components/app/dispute-panel';
+import { DisputePanel, disputeReasonKey, disputeStatusKey } from '@/components/app/dispute-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
@@ -545,6 +545,66 @@ function waylerPaymentStatusNote(
   }
 }
 
+function AcceptedOrderDisputeSection({
+  dispute,
+  disputesLoading,
+  disputesListLoadFailed,
+  onRetryDisputes,
+  t,
+}: {
+  dispute: DisputeSummary | undefined;
+  disputesLoading: boolean;
+  disputesListLoadFailed: boolean;
+  onRetryDisputes: () => void;
+  t: (key: TranslationKey) => string;
+}) {
+  const hasKnownDispute = Boolean(dispute);
+
+  return (
+    <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+      <p className="text-sm font-medium">{t('app.disputes.title')}</p>
+      {disputesLoading ? (
+        <p className="mt-1 text-xs text-muted-foreground" role="status" aria-live="polite">
+          {hasKnownDispute ? t('app.disputes.disputeRefreshing') : t('app.disputes.disputeLoading')}
+        </p>
+      ) : null}
+      {disputesListLoadFailed && !disputesLoading ? (
+        <div className="mt-2">
+          <PanelErrorState
+            message={t('app.disputes.disputeLoadFailed')}
+            retryLabel={t('app.disputes.retryDisputeStatus')}
+            onRetry={onRetryDisputes}
+            retryDisabled={disputesLoading}
+          />
+        </div>
+      ) : null}
+      {dispute ? (
+        <dl className="mt-2 flex flex-col gap-1 text-sm">
+          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+            <dt className="text-muted-foreground">{t('app.disputes.status')}</dt>
+            <dd className="font-medium">{t(disputeStatusKey(dispute.status))}</dd>
+          </div>
+          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+            <dt className="text-muted-foreground">{t('app.disputes.reason')}</dt>
+            <dd className="font-medium">{t(disputeReasonKey(dispute.reason))}</dd>
+          </div>
+          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+            <dt className="text-muted-foreground">{t('app.disputes.createdAt')}</dt>
+            <dd>{new Date(dispute.createdAt).toLocaleString()}</dd>
+          </div>
+        </dl>
+      ) : !disputesListLoadFailed && !disputesLoading ? (
+        <div className="mt-2">
+          <PanelEmptyState
+            title={t('app.disputes.noDisputeYet')}
+            body={t('app.disputes.noDisputeYetBody')}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export default function AppHomePage() {
   const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
@@ -629,6 +689,7 @@ export default function AppHomePage() {
   const [openingChatOrderId, setOpeningChatOrderId] = useState<string | null>(null);
   const [chatOpenError, setChatOpenError] = useState<string | null>(null);
   const [disputesByOrderId, setDisputesByOrderId] = useState<Record<string, DisputeSummary>>({});
+  const [disputesLoading, setDisputesLoading] = useState(false);
   const [disputesListLoadFailed, setDisputesListLoadFailed] = useState(false);
   const [disputeOpen, setDisputeOpen] = useState(false);
   const [disputeOrderId, setDisputeOrderId] = useState<string | null>(null);
@@ -709,6 +770,7 @@ export default function AppHomePage() {
   }, [t]);
 
   const loadUserDisputes = useCallback(async () => {
+    setDisputesLoading(true);
     try {
       const result = await api.disputes.list({ limit: 100 });
       const map: Record<string, DisputeSummary> = {};
@@ -725,6 +787,8 @@ export default function AppHomePage() {
       setDisputesListLoadFailed(false);
     } catch {
       setDisputesListLoadFailed(true);
+    } finally {
+      setDisputesLoading(false);
     }
   }, []);
 
@@ -1956,8 +2020,13 @@ export default function AppHomePage() {
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
-                {disputesListLoadFailed ? (
-                  <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
+                {disputesListLoadFailed && Object.keys(disputesByOrderId).length === 0 ? (
+                  <PanelErrorState
+                    message={t('app.disputes.disputeLoadFailed')}
+                    retryLabel={t('app.disputes.retryDisputeStatus')}
+                    onRetry={() => void loadUserDisputes()}
+                    retryDisabled={disputesLoading}
+                  />
                 ) : null}
                 {isApproved && acceptedError ? (
                   <PanelErrorState
@@ -2210,6 +2279,15 @@ export default function AppHomePage() {
                             <p className="mt-3 text-sm text-muted-foreground">
                               {t('app.waylerFeed.acceptedPanel.delivered')}
                             </p>
+                          ) : null}
+                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                            <AcceptedOrderDisputeSection
+                              dispute={disputesByOrderId[order.id]}
+                              disputesLoading={disputesLoading}
+                              disputesListLoadFailed={disputesListLoadFailed}
+                              onRetryDisputes={() => void loadUserDisputes()}
+                              t={t}
+                            />
                           ) : null}
                           <div className="wayly-action-group mt-3">
                             <Button
@@ -2799,8 +2877,13 @@ export default function AppHomePage() {
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
-                {disputesListLoadFailed ? (
-                  <p className="text-xs text-muted-foreground">{t('app.disputes.loadFailed')}</p>
+                {disputesListLoadFailed && Object.keys(disputesByOrderId).length === 0 ? (
+                  <PanelErrorState
+                    message={t('app.disputes.disputeLoadFailed')}
+                    retryLabel={t('app.disputes.retryDisputeStatus')}
+                    onRetry={() => void loadUserDisputes()}
+                    retryDisabled={disputesLoading}
+                  />
                 ) : null}
                 {canViewSenderOrders && senderAcceptedError ? (
                   <PanelErrorState
@@ -3168,6 +3251,15 @@ export default function AppHomePage() {
                               </div>
                             ) : null}
                           </div>
+                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                            <AcceptedOrderDisputeSection
+                              dispute={disputesByOrderId[order.id]}
+                              disputesLoading={disputesLoading}
+                              disputesListLoadFailed={disputesListLoadFailed}
+                              onRetryDisputes={() => void loadUserDisputes()}
+                              t={t}
+                            />
+                          ) : null}
                           <div className="wayly-action-group mt-3">
                             <Button
                               className="w-full sm:w-auto"

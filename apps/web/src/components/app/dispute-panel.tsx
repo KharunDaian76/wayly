@@ -10,6 +10,11 @@ import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 
 const MIN_DESCRIPTION_LENGTH = 10;
 const MAX_DESCRIPTION_LENGTH = 3000;
@@ -53,11 +58,11 @@ type DisputePanelProps = {
   onDisputeOpened?: (disputeId: string) => void;
 };
 
-function disputeReasonKey(reason: DisputeReason): TranslationKey {
+export function disputeReasonKey(reason: DisputeReason): TranslationKey {
   return `app.disputes.reason.${reason}` as TranslationKey;
 }
 
-function disputeStatusKey(status: DisputeStatus): TranslationKey {
+export function disputeStatusKey(status: DisputeStatus): TranslationKey {
   return `app.disputes.status.${status}` as TranslationKey;
 }
 
@@ -76,7 +81,8 @@ export function DisputePanel({
 
   const [detail, setDetail] = useState<DisputeDetail | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [openError, setOpenError] = useState<string | null>(null);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   const [reason, setReason] = useState<DisputeReason>(DisputeReason.OTHER);
@@ -130,14 +136,15 @@ export function DisputePanel({
       }
       if (foreground) {
         setLoading(true);
-        setError(null);
+        setLoadError(null);
       }
       try {
         const next = await api.disputes.detail(disputeId);
         setDetail(next);
+        setLoadError(null);
       } catch {
         if (foreground) {
-          setError(t('app.disputes.loadFailed'));
+          setLoadError(t('app.disputes.loadFailed'));
         }
       } finally {
         if (foreground) {
@@ -157,7 +164,8 @@ export function DisputePanel({
   useEffect(() => {
     if (!open) {
       setDetail(null);
-      setError(null);
+      setLoadError(null);
+      setOpenError(null);
       setOpenSuccess(false);
       setReason(DisputeReason.OTHER);
       setDescription('');
@@ -175,7 +183,8 @@ export function DisputePanel({
       return;
     }
     setSubmittingOpen(true);
-    setError(null);
+    setOpenError(null);
+    setLoadError(null);
     setOpenSuccess(false);
     try {
       const created = await api.disputes.open({
@@ -187,15 +196,16 @@ export function DisputePanel({
       onDisputeOpened?.(created.id);
       onDisputeChanged?.();
       setDetail(created);
+      setLoadError(null);
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {
-        setError(t('app.disputes.duplicateActive'));
+        setOpenError(t('app.disputes.duplicateActive'));
         onDisputeChanged?.();
       } else {
-        setError(
+        setOpenError(
           err instanceof ApiError
-            ? err.message || t('app.disputes.openFailed')
-            : t('app.disputes.openFailed'),
+            ? err.message || t('app.disputes.disputeSubmitFailed')
+            : t('app.disputes.disputeSubmitFailed'),
         );
       }
     } finally {
@@ -266,6 +276,8 @@ export function DisputePanel({
 
   const showDetail = !isOpenMode || (openSuccess && detail !== null);
   const panelTitle = showDetail ? t('app.disputes.viewTitle') : t('app.disputes.openTitle');
+  const showInitialLoading = showDetail && loading && detail === null;
+  const isRefreshing = showDetail && loading && detail !== null;
 
   return (
     <div
@@ -299,7 +311,7 @@ export function DisputePanel({
                 disabled={loading || submittingOpen || sendingMessage || addingEvidence}
                 onClick={() => void refreshDetail(true)}
               >
-                {t('app.disputes.refresh')}
+                {isRefreshing ? t('app.disputes.refreshing') : t('app.disputes.refresh')}
               </Button>
             ) : null}
             <Button
@@ -315,10 +327,13 @@ export function DisputePanel({
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
-          {error ? (
-            <p className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger">
-              {error}
-            </p>
+          {loadError ? (
+            <PanelErrorState
+              message={loadError}
+              retryLabel={t('app.disputes.retryDisputeStatus')}
+              onRetry={() => void refreshDetail(true)}
+              retryDisabled={loading}
+            />
           ) : null}
           {openSuccess ? (
             <p className="rounded-md border border-accent/30 bg-accent/10 px-2 py-1.5 text-xs text-foreground">
@@ -328,12 +343,20 @@ export function DisputePanel({
 
           {showDetail ? (
             <>
-              {loading ? (
-                <p className="py-6 text-center text-sm text-muted-foreground">
-                  {t('app.disputes.loading')}
-                </p>
+              {showInitialLoading ? (
+                <div className="flex flex-col gap-2 py-2">
+                  <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                    {t('app.disputes.disputeLoading')}
+                  </p>
+                  <RequestsListSkeleton rows={2} itemClassName="h-14 w-full rounded-md" />
+                </div>
               ) : detail ? (
                 <>
+                  {isRefreshing ? (
+                    <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
+                      {t('app.disputes.disputeRefreshing')}
+                    </p>
+                  ) : null}
                   <dl className="flex flex-col gap-2 text-sm">
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                       <dt className="text-muted-foreground">{t('app.disputes.status')}</dt>
@@ -356,9 +379,10 @@ export function DisputePanel({
                   <section className="flex flex-col gap-2">
                     <p className="text-sm font-medium">{t('app.disputes.messages')}</p>
                     {detail.messages.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">
-                        {t('app.disputes.noMessages')}
-                      </p>
+                      <PanelEmptyState
+                        title={t('app.disputes.noMessagesTitle')}
+                        body={t('app.disputes.noMessagesBody')}
+                      />
                     ) : (
                       <ul className="flex flex-col gap-2">
                         {detail.messages.map((message: DisputeMessageSummary) => {
@@ -422,9 +446,10 @@ export function DisputePanel({
                   <section className="flex flex-col gap-2 border-t border-border/60 pt-3">
                     <p className="text-sm font-medium">{t('app.disputes.evidence')}</p>
                     {detail.evidence.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">
-                        {t('app.disputes.noEvidence')}
-                      </p>
+                      <PanelEmptyState
+                        title={t('app.disputes.noEvidenceTitle')}
+                        body={t('app.disputes.noEvidenceBody')}
+                      />
                     ) : (
                       <ul className="flex flex-col gap-2">
                         {detail.evidence.map((item: DisputeEvidenceSummary) => (
@@ -508,6 +533,18 @@ export function DisputePanel({
             </>
           ) : (
             <div className="flex flex-col gap-3">
+              <PanelEmptyState
+                title={t('app.disputes.noDisputeYet')}
+                body={t('app.disputes.noDisputeYetBody')}
+              />
+              {openError ? (
+                <p
+                  className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger"
+                  role="alert"
+                >
+                  {openError}
+                </p>
+              ) : null}
               <label className="flex flex-col gap-1.5 text-sm">
                 <span className="font-medium">{t('app.disputes.reason')}</span>
                 <select
@@ -544,7 +581,9 @@ export function DisputePanel({
                 disabled={!canSubmitOpen}
                 onClick={() => void handleOpenDispute()}
               >
-                {submittingOpen ? t('app.disputes.submitting') : t('app.disputes.submit')}
+                {submittingOpen
+                  ? t('app.disputes.submittingDispute')
+                  : t('app.disputes.submitDispute')}
               </Button>
             </div>
           )}
