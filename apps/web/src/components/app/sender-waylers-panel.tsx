@@ -25,6 +25,7 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
+import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -53,7 +54,6 @@ const REQUEST_CARD_CLASS = cn(
 );
 
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
-const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
 const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
 
 type FilterState = {
@@ -97,8 +97,8 @@ const INITIAL_FILTERS: FilterState = {
 };
 
 type SenderWaylersPanelProps = {
+  kycGate: KycGateProps;
   canBrowse: boolean;
-  kycLoading: boolean;
   /** Refresh parent Sender accepted-order list when converted requests are present. */
   onAcceptedOrdersRefresh?: () => void;
 };
@@ -347,11 +347,12 @@ function resolveRequestError(err: unknown, t: (key: TranslationKey) => string): 
 }
 
 export function SenderWaylersPanel({
+  kycGate,
   canBrowse,
-  kycLoading,
   onAcceptedOrdersRefresh,
 }: SenderWaylersPanelProps) {
   const { t } = useI18n();
+  const { kycLoading } = kycGate;
 
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [listings, setListings] = useState<WaylerAvailabilitySummary[]>([]);
@@ -593,9 +594,7 @@ export function SenderWaylersPanel({
     <div className="flex flex-col gap-6">
       <p className="text-sm text-muted-foreground">{t('app.senderWaylers.subtitle')}</p>
 
-      {!kycLoading && !canBrowse ? (
-        <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
-      ) : null}
+      {!canBrowse ? <KycMarketplaceGateNotice {...kycGate} /> : null}
 
       {requestSuccess ? <p className={ALERT_SUCCESS_CLASS}>{requestSuccess}</p> : null}
 

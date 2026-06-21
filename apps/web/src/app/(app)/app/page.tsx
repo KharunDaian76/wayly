@@ -34,6 +34,11 @@ import {
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { DisputePanel, disputeReasonKey, disputeStatusKey } from '@/components/app/dispute-panel';
+import {
+  KycActionBlockedHint,
+  KycMarketplaceGateNotice,
+  type KycGateProps,
+} from '@/components/app/kyc-marketplace-gate';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
@@ -56,7 +61,6 @@ const isDev = process.env.NODE_ENV !== 'production';
 const APP_PANEL_CLASS = 'wayly-app-panel';
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
 const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
-const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
 
 const FEED_SELECT_CLASS =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
@@ -736,6 +740,27 @@ export default function AppHomePage() {
   const isApproved = kycStatus?.verified && kycStatus?.kycStatus === KycStatus.APPROVED;
   const canViewSenderOrders =
     Boolean(user?.verified) && kycStatus?.kycStatus === KycStatus.APPROVED;
+
+  const kycGateProps = useMemo(
+    (): KycGateProps => ({
+      kycLoading,
+      kycError,
+      kycStatus,
+      isApproved: !!isApproved,
+      onRetryKyc: () => {
+        void loadKycStatus();
+      },
+    }),
+    [kycLoading, kycError, kycStatus, isApproved, loadKycStatus],
+  );
+
+  const senderKycGateProps = useMemo(
+    (): KycGateProps => ({
+      ...kycGateProps,
+      isApproved: !!canViewSenderOrders,
+    }),
+    [kycGateProps, canViewSenderOrders],
+  );
 
   const loadDraftOrders = useCallback(async () => {
     setDraftsLoading(true);
@@ -1676,13 +1701,7 @@ export default function AppHomePage() {
                 ? t('app.mode.senderDashboard.description')
                 : t('app.mode.waylerDashboard.description')}
             </p>
-            {!kycLoading && !isApproved ? (
-              <p className={ALERT_INFO_CLASS}>
-                {mode === 'sender'
-                  ? t('app.mode.senderDashboard.kycRequired')
-                  : t('app.mode.waylerDashboard.kycRequired')}
-              </p>
-            ) : null}
+            {!isApproved ? <KycMarketplaceGateNotice {...kycGateProps} /> : null}
           </CardContent>
         </Card>
 
@@ -1694,8 +1713,7 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent>
                 <WaylerAccessPanel
-                  isApproved={!!isApproved}
-                  kycLoading={kycLoading}
+                  kycGate={kycGateProps}
                   onAccessChanged={setWaylerHasActiveAccess}
                 />
               </CardContent>
@@ -1707,7 +1725,7 @@ export default function AppHomePage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={!isApproved || feedLoading}
+                  disabled={kycLoading || !isApproved || feedLoading}
                   onClick={() => void loadFeedOrders()}
                 >
                   {feedLoading && feedOrders.length > 0
@@ -1716,9 +1734,7 @@ export default function AppHomePage() {
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                {!kycLoading && !isApproved ? (
-                  <p className={ALERT_INFO_CLASS}>{t('app.waylerFeed.kycRequired')}</p>
-                ) : null}
+                <KycMarketplaceGateNotice {...kycGateProps} />
                 {isApproved ? (
                   <fieldset
                     className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4"
@@ -1959,9 +1975,10 @@ export default function AppHomePage() {
                                 {t('app.waylerFeed.senderCannotAcceptOwn')}
                               </p>
                             ) : !isApproved ? (
-                              <p className="text-xs text-muted-foreground" role="note">
-                                {t('app.waylerFeed.acceptDisabledKyc')}
-                              </p>
+                              <KycActionBlockedHint
+                                {...kycGateProps}
+                                actionHint="acceptPostedOrder"
+                              />
                             ) : canAcceptEligible && !waylerHasActiveAccess ? (
                               <p className="text-xs text-muted-foreground" role="note">
                                 {t('app.waylerFeed.accessRequiredForAccept')}
@@ -2004,9 +2021,7 @@ export default function AppHomePage() {
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                {!kycLoading && !isApproved ? (
-                  <p className={ALERT_INFO_CLASS}>{t('app.waylerFeed.kycRequired')}</p>
-                ) : null}
+                <KycMarketplaceGateNotice {...kycGateProps} />
                 {progressSuccess === 'transit' ? (
                   <p className="wayly-alert wayly-alert-success">
                     {t('app.waylerFeed.acceptedPanel.transitStarted')}
@@ -2475,7 +2490,7 @@ export default function AppHomePage() {
                 <CardTitle>{t('app.waylerAvailability.title')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <WaylerAvailabilityPanel isApproved={!!isApproved} kycLoading={kycLoading} />
+                <WaylerAvailabilityPanel kycGate={kycGateProps} />
               </CardContent>
             </Card>
 
@@ -2485,8 +2500,7 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent>
                 <WaylerIncomingRequestsPanel
-                  isApproved={!!isApproved}
-                  kycLoading={kycLoading}
+                  kycGate={kycGateProps}
                   waylerHasActiveAccess={waylerHasActiveAccess}
                   onRequestAccepted={() => void loadAcceptedOrders()}
                 />
@@ -2503,9 +2517,7 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 <p className="text-sm text-muted-foreground">{t('app.orders.createDescription')}</p>
-                {!kycLoading && !isApproved ? (
-                  <p className={ALERT_INFO_CLASS}>{t('app.orders.kycRequiredNote')}</p>
-                ) : null}
+                <KycMarketplaceGateNotice {...senderKycGateProps} />
                 {orderError ? <p className="wayly-alert wayly-alert-danger">{orderError}</p> : null}
                 {orderSuccess ? (
                   <p className="wayly-alert wayly-alert-success" role="status">
@@ -2522,7 +2534,7 @@ export default function AppHomePage() {
                       value={orderTitle}
                       onChange={(e) => setOrderTitle(e.target.value)}
                       required
-                      disabled={!isApproved || orderSubmitting}
+                      disabled={kycLoading || !isApproved || orderSubmitting}
                     />
                   </label>
                   <label className="flex flex-col gap-1.5 text-sm">
@@ -2531,7 +2543,7 @@ export default function AppHomePage() {
                       className={FEED_SELECT_CLASS}
                       value={orderType}
                       onChange={(e) => setOrderType(e.target.value as 'LOCAL' | 'INTERNATIONAL')}
-                      disabled={!isApproved || orderSubmitting}
+                      disabled={kycLoading || !isApproved || orderSubmitting}
                     >
                       <option value={DeliveryOrderType.LOCAL}>{t('app.orders.typeLocal')}</option>
                       <option value={DeliveryOrderType.INTERNATIONAL}>
@@ -2544,7 +2556,7 @@ export default function AppHomePage() {
                     <Input
                       value={orderDescription}
                       onChange={(e) => setOrderDescription(e.target.value)}
-                      disabled={!isApproved || orderSubmitting}
+                      disabled={kycLoading || !isApproved || orderSubmitting}
                     />
                   </label>
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -2553,7 +2565,7 @@ export default function AppHomePage() {
                       <Input
                         value={pickupCountry}
                         onChange={(e) => setPickupCountry(e.target.value)}
-                        disabled={!isApproved || orderSubmitting}
+                        disabled={kycLoading || !isApproved || orderSubmitting}
                       />
                     </label>
                     <label className="flex flex-col gap-1.5 text-sm">
@@ -2561,7 +2573,7 @@ export default function AppHomePage() {
                       <Input
                         value={pickupCity}
                         onChange={(e) => setPickupCity(e.target.value)}
-                        disabled={!isApproved || orderSubmitting}
+                        disabled={kycLoading || !isApproved || orderSubmitting}
                       />
                     </label>
                     <label className="flex flex-col gap-1.5 text-sm">
@@ -2569,7 +2581,7 @@ export default function AppHomePage() {
                       <Input
                         value={dropoffCountry}
                         onChange={(e) => setDropoffCountry(e.target.value)}
-                        disabled={!isApproved || orderSubmitting}
+                        disabled={kycLoading || !isApproved || orderSubmitting}
                       />
                     </label>
                     <label className="flex flex-col gap-1.5 text-sm">
@@ -2577,7 +2589,7 @@ export default function AppHomePage() {
                       <Input
                         value={dropoffCity}
                         onChange={(e) => setDropoffCity(e.target.value)}
-                        disabled={!isApproved || orderSubmitting}
+                        disabled={kycLoading || !isApproved || orderSubmitting}
                       />
                     </label>
                   </div>
@@ -2587,7 +2599,7 @@ export default function AppHomePage() {
                       <Input
                         value={orderCurrency}
                         onChange={(e) => setOrderCurrency(e.target.value)}
-                        disabled={!isApproved || orderSubmitting}
+                        disabled={kycLoading || !isApproved || orderSubmitting}
                       />
                     </label>
                     <label className="flex flex-col gap-1.5 text-sm">
@@ -2598,16 +2610,19 @@ export default function AppHomePage() {
                         step="0.01"
                         value={offeredRewardAmount}
                         onChange={(e) => setOfferedRewardAmount(e.target.value)}
-                        disabled={!isApproved || orderSubmitting}
+                        disabled={kycLoading || !isApproved || orderSubmitting}
                       />
                     </label>
                   </div>
                   <Button
                     type="submit"
-                    disabled={!isApproved || orderSubmitting || !orderTitle.trim()}
+                    disabled={kycLoading || !isApproved || orderSubmitting || !orderTitle.trim()}
                   >
                     {orderSubmitting ? t('app.orders.submitting') : t('app.orders.submitCreate')}
                   </Button>
+                  {!isApproved ? (
+                    <KycActionBlockedHint {...kycGateProps} actionHint="postOrder" />
+                  ) : null}
                 </form>
               </CardContent>
             </Card>
@@ -2625,9 +2640,7 @@ export default function AppHomePage() {
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                {!kycLoading && !canViewSenderOrders ? (
-                  <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
-                ) : null}
+                <KycMarketplaceGateNotice {...senderKycGateProps} />
                 {cancelError ? (
                   <p className="wayly-alert wayly-alert-danger">{cancelError}</p>
                 ) : null}
@@ -2749,9 +2762,7 @@ export default function AppHomePage() {
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                {!kycLoading && !canViewSenderOrders ? (
-                  <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
-                ) : null}
+                <KycMarketplaceGateNotice {...senderKycGateProps} />
                 {cancelError ? (
                   <p className="wayly-alert wayly-alert-danger">{cancelError}</p>
                 ) : null}
@@ -2871,9 +2882,7 @@ export default function AppHomePage() {
                 </Button>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                {!kycLoading && !canViewSenderOrders ? (
-                  <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
-                ) : null}
+                <KycMarketplaceGateNotice {...senderKycGateProps} />
                 {chatOpenError ? (
                   <p className="wayly-alert wayly-alert-danger">{chatOpenError}</p>
                 ) : null}
@@ -3311,8 +3320,8 @@ export default function AppHomePage() {
               </CardHeader>
               <CardContent>
                 <SenderWaylersPanel
+                  kycGate={senderKycGateProps}
                   canBrowse={!!canViewSenderOrders}
-                  kycLoading={kycLoading}
                   onAcceptedOrdersRefresh={() => void loadSenderAcceptedOrders()}
                 />
               </CardContent>
@@ -3376,8 +3385,18 @@ export default function AppHomePage() {
             <CardTitle>{t('app.kycPanel.title')}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
+            {kycError ? (
+              <PanelErrorState
+                message={kycError}
+                retryLabel={t('app.kycGate.retryKycStatus')}
+                onRetry={() => void loadKycStatus()}
+                retryDisabled={kycLoading}
+              />
+            ) : null}
             {kycLoading ? (
-              <p className="text-sm text-muted-foreground">{t('app.kycPanel.loading')}</p>
+              <p className="text-sm text-muted-foreground" role="status" aria-live="polite">
+                {t('app.kycGate.kycLoading')}
+              </p>
             ) : kycStatus ? (
               <>
                 <dl className="flex flex-col gap-4">
@@ -3425,8 +3444,6 @@ export default function AppHomePage() {
                 </div>
               </>
             ) : null}
-
-            {kycError ? <p className="wayly-alert wayly-alert-danger">{kycError}</p> : null}
 
             {isApproved ? (
               <p className="text-sm text-muted-foreground">{t('app.kycPanel.approvedHelper')}</p>

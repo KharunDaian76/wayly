@@ -59,6 +59,57 @@ const en = {
   'app.kycPanel.actionFailed': 'Verification action failed. Please try again.',
   'app.kycPanel.devOnly': 'Development only',
   'app.kycPanel.approvedHelper': 'Verification is approved. No further action is needed.',
+  'app.kycGate.kycLoading': 'Checking verification status…',
+  'app.kycGate.retryKycStatus': 'Retry verification status',
+  'app.kycGate.kycRequiredTitle': 'Verification required',
+  'app.kycGate.kycRequiredBody':
+    'Complete identity verification before using marketplace features on Wayly.',
+  'app.kycGate.kycPendingTitle': 'Verification pending',
+  'app.kycGate.kycPendingBody':
+    'Your verification is being reviewed. Marketplace actions stay limited until approval.',
+  'app.kycGate.kycRejectedTitle': 'Verification needs attention',
+  'app.kycGate.kycRejectedBody':
+    'Your verification was not approved. Marketplace actions remain blocked until verification is resolved.',
+  'app.kycGate.actionPostOrderRequired': 'Posting orders requires approved verification.',
+  'app.kycGate.actionPostOrderPending':
+    'Posting orders is unavailable while verification is pending.',
+  'app.kycGate.actionPostOrderRejected':
+    'Posting orders is blocked until verification is resolved.',
+  'app.kycGate.actionRequestWaylerRequired': 'Requesting Waylers requires approved verification.',
+  'app.kycGate.actionRequestWaylerPending':
+    'Requesting Waylers is unavailable while verification is pending.',
+  'app.kycGate.actionRequestWaylerRejected':
+    'Requesting Waylers is blocked until verification is resolved.',
+  'app.kycGate.actionPublishAvailabilityRequired':
+    'Publishing availability requires approved verification.',
+  'app.kycGate.actionPublishAvailabilityPending':
+    'Publishing availability is unavailable while verification is pending.',
+  'app.kycGate.actionPublishAvailabilityRejected':
+    'Publishing availability is blocked until verification is resolved.',
+  'app.kycGate.actionAcceptPostedOrderRequired':
+    'Accepting posted orders requires approved verification.',
+  'app.kycGate.actionAcceptPostedOrderPending':
+    'Accepting posted orders is unavailable while verification is pending.',
+  'app.kycGate.actionAcceptPostedOrderRejected':
+    'Accepting posted orders is blocked until verification is resolved.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired':
+    'Accepting availability requests requires approved verification.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending':
+    'Accepting requests is unavailable while verification is pending.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected':
+    'Accepting requests is blocked until verification is resolved.',
+  'app.kycGate.actionBrowseFeedRequired':
+    'Browsing delivery requests requires approved verification.',
+  'app.kycGate.actionBrowseFeedPending':
+    'Browsing requests is unavailable while verification is pending.',
+  'app.kycGate.actionBrowseFeedRejected':
+    'Browsing requests is blocked until verification is resolved.',
+  'app.kycGate.actionViewSenderOrdersRequired':
+    'Viewing your orders requires approved verification.',
+  'app.kycGate.actionViewSenderOrdersPending':
+    'Viewing your orders is unavailable while verification is pending.',
+  'app.kycGate.actionViewSenderOrdersRejected':
+    'Viewing your orders is blocked until verification is resolved.',
   'app.mode.title': 'Choose how you want to use Wayly',
   'app.mode.sender': 'Sender mode',
   'app.mode.wayler': 'Wayler mode',
@@ -746,6 +797,54 @@ const ru: Dictionary = {
   'app.kycPanel.actionFailed': 'Не удалось выполнить действие. Попробуйте снова.',
   'app.kycPanel.devOnly': 'Только для разработки',
   'app.kycPanel.approvedHelper': 'Верификация одобрена. Дальнейшие действия не требуются.',
+  'app.kycGate.kycLoading': 'Проверка статуса верификации…',
+  'app.kycGate.retryKycStatus': 'Повторить проверку статуса',
+  'app.kycGate.kycRequiredTitle': 'Требуется верификация',
+  'app.kycGate.kycRequiredBody':
+    'Пройдите верификацию личности, прежде чем использовать функции маркетплейса Wayly.',
+  'app.kycGate.kycPendingTitle': 'Верификация на рассмотрении',
+  'app.kycGate.kycPendingBody':
+    'Ваша верификация проверяется. Действия на маркетплейсе ограничены до одобрения.',
+  'app.kycGate.kycRejectedTitle': 'Верификация требует внимания',
+  'app.kycGate.kycRejectedBody':
+    'Верификация не одобрена. Действия на маркетплейсе заблокированы, пока проблема не решена.',
+  'app.kycGate.actionPostOrderRequired': 'Публикация заказов требует одобренной верификации.',
+  'app.kycGate.actionPostOrderPending':
+    'Публикация заказов недоступна, пока верификация на рассмотрении.',
+  'app.kycGate.actionPostOrderRejected':
+    'Публикация заказов заблокирована, пока верификация не решена.',
+  'app.kycGate.actionRequestWaylerRequired': 'Запрос курьеров требует одобренной верификации.',
+  'app.kycGate.actionRequestWaylerPending':
+    'Запрос курьеров недоступен, пока верификация на рассмотрении.',
+  'app.kycGate.actionRequestWaylerRejected':
+    'Запрос курьеров заблокирован, пока верификация не решена.',
+  'app.kycGate.actionPublishAvailabilityRequired':
+    'Публикация доступности требует одобренной верификации.',
+  'app.kycGate.actionPublishAvailabilityPending':
+    'Публикация доступности недоступна, пока верификация на рассмотрении.',
+  'app.kycGate.actionPublishAvailabilityRejected':
+    'Публикация доступности заблокирована, пока верификация не решена.',
+  'app.kycGate.actionAcceptPostedOrderRequired': 'Принятие заказов требует одобренной верификации.',
+  'app.kycGate.actionAcceptPostedOrderPending':
+    'Принятие заказов недоступно, пока верификация на рассмотрении.',
+  'app.kycGate.actionAcceptPostedOrderRejected':
+    'Принятие заказов заблокировано, пока верификация не решена.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired':
+    'Принятие запросов требует одобренной верификации.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending':
+    'Принятие запросов недоступно, пока верификация на рассмотрении.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected':
+    'Принятие запросов заблокировано, пока верификация не решена.',
+  'app.kycGate.actionBrowseFeedRequired': 'Просмотр заявок требует одобренной верификации.',
+  'app.kycGate.actionBrowseFeedPending':
+    'Просмотр заявок недоступен, пока верификация на рассмотрении.',
+  'app.kycGate.actionBrowseFeedRejected':
+    'Просмотр заявок заблокирован, пока верификация не решена.',
+  'app.kycGate.actionViewSenderOrdersRequired': 'Просмотр заказов требует одобренной верификации.',
+  'app.kycGate.actionViewSenderOrdersPending':
+    'Просмотр заказов недоступен, пока верификация на рассмотрении.',
+  'app.kycGate.actionViewSenderOrdersRejected':
+    'Просмотр заказов заблокирован, пока верификация не решена.',
   'app.mode.title': 'Выберите, как использовать Wayly',
   'app.mode.sender': 'Режим отправителя',
   'app.mode.wayler': 'Режим курьера',
@@ -1433,6 +1532,56 @@ const es: Dictionary = {
   'app.kycPanel.actionFailed': 'Error en la verificación. Inténtalo de nuevo.',
   'app.kycPanel.devOnly': 'Solo desarrollo',
   'app.kycPanel.approvedHelper': 'Verificación aprobada. No se necesita ninguna acción.',
+  'app.kycGate.kycLoading': 'Comprobando estado de verificación…',
+  'app.kycGate.retryKycStatus': 'Reintentar estado de verificación',
+  'app.kycGate.kycRequiredTitle': 'Verificación requerida',
+  'app.kycGate.kycRequiredBody':
+    'Complete la verificación de identidad antes de usar las funciones del marketplace en Wayly.',
+  'app.kycGate.kycPendingTitle': 'Verificación pendiente',
+  'app.kycGate.kycPendingBody':
+    'Su verificación está en revisión. Las acciones del marketplace siguen limitadas hasta la aprobación.',
+  'app.kycGate.kycRejectedTitle': 'La verificación necesita atención',
+  'app.kycGate.kycRejectedBody':
+    'Su verificación no fue aprobada. Las acciones del marketplace siguen bloqueadas hasta resolverla.',
+  'app.kycGate.actionPostOrderRequired': 'Publicar pedidos requiere verificación aprobada.',
+  'app.kycGate.actionPostOrderPending':
+    'Publicar pedidos no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionPostOrderRejected':
+    'Publicar pedidos está bloqueado hasta resolver la verificación.',
+  'app.kycGate.actionRequestWaylerRequired': 'Solicitar mensajeros requiere verificación aprobada.',
+  'app.kycGate.actionRequestWaylerPending':
+    'Solicitar mensajeros no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionRequestWaylerRejected':
+    'Solicitar mensajeros está bloqueado hasta resolver la verificación.',
+  'app.kycGate.actionPublishAvailabilityRequired':
+    'Publicar disponibilidad requiere verificación aprobada.',
+  'app.kycGate.actionPublishAvailabilityPending':
+    'Publicar disponibilidad no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionPublishAvailabilityRejected':
+    'Publicar disponibilidad está bloqueado hasta resolver la verificación.',
+  'app.kycGate.actionAcceptPostedOrderRequired':
+    'Aceptar pedidos publicados requiere verificación aprobada.',
+  'app.kycGate.actionAcceptPostedOrderPending':
+    'Aceptar pedidos no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionAcceptPostedOrderRejected':
+    'Aceptar pedidos está bloqueado hasta resolver la verificación.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired':
+    'Aceptar solicitudes requiere verificación aprobada.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending':
+    'Aceptar solicitudes no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected':
+    'Aceptar solicitudes está bloqueado hasta resolver la verificación.',
+  'app.kycGate.actionBrowseFeedRequired':
+    'Ver solicitudes de entrega requiere verificación aprobada.',
+  'app.kycGate.actionBrowseFeedPending':
+    'Ver solicitudes no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionBrowseFeedRejected':
+    'Ver solicitudes está bloqueado hasta resolver la verificación.',
+  'app.kycGate.actionViewSenderOrdersRequired': 'Ver sus pedidos requiere verificación aprobada.',
+  'app.kycGate.actionViewSenderOrdersPending':
+    'Ver sus pedidos no está disponible mientras la verificación está pendiente.',
+  'app.kycGate.actionViewSenderOrdersRejected':
+    'Ver sus pedidos está bloqueado hasta resolver la verificación.',
   'app.mode.title': 'Elige cómo quieres usar Wayly',
   'app.mode.sender': 'Modo remitente',
   'app.mode.wayler': 'Modo repartidor',
@@ -2122,6 +2271,59 @@ const fr: Dictionary = {
   'app.kycPanel.actionFailed': "Échec de l'action. Veuillez réessayer.",
   'app.kycPanel.devOnly': 'Développement uniquement',
   'app.kycPanel.approvedHelper': 'Vérification approuvée. Aucune action supplémentaire requise.',
+  'app.kycGate.kycLoading': 'Vérification du statut en cours…',
+  'app.kycGate.retryKycStatus': 'Réessayer le statut de vérification',
+  'app.kycGate.kycRequiredTitle': 'Vérification requise',
+  'app.kycGate.kycRequiredBody':
+    'Complétez la vérification d’identité avant d’utiliser les fonctionnalités marketplace de Wayly.',
+  'app.kycGate.kycPendingTitle': 'Vérification en attente',
+  'app.kycGate.kycPendingBody':
+    'Votre vérification est en cours d’examen. Les actions marketplace restent limitées jusqu’à l’approbation.',
+  'app.kycGate.kycRejectedTitle': 'Vérification à traiter',
+  'app.kycGate.kycRejectedBody':
+    'Votre vérification n’a pas été approuvée. Les actions marketplace restent bloquées jusqu’à résolution.',
+  'app.kycGate.actionPostOrderRequired':
+    'Publier des commandes nécessite une vérification approuvée.',
+  'app.kycGate.actionPostOrderPending':
+    'Publier des commandes est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionPostOrderRejected':
+    'Publier des commandes est bloqué jusqu’à résolution de la vérification.',
+  'app.kycGate.actionRequestWaylerRequired':
+    'Demander un Wayler nécessite une vérification approuvée.',
+  'app.kycGate.actionRequestWaylerPending':
+    'Demander un Wayler est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionRequestWaylerRejected':
+    'Demander un Wayler est bloqué jusqu’à résolution de la vérification.',
+  'app.kycGate.actionPublishAvailabilityRequired':
+    'Publier une disponibilité nécessite une vérification approuvée.',
+  'app.kycGate.actionPublishAvailabilityPending':
+    'Publier une disponibilité est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionPublishAvailabilityRejected':
+    'Publier une disponibilité est bloqué jusqu’à résolution de la vérification.',
+  'app.kycGate.actionAcceptPostedOrderRequired':
+    'Accepter des commandes publiées nécessite une vérification approuvée.',
+  'app.kycGate.actionAcceptPostedOrderPending':
+    'Accepter des commandes est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionAcceptPostedOrderRejected':
+    'Accepter des commandes est bloqué jusqu’à résolution de la vérification.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired':
+    'Accepter des demandes nécessite une vérification approuvée.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending':
+    'Accepter des demandes est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected':
+    'Accepter des demandes est bloqué jusqu’à résolution de la vérification.',
+  'app.kycGate.actionBrowseFeedRequired':
+    'Parcourir les demandes de livraison nécessite une vérification approuvée.',
+  'app.kycGate.actionBrowseFeedPending':
+    'Parcourir les demandes est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionBrowseFeedRejected':
+    'Parcourir les demandes est bloqué jusqu’à résolution de la vérification.',
+  'app.kycGate.actionViewSenderOrdersRequired':
+    'Voir vos commandes nécessite une vérification approuvée.',
+  'app.kycGate.actionViewSenderOrdersPending':
+    'Voir vos commandes est indisponible tant que la vérification est en attente.',
+  'app.kycGate.actionViewSenderOrdersRejected':
+    'Voir vos commandes est bloqué jusqu’à résolution de la vérification.',
   'app.mode.title': 'Choisissez comment utiliser Wayly',
   'app.mode.sender': 'Mode expéditeur',
   'app.mode.wayler': 'Mode livreur',
@@ -2823,6 +3025,59 @@ const de: Dictionary = {
   'app.kycPanel.devOnly': 'Nur Entwicklung',
   'app.kycPanel.approvedHelper':
     'Verifizierung genehmigt. Es sind keine weiteren Schritte erforderlich.',
+  'app.kycGate.kycLoading': 'Verifizierungsstatus wird geprüft…',
+  'app.kycGate.retryKycStatus': 'Verifizierungsstatus erneut laden',
+  'app.kycGate.kycRequiredTitle': 'Verifizierung erforderlich',
+  'app.kycGate.kycRequiredBody':
+    'Schließen Sie die Identitätsverifizierung ab, bevor Sie Marketplace-Funktionen auf Wayly nutzen.',
+  'app.kycGate.kycPendingTitle': 'Verifizierung ausstehend',
+  'app.kycGate.kycPendingBody':
+    'Ihre Verifizierung wird geprüft. Marketplace-Aktionen bleiben bis zur Genehmigung eingeschränkt.',
+  'app.kycGate.kycRejectedTitle': 'Verifizierung erfordert Aufmerksamkeit',
+  'app.kycGate.kycRejectedBody':
+    'Ihre Verifizierung wurde nicht genehmigt. Marketplace-Aktionen bleiben gesperrt, bis dies geklärt ist.',
+  'app.kycGate.actionPostOrderRequired':
+    'Aufträge veröffentlichen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionPostOrderPending':
+    'Aufträge veröffentlichen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionPostOrderRejected':
+    'Aufträge veröffentlichen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.kycGate.actionRequestWaylerRequired':
+    'Wayler anfragen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionRequestWaylerPending':
+    'Wayler anfragen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionRequestWaylerRejected':
+    'Wayler anfragen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.kycGate.actionPublishAvailabilityRequired':
+    'Verfügbarkeit veröffentlichen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionPublishAvailabilityPending':
+    'Verfügbarkeit veröffentlichen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionPublishAvailabilityRejected':
+    'Verfügbarkeit veröffentlichen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.kycGate.actionAcceptPostedOrderRequired':
+    'Veröffentlichte Aufträge annehmen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionAcceptPostedOrderPending':
+    'Aufträge annehmen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionAcceptPostedOrderRejected':
+    'Aufträge annehmen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired':
+    'Anfragen annehmen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending':
+    'Anfragen annehmen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected':
+    'Anfragen annehmen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.kycGate.actionBrowseFeedRequired':
+    'Lieferanfragen durchsuchen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionBrowseFeedPending':
+    'Anfragen durchsuchen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionBrowseFeedRejected':
+    'Anfragen durchsuchen ist gesperrt, bis die Verifizierung geklärt ist.',
+  'app.kycGate.actionViewSenderOrdersRequired':
+    'Eigene Aufträge ansehen erfordert eine genehmigte Verifizierung.',
+  'app.kycGate.actionViewSenderOrdersPending':
+    'Eigene Aufträge ansehen ist nicht verfügbar, solange die Verifizierung aussteht.',
+  'app.kycGate.actionViewSenderOrdersRejected':
+    'Eigene Aufträge ansehen ist gesperrt, bis die Verifizierung geklärt ist.',
   'app.mode.title': 'Wählen Sie, wie Sie Wayly nutzen möchten',
   'app.mode.sender': 'Absender-Modus',
   'app.mode.wayler': 'Wayler-Modus',
@@ -3537,6 +3792,47 @@ const tr: Dictionary = {
   'app.kycPanel.actionFailed': 'Doğrulama işlemi başarısız. Tekrar deneyin.',
   'app.kycPanel.devOnly': 'Yalnızca geliştirme',
   'app.kycPanel.approvedHelper': 'Doğrulama onaylandı. Başka bir işlem gerekmez.',
+  'app.kycGate.kycLoading': 'Doğrulama durumu kontrol ediliyor…',
+  'app.kycGate.retryKycStatus': 'Doğrulama durumunu yeniden dene',
+  'app.kycGate.kycRequiredTitle': 'Doğrulama gerekli',
+  'app.kycGate.kycRequiredBody':
+    'Wayly pazar yeri özelliklerini kullanmadan önce kimlik doğrulamasını tamamlayın.',
+  'app.kycGate.kycPendingTitle': 'Doğrulama bekleniyor',
+  'app.kycGate.kycPendingBody':
+    'Doğrulamanız inceleniyor. Onaylanana kadar pazar yeri işlemleri sınırlı kalır.',
+  'app.kycGate.kycRejectedTitle': 'Doğrulama dikkat gerektiriyor',
+  'app.kycGate.kycRejectedBody':
+    'Doğrulamanız onaylanmadı. Sorun çözülene kadar pazar yeri işlemleri engellenir.',
+  'app.kycGate.actionPostOrderRequired': 'Sipariş göndermek onaylı doğrulama gerektirir.',
+  'app.kycGate.actionPostOrderPending': 'Doğrulama beklerken sipariş gönderilemez.',
+  'app.kycGate.actionPostOrderRejected': 'Doğrulama çözülene kadar sipariş gönderme engellenir.',
+  'app.kycGate.actionRequestWaylerRequired': 'Wayler talep etmek onaylı doğrulama gerektirir.',
+  'app.kycGate.actionRequestWaylerPending': 'Doğrulama beklerken Wayler talep edilemez.',
+  'app.kycGate.actionRequestWaylerRejected': 'Doğrulama çözülene kadar Wayler talebi engellenir.',
+  'app.kycGate.actionPublishAvailabilityRequired':
+    'Müsaitlik yayınlamak onaylı doğrulama gerektirir.',
+  'app.kycGate.actionPublishAvailabilityPending': 'Doğrulama beklerken müsaitlik yayınlanamaz.',
+  'app.kycGate.actionPublishAvailabilityRejected':
+    'Doğrulama çözülene kadar müsaitlik yayınlama engellenir.',
+  'app.kycGate.actionAcceptPostedOrderRequired':
+    'Yayınlanan siparişleri kabul etmek onaylı doğrulama gerektirir.',
+  'app.kycGate.actionAcceptPostedOrderPending': 'Doğrulama beklerken sipariş kabul edilemez.',
+  'app.kycGate.actionAcceptPostedOrderRejected':
+    'Doğrulama çözülene kadar sipariş kabul engellenir.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired':
+    'Talepleri kabul etmek onaylı doğrulama gerektirir.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending': 'Doğrulama beklerken talep kabul edilemez.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected':
+    'Doğrulama çözülene kadar talep kabul engellenir.',
+  'app.kycGate.actionBrowseFeedRequired':
+    'Teslimat taleplerine göz atmak onaylı doğrulama gerektirir.',
+  'app.kycGate.actionBrowseFeedPending': 'Doğrulama beklerken talepler görüntülenemez.',
+  'app.kycGate.actionBrowseFeedRejected': 'Doğrulama çözülene kadar taleplere göz atma engellenir.',
+  'app.kycGate.actionViewSenderOrdersRequired':
+    'Siparişlerinizi görüntülemek onaylı doğrulama gerektirir.',
+  'app.kycGate.actionViewSenderOrdersPending': 'Doğrulama beklerken siparişler görüntülenemez.',
+  'app.kycGate.actionViewSenderOrdersRejected':
+    'Doğrulama çözülene kadar sipariş görüntüleme engellenir.',
   'app.mode.title': "Wayly'yi nasıl kullanmak istediğinizi seçin",
   'app.mode.sender': 'Gönderici modu',
   'app.mode.wayler': 'Wayler modu',
@@ -4225,6 +4521,38 @@ const ar: Dictionary = {
   'app.kycPanel.actionFailed': 'فشل إجراء التحقق. حاول مرة أخرى.',
   'app.kycPanel.devOnly': 'للتطوير فقط',
   'app.kycPanel.approvedHelper': 'تمت الموافقة على التحقق. لا يلزم اتخاذ أي إجراء آخر.',
+  'app.kycGate.kycLoading': 'جارٍ التحقق من حالة التحقق…',
+  'app.kycGate.retryKycStatus': 'إعادة محاولة حالة التحقق',
+  'app.kycGate.kycRequiredTitle': 'التحقق مطلوب',
+  'app.kycGate.kycRequiredBody': 'أكمل التحقق من الهوية قبل استخدام ميزات السوق في Wayly.',
+  'app.kycGate.kycPendingTitle': 'التحقق قيد المراجعة',
+  'app.kycGate.kycPendingBody':
+    'يتم مراجعة التحقق الخاص بك. تظل إجراءات السوق محدودة حتى الموافقة.',
+  'app.kycGate.kycRejectedTitle': 'التحقق يحتاج إلى اهتمام',
+  'app.kycGate.kycRejectedBody':
+    'لم تتم الموافقة على التحقق. تظل إجراءات السوق محظورة حتى حل المشكلة.',
+  'app.kycGate.actionPostOrderRequired': 'نشر الطلبات يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionPostOrderPending': 'نشر الطلبات غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionPostOrderRejected': 'نشر الطلبات محظور حتى حل التحقق.',
+  'app.kycGate.actionRequestWaylerRequired': 'طلب Wayler يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionRequestWaylerPending': 'طلب Wayler غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionRequestWaylerRejected': 'طلب Wayler محظور حتى حل التحقق.',
+  'app.kycGate.actionPublishAvailabilityRequired': 'نشر التوفر يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionPublishAvailabilityPending': 'نشر التوفر غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionPublishAvailabilityRejected': 'نشر التوفر محظور حتى حل التحقق.',
+  'app.kycGate.actionAcceptPostedOrderRequired': 'قبول الطلبات المنشورة يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionAcceptPostedOrderPending': 'قبول الطلبات غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionAcceptPostedOrderRejected': 'قبول الطلبات محظور حتى حل التحقق.',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired': 'قبول الطلبات يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionAcceptAvailabilityRequestPending':
+    'قبول الطلبات غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected': 'قبول الطلبات محظور حتى حل التحقق.',
+  'app.kycGate.actionBrowseFeedRequired': 'تصفح طلبات التسليم يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionBrowseFeedPending': 'تصفح الطلبات غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionBrowseFeedRejected': 'تصفح الطلبات محظور حتى حل التحقق.',
+  'app.kycGate.actionViewSenderOrdersRequired': 'عرض طلباتك يتطلب تحققًا معتمدًا.',
+  'app.kycGate.actionViewSenderOrdersPending': 'عرض الطلبات غير متاح أثناء انتظار التحقق.',
+  'app.kycGate.actionViewSenderOrdersRejected': 'عرض الطلبات محظور حتى حل التحقق.',
   'app.mode.title': 'اختر كيف تريد استخدام Wayly',
   'app.mode.sender': 'وضع المرسل',
   'app.mode.wayler': 'وضع الناقل',
@@ -4891,6 +5219,35 @@ const zh: Dictionary = {
   'app.kycPanel.actionFailed': '验证操作失败，请重试。',
   'app.kycPanel.devOnly': '仅开发环境',
   'app.kycPanel.approvedHelper': '验证已通过，无需进一步操作。',
+  'app.kycGate.kycLoading': '正在检查验证状态…',
+  'app.kycGate.retryKycStatus': '重试验证状态',
+  'app.kycGate.kycRequiredTitle': '需要验证',
+  'app.kycGate.kycRequiredBody': '在使用 Wayly 市场功能前，请先完成身份验证。',
+  'app.kycGate.kycPendingTitle': '验证审核中',
+  'app.kycGate.kycPendingBody': '您的验证正在审核中。批准前市场操作仍受限。',
+  'app.kycGate.kycRejectedTitle': '验证需要处理',
+  'app.kycGate.kycRejectedBody': '您的验证未通过。问题解决前市场操作仍被阻止。',
+  'app.kycGate.actionPostOrderRequired': '发布订单需要已通过验证。',
+  'app.kycGate.actionPostOrderPending': '验证审核期间无法发布订单。',
+  'app.kycGate.actionPostOrderRejected': '验证问题解决前无法发布订单。',
+  'app.kycGate.actionRequestWaylerRequired': '请求 Wayler 需要已通过验证。',
+  'app.kycGate.actionRequestWaylerPending': '验证审核期间无法请求 Wayler。',
+  'app.kycGate.actionRequestWaylerRejected': '验证问题解决前无法请求 Wayler。',
+  'app.kycGate.actionPublishAvailabilityRequired': '发布可用性需要已通过验证。',
+  'app.kycGate.actionPublishAvailabilityPending': '验证审核期间无法发布可用性。',
+  'app.kycGate.actionPublishAvailabilityRejected': '验证问题解决前无法发布可用性。',
+  'app.kycGate.actionAcceptPostedOrderRequired': '接受已发布订单需要已通过验证。',
+  'app.kycGate.actionAcceptPostedOrderPending': '验证审核期间无法接受订单。',
+  'app.kycGate.actionAcceptPostedOrderRejected': '验证问题解决前无法接受订单。',
+  'app.kycGate.actionAcceptAvailabilityRequestRequired': '接受可用性请求需要已通过验证。',
+  'app.kycGate.actionAcceptAvailabilityRequestPending': '验证审核期间无法接受请求。',
+  'app.kycGate.actionAcceptAvailabilityRequestRejected': '验证问题解决前无法接受请求。',
+  'app.kycGate.actionBrowseFeedRequired': '浏览配送请求需要已通过验证。',
+  'app.kycGate.actionBrowseFeedPending': '验证审核期间无法浏览请求。',
+  'app.kycGate.actionBrowseFeedRejected': '验证问题解决前无法浏览请求。',
+  'app.kycGate.actionViewSenderOrdersRequired': '查看您的订单需要已通过验证。',
+  'app.kycGate.actionViewSenderOrdersPending': '验证审核期间无法查看订单。',
+  'app.kycGate.actionViewSenderOrdersRejected': '验证问题解决前无法查看订单。',
   'app.mode.title': '选择您使用 Wayly 的方式',
   'app.mode.sender': '发件人模式',
   'app.mode.wayler': '配送员模式',

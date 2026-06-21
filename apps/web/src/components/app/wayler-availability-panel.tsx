@@ -12,6 +12,7 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
+import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -34,7 +35,6 @@ const LISTING_CARD_CLASS = cn(
 
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
 const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
-const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
 
 type ActionKind = 'publish' | 'pause' | 'cancel';
 
@@ -75,8 +75,7 @@ const INITIAL_FORM: FormState = {
 };
 
 type WaylerAvailabilityPanelProps = {
-  isApproved: boolean;
-  kycLoading: boolean;
+  kycGate: KycGateProps;
 };
 
 function toIsoDateTime(localValue: string): string | undefined {
@@ -170,8 +169,9 @@ function formatDateTime(value: string | null): string {
   return new Date(value).toLocaleString();
 }
 
-export function WaylerAvailabilityPanel({ isApproved, kycLoading }: WaylerAvailabilityPanelProps) {
+export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProps) {
   const { t } = useI18n();
+  const { isApproved, kycLoading } = kycGate;
 
   const [listings, setListings] = useState<WaylerAvailabilitySummary[]>([]);
   const [listingsLoading, setListingsLoading] = useState(false);
@@ -386,9 +386,7 @@ export function WaylerAvailabilityPanel({ isApproved, kycLoading }: WaylerAvaila
     <div className="flex flex-col gap-6">
       <p className="text-sm text-muted-foreground">{t('app.waylerAvailability.subtitle')}</p>
 
-      {!kycLoading && !isApproved ? (
-        <p className={ALERT_INFO_CLASS}>{t('app.waylerFeed.kycRequired')}</p>
-      ) : null}
+      {!isApproved ? <KycMarketplaceGateNotice {...kycGate} /> : null}
 
       {isApproved ? (
         <>

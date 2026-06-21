@@ -12,6 +12,7 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
+import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -30,14 +31,12 @@ const TEXTAREA_CLASS = cn(
 );
 
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
-const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
 const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
 
 type ActionKind = 'accept' | 'decline';
 
 type WaylerIncomingRequestsPanelProps = {
-  isApproved: boolean;
-  kycLoading: boolean;
+  kycGate: KycGateProps;
   waylerHasActiveAccess: boolean;
   /** Refresh parent accepted-order lists after accept creates a DeliveryOrder. */
   onRequestAccepted?: () => void;
@@ -125,12 +124,12 @@ function optionalResponseMessage(draft: string): { responseMessage?: string } {
 }
 
 export function WaylerIncomingRequestsPanel({
-  isApproved,
-  kycLoading,
+  kycGate,
   waylerHasActiveAccess,
   onRequestAccepted,
 }: WaylerIncomingRequestsPanelProps) {
   const { t } = useI18n();
+  const { isApproved, kycLoading } = kycGate;
 
   const [requests, setRequests] = useState<WaylerAvailabilityRequestSummary[]>([]);
   const [loading, setLoading] = useState(false);
@@ -216,9 +215,7 @@ export function WaylerIncomingRequestsPanel({
 
   return (
     <div className="flex flex-col gap-4">
-      {!kycLoading && !isApproved ? (
-        <p className={ALERT_INFO_CLASS}>{t('app.senderPanel.kycRequired')}</p>
-      ) : null}
+      {!isApproved ? <KycMarketplaceGateNotice {...kycGate} /> : null}
 
       {actionSuccess ? <p className={ALERT_SUCCESS_CLASS}>{actionSuccess}</p> : null}
       {actionError ? <p className={ALERT_ERROR_CLASS}>{actionError}</p> : null}

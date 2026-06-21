@@ -5,6 +5,7 @@ import { WaylerAccessPassStatus } from '@wayly/types';
 import { Button, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -17,11 +18,9 @@ const LISTING_CARD_CLASS = cn(
 
 const ALERT_ERROR_CLASS = 'wayly-alert wayly-alert-danger';
 const ALERT_SUCCESS_CLASS = 'wayly-alert wayly-alert-success';
-const ALERT_INFO_CLASS = 'wayly-alert wayly-alert-info';
 
 type WaylerAccessPanelProps = {
-  isApproved: boolean;
-  kycLoading: boolean;
+  kycGate: KycGateProps;
   onAccessChanged?: (hasActiveAccess: boolean) => void;
 };
 
@@ -124,12 +123,9 @@ function PassHistoryRow({
   );
 }
 
-export function WaylerAccessPanel({
-  isApproved,
-  kycLoading,
-  onAccessChanged,
-}: WaylerAccessPanelProps) {
+export function WaylerAccessPanel({ kycGate, onAccessChanged }: WaylerAccessPanelProps) {
   const { t } = useI18n();
+  const { isApproved, kycLoading } = kycGate;
 
   const [accessState, setAccessState] = useState<WaylerAccessState | null>(null);
   const [history, setHistory] = useState<WaylerAccessPassSummary[]>([]);
@@ -232,9 +228,7 @@ export function WaylerAccessPanel({
     <div className="flex flex-col gap-6">
       <p className="text-sm text-muted-foreground">{t('app.waylerAccess.subtitle')}</p>
 
-      {!kycLoading && !isApproved ? (
-        <p className={ALERT_INFO_CLASS}>{t('app.waylerAccess.kycRequired')}</p>
-      ) : null}
+      {!isApproved ? <KycMarketplaceGateNotice {...kycGate} /> : null}
 
       {isApproved ? (
         <>
