@@ -26,3 +26,27 @@ export interface AuthResult {
   accessToken: string;
   user: UserProfile;
 }
+
+/** Compact user row for admin/arbitrator trust & safety queue (read-only). */
+export interface AdminUserQueueItem {
+  id: string;
+  displayName: string;
+  email: string;
+  roles: UserRole[];
+  kycStatus: KycStatus;
+  verified: boolean;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+  postedOrdersCount: number;
+  acceptedOrdersCount: number;
+  disputesCount: number;
+  latestActivityAt: ISODateString;
+}
+
+/** Paginated admin users queue (GET /admin/users). */
+export interface AdminUserListResponse {
+  items: AdminUserQueueItem[];
+  page: number;
+  limit: number;
+  total: number;
+}

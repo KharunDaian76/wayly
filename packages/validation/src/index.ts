@@ -9,3 +9,4 @@ export * from './dispute';
 export * from './wayler-availability';
 export * from './wayler-availability-request';
 export * from './wayler-access-pass';
+export * from './user-admin';

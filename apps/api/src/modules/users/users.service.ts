@@ -1,8 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import type { User } from '@prisma/client';
-import type { UpdateProfileInput } from '@wayly/validation';
+import type { Prisma, User } from '@prisma/client';
+import { KycStatus as PrismaKycStatus, UserRole as PrismaUserRole } from '@prisma/client';
+import type { AdminUserListResponse } from '@wayly/types';
+import type { AdminUsersListQueryInput, UpdateProfileInput } from '@wayly/validation';
 
 import { PrismaService } from '../../infra/prisma/prisma.service';
+
+import { toAdminUserQueueItem } from './user.mapper';
 
 @Injectable()
 export class UsersService {
@@ -59,6 +63,57 @@ export class UsersService {
         ...(phoneChanged ? { phoneVerified: false } : {}),
       },
     });
+  }
+
+  async listForOperations(query: AdminUsersListQueryInput): Promise<AdminUserListResponse> {
+    const where: Prisma.UserWhereInput = {
+      deletedAt: null,
+      ...(query.role ? { roles: { has: query.role as PrismaUserRole } } : {}),
+      ...(query.kycStatus ? { kycStatus: query.kycStatus as PrismaKycStatus } : {}),
+    };
+
+    if (query.search) {
+      where.OR = [
+        { email: { contains: query.search, mode: 'insensitive' } },
+        { displayName: { contains: query.search, mode: 'insensitive' } },
+      ];
+    }
+
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.user.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+        select: {
+          id: true,
+          email: true,
+          displayName: true,
+          roles: true,
+          kycStatus: true,
+          verified: true,
+          createdAt: true,
+          updatedAt: true,
+          _count: {
+            select: {
+              sentDeliveryOrders: true,
+              acceptedDeliveryOrders: true,
+              disputesOpened: true,
+            },
+          },
+        },
+      }),
+      this.prisma.user.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toAdminUserQueueItem),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
   }
 
   /** Marks a GDPR deletion request (endpoint deferred to a later milestone). */
