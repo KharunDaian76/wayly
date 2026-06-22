@@ -6,3 +6,8 @@ export interface KycVerificationsListQuery {
   limit?: number;
   status?: KycStatus;
 }
+
+/** Body for POST /admin/kyc-verifications/:id/reject. */
+export interface AdminKycRejectBody {
+  rejectionReason: string;
+}

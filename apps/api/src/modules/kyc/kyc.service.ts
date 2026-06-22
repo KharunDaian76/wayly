@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import type { KycVerification, Prisma, User } from '@prisma/client';
 import { KycStatus as PrismaKycStatus } from '@prisma/client';
-import type { AdminKycListResponse, KycVerificationSummary } from '@wayly/types';
+import type { AdminKycListResponse, AdminKycQueueItem, KycVerificationSummary } from '@wayly/types';
 import { KycStatus } from '@wayly/types';
 import type { KycStartInput, KycVerificationsListQueryInput } from '@wayly/validation';
 
@@ -158,6 +158,96 @@ export class KycService {
       limit: query.limit,
       total,
     };
+  }
+
+  async approveForOperations(verificationId: string): Promise<AdminKycQueueItem> {
+    const record = await this.findVerificationForOperations(verificationId);
+    if (record.status === PrismaKycStatus.APPROVED) {
+      throw new BadRequestException('KYC verification is already approved');
+    }
+    if (record.status !== PrismaKycStatus.PENDING && record.status !== PrismaKycStatus.REJECTED) {
+      throw new BadRequestException('KYC verification cannot be approved');
+    }
+
+    const now = new Date();
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const verification = await tx.kycVerification.update({
+        where: { id: verificationId },
+        data: {
+          status: PrismaKycStatus.APPROVED,
+          reviewedAt: now,
+          rejectionReason: null,
+        },
+        include: {
+          user: { select: { displayName: true, email: true } },
+        },
+      });
+
+      await tx.user.update({
+        where: { id: record.userId },
+        data: {
+          kycStatus: PrismaKycStatus.APPROVED,
+          verified: true,
+        },
+      });
+
+      return verification;
+    });
+
+    return toAdminKycQueueItem(updated);
+  }
+
+  async rejectForOperations(
+    verificationId: string,
+    rejectionReason: string,
+  ): Promise<AdminKycQueueItem> {
+    const record = await this.findVerificationForOperations(verificationId);
+    if (record.status === PrismaKycStatus.APPROVED) {
+      throw new BadRequestException('Approved KYC verifications cannot be rejected');
+    }
+    if (record.status !== PrismaKycStatus.PENDING && record.status !== PrismaKycStatus.REJECTED) {
+      throw new BadRequestException('KYC verification cannot be rejected');
+    }
+
+    const now = new Date();
+    const updated = await this.prisma.$transaction(async (tx) => {
+      const verification = await tx.kycVerification.update({
+        where: { id: verificationId },
+        data: {
+          status: PrismaKycStatus.REJECTED,
+          reviewedAt: now,
+          rejectionReason,
+        },
+        include: {
+          user: { select: { displayName: true, email: true } },
+        },
+      });
+
+      await tx.user.update({
+        where: { id: record.userId },
+        data: {
+          kycStatus: PrismaKycStatus.REJECTED,
+          verified: false,
+        },
+      });
+
+      return verification;
+    });
+
+    return toAdminKycQueueItem(updated);
+  }
+
+  private async findVerificationForOperations(verificationId: string) {
+    const record = await this.prisma.kycVerification.findUnique({
+      where: { id: verificationId },
+      include: {
+        user: { select: { displayName: true, email: true, deletedAt: true } },
+      },
+    });
+    if (!record || record.user.deletedAt) {
+      throw new NotFoundException('KYC verification not found');
+    }
+    return record;
   }
 
   private assertMockRoutesAllowed(): void {

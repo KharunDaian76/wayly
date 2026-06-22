@@ -36,3 +36,9 @@ export const kycVerificationsListQuerySchema = z.object({
 });
 
 export type KycVerificationsListQueryInput = z.infer<typeof kycVerificationsListQuerySchema>;
+
+/** POST /admin/kyc-verifications/:id/reject body. */
+export const adminKycRejectSchema = z.object({
+  rejectionReason: nonEmptyStringSchema.max(500),
+});
+export type AdminKycRejectInput = z.infer<typeof adminKycRejectSchema>;

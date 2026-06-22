@@ -1,6 +1,7 @@
 import type {
   AdminDisputeListResponse,
   AdminKycListResponse,
+  AdminKycQueueItem,
   AdminOrderListResponse,
   AdminPaymentListResponse,
   AdminSystemHealthResponse,
@@ -9,7 +10,7 @@ import type {
 
 import type { AdminApi } from './admin.types';
 import type { DisputesListQuery } from './disputes.types';
-import type { KycVerificationsListQuery } from './kyc-admin.types';
+import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
 import type { AdminPaymentsListQuery } from './payments-admin.types';
 import type { RequestOptions } from './types';
@@ -135,6 +136,19 @@ export function createAdminApi(request: Requester): AdminApi {
           accessToken,
         },
       ),
+    approveKycVerification: (id: string, accessToken?: string | null) =>
+      request<AdminKycQueueItem>(`/admin/kyc-verifications/${id}/approve`, {
+        method: 'POST',
+        ...withCookies,
+        accessToken,
+      }),
+    rejectKycVerification: (id: string, body: AdminKycRejectBody, accessToken?: string | null) =>
+      request<AdminKycQueueItem>(`/admin/kyc-verifications/${id}/reject`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
     listOrders: (query?: AdminOrdersListQuery, accessToken?: string | null) =>
       request<AdminOrderListResponse>(`/admin/orders${buildAdminOrdersQuery(query)}`, {
         method: 'GET',

@@ -1,7 +1,7 @@
 'use client';
 
 import type { AdminKycQueueItem, KycStatus, UserRole } from '@wayly/types';
-import { Button } from '@wayly/ui';
+import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 import {
@@ -23,6 +23,8 @@ const LISTING_CARD_CLASS = cn(
 export type AdminKycQueuePanelProps = {
   roles: UserRole[];
 };
+
+type CardAction = 'approve' | 'reject';
 
 export function adminKycStatusKey(status: KycStatus): TranslationKey {
   return `app.admin.kycVerificationStatus.${status}` as TranslationKey;
@@ -49,12 +51,22 @@ function formatUser(displayName: string | null, email: string | null): string {
   return displayName ?? email ?? '—';
 }
 
+function canReviewKyc(status: KycStatus): boolean {
+  return status === 'PENDING' || status === 'REJECTED';
+}
+
 export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
   const { t } = useI18n();
   const [items, setItems] = useState<AdminKycQueueItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loadedOnce, setLoadedOnce] = useState(false);
+  const [rejectFormId, setRejectFormId] = useState<string | null>(null);
+  const [rejectReasons, setRejectReasons] = useState<Record<string, string>>({});
+  const [rejectReasonErrors, setRejectReasonErrors] = useState<Record<string, string>>({});
+  const [cardActions, setCardActions] = useState<Record<string, CardAction | null>>({});
+  const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
+  const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
 
   const loadKycQueue = useCallback(async () => {
     setLoading(true);
@@ -76,6 +88,75 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
     }
   }, [roles, loadKycQueue]);
 
+  const updateItemInList = useCallback((updated: AdminKycQueueItem) => {
+    setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+  }, []);
+
+  const handleApprove = useCallback(
+    async (item: AdminKycQueueItem) => {
+      setCardActions((current) => ({ ...current, [item.id]: 'approve' }));
+      setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+      setRejectFormId((current) => (current === item.id ? null : current));
+
+      try {
+        const updated = await api.admin.approveKycVerification(item.id);
+        updateItemInList(updated);
+        setCardActionSuccess((current) => ({
+          ...current,
+          [item.id]: t('app.admin.kycApprovedSuccess'),
+        }));
+      } catch {
+        setCardActionErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.kycReviewActionFailed'),
+        }));
+      } finally {
+        setCardActions((current) => ({ ...current, [item.id]: null }));
+      }
+    },
+    [t, updateItemInList],
+  );
+
+  const handleRejectSubmit = useCallback(
+    async (item: AdminKycQueueItem) => {
+      const reason = rejectReasons[item.id]?.trim() ?? '';
+      if (!reason) {
+        setRejectReasonErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.rejectKycReasonRequired'),
+        }));
+        return;
+      }
+
+      setRejectReasonErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActions((current) => ({ ...current, [item.id]: 'reject' }));
+      setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+
+      try {
+        const updated = await api.admin.rejectKycVerification(item.id, {
+          rejectionReason: reason,
+        });
+        updateItemInList(updated);
+        setRejectFormId(null);
+        setRejectReasons((current) => ({ ...current, [item.id]: '' }));
+        setCardActionSuccess((current) => ({
+          ...current,
+          [item.id]: t('app.admin.kycRejectedSuccess'),
+        }));
+      } catch {
+        setCardActionErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.kycReviewActionFailed'),
+        }));
+      } finally {
+        setCardActions((current) => ({ ...current, [item.id]: null }));
+      }
+    },
+    [rejectReasons, t, updateItemInList],
+  );
+
   if (!hasOperationsDashboardAccess(roles)) {
     return null;
   }
@@ -95,7 +176,7 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
           </h3>
           <p className="mt-1 text-xs text-muted-foreground">{t('app.admin.kycReviewBody')}</p>
         </div>
-        <span className="text-xs text-muted-foreground">{t('app.admin.readOnlyQueue')}</span>
+        <span className="text-xs text-muted-foreground">{t('app.admin.kycManualReviewBadge')}</span>
       </div>
 
       <div className="px-1 pb-1">
@@ -124,46 +205,161 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
 
         {!showInitialLoading && !loadError && items.length > 0 ? (
           <ul className="flex flex-col gap-2 px-2 pb-2">
-            {items.map((item) => (
-              <li key={item.id} className={LISTING_CARD_CLASS}>
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground">
-                      {formatUser(item.userDisplayName, item.userEmail)}
-                    </p>
-                    <p className="mt-1 font-mono text-xs text-muted-foreground">
-                      {t('app.admin.kycUser')}: {item.userId}
-                    </p>
-                  </div>
-                  <span className="wayly-status-badge wayly-status-default shrink-0 text-xs">
-                    {t(adminKycStatusKey(item.status))}
-                  </span>
-                </div>
+            {items.map((item) => {
+              const action = cardActions[item.id];
+              const isRejectFormOpen = rejectFormId === item.id;
+              const showReviewActions = canReviewKyc(item.status);
+              const isApproved = item.status === 'APPROVED';
 
-                <dl className="mt-3 flex flex-col gap-1.5 text-sm">
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.kycCountry')}</dt>
-                    <dd className="font-medium">{item.country?.trim() || '—'}</dd>
+              return (
+                <li key={item.id} className={LISTING_CARD_CLASS}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-foreground">
+                        {formatUser(item.userDisplayName, item.userEmail)}
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-muted-foreground">
+                        {t('app.admin.kycUser')}: {item.userId}
+                      </p>
+                    </div>
+                    <span className="wayly-status-badge wayly-status-default shrink-0 text-xs">
+                      {t(adminKycStatusKey(item.status))}
+                    </span>
                   </div>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.kycSubmitted')}</dt>
-                    <dd>{formatDateTime(item.submittedAt ?? item.createdAt)}</dd>
-                  </div>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.kycUpdated')}</dt>
-                    <dd>{formatDateTime(item.reviewedAt ?? item.updatedAt)}</dd>
-                  </div>
-                  {item.rejectionReason?.trim() ? (
+
+                  <dl className="mt-3 flex flex-col gap-1.5 text-sm">
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                      <dt className="text-muted-foreground">{t('app.admin.rejectionReason')}</dt>
-                      <dd className="break-words text-right sm:max-w-[65%]">
-                        {item.rejectionReason}
-                      </dd>
+                      <dt className="text-muted-foreground">{t('app.admin.kycCountry')}</dt>
+                      <dd className="font-medium">{item.country?.trim() || '—'}</dd>
+                    </div>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                      <dt className="text-muted-foreground">{t('app.admin.kycSubmitted')}</dt>
+                      <dd>{formatDateTime(item.submittedAt ?? item.createdAt)}</dd>
+                    </div>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                      <dt className="text-muted-foreground">{t('app.admin.kycUpdated')}</dt>
+                      <dd>{formatDateTime(item.reviewedAt ?? item.updatedAt)}</dd>
+                    </div>
+                    {item.rejectionReason?.trim() ? (
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                        <dt className="text-muted-foreground">{t('app.admin.rejectionReason')}</dt>
+                        <dd className="break-words text-right sm:max-w-[65%]">
+                          {item.rejectionReason}
+                        </dd>
+                      </div>
+                    ) : null}
+                  </dl>
+
+                  {isApproved ? (
+                    <p className="mt-3 text-xs text-muted-foreground">
+                      {t('app.admin.kycAlreadyApproved')}
+                    </p>
+                  ) : null}
+
+                  {cardActionSuccess[item.id] ? (
+                    <p className="mt-3 text-xs text-[hsl(var(--success))]" role="status">
+                      {cardActionSuccess[item.id]}
+                    </p>
+                  ) : null}
+
+                  {cardActionErrors[item.id] ? (
+                    <p className="mt-3 text-xs text-[hsl(var(--danger))]" role="alert">
+                      {cardActionErrors[item.id]}
+                    </p>
+                  ) : null}
+
+                  {showReviewActions ? (
+                    <div className="mt-3 border-t border-border/40 pt-3">
+                      {isRejectFormOpen ? (
+                        <div className="flex flex-col gap-2">
+                          <label
+                            className="text-xs font-medium text-foreground"
+                            htmlFor={`reject-reason-${item.id}`}
+                          >
+                            {t('app.admin.rejectKycReason')}
+                          </label>
+                          <Input
+                            id={`reject-reason-${item.id}`}
+                            value={rejectReasons[item.id] ?? ''}
+                            placeholder={t('app.admin.rejectKycReasonPlaceholder')}
+                            disabled={action === 'reject'}
+                            onChange={(event) => {
+                              const value = event.target.value;
+                              setRejectReasons((current) => ({ ...current, [item.id]: value }));
+                              if (value.trim()) {
+                                setRejectReasonErrors((current) => ({ ...current, [item.id]: '' }));
+                              }
+                            }}
+                            className="h-9 text-sm"
+                          />
+                          {rejectReasonErrors[item.id] ? (
+                            <p className="text-xs text-[hsl(var(--danger))]" role="alert">
+                              {rejectReasonErrors[item.id]}
+                            </p>
+                          ) : null}
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              variant="danger"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={action !== null}
+                              onClick={() => void handleRejectSubmit(item)}
+                            >
+                              {action === 'reject'
+                                ? t('app.admin.rejectingKyc')
+                                : t('app.admin.rejectKyc')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={action !== null}
+                              onClick={() => {
+                                setRejectFormId(null);
+                                setRejectReasonErrors((current) => ({ ...current, [item.id]: '' }));
+                              }}
+                            >
+                              {t('app.admin.cancelKycReject')}
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap gap-2">
+                          <Button
+                            type="button"
+                            variant="primary"
+                            size="sm"
+                            className="h-8 text-xs"
+                            disabled={action !== null}
+                            onClick={() => void handleApprove(item)}
+                          >
+                            {action === 'approve'
+                              ? t('app.admin.approvingKyc')
+                              : t('app.admin.approveKyc')}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs"
+                            disabled={action !== null}
+                            onClick={() => {
+                              setRejectFormId(item.id);
+                              setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+                              setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+                            }}
+                          >
+                            {t('app.admin.rejectKyc')}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   ) : null}
-                </dl>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         ) : null}
 

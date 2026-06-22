@@ -15,6 +15,12 @@ export class KycMockRejectBodyDto {
   rejectionReason?: string;
 }
 
+/** Swagger-only schema for POST /admin/kyc-verifications/:id/reject. */
+export class AdminKycRejectBodyDto {
+  @ApiProperty({ example: 'Document image was unreadable' })
+  rejectionReason!: string;
+}
+
 export class KycVerificationSummaryDto {
   @ApiProperty({ format: 'uuid' })
   id!: string;
