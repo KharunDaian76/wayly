@@ -9,17 +9,19 @@ import {
   PaymentProvider as PrismaPaymentProvider,
   PaymentStatus as PrismaPaymentStatus,
   PayoutStatus as PrismaPayoutStatus,
+  Prisma,
 } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
-import type { PaymentIntentSummary } from '@wayly/types';
+import type { AdminPaymentListResponse, PaymentIntentSummary } from '@wayly/types';
 import { DeliveryOrderStatus, NotificationType } from '@wayly/types';
+import type { AdminPaymentsListQueryInput } from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
-import { toPaymentIntentSummary } from './payments.mapper';
+import { toAdminPaymentQueueItem, toPaymentIntentSummary } from './payments.mapper';
 
 const MOCK_PLATFORM_FEE_RATE = new Decimal('0.1');
 
@@ -29,6 +31,46 @@ export class PaymentsService {
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
   ) {}
+
+  async listForOperations(query: AdminPaymentsListQueryInput): Promise<AdminPaymentListResponse> {
+    const where: Prisma.PaymentIntentWhereInput = {
+      ...(query.status ? { status: query.status as PrismaPaymentStatus } : {}),
+      ...(query.currency ? { currency: query.currency } : {}),
+    };
+
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.paymentIntent.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+        include: {
+          payer: { select: { displayName: true, email: true } },
+          payee: { select: { displayName: true, email: true } },
+          order: {
+            select: {
+              title: true,
+              disputes: {
+                select: { status: true },
+                orderBy: { createdAt: 'desc' },
+                take: 1,
+              },
+            },
+          },
+        },
+      }),
+      this.prisma.paymentIntent.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toAdminPaymentQueueItem),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
+  }
 
   async mockAuthorizeOrder(user: RequestUser, orderId: string): Promise<PaymentIntentSummary> {
     requireKycApproved(user);

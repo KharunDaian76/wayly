@@ -2,12 +2,14 @@ import type {
   AdminDisputeListResponse,
   AdminKycListResponse,
   AdminOrderListResponse,
+  AdminPaymentListResponse,
   AdminUserListResponse,
 } from '@wayly/types';
 
 import type { DisputesListQuery } from './disputes.types';
 import type { KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
+import type { AdminPaymentsListQuery } from './payments-admin.types';
 import type { AdminUsersListQuery } from './users-admin.types';
 
 /** Admin / operations endpoints (read-only in current batches). */
@@ -28,11 +30,16 @@ export interface AdminApi {
     query?: AdminUsersListQuery,
     accessToken?: string | null,
   ): Promise<AdminUserListResponse>;
+  listPayments(
+    query?: AdminPaymentsListQuery,
+    accessToken?: string | null,
+  ): Promise<AdminPaymentListResponse>;
 }
 
 export type {
   AdminDisputeListResponse,
   AdminKycListResponse,
   AdminOrderListResponse,
+  AdminPaymentListResponse,
   AdminUserListResponse,
 };

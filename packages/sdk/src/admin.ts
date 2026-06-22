@@ -2,6 +2,7 @@ import type {
   AdminDisputeListResponse,
   AdminKycListResponse,
   AdminOrderListResponse,
+  AdminPaymentListResponse,
   AdminUserListResponse,
 } from '@wayly/types';
 
@@ -9,6 +10,7 @@ import type { AdminApi } from './admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
+import type { AdminPaymentsListQuery } from './payments-admin.types';
 import type { RequestOptions } from './types';
 import type { AdminUsersListQuery } from './users-admin.types';
 
@@ -94,6 +96,27 @@ function buildAdminUsersQuery(query?: AdminUsersListQuery): string {
   return qs ? `?${qs}` : '';
 }
 
+function buildAdminPaymentsQuery(query?: AdminPaymentsListQuery): string {
+  if (!query) {
+    return '';
+  }
+  const params = new URLSearchParams();
+  if (query.page !== undefined) {
+    params.set('page', String(query.page));
+  }
+  if (query.limit !== undefined) {
+    params.set('limit', String(query.limit));
+  }
+  if (query.status !== undefined) {
+    params.set('status', query.status);
+  }
+  if (query.currency !== undefined) {
+    params.set('currency', query.currency);
+  }
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
 export function createAdminApi(request: Requester): AdminApi {
   return {
     listDisputes: (query?: DisputesListQuery, accessToken?: string | null) =>
@@ -119,6 +142,12 @@ export function createAdminApi(request: Requester): AdminApi {
       }),
     listUsers: (query?: AdminUsersListQuery, accessToken?: string | null) =>
       request<AdminUserListResponse>(`/admin/users${buildAdminUsersQuery(query)}`, {
+        method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    listPayments: (query?: AdminPaymentsListQuery, accessToken?: string | null) =>
+      request<AdminPaymentListResponse>(`/admin/payments${buildAdminPaymentsQuery(query)}`, {
         method: 'GET',
         ...withCookies,
         accessToken,
