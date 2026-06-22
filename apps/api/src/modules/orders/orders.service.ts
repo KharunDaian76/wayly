@@ -9,9 +9,14 @@ import {
   DeliveryOrderType as PrismaDeliveryOrderType,
   Prisma,
 } from '@prisma/client';
-import type { DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
+import type {
+  AdminOrderListResponse,
+  DeliveryOrderDetail,
+  DeliveryOrderSummary,
+} from '@wayly/types';
 import { DeliveryOrderStatus, NotificationType } from '@wayly/types';
 import type {
+  AdminOrdersListQueryInput,
   CreateDeliveryOrderInput,
   DeliveryOrderQueryInput,
   SubmitDeliveryProofInput,
@@ -23,7 +28,11 @@ import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
-import { toDeliveryOrderDetail, toDeliveryOrderSummary } from './orders.mapper';
+import {
+  toAdminOrderQueueItem,
+  toDeliveryOrderDetail,
+  toDeliveryOrderSummary,
+} from './orders.mapper';
 
 export interface OrdersListQuery extends DeliveryOrderQueryInput {
   page: number;
@@ -85,6 +94,41 @@ export class OrdersService {
 
     return {
       items: records.map(toDeliveryOrderSummary),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
+  }
+
+  async listForOperations(query: AdminOrdersListQueryInput): Promise<AdminOrderListResponse> {
+    const where: Prisma.DeliveryOrderWhereInput = query.status
+      ? { status: query.status as PrismaDeliveryOrderStatus }
+      : {};
+
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.deliveryOrder.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+        include: {
+          sender: { select: { displayName: true, email: true } },
+          acceptedWayler: { select: { displayName: true, email: true } },
+          paymentIntent: { select: { status: true } },
+          disputes: {
+            select: { status: true },
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+          },
+        },
+      }),
+      this.prisma.deliveryOrder.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toAdminOrderQueueItem),
       page: query.page,
       limit: query.limit,
       total,

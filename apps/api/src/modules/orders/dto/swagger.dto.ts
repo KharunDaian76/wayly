@@ -205,3 +205,90 @@ export class DeliveryOrderListResponseDto {
   @ApiProperty()
   total!: number;
 }
+
+export class AdminOrderQueueItemDto {
+  @ApiProperty({ format: 'uuid' })
+  id!: string;
+
+  @ApiProperty({ enum: ['SENDER_POSTED_ORDER', 'WAYLER_AVAILABILITY_REQUEST'] })
+  sourceType!: string;
+
+  @ApiProperty({
+    enum: ['DRAFT', 'OPEN', 'ACCEPTED', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'DISPUTED'],
+  })
+  status!: string;
+
+  @ApiProperty({ example: 'Documents to Berlin' })
+  title!: string;
+
+  @ApiPropertyOptional({ example: 'Paris' })
+  pickupCity!: string | null;
+
+  @ApiPropertyOptional({ example: 'FR' })
+  pickupCountry!: string | null;
+
+  @ApiPropertyOptional({ example: 'Berlin' })
+  dropoffCity!: string | null;
+
+  @ApiPropertyOptional({ example: 'DE' })
+  dropoffCountry!: string | null;
+
+  @ApiProperty({ example: 'USD' })
+  currency!: string;
+
+  @ApiPropertyOptional({ example: '50.00' })
+  offeredRewardAmount!: string | null;
+
+  @ApiPropertyOptional({ example: 'Sender Demo' })
+  senderDisplayName!: string | null;
+
+  @ApiPropertyOptional({ example: 'sender@example.com' })
+  senderEmail!: string | null;
+
+  @ApiPropertyOptional({ example: 'Wayler Demo' })
+  waylerDisplayName!: string | null;
+
+  @ApiPropertyOptional({ example: 'wayler@example.com' })
+  waylerEmail!: string | null;
+
+  @ApiProperty({ format: 'date-time' })
+  createdAt!: string;
+
+  @ApiProperty({ format: 'date-time' })
+  updatedAt!: string;
+
+  @ApiPropertyOptional({
+    enum: [
+      'PENDING',
+      'AUTHORIZED',
+      'HELD_IN_ESCROW',
+      'RELEASED',
+      'REFUNDED',
+      'FAILED',
+      'CANCELLED',
+    ],
+  })
+  paymentStatus!: string | null;
+
+  @ApiPropertyOptional({
+    enum: ['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED', 'CANCELLED'],
+  })
+  latestDisputeStatus!: string | null;
+
+  @ApiProperty()
+  proofSubmitted!: boolean;
+}
+
+export class AdminOrderListResponseDto {
+  @ApiProperty({ type: [AdminOrderQueueItemDto] })
+  items!: AdminOrderQueueItemDto[];
+
+  @ApiProperty({ example: 1 })
+  page!: number;
+
+  @ApiProperty({ example: 20 })
+  limit!: number;
+
+  @ApiProperty({ example: 0 })
+  total!: number;
+}

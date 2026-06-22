@@ -1,8 +1,13 @@
-import type { AdminDisputeListResponse, AdminKycListResponse } from '@wayly/types';
+import type {
+  AdminDisputeListResponse,
+  AdminKycListResponse,
+  AdminOrderListResponse,
+} from '@wayly/types';
 
 import type { AdminApi } from './admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { KycVerificationsListQuery } from './kyc-admin.types';
+import type { AdminOrdersListQuery } from './orders-admin.types';
 import type { RequestOptions } from './types';
 
 type Requester = <T>(path: string, options?: RequestOptions) => Promise<T>;
@@ -45,6 +50,24 @@ function buildKycVerificationsQuery(query?: KycVerificationsListQuery): string {
   return qs ? `?${qs}` : '';
 }
 
+function buildAdminOrdersQuery(query?: AdminOrdersListQuery): string {
+  if (!query) {
+    return '';
+  }
+  const params = new URLSearchParams();
+  if (query.page !== undefined) {
+    params.set('page', String(query.page));
+  }
+  if (query.limit !== undefined) {
+    params.set('limit', String(query.limit));
+  }
+  if (query.status !== undefined) {
+    params.set('status', query.status);
+  }
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
 export function createAdminApi(request: Requester): AdminApi {
   return {
     listDisputes: (query?: DisputesListQuery, accessToken?: string | null) =>
@@ -62,6 +85,12 @@ export function createAdminApi(request: Requester): AdminApi {
           accessToken,
         },
       ),
+    listOrders: (query?: AdminOrdersListQuery, accessToken?: string | null) =>
+      request<AdminOrderListResponse>(`/admin/orders${buildAdminOrdersQuery(query)}`, {
+        method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
   };
 }
 

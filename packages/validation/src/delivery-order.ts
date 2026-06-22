@@ -63,6 +63,15 @@ export const deliveryOrderQuerySchema = paginationSchema.extend({
 });
 export type DeliveryOrderQueryInput = z.infer<typeof deliveryOrderQuerySchema>;
 
+/** GET /admin/orders query parameters (operations read-only list). */
+export const adminOrdersListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  status: enumSchema(DeliveryOrderStatus).optional(),
+});
+
+export type AdminOrdersListQueryInput = z.infer<typeof adminOrdersListQuerySchema>;
+
 const optionalProofNoteSchema = z.string().trim().min(1).max(1000).optional();
 const optionalProofConfirmationCodeSchema = z.string().trim().min(1).max(64).optional();
 

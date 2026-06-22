@@ -3,7 +3,9 @@ import type {
   DeliveryOrderSource,
   DeliveryOrderStatus,
   DeliveryOrderType,
+  DisputeStatus,
   PackageSize,
+  PaymentStatus,
 } from './enums';
 
 /**
@@ -102,3 +104,34 @@ export interface CreateDeliveryOrderInput {
 
 /** Partial update for an existing delivery request (draft edits in later batches). */
 export type UpdateDeliveryOrderInput = Partial<CreateDeliveryOrderInput>;
+
+/** Compact delivery order row for admin/arbitrator operations queue (read-only). */
+export interface AdminOrderQueueItem {
+  id: string;
+  sourceType: DeliveryOrderSource;
+  status: DeliveryOrderStatus;
+  title: string;
+  pickupCity: string | null;
+  pickupCountry: string | null;
+  dropoffCity: string | null;
+  dropoffCountry: string | null;
+  currency: string;
+  offeredRewardAmount: DecimalString | null;
+  senderDisplayName: string | null;
+  senderEmail: string | null;
+  waylerDisplayName: string | null;
+  waylerEmail: string | null;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+  paymentStatus: PaymentStatus | null;
+  latestDisputeStatus: DisputeStatus | null;
+  proofSubmitted: boolean;
+}
+
+/** Paginated admin orders queue (GET /admin/orders). */
+export interface AdminOrderListResponse {
+  items: AdminOrderQueueItem[];
+  page: number;
+  limit: number;
+  total: number;
+}

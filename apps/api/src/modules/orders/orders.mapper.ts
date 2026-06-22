@@ -1,11 +1,13 @@
 import type { DeliveryOrder } from '@prisma/client';
 import type { Decimal } from '@prisma/client/runtime/library';
-import type { DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
+import type { AdminOrderQueueItem, DeliveryOrderDetail, DeliveryOrderSummary } from '@wayly/types';
 import {
   DeliveryOrderSource,
   DeliveryOrderStatus,
   DeliveryOrderType,
+  DisputeStatus,
   PackageSize,
+  PaymentStatus,
 } from '@wayly/types';
 
 function decimalToString(value: Decimal | null | undefined): string | null {
@@ -17,6 +19,38 @@ function decimalToString(value: Decimal | null | undefined): string | null {
 
 function toIso(value: Date | null): string | null {
   return value?.toISOString() ?? null;
+}
+
+/** Maps a Prisma DeliveryOrder with parties and light relations to the admin queue shape. */
+export function toAdminOrderQueueItem(
+  record: DeliveryOrder & {
+    sender: { displayName: string; email: string };
+    acceptedWayler: { displayName: string; email: string } | null;
+    paymentIntent: { status: string } | null;
+    disputes: { status: string }[];
+  },
+): AdminOrderQueueItem {
+  return {
+    id: record.id,
+    sourceType: record.sourceType as DeliveryOrderSource,
+    status: record.status as DeliveryOrderStatus,
+    title: record.title,
+    pickupCity: record.pickupCity,
+    pickupCountry: record.pickupCountry,
+    dropoffCity: record.dropoffCity,
+    dropoffCountry: record.dropoffCountry,
+    currency: record.currency,
+    offeredRewardAmount: decimalToString(record.offeredRewardAmount),
+    senderDisplayName: record.sender.displayName,
+    senderEmail: record.sender.email,
+    waylerDisplayName: record.acceptedWayler?.displayName ?? null,
+    waylerEmail: record.acceptedWayler?.email ?? null,
+    createdAt: record.createdAt.toISOString(),
+    updatedAt: record.updatedAt.toISOString(),
+    paymentStatus: record.paymentIntent ? (record.paymentIntent.status as PaymentStatus) : null,
+    latestDisputeStatus: record.disputes[0] ? (record.disputes[0].status as DisputeStatus) : null,
+    proofSubmitted: record.proofSubmittedAt != null,
+  };
 }
 
 /** Maps a Prisma DeliveryOrder to the compact public list shape. */

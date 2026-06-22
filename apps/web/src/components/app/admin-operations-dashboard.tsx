@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@wayly/ui';
 
 import { AdminDisputesQueuePanel } from '@/components/app/admin-disputes-queue-panel';
 import { AdminKycQueuePanel } from '@/components/app/admin-kyc-queue-panel';
+import { AdminOrdersQueuePanel } from '@/components/app/admin-orders-queue-panel';
 import { PanelEmptyState } from '@/components/app/panel-status-states';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
@@ -13,7 +14,6 @@ import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-ac
 import { cn } from '@/lib/utils';
 
 const PLACEHOLDER_SECTIONS: ReadonlyArray<{ titleKey: TranslationKey; bodyKey: TranslationKey }> = [
-  { titleKey: 'app.admin.ordersMonitoringTitle', bodyKey: 'app.admin.ordersMonitoringBody' },
   { titleKey: 'app.admin.usersSafetyTitle', bodyKey: 'app.admin.usersSafetyBody' },
   { titleKey: 'app.admin.paymentsMonitoringTitle', bodyKey: 'app.admin.paymentsMonitoringBody' },
   { titleKey: 'app.admin.systemHealthTitle', bodyKey: 'app.admin.systemHealthBody' },
@@ -63,6 +63,7 @@ export function AdminOperationsDashboard({ roles }: AdminOperationsDashboardProp
         <div className="grid gap-4 sm:grid-cols-2">
           <AdminDisputesQueuePanel roles={roles} />
           <AdminKycQueuePanel roles={roles} />
+          <AdminOrdersQueuePanel roles={roles} />
 
           {PLACEHOLDER_SECTIONS.map(({ titleKey, bodyKey }) => (
             <section
