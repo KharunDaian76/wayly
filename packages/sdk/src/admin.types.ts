@@ -3,6 +3,7 @@ import type {
   AdminKycListResponse,
   AdminOrderListResponse,
   AdminPaymentListResponse,
+  AdminSystemHealthResponse,
   AdminUserListResponse,
 } from '@wayly/types';
 
@@ -34,6 +35,7 @@ export interface AdminApi {
     query?: AdminPaymentsListQuery,
     accessToken?: string | null,
   ): Promise<AdminPaymentListResponse>;
+  getSystemHealth(accessToken?: string | null): Promise<AdminSystemHealthResponse>;
 }
 
 export type {
@@ -41,5 +43,6 @@ export type {
   AdminKycListResponse,
   AdminOrderListResponse,
   AdminPaymentListResponse,
+  AdminSystemHealthResponse,
   AdminUserListResponse,
 };

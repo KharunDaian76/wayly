@@ -3,6 +3,7 @@ import type {
   AdminKycListResponse,
   AdminOrderListResponse,
   AdminPaymentListResponse,
+  AdminSystemHealthResponse,
   AdminUserListResponse,
 } from '@wayly/types';
 
@@ -148,6 +149,12 @@ export function createAdminApi(request: Requester): AdminApi {
       }),
     listPayments: (query?: AdminPaymentsListQuery, accessToken?: string | null) =>
       request<AdminPaymentListResponse>(`/admin/payments${buildAdminPaymentsQuery(query)}`, {
+        method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    getSystemHealth: (accessToken?: string | null) =>
+      request<AdminSystemHealthResponse>('/admin/system-health', {
         method: 'GET',
         ...withCookies,
         accessToken,

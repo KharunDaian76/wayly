@@ -8,16 +8,11 @@ import { AdminDisputesQueuePanel } from '@/components/app/admin-disputes-queue-p
 import { AdminKycQueuePanel } from '@/components/app/admin-kyc-queue-panel';
 import { AdminOrdersQueuePanel } from '@/components/app/admin-orders-queue-panel';
 import { AdminPaymentsQueuePanel } from '@/components/app/admin-payments-queue-panel';
+import { AdminSystemHealthPanel } from '@/components/app/admin-system-health-panel';
 import { AdminUsersQueuePanel } from '@/components/app/admin-users-queue-panel';
-import { PanelEmptyState } from '@/components/app/panel-status-states';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
-import { cn } from '@/lib/utils';
-
-const PLACEHOLDER_SECTIONS: ReadonlyArray<{ titleKey: TranslationKey; bodyKey: TranslationKey }> = [
-  { titleKey: 'app.admin.systemHealthTitle', bodyKey: 'app.admin.systemHealthBody' },
-];
 
 export type AdminOperationsDashboardProps = {
   roles: UserRole[];
@@ -66,20 +61,7 @@ export function AdminOperationsDashboard({ roles }: AdminOperationsDashboardProp
           <AdminOrdersQueuePanel roles={roles} />
           <AdminUsersQueuePanel roles={roles} />
           <AdminPaymentsQueuePanel roles={roles} />
-
-          {PLACEHOLDER_SECTIONS.map(({ titleKey, bodyKey }) => (
-            <section
-              key={titleKey}
-              className={cn(
-                'flex flex-col gap-2 rounded-xl border border-border/50 bg-muted/10 p-1',
-              )}
-            >
-              <div className="flex flex-wrap items-center justify-end gap-2 px-3 pt-3">
-                <span className="text-xs text-muted-foreground">{t('app.admin.comingSoon')}</span>
-              </div>
-              <PanelEmptyState title={t(titleKey)} body={t(bodyKey)} />
-            </section>
-          ))}
+          <AdminSystemHealthPanel roles={roles} />
         </div>
       </CardContent>
     </Card>
