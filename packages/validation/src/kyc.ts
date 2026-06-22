@@ -1,5 +1,7 @@
+import { KycStatus } from '@wayly/types';
 import { z } from 'zod';
 
+import { enumSchema } from './helpers';
 import { countryCodeSchema, nonEmptyStringSchema } from './schemas';
 
 /**
@@ -25,3 +27,12 @@ export const kycManualReviewSchema = z
     path: ['rejectionReason'],
   });
 export type KycManualReviewInput = z.infer<typeof kycManualReviewSchema>;
+
+/** GET /admin/kyc-verifications query parameters. */
+export const kycVerificationsListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  status: enumSchema(KycStatus).optional(),
+});
+
+export type KycVerificationsListQueryInput = z.infer<typeof kycVerificationsListQuerySchema>;

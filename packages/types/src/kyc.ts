@@ -35,6 +35,29 @@ export interface KycStatusView {
   canReceivePayout: boolean;
 }
 
+/** Paginated admin KYC review queue (GET /admin/kyc-verifications). */
+export interface AdminKycListResponse {
+  items: AdminKycQueueItem[];
+  page: number;
+  limit: number;
+  total: number;
+}
+
+/** Compact KYC row for admin/arbitrator operations queue (read-only). */
+export interface AdminKycQueueItem {
+  id: string;
+  userId: string;
+  userDisplayName: string | null;
+  userEmail: string | null;
+  status: KycStatus;
+  country: string | null;
+  rejectionReason: string | null;
+  submittedAt: ISODateString | null;
+  reviewedAt: ISODateString | null;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+}
+
 /**
  * High-level KYC gating snapshot derived from User.verified / User.kycStatus.
  * Used by future guards and UI to explain what is blocked until verification.

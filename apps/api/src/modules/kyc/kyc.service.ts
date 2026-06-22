@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import type { KycVerification, User } from '@prisma/client';
+import type { KycVerification, Prisma, User } from '@prisma/client';
 import { KycStatus as PrismaKycStatus } from '@prisma/client';
-import type { KycVerificationSummary } from '@wayly/types';
+import type { AdminKycListResponse, KycVerificationSummary } from '@wayly/types';
 import { KycStatus } from '@wayly/types';
-import type { KycStartInput } from '@wayly/validation';
+import type { KycStartInput, KycVerificationsListQueryInput } from '@wayly/validation';
 
 import { AppConfigService } from '../../config/config.service';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 
-import { toKycVerificationSummary } from './kyc.mapper';
+import { toAdminKycQueueItem, toKycVerificationSummary } from './kyc.mapper';
 
 /** Full KYC status payload returned by GET /kyc/status and mock routes. */
 export interface KycStatusView {
@@ -130,6 +130,34 @@ export class KycService {
     });
 
     return this.getStatus(userId);
+  }
+
+  async listForOperations(query: KycVerificationsListQueryInput): Promise<AdminKycListResponse> {
+    const where: Prisma.KycVerificationWhereInput = query.status ? { status: query.status } : {};
+
+    const skip = (query.page - 1) * query.limit;
+
+    const [records, total] = await Promise.all([
+      this.prisma.kycVerification.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: query.limit,
+        include: {
+          user: {
+            select: { displayName: true, email: true },
+          },
+        },
+      }),
+      this.prisma.kycVerification.count({ where }),
+    ]);
+
+    return {
+      items: records.map(toAdminKycQueueItem),
+      page: query.page,
+      limit: query.limit,
+      total,
+    };
   }
 
   private assertMockRoutesAllowed(): void {
