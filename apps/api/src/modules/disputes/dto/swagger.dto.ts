@@ -212,6 +212,27 @@ export class AdminDisputeQueueItemDto {
 
   @ApiPropertyOptional({ example: 'wayler@example.com' })
   waylerEmail!: string | null;
+
+  @ApiPropertyOptional({
+    enum: ['REFUND_SENDER', 'RELEASE_TO_WAYLER', 'PARTIAL_REFUND', 'NO_ACTION', 'OTHER'],
+  })
+  resolution!: string | null;
+
+  @ApiPropertyOptional({ example: 'Reviewed evidence; sender documentation supports claim.' })
+  resolutionNote!: string | null;
+
+  @ApiPropertyOptional({ format: 'date-time' })
+  resolvedAt!: string | null;
+}
+
+export class AdminDisputeResolveBodyDto {
+  @ApiProperty({ example: 'Reviewed evidence; decision recorded for operations.' })
+  resolutionNote!: string;
+
+  @ApiPropertyOptional({
+    enum: ['SENDER_FAVORED', 'WAYLER_FAVORED', 'NO_FAULT', 'INFORMATION_ONLY'],
+  })
+  outcome?: string;
 }
 
 export class AdminDisputeListResponseDto {

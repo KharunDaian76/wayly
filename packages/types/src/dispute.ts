@@ -51,7 +51,7 @@ export interface DisputeListResponse {
   total: number;
 }
 
-/** Compact dispute row for admin/arbitrator operations queue (read-only). */
+/** Compact dispute row for admin/arbitrator operations queue. */
 export interface AdminDisputeQueueItem {
   id: string;
   orderId: string;
@@ -67,6 +67,9 @@ export interface AdminDisputeQueueItem {
   senderEmail: string | null;
   waylerDisplayName: string | null;
   waylerEmail: string | null;
+  resolution: DisputeResolution | null;
+  resolutionNote: string | null;
+  resolvedAt: ISODateString | null;
 }
 
 /** Paginated admin dispute queue (GET /admin/disputes). */

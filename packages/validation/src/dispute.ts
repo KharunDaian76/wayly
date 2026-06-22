@@ -37,3 +37,22 @@ export const addDisputeEvidenceSchema = z.object({
 });
 
 export type AddDisputeEvidenceInput = z.infer<typeof addDisputeEvidenceSchema>;
+
+/** Admin dispute resolution outcome (maps to DisputeResolution metadata — no payment execution). */
+export const AdminDisputeResolutionOutcome = {
+  SENDER_FAVORED: 'SENDER_FAVORED',
+  WAYLER_FAVORED: 'WAYLER_FAVORED',
+  NO_FAULT: 'NO_FAULT',
+  INFORMATION_ONLY: 'INFORMATION_ONLY',
+} as const;
+
+export type AdminDisputeResolutionOutcome =
+  (typeof AdminDisputeResolutionOutcome)[keyof typeof AdminDisputeResolutionOutcome];
+
+/** POST /admin/disputes/:id/resolve body. */
+export const adminDisputeResolveSchema = z.object({
+  resolutionNote: z.string().trim().min(1).max(2000),
+  outcome: enumSchema(AdminDisputeResolutionOutcome).optional(),
+});
+
+export type AdminDisputeResolveInput = z.infer<typeof adminDisputeResolveSchema>;

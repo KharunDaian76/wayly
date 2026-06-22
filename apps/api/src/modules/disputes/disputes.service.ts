@@ -1,6 +1,12 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   DeliveryOrderStatus as PrismaDeliveryOrderStatus,
+  DisputeResolution as PrismaDisputeResolution,
   DisputeStatus as PrismaDisputeStatus,
   type DeliveryOrder,
   type Dispute,
@@ -8,6 +14,7 @@ import {
 } from '@prisma/client';
 import type {
   AdminDisputeListResponse,
+  AdminDisputeQueueItem,
   DisputeDetail,
   DisputeEvidenceSummary,
   DisputeListResponse,
@@ -17,9 +24,11 @@ import { NotificationType } from '@wayly/types';
 import type {
   AddDisputeEvidenceInput,
   AddDisputeMessageInput,
+  AdminDisputeResolveInput,
   DisputesListQueryInput,
   OpenDisputeInput,
 } from '@wayly/validation';
+import { AdminDisputeResolutionOutcome } from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
@@ -163,6 +172,85 @@ export class DisputesService {
       limit: query.limit,
       total,
     };
+  }
+
+  async resolveForOperations(
+    disputeId: string,
+    body: AdminDisputeResolveInput,
+  ): Promise<AdminDisputeQueueItem> {
+    const dispute = await this.findDisputeForOperations(disputeId);
+
+    if (dispute.status === PrismaDisputeStatus.RESOLVED) {
+      throw new BadRequestException('Dispute is already resolved');
+    }
+    if (!ACTIVE_DISPUTE_STATUSES.includes(dispute.status)) {
+      throw new BadRequestException('Dispute cannot be resolved');
+    }
+
+    const now = new Date();
+    const updated = await this.prisma.dispute.update({
+      where: { id: disputeId },
+      data: {
+        status: PrismaDisputeStatus.RESOLVED,
+        resolution: this.mapAdminOutcomeToResolution(body.outcome),
+        resolutionNote: body.resolutionNote,
+        resolvedAt: now,
+      },
+      include: {
+        order: {
+          select: {
+            title: true,
+            pickupCity: true,
+            pickupCountry: true,
+            dropoffCity: true,
+            dropoffCountry: true,
+            sender: { select: { displayName: true, email: true } },
+            acceptedWayler: { select: { displayName: true, email: true } },
+          },
+        },
+      },
+    });
+
+    return toAdminDisputeQueueItem(updated);
+  }
+
+  private async findDisputeForOperations(disputeId: string) {
+    const dispute = await this.prisma.dispute.findUnique({
+      where: { id: disputeId },
+      include: {
+        order: {
+          select: {
+            title: true,
+            pickupCity: true,
+            pickupCountry: true,
+            dropoffCity: true,
+            dropoffCountry: true,
+            sender: { select: { displayName: true, email: true } },
+            acceptedWayler: { select: { displayName: true, email: true } },
+          },
+        },
+      },
+    });
+    if (!dispute) {
+      throw new NotFoundException('Dispute not found');
+    }
+    return dispute;
+  }
+
+  private mapAdminOutcomeToResolution(
+    outcome: AdminDisputeResolveInput['outcome'],
+  ): PrismaDisputeResolution {
+    switch (outcome) {
+      case AdminDisputeResolutionOutcome.SENDER_FAVORED:
+        return PrismaDisputeResolution.REFUND_SENDER;
+      case AdminDisputeResolutionOutcome.WAYLER_FAVORED:
+        return PrismaDisputeResolution.RELEASE_TO_WAYLER;
+      case AdminDisputeResolutionOutcome.INFORMATION_ONLY:
+        return PrismaDisputeResolution.OTHER;
+      case AdminDisputeResolutionOutcome.NO_FAULT:
+      default:
+        return PrismaDisputeResolution.NO_ACTION;
+    }
   }
 
   async getDetail(user: RequestUser, id: string): Promise<DisputeDetail> {

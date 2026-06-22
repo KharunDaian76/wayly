@@ -41,6 +41,9 @@ export function toAdminDisputeQueueItem(
     senderEmail: record.order.sender.email,
     waylerDisplayName: record.order.acceptedWayler?.displayName ?? null,
     waylerEmail: record.order.acceptedWayler?.email ?? null,
+    resolution: (record.resolution as DisputeResolution | null) ?? null,
+    resolutionNote: record.resolutionNote,
+    resolvedAt: toIso(record.resolvedAt),
   };
 }
 

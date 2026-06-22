@@ -1,5 +1,6 @@
 import type {
   AdminDisputeListResponse,
+  AdminDisputeQueueItem,
   AdminKycListResponse,
   AdminKycQueueItem,
   AdminOrderListResponse,
@@ -9,6 +10,7 @@ import type {
 } from '@wayly/types';
 
 import type { AdminApi } from './admin.types';
+import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
@@ -124,6 +126,13 @@ export function createAdminApi(request: Requester): AdminApi {
     listDisputes: (query?: DisputesListQuery, accessToken?: string | null) =>
       request<AdminDisputeListResponse>(`/admin/disputes${buildDisputesQuery(query)}`, {
         method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    resolveAdminDispute: (id: string, body: AdminDisputeResolveBody, accessToken?: string | null) =>
+      request<AdminDisputeQueueItem>(`/admin/disputes/${id}/resolve`, {
+        method: 'POST',
+        body,
         ...withCookies,
         accessToken,
       }),
