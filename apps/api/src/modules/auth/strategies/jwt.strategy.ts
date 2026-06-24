@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import type { KycStatus, UserRole } from '@wayly/types';
+import type { KycStatus, UserAccountStatus, UserRole } from '@wayly/types';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import type { RequestUser } from '../../../common/types/request-user.type';
@@ -39,6 +39,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       verified: user.verified,
       kycStatus: user.kycStatus as KycStatus,
       phoneVerified: user.phoneVerified,
+      accountStatus: user.accountStatus as UserAccountStatus,
+      suspendedAt: user.suspendedAt,
     };
   }
 }

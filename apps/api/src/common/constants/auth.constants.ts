@@ -6,3 +6,6 @@ export const ROLES_KEY = 'roles';
 
 /** Metadata key for @RequiresVerification(). */
 export const REQUIRES_VERIFICATION_KEY = 'requiresVerification';
+
+/** Metadata key for @RequiresActiveAccount(). */
+export const REQUIRES_ACTIVE_ACCOUNT_KEY = 'requiresActiveAccount';

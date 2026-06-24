@@ -34,6 +34,7 @@ import {
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -57,6 +58,7 @@ export class WaylerAvailabilitiesController {
   constructor(private readonly waylerAvailabilities: WaylerAvailabilitiesService) {}
 
   @Post()
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Create a DRAFT Wayler availability or trip listing' })
   @ApiBody({ type: CreateWaylerAvailabilityBodyDto })
   @ApiCreatedResponse({ type: WaylerAvailabilityDetailDto })
@@ -123,6 +125,7 @@ export class WaylerAvailabilitiesController {
   }
 
   @Post(':id/publish')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Publish a DRAFT or PAUSED Wayler availability' })
   @ApiOkResponse({ type: WaylerAvailabilityDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -137,6 +140,7 @@ export class WaylerAvailabilitiesController {
   }
 
   @Post(':id/pause')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Pause an ACTIVE Wayler availability' })
   @ApiOkResponse({ type: WaylerAvailabilityDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -151,6 +155,7 @@ export class WaylerAvailabilitiesController {
   }
 
   @Post(':id/cancel')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Cancel a Wayler availability' })
   @ApiOkResponse({ type: WaylerAvailabilityDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

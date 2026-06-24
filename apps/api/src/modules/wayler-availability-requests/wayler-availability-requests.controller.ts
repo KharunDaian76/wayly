@@ -32,6 +32,7 @@ import {
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -55,6 +56,7 @@ export class WaylerAvailabilityRequestsController {
   constructor(private readonly requests: WaylerAvailabilityRequestsService) {}
 
   @Post()
+  @RequiresActiveAccount()
   @ApiOperation({
     summary: 'Sender creates a delivery request for a published Wayler availability',
   })
@@ -117,6 +119,7 @@ export class WaylerAvailabilityRequestsController {
   }
 
   @Post(':id/accept')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Wayler accepts a pending availability request' })
   @ApiBody({ type: RespondWaylerAvailabilityRequestBodyDto, required: false })
   @ApiOkResponse({ type: WaylerAvailabilityRequestDetailDto })
@@ -136,6 +139,7 @@ export class WaylerAvailabilityRequestsController {
   }
 
   @Post(':id/decline')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Wayler declines a pending availability request' })
   @ApiBody({ type: RespondWaylerAvailabilityRequestBodyDto, required: false })
   @ApiOkResponse({ type: WaylerAvailabilityRequestDetailDto })
@@ -155,6 +159,7 @@ export class WaylerAvailabilityRequestsController {
   }
 
   @Post(':id/cancel')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Sender cancels their pending availability request' })
   @ApiOkResponse({ type: WaylerAvailabilityRequestDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

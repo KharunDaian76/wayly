@@ -3,6 +3,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { AccountModerationGuard } from './common/guards/account-moderation.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { VerificationGuard } from './common/guards/verification.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -74,6 +75,7 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: VerificationGuard },
+    { provide: APP_GUARD, useClass: AccountModerationGuard },
   ],
 })
 export class AppModule {}

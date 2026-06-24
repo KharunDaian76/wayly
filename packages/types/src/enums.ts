@@ -63,6 +63,13 @@ export const UserRole = {
 } as const;
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
+/** Account moderation status (admin suspend/unsuspend v1). */
+export const UserAccountStatus = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+} as const;
+export type UserAccountStatus = (typeof UserAccountStatus)[keyof typeof UserAccountStatus];
+
 /** In-app notification categories (dispatch routes land in a later batch). */
 export const NotificationType = {
   ORDER_PUBLISHED: 'ORDER_PUBLISHED',

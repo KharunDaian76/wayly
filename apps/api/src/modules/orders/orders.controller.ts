@@ -32,6 +32,7 @@ import {
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -68,6 +69,7 @@ export class OrdersController {
   constructor(private readonly orders: OrdersService) {}
 
   @Post()
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Create a delivery order as the current user (Sender)' })
   @ApiBody({ type: CreateDeliveryOrderBodyDto })
   @ApiCreatedResponse({ type: DeliveryOrderDetailDto })
@@ -115,6 +117,7 @@ export class OrdersController {
   }
 
   @Post(':id/publish')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Publish a draft delivery order (Sender only)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -129,6 +132,7 @@ export class OrdersController {
   }
 
   @Post(':id/accept')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Accept an open delivery order (Wayler)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -204,6 +208,7 @@ export class OrdersController {
   }
 
   @Post(':id/cancel')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Cancel a draft or open delivery order (Sender only)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

@@ -5,6 +5,8 @@ export const AdminAuditLogAction = {
   KYC_APPROVED: 'KYC_APPROVED',
   KYC_REJECTED: 'KYC_REJECTED',
   DISPUTE_RESOLVED: 'DISPUTE_RESOLVED',
+  USER_SUSPENDED: 'USER_SUSPENDED',
+  USER_UNSUSPENDED: 'USER_UNSUSPENDED',
 } as const;
 export type AdminAuditLogAction = (typeof AdminAuditLogAction)[keyof typeof AdminAuditLogAction];
 
@@ -12,6 +14,7 @@ export type AdminAuditLogAction = (typeof AdminAuditLogAction)[keyof typeof Admi
 export const AdminAuditLogTargetType = {
   KYC_VERIFICATION: 'KYC_VERIFICATION',
   DISPUTE: 'DISPUTE',
+  USER: 'USER',
 } as const;
 export type AdminAuditLogTargetType =
   (typeof AdminAuditLogTargetType)[keyof typeof AdminAuditLogTargetType];

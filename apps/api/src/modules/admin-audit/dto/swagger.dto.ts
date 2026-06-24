@@ -16,10 +16,18 @@ export class AdminAuditLogItemDto {
   @ApiProperty({ type: [String], example: ['ADMIN'] })
   actorRolesSnapshot!: string[];
 
-  @ApiProperty({ enum: ['KYC_APPROVED', 'KYC_REJECTED', 'DISPUTE_RESOLVED'] })
+  @ApiProperty({
+    enum: [
+      'KYC_APPROVED',
+      'KYC_REJECTED',
+      'DISPUTE_RESOLVED',
+      'USER_SUSPENDED',
+      'USER_UNSUSPENDED',
+    ],
+  })
   action!: string;
 
-  @ApiProperty({ enum: ['KYC_VERIFICATION', 'DISPUTE'] })
+  @ApiProperty({ enum: ['KYC_VERIFICATION', 'DISPUTE', 'USER'] })
   targetType!: string;
 
   @ApiProperty({ format: 'uuid' })

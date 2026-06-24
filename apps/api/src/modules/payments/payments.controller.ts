@@ -12,6 +12,7 @@ import {
 import type { PaymentIntentSummary } from '@wayly/types';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -29,6 +30,7 @@ export class PaymentsController {
   constructor(private readonly payments: PaymentsService) {}
 
   @Post('orders/:orderId/mock-authorize')
+  @RequiresActiveAccount()
   @ApiOperation({
     summary: 'Mock-authorize payment for an accepted order (MANUAL provider, local testing only)',
   })
@@ -61,6 +63,7 @@ export class PaymentsController {
   }
 
   @Post(':id/mock-hold-escrow')
+  @RequiresActiveAccount()
   @ApiOperation({
     summary: 'Mock hold escrow (AUTHORIZED → HELD_IN_ESCROW, MANUAL provider, local testing only)',
   })
@@ -77,6 +80,7 @@ export class PaymentsController {
   }
 
   @Post(':id/mock-release')
+  @RequiresActiveAccount()
   @ApiOperation({
     summary: 'Mock release escrow to Wayler payout (HELD_IN_ESCROW → RELEASED, local testing only)',
   })

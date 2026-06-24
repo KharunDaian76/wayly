@@ -8,6 +8,7 @@ import type {
   AdminPaymentListResponse,
   AdminSystemHealthResponse,
   AdminUserListResponse,
+  AdminUserQueueItem,
 } from '@wayly/types';
 
 import type { AdminAuditLogsListQuery } from './admin-audit.types';
@@ -16,7 +17,11 @@ import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
 import type { AdminPaymentsListQuery } from './payments-admin.types';
-import type { AdminUsersListQuery } from './users-admin.types';
+import type {
+  AdminUsersListQuery,
+  AdminUserSuspendBody,
+  AdminUserUnsuspendBody,
+} from './users-admin.types';
 
 /** Admin / operations endpoints. KYC approve/reject are the first admin mutation workflows. */
 export interface AdminApi {
@@ -47,6 +52,16 @@ export interface AdminApi {
     query?: AdminUsersListQuery,
     accessToken?: string | null,
   ): Promise<AdminUserListResponse>;
+  suspendAdminUser(
+    id: string,
+    body: AdminUserSuspendBody,
+    accessToken?: string | null,
+  ): Promise<AdminUserQueueItem>;
+  unsuspendAdminUser(
+    id: string,
+    body?: AdminUserUnsuspendBody,
+    accessToken?: string | null,
+  ): Promise<AdminUserQueueItem>;
   listPayments(
     query?: AdminPaymentsListQuery,
     accessToken?: string | null,
@@ -68,6 +83,12 @@ export type {
   AdminPaymentListResponse,
   AdminSystemHealthResponse,
   AdminUserListResponse,
+  AdminUserQueueItem,
 };
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
 export type { AdminDisputeResolveBody } from './disputes-admin.types';
+export type {
+  AdminUsersListQuery,
+  AdminUserSuspendBody,
+  AdminUserUnsuspendBody,
+} from './users-admin.types';

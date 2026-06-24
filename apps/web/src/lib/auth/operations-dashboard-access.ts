@@ -4,3 +4,8 @@ import { UserRole, type UserRole as UserRoleType } from '@wayly/types';
 export function hasOperationsDashboardAccess(roles: readonly UserRoleType[]): boolean {
   return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.ARBITRATOR);
 }
+
+/** True when the signed-in user may perform ADMIN-only moderation mutations. */
+export function hasAdminModerationAccess(roles: readonly UserRoleType[]): boolean {
+  return roles.includes(UserRole.ADMIN);
+}

@@ -18,6 +18,7 @@ import { waylerAccessPassesListQuerySchema } from '@wayly/validation';
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -62,6 +63,7 @@ export class WaylerAccessController {
   }
 
   @Post('mock-activate-today')
+  @RequiresActiveAccount()
   @ApiOperation({
     summary: "Mock/manual activate today's Wayler work access pass (no real payment)",
   })
@@ -73,6 +75,7 @@ export class WaylerAccessController {
   }
 
   @Post(':id/cancel')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: "Cancel current user's own non-expired access pass" })
   @ApiOkResponse({ type: WaylerAccessPassSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

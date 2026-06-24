@@ -35,6 +35,8 @@ export function adminAuditActionKey(action: AdminAuditLogAction): TranslationKey
     KYC_APPROVED: 'app.admin.adminAuditActionKycApproved',
     KYC_REJECTED: 'app.admin.adminAuditActionKycRejected',
     DISPUTE_RESOLVED: 'app.admin.adminAuditActionDisputeResolved',
+    USER_SUSPENDED: 'app.admin.adminAuditActionUserSuspended',
+    USER_UNSUSPENDED: 'app.admin.adminAuditActionUserUnsuspended',
   };
   return map[action];
 }
@@ -43,6 +45,7 @@ export function adminAuditTargetKey(targetType: AdminAuditLogTargetType): Transl
   const map: Record<AdminAuditLogTargetType, TranslationKey> = {
     KYC_VERIFICATION: 'app.admin.adminAuditTargetKycVerification',
     DISPUTE: 'app.admin.adminAuditTargetDispute',
+    USER: 'app.admin.adminAuditTargetUser',
   };
   return map[targetType];
 }

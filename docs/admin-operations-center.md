@@ -2,7 +2,7 @@
 
 This document records the **current** Admin / Arbitrator Operations Center on Wayly: read-only monitoring panels, the first **controlled admin mutation workflows** (KYC approve/reject and dispute resolution v1), access enforcement, safety boundaries, and what remains **future work**.
 
-**Last updated:** documentation checkpoint — KYC approve/reject v1 + dispute resolution v1.
+**Last updated:** user moderation suspend/unsuspend v1 + audit log extensions.
 
 ---
 
@@ -14,15 +14,15 @@ This document records the **current** Admin / Arbitrator Operations Center on Wa
 | Disputes queue                                         | ✅ List + **manual resolve v1**             |
 | KYC review queue                                       | ✅ List + **approve/reject v1**             |
 | Orders monitoring                                      | ✅ **Read-only**                            |
-| Users & Trust/Safety                                   | ✅ **Read-only**                            |
+| Users & Trust/Safety                                   | ✅ List + **suspend/unsuspend v1 (ADMIN)**  |
 | Payments & Escrow                                      | ✅ **Read-only**                            |
 | System Health & Audit                                  | ✅ **Read-only** snapshot                   |
 | Real Stripe / Sumsub admin integrations                | ❌ Not implemented                          |
 | Persistent audit log schema                            | ✅ **Implemented v1** (append-only)         |
 | Payment refund / release / capture / payout from admin | ❌ Not implemented                          |
-| User ban / suspend / delete from admin                 | ❌ Not implemented                          |
+| User ban / delete from admin                           | ❌ Not implemented                          |
 
-The Operations Center is **no longer fully read-only**: KYC and Disputes panels include **controlled, metadata-only mutations**. Orders, Users, Payments, and System Health remain list/monitor/snapshot only.
+The Operations Center is **no longer fully read-only**: KYC, Disputes, and Users (ADMIN-only) panels include **controlled mutations**. Orders, Payments, and System Health remain list/monitor/snapshot only.
 
 Normal **`USER`** accounts do **not** see the Operations Center in the web app and receive **403 Forbidden** on admin API routes.
 
@@ -175,14 +175,22 @@ Each read-only panel follows: **loading**, **error + retry**, **empty state** (w
 
 ### Users & Trust/Safety queue
 
-|              |                                                        |
-| ------------ | ------------------------------------------------------ |
-| **Endpoint** | `GET /api/v1/admin/users`                              |
-| **Backend**  | `apps/api/src/modules/users/admin-users.controller.ts` |
+|               |                                                             |
+| ------------- | ----------------------------------------------------------- |
+| **List**      | `GET /api/v1/admin/users` — `ADMIN` / `ARBITRATOR`          |
+| **Suspend**   | `POST /api/v1/admin/users/:id/suspend` — **`ADMIN` only**   |
+| **Unsuspend** | `POST /api/v1/admin/users/:id/unsuspend` — **`ADMIN` only** |
+| **Backend**   | `apps/api/src/modules/users/admin-users.controller.ts`      |
 
-**Read-only data:** display/email, roles, KYC status, safe activity counts, timestamps.
+**List data:** display/email, roles, KYC status, account status, safe activity counts, timestamps.
 
-**Not implemented:** ban, suspend, delete, promote, demote, or moderation actions.
+**Suspend v1:** sets `accountStatus=SUSPENDED`, `suspendedAt`, `suspensionReason`. Requires reason. Cannot suspend self, `ADMIN`, or `ARBITRATOR`. No role/KYC/order/payment/dispute side effects.
+
+**Unsuspend v1:** clears suspension fields. Optional note for audit only (not stored on user row).
+
+**ARBITRATOR** can list users but gets **403** on suspend/unsuspend.
+
+**Not implemented:** ban, delete, promote, demote, timed auto-expiry.
 
 ### Payments & Escrow queue
 
@@ -232,6 +240,8 @@ Public probes (`GET /api/v1/health/live`, `GET /api/v1/health/ready`) remain sep
 | `KYC_APPROVED`     | `POST /admin/kyc-verifications/:id/approve` succeeds |
 | `KYC_REJECTED`     | `POST /admin/kyc-verifications/:id/reject` succeeds  |
 | `DISPUTE_RESOLVED` | `POST /admin/disputes/:id/resolve` succeeds          |
+| `USER_SUSPENDED`   | `POST /admin/users/:id/suspend` succeeds             |
+| `USER_UNSUSPENDED` | `POST /admin/users/:id/unsuspend` succeeds           |
 
 **Write behavior:** **best-effort after successful mutation** — audit insert failure is logged to Pino but does **not** fail the admin action in v1.
 
@@ -241,7 +251,16 @@ Public probes (`GET /api/v1/health/live`, `GET /api/v1/health/ready`) remain sep
 
 **Not stored:** tokens, secrets, payment card data, KYC provider payloads, raw request bodies, full chat/evidence content.
 
-**Prisma:** `AdminAuditLog` model — migration `admin_audit_log_foundation`.
+**Prisma:** `AdminAuditLog` model — migrations `admin_audit_log_foundation`, `user_moderation_suspend_foundation`.
+
+---
+
+## Suspended account gating (v1)
+
+- **Login / refresh / logout / `GET /users/me`:** allowed — suspended users see account status and a banner on `/app`.
+- **Marketplace mutations blocked** via `@RequiresActiveAccount()` + `AccountModerationGuard` (`403`, code `ACCOUNT_SUSPENDED`): new orders, accept, publish/cancel orders, availability listings/requests, payments, dispute open/messages/evidence, chat send, profile PATCH, etc.
+- **In-progress deliveries:** `start-transit`, `mark-delivered`, and proof submit remain allowed so accepted orders are not stranded (ownership checks unchanged).
+- **No silent lockout:** users are not logged out automatically.
 
 ---
 
@@ -249,10 +268,10 @@ Public probes (`GET /api/v1/health/live`, `GET /api/v1/health/ready`) remain sep
 
 1. **Role enforcement:** normal `USER` → **403** on all `/api/v1/admin/*` routes (including mutation endpoints).
 2. **UI defense in depth:** Operations Center and each panel re-check roles client-side before rendering, fetching, or showing mutation controls.
-3. **Controlled mutations only:** KYC approve/reject and dispute resolve update **verification/dispute metadata** using existing schema fields — they do **not** trigger payment, order, or user moderation side effects.
-4. **Most panels remain read-only:** Orders, Users, Payments, and System Health are list/monitor/snapshot only.
-5. **Dangerous actions not implemented:** payment refund/release/capture/payout, user ban/suspend/delete, order cancellation/reassignment, role promote/demote.
-6. **Audit log v1:** append-only operator trail for KYC approve/reject and dispute resolve; best-effort writes; no secrets in stored metadata or list responses.
+3. **Controlled mutations only:** KYC approve/reject, dispute resolve, and user suspend/unsuspend update **existing schema fields only** — they do **not** trigger payment, order cancellation, or dispute auto-close side effects.
+4. **Most panels remain read-only:** Orders, Payments, and System Health are list/monitor/snapshot only. Users list is readable by `ARBITRATOR`; suspend/unsuspend is **ADMIN-only**.
+5. **Dangerous actions not implemented:** payment refund/release/capture/payout, user ban/delete, order cancellation/reassignment, role promote/demote.
+6. **Audit log v1:** append-only operator trail for KYC, dispute resolve, and user suspend/unsuspend; best-effort writes; no secrets in stored metadata or list responses.
 7. **No secrets in admin responses:** admin list/snapshot endpoints return operational metadata only — never connection strings, provider credentials, or payment instrument details.
 8. **Mock providers unchanged:** mock KYC (user-facing dev routes), mock payments, and mock Wayler daily access remain separate user-facing flows. Admin KYC review is **manual operator decision** on existing records — not a live Sumsub/Stripe Identity integration.
 9. **Not production/commercial-ready** for real money movement, real KYC compliance, or automated dispute settlement — suitable for **local/staging operator workflow testing** only.
@@ -272,6 +291,8 @@ Admin client surface: `packages/sdk/src/admin.ts` → `api.admin.*`
 | `rejectKycVerification(id, body)` | `POST /admin/kyc-verifications/:id/reject`  |
 | `listOrders(query?)`              | `GET /admin/orders`                         |
 | `listUsers(query?)`               | `GET /admin/users`                          |
+| `suspendAdminUser(id, body)`      | `POST /admin/users/:id/suspend` (ADMIN)     |
+| `unsuspendAdminUser(id, body?)`   | `POST /admin/users/:id/unsuspend` (ADMIN)   |
 | `listPayments(query?)`            | `GET /admin/payments`                       |
 | `getSystemHealth()`               | `GET /admin/system-health`                  |
 | `listAuditLogs(query?)`           | `GET /admin/audit-logs`                     |
@@ -286,11 +307,12 @@ Validation: `@wayly/validation` — `adminDisputeResolveSchema`, `adminAuditLogs
 
 ### Implemented v1
 
-| Capability                         | Notes                                                           |
-| ---------------------------------- | --------------------------------------------------------------- |
-| KYC approve/reject workflow        | Manual review; audit logged (`KYC_APPROVED` / `KYC_REJECTED`)   |
-| Dispute resolution workflow        | Metadata-only resolve; audit logged (`DISPUTE_RESOLVED`)        |
-| Persistent audit log (append-only) | `AdminAuditLog` model + `GET /admin/audit-logs` + UI subsection |
+| Capability                         | Notes                                                            |
+| ---------------------------------- | ---------------------------------------------------------------- |
+| KYC approve/reject workflow        | Manual review; audit logged (`KYC_APPROVED` / `KYC_REJECTED`)    |
+| Dispute resolution workflow        | Metadata-only resolve; audit logged (`DISPUTE_RESOLVED`)         |
+| User suspend/unsuspend v1          | ADMIN-only; audit logged (`USER_SUSPENDED` / `USER_UNSUSPENDED`) |
+| Persistent audit log (append-only) | `AdminAuditLog` model + `GET /admin/audit-logs` + UI subsection  |
 
 ### Future work (not implemented)
 
@@ -301,7 +323,7 @@ Validation: `@wayly/validation` — `adminDisputeResolveSchema`, `adminAuditLogs
 | Real KYC provider integration         | Sumsub / Stripe Identity / Persona; webhooks; document review            |
 | Dispute payment execution             | Refund/release/capture/payout tied to dispute outcomes                   |
 | Payment admin mutations               | Stripe-backed refund / release / capture / payout from Operations Center |
-| User moderation                       | Ban / suspend / escalation with audit trail                              |
+| User ban / delete / timed suspension  | Hard ban, GDPR delete, auto-expiry cron                                  |
 | Assign arbitrator                     | Set `assignedArbitratorId`; dedicated queue routing                      |
 | Admin notification / realtime updates | WebSocket/SSE or push for operations queue changes                       |
 | Full legal/compliance review          | Production operator policies beyond current dev scope                    |

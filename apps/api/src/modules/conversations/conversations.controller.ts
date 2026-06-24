@@ -29,6 +29,7 @@ import { conversationsListQuerySchema, sendChatMessageSchema } from '@wayly/vali
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -53,6 +54,7 @@ export class ConversationsController {
   constructor(private readonly conversations: ConversationsService) {}
 
   @Post('order/:orderId')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Create or fetch the conversation for an accepted delivery order' })
   @ApiCreatedResponse({ type: ConversationDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -98,6 +100,7 @@ export class ConversationsController {
   }
 
   @Post(':id/messages')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Send a message in a conversation' })
   @ApiBody({ type: SendChatMessageBodyDto })
   @ApiCreatedResponse({ type: ChatMessageSummaryDto })

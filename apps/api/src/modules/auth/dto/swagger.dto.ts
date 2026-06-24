@@ -80,6 +80,12 @@ export class UserProfileDto {
   @ApiProperty({ nullable: true, example: 'US' })
   country!: string | null;
 
+  @ApiProperty({ enum: ['ACTIVE', 'SUSPENDED'] })
+  accountStatus!: string;
+
+  @ApiProperty({ nullable: true, format: 'date-time' })
+  suspendedAt!: string | null;
+
   @ApiProperty({ format: 'date-time' })
   createdAt!: string;
 }

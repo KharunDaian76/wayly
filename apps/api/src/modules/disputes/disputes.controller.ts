@@ -35,6 +35,7 @@ import {
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
@@ -61,6 +62,7 @@ export class DisputesController {
   constructor(private readonly disputes: DisputesService) {}
 
   @Post()
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Open a dispute on an eligible delivery order' })
   @ApiBody({ type: OpenDisputeBodyDto })
   @ApiCreatedResponse({ type: DisputeDetailDto })
@@ -105,6 +107,7 @@ export class DisputesController {
   }
 
   @Post(':id/messages')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Add a message to an open dispute thread' })
   @ApiBody({ type: AddDisputeMessageBodyDto })
   @ApiCreatedResponse({ type: DisputeMessageSummaryDto })
@@ -122,6 +125,7 @@ export class DisputesController {
   }
 
   @Post(':id/evidence')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Add evidence metadata to an open dispute' })
   @ApiBody({ type: AddDisputeEvidenceBodyDto })
   @ApiCreatedResponse({ type: DisputeEvidenceSummaryDto })

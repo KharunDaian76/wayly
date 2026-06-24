@@ -48,6 +48,7 @@ import { KycIdentityPanel } from '@/components/app/kyc-identity-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
+import { SuspendedAccountNotice } from '@/components/app/suspended-account-notice';
 import { WaylerAccessPanel } from '@/components/app/wayler-access-panel';
 import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
 import { WaylerIncomingRequestsPanel } from '@/components/app/wayler-incoming-requests-panel';
@@ -1744,6 +1745,8 @@ export default function AppHomePage() {
         </header>
 
         {error ? <p className={ALERT_ERROR_CLASS}>{error}</p> : null}
+
+        <SuspendedAccountNotice user={user} />
 
         <ModeSwitcher />
 

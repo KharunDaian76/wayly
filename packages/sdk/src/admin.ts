@@ -8,6 +8,7 @@ import type {
   AdminPaymentListResponse,
   AdminSystemHealthResponse,
   AdminUserListResponse,
+  AdminUserQueueItem,
 } from '@wayly/types';
 
 import type { AdminAuditLogsListQuery } from './admin-audit.types';
@@ -18,7 +19,11 @@ import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.
 import type { AdminOrdersListQuery } from './orders-admin.types';
 import type { AdminPaymentsListQuery } from './payments-admin.types';
 import type { RequestOptions } from './types';
-import type { AdminUsersListQuery } from './users-admin.types';
+import type {
+  AdminUsersListQuery,
+  AdminUserSuspendBody,
+  AdminUserUnsuspendBody,
+} from './users-admin.types';
 
 type Requester = <T>(path: string, options?: RequestOptions) => Promise<T>;
 
@@ -94,6 +99,9 @@ function buildAdminUsersQuery(query?: AdminUsersListQuery): string {
   }
   if (query.kycStatus !== undefined) {
     params.set('kycStatus', query.kycStatus);
+  }
+  if (query.accountStatus !== undefined) {
+    params.set('accountStatus', query.accountStatus);
   }
   if (query.search !== undefined) {
     params.set('search', query.search);
@@ -202,6 +210,20 @@ export function createAdminApi(request: Requester): AdminApi {
     listUsers: (query?: AdminUsersListQuery, accessToken?: string | null) =>
       request<AdminUserListResponse>(`/admin/users${buildAdminUsersQuery(query)}`, {
         method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    suspendAdminUser: (id: string, body: AdminUserSuspendBody, accessToken?: string | null) =>
+      request<AdminUserQueueItem>(`/admin/users/${id}/suspend`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    unsuspendAdminUser: (id: string, body?: AdminUserUnsuspendBody, accessToken?: string | null) =>
+      request<AdminUserQueueItem>(`/admin/users/${id}/unsuspend`, {
+        method: 'POST',
+        body: body ?? {},
         ...withCookies,
         accessToken,
       }),

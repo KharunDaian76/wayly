@@ -37,6 +37,12 @@ export class AdminUserQueueItemDto {
   @ApiProperty()
   verified!: boolean;
 
+  @ApiProperty({ enum: ['ACTIVE', 'SUSPENDED'] })
+  accountStatus!: string;
+
+  @ApiProperty({ nullable: true, format: 'date-time' })
+  suspendedAt!: string | null;
+
   @ApiProperty({ format: 'date-time' })
   createdAt!: string;
 
@@ -54,6 +60,16 @@ export class AdminUserQueueItemDto {
 
   @ApiProperty({ format: 'date-time' })
   latestActivityAt!: string;
+}
+
+export class AdminUserSuspendBodyDto {
+  @ApiProperty({ example: 'Repeated policy violations after warnings.' })
+  reason!: string;
+}
+
+export class AdminUserUnsuspendBodyDto {
+  @ApiPropertyOptional({ example: 'Appeal reviewed and account restored.' })
+  note?: string;
 }
 
 export class AdminUserListResponseDto {

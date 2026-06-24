@@ -189,16 +189,25 @@ enum WaylerAccessPassProvider {
   OTHER
 }
 
+// Account moderation status (admin suspend/unsuspend v1).
+enum UserAccountStatus {
+  ACTIVE
+  SUSPENDED
+}
+
 // Admin/arbitrator operator audit trail (append-only; v1 actions only).
 enum AdminAuditLogAction {
   KYC_APPROVED
   KYC_REJECTED
   DISPUTE_RESOLVED
+  USER_SUSPENDED
+  USER_UNSUSPENDED
 }
 
 enum AdminAuditLogTargetType {
   KYC_VERIFICATION
   DISPUTE
+  USER
 }
 
 enum AdminAuditLogStatus {
@@ -230,6 +239,11 @@ model User {
   locale  String  @default("en")
   country String?
 
+  // Account moderation (admin suspend/unsuspend v1; ban/delete are out of scope).
+  accountStatus    UserAccountStatus @default(ACTIVE)
+  suspendedAt      DateTime?
+  suspensionReason String?
+
   createdAt               DateTime  @default(now())
   updatedAt               DateTime  @updatedAt
   deletedAt               DateTime?
@@ -260,6 +274,8 @@ model User {
   adminAuditLogs                AdminAuditLog[]             @relation("AdminAuditLogActor")
 
   @@index([deletedAt])
+  @@index([accountStatus])
+  @@index([suspendedAt])
   @@map("users")
 }
 

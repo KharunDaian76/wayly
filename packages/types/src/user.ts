@@ -1,5 +1,5 @@
 import type { ISODateString } from './common';
-import type { KycStatus, UserRole } from './enums';
+import type { KycStatus, UserAccountStatus, UserRole } from './enums';
 
 /**
  * Safe, serializable user shape returned by the API (e.g. GET /users/me).
@@ -18,6 +18,8 @@ export interface UserProfile {
   connectOnboarded: boolean;
   locale: string;
   country: string | null;
+  accountStatus: UserAccountStatus;
+  suspendedAt: ISODateString | null;
   createdAt: ISODateString;
 }
 
@@ -35,6 +37,8 @@ export interface AdminUserQueueItem {
   roles: UserRole[];
   kycStatus: KycStatus;
   verified: boolean;
+  accountStatus: UserAccountStatus;
+  suspendedAt: ISODateString | null;
   createdAt: ISODateString;
   updatedAt: ISODateString;
   postedOrdersCount: number;

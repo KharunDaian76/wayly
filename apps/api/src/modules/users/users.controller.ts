@@ -12,6 +12,7 @@ import type { UserProfile } from '@wayly/types';
 import { updateProfileSchema } from '@wayly/validation';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { zodBody } from '../../common/pipes/zod-validation.pipe';
 import type { RequestUser } from '../../common/types/request-user.type';
@@ -41,6 +42,7 @@ export class UsersController {
   }
 
   @Patch('me')
+  @RequiresActiveAccount()
   @ApiOperation({ summary: 'Update the authenticated user profile' })
   @ApiBody({ type: UpdateProfileBodyDto })
   @ApiOkResponse({ type: UserProfileDto })

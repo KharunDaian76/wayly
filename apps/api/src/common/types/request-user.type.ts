@@ -1,4 +1,4 @@
-import type { KycStatus, UserRole } from '@wayly/types';
+import type { KycStatus, UserAccountStatus, UserRole } from '@wayly/types';
 
 /** Authenticated user attached to the request after JWT validation. */
 export interface RequestUser {
@@ -8,4 +8,6 @@ export interface RequestUser {
   verified: boolean;
   kycStatus: KycStatus;
   phoneVerified: boolean;
+  accountStatus: UserAccountStatus;
+  suspendedAt: Date | null;
 }
