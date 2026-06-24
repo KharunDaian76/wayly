@@ -1,4 +1,5 @@
 import type {
+  AdminAuditLogListResponse,
   AdminDisputeListResponse,
   AdminDisputeQueueItem,
   AdminKycListResponse,
@@ -9,6 +10,7 @@ import type {
   AdminUserListResponse,
 } from '@wayly/types';
 
+import type { AdminAuditLogsListQuery } from './admin-audit.types';
 import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
@@ -50,9 +52,14 @@ export interface AdminApi {
     accessToken?: string | null,
   ): Promise<AdminPaymentListResponse>;
   getSystemHealth(accessToken?: string | null): Promise<AdminSystemHealthResponse>;
+  listAuditLogs(
+    query?: AdminAuditLogsListQuery,
+    accessToken?: string | null,
+  ): Promise<AdminAuditLogListResponse>;
 }
 
 export type {
+  AdminAuditLogListResponse,
   AdminDisputeListResponse,
   AdminDisputeQueueItem,
   AdminKycListResponse,
@@ -62,4 +69,5 @@ export type {
   AdminSystemHealthResponse,
   AdminUserListResponse,
 };
+export type { AdminAuditLogsListQuery } from './admin-audit.types';
 export type { AdminDisputeResolveBody } from './disputes-admin.types';

@@ -10,6 +10,7 @@ import { AppConfigModule } from './config/config.module';
 import { AppConfigService } from './config/config.service';
 import { InfraModule } from './infra/infra.module';
 import { LoggerModule } from './infra/logger/logger.module';
+import { AdminAuditModule } from './modules/admin-audit/admin-audit.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConversationsModule } from './modules/conversations/conversations.module';
 import { DisputesModule } from './modules/disputes/disputes.module';
@@ -42,6 +43,7 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
       }),
     }),
     HealthModule,
+    AdminAuditModule,
     AuthModule,
     UsersModule,
     KycModule,
@@ -63,7 +65,7 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
     //   ChatModule WebSocket, // later batch
     //   Notifications dispatch / WebSocket, // later batch
     //   AdminModule,         // M12
-    //   AuditModule,
+    //   AuditModule,         // replaced by AdminAuditModule
     // ---------------------------------------------------------------------
   ],
   providers: [

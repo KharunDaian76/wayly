@@ -1,6 +1,9 @@
 'use client';
 
 import type {
+  AdminAuditLogAction,
+  AdminAuditLogItem,
+  AdminAuditLogTargetType,
   AdminHealthComponentStatus,
   AdminSystemHealthResponse,
   AdminSystemOverallStatus,
@@ -10,7 +13,11 @@ import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 import { adminPaymentStatusKey } from '@/components/app/admin-orders-queue-panel';
-import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
@@ -22,6 +29,23 @@ const CARD_CLASS = cn('wayly-order-card rounded-xl px-4 py-4 text-sm', 'wayly-fe
 export type AdminSystemHealthPanelProps = {
   roles: UserRole[];
 };
+
+export function adminAuditActionKey(action: AdminAuditLogAction): TranslationKey {
+  const map: Record<AdminAuditLogAction, TranslationKey> = {
+    KYC_APPROVED: 'app.admin.adminAuditActionKycApproved',
+    KYC_REJECTED: 'app.admin.adminAuditActionKycRejected',
+    DISPUTE_RESOLVED: 'app.admin.adminAuditActionDisputeResolved',
+  };
+  return map[action];
+}
+
+export function adminAuditTargetKey(targetType: AdminAuditLogTargetType): TranslationKey {
+  const map: Record<AdminAuditLogTargetType, TranslationKey> = {
+    KYC_VERIFICATION: 'app.admin.adminAuditTargetKycVerification',
+    DISPUTE: 'app.admin.adminAuditTargetDispute',
+  };
+  return map[targetType];
+}
 
 function formatDateTime(value: string | null): string {
   if (!value) {
@@ -35,6 +59,13 @@ function formatDateTime(value: string | null): string {
   } catch {
     return value;
   }
+}
+
+function formatActor(item: AdminAuditLogItem): string {
+  if (item.actorDisplaySnapshot && item.actorEmailSnapshot) {
+    return `${item.actorDisplaySnapshot} (${item.actorEmailSnapshot})`;
+  }
+  return item.actorDisplaySnapshot || item.actorEmailSnapshot || '—';
 }
 
 function componentStatusKey(status: AdminHealthComponentStatus): TranslationKey {
@@ -82,6 +113,10 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loadedOnce, setLoadedOnce] = useState(false);
+  const [auditItems, setAuditItems] = useState<AdminAuditLogItem[]>([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditLoadError, setAuditLoadError] = useState<string | null>(null);
+  const [auditLoadedOnce, setAuditLoadedOnce] = useState(false);
 
   const loadSystemHealth = useCallback(async () => {
     setLoading(true);
@@ -97,17 +132,34 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
     }
   }, [t]);
 
+  const loadAuditLogs = useCallback(async () => {
+    setAuditLoading(true);
+    setAuditLoadError(null);
+    try {
+      const response = await api.admin.listAuditLogs({ page: 1, limit: 20 });
+      setAuditItems(response.items);
+      setAuditLoadedOnce(true);
+    } catch {
+      setAuditLoadError(t('app.admin.adminAuditLogLoadFailed'));
+    } finally {
+      setAuditLoading(false);
+    }
+  }, [t]);
+
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
       void loadSystemHealth();
+      void loadAuditLogs();
     }
-  }, [roles, loadSystemHealth]);
+  }, [roles, loadSystemHealth, loadAuditLogs]);
 
   if (!hasOperationsDashboardAccess(roles)) {
     return null;
   }
 
   const showInitialLoading = loading && !loadedOnce;
+  const showAuditInitialLoading = auditLoading && !auditLoadedOnce;
+  const showAuditEmpty = auditLoadedOnce && !auditLoadError && auditItems.length === 0;
 
   return (
     <section
@@ -247,6 +299,87 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
           </div>
         ) : null}
 
+        <div className="mt-1 border-t border-border/30 px-2 pb-2 pt-3">
+          <div className="mb-2 px-1">
+            <h4 className="text-sm font-semibold text-foreground">
+              {t('app.admin.recentAdminActions')}
+            </h4>
+            <p className="mt-1 text-xs text-muted-foreground">{t('app.admin.adminAuditLogs')}</p>
+          </div>
+
+          {auditLoadError ? (
+            <PanelErrorState
+              message={auditLoadError}
+              retryLabel={t('app.admin.retrySystemHealth')}
+              onRetry={() => void loadAuditLogs()}
+              retryDisabled={auditLoading}
+            />
+          ) : null}
+
+          {showAuditInitialLoading ? (
+            <div className="px-1 pb-2" role="status" aria-live="polite" aria-busy="true">
+              <RequestsListSkeleton rows={3} itemClassName="h-20 w-full rounded-lg" />
+            </div>
+          ) : null}
+
+          {showAuditEmpty ? (
+            <PanelEmptyState
+              title={t('app.admin.adminAuditLogEmpty')}
+              body={t('app.admin.adminAuditLogs')}
+            />
+          ) : null}
+
+          {!showAuditInitialLoading && !auditLoadError && auditItems.length > 0 ? (
+            <ul className="flex flex-col gap-2 px-1 pb-2">
+              {auditItems.map((item) => (
+                <li key={item.id} className={CARD_CLASS}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <p className="font-medium text-foreground">{formatActor(item)}</p>
+                    <span className="wayly-status-badge wayly-status-default shrink-0 text-xs">
+                      {t(adminAuditActionKey(item.action))}
+                    </span>
+                  </div>
+                  <dl className="mt-3 flex flex-col gap-1.5">
+                    <HealthRow
+                      label={t('app.admin.adminAuditLogTime')}
+                      value={formatDateTime(item.createdAt)}
+                    />
+                    <HealthRow
+                      label={t('app.admin.adminAuditLogTarget')}
+                      value={`${t(adminAuditTargetKey(item.targetType))} · ${item.targetId}`}
+                    />
+                    <div className="flex flex-col gap-0.5">
+                      <dt className="text-muted-foreground">
+                        {t('app.admin.adminAuditLogSummary')}
+                      </dt>
+                      <dd className="whitespace-pre-wrap break-words">{item.summary}</dd>
+                    </div>
+                  </dl>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          {!showAuditInitialLoading &&
+          (auditLoadedOnce || auditItems.length > 0) &&
+          !auditLoadError ? (
+            <div className="flex justify-end px-2 pb-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs"
+                disabled={auditLoading}
+                onClick={() => void loadAuditLogs()}
+              >
+                {auditLoading
+                  ? t('app.admin.systemHealthLoading')
+                  : t('app.admin.adminAuditLogRefresh')}
+              </Button>
+            </div>
+          ) : null}
+        </div>
+
         {!showInitialLoading && snapshot && !loadError ? (
           <div className="flex justify-end px-3 pb-2">
             <Button
@@ -255,7 +388,10 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
               size="sm"
               className="h-8 text-xs"
               disabled={loading}
-              onClick={() => void loadSystemHealth()}
+              onClick={() => {
+                void loadSystemHealth();
+                void loadAuditLogs();
+              }}
             >
               {loading ? t('app.admin.systemHealthLoading') : t('app.admin.refreshSystemHealth')}
             </Button>

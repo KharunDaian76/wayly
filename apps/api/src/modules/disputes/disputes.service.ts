@@ -20,7 +20,7 @@ import type {
   DisputeListResponse,
   DisputeMessageSummary,
 } from '@wayly/types';
-import { NotificationType } from '@wayly/types';
+import { AdminAuditLogAction, AdminAuditLogTargetType, NotificationType } from '@wayly/types';
 import type {
   AddDisputeEvidenceInput,
   AddDisputeMessageInput,
@@ -33,6 +33,10 @@ import { AdminDisputeResolutionOutcome } from '@wayly/validation';
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import {
+  AdminAuditLogService,
+  type AdminAuditRequestContext,
+} from '../admin-audit/admin-audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
 import {
@@ -61,6 +65,7 @@ export class DisputesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly adminAuditLog: AdminAuditLogService,
   ) {}
 
   async open(user: RequestUser, body: OpenDisputeInput): Promise<DisputeDetail> {
@@ -175,10 +180,13 @@ export class DisputesService {
   }
 
   async resolveForOperations(
+    actor: RequestUser,
     disputeId: string,
     body: AdminDisputeResolveInput,
+    requestContext?: AdminAuditRequestContext,
   ): Promise<AdminDisputeQueueItem> {
     const dispute = await this.findDisputeForOperations(disputeId);
+    const previousStatus = dispute.status;
 
     if (dispute.status === PrismaDisputeStatus.RESOLVED) {
       throw new BadRequestException('Dispute is already resolved');
@@ -187,12 +195,13 @@ export class DisputesService {
       throw new BadRequestException('Dispute cannot be resolved');
     }
 
+    const resolution = this.mapAdminOutcomeToResolution(body.outcome);
     const now = new Date();
     const updated = await this.prisma.dispute.update({
       where: { id: disputeId },
       data: {
         status: PrismaDisputeStatus.RESOLVED,
-        resolution: this.mapAdminOutcomeToResolution(body.outcome),
+        resolution,
         resolutionNote: body.resolutionNote,
         resolvedAt: now,
       },
@@ -209,6 +218,23 @@ export class DisputesService {
           },
         },
       },
+    });
+
+    const orderLabel = updated.order.title?.trim() || updated.orderId;
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.DISPUTE_RESOLVED,
+      targetType: AdminAuditLogTargetType.DISPUTE,
+      targetId: updated.id,
+      summary: `Resolved dispute for order ${orderLabel}`,
+      metadata: {
+        previousStatus,
+        newStatus: PrismaDisputeStatus.RESOLVED,
+        orderId: updated.orderId,
+        resolution,
+        ...(body.outcome ? { outcome: body.outcome } : {}),
+      },
+      requestContext,
     });
 
     return toAdminDisputeQueueItem(updated);

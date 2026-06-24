@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -20,11 +21,15 @@ import {
 import type { AdminDisputeListResponse, AdminDisputeQueueItem } from '@wayly/types';
 import { UserRole } from '@wayly/types';
 import { adminDisputeResolveSchema, disputesListQuerySchema } from '@wayly/validation';
+import type { Request } from 'express';
 import { z } from 'zod';
 
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import type { RequestUser } from '../../common/types/request-user.type';
+import { adminAuditRequestContext } from '../admin-audit/admin-audit.util';
 
 import { DisputesService } from './disputes.service';
 import {
@@ -60,9 +65,11 @@ export class AdminDisputesController {
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
   @ApiForbiddenResponse({ description: 'ADMIN or ARBITRATOR role required' })
   resolve(
+    @CurrentUser() actor: RequestUser,
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodBody(adminDisputeResolveSchema)) body: z.infer<typeof adminDisputeResolveSchema>,
+    @Req() req: Request,
   ): Promise<AdminDisputeQueueItem> {
-    return this.disputes.resolveForOperations(id, body);
+    return this.disputes.resolveForOperations(actor, id, body, adminAuditRequestContext(req));
   }
 }

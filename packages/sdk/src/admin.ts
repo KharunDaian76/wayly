@@ -1,4 +1,5 @@
 import type {
+  AdminAuditLogListResponse,
   AdminDisputeListResponse,
   AdminDisputeQueueItem,
   AdminKycListResponse,
@@ -9,6 +10,7 @@ import type {
   AdminUserListResponse,
 } from '@wayly/types';
 
+import type { AdminAuditLogsListQuery } from './admin-audit.types';
 import type { AdminApi } from './admin.types';
 import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
@@ -121,6 +123,39 @@ function buildAdminPaymentsQuery(query?: AdminPaymentsListQuery): string {
   return qs ? `?${qs}` : '';
 }
 
+function buildAdminAuditLogsQuery(query?: AdminAuditLogsListQuery): string {
+  if (!query) {
+    return '';
+  }
+  const params = new URLSearchParams();
+  if (query.page !== undefined) {
+    params.set('page', String(query.page));
+  }
+  if (query.limit !== undefined) {
+    params.set('limit', String(query.limit));
+  }
+  if (query.action !== undefined) {
+    params.set('action', query.action);
+  }
+  if (query.actorUserId !== undefined) {
+    params.set('actorUserId', query.actorUserId);
+  }
+  if (query.targetType !== undefined) {
+    params.set('targetType', query.targetType);
+  }
+  if (query.targetId !== undefined) {
+    params.set('targetId', query.targetId);
+  }
+  if (query.from !== undefined) {
+    params.set('from', query.from instanceof Date ? query.from.toISOString() : String(query.from));
+  }
+  if (query.to !== undefined) {
+    params.set('to', query.to instanceof Date ? query.to.toISOString() : String(query.to));
+  }
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
 export function createAdminApi(request: Requester): AdminApi {
   return {
     listDisputes: (query?: DisputesListQuery, accessToken?: string | null) =>
@@ -178,6 +213,12 @@ export function createAdminApi(request: Requester): AdminApi {
       }),
     getSystemHealth: (accessToken?: string | null) =>
       request<AdminSystemHealthResponse>('/admin/system-health', {
+        method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    listAuditLogs: (query?: AdminAuditLogsListQuery, accessToken?: string | null) =>
+      request<AdminAuditLogListResponse>(`/admin/audit-logs${buildAdminAuditLogsQuery(query)}`, {
         method: 'GET',
         ...withCookies,
         accessToken,

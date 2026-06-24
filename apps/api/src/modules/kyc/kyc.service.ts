@@ -2,11 +2,16 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import type { KycVerification, Prisma, User } from '@prisma/client';
 import { KycStatus as PrismaKycStatus } from '@prisma/client';
 import type { AdminKycListResponse, AdminKycQueueItem, KycVerificationSummary } from '@wayly/types';
-import { KycStatus } from '@wayly/types';
+import { AdminAuditLogAction, AdminAuditLogTargetType, KycStatus } from '@wayly/types';
 import type { KycStartInput, KycVerificationsListQueryInput } from '@wayly/validation';
 
+import type { RequestUser } from '../../common/types/request-user.type';
 import { AppConfigService } from '../../config/config.service';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import {
+  AdminAuditLogService,
+  type AdminAuditRequestContext,
+} from '../admin-audit/admin-audit.service';
 
 import { toAdminKycQueueItem, toKycVerificationSummary } from './kyc.mapper';
 
@@ -28,6 +33,7 @@ export class KycService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly config: AppConfigService,
+    private readonly adminAuditLog: AdminAuditLogService,
   ) {}
 
   async getStatus(userId: string): Promise<KycStatusView> {
@@ -160,8 +166,13 @@ export class KycService {
     };
   }
 
-  async approveForOperations(verificationId: string): Promise<AdminKycQueueItem> {
+  async approveForOperations(
+    actor: RequestUser,
+    verificationId: string,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminKycQueueItem> {
     const record = await this.findVerificationForOperations(verificationId);
+    const previousStatus = record.status;
     if (record.status === PrismaKycStatus.APPROVED) {
       throw new BadRequestException('KYC verification is already approved');
     }
@@ -194,14 +205,33 @@ export class KycService {
       return verification;
     });
 
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.KYC_APPROVED,
+      targetType: AdminAuditLogTargetType.KYC_VERIFICATION,
+      targetId: updated.id,
+      targetUserId: updated.userId,
+      summary: `Approved KYC verification for ${updated.user.displayName} (${updated.user.email})`,
+      metadata: {
+        previousStatus,
+        newStatus: PrismaKycStatus.APPROVED,
+        verificationId: updated.id,
+        ...(updated.country ? { country: updated.country } : {}),
+      },
+      requestContext,
+    });
+
     return toAdminKycQueueItem(updated);
   }
 
   async rejectForOperations(
+    actor: RequestUser,
     verificationId: string,
     rejectionReason: string,
+    requestContext?: AdminAuditRequestContext,
   ): Promise<AdminKycQueueItem> {
     const record = await this.findVerificationForOperations(verificationId);
+    const previousStatus = record.status;
     if (record.status === PrismaKycStatus.APPROVED) {
       throw new BadRequestException('Approved KYC verifications cannot be rejected');
     }
@@ -232,6 +262,23 @@ export class KycService {
       });
 
       return verification;
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.KYC_REJECTED,
+      targetType: AdminAuditLogTargetType.KYC_VERIFICATION,
+      targetId: updated.id,
+      targetUserId: updated.userId,
+      summary: `Rejected KYC verification for ${updated.user.displayName} (${updated.user.email})`,
+      metadata: {
+        previousStatus,
+        newStatus: PrismaKycStatus.REJECTED,
+        verificationId: updated.id,
+        rejectionReasonLength: rejectionReason.trim().length,
+        ...(updated.country ? { country: updated.country } : {}),
+      },
+      requestContext,
     });
 
     return toAdminKycQueueItem(updated);

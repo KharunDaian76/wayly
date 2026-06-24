@@ -18,7 +18,7 @@ This document records the **current** Admin / Arbitrator Operations Center on Wa
 | Payments & Escrow                                      | ✅ **Read-only**                            |
 | System Health & Audit                                  | ✅ **Read-only** snapshot                   |
 | Real Stripe / Sumsub admin integrations                | ❌ Not implemented                          |
-| Persistent audit log schema                            | ❌ Not implemented                          |
+| Persistent audit log schema                            | ✅ **Implemented v1** (append-only)         |
 | Payment refund / release / capture / payout from admin | ❌ Not implemented                          |
 | User ban / suspend / delete from admin                 | ❌ Not implemented                          |
 
@@ -208,9 +208,40 @@ Each read-only panel follows: **loading**, **error + retry**, **empty state** (w
 
 **Explicitly excluded:** secrets, connection strings, provider keys, stack traces in normal responses.
 
-**Not implemented:** restart, repair, log download, persistent audit log storage.
+**Not implemented:** restart, repair, log download.
+
+**Admin audit log (v1):** read-only **Recent admin actions** subsection loads `GET /api/v1/admin/audit-logs` (latest 20 entries). Append-only — no delete/export.
 
 Public probes (`GET /api/v1/health/live`, `GET /api/v1/health/ready`) remain separate unauthenticated infrastructure endpoints.
+
+---
+
+## Admin audit log foundation v1
+
+|                   |                                                             |
+| ----------------- | ----------------------------------------------------------- |
+| **Access**        | `ADMIN` / `ARBITRATOR` only — normal `USER` → **403**       |
+| **Backend**       | `apps/api/src/modules/admin-audit/`                         |
+| **List endpoint** | `GET /api/v1/admin/audit-logs`                              |
+| **UI**            | **Recent admin actions** in `admin-system-health-panel.tsx` |
+
+**Logged actions (v1):**
+
+| Action             | Trigger                                              |
+| ------------------ | ---------------------------------------------------- |
+| `KYC_APPROVED`     | `POST /admin/kyc-verifications/:id/approve` succeeds |
+| `KYC_REJECTED`     | `POST /admin/kyc-verifications/:id/reject` succeeds  |
+| `DISPUTE_RESOLVED` | `POST /admin/disputes/:id/resolve` succeeds          |
+
+**Write behavior:** **best-effort after successful mutation** — audit insert failure is logged to Pino but does **not** fail the admin action in v1.
+
+**Append-only:** no update/delete/export/download API.
+
+**Stored safely:** actor snapshots (id, email, display, roles), action, target type/id, optional target user id, short summary, allowlisted metadata, optional `requestId`. IP/userAgent may be persisted but are **not** returned in list API v1.
+
+**Not stored:** tokens, secrets, payment card data, KYC provider payloads, raw request bodies, full chat/evidence content.
+
+**Prisma:** `AdminAuditLog` model — migration `admin_audit_log_foundation`.
 
 ---
 
@@ -220,10 +251,11 @@ Public probes (`GET /api/v1/health/live`, `GET /api/v1/health/ready`) remain sep
 2. **UI defense in depth:** Operations Center and each panel re-check roles client-side before rendering, fetching, or showing mutation controls.
 3. **Controlled mutations only:** KYC approve/reject and dispute resolve update **verification/dispute metadata** using existing schema fields — they do **not** trigger payment, order, or user moderation side effects.
 4. **Most panels remain read-only:** Orders, Users, Payments, and System Health are list/monitor/snapshot only.
-5. **Dangerous actions not implemented:** payment refund/release/capture/payout, user ban/suspend/delete, order cancellation/reassignment, role promote/demote, persistent audit logs.
-6. **No secrets in admin responses:** admin list/snapshot endpoints return operational metadata only — never connection strings, provider credentials, or payment instrument details.
-7. **Mock providers unchanged:** mock KYC (user-facing dev routes), mock payments, and mock Wayler daily access remain separate user-facing flows. Admin KYC review is **manual operator decision** on existing records — not a live Sumsub/Stripe Identity integration.
-8. **Not production/commercial-ready** for real money movement, real KYC compliance, or automated dispute settlement — suitable for **local/staging operator workflow testing** only.
+5. **Dangerous actions not implemented:** payment refund/release/capture/payout, user ban/suspend/delete, order cancellation/reassignment, role promote/demote.
+6. **Audit log v1:** append-only operator trail for KYC approve/reject and dispute resolve; best-effort writes; no secrets in stored metadata or list responses.
+7. **No secrets in admin responses:** admin list/snapshot endpoints return operational metadata only — never connection strings, provider credentials, or payment instrument details.
+8. **Mock providers unchanged:** mock KYC (user-facing dev routes), mock payments, and mock Wayler daily access remain separate user-facing flows. Admin KYC review is **manual operator decision** on existing records — not a live Sumsub/Stripe Identity integration.
+9. **Not production/commercial-ready** for real money movement, real KYC compliance, or automated dispute settlement — suitable for **local/staging operator workflow testing** only.
 
 ---
 
@@ -242,10 +274,11 @@ Admin client surface: `packages/sdk/src/admin.ts` → `api.admin.*`
 | `listUsers(query?)`               | `GET /admin/users`                          |
 | `listPayments(query?)`            | `GET /admin/payments`                       |
 | `getSystemHealth()`               | `GET /admin/system-health`                  |
+| `listAuditLogs(query?)`           | `GET /admin/audit-logs`                     |
 
-Types: `@wayly/types` — `AdminDisputeQueueItem`, `AdminKycQueueItem`, and other admin list/snapshot interfaces.
+Types: `@wayly/types` — admin queue/snapshot interfaces plus `AdminAuditLogItem`, `AdminAuditLogListResponse`.
 
-Validation: `@wayly/validation` — `adminDisputeResolveSchema`, `AdminDisputeResolutionOutcome`, KYC reject body schema, list query schemas.
+Validation: `@wayly/validation` — `adminDisputeResolveSchema`, `adminAuditLogsListQuerySchema`, KYC reject body schema, list query schemas.
 
 ---
 
@@ -253,16 +286,18 @@ Validation: `@wayly/validation` — `adminDisputeResolveSchema`, `AdminDisputeRe
 
 ### Implemented v1
 
-| Capability                  | Notes                                                                    |
-| --------------------------- | ------------------------------------------------------------------------ |
-| KYC approve/reject workflow | Manual review on existing verification records; no provider integration  |
-| Dispute resolution workflow | Metadata-only resolve with note + optional outcome; no payment execution |
+| Capability                         | Notes                                                           |
+| ---------------------------------- | --------------------------------------------------------------- |
+| KYC approve/reject workflow        | Manual review; audit logged (`KYC_APPROVED` / `KYC_REJECTED`)   |
+| Dispute resolution workflow        | Metadata-only resolve; audit logged (`DISPUTE_RESOLVED`)        |
+| Persistent audit log (append-only) | `AdminAuditLog` model + `GET /admin/audit-logs` + UI subsection |
 
 ### Future work (not implemented)
 
 | Future capability                     | Notes                                                                    |
 | ------------------------------------- | ------------------------------------------------------------------------ |
-| Persistent audit logs                 | Immutable operator action history (schema + UI)                          |
+| Strict transactional audit / outbox   | Atomic audit + mutation for compliance-critical actions                  |
+| Richer audit export / retention       | CSV download, retention policy, advanced filters in UI                   |
 | Real KYC provider integration         | Sumsub / Stripe Identity / Persona; webhooks; document review            |
 | Dispute payment execution             | Refund/release/capture/payout tied to dispute outcomes                   |
 | Payment admin mutations               | Stripe-backed refund / release / capture / payout from Operations Center |
@@ -318,6 +353,15 @@ Use an account with `ADMIN` or `ARBITRATOR` role (seed or dev assignment):
 - [ ] Resolve with note updates card to **RESOLVED** — action buttons hidden
 - [ ] Resolution note and outcome label visible on resolved card
 - [ ] No refund/release/payment/order/user action buttons anywhere
+
+### Audit log v1
+
+- [ ] **Recent admin actions** visible in System Health & Audit panel
+- [ ] Approve KYC → new `KYC_APPROVED` row in audit list
+- [ ] Reject KYC → new `KYC_REJECTED` row
+- [ ] Resolve dispute → new `DISPUTE_RESOLVED` row
+- [ ] Normal `USER` → **403** on `GET /api/v1/admin/audit-logs`
+- [ ] Audit list response does not include IP/userAgent
 
 ### Swagger
 

@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -20,11 +21,15 @@ import {
 import type { AdminKycListResponse, AdminKycQueueItem } from '@wayly/types';
 import { UserRole } from '@wayly/types';
 import { adminKycRejectSchema, kycVerificationsListQuerySchema } from '@wayly/validation';
+import type { Request } from 'express';
 import { z } from 'zod';
 
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import type { RequestUser } from '../../common/types/request-user.type';
+import { adminAuditRequestContext } from '../admin-audit/admin-audit.util';
 
 import {
   AdminKycListResponseDto,
@@ -60,8 +65,12 @@ export class AdminKycController {
   @ApiOkResponse({ type: AdminKycQueueItemDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
   @ApiForbiddenResponse({ description: 'ADMIN or ARBITRATOR role required' })
-  approve(@Param('id', ParseUUIDPipe) id: string): Promise<AdminKycQueueItem> {
-    return this.kyc.approveForOperations(id);
+  approve(
+    @CurrentUser() actor: RequestUser,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() req: Request,
+  ): Promise<AdminKycQueueItem> {
+    return this.kyc.approveForOperations(actor, id, adminAuditRequestContext(req));
   }
 
   @Post(':id/reject')
@@ -73,9 +82,16 @@ export class AdminKycController {
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
   @ApiForbiddenResponse({ description: 'ADMIN or ARBITRATOR role required' })
   reject(
+    @CurrentUser() actor: RequestUser,
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodBody(adminKycRejectSchema)) body: z.infer<typeof adminKycRejectSchema>,
+    @Req() req: Request,
   ): Promise<AdminKycQueueItem> {
-    return this.kyc.rejectForOperations(id, body.rejectionReason);
+    return this.kyc.rejectForOperations(
+      actor,
+      id,
+      body.rejectionReason,
+      adminAuditRequestContext(req),
+    );
   }
 }
