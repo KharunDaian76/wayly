@@ -21,6 +21,7 @@ import {
   WaylerAvailabilityPublishingChecklist,
   WaylerAvailabilityReadyBadge,
 } from '@/components/app/wayler-availability-composer';
+import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -612,6 +613,7 @@ export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProp
 
             <WaylerAvailabilityPreview form={form} />
             <WaylerAvailabilityPublishingChecklist />
+            <RestrictedItemsSafetyNote variant="wayler" />
 
             <div className="flex flex-wrap items-center gap-2">
               <WaylerAvailabilityReadyBadge ready={isWaylerAvailabilityReady(form)} />

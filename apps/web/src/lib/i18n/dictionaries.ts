@@ -1127,6 +1127,30 @@ const en = {
   'app.senderRequest.ready': 'Request ready to send',
   'app.senderRequest.submitting': 'Sending request…',
   'app.senderRequest.messageCounter': '{count} characters remaining',
+  'app.restrictedItems.title': 'Restricted & unsafe items',
+  'app.restrictedItems.subtitle':
+    'Wayly does not verify item legality. You are responsible for following local laws and transport rules.',
+  'app.restrictedItems.senderNote':
+    'Before sending a request, make sure the item is legal, safe, and allowed by local transport and customs rules.',
+  'app.restrictedItems.waylerNote':
+    'Before accepting a request, confirm the item is legal and safe, and verify size, weight, and contents before you agree to carry it.',
+  'app.restrictedItems.keepInsideWayly':
+    'Keep item details and agreements inside Wayly so there is a clear record if a dispute happens.',
+  'app.restrictedItems.categoriesTitle': 'Examples of restricted or high-risk items',
+  'app.restrictedItems.categoryIllegalGoods': 'Illegal goods or stolen property',
+  'app.restrictedItems.categoryWeaponsDangerous': 'Weapons, explosives, or other dangerous items',
+  'app.restrictedItems.categoryDrugsControlled': 'Drugs or controlled substances',
+  'app.restrictedItems.categoryCashFinancial': 'Cash or high-value financial instruments',
+  'app.restrictedItems.categoryFragileTemperature':
+    'Fragile or temperature-sensitive items unless clearly agreed in advance',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'Liquids, batteries, chemicals, or items restricted by airline or customs rules',
+  'app.restrictedItems.categoryDocuments':
+    'Personal documents or passports only when permitted by law and platform rules',
+  'app.restrictedItems.customsReminder':
+    'Check local customs, airline, and carrier rules before sending or accepting an item.',
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly does not provide guidance on bypassing customs, security, or legal controls.',
   'app.senderWaylers.resultsTitle': 'Results',
   'app.senderWaylers.status': 'Status',
   'app.senderWaylers.availableFrom': 'Available from',
@@ -2383,6 +2407,30 @@ const ru: Dictionary = {
   'app.senderRequest.ready': 'Запрос готов к отправке',
   'app.senderRequest.submitting': 'Отправка запроса…',
   'app.senderRequest.messageCounter': 'Осталось символов: {count}',
+  'app.restrictedItems.title': 'Запрещённые и небезопасные предметы',
+  'app.restrictedItems.subtitle':
+    'Wayly не проверяет законность предметов. Вы сами отвечаете за соблюдение местных законов и правил перевозки.',
+  'app.restrictedItems.senderNote':
+    'Перед отправкой запроса убедитесь, что предмет законен, безопасен и разрешён местными правилами транспорта и таможни.',
+  'app.restrictedItems.waylerNote':
+    'Перед принятием запроса убедитесь, что предмет законен и безопасен, и проверьте размер, вес и содержимое, прежде чем согласиться его нести.',
+  'app.restrictedItems.keepInsideWayly':
+    'Указывайте детали предмета и договорённости в Wayly — так будет ясная запись при споре.',
+  'app.restrictedItems.categoriesTitle': 'Примеры запрещённых или рискованных предметов',
+  'app.restrictedItems.categoryIllegalGoods': 'Незаконные товары или краденое имущество',
+  'app.restrictedItems.categoryWeaponsDangerous': 'Оружие, взрывчатые или иные опасные предметы',
+  'app.restrictedItems.categoryDrugsControlled': 'Наркотики или контролируемые вещества',
+  'app.restrictedItems.categoryCashFinancial': 'Наличные или ценные финансовые инструменты',
+  'app.restrictedItems.categoryFragileTemperature':
+    'Хрупкие или температурочувствительные предметы, если это не согласовано заранее',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'Жидкости, батареи, химикаты или предметы, ограниченные авиакомпаниями или таможней',
+  'app.restrictedItems.categoryDocuments':
+    'Личные документы или паспорта только если это разрешено законом и правилами платформы',
+  'app.restrictedItems.customsReminder':
+    'Проверьте местные таможенные, авиационные и перевозочные правила перед отправкой или принятием.',
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly не даёт советов по обходу таможни, безопасности или правовых ограничений.',
   'app.senderWaylers.resultsTitle': 'Результаты',
   'app.senderWaylers.status': 'Статус',
   'app.senderWaylers.availableFrom': 'Доступен с',
@@ -3646,6 +3694,30 @@ const es: Dictionary = {
   'app.senderRequest.ready': 'Solicitud lista para enviar',
   'app.senderRequest.submitting': 'Enviando solicitud…',
   'app.senderRequest.messageCounter': '{count} caracteres restantes',
+  'app.restrictedItems.title': 'Artículos restringidos e inseguros',
+  'app.restrictedItems.subtitle':
+    'Wayly no verifica la legalidad de los artículos. Eres responsable de cumplir las leyes locales y las normas de transporte.',
+  'app.restrictedItems.senderNote':
+    'Antes de enviar una solicitud, asegúrate de que el artículo sea legal, seguro y permitido por las normas locales de transporte y aduanas.',
+  'app.restrictedItems.waylerNote':
+    'Antes de aceptar una solicitud, confirma que el artículo es legal y seguro, y verifica tamaño, peso y contenido antes de aceptar transportarlo.',
+  'app.restrictedItems.keepInsideWayly':
+    'Mantén los detalles del artículo y los acuerdos dentro de Wayly para tener un registro claro en caso de disputa.',
+  'app.restrictedItems.categoriesTitle': 'Ejemplos de artículos restringidos o de alto riesgo',
+  'app.restrictedItems.categoryIllegalGoods': 'Mercancías ilegales o propiedad robada',
+  'app.restrictedItems.categoryWeaponsDangerous': 'Armas, explosivos u otros artículos peligrosos',
+  'app.restrictedItems.categoryDrugsControlled': 'Drogas o sustancias controladas',
+  'app.restrictedItems.categoryCashFinancial': 'Efectivo o instrumentos financieros de alto valor',
+  'app.restrictedItems.categoryFragileTemperature':
+    'Artículos frágiles o sensibles a la temperatura, salvo acuerdo previo claro',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'Líquidos, baterías, químicos o artículos restringidos por aerolíneas o aduanas',
+  'app.restrictedItems.categoryDocuments':
+    'Documentos personales o pasaportes solo cuando lo permitan la ley y las reglas de la plataforma',
+  'app.restrictedItems.customsReminder':
+    'Consulta las normas locales de aduanas, aerolíneas y transportistas antes de enviar o aceptar un artículo.',
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly no ofrece orientación para eludir aduanas, seguridad o controles legales.',
   'app.senderWaylers.resultsTitle': 'Resultados',
   'app.senderWaylers.status': 'Estado',
   'app.senderWaylers.availableFrom': 'Disponible desde',
@@ -4922,6 +4994,30 @@ const fr: Dictionary = {
   'app.senderRequest.ready': 'Demande prête à envoyer',
   'app.senderRequest.submitting': 'Envoi de la demande…',
   'app.senderRequest.messageCounter': '{count} caractères restants',
+  'app.restrictedItems.title': 'Articles restreints et dangereux',
+  'app.restrictedItems.subtitle':
+    'Wayly ne vérifie pas la légalité des articles. Vous devez respecter les lois locales et les règles de transport.',
+  'app.restrictedItems.senderNote':
+    "Avant d'envoyer une demande, assurez-vous que l'article est légal, sûr et autorisé par les règles locales de transport et de douane.",
+  'app.restrictedItems.waylerNote':
+    "Avant d'accepter une demande, confirmez que l'article est légal et sûr, et vérifiez la taille, le poids et le contenu avant d'accepter de le transporter.",
+  'app.restrictedItems.keepInsideWayly':
+    "Gardez les détails de l'article et les accords dans Wayly pour disposer d'un enregistrement clair en cas de litige.",
+  'app.restrictedItems.categoriesTitle': "Exemples d'articles restreints ou à haut risque",
+  'app.restrictedItems.categoryIllegalGoods': 'Marchandises illégales ou biens volés',
+  'app.restrictedItems.categoryWeaponsDangerous': 'Armes, explosifs ou autres objets dangereux',
+  'app.restrictedItems.categoryDrugsControlled': 'Drogues ou substances contrôlées',
+  'app.restrictedItems.categoryCashFinancial': 'Espèces ou instruments financiers de grande valeur',
+  'app.restrictedItems.categoryFragileTemperature':
+    'Articles fragiles ou sensibles à la température, sauf accord préalable clair',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'Liquides, batteries, produits chimiques ou articles restreints par les compagnies aériennes ou la douane',
+  'app.restrictedItems.categoryDocuments':
+    'Documents personnels ou passeports uniquement si la loi et les règles de la plateforme le permettent',
+  'app.restrictedItems.customsReminder':
+    "Vérifiez les règles locales de douane, d'aviation et de transport avant d'envoyer ou d'accepter un article.",
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly ne fournit pas de conseils pour contourner la douane, la sécurité ou les contrôles légaux.',
   'app.senderWaylers.resultsTitle': 'Résultats',
   'app.senderWaylers.status': 'Statut',
   'app.senderWaylers.availableFrom': 'Disponible à partir de',
@@ -6214,6 +6310,32 @@ const de: Dictionary = {
   'app.senderRequest.ready': 'Anfrage bereit zum Senden',
   'app.senderRequest.submitting': 'Anfrage wird gesendet…',
   'app.senderRequest.messageCounter': '{count} Zeichen verbleibend',
+  'app.restrictedItems.title': 'Eingeschränkte und unsichere Gegenstände',
+  'app.restrictedItems.subtitle':
+    'Wayly prüft die Rechtmäßigkeit von Gegenständen nicht. Sie sind für die Einhaltung lokaler Gesetze und Transportregeln verantwortlich.',
+  'app.restrictedItems.senderNote':
+    'Stellen Sie vor dem Senden einer Anfrage sicher, dass der Gegenstand legal, sicher und nach lokalen Transport- und Zollvorschriften erlaubt ist.',
+  'app.restrictedItems.waylerNote':
+    'Bestätigen Sie vor der Annahme einer Anfrage, dass der Gegenstand legal und sicher ist, und prüfen Sie Größe, Gewicht und Inhalt, bevor Sie zustimmen, ihn zu transportieren.',
+  'app.restrictedItems.keepInsideWayly':
+    'Halten Sie Artikeldetails und Vereinbarungen in Wayly, damit bei Streitigkeiten eine klare Aufzeichnung vorliegt.',
+  'app.restrictedItems.categoriesTitle':
+    'Beispiele für eingeschränkte oder risikoreiche Gegenstände',
+  'app.restrictedItems.categoryIllegalGoods': 'Illegale Waren oder gestohlenes Eigentum',
+  'app.restrictedItems.categoryWeaponsDangerous':
+    'Waffen, Sprengstoff oder andere gefährliche Gegenstände',
+  'app.restrictedItems.categoryDrugsControlled': 'Drogen oder kontrollierte Substanzen',
+  'app.restrictedItems.categoryCashFinancial': 'Bargeld oder hochwertige Finanzinstrumente',
+  'app.restrictedItems.categoryFragileTemperature':
+    'Zerbrechliche oder temperaturempfindliche Gegenstände, sofern nicht klar im Voraus vereinbart',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'Flüssigkeiten, Batterien, Chemikalien oder von Fluggesellschaften oder Zoll eingeschränkte Gegenstände',
+  'app.restrictedItems.categoryDocuments':
+    'Persönliche Dokumente oder Pässe nur, wenn Gesetz und Plattformregeln dies erlauben',
+  'app.restrictedItems.customsReminder':
+    'Prüfen Sie lokale Zoll-, Fluglinien- und Beförderungsregeln, bevor Sie einen Gegenstand senden oder annehmen.',
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly gibt keine Hinweise zum Umgehen von Zoll, Sicherheit oder rechtlichen Kontrollen.',
   'app.senderWaylers.resultsTitle': 'Ergebnisse',
   'app.senderWaylers.status': 'Status',
   'app.senderWaylers.availableFrom': 'Verfügbar ab',
@@ -7463,6 +7585,31 @@ const tr: Dictionary = {
   'app.senderRequest.ready': 'Talep gönderime hazır',
   'app.senderRequest.submitting': 'Talep gönderiliyor…',
   'app.senderRequest.messageCounter': '{count} karakter kaldı',
+  'app.restrictedItems.title': 'Kısıtlı ve güvensiz eşyalar',
+  'app.restrictedItems.subtitle':
+    'Wayly eşyaların yasallığını doğrulamaz. Yerel yasalara ve taşıma kurallarına uymaktan siz sorumlusunuz.',
+  'app.restrictedItems.senderNote':
+    'Bir talep göndermeden önce eşyanın yasal, güvenli ve yerel taşıma ile gümrük kurallarına uygun olduğundan emin olun.',
+  'app.restrictedItems.waylerNote':
+    'Bir talebi kabul etmeden önce eşyanın yasal ve güvenli olduğunu doğrulayın; taşımayı kabul etmeden önce boyut, ağırlık ve içeriği kontrol edin.',
+  'app.restrictedItems.keepInsideWayly':
+    'Eşya detaylarını ve anlaşmaları Wayly içinde tutun; anlaşmazlık olursa net bir kayıt olsun.',
+  'app.restrictedItems.categoriesTitle': 'Kısıtlı veya yüksek riskli eşya örnekleri',
+  'app.restrictedItems.categoryIllegalGoods': 'Yasadışı mallar veya çalıntı mülk',
+  'app.restrictedItems.categoryWeaponsDangerous':
+    'Silahlar, patlayıcılar veya diğer tehlikeli eşyalar',
+  'app.restrictedItems.categoryDrugsControlled': 'Uyuşturucular veya kontrollü maddeler',
+  'app.restrictedItems.categoryCashFinancial': 'Nakit veya yüksek değerli finansal araçlar',
+  'app.restrictedItems.categoryFragileTemperature':
+    'Önceden açıkça anlaşılmadıkça kırılgan veya sıcaklığa duyarlı eşyalar',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'Sıvılar, piller, kimyasallar veya havayolu/gümrük kurallarıyla kısıtlanan eşyalar',
+  'app.restrictedItems.categoryDocuments':
+    'Kişisel belgeler veya pasaportlar yalnızca yasa ve platform kuralları izin veriyorsa',
+  'app.restrictedItems.customsReminder':
+    'Göndermeden veya kabul etmeden önce yerel gümrük, havayolu ve taşıyıcı kurallarını kontrol edin.',
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly gümrük, güvenlik veya yasal kontrolleri atlatma konusunda rehberlik sağlamaz.',
   'app.senderWaylers.resultsTitle': 'Sonuçlar',
   'app.senderWaylers.status': 'Durum',
   'app.senderWaylers.availableFrom': 'Müsait başlangıç',
@@ -8666,6 +8813,30 @@ const ar: Dictionary = {
   'app.senderRequest.ready': 'الطلب جاهز للإرسال',
   'app.senderRequest.submitting': 'جارٍ إرسال الطلب…',
   'app.senderRequest.messageCounter': '{count} حرفًا متبقيًا',
+  'app.restrictedItems.title': 'عناصر محظورة وغير آمنة',
+  'app.restrictedItems.subtitle':
+    'Wayly لا يتحقق من قانونية العناصر. أنت مسؤول عن الالتزام بالقوانين المحلية وقواعد النقل.',
+  'app.restrictedItems.senderNote':
+    'قبل إرسال طلب، تأكد أن العنصر قانوني وآمن ومسموح به وفق قواعد النقل والجمارك المحلية.',
+  'app.restrictedItems.waylerNote':
+    'قبل قبول طلب، تأكد أن العنصر قانوني وآمن، وتحقق من الحجم والوزن والمحتوى قبل الموافقة على حمله.',
+  'app.restrictedItems.keepInsideWayly':
+    'احتفظ بتفاصيل العنصر والاتفاقات داخل Wayly ليكون هناك سجل واضح عند النزاع.',
+  'app.restrictedItems.categoriesTitle': 'أمثلة على عناصر محظورة أو عالية المخاطر',
+  'app.restrictedItems.categoryIllegalGoods': 'بضائع غير قانونية أو ممتلكات مسروقة',
+  'app.restrictedItems.categoryWeaponsDangerous': 'أسلحة أو متفجرات أو عناصر خطرة أخرى',
+  'app.restrictedItems.categoryDrugsControlled': 'مخدرات أو مواد خاضعة للرقابة',
+  'app.restrictedItems.categoryCashFinancial': 'نقد أو أدوات مالية عالية القيمة',
+  'app.restrictedItems.categoryFragileTemperature':
+    'عناصر هشة أو حساسة للحرارة ما لم يُتفق عليها مسبقًا بوضوح',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals':
+    'سوائل أو بطاريات أو مواد كيميائية أو عناصر مقيدة بقواعد الطيران أو الجمارك',
+  'app.restrictedItems.categoryDocuments':
+    'وثائق شخصية أو جوازات سفر فقط عندما يسمح القانون وقواعد المنصة بذلك',
+  'app.restrictedItems.customsReminder':
+    'راجع قواعد الجمارك والطيران والناقل المحلية قبل إرسال عنصر أو قبوله.',
+  'app.restrictedItems.noEvasionAdvice':
+    'Wayly لا يقدم إرشادات لتجاوز الجمارك أو الأمن أو الضوابط القانونية.',
   'app.senderWaylers.resultsTitle': 'النتائج',
   'app.senderWaylers.status': 'الحالة',
   'app.senderWaylers.availableFrom': 'متاح من',
@@ -9840,6 +10011,23 @@ const zh: Dictionary = {
   'app.senderRequest.ready': '请求可发送',
   'app.senderRequest.submitting': '正在发送请求…',
   'app.senderRequest.messageCounter': '剩余 {count} 个字符',
+  'app.restrictedItems.title': '受限与不安全物品',
+  'app.restrictedItems.subtitle': 'Wayly 不验证物品合法性。您需自行遵守当地法律与运输规则。',
+  'app.restrictedItems.senderNote': '发送请求前，请确认物品合法、安全，并符合当地运输与海关规定。',
+  'app.restrictedItems.waylerNote':
+    '接受请求前，请确认物品合法、安全，并在同意携带前核实尺寸、重量与内容。',
+  'app.restrictedItems.keepInsideWayly':
+    '请在 Wayly 内保留物品详情与约定，以便发生纠纷时有清晰记录。',
+  'app.restrictedItems.categoriesTitle': '受限或高风险物品示例',
+  'app.restrictedItems.categoryIllegalGoods': '非法商品或赃物',
+  'app.restrictedItems.categoryWeaponsDangerous': '武器、爆炸物或其他危险物品',
+  'app.restrictedItems.categoryDrugsControlled': '毒品或受控物质',
+  'app.restrictedItems.categoryCashFinancial': '现金或高价值金融工具',
+  'app.restrictedItems.categoryFragileTemperature': '易碎或温控敏感物品，除非事先明确约定',
+  'app.restrictedItems.categoryLiquidsBatteriesChemicals': '液体、电池、化学品或航空/海关限制物品',
+  'app.restrictedItems.categoryDocuments': '个人证件或护照，仅在法律与平台规则允许时',
+  'app.restrictedItems.customsReminder': '发送或接受物品前，请查阅当地海关、航空公司与承运规则。',
+  'app.restrictedItems.noEvasionAdvice': 'Wayly 不提供规避海关、安检或法律管控的建议。',
   'app.senderWaylers.resultsTitle': '结果',
   'app.senderWaylers.status': '状态',
   'app.senderWaylers.availableFrom': '可用开始',

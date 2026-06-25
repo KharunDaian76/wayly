@@ -29,6 +29,7 @@ import {
   SenderRequestSafetyChecklist,
   SenderRequestSummary,
 } from '@/components/app/sender-request-composer';
+import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -1086,6 +1087,7 @@ export function SenderWaylersPanel({
 
                           <SenderRequestSummary form={requestForm} />
                           <SenderRequestSafetyChecklist />
+                          <RestrictedItemsSafetyNote variant="sender" />
                           <SenderRequestGoodTips />
 
                           <div className="flex flex-wrap items-center justify-between gap-2">
