@@ -144,7 +144,11 @@ export class DisputesService {
   }
 
   async listForOperations(query: DisputesListQueryInput): Promise<AdminDisputeListResponse> {
-    const where: Prisma.DisputeWhereInput = query.status ? { status: query.status } : {};
+    const where: Prisma.DisputeWhereInput = {
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.orderId ? { orderId: query.orderId } : {}),
+      ...(query.openedById ? { openedById: query.openedById } : {}),
+    };
 
     const skip = (query.page - 1) * query.limit;
 

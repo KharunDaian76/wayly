@@ -1,6 +1,8 @@
 'use client';
 
 import type { AdminKycQueueItem, KycStatus, UserRole } from '@wayly/types';
+import { KycStatus as KycStatusEnum } from '@wayly/types';
+import type { KycVerificationsListQuery } from '@wayly/sdk';
 import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -19,6 +21,48 @@ const LISTING_CARD_CLASS = cn(
   'wayly-order-card rounded-xl px-4 py-4 text-sm',
   'wayly-feed-item-enter',
 );
+
+const FILTER_SELECT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const FILTER_INPUT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const QUEUE_PAGE_LIMIT = 50;
+
+const KYC_STATUS_OPTIONS = Object.values(KycStatusEnum);
+
+type KycFilterForm = {
+  status: KycStatus | '';
+  userId: string;
+  country: string;
+};
+
+const DEFAULT_KYC_FILTER_FORM: KycFilterForm = {
+  status: '',
+  userId: '',
+  country: '',
+};
+
+function hasActiveKycFilters(filters: KycFilterForm): boolean {
+  return Boolean(filters.status || filters.userId.trim() || filters.country.trim());
+}
+
+function buildKycListQuery(page: number, filters: KycFilterForm): KycVerificationsListQuery {
+  const query: KycVerificationsListQuery = { page, limit: QUEUE_PAGE_LIMIT };
+  if (filters.status) {
+    query.status = filters.status;
+  }
+  const userId = filters.userId.trim();
+  if (userId) {
+    query.userId = userId;
+  }
+  const country = filters.country.trim();
+  if (country) {
+    query.country = country;
+  }
+  return query;
+}
 
 export type AdminKycQueuePanelProps = {
   roles: UserRole[];
@@ -67,26 +111,52 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
   const [cardActions, setCardActions] = useState<Record<string, CardAction | null>>({});
   const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
   const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filterForm, setFilterForm] = useState<KycFilterForm>(DEFAULT_KYC_FILTER_FORM);
+  const [appliedFilters, setAppliedFilters] = useState<KycFilterForm>(DEFAULT_KYC_FILTER_FORM);
 
-  const loadKycQueue = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const response = await api.admin.listKycVerifications({ page: 1, limit: 50 });
-      setItems(response.items);
-      setLoadedOnce(true);
-    } catch {
-      setLoadError(t('app.admin.kycQueueLoadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const fetchKycQueue = useCallback(
+    async (pageNumber: number, filters: KycFilterForm) => {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const response = await api.admin.listKycVerifications(
+          buildKycListQuery(pageNumber, filters),
+        );
+        setItems(response.items);
+        setPage(response.page);
+        setTotal(response.total);
+        setLoadedOnce(true);
+      } catch {
+        setLoadError(t('app.admin.kycQueueLoadFailed'));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [t],
+  );
+
+  const loadKycQueue = useCallback(() => {
+    void fetchKycQueue(page, appliedFilters);
+  }, [appliedFilters, fetchKycQueue, page]);
+
+  const handleApplyFilters = useCallback(() => {
+    setAppliedFilters(filterForm);
+    void fetchKycQueue(1, filterForm);
+  }, [fetchKycQueue, filterForm]);
+
+  const handleClearFilters = useCallback(() => {
+    setFilterForm(DEFAULT_KYC_FILTER_FORM);
+    setAppliedFilters(DEFAULT_KYC_FILTER_FORM);
+    void fetchKycQueue(1, DEFAULT_KYC_FILTER_FORM);
+  }, [fetchKycQueue]);
 
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
-      void loadKycQueue();
+      void fetchKycQueue(1, DEFAULT_KYC_FILTER_FORM);
     }
-  }, [roles, loadKycQueue]);
+  }, [roles, fetchKycQueue]);
 
   const updateItemInList = useCallback((updated: AdminKycQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -162,7 +232,10 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
   }
 
   const showInitialLoading = loading && !loadedOnce;
-  const showEmpty = loadedOnce && !loadError && items.length === 0;
+  const filtersActive = hasActiveKycFilters(appliedFilters);
+  const showEmpty = loadedOnce && !loadError && items.length === 0 && !filtersActive;
+  const showFilteredEmpty = loadedOnce && !loadError && items.length === 0 && filtersActive;
+  const totalPages = Math.max(1, Math.ceil(total / QUEUE_PAGE_LIMIT));
 
   return (
     <section
@@ -180,6 +253,87 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
       </div>
 
       <div className="px-1 pb-1">
+        <div className="mb-3 px-2">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">
+            {t('app.admin.adminKycFilters')}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">{t('app.admin.adminKycStatusFilter')}</span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.status}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    status: event.target.value as KycFilterForm['status'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminKycAllStatuses')}</option>
+                {KYC_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminKycStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">{t('app.admin.adminKycUserIdFilter')}</span>
+              <input
+                type="text"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.userId}
+                placeholder={t('app.admin.adminKycUserIdFilter')}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    userId: event.target.value.trim(),
+                  }))
+                }
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">{t('app.admin.adminKycCountryFilter')}</span>
+              <input
+                type="text"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.country}
+                placeholder="DE"
+                maxLength={80}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    country: event.target.value,
+                  }))
+                }
+              />
+            </label>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleApplyFilters}
+            >
+              {t('app.admin.adminQueueApplyFilters')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleClearFilters}
+            >
+              {t('app.admin.adminQueueClearFilters')}
+            </Button>
+          </div>
+        </div>
+
         {loadError ? (
           <PanelErrorState
             message={loadError}
@@ -199,6 +353,13 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
         {showEmpty ? (
           <PanelEmptyState
             title={t('app.admin.noKycReviewsTitle')}
+            body={t('app.admin.noKycReviewsBody')}
+          />
+        ) : null}
+
+        {showFilteredEmpty ? (
+          <PanelEmptyState
+            title={t('app.admin.adminKycNoFilteredResults')}
             body={t('app.admin.noKycReviewsBody')}
           />
         ) : null}
@@ -363,8 +524,39 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
           </ul>
         ) : null}
 
-        {!showInitialLoading && items.length > 0 && !loadError ? (
-          <div className="flex justify-end px-3 pb-2">
+        {!showInitialLoading && (loadedOnce || items.length > 0) && !loadError ? (
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-2">
+            {totalPages > 1 ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page <= 1}
+                  onClick={() => void fetchKycQueue(page - 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueuePreviousPage')}
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {t('app.admin.adminQueuePageLabel')
+                    .replace('{page}', String(page))
+                    .replace('{total}', String(totalPages))}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page >= totalPages}
+                  onClick={() => void fetchKycQueue(page + 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueueNextPage')}
+                </Button>
+              </div>
+            ) : (
+              <span />
+            )}
             <Button
               type="button"
               variant="outline"

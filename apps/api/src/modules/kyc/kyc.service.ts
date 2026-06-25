@@ -139,7 +139,13 @@ export class KycService {
   }
 
   async listForOperations(query: KycVerificationsListQueryInput): Promise<AdminKycListResponse> {
-    const where: Prisma.KycVerificationWhereInput = query.status ? { status: query.status } : {};
+    const where: Prisma.KycVerificationWhereInput = {
+      ...(query.status ? { status: query.status } : {}),
+      ...(query.userId ? { userId: query.userId } : {}),
+      ...(query.country
+        ? { country: { equals: query.country, mode: 'insensitive' as const } }
+        : {}),
+    };
 
     const skip = (query.page - 1) * query.limit;
 

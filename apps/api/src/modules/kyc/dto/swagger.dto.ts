@@ -136,3 +136,21 @@ export class AdminKycListResponseDto {
   @ApiProperty({ example: 0 })
   total!: number;
 }
+
+/** Query parameters for GET /admin/kyc-verifications. */
+export class KycVerificationsListQueryDto {
+  @ApiPropertyOptional({ example: 1, default: 1, minimum: 1 })
+  page?: number;
+
+  @ApiPropertyOptional({ example: 20, default: 20, minimum: 1, maximum: 100 })
+  limit?: number;
+
+  @ApiPropertyOptional({ enum: ['NONE', 'PENDING', 'APPROVED', 'REJECTED'] })
+  status?: string;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  userId?: string;
+
+  @ApiPropertyOptional({ example: 'DE', minLength: 2, maxLength: 80 })
+  country?: string;
+}

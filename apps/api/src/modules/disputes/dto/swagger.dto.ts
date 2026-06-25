@@ -248,3 +248,23 @@ export class AdminDisputeListResponseDto {
   @ApiProperty({ example: 0 })
   total!: number;
 }
+
+/** Query parameters for GET /admin/disputes. */
+export class AdminDisputesListQueryDto {
+  @ApiPropertyOptional({ example: 1, default: 1, minimum: 1 })
+  page?: number;
+
+  @ApiPropertyOptional({ example: 20, default: 20, minimum: 1, maximum: 100 })
+  limit?: number;
+
+  @ApiPropertyOptional({
+    enum: ['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED', 'CANCELLED'],
+  })
+  status?: string;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  orderId?: string;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  openedById?: string;
+}

@@ -2,7 +2,7 @@ import { KycStatus } from '@wayly/types';
 import { z } from 'zod';
 
 import { enumSchema } from './helpers';
-import { countryCodeSchema, nonEmptyStringSchema } from './schemas';
+import { countryCodeSchema, idSchema, nonEmptyStringSchema } from './schemas';
 
 /**
  * KYC request schemas (shared by backend validation and frontend forms).
@@ -33,6 +33,8 @@ export const kycVerificationsListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: enumSchema(KycStatus).optional(),
+  userId: idSchema.optional(),
+  country: z.string().trim().min(2).max(80).optional(),
 });
 
 export type KycVerificationsListQueryInput = z.infer<typeof kycVerificationsListQuerySchema>;

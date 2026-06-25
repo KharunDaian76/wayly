@@ -58,6 +58,12 @@ function buildDisputesQuery(query?: DisputesListQuery): string {
   if (query.status !== undefined) {
     params.set('status', query.status);
   }
+  if (query.orderId !== undefined) {
+    params.set('orderId', query.orderId);
+  }
+  if (query.openedById !== undefined) {
+    params.set('openedById', query.openedById);
+  }
   const qs = params.toString();
   return qs ? `?${qs}` : '';
 }
@@ -75,6 +81,12 @@ function buildKycVerificationsQuery(query?: KycVerificationsListQuery): string {
   }
   if (query.status !== undefined) {
     params.set('status', query.status);
+  }
+  if (query.userId !== undefined) {
+    params.set('userId', query.userId);
+  }
+  if (query.country !== undefined) {
+    params.set('country', query.country);
   }
   const qs = params.toString();
   return qs ? `?${qs}` : '';

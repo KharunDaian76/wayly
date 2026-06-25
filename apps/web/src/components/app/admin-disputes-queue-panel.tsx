@@ -6,6 +6,8 @@ import type {
   DisputeStatus,
   UserRole,
 } from '@wayly/types';
+import { DisputeStatus as DisputeStatusEnum } from '@wayly/types';
+import type { DisputesListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import {
   AdminDisputeResolutionOutcome,
@@ -39,6 +41,48 @@ const TEXTAREA_CLASS = cn(
 
 const SELECT_CLASS =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
+
+const FILTER_SELECT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const FILTER_INPUT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const QUEUE_PAGE_LIMIT = 50;
+
+const DISPUTE_STATUS_OPTIONS = Object.values(DisputeStatusEnum);
+
+type DisputeFilterForm = {
+  status: DisputeStatus | '';
+  orderId: string;
+  openedById: string;
+};
+
+const DEFAULT_DISPUTE_FILTER_FORM: DisputeFilterForm = {
+  status: '',
+  orderId: '',
+  openedById: '',
+};
+
+function hasActiveDisputeFilters(filters: DisputeFilterForm): boolean {
+  return Boolean(filters.status || filters.orderId.trim() || filters.openedById.trim());
+}
+
+function buildDisputesListQuery(page: number, filters: DisputeFilterForm): DisputesListQuery {
+  const query: DisputesListQuery = { page, limit: QUEUE_PAGE_LIMIT };
+  if (filters.status) {
+    query.status = filters.status;
+  }
+  const orderId = filters.orderId.trim();
+  if (orderId) {
+    query.orderId = orderId;
+  }
+  const openedById = filters.openedById.trim();
+  if (openedById) {
+    query.openedById = openedById;
+  }
+  return query;
+}
 
 const MAX_RESOLUTION_NOTE_LENGTH = 2000;
 
@@ -136,26 +180,52 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
   const [resolvingIds, setResolvingIds] = useState<Record<string, boolean>>({});
   const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
   const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filterForm, setFilterForm] = useState<DisputeFilterForm>(DEFAULT_DISPUTE_FILTER_FORM);
+  const [appliedFilters, setAppliedFilters] = useState<DisputeFilterForm>(
+    DEFAULT_DISPUTE_FILTER_FORM,
+  );
 
-  const loadDisputes = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const response = await api.admin.listDisputes({ page: 1, limit: 50 });
-      setItems(response.items);
-      setLoadedOnce(true);
-    } catch {
-      setLoadError(t('app.admin.disputesLoadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const fetchDisputes = useCallback(
+    async (pageNumber: number, filters: DisputeFilterForm) => {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const response = await api.admin.listDisputes(buildDisputesListQuery(pageNumber, filters));
+        setItems(response.items);
+        setPage(response.page);
+        setTotal(response.total);
+        setLoadedOnce(true);
+      } catch {
+        setLoadError(t('app.admin.disputesLoadFailed'));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [t],
+  );
+
+  const loadDisputes = useCallback(() => {
+    void fetchDisputes(page, appliedFilters);
+  }, [appliedFilters, fetchDisputes, page]);
+
+  const handleApplyFilters = useCallback(() => {
+    setAppliedFilters(filterForm);
+    void fetchDisputes(1, filterForm);
+  }, [fetchDisputes, filterForm]);
+
+  const handleClearFilters = useCallback(() => {
+    setFilterForm(DEFAULT_DISPUTE_FILTER_FORM);
+    setAppliedFilters(DEFAULT_DISPUTE_FILTER_FORM);
+    void fetchDisputes(1, DEFAULT_DISPUTE_FILTER_FORM);
+  }, [fetchDisputes]);
 
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
-      void loadDisputes();
+      void fetchDisputes(1, DEFAULT_DISPUTE_FILTER_FORM);
     }
-  }, [roles, loadDisputes]);
+  }, [roles, fetchDisputes]);
 
   const updateItemInList = useCallback((updated: AdminDisputeQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -210,7 +280,10 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
   }
 
   const showInitialLoading = loading && !loadedOnce;
-  const showEmpty = loadedOnce && !loadError && items.length === 0;
+  const filtersActive = hasActiveDisputeFilters(appliedFilters);
+  const showEmpty = loadedOnce && !loadError && items.length === 0 && !filtersActive;
+  const showFilteredEmpty = loadedOnce && !loadError && items.length === 0 && filtersActive;
+  const totalPages = Math.max(1, Math.ceil(total / QUEUE_PAGE_LIMIT));
 
   return (
     <section
@@ -230,6 +303,92 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
       </div>
 
       <div className="px-1 pb-1">
+        <div className="mb-3 px-2">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">
+            {t('app.admin.adminDisputesFilters')}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminDisputesStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.status}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    status: event.target.value as DisputeFilterForm['status'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminDisputesAllStatuses')}</option>
+                {DISPUTE_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(disputeStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminDisputesOrderIdFilter')}
+              </span>
+              <input
+                type="text"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.orderId}
+                placeholder={t('app.admin.adminDisputesOrderIdFilter')}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    orderId: event.target.value.trim(),
+                  }))
+                }
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminDisputesOpenedByIdFilter')}
+              </span>
+              <input
+                type="text"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.openedById}
+                placeholder={t('app.admin.adminDisputesOpenedByIdFilter')}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    openedById: event.target.value.trim(),
+                  }))
+                }
+              />
+            </label>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleApplyFilters}
+            >
+              {t('app.admin.adminQueueApplyFilters')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleClearFilters}
+            >
+              {t('app.admin.adminQueueClearFilters')}
+            </Button>
+          </div>
+        </div>
+
         {loadError ? (
           <PanelErrorState
             message={loadError}
@@ -249,6 +408,13 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
         {showEmpty ? (
           <PanelEmptyState
             title={t('app.admin.noDisputesTitle')}
+            body={t('app.admin.noDisputesBody')}
+          />
+        ) : null}
+
+        {showFilteredEmpty ? (
+          <PanelEmptyState
+            title={t('app.admin.adminDisputesNoFilteredResults')}
             body={t('app.admin.noDisputesBody')}
           />
         ) : null}
@@ -470,8 +636,39 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
           </ul>
         ) : null}
 
-        {!showInitialLoading && items.length > 0 && !loadError ? (
-          <div className="flex justify-end px-3 pb-2">
+        {!showInitialLoading && (loadedOnce || items.length > 0) && !loadError ? (
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-2">
+            {totalPages > 1 ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page <= 1}
+                  onClick={() => void fetchDisputes(page - 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueuePreviousPage')}
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {t('app.admin.adminQueuePageLabel')
+                    .replace('{page}', String(page))
+                    .replace('{total}', String(totalPages))}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page >= totalPages}
+                  onClick={() => void fetchDisputes(page + 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueueNextPage')}
+                </Button>
+              </div>
+            ) : (
+              <span />
+            )}
             <Button
               type="button"
               variant="outline"
