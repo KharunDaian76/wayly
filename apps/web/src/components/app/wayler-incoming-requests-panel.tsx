@@ -12,14 +12,20 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
+import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
+import {
+  WaylerRequestAcceptGuidance,
+  WaylerRequestStatusNote,
+  WaylerRequestSummary,
+} from '@/components/app/wayler-request-summary';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
 const REQUEST_CARD_CLASS = cn(
-  'rounded-lg border border-border bg-background/60 px-3 py-3 text-sm',
+  'wayly-order-card rounded-xl px-4 py-4 text-sm',
   'wayly-feed-item-enter',
 );
 
@@ -41,20 +47,6 @@ type WaylerIncomingRequestsPanelProps = {
   /** Refresh parent accepted-order lists after accept creates a DeliveryOrder. */
   onRequestAccepted?: () => void;
 };
-
-function formatLocation(city: string, country: string): string {
-  return [city, country].filter(Boolean).join(', ') || '—';
-}
-
-function formatRequestRoute(request: WaylerAvailabilityRequestSummary): string {
-  const pickup = formatLocation(request.pickupCity, request.pickupCountry);
-  const dropoff = formatLocation(request.dropoffCity, request.dropoffCountry);
-  return `${pickup} → ${dropoff}`;
-}
-
-function formatRewardCents(cents: number, currency: string): string {
-  return `${(cents / 100).toFixed(2)} ${currency}`;
-}
 
 function formatDateTime(value: string | null): string {
   if (!value) {
@@ -86,7 +78,7 @@ function requestStatusBadgeClass(status: WaylerAvailabilityRequestStatus): strin
     case WaylerAvailabilityRequestStatus.PENDING:
       return cn(base, 'wayly-status-open');
     case WaylerAvailabilityRequestStatus.ACCEPTED:
-      return cn(base, 'wayly-status-default');
+      return cn(base, 'wayly-status-accepted');
     case WaylerAvailabilityRequestStatus.DECLINED:
     case WaylerAvailabilityRequestStatus.CANCELLED:
     case WaylerAvailabilityRequestStatus.EXPIRED:
@@ -243,9 +235,10 @@ export function WaylerIncomingRequestsPanel({
               body={t('app.availabilityRequests.waylerEmptyBody')}
             />
           ) : requests.length > 0 ? (
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-4">
               {requests.map((request) => {
                 const isPending = request.status === WaylerAvailabilityRequestStatus.PENDING;
+                const isAccepted = request.status === WaylerAvailabilityRequestStatus.ACCEPTED;
                 const isAccepting = actionBusy?.id === request.id && actionBusy.action === 'accept';
                 const isDeclining =
                   actionBusy?.id === request.id && actionBusy.action === 'decline';
@@ -255,55 +248,23 @@ export function WaylerIncomingRequestsPanel({
                 return (
                   <li key={request.id} className={REQUEST_CARD_CLASS}>
                     <div className="flex flex-wrap items-start justify-between gap-2">
-                      <p className="font-medium">{request.title}</p>
+                      <div className="min-w-0">
+                        <p className="font-semibold">{request.title}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground">
+                          {t('app.availabilityRequests.senderRequest')} ·{' '}
+                          {formatDateTime(request.createdAt)}
+                        </p>
+                      </div>
                       <span className={requestStatusBadgeClass(request.status)}>
                         {t(requestStatusKey(request.status))}
                       </span>
                     </div>
 
-                    <p className="mt-1 text-muted-foreground">
-                      {t('app.availabilityRequests.senderRequest')}
-                    </p>
-
-                    <dl className="mt-2 flex flex-col gap-1">
-                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                        <dt className="text-muted-foreground">
-                          {t('app.availabilityRequests.packageDescription')}
-                        </dt>
-                        <dd className="break-words sm:max-w-[60%] sm:text-right">
-                          {request.packageDescription}
-                        </dd>
-                      </div>
-                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                        <dt className="text-muted-foreground">
-                          {t('app.availabilityRequests.requestRoute')}
-                        </dt>
-                        <dd>{formatRequestRoute(request)}</dd>
-                      </div>
-                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                        <dt className="text-muted-foreground">
-                          {t('app.availabilityRequests.proposedReward')}
-                        </dt>
-                        <dd>{formatRewardCents(request.proposedRewardCents, request.currency)}</dd>
-                      </div>
-                    </dl>
-
-                    <p className="mt-1 text-muted-foreground">
-                      {formatDateTime(request.createdAt)}
-                    </p>
-
-                    {request.message ? (
-                      <p className="mt-2 break-words">
-                        <span className="text-muted-foreground">
-                          {t('app.availabilityRequests.senderMessage')}:{' '}
-                        </span>
-                        {request.message}
-                      </p>
-                    ) : null}
+                    <WaylerRequestSummary compact className="mt-3" request={request} />
 
                     {request.responseMessage ? (
-                      <p className="mt-2 break-words">
-                        <span className="text-muted-foreground">
+                      <p className="mt-3 break-words text-sm">
+                        <span className="font-medium text-muted-foreground">
                           {t('app.availabilityRequests.responseMessage')}:{' '}
                         </span>
                         {request.responseMessage}
@@ -311,47 +272,62 @@ export function WaylerIncomingRequestsPanel({
                     ) : null}
 
                     {request.deliveryOrderId ? (
-                      <AvailabilityRequestConvertedOrder
-                        deliveryOrderId={request.deliveryOrderId}
-                      />
+                      <div className="mt-3 flex flex-col gap-1">
+                        <AvailabilityRequestConvertedOrder
+                          deliveryOrderId={request.deliveryOrderId}
+                        />
+                        <WaylerRequestStatusNote convertedToOrder />
+                      </div>
+                    ) : isAccepted ? (
+                      <WaylerRequestStatusNote convertedToOrder={false} className="mt-3" />
                     ) : null}
 
                     {isPending ? (
-                      <div className="mt-3 flex flex-col gap-3">
-                        <label className="flex flex-col gap-1.5 text-sm">
-                          <span className="font-medium">
-                            {t('app.availabilityRequests.responseMessageField')}
-                          </span>
-                          <textarea
-                            className={TEXTAREA_CLASS}
-                            value={responseDrafts[request.id] ?? ''}
-                            disabled={actionDisabled}
-                            onChange={(e) => updateResponseDraft(request.id, e.target.value)}
-                          />
-                        </label>
-                        <div className="wayly-action-group flex-col sm:flex-row">
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            disabled={acceptDisabled}
-                            onClick={() => void handleAccept(request.id)}
-                          >
-                            {isAccepting
-                              ? t('app.senderWaylers.loading')
-                              : t('app.availabilityRequests.acceptRequest')}
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            disabled={actionDisabled}
-                            onClick={() => void handleDecline(request.id)}
-                          >
-                            {isDeclining
-                              ? t('app.senderWaylers.loading')
-                              : t('app.availabilityRequests.declineRequest')}
-                          </Button>
+                      <div className="mt-4 flex flex-col gap-3 border-t border-border/50 pt-4">
+                        <RestrictedItemsSafetyNote variant="wayler" className="text-[11px]" />
+                        <WaylerRequestAcceptGuidance compact />
+
+                        <div>
+                          <h4 className="text-sm font-medium">
+                            {t('app.waylerRequests.requestActionsTitle')}
+                          </h4>
+                          <label className="mt-2 flex flex-col gap-1.5 text-sm">
+                            <span className="font-medium text-muted-foreground">
+                              {t('app.availabilityRequests.responseMessageField')}
+                            </span>
+                            <textarea
+                              className={TEXTAREA_CLASS}
+                              value={responseDrafts[request.id] ?? ''}
+                              disabled={actionDisabled}
+                              onChange={(e) => updateResponseDraft(request.id, e.target.value)}
+                            />
+                          </label>
+                          <div className="wayly-action-group mt-3 flex-col sm:flex-row">
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              className="w-full sm:w-auto"
+                              disabled={acceptDisabled}
+                              onClick={() => void handleAccept(request.id)}
+                            >
+                              {isAccepting
+                                ? t('app.waylerRequests.accepting')
+                                : t('app.waylerRequests.acceptRequest')}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full sm:w-auto"
+                              disabled={actionDisabled}
+                              onClick={() => void handleDecline(request.id)}
+                            >
+                              {isDeclining
+                                ? t('app.waylerRequests.declining')
+                                : t('app.waylerRequests.declineRequest')}
+                            </Button>
+                          </div>
                           {!waylerHasActiveAccess ? (
-                            <p className="text-xs text-muted-foreground" role="note">
+                            <p className="mt-2 text-xs text-muted-foreground" role="note">
                               {t('app.availabilityRequests.accessRequiredForAcceptRequest')}
                             </p>
                           ) : null}
