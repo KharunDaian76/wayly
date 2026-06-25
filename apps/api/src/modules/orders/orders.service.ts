@@ -7,15 +7,28 @@ import {
 import {
   DeliveryOrderStatus as PrismaDeliveryOrderStatus,
   DeliveryOrderType as PrismaDeliveryOrderType,
+  OrderAdminReviewStatus as PrismaOrderAdminReviewStatus,
   Prisma,
 } from '@prisma/client';
 import type {
   AdminOrderListResponse,
+  AdminOrderQueueItem,
   DeliveryOrderDetail,
   DeliveryOrderSummary,
 } from '@wayly/types';
-import { DeliveryOrderStatus, NotificationType } from '@wayly/types';
+import {
+  AdminAuditLogAction,
+  AdminAuditLogTargetType,
+  DeliveryOrderStatus,
+  NotificationType,
+  OrderAdminReviewStatus,
+} from '@wayly/types';
 import type {
+  AdminOrderClearManualReviewInput,
+  AdminOrderClearRiskInput,
+  AdminOrderDecisionInput,
+  AdminOrderManualReviewInput,
+  AdminOrderRiskFlagInput,
   AdminOrdersListQueryInput,
   CreateDeliveryOrderInput,
   DeliveryOrderQueryInput,
@@ -25,6 +38,10 @@ import type {
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import {
+  AdminAuditLogService,
+  type AdminAuditRequestContext,
+} from '../admin-audit/admin-audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
@@ -63,7 +80,19 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
     private readonly waylerAccess: WaylerAccessService,
+    private readonly adminAuditLog: AdminAuditLogService,
   ) {}
+
+  private readonly adminOrderInclude = {
+    sender: { select: { displayName: true, email: true } },
+    acceptedWayler: { select: { displayName: true, email: true } },
+    paymentIntent: { select: { id: true, status: true } },
+    disputes: {
+      select: { id: true, status: true },
+      orderBy: { createdAt: 'desc' as const },
+      take: 1,
+    },
+  } satisfies Prisma.DeliveryOrderInclude;
 
   async create(user: RequestUser, input: CreateDeliveryOrderInput): Promise<DeliveryOrderDetail> {
     requireKycApproved(user);
@@ -101,9 +130,12 @@ export class OrdersService {
   }
 
   async listForOperations(query: AdminOrdersListQueryInput): Promise<AdminOrderListResponse> {
-    const where: Prisma.DeliveryOrderWhereInput = query.status
-      ? { status: query.status as PrismaDeliveryOrderStatus }
-      : {};
+    const where: Prisma.DeliveryOrderWhereInput = {
+      ...(query.status ? { status: query.status as PrismaDeliveryOrderStatus } : {}),
+      ...(query.adminReviewStatus
+        ? { adminReviewStatus: query.adminReviewStatus as PrismaOrderAdminReviewStatus }
+        : {}),
+    };
 
     const skip = (query.page - 1) * query.limit;
 
@@ -113,16 +145,7 @@ export class OrdersService {
         orderBy: { createdAt: 'desc' },
         skip,
         take: query.limit,
-        include: {
-          sender: { select: { displayName: true, email: true } },
-          acceptedWayler: { select: { displayName: true, email: true } },
-          paymentIntent: { select: { status: true } },
-          disputes: {
-            select: { status: true },
-            orderBy: { createdAt: 'desc' },
-            take: 1,
-          },
-        },
+        include: this.adminOrderInclude,
       }),
       this.prisma.deliveryOrder.count({ where }),
     ]);
@@ -478,5 +501,253 @@ export class OrdersService {
     if (input.notes !== undefined) data.notes = input.notes;
 
     return data;
+  }
+
+  async markManualReviewForOperations(
+    actor: RequestUser,
+    orderId: string,
+    body: AdminOrderManualReviewInput,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminOrderQueueItem> {
+    const order = await this.findOrderForOperations(orderId);
+    const previousReviewStatus = order.adminReviewStatus as OrderAdminReviewStatus;
+
+    if (previousReviewStatus === OrderAdminReviewStatus.MANUAL_REVIEW) {
+      throw new ConflictException('Order is already marked for manual review');
+    }
+
+    const note = body.note.trim();
+    const now = new Date();
+
+    await this.prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: {
+        adminReviewStatus: PrismaOrderAdminReviewStatus.MANUAL_REVIEW,
+        adminReviewDecision: null,
+        adminReviewNote: note,
+        adminReviewAt: now,
+        adminReviewByUserId: actor.id,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.ORDER_MANUAL_REVIEW_MARKED,
+      targetType: AdminAuditLogTargetType.DELIVERY_ORDER,
+      targetId: order.id,
+      targetUserId: order.senderId,
+      summary: `Marked order ${order.id} for manual review`,
+      metadata: this.buildOrderReviewAuditMetadata(order, {
+        previousReviewStatus,
+        newReviewStatus: OrderAdminReviewStatus.MANUAL_REVIEW,
+        reasonLength: note.length,
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(orderId);
+  }
+
+  async clearManualReviewForOperations(
+    actor: RequestUser,
+    orderId: string,
+    body: AdminOrderClearManualReviewInput | undefined,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminOrderQueueItem> {
+    const order = await this.findOrderForOperations(orderId);
+    const previousReviewStatus = order.adminReviewStatus as OrderAdminReviewStatus;
+
+    if (previousReviewStatus !== OrderAdminReviewStatus.MANUAL_REVIEW) {
+      throw new ConflictException('Order is not marked for manual review');
+    }
+
+    const note = body?.note?.trim();
+
+    await this.prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: this.clearReviewFields(),
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.ORDER_MANUAL_REVIEW_CLEARED,
+      targetType: AdminAuditLogTargetType.DELIVERY_ORDER,
+      targetId: order.id,
+      targetUserId: order.senderId,
+      summary: `Cleared manual review flag on order ${order.id}`,
+      metadata: this.buildOrderReviewAuditMetadata(order, {
+        previousReviewStatus,
+        newReviewStatus: OrderAdminReviewStatus.NONE,
+        ...(note ? { noteLength: note.length } : {}),
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(orderId);
+  }
+
+  async recordDecisionForOperations(
+    actor: RequestUser,
+    orderId: string,
+    body: AdminOrderDecisionInput,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminOrderQueueItem> {
+    const order = await this.findOrderForOperations(orderId);
+    const previousReviewStatus = order.adminReviewStatus as OrderAdminReviewStatus;
+    const note = body.note.trim();
+    const now = new Date();
+
+    await this.prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: {
+        adminReviewStatus: PrismaOrderAdminReviewStatus.DECISION_RECORDED,
+        adminReviewDecision: body.decision,
+        adminReviewNote: note,
+        adminReviewAt: now,
+        adminReviewByUserId: actor.id,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.ORDER_DECISION_RECORDED,
+      targetType: AdminAuditLogTargetType.DELIVERY_ORDER,
+      targetId: order.id,
+      targetUserId: order.senderId,
+      summary: `Recorded decision on order ${order.id}`,
+      metadata: this.buildOrderReviewAuditMetadata(order, {
+        previousReviewStatus,
+        newReviewStatus: OrderAdminReviewStatus.DECISION_RECORDED,
+        decision: body.decision,
+        noteLength: note.length,
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(orderId);
+  }
+
+  async flagRiskForOperations(
+    actor: RequestUser,
+    orderId: string,
+    body: AdminOrderRiskFlagInput,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminOrderQueueItem> {
+    const order = await this.findOrderForOperations(orderId);
+    const previousReviewStatus = order.adminReviewStatus as OrderAdminReviewStatus;
+
+    if (previousReviewStatus === OrderAdminReviewStatus.RISK_FLAGGED) {
+      throw new ConflictException('Order is already flagged for risk');
+    }
+
+    const note = body.note.trim();
+    const now = new Date();
+
+    await this.prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: {
+        adminReviewStatus: PrismaOrderAdminReviewStatus.RISK_FLAGGED,
+        adminReviewDecision: null,
+        adminReviewNote: note,
+        adminReviewAt: now,
+        adminReviewByUserId: actor.id,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.ORDER_RISK_FLAGGED,
+      targetType: AdminAuditLogTargetType.DELIVERY_ORDER,
+      targetId: order.id,
+      targetUserId: order.senderId,
+      summary: `Flagged order ${order.id} for risk review`,
+      metadata: this.buildOrderReviewAuditMetadata(order, {
+        previousReviewStatus,
+        newReviewStatus: OrderAdminReviewStatus.RISK_FLAGGED,
+        reasonLength: note.length,
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(orderId);
+  }
+
+  async clearRiskForOperations(
+    actor: RequestUser,
+    orderId: string,
+    body: AdminOrderClearRiskInput | undefined,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminOrderQueueItem> {
+    const order = await this.findOrderForOperations(orderId);
+    const previousReviewStatus = order.adminReviewStatus as OrderAdminReviewStatus;
+
+    if (previousReviewStatus !== OrderAdminReviewStatus.RISK_FLAGGED) {
+      throw new ConflictException('Order is not flagged for risk');
+    }
+
+    const note = body?.note?.trim();
+
+    await this.prisma.deliveryOrder.update({
+      where: { id: orderId },
+      data: this.clearReviewFields(),
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.ORDER_RISK_CLEARED,
+      targetType: AdminAuditLogTargetType.DELIVERY_ORDER,
+      targetId: order.id,
+      targetUserId: order.senderId,
+      summary: `Cleared risk flag on order ${order.id}`,
+      metadata: this.buildOrderReviewAuditMetadata(order, {
+        previousReviewStatus,
+        newReviewStatus: OrderAdminReviewStatus.NONE,
+        ...(note ? { noteLength: note.length } : {}),
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(orderId);
+  }
+
+  private clearReviewFields(): Prisma.DeliveryOrderUncheckedUpdateInput {
+    return {
+      adminReviewStatus: PrismaOrderAdminReviewStatus.NONE,
+      adminReviewDecision: null,
+      adminReviewNote: null,
+      adminReviewAt: null,
+      adminReviewByUserId: null,
+    };
+  }
+
+  private async findOrderForOperations(orderId: string) {
+    const order = await this.prisma.deliveryOrder.findUnique({
+      where: { id: orderId },
+      include: this.adminOrderInclude,
+    });
+    if (!order) {
+      throw new NotFoundException('Delivery order not found');
+    }
+    return order;
+  }
+
+  private async getAdminQueueItem(orderId: string): Promise<AdminOrderQueueItem> {
+    const order = await this.findOrderForOperations(orderId);
+    return toAdminOrderQueueItem(order);
+  }
+
+  private buildOrderReviewAuditMetadata(
+    order: Awaited<ReturnType<OrdersService['findOrderForOperations']>>,
+    extra: Record<string, unknown>,
+  ): Record<string, unknown> {
+    const latestDispute = order.disputes[0];
+    return {
+      orderStatus: order.status,
+      senderId: order.senderId,
+      ...(order.acceptedWaylerId ? { waylerId: order.acceptedWaylerId } : {}),
+      ...(order.paymentIntent ? { paymentIntentId: order.paymentIntent.id } : {}),
+      ...(latestDispute ? { disputeId: latestDispute.id } : {}),
+      ...extra,
+    };
   }
 }

@@ -277,6 +277,56 @@ export class AdminOrderQueueItemDto {
 
   @ApiProperty()
   proofSubmitted!: boolean;
+
+  @ApiProperty({
+    enum: ['NONE', 'MANUAL_REVIEW', 'DECISION_RECORDED', 'RISK_FLAGGED'],
+    example: 'NONE',
+  })
+  adminReviewStatus!: string;
+
+  @ApiPropertyOptional({
+    enum: ['MONITOR', 'ESCALATE_PAYMENT', 'ESCALATE_DISPUTE', 'NO_ACTION', 'OTHER'],
+  })
+  adminReviewDecision!: string | null;
+
+  @ApiPropertyOptional({ example: 'Internal ops note' })
+  adminReviewNote!: string | null;
+
+  @ApiPropertyOptional({ format: 'date-time' })
+  adminReviewAt!: string | null;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  adminReviewByUserId!: string | null;
+}
+
+export class AdminOrderManualReviewBodyDto {
+  @ApiProperty({ example: 'Route mismatch requires manual review', maxLength: 500 })
+  note!: string;
+}
+
+export class AdminOrderClearManualReviewBodyDto {
+  @ApiPropertyOptional({ example: 'Review completed', maxLength: 500 })
+  note?: string;
+}
+
+export class AdminOrderDecisionBodyDto {
+  @ApiProperty({
+    enum: ['MONITOR', 'ESCALATE_PAYMENT', 'ESCALATE_DISPUTE', 'NO_ACTION', 'OTHER'],
+  })
+  decision!: string;
+
+  @ApiProperty({ example: 'Escalate to payment review queue', maxLength: 500 })
+  note!: string;
+}
+
+export class AdminOrderRiskFlagBodyDto {
+  @ApiProperty({ example: 'Suspicious activity reported', maxLength: 500 })
+  note!: string;
+}
+
+export class AdminOrderClearRiskBodyDto {
+  @ApiPropertyOptional({ example: 'Risk cleared after review', maxLength: 500 })
+  note?: string;
 }
 
 export class AdminOrderListResponseDto {

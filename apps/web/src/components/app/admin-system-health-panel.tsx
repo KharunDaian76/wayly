@@ -41,6 +41,11 @@ export function adminAuditActionKey(action: AdminAuditLogAction): TranslationKey
     PAYMENT_MANUAL_REVIEW_CLEARED: 'app.admin.adminAuditActionPaymentManualReviewCleared',
     PAYMENT_REFUND_DECISION_RECORDED: 'app.admin.adminAuditActionPaymentRefundDecisionRecorded',
     PAYMENT_RELEASE_DECISION_RECORDED: 'app.admin.adminAuditActionPaymentReleaseDecisionRecorded',
+    ORDER_MANUAL_REVIEW_MARKED: 'app.admin.adminAuditActionOrderManualReviewMarked',
+    ORDER_MANUAL_REVIEW_CLEARED: 'app.admin.adminAuditActionOrderManualReviewCleared',
+    ORDER_DECISION_RECORDED: 'app.admin.adminAuditActionOrderDecisionRecorded',
+    ORDER_RISK_FLAGGED: 'app.admin.adminAuditActionOrderRiskFlagged',
+    ORDER_RISK_CLEARED: 'app.admin.adminAuditActionOrderRiskCleared',
   };
   return map[action];
 }
@@ -51,6 +56,7 @@ export function adminAuditTargetKey(targetType: AdminAuditLogTargetType): Transl
     DISPUTE: 'app.admin.adminAuditTargetDispute',
     USER: 'app.admin.adminAuditTargetUser',
     PAYMENT_INTENT: 'app.admin.adminAuditTargetPaymentIntent',
+    DELIVERY_ORDER: 'app.admin.adminAuditTargetDeliveryOrder',
   };
   return map[targetType];
 }

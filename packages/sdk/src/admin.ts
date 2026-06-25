@@ -5,6 +5,7 @@ import type {
   AdminKycListResponse,
   AdminKycQueueItem,
   AdminOrderListResponse,
+  AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
   AdminSystemHealthResponse,
@@ -17,7 +18,14 @@ import type { AdminApi } from './admin.types';
 import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
-import type { AdminOrdersListQuery } from './orders-admin.types';
+import type {
+  AdminOrderClearManualReviewBody,
+  AdminOrderClearRiskBody,
+  AdminOrderDecisionBody,
+  AdminOrderManualReviewBody,
+  AdminOrderRiskFlagBody,
+  AdminOrdersListQuery,
+} from './orders-admin.types';
 import type {
   AdminPaymentClearManualReviewBody,
   AdminPaymentManualReviewBody,
@@ -85,6 +93,9 @@ function buildAdminOrdersQuery(query?: AdminOrdersListQuery): string {
   }
   if (query.status !== undefined) {
     params.set('status', query.status);
+  }
+  if (query.adminReviewStatus !== undefined) {
+    params.set('adminReviewStatus', query.adminReviewStatus);
   }
   const qs = params.toString();
   return qs ? `?${qs}` : '';
@@ -214,6 +225,49 @@ export function createAdminApi(request: Requester): AdminApi {
     listOrders: (query?: AdminOrdersListQuery, accessToken?: string | null) =>
       request<AdminOrderListResponse>(`/admin/orders${buildAdminOrdersQuery(query)}`, {
         method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    markOrderManualReview: (
+      id: string,
+      body: AdminOrderManualReviewBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminOrderQueueItem>(`/admin/orders/${id}/mark-manual-review`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    clearOrderManualReview: (
+      id: string,
+      body?: AdminOrderClearManualReviewBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminOrderQueueItem>(`/admin/orders/${id}/clear-manual-review`, {
+        method: 'POST',
+        body: body ?? {},
+        ...withCookies,
+        accessToken,
+      }),
+    recordOrderDecision: (id: string, body: AdminOrderDecisionBody, accessToken?: string | null) =>
+      request<AdminOrderQueueItem>(`/admin/orders/${id}/record-decision`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    flagOrderRisk: (id: string, body: AdminOrderRiskFlagBody, accessToken?: string | null) =>
+      request<AdminOrderQueueItem>(`/admin/orders/${id}/flag-risk`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    clearOrderRisk: (id: string, body?: AdminOrderClearRiskBody, accessToken?: string | null) =>
+      request<AdminOrderQueueItem>(`/admin/orders/${id}/clear-risk`, {
+        method: 'POST',
+        body: body ?? {},
         ...withCookies,
         accessToken,
       }),

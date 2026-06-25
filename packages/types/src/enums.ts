@@ -91,6 +91,27 @@ export const PaymentAdminReviewDecision = {
 export type PaymentAdminReviewDecision =
   (typeof PaymentAdminReviewDecision)[keyof typeof PaymentAdminReviewDecision];
 
+/** Admin metadata-only order review status (does not change DeliveryOrder.status). */
+export const OrderAdminReviewStatus = {
+  NONE: 'NONE',
+  MANUAL_REVIEW: 'MANUAL_REVIEW',
+  DECISION_RECORDED: 'DECISION_RECORDED',
+  RISK_FLAGGED: 'RISK_FLAGGED',
+} as const;
+export type OrderAdminReviewStatus =
+  (typeof OrderAdminReviewStatus)[keyof typeof OrderAdminReviewStatus];
+
+/** Admin metadata-only order review decision (ops recommendation only). */
+export const OrderAdminReviewDecision = {
+  MONITOR: 'MONITOR',
+  ESCALATE_PAYMENT: 'ESCALATE_PAYMENT',
+  ESCALATE_DISPUTE: 'ESCALATE_DISPUTE',
+  NO_ACTION: 'NO_ACTION',
+  OTHER: 'OTHER',
+} as const;
+export type OrderAdminReviewDecision =
+  (typeof OrderAdminReviewDecision)[keyof typeof OrderAdminReviewDecision];
+
 /** In-app notification categories (dispatch routes land in a later batch). */
 export const NotificationType = {
   ORDER_PUBLISHED: 'ORDER_PUBLISHED',

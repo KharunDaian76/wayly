@@ -1,4 +1,9 @@
-import { DeliveryOrderStatus, DeliveryOrderType, PackageSize } from '@wayly/types';
+import {
+  DeliveryOrderStatus,
+  DeliveryOrderType,
+  OrderAdminReviewStatus,
+  PackageSize,
+} from '@wayly/types';
 import { z } from 'zod';
 
 import { enumSchema } from './helpers';
@@ -68,6 +73,7 @@ export const adminOrdersListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: enumSchema(DeliveryOrderStatus).optional(),
+  adminReviewStatus: enumSchema(OrderAdminReviewStatus).optional(),
 });
 
 export type AdminOrdersListQueryInput = z.infer<typeof adminOrdersListQuerySchema>;

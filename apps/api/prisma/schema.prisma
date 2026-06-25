@@ -206,6 +206,11 @@ enum AdminAuditLogAction {
   PAYMENT_MANUAL_REVIEW_CLEARED
   PAYMENT_REFUND_DECISION_RECORDED
   PAYMENT_RELEASE_DECISION_RECORDED
+  ORDER_MANUAL_REVIEW_MARKED
+  ORDER_MANUAL_REVIEW_CLEARED
+  ORDER_DECISION_RECORDED
+  ORDER_RISK_FLAGGED
+  ORDER_RISK_CLEARED
 }
 
 enum AdminAuditLogTargetType {
@@ -213,6 +218,23 @@ enum AdminAuditLogTargetType {
   DISPUTE
   USER
   PAYMENT_INTENT
+  DELIVERY_ORDER
+}
+
+// Admin metadata-only order review (no lifecycle changes).
+enum OrderAdminReviewStatus {
+  NONE
+  MANUAL_REVIEW
+  DECISION_RECORDED
+  RISK_FLAGGED
+}
+
+enum OrderAdminReviewDecision {
+  MONITOR
+  ESCALATE_PAYMENT
+  ESCALATE_DISPUTE
+  NO_ACTION
+  OTHER
 }
 
 // Admin metadata-only payment review (no real money movement).
@@ -294,6 +316,7 @@ model User {
   availabilityRequestsAsWayler  WaylerAvailabilityRequest[] @relation("AvailabilityRequestWayler")
   adminAuditLogs                AdminAuditLog[]             @relation("AdminAuditLogActor")
   paymentIntentsReviewed        PaymentIntent[]             @relation("PaymentIntentAdminReviewer")
+  deliveryOrdersReviewed        DeliveryOrder[]             @relation("DeliveryOrderAdminReviewer")
 
   @@index([deletedAt])
   @@index([accountStatus])
@@ -413,6 +436,15 @@ model DeliveryOrder {
   proofSubmittedAt       DateTime?
   proofSubmittedById     String?   @db.Uuid
   proofSubmittedBy       User?     @relation("ProofSubmittedDeliveryOrders", fields: [proofSubmittedById], references: [id], onDelete: SetNull)
+
+  // Admin metadata-only review (does not change DeliveryOrder.status or parties).
+  adminReviewStatus     OrderAdminReviewStatus     @default(NONE)
+  adminReviewDecision   OrderAdminReviewDecision?
+  adminReviewNote       String?
+  adminReviewAt         DateTime?
+  adminReviewByUserId   String?                    @db.Uuid
+  adminReviewBy         User?                      @relation("DeliveryOrderAdminReviewer", fields: [adminReviewByUserId], references: [id], onDelete: SetNull)
+
   notifications          Notification[]
   conversation           Conversation?
   paymentIntent          PaymentIntent?
@@ -431,6 +463,9 @@ model DeliveryOrder {
   @@index([createdAt])
   @@index([publishedAt])
   @@index([proofSubmittedById])
+  @@index([adminReviewStatus])
+  @@index([adminReviewAt])
+  @@index([adminReviewByUserId])
   @@map("delivery_orders")
 }
 

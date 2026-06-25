@@ -5,6 +5,7 @@ import type {
   AdminKycListResponse,
   AdminKycQueueItem,
   AdminOrderListResponse,
+  AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
   AdminSystemHealthResponse,
@@ -16,7 +17,14 @@ import type { AdminAuditLogsListQuery } from './admin-audit.types';
 import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
-import type { AdminOrdersListQuery } from './orders-admin.types';
+import type {
+  AdminOrderClearManualReviewBody,
+  AdminOrderClearRiskBody,
+  AdminOrderDecisionBody,
+  AdminOrderManualReviewBody,
+  AdminOrderRiskFlagBody,
+  AdminOrdersListQuery,
+} from './orders-admin.types';
 import type {
   AdminPaymentClearManualReviewBody,
   AdminPaymentManualReviewBody,
@@ -55,6 +63,31 @@ export interface AdminApi {
     query?: AdminOrdersListQuery,
     accessToken?: string | null,
   ): Promise<AdminOrderListResponse>;
+  markOrderManualReview(
+    id: string,
+    body: AdminOrderManualReviewBody,
+    accessToken?: string | null,
+  ): Promise<AdminOrderQueueItem>;
+  clearOrderManualReview(
+    id: string,
+    body?: AdminOrderClearManualReviewBody,
+    accessToken?: string | null,
+  ): Promise<AdminOrderQueueItem>;
+  recordOrderDecision(
+    id: string,
+    body: AdminOrderDecisionBody,
+    accessToken?: string | null,
+  ): Promise<AdminOrderQueueItem>;
+  flagOrderRisk(
+    id: string,
+    body: AdminOrderRiskFlagBody,
+    accessToken?: string | null,
+  ): Promise<AdminOrderQueueItem>;
+  clearOrderRisk(
+    id: string,
+    body?: AdminOrderClearRiskBody,
+    accessToken?: string | null,
+  ): Promise<AdminOrderQueueItem>;
   listUsers(
     query?: AdminUsersListQuery,
     accessToken?: string | null,
@@ -107,12 +140,21 @@ export type {
   AdminKycListResponse,
   AdminKycQueueItem,
   AdminOrderListResponse,
+  AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
 };
+export type {
+  AdminOrderClearManualReviewBody,
+  AdminOrderClearRiskBody,
+  AdminOrderDecisionBody,
+  AdminOrderManualReviewBody,
+  AdminOrderRiskFlagBody,
+  AdminOrdersListQuery,
+} from './orders-admin.types';
 export type {
   AdminPaymentClearManualReviewBody,
   AdminPaymentManualReviewBody,

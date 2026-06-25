@@ -4,6 +4,8 @@ import type {
   DeliveryOrderStatus,
   DeliveryOrderType,
   DisputeStatus,
+  OrderAdminReviewDecision,
+  OrderAdminReviewStatus,
   PackageSize,
   PaymentStatus,
 } from './enums';
@@ -126,6 +128,11 @@ export interface AdminOrderQueueItem {
   paymentStatus: PaymentStatus | null;
   latestDisputeStatus: DisputeStatus | null;
   proofSubmitted: boolean;
+  adminReviewStatus: OrderAdminReviewStatus;
+  adminReviewDecision: OrderAdminReviewDecision | null;
+  adminReviewNote: string | null;
+  adminReviewAt: ISODateString | null;
+  adminReviewByUserId: string | null;
 }
 
 /** Paginated admin orders queue (GET /admin/orders). */

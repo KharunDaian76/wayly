@@ -6,6 +6,8 @@ import {
   DeliveryOrderStatus,
   DeliveryOrderType,
   DisputeStatus,
+  OrderAdminReviewDecision,
+  OrderAdminReviewStatus,
   PackageSize,
   PaymentStatus,
 } from '@wayly/types';
@@ -50,6 +52,11 @@ export function toAdminOrderQueueItem(
     paymentStatus: record.paymentIntent ? (record.paymentIntent.status as PaymentStatus) : null,
     latestDisputeStatus: record.disputes[0] ? (record.disputes[0].status as DisputeStatus) : null,
     proofSubmitted: record.proofSubmittedAt != null,
+    adminReviewStatus: record.adminReviewStatus as OrderAdminReviewStatus,
+    adminReviewDecision: record.adminReviewDecision as OrderAdminReviewDecision | null,
+    adminReviewNote: record.adminReviewNote,
+    adminReviewAt: toIso(record.adminReviewAt),
+    adminReviewByUserId: record.adminReviewByUserId,
   };
 }
 
