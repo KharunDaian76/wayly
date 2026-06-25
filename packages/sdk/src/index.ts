@@ -5,6 +5,7 @@ export { type AdminApi } from './admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
 export type { AdminOrdersListQuery } from './orders-admin.types';
 export type { AdminPaymentsListQuery } from './payments-admin.types';
+export type { AdminUsersListQuery } from './users-admin.types';
 export { createAuthApi } from './auth';
 export {
   type AuthApi,

@@ -1,7 +1,12 @@
 'use client';
 
-import type { AdminUserQueueItem, UserAccountStatus, UserRole } from '@wayly/types';
-import { UserAccountStatus as UserAccountStatusEnum, UserRole as UserRoleEnum } from '@wayly/types';
+import type { AdminUserQueueItem, KycStatus, UserAccountStatus, UserRole } from '@wayly/types';
+import {
+  KycStatus as KycStatusEnum,
+  UserAccountStatus as UserAccountStatusEnum,
+  UserRole as UserRoleEnum,
+} from '@wayly/types';
+import type { AdminUsersListQuery } from '@wayly/sdk';
 import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -24,6 +29,66 @@ const LISTING_CARD_CLASS = cn(
   'wayly-order-card rounded-xl px-4 py-4 text-sm',
   'wayly-feed-item-enter',
 );
+
+const FILTER_SELECT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const FILTER_INPUT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const QUEUE_PAGE_LIMIT = 50;
+
+const ROLE_OPTIONS = Object.values(UserRoleEnum);
+const KYC_STATUS_OPTIONS = Object.values(KycStatusEnum);
+const ACCOUNT_STATUS_OPTIONS = Object.values(UserAccountStatusEnum);
+
+type UserFilterForm = {
+  role: UserRole | '';
+  kycStatus: KycStatus | '';
+  accountStatus: UserAccountStatus | '';
+  search: string;
+};
+
+const DEFAULT_USER_FILTER_FORM: UserFilterForm = {
+  role: '',
+  kycStatus: '',
+  accountStatus: '',
+  search: '',
+};
+
+function hasActiveUserFilters(filters: UserFilterForm): boolean {
+  return Boolean(
+    filters.role || filters.kycStatus || filters.accountStatus || filters.search.trim(),
+  );
+}
+
+function buildUsersListQuery(page: number, filters: UserFilterForm): AdminUsersListQuery {
+  const query: AdminUsersListQuery = { page, limit: QUEUE_PAGE_LIMIT };
+  if (filters.role) {
+    query.role = filters.role;
+  }
+  if (filters.kycStatus) {
+    query.kycStatus = filters.kycStatus;
+  }
+  if (filters.accountStatus) {
+    query.accountStatus = filters.accountStatus;
+  }
+  const search = filters.search.trim();
+  if (search) {
+    query.search = search;
+  }
+  return query;
+}
+
+function roleFilterLabel(role: UserRole, t: (key: TranslationKey) => string): string {
+  if (role === UserRoleEnum.ADMIN) {
+    return t('app.admin.roleAdmin');
+  }
+  if (role === UserRoleEnum.ARBITRATOR) {
+    return t('app.admin.roleArbitrator');
+  }
+  return t('app.admin.userRole.USER');
+}
 
 export type AdminUsersQueuePanelProps = {
   roles: UserRole[];
@@ -85,26 +150,50 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
   const [cardActions, setCardActions] = useState<Record<string, CardAction | null>>({});
   const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
   const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filterForm, setFilterForm] = useState<UserFilterForm>(DEFAULT_USER_FILTER_FORM);
+  const [appliedFilters, setAppliedFilters] = useState<UserFilterForm>(DEFAULT_USER_FILTER_FORM);
 
-  const loadUsers = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const response = await api.admin.listUsers({ page: 1, limit: 50 });
-      setItems(response.items);
-      setLoadedOnce(true);
-    } catch {
-      setLoadError(t('app.admin.usersLoadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const fetchUsers = useCallback(
+    async (pageNumber: number, filters: UserFilterForm) => {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const response = await api.admin.listUsers(buildUsersListQuery(pageNumber, filters));
+        setItems(response.items);
+        setPage(response.page);
+        setTotal(response.total);
+        setLoadedOnce(true);
+      } catch {
+        setLoadError(t('app.admin.usersLoadFailed'));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [t],
+  );
+
+  const loadUsers = useCallback(() => {
+    void fetchUsers(page, appliedFilters);
+  }, [appliedFilters, fetchUsers, page]);
+
+  const handleApplyFilters = useCallback(() => {
+    setAppliedFilters(filterForm);
+    void fetchUsers(1, filterForm);
+  }, [fetchUsers, filterForm]);
+
+  const handleClearFilters = useCallback(() => {
+    setFilterForm(DEFAULT_USER_FILTER_FORM);
+    setAppliedFilters(DEFAULT_USER_FILTER_FORM);
+    void fetchUsers(1, DEFAULT_USER_FILTER_FORM);
+  }, [fetchUsers]);
 
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
-      void loadUsers();
+      void fetchUsers(1, DEFAULT_USER_FILTER_FORM);
     }
-  }, [roles, loadUsers]);
+  }, [roles, fetchUsers]);
 
   const updateItemInList = useCallback((updated: AdminUserQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -182,7 +271,10 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
   }
 
   const showInitialLoading = loading && !loadedOnce;
-  const showEmpty = loadedOnce && !loadError && items.length === 0;
+  const filtersActive = hasActiveUserFilters(appliedFilters);
+  const showEmpty = loadedOnce && !loadError && items.length === 0 && !filtersActive;
+  const showFilteredEmpty = loadedOnce && !loadError && items.length === 0 && filtersActive;
+  const totalPages = Math.max(1, Math.ceil(total / QUEUE_PAGE_LIMIT));
 
   return (
     <section
@@ -204,6 +296,115 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
       </div>
 
       <div className="px-1 pb-1">
+        <div className="mb-3 px-2">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">
+            {t('app.admin.adminUsersFilters')}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">{t('app.admin.adminUsersRoleFilter')}</span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.role}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    role: event.target.value as UserFilterForm['role'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminUsersAllRoles')}</option>
+                {ROLE_OPTIONS.map((role) => (
+                  <option key={role} value={role}>
+                    {roleFilterLabel(role, t)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminUsersKycStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.kycStatus}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    kycStatus: event.target.value as UserFilterForm['kycStatus'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminUsersAllKycStatuses')}</option>
+                {KYC_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminKycStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminUsersAccountStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.accountStatus}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    accountStatus: event.target.value as UserFilterForm['accountStatus'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminUsersAllAccountStatuses')}</option>
+                {ACCOUNT_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminAccountStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">{t('app.admin.adminUsersSearchFilter')}</span>
+              <input
+                type="search"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.search}
+                placeholder={t('app.admin.adminUsersSearchPlaceholder')}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    search: event.target.value,
+                  }))
+                }
+              />
+            </label>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleApplyFilters}
+            >
+              {t('app.admin.adminQueueApplyFilters')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleClearFilters}
+            >
+              {t('app.admin.adminQueueClearFilters')}
+            </Button>
+          </div>
+        </div>
+
         {loadError ? (
           <PanelErrorState
             message={loadError}
@@ -222,6 +423,13 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
 
         {showEmpty ? (
           <PanelEmptyState title={t('app.admin.noUsersTitle')} body={t('app.admin.noUsersBody')} />
+        ) : null}
+
+        {showFilteredEmpty ? (
+          <PanelEmptyState
+            title={t('app.admin.adminUsersNoFilteredResults')}
+            body={t('app.admin.noUsersBody')}
+          />
         ) : null}
 
         {!showInitialLoading && !loadError && items.length > 0 ? (
@@ -459,8 +667,39 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
           </ul>
         ) : null}
 
-        {!showInitialLoading && items.length > 0 && !loadError ? (
-          <div className="flex justify-end px-3 pb-2">
+        {!showInitialLoading && (loadedOnce || items.length > 0) && !loadError ? (
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-2">
+            {totalPages > 1 ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page <= 1}
+                  onClick={() => void fetchUsers(page - 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueuePreviousPage')}
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {t('app.admin.adminQueuePageLabel')
+                    .replace('{page}', String(page))
+                    .replace('{total}', String(totalPages))}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page >= totalPages}
+                  onClick={() => void fetchUsers(page + 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueueNextPage')}
+                </Button>
+              </div>
+            ) : (
+              <span />
+            )}
             <Button
               type="button"
               variant="outline"
