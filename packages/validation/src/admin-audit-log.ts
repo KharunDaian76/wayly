@@ -1,4 +1,4 @@
-import { AdminAuditLogAction, AdminAuditLogTargetType } from '@wayly/types';
+import { AdminAuditLogAction, AdminAuditLogStatus, AdminAuditLogTargetType } from '@wayly/types';
 import { z } from 'zod';
 
 import { enumSchema } from './helpers';
@@ -11,7 +11,9 @@ export const adminAuditLogsListQuerySchema = z.object({
   action: enumSchema(AdminAuditLogAction).optional(),
   actorUserId: idSchema.optional(),
   targetType: enumSchema(AdminAuditLogTargetType).optional(),
+  targetUserId: idSchema.optional(),
   targetId: idSchema.optional(),
+  status: enumSchema(AdminAuditLogStatus).optional(),
   from: z.coerce.date().optional(),
   to: z.coerce.date().optional(),
 });

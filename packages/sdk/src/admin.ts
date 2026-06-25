@@ -175,6 +175,12 @@ function buildAdminAuditLogsQuery(query?: AdminAuditLogsListQuery): string {
   if (query.targetId !== undefined) {
     params.set('targetId', query.targetId);
   }
+  if (query.targetUserId !== undefined) {
+    params.set('targetUserId', query.targetUserId);
+  }
+  if (query.status !== undefined) {
+    params.set('status', query.status);
+  }
   if (query.from !== undefined) {
     params.set('from', query.from instanceof Date ? query.from.toISOString() : String(query.from));
   }

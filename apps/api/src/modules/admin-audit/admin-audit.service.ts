@@ -98,7 +98,9 @@ export class AdminAuditLogService {
       ...(query.targetType
         ? { targetType: query.targetType as PrismaAdminAuditLogTargetType }
         : {}),
+      ...(query.targetUserId ? { targetUserId: query.targetUserId } : {}),
       ...(query.targetId ? { targetId: query.targetId } : {}),
+      ...(query.status ? { status: query.status as PrismaAdminAuditLogStatus } : {}),
     };
 
     if (query.from || query.to) {

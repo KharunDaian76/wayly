@@ -3,12 +3,19 @@
 import type {
   AdminAuditLogAction,
   AdminAuditLogItem,
+  AdminAuditLogStatus,
   AdminAuditLogTargetType,
   AdminHealthComponentStatus,
   AdminSystemHealthResponse,
   AdminSystemOverallStatus,
   UserRole,
 } from '@wayly/types';
+import {
+  AdminAuditLogAction as AdminAuditLogActionEnum,
+  AdminAuditLogStatus as AdminAuditLogStatusEnum,
+  AdminAuditLogTargetType as AdminAuditLogTargetTypeEnum,
+} from '@wayly/types';
+import type { AdminAuditLogsListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -25,6 +32,85 @@ import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
 const CARD_CLASS = cn('wayly-order-card rounded-xl px-4 py-4 text-sm', 'wayly-feed-item-enter');
+
+const SELECT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const INPUT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const AUDIT_PAGE_LIMIT = 20;
+
+const AUDIT_ACTION_OPTIONS = Object.values(AdminAuditLogActionEnum);
+const AUDIT_TARGET_TYPE_OPTIONS = Object.values(AdminAuditLogTargetTypeEnum);
+const AUDIT_STATUS_OPTIONS = Object.values(AdminAuditLogStatusEnum);
+
+type AuditFilterForm = {
+  action: AdminAuditLogAction | '';
+  targetType: AdminAuditLogTargetType | '';
+  status: AdminAuditLogStatus | '';
+  actorUserId: string;
+  targetUserId: string;
+  targetId: string;
+  from: string;
+  to: string;
+};
+
+const DEFAULT_AUDIT_FILTER_FORM: AuditFilterForm = {
+  action: '',
+  targetType: '',
+  status: '',
+  actorUserId: '',
+  targetUserId: '',
+  targetId: '',
+  from: '',
+  to: '',
+};
+
+function hasActiveAuditFilters(filters: AuditFilterForm): boolean {
+  return Boolean(
+    filters.action ||
+    filters.targetType ||
+    filters.status ||
+    filters.actorUserId.trim() ||
+    filters.targetUserId.trim() ||
+    filters.targetId.trim() ||
+    filters.from ||
+    filters.to,
+  );
+}
+
+function buildAuditLogsQuery(page: number, filters: AuditFilterForm): AdminAuditLogsListQuery {
+  const query: AdminAuditLogsListQuery = { page, limit: AUDIT_PAGE_LIMIT };
+  if (filters.action) {
+    query.action = filters.action;
+  }
+  if (filters.targetType) {
+    query.targetType = filters.targetType;
+  }
+  if (filters.status) {
+    query.status = filters.status;
+  }
+  const actorUserId = filters.actorUserId.trim();
+  if (actorUserId) {
+    query.actorUserId = actorUserId;
+  }
+  const targetUserId = filters.targetUserId.trim();
+  if (targetUserId) {
+    query.targetUserId = targetUserId;
+  }
+  const targetId = filters.targetId.trim();
+  if (targetId) {
+    query.targetId = targetId;
+  }
+  if (filters.from) {
+    query.from = new Date(`${filters.from}T00:00:00`);
+  }
+  if (filters.to) {
+    query.to = new Date(`${filters.to}T23:59:59.999`);
+  }
+  return query;
+}
 
 export type AdminSystemHealthPanelProps = {
   roles: UserRole[];
@@ -131,6 +217,12 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditLoadError, setAuditLoadError] = useState<string | null>(null);
   const [auditLoadedOnce, setAuditLoadedOnce] = useState(false);
+  const [auditPage, setAuditPage] = useState(1);
+  const [auditTotal, setAuditTotal] = useState(0);
+  const [auditFilterForm, setAuditFilterForm] =
+    useState<AuditFilterForm>(DEFAULT_AUDIT_FILTER_FORM);
+  const [appliedAuditFilters, setAppliedAuditFilters] =
+    useState<AuditFilterForm>(DEFAULT_AUDIT_FILTER_FORM);
 
   const loadSystemHealth = useCallback(async () => {
     setLoading(true);
@@ -146,26 +238,46 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
     }
   }, [t]);
 
-  const loadAuditLogs = useCallback(async () => {
-    setAuditLoading(true);
-    setAuditLoadError(null);
-    try {
-      const response = await api.admin.listAuditLogs({ page: 1, limit: 20 });
-      setAuditItems(response.items);
-      setAuditLoadedOnce(true);
-    } catch {
-      setAuditLoadError(t('app.admin.adminAuditLogLoadFailed'));
-    } finally {
-      setAuditLoading(false);
-    }
-  }, [t]);
+  const fetchAuditLogs = useCallback(
+    async (page: number, filters: AuditFilterForm) => {
+      setAuditLoading(true);
+      setAuditLoadError(null);
+      try {
+        const response = await api.admin.listAuditLogs(buildAuditLogsQuery(page, filters));
+        setAuditItems(response.items);
+        setAuditPage(response.page);
+        setAuditTotal(response.total);
+        setAuditLoadedOnce(true);
+      } catch {
+        setAuditLoadError(t('app.admin.adminAuditLogLoadFailed'));
+      } finally {
+        setAuditLoading(false);
+      }
+    },
+    [t],
+  );
+
+  const loadAuditLogs = useCallback(() => {
+    void fetchAuditLogs(auditPage, appliedAuditFilters);
+  }, [auditPage, appliedAuditFilters, fetchAuditLogs]);
+
+  const handleApplyAuditFilters = useCallback(() => {
+    setAppliedAuditFilters(auditFilterForm);
+    void fetchAuditLogs(1, auditFilterForm);
+  }, [auditFilterForm, fetchAuditLogs]);
+
+  const handleClearAuditFilters = useCallback(() => {
+    setAuditFilterForm(DEFAULT_AUDIT_FILTER_FORM);
+    setAppliedAuditFilters(DEFAULT_AUDIT_FILTER_FORM);
+    void fetchAuditLogs(1, DEFAULT_AUDIT_FILTER_FORM);
+  }, [fetchAuditLogs]);
 
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
       void loadSystemHealth();
-      void loadAuditLogs();
+      void fetchAuditLogs(1, DEFAULT_AUDIT_FILTER_FORM);
     }
-  }, [roles, loadSystemHealth, loadAuditLogs]);
+  }, [roles, loadSystemHealth, fetchAuditLogs]);
 
   if (!hasOperationsDashboardAccess(roles)) {
     return null;
@@ -173,7 +285,12 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
 
   const showInitialLoading = loading && !loadedOnce;
   const showAuditInitialLoading = auditLoading && !auditLoadedOnce;
-  const showAuditEmpty = auditLoadedOnce && !auditLoadError && auditItems.length === 0;
+  const auditFiltersActive = hasActiveAuditFilters(appliedAuditFilters);
+  const showAuditEmpty =
+    auditLoadedOnce && !auditLoadError && auditItems.length === 0 && !auditFiltersActive;
+  const showAuditFilteredEmpty =
+    auditLoadedOnce && !auditLoadError && auditItems.length === 0 && auditFiltersActive;
+  const auditTotalPages = Math.max(1, Math.ceil(auditTotal / AUDIT_PAGE_LIMIT));
 
   return (
     <section
@@ -321,6 +438,168 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
             <p className="mt-1 text-xs text-muted-foreground">{t('app.admin.adminAuditLogs')}</p>
           </div>
 
+          <div className="mb-3 px-1">
+            <p className="mb-2 text-xs font-medium text-muted-foreground">
+              {t('app.admin.adminAuditFilters')}
+            </p>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">
+                  {t('app.admin.adminAuditActionFilter')}
+                </span>
+                <select
+                  className={SELECT_CLASS}
+                  value={auditFilterForm.action}
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({
+                      ...prev,
+                      action: event.target.value as AuditFilterForm['action'],
+                    }))
+                  }
+                >
+                  <option value="">{t('app.admin.adminAuditAllActions')}</option>
+                  {AUDIT_ACTION_OPTIONS.map((action) => (
+                    <option key={action} value={action}>
+                      {t(adminAuditActionKey(action))}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">
+                  {t('app.admin.adminAuditTargetTypeFilter')}
+                </span>
+                <select
+                  className={SELECT_CLASS}
+                  value={auditFilterForm.targetType}
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({
+                      ...prev,
+                      targetType: event.target.value as AuditFilterForm['targetType'],
+                    }))
+                  }
+                >
+                  <option value="">{t('app.admin.adminAuditAllTargetTypes')}</option>
+                  {AUDIT_TARGET_TYPE_OPTIONS.map((targetType) => (
+                    <option key={targetType} value={targetType}>
+                      {t(adminAuditTargetKey(targetType))}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">
+                  {t('app.admin.adminAuditStatusFilter')}
+                </span>
+                <select
+                  className={SELECT_CLASS}
+                  value={auditFilterForm.status}
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({
+                      ...prev,
+                      status: event.target.value as AuditFilterForm['status'],
+                    }))
+                  }
+                >
+                  <option value="">{t('app.admin.adminAuditAllStatuses')}</option>
+                  {AUDIT_STATUS_OPTIONS.map((status) => (
+                    <option key={status} value={status}>
+                      {status === AdminAuditLogStatusEnum.SUCCESS
+                        ? t('app.admin.adminAuditStatusSuccess')
+                        : t('app.admin.adminAuditStatusFailed')}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">
+                  {t('app.admin.adminAuditActorUserIdFilter')}
+                </span>
+                <input
+                  type="text"
+                  className={INPUT_CLASS}
+                  value={auditFilterForm.actorUserId}
+                  placeholder="UUID"
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({ ...prev, actorUserId: event.target.value }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">
+                  {t('app.admin.adminAuditTargetUserIdFilter')}
+                </span>
+                <input
+                  type="text"
+                  className={INPUT_CLASS}
+                  value={auditFilterForm.targetUserId}
+                  placeholder="UUID"
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({ ...prev, targetUserId: event.target.value }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">
+                  {t('app.admin.adminAuditTargetIdFilter')}
+                </span>
+                <input
+                  type="text"
+                  className={INPUT_CLASS}
+                  value={auditFilterForm.targetId}
+                  placeholder="UUID"
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({ ...prev, targetId: event.target.value }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">{t('app.admin.adminAuditFromFilter')}</span>
+                <input
+                  type="date"
+                  className={INPUT_CLASS}
+                  value={auditFilterForm.from}
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({ ...prev, from: event.target.value }))
+                  }
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-xs">
+                <span className="text-muted-foreground">{t('app.admin.adminAuditToFilter')}</span>
+                <input
+                  type="date"
+                  className={INPUT_CLASS}
+                  value={auditFilterForm.to}
+                  onChange={(event) =>
+                    setAuditFilterForm((prev) => ({ ...prev, to: event.target.value }))
+                  }
+                />
+              </label>
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                className="h-8 text-xs"
+                disabled={auditLoading}
+                onClick={handleApplyAuditFilters}
+              >
+                {t('app.admin.adminAuditApplyFilters')}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs"
+                disabled={auditLoading}
+                onClick={handleClearAuditFilters}
+              >
+                {t('app.admin.adminAuditClearFilters')}
+              </Button>
+            </div>
+          </div>
+
           {auditLoadError ? (
             <PanelErrorState
               message={auditLoadError}
@@ -339,6 +618,13 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
           {showAuditEmpty ? (
             <PanelEmptyState
               title={t('app.admin.adminAuditLogEmpty')}
+              body={t('app.admin.adminAuditLogs')}
+            />
+          ) : null}
+
+          {showAuditFilteredEmpty ? (
+            <PanelEmptyState
+              title={t('app.admin.adminAuditNoFilteredResults')}
               body={t('app.admin.adminAuditLogs')}
             />
           ) : null}
@@ -377,14 +663,45 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
           {!showAuditInitialLoading &&
           (auditLoadedOnce || auditItems.length > 0) &&
           !auditLoadError ? (
-            <div className="flex justify-end px-2 pb-1">
+            <div className="flex flex-wrap items-center justify-between gap-2 px-2 pb-1">
+              {auditTotalPages > 1 ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs"
+                    disabled={auditLoading || auditPage <= 1}
+                    onClick={() => void fetchAuditLogs(auditPage - 1, appliedAuditFilters)}
+                  >
+                    {t('app.admin.adminAuditPreviousPage')}
+                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    {t('app.admin.adminAuditPageLabel')
+                      .replace('{page}', String(auditPage))
+                      .replace('{total}', String(auditTotalPages))}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs"
+                    disabled={auditLoading || auditPage >= auditTotalPages}
+                    onClick={() => void fetchAuditLogs(auditPage + 1, appliedAuditFilters)}
+                  >
+                    {t('app.admin.adminAuditNextPage')}
+                  </Button>
+                </div>
+              ) : (
+                <span />
+              )}
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 className="h-8 text-xs"
                 disabled={auditLoading}
-                onClick={() => void loadAuditLogs()}
+                onClick={loadAuditLogs}
               >
                 {auditLoading
                   ? t('app.admin.systemHealthLoading')
@@ -404,7 +721,7 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
               disabled={loading}
               onClick={() => {
                 void loadSystemHealth();
-                void loadAuditLogs();
+                loadAuditLogs();
               }}
             >
               {loading ? t('app.admin.systemHealthLoading') : t('app.admin.refreshSystemHealth')}
