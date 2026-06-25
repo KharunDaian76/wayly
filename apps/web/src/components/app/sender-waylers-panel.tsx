@@ -303,6 +303,7 @@ export function SenderWaylersPanel({
   const [activeWaylersRefreshKey, setActiveWaylersRefreshKey] = useState(0);
   const [listingsLoading, setListingsLoading] = useState(false);
   const [listingsError, setListingsError] = useState<string | null>(null);
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
 
   const [requestTargetId, setRequestTargetId] = useState<string | null>(null);
   const [requestForm, setRequestForm] = useState<RequestFormState | null>(null);
@@ -395,7 +396,12 @@ export function SenderWaylersPanel({
 
   const handleClearFilters = () => {
     setFilters(INITIAL_FILTERS);
+    setVerifiedOnly(false);
     void runSearch(INITIAL_FILTERS);
+  };
+
+  const handleShowAllWaylers = () => {
+    setVerifiedOnly(false);
   };
 
   const scrollToWaylerResults = () => {
@@ -535,6 +541,9 @@ export function SenderWaylersPanel({
   }, []);
 
   const busy = listingsLoading;
+  const displayedListings = verifiedOnly
+    ? listings.filter((listing) => listing.isWaylerVerified)
+    : listings;
 
   return (
     <div className="flex flex-col gap-6">
@@ -658,6 +667,24 @@ export function SenderWaylersPanel({
               </label>
             </div>
 
+            <label className="flex cursor-pointer items-start gap-2.5 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] px-3 py-2.5 text-sm">
+              <input
+                type="checkbox"
+                className="mt-0.5 size-4 shrink-0 rounded border-input"
+                checked={verifiedOnly}
+                disabled={busy}
+                onChange={(e) => setVerifiedOnly(e.target.checked)}
+              />
+              <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="font-medium text-foreground">
+                  {t('app.marketplaceTrust.verifiedOnlyFilter')}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {t('app.marketplaceTrust.verifiedOnlyFilterHelp')}
+                </span>
+              </span>
+            </label>
+
             <div className="wayly-action-group">
               <Button variant="primary" size="sm" disabled={busy} onClick={handleSearch}>
                 {listingsLoading ? t('app.senderWaylers.loading') : t('app.senderWaylers.search')}
@@ -688,6 +715,11 @@ export function SenderWaylersPanel({
               />
             ) : null}
             {requestError ? <p className={ALERT_ERROR_CLASS}>{requestError}</p> : null}
+            {verifiedOnly && !listingsLoading && listings.length > 0 ? (
+              <p className="text-xs text-muted-foreground" role="status">
+                {t('app.marketplaceTrust.showAllHelp')}
+              </p>
+            ) : null}
             {listingsLoading && listings.length === 0 ? (
               <div className="flex flex-col gap-3">
                 <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
@@ -716,9 +748,19 @@ export function SenderWaylersPanel({
                 }
                 onPrimaryAction={hasActiveFilters(loadedFilters) ? handleClearFilters : undefined}
               />
-            ) : listings.length > 0 ? (
+            ) : !listingsLoading && !listingsError && displayedListings.length === 0 ? (
+              <MarketplaceEmptyState
+                variant="sender"
+                icon="✓"
+                title={t('app.marketplaceTrust.noVerifiedWaylersTitle')}
+                description={t('app.marketplaceTrust.noVerifiedWaylersDescription')}
+                helperItems={[t('app.marketplaceTrust.showAllHelp')]}
+                primaryActionLabel={t('app.marketplaceTrust.showAllWaylers')}
+                onPrimaryAction={handleShowAllWaylers}
+              />
+            ) : displayedListings.length > 0 ? (
               <ul className="flex flex-col gap-4">
-                {listings.map((listing) => {
+                {displayedListings.map((listing) => {
                   const isLocalListing = listing.type === WaylerAvailabilityType.LOCAL_AVAILABILITY;
                   const isRequestOpen = requestTargetId === listing.id && requestForm !== null;
 

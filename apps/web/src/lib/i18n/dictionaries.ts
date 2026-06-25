@@ -1138,6 +1138,15 @@ const en = {
   'app.marketplaceTrust.browseAvailableWaylers': 'Browse available Waylers below.',
   'app.marketplaceTrust.verifiedWayler': 'Verified Wayler',
   'app.marketplaceTrust.identityChecked': 'Identity checked by Wayly',
+  'app.marketplaceTrust.verifiedOnlyFilter': 'Verified Waylers only',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    'Verified Waylers have completed Wayly identity checks. Results are filtered on this device from your current search.',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'No verified Waylers in these results',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    'Your search returned Waylers, but none are verified for this filter. Try a broader search or show all Waylers from this result set.',
+  'app.marketplaceTrust.showAllHelp':
+    'Showing verified Waylers only from your current search (filtered locally).',
+  'app.marketplaceTrust.showAllWaylers': 'Show all Waylers',
   'app.marketplaceRouteMatch.label': 'Match',
   'app.marketplaceRouteMatch.basedOnSearch': 'Based on your current search',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -2594,6 +2603,15 @@ const ru: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': 'Просмотрите доступных Wayler ниже.',
   'app.marketplaceTrust.verifiedWayler': 'Проверенный Wayler',
   'app.marketplaceTrust.identityChecked': 'Личность проверена Wayly',
+  'app.marketplaceTrust.verifiedOnlyFilter': 'Только проверенные Wayler',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    'Проверенные Wayler прошли проверку личности Wayly. Результаты фильтруются на устройстве из текущего поиска.',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'В этих результатах нет проверенных Wayler',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    'Поиск вернул Wayler, но ни один не проходит фильтр проверки. Расширьте поиск или покажите всех Wayler из этого набора.',
+  'app.marketplaceTrust.showAllHelp':
+    'Показаны только проверенные Wayler из текущего поиска (локальный фильтр).',
+  'app.marketplaceTrust.showAllWaylers': 'Показать всех Wayler',
   'app.marketplaceRouteMatch.label': 'Совпадение',
   'app.marketplaceRouteMatch.basedOnSearch': 'На основе вашего текущего поиска',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -4053,6 +4071,15 @@ const es: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': 'Explora Waylers disponibles abajo.',
   'app.marketplaceTrust.verifiedWayler': 'Wayler verificado',
   'app.marketplaceTrust.identityChecked': 'Identidad verificada por Wayly',
+  'app.marketplaceTrust.verifiedOnlyFilter': 'Solo Waylers verificados',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    'Los Waylers verificados completaron las comprobaciones de identidad de Wayly. Los resultados se filtran localmente desde tu búsqueda actual.',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'No hay Waylers verificados en estos resultados',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    'Tu búsqueda devolvió Waylers, pero ninguno cumple este filtro. Prueba una búsqueda más amplia o muestra todos los Waylers de este conjunto.',
+  'app.marketplaceTrust.showAllHelp':
+    'Mostrando solo Waylers verificados de tu búsqueda actual (filtrado local).',
+  'app.marketplaceTrust.showAllWaylers': 'Mostrar todos los Waylers',
   'app.marketplaceRouteMatch.label': 'Coincidencia',
   'app.marketplaceRouteMatch.basedOnSearch': 'Según tu búsqueda actual',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -5526,6 +5553,15 @@ const fr: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': 'Parcourez les Waylers disponibles ci-dessous.',
   'app.marketplaceTrust.verifiedWayler': 'Wayler vérifié',
   'app.marketplaceTrust.identityChecked': 'Identité vérifiée par Wayly',
+  'app.marketplaceTrust.verifiedOnlyFilter': 'Waylers vérifiés uniquement',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    'Les Waylers vérifiés ont terminé les contrôles d’identité Wayly. Les résultats sont filtrés localement à partir de votre recherche actuelle.',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'Aucun Wayler vérifié dans ces résultats',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    'Votre recherche a renvoyé des Waylers, mais aucun ne correspond à ce filtre. Élargissez la recherche ou affichez tous les Waylers de cet ensemble.',
+  'app.marketplaceTrust.showAllHelp':
+    'Affichage des Waylers vérifiés uniquement pour votre recherche actuelle (filtre local).',
+  'app.marketplaceTrust.showAllWaylers': 'Afficher tous les Waylers',
   'app.marketplaceRouteMatch.label': 'Correspondance',
   'app.marketplaceRouteMatch.basedOnSearch': 'Selon votre recherche actuelle',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -7017,6 +7053,15 @@ const de: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': 'Verfügbare Wayler unten durchsuchen.',
   'app.marketplaceTrust.verifiedWayler': 'Verifizierter Wayler',
   'app.marketplaceTrust.identityChecked': 'Identität von Wayly geprüft',
+  'app.marketplaceTrust.verifiedOnlyFilter': 'Nur verifizierte Wayler',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    'Verifizierte Wayler haben Wayly-Identitätsprüfungen abgeschlossen. Ergebnisse werden lokal aus Ihrer aktuellen Suche gefiltert.',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'Keine verifizierten Wayler in diesen Ergebnissen',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    'Ihre Suche lieferte Wayler, aber keiner erfüllt diesen Filter. Versuchen Sie eine breitere Suche oder zeigen Sie alle Wayler aus diesem Ergebnis.',
+  'app.marketplaceTrust.showAllHelp':
+    'Es werden nur verifizierte Wayler aus Ihrer aktuellen Suche angezeigt (lokal gefiltert).',
+  'app.marketplaceTrust.showAllWaylers': 'Alle Wayler anzeigen',
   'app.marketplaceRouteMatch.label': 'Übereinstimmung',
   'app.marketplaceRouteMatch.basedOnSearch': 'Basierend auf Ihrer aktuellen Suche',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -8466,6 +8511,15 @@ const tr: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': "Aşağıda müsait Wayler'ları inceleyin.",
   'app.marketplaceTrust.verifiedWayler': 'Doğrulanmış Wayler',
   'app.marketplaceTrust.identityChecked': 'Kimlik Wayly tarafından doğrulandı',
+  'app.marketplaceTrust.verifiedOnlyFilter': "Yalnızca doğrulanmış Wayler'lar",
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    "Doğrulanmış Wayler'lar Wayly kimlik kontrollerini tamamlamıştır. Sonuçlar mevcut aramanızdan cihazda filtrelenir.",
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'Bu sonuçlarda doğrulanmış Wayler yok',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    "Aramanız Wayler döndürdü ancak hiçbiri bu filtreyi karşılamıyor. Daha geniş arama deneyin veya bu sonuç kümesindeki tüm Wayler'ları gösterin.",
+  'app.marketplaceTrust.showAllHelp':
+    "Mevcut aramanızdan yalnızca doğrulanmış Wayler'lar gösteriliyor (yerel filtre).",
+  'app.marketplaceTrust.showAllWaylers': "Tüm Wayler'ları göster",
   'app.marketplaceRouteMatch.label': 'Eşleşme',
   'app.marketplaceRouteMatch.basedOnSearch': 'Mevcut aramanıza göre',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -9860,6 +9914,14 @@ const ar: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': 'تصفّح Waylers المتاحين أدناه.',
   'app.marketplaceTrust.verifiedWayler': 'Wayler موثّق',
   'app.marketplaceTrust.identityChecked': 'تم التحقق من الهوية بواسطة Wayly',
+  'app.marketplaceTrust.verifiedOnlyFilter': 'Waylers موثّقون فقط',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    'أكمل Waylers الموثّقون فحوصات هوية Wayly. تُصفّى النتائج محلياً من بحثك الحالي.',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': 'لا يوجد Waylers موثّقون في هذه النتائج',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    'أعاد بحثك Waylers، لكن لا أحد يطابق هذا الفلتر. جرّب بحثاً أوسع أو اعرض جميع Waylers من هذه المجموعة.',
+  'app.marketplaceTrust.showAllHelp': 'يتم عرض Waylers الموثّقين فقط من بحثك الحالي (فلتر محلي).',
+  'app.marketplaceTrust.showAllWaylers': 'عرض جميع Waylers',
   'app.marketplaceRouteMatch.label': 'تطابق',
   'app.marketplaceRouteMatch.basedOnSearch': 'بناءً على بحثك الحالي',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -11218,6 +11280,14 @@ const zh: Dictionary = {
   'app.marketplaceTrust.browseAvailableWaylers': '请在下方浏览可用的 Wayler。',
   'app.marketplaceTrust.verifiedWayler': '已验证 Wayler',
   'app.marketplaceTrust.identityChecked': '身份已由 Wayly 验证',
+  'app.marketplaceTrust.verifiedOnlyFilter': '仅显示已验证 Wayler',
+  'app.marketplaceTrust.verifiedOnlyFilterHelp':
+    '已验证 Wayler 已完成 Wayly 身份检查。结果会在本设备上从当前搜索中本地筛选。',
+  'app.marketplaceTrust.noVerifiedWaylersTitle': '这些结果中没有已验证 Wayler',
+  'app.marketplaceTrust.noVerifiedWaylersDescription':
+    '搜索返回了 Wayler，但没有符合此筛选条件的。请尝试扩大搜索范围，或显示此结果集中的全部 Wayler。',
+  'app.marketplaceTrust.showAllHelp': '仅显示当前搜索中的已验证 Wayler（本地筛选）。',
+  'app.marketplaceTrust.showAllWaylers': '显示全部 Wayler',
   'app.marketplaceRouteMatch.label': '匹配',
   'app.marketplaceRouteMatch.basedOnSearch': '基于您当前的搜索',
   'app.marketplaceRouteMatch.noRouteFilter': '尚未设置路线筛选 — 添加起点或终点以查看匹配',
