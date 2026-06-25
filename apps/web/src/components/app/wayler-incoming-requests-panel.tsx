@@ -43,6 +43,7 @@ type WaylerIncomingRequestsPanelProps = {
   waylerHasActiveAccess: boolean;
   /** Refresh parent accepted-order lists after accept creates a DeliveryOrder. */
   onRequestAccepted?: () => void;
+  onRequestsSnapshot?: (snapshot: { pendingCount: number; loading: boolean }) => void;
 };
 
 function formatDateTime(value: string | null): string {
@@ -116,6 +117,7 @@ export function WaylerIncomingRequestsPanel({
   kycGate,
   waylerHasActiveAccess,
   onRequestAccepted,
+  onRequestsSnapshot,
 }: WaylerIncomingRequestsPanelProps) {
   const { t } = useI18n();
   const { isApproved, kycLoading } = kycGate;
@@ -150,6 +152,13 @@ export function WaylerIncomingRequestsPanel({
       void loadRequests();
     }
   }, [kycLoading, isApproved, loadRequests]);
+
+  useEffect(() => {
+    const pendingCount = requests.filter(
+      (request) => request.status === WaylerAvailabilityRequestStatus.PENDING,
+    ).length;
+    onRequestsSnapshot?.({ pendingCount, loading });
+  }, [requests, loading, onRequestsSnapshot]);
 
   const updateResponseDraft = (id: string, value: string) => {
     setResponseDrafts((prev) => ({ ...prev, [id]: value }));

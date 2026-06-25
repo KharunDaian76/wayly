@@ -195,7 +195,7 @@ export function KycIdentityPanel({
   }
 
   return (
-    <Card className="wayly-app-panel">
+    <Card id="wayler-kyc" className="wayly-app-panel">
       <CardHeader>
         <CardTitle>{t('app.kycPanel.title')}</CardTitle>
       </CardHeader>

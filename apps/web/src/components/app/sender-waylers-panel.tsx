@@ -30,6 +30,7 @@ import {
   SenderRequestSummary,
 } from '@/components/app/sender-request-composer';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
+import { SenderNextBestActions } from '@/components/app/sender-next-best-actions';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
@@ -107,6 +108,8 @@ type SenderWaylersPanelProps = {
   canBrowse: boolean;
   /** Refresh parent Sender accepted-order list when converted requests are present. */
   onAcceptedOrdersRefresh?: () => void;
+  hasAcceptedOrders?: boolean;
+  acceptedOrdersLoading?: boolean;
 };
 
 function normalizeCountry(value: string): string | undefined {
@@ -288,6 +291,8 @@ export function SenderWaylersPanel({
   kycGate,
   canBrowse,
   onAcceptedOrdersRefresh,
+  hasAcceptedOrders = false,
+  acceptedOrdersLoading = false,
 }: SenderWaylersPanelProps) {
   const { t } = useI18n();
   const { kycLoading } = kycGate;
@@ -399,6 +404,10 @@ export function SenderWaylersPanel({
       block: 'start',
     });
   };
+
+  const hasPendingRequests = myRequests.some(
+    (request) => request.status === WaylerAvailabilityRequestStatus.PENDING,
+  );
 
   const openRequestForm = (listing: WaylerAvailabilitySummary) => {
     setRequestTargetId(listing.id);
@@ -537,6 +546,18 @@ export function SenderWaylersPanel({
 
       {canBrowse ? (
         <>
+          <SenderNextBestActions
+            canBrowse={canBrowse}
+            requestsLoading={myRequestsLoading}
+            hasSentRequests={myRequests.length > 0}
+            hasPendingRequests={hasPendingRequests}
+            hasAcceptedOrders={hasAcceptedOrders}
+            acceptedOrdersLoading={acceptedOrdersLoading}
+            listingsLoading={listingsLoading}
+            listingsEmpty={!listingsLoading && !listingsError && listings.length === 0}
+            hasActiveSearchFilters={hasActiveFilters(loadedFilters)}
+          />
+
           <ActiveWaylersMarketplaceSection
             canBrowse={canBrowse}
             refreshKey={activeWaylersRefreshKey}
@@ -549,7 +570,10 @@ export function SenderWaylersPanel({
             onLocationSelect={handleLocationSelect}
           />
 
-          <div className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4">
+          <div
+            id="sender-waylers-filters"
+            className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4"
+          >
             <h3 className="text-sm font-semibold">{t('app.senderWaylers.filters')}</h3>
 
             <label className="flex flex-col gap-1.5 text-sm">
@@ -1112,7 +1136,7 @@ export function SenderWaylersPanel({
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-border pt-6">
+          <div id="sender-requests" className="flex flex-col gap-3 border-t border-border pt-6">
             <h3 className="text-sm font-semibold">
               {t('app.availabilityRequests.myWaylerRequests')}
             </h3>

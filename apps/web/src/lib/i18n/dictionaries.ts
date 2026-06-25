@@ -1374,6 +1374,47 @@ const en = {
   'app.marketplaceEmpty.keepInsideWayly': 'Keep details and communication inside Wayly.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'An accepted request becomes a delivery order with chat inside Wayly.',
+  'app.nextBestAction.senderTitle': 'Next for Sender',
+  'app.nextBestAction.senderSubtitle':
+    'Suggested steps based on your current marketplace activity.',
+  'app.nextBestAction.waylerTitle': 'Next for Wayler',
+  'app.nextBestAction.waylerSubtitle':
+    'Suggested steps based on your current marketplace activity.',
+  'app.nextBestAction.browseWaylersTitle': 'Find a Wayler',
+  'app.nextBestAction.browseWaylersDescription':
+    'Browse published availability and trip routes, then send your first request with clear package details.',
+  'app.nextBestAction.browseWaylersAction': 'Browse Waylers',
+  'app.nextBestAction.trackRequestsTitle': 'Track Wayler responses',
+  'app.nextBestAction.trackRequestsDescription':
+    'You have pending requests waiting for a Wayler response. Check status and messages inside Wayly.',
+  'app.nextBestAction.trackRequestsAction': 'View sent requests',
+  'app.nextBestAction.continueOrderTitle': 'Continue your delivery',
+  'app.nextBestAction.continueOrderDescription':
+    'You have an accepted delivery. Follow the order timeline, chat, and proof steps inside Wayly.',
+  'app.nextBestAction.continueOrderAction': 'View accepted orders',
+  'app.nextBestAction.completeKycTitle': 'Complete identity verification',
+  'app.nextBestAction.completeKycDescription':
+    'KYC is required before marketplace actions such as publishing availability, accepting requests, or taking work.',
+  'app.nextBestAction.completeKycAction': 'Go to KYC',
+  'app.nextBestAction.activateAccessTitle': 'Activate Wayler work access',
+  'app.nextBestAction.activateAccessDescription':
+    'Wayler work access may be required before accepting requests or contacting Senders. This flow is mock/manual only — no real payment is charged.',
+  'app.nextBestAction.activateAccessAction': 'View work access',
+  'app.nextBestAction.publishAvailabilityTitle': 'Publish availability',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'Publish local availability or a trip route so Senders can discover you and send a request.',
+  'app.nextBestAction.publishAvailabilityAction': 'Publish availability',
+  'app.nextBestAction.reviewRequestsTitle': 'Review Sender requests',
+  'app.nextBestAction.reviewRequestsDescription':
+    'You have pending Sender requests. Review details and respond inside Wayly.',
+  'app.nextBestAction.reviewRequestsAction': 'View incoming requests',
+  'app.nextBestAction.continueDeliveryTitle': 'Continue your delivery',
+  'app.nextBestAction.continueDeliveryDescription':
+    'You have accepted work in progress. Use the order timeline and proof guidance as you deliver.',
+  'app.nextBestAction.continueDeliveryAction': 'View accepted work',
+  'app.nextBestAction.priorityHigh': 'High',
+  'app.nextBestAction.priorityMedium': 'Medium',
+  'app.nextBestAction.priorityLow': 'Low',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -2783,6 +2824,47 @@ const ru: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': 'Держите детали и общение внутри Wayly.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'Принятый запрос становится заказом на доставку с чатом внутри Wayly.',
+  'app.nextBestAction.senderTitle': 'Дальше для отправителя',
+  'app.nextBestAction.senderSubtitle':
+    'Рекомендуемые шаги на основе вашей текущей активности на маркетплейсе.',
+  'app.nextBestAction.waylerTitle': 'Дальше для курьера',
+  'app.nextBestAction.waylerSubtitle':
+    'Рекомендуемые шаги на основе вашей текущей активности на маркетплейсе.',
+  'app.nextBestAction.browseWaylersTitle': 'Найти курьера',
+  'app.nextBestAction.browseWaylersDescription':
+    'Просмотрите опубликованную доступность и маршруты, затем отправьте первый запрос с понятными деталями посылки.',
+  'app.nextBestAction.browseWaylersAction': 'Смотреть курьеров',
+  'app.nextBestAction.trackRequestsTitle': 'Отслеживать ответы курьеров',
+  'app.nextBestAction.trackRequestsDescription':
+    'У вас есть ожидающие запросы. Проверяйте статус и сообщения внутри Wayly.',
+  'app.nextBestAction.trackRequestsAction': 'Мои запросы',
+  'app.nextBestAction.continueOrderTitle': 'Продолжить доставку',
+  'app.nextBestAction.continueOrderDescription':
+    'У вас есть принятая доставка. Следуйте таймлайну заказа, чату и шагам подтверждения в Wayly.',
+  'app.nextBestAction.continueOrderAction': 'Принятые заказы',
+  'app.nextBestAction.completeKycTitle': 'Пройти верификацию личности',
+  'app.nextBestAction.completeKycDescription':
+    'KYC требуется перед действиями на маркетплейсе: публикация доступности, принятие запросов или выполнение работы.',
+  'app.nextBestAction.completeKycAction': 'Перейти к KYC',
+  'app.nextBestAction.activateAccessTitle': 'Активировать доступ курьера',
+  'app.nextBestAction.activateAccessDescription':
+    'Доступ к работе курьера может потребоваться перед принятием запросов или контактом с отправителями. Это mock/ручной процесс — реальная оплата не взимается.',
+  'app.nextBestAction.activateAccessAction': 'Доступ к работе',
+  'app.nextBestAction.publishAvailabilityTitle': 'Опубликовать доступность',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'Опубликуйте локальную доступность или маршрут, чтобы отправители могли найти вас и отправить запрос.',
+  'app.nextBestAction.publishAvailabilityAction': 'Опубликовать доступность',
+  'app.nextBestAction.reviewRequestsTitle': 'Просмотреть запросы отправителей',
+  'app.nextBestAction.reviewRequestsDescription':
+    'У вас есть ожидающие запросы от отправителей. Просмотрите детали и ответьте внутри Wayly.',
+  'app.nextBestAction.reviewRequestsAction': 'Входящие запросы',
+  'app.nextBestAction.continueDeliveryTitle': 'Продолжить доставку',
+  'app.nextBestAction.continueDeliveryDescription':
+    'У вас есть принятая работа. Используйте таймлайн заказа и подсказки по подтверждению доставки.',
+  'app.nextBestAction.continueDeliveryAction': 'Принятая работа',
+  'app.nextBestAction.priorityHigh': 'Высокий',
+  'app.nextBestAction.priorityMedium': 'Средний',
+  'app.nextBestAction.priorityLow': 'Низкий',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -4200,6 +4282,47 @@ const es: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': 'Mantén detalles y comunicación dentro de Wayly.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'Una solicitud aceptada se convierte en pedido de entrega con chat dentro de Wayly.',
+  'app.nextBestAction.senderTitle': 'Siguiente para Sender',
+  'app.nextBestAction.senderSubtitle':
+    'Pasos sugeridos según tu actividad actual en el marketplace.',
+  'app.nextBestAction.waylerTitle': 'Siguiente para Wayler',
+  'app.nextBestAction.waylerSubtitle':
+    'Pasos sugeridos según tu actividad actual en el marketplace.',
+  'app.nextBestAction.browseWaylersTitle': 'Encontrar un Wayler',
+  'app.nextBestAction.browseWaylersDescription':
+    'Explora disponibilidad y rutas publicadas, luego envía tu primera solicitud con detalles claros del paquete.',
+  'app.nextBestAction.browseWaylersAction': 'Explorar Waylers',
+  'app.nextBestAction.trackRequestsTitle': 'Seguir respuestas de Waylers',
+  'app.nextBestAction.trackRequestsDescription':
+    'Tienes solicitudes pendientes esperando respuesta. Revisa el estado y mensajes dentro de Wayly.',
+  'app.nextBestAction.trackRequestsAction': 'Ver solicitudes enviadas',
+  'app.nextBestAction.continueOrderTitle': 'Continuar tu entrega',
+  'app.nextBestAction.continueOrderDescription':
+    'Tienes una entrega aceptada. Sigue la línea de tiempo, el chat y los pasos de prueba dentro de Wayly.',
+  'app.nextBestAction.continueOrderAction': 'Ver pedidos aceptados',
+  'app.nextBestAction.completeKycTitle': 'Completar verificación de identidad',
+  'app.nextBestAction.completeKycDescription':
+    'KYC es necesario antes de acciones del marketplace como publicar disponibilidad, aceptar solicitudes o tomar trabajo.',
+  'app.nextBestAction.completeKycAction': 'Ir a KYC',
+  'app.nextBestAction.activateAccessTitle': 'Activar acceso de trabajo Wayler',
+  'app.nextBestAction.activateAccessDescription':
+    'El acceso de trabajo Wayler puede ser necesario antes de aceptar solicitudes o contactar Senders. Flujo mock/manual — no se cobra pago real.',
+  'app.nextBestAction.activateAccessAction': 'Ver acceso de trabajo',
+  'app.nextBestAction.publishAvailabilityTitle': 'Publicar disponibilidad',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'Publica disponibilidad local o una ruta de viaje para que los Senders te encuentren y envíen una solicitud.',
+  'app.nextBestAction.publishAvailabilityAction': 'Publicar disponibilidad',
+  'app.nextBestAction.reviewRequestsTitle': 'Revisar solicitudes de Senders',
+  'app.nextBestAction.reviewRequestsDescription':
+    'Tienes solicitudes pendientes de Senders. Revisa los detalles y responde dentro de Wayly.',
+  'app.nextBestAction.reviewRequestsAction': 'Ver solicitudes entrantes',
+  'app.nextBestAction.continueDeliveryTitle': 'Continuar tu entrega',
+  'app.nextBestAction.continueDeliveryDescription':
+    'Tienes trabajo aceptado en curso. Usa la línea de tiempo del pedido y la guía de prueba de entrega.',
+  'app.nextBestAction.continueDeliveryAction': 'Ver trabajo aceptado',
+  'app.nextBestAction.priorityHigh': 'Alta',
+  'app.nextBestAction.priorityMedium': 'Media',
+  'app.nextBestAction.priorityLow': 'Baja',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -5633,6 +5756,47 @@ const fr: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': 'Gardez les détails et la communication dans Wayly.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'Une demande acceptée devient une commande de livraison avec chat dans Wayly.',
+  'app.nextBestAction.senderTitle': 'Prochaine étape Sender',
+  'app.nextBestAction.senderSubtitle':
+    'Étapes suggérées selon votre activité actuelle sur le marketplace.',
+  'app.nextBestAction.waylerTitle': 'Prochaine étape Wayler',
+  'app.nextBestAction.waylerSubtitle':
+    'Étapes suggérées selon votre activité actuelle sur le marketplace.',
+  'app.nextBestAction.browseWaylersTitle': 'Trouver un Wayler',
+  'app.nextBestAction.browseWaylersDescription':
+    'Parcourez les disponibilités et itinéraires publiés, puis envoyez votre première demande avec des détails clairs.',
+  'app.nextBestAction.browseWaylersAction': 'Parcourir les Waylers',
+  'app.nextBestAction.trackRequestsTitle': 'Suivre les réponses Wayler',
+  'app.nextBestAction.trackRequestsDescription':
+    'Vous avez des demandes en attente de réponse. Consultez le statut et les messages dans Wayly.',
+  'app.nextBestAction.trackRequestsAction': 'Voir les demandes envoyées',
+  'app.nextBestAction.continueOrderTitle': 'Poursuivre votre livraison',
+  'app.nextBestAction.continueOrderDescription':
+    'Vous avez une livraison acceptée. Suivez la chronologie, le chat et les étapes de preuve dans Wayly.',
+  'app.nextBestAction.continueOrderAction': 'Voir les commandes acceptées',
+  'app.nextBestAction.completeKycTitle': 'Compléter la vérification d’identité',
+  'app.nextBestAction.completeKycDescription':
+    'Le KYC est requis avant les actions marketplace comme publier une disponibilité, accepter des demandes ou prendre du travail.',
+  'app.nextBestAction.completeKycAction': 'Aller au KYC',
+  'app.nextBestAction.activateAccessTitle': 'Activer l’accès travail Wayler',
+  'app.nextBestAction.activateAccessDescription':
+    'L’accès travail Wayler peut être requis avant d’accepter des demandes ou contacter des Senders. Flux mock/manuel — aucun paiement réel.',
+  'app.nextBestAction.activateAccessAction': 'Voir l’accès travail',
+  'app.nextBestAction.publishAvailabilityTitle': 'Publier une disponibilité',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'Publiez une disponibilité locale ou un itinéraire pour que les Senders vous trouvent et envoient une demande.',
+  'app.nextBestAction.publishAvailabilityAction': 'Publier une disponibilité',
+  'app.nextBestAction.reviewRequestsTitle': 'Examiner les demandes Sender',
+  'app.nextBestAction.reviewRequestsDescription':
+    'Vous avez des demandes Sender en attente. Examinez les détails et répondez dans Wayly.',
+  'app.nextBestAction.reviewRequestsAction': 'Voir les demandes entrantes',
+  'app.nextBestAction.continueDeliveryTitle': 'Poursuivre votre livraison',
+  'app.nextBestAction.continueDeliveryDescription':
+    'Vous avez du travail accepté en cours. Utilisez la chronologie de commande et les conseils de preuve de livraison.',
+  'app.nextBestAction.continueDeliveryAction': 'Voir le travail accepté',
+  'app.nextBestAction.priorityHigh': 'Élevée',
+  'app.nextBestAction.priorityMedium': 'Moyenne',
+  'app.nextBestAction.priorityLow': 'Faible',
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -7083,6 +7247,47 @@ const de: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': 'Details und Kommunikation in Wayly behalten.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'Eine akzeptierte Anfrage wird zu einer Lieferbestellung mit Chat in Wayly.',
+  'app.nextBestAction.senderTitle': 'Als Sender als Nächstes',
+  'app.nextBestAction.senderSubtitle':
+    'Vorgeschlagene Schritte basierend auf Ihrer aktuellen Marktplatz-Aktivität.',
+  'app.nextBestAction.waylerTitle': 'Als Wayler als Nächstes',
+  'app.nextBestAction.waylerSubtitle':
+    'Vorgeschlagene Schritte basierend auf Ihrer aktuellen Marktplatz-Aktivität.',
+  'app.nextBestAction.browseWaylersTitle': 'Wayler finden',
+  'app.nextBestAction.browseWaylersDescription':
+    'Veröffentlichte Verfügbarkeit und Routen durchsuchen, dann erste Anfrage mit klaren Paketdetails senden.',
+  'app.nextBestAction.browseWaylersAction': 'Wayler durchsuchen',
+  'app.nextBestAction.trackRequestsTitle': 'Wayler-Antworten verfolgen',
+  'app.nextBestAction.trackRequestsDescription':
+    'Sie haben ausstehende Anfragen. Status und Nachrichten in Wayly prüfen.',
+  'app.nextBestAction.trackRequestsAction': 'Gesendete Anfragen ansehen',
+  'app.nextBestAction.continueOrderTitle': 'Lieferung fortsetzen',
+  'app.nextBestAction.continueOrderDescription':
+    'Sie haben eine akzeptierte Lieferung. Timeline, Chat und Nachweisschritte in Wayly folgen.',
+  'app.nextBestAction.continueOrderAction': 'Akzeptierte Bestellungen ansehen',
+  'app.nextBestAction.completeKycTitle': 'Identitätsverifizierung abschließen',
+  'app.nextBestAction.completeKycDescription':
+    'KYC ist erforderlich vor Marktplatz-Aktionen wie Verfügbarkeit veröffentlichen, Anfragen annehmen oder Arbeit übernehmen.',
+  'app.nextBestAction.completeKycAction': 'Zu KYC',
+  'app.nextBestAction.activateAccessTitle': 'Wayler-Arbeitszugang aktivieren',
+  'app.nextBestAction.activateAccessDescription':
+    'Wayler-Arbeitszugang kann erforderlich sein, bevor Anfragen angenommen oder Sender kontaktiert werden. Mock/manueller Ablauf — keine echte Zahlung.',
+  'app.nextBestAction.activateAccessAction': 'Arbeitszugang ansehen',
+  'app.nextBestAction.publishAvailabilityTitle': 'Verfügbarkeit veröffentlichen',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'Lokale Verfügbarkeit oder Reiseroute veröffentlichen, damit Sender Sie finden und eine Anfrage senden.',
+  'app.nextBestAction.publishAvailabilityAction': 'Verfügbarkeit veröffentlichen',
+  'app.nextBestAction.reviewRequestsTitle': 'Sender-Anfragen prüfen',
+  'app.nextBestAction.reviewRequestsDescription':
+    'Sie haben ausstehende Sender-Anfragen. Details prüfen und in Wayly antworten.',
+  'app.nextBestAction.reviewRequestsAction': 'Eingehende Anfragen ansehen',
+  'app.nextBestAction.continueDeliveryTitle': 'Lieferung fortsetzen',
+  'app.nextBestAction.continueDeliveryDescription':
+    'Sie haben akzeptierte Arbeit in Bearbeitung. Bestell-Timeline und Liefernachweis-Hinweise nutzen.',
+  'app.nextBestAction.continueDeliveryAction': 'Akzeptierte Arbeit ansehen',
+  'app.nextBestAction.priorityHigh': 'Hoch',
+  'app.nextBestAction.priorityMedium': 'Mittel',
+  'app.nextBestAction.priorityLow': 'Niedrig',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -8482,6 +8687,45 @@ const tr: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': 'Detayları ve iletişimi Wayly içinde tutun.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'Kabul edilen bir talep, Wayly içinde sohbetli bir teslimat siparişine dönüşür.',
+  'app.nextBestAction.senderTitle': 'Gönderici için sıradaki',
+  'app.nextBestAction.senderSubtitle': 'Mevcut marketplace aktivitenize göre önerilen adımlar.',
+  'app.nextBestAction.waylerTitle': 'Wayler için sıradaki',
+  'app.nextBestAction.waylerSubtitle': 'Mevcut marketplace aktivitenize göre önerilen adımlar.',
+  'app.nextBestAction.browseWaylersTitle': 'Wayler bul',
+  'app.nextBestAction.browseWaylersDescription':
+    'Yayınlanmış müsaitlik ve rotalara göz atın, ardından net paket detaylarıyla ilk talebinizi gönderin.',
+  'app.nextBestAction.browseWaylersAction': "Wayler'lara göz at",
+  'app.nextBestAction.trackRequestsTitle': 'Wayler yanıtlarını takip et',
+  'app.nextBestAction.trackRequestsDescription':
+    'Yanıt bekleyen talepleriniz var. Durumu ve mesajları Wayly içinde kontrol edin.',
+  'app.nextBestAction.trackRequestsAction': 'Gönderilen talepleri gör',
+  'app.nextBestAction.continueOrderTitle': 'Teslimata devam et',
+  'app.nextBestAction.continueOrderDescription':
+    'Kabul edilmiş bir teslimatınız var. Wayly içinde sipariş zaman çizelgesi, sohbet ve kanıt adımlarını izleyin.',
+  'app.nextBestAction.continueOrderAction': 'Kabul edilen siparişleri gör',
+  'app.nextBestAction.completeKycTitle': 'Kimlik doğrulamayı tamamla',
+  'app.nextBestAction.completeKycDescription':
+    'Müsaitlik yayınlama, talep kabul etme veya iş alma gibi marketplace eylemlerinden önce KYC gerekir.',
+  'app.nextBestAction.completeKycAction': "KYC'ye git",
+  'app.nextBestAction.activateAccessTitle': 'Wayler iş erişimini etkinleştir',
+  'app.nextBestAction.activateAccessDescription':
+    'Talep kabul etmeden veya Göndericiyle iletişime geçmeden önce Wayler iş erişimi gerekebilir. Mock/manuel akış — gerçek ödeme alınmaz.',
+  'app.nextBestAction.activateAccessAction': 'İş erişimini gör',
+  'app.nextBestAction.publishAvailabilityTitle': 'Müsaitlik yayınla',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'Göndericilerin sizi bulup talep gönderebilmesi için yerel müsaitlik veya seyahat rotası yayınlayın.',
+  'app.nextBestAction.publishAvailabilityAction': 'Müsaitlik yayınla',
+  'app.nextBestAction.reviewRequestsTitle': 'Gönderici taleplerini incele',
+  'app.nextBestAction.reviewRequestsDescription':
+    'Bekleyen Gönderici talepleriniz var. Detayları inceleyin ve Wayly içinde yanıtlayın.',
+  'app.nextBestAction.reviewRequestsAction': 'Gelen talepleri gör',
+  'app.nextBestAction.continueDeliveryTitle': 'Teslimata devam et',
+  'app.nextBestAction.continueDeliveryDescription':
+    'Devam eden kabul edilmiş işiniz var. Sipariş zaman çizelgesi ve teslim kanıtı rehberini kullanın.',
+  'app.nextBestAction.continueDeliveryAction': 'Kabul edilen işi gör',
+  'app.nextBestAction.priorityHigh': 'Yüksek',
+  'app.nextBestAction.priorityMedium': 'Orta',
+  'app.nextBestAction.priorityLow': 'Düşük',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -9828,6 +10072,45 @@ const ar: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': 'احتفظ بالتفاصيل والتواصل داخل Wayly.',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     'يصبح الطلب المقبول طلب تسليم مع دردشة داخل Wayly.',
+  'app.nextBestAction.senderTitle': 'التالي للمرسل',
+  'app.nextBestAction.senderSubtitle': 'خطوات مقترحة بناءً على نشاطك الحالي في السوق.',
+  'app.nextBestAction.waylerTitle': 'التالي للوايلر',
+  'app.nextBestAction.waylerSubtitle': 'خطوات مقترحة بناءً على نشاطك الحالي في السوق.',
+  'app.nextBestAction.browseWaylersTitle': 'العثور على وايلر',
+  'app.nextBestAction.browseWaylersDescription':
+    'تصفّح التوفر والمسارات المنشورة، ثم أرسل طلبك الأول بتفاصيل واضحة للطرد.',
+  'app.nextBestAction.browseWaylersAction': 'تصفّح الوايلر',
+  'app.nextBestAction.trackRequestsTitle': 'تتبع ردود الوايلر',
+  'app.nextBestAction.trackRequestsDescription':
+    'لديك طلبات معلقة بانتظار الرد. تحقق من الحالة والرسائل داخل Wayly.',
+  'app.nextBestAction.trackRequestsAction': 'عرض الطلبات المرسلة',
+  'app.nextBestAction.continueOrderTitle': 'متابعة التسليم',
+  'app.nextBestAction.continueOrderDescription':
+    'لديك تسليم مقبول. اتبع الجدول الزمني للطلب والدردشة وخطوات الإثبات داخل Wayly.',
+  'app.nextBestAction.continueOrderAction': 'عرض الطلبات المقبولة',
+  'app.nextBestAction.completeKycTitle': 'إكمال التحقق من الهوية',
+  'app.nextBestAction.completeKycDescription':
+    'KYC مطلوب قبل إجراءات السوق مثل نشر التوفر أو قبول الطلبات أو أخذ العمل.',
+  'app.nextBestAction.completeKycAction': 'الذهاب إلى KYC',
+  'app.nextBestAction.activateAccessTitle': 'تفعيل وصول عمل الوايلر',
+  'app.nextBestAction.activateAccessDescription':
+    'قد يلزم وصول عمل الوايلر قبل قبول الطلبات أو التواصل مع المرسلين. تدفق mock/يدوي — لا يتم خصم دفع حقيقي.',
+  'app.nextBestAction.activateAccessAction': 'عرض وصول العمل',
+  'app.nextBestAction.publishAvailabilityTitle': 'نشر التوفر',
+  'app.nextBestAction.publishAvailabilityDescription':
+    'انشر توفراً محلياً أو مسار رحلة ليتمكن المرسلون من العثور عليك وإرسال طلب.',
+  'app.nextBestAction.publishAvailabilityAction': 'نشر التوفر',
+  'app.nextBestAction.reviewRequestsTitle': 'مراجعة طلبات المرسل',
+  'app.nextBestAction.reviewRequestsDescription':
+    'لديك طلبات مرسل معلقة. راجع التفاصيل وأجب داخل Wayly.',
+  'app.nextBestAction.reviewRequestsAction': 'عرض الطلبات الواردة',
+  'app.nextBestAction.continueDeliveryTitle': 'متابعة التسليم',
+  'app.nextBestAction.continueDeliveryDescription':
+    'لديك عمل مقبول قيد التنفيذ. استخدم الجدول الزمني للطلب وإرشادات إثبات التسليم.',
+  'app.nextBestAction.continueDeliveryAction': 'عرض العمل المقبول',
+  'app.nextBestAction.priorityHigh': 'عالية',
+  'app.nextBestAction.priorityMedium': 'متوسطة',
+  'app.nextBestAction.priorityLow': 'منخفضة',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -11132,6 +11415,44 @@ const zh: Dictionary = {
   'app.marketplaceEmpty.keepInsideWayly': '在 Wayly 内保留详情和沟通。',
   'app.marketplaceEmpty.acceptedCreatesOrderChat':
     '已接受的请求会在 Wayly 内转为配送订单并开启聊天。',
+  'app.nextBestAction.senderTitle': 'Sender 下一步',
+  'app.nextBestAction.senderSubtitle': '根据您当前的市场活动建议的步骤。',
+  'app.nextBestAction.waylerTitle': 'Wayler 下一步',
+  'app.nextBestAction.waylerSubtitle': '根据您当前的市场活动建议的步骤。',
+  'app.nextBestAction.browseWaylersTitle': '寻找 Wayler',
+  'app.nextBestAction.browseWaylersDescription':
+    '浏览已发布的可用性和路线，然后发送包含清晰包裹细节的第一个请求。',
+  'app.nextBestAction.browseWaylersAction': '浏览 Wayler',
+  'app.nextBestAction.trackRequestsTitle': '跟踪 Wayler 回复',
+  'app.nextBestAction.trackRequestsDescription': '您有待回复的请求。在 Wayly 内查看状态和消息。',
+  'app.nextBestAction.trackRequestsAction': '查看已发送请求',
+  'app.nextBestAction.continueOrderTitle': '继续配送',
+  'app.nextBestAction.continueOrderDescription':
+    '您有已接受的配送。在 Wayly 内跟随订单时间线、聊天和凭证步骤。',
+  'app.nextBestAction.continueOrderAction': '查看已接受订单',
+  'app.nextBestAction.completeKycTitle': '完成身份验证',
+  'app.nextBestAction.completeKycDescription':
+    '发布可用性、接受请求或接单等市场操作前需要完成 KYC。',
+  'app.nextBestAction.completeKycAction': '前往 KYC',
+  'app.nextBestAction.activateAccessTitle': '激活 Wayler 工作权限',
+  'app.nextBestAction.activateAccessDescription':
+    '接受请求或联系 Sender 前可能需要 Wayler 工作权限。模拟/手动流程 — 不收取真实费用。',
+  'app.nextBestAction.activateAccessAction': '查看工作权限',
+  'app.nextBestAction.publishAvailabilityTitle': '发布可用性',
+  'app.nextBestAction.publishAvailabilityDescription':
+    '发布本地可用性或旅行路线，以便 Sender 找到您并发送请求。',
+  'app.nextBestAction.publishAvailabilityAction': '发布可用性',
+  'app.nextBestAction.reviewRequestsTitle': '查看 Sender 请求',
+  'app.nextBestAction.reviewRequestsDescription':
+    '您有待处理的 Sender 请求。查看详情并在 Wayly 内回复。',
+  'app.nextBestAction.reviewRequestsAction': '查看收到的请求',
+  'app.nextBestAction.continueDeliveryTitle': '继续配送',
+  'app.nextBestAction.continueDeliveryDescription':
+    '您有进行中的已接受工作。使用订单时间线和送达凭证指引。',
+  'app.nextBestAction.continueDeliveryAction': '查看已接受工作',
+  'app.nextBestAction.priorityHigh': '高',
+  'app.nextBestAction.priorityMedium': '中',
+  'app.nextBestAction.priorityLow': '低',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',

@@ -55,6 +55,7 @@ import { SuspendedAccountNotice } from '@/components/app/suspended-account-notic
 import { WaylerAccessPanel } from '@/components/app/wayler-access-panel';
 import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-panel';
 import { WaylerIncomingRequestsPanel } from '@/components/app/wayler-incoming-requests-panel';
+import { WaylerNextBestActions } from '@/components/app/wayler-next-best-actions';
 import { LanguageSelect } from '@/components/language-select';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
@@ -677,6 +678,14 @@ export default function AppHomePage() {
   const [acceptError, setAcceptError] = useState<string | null>(null);
   const [acceptSuccess, setAcceptSuccess] = useState(false);
   const [waylerHasActiveAccess, setWaylerHasActiveAccess] = useState(false);
+  const [waylerAvailabilitySnapshot, setWaylerAvailabilitySnapshot] = useState<{
+    count: number;
+    loading: boolean;
+  } | null>(null);
+  const [waylerRequestsSnapshot, setWaylerRequestsSnapshot] = useState<{
+    pendingCount: number;
+    loading: boolean;
+  } | null>(null);
   const [acceptedOrders, setAcceptedOrders] = useState<WaylerAcceptedOrderRow[]>([]);
   const [acceptedLoading, setAcceptedLoading] = useState(false);
   const [acceptedError, setAcceptedError] = useState<string | null>(null);
@@ -1775,7 +1784,21 @@ export default function AppHomePage() {
 
         {mode === 'wayler' ? (
           <>
-            <Card className={APP_PANEL_CLASS}>
+            <WaylerNextBestActions
+              kycLoading={kycLoading}
+              isApproved={!!isApproved}
+              waylerHasActiveAccess={waylerHasActiveAccess}
+              hasAcceptedWork={acceptedOrders.length > 0}
+              acceptedWorkLoading={acceptedLoading}
+              availabilityLoading={waylerAvailabilitySnapshot?.loading ?? null}
+              hasPublishedAvailability={
+                waylerAvailabilitySnapshot === null ? null : waylerAvailabilitySnapshot.count > 0
+              }
+              incomingLoading={waylerRequestsSnapshot?.loading ?? null}
+              pendingIncomingCount={waylerRequestsSnapshot?.pendingCount ?? null}
+            />
+
+            <Card id="wayler-access" className={APP_PANEL_CLASS}>
               <CardHeader>
                 <CardTitle>{t('app.waylerAccess.title')}</CardTitle>
               </CardHeader>
@@ -2577,11 +2600,14 @@ export default function AppHomePage() {
                 <CardTitle>{t('app.waylerAvailability.title')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <WaylerAvailabilityPanel kycGate={kycGateProps} />
+                <WaylerAvailabilityPanel
+                  kycGate={kycGateProps}
+                  onAvailabilitySnapshot={setWaylerAvailabilitySnapshot}
+                />
               </CardContent>
             </Card>
 
-            <Card className={APP_PANEL_CLASS}>
+            <Card id="wayler-requests" className={APP_PANEL_CLASS}>
               <CardHeader>
                 <CardTitle>{t('app.availabilityRequests.incomingRequests')}</CardTitle>
               </CardHeader>
@@ -2590,6 +2616,7 @@ export default function AppHomePage() {
                   kycGate={kycGateProps}
                   waylerHasActiveAccess={waylerHasActiveAccess}
                   onRequestAccepted={() => void loadAcceptedOrders()}
+                  onRequestsSnapshot={setWaylerRequestsSnapshot}
                 />
               </CardContent>
             </Card>
@@ -2834,7 +2861,7 @@ export default function AppHomePage() {
               </CardContent>
             </Card>
 
-            <Card className={APP_PANEL_CLASS}>
+            <Card id="sender-orders" className={APP_PANEL_CLASS}>
               <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <CardTitle>{t('app.senderPanel.publishedTitle')}</CardTitle>
                 <Button
@@ -3449,6 +3476,8 @@ export default function AppHomePage() {
                   kycGate={senderKycGateProps}
                   canBrowse={!!canViewSenderOrders}
                   onAcceptedOrdersRefresh={() => void loadSenderAcceptedOrders()}
+                  hasAcceptedOrders={senderAcceptedOrders.length > 0}
+                  acceptedOrdersLoading={senderAcceptedLoading}
                 />
               </CardContent>
             </Card>

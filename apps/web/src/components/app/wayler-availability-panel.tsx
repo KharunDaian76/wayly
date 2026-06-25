@@ -82,6 +82,7 @@ const INITIAL_FORM: FormState = {
 
 type WaylerAvailabilityPanelProps = {
   kycGate: KycGateProps;
+  onAvailabilitySnapshot?: (snapshot: { count: number; loading: boolean }) => void;
 };
 
 function toIsoDateTime(localValue: string): string | undefined {
@@ -175,7 +176,10 @@ function formatDateTime(value: string | null): string {
   return new Date(value).toLocaleString();
 }
 
-export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProps) {
+export function WaylerAvailabilityPanel({
+  kycGate,
+  onAvailabilitySnapshot,
+}: WaylerAvailabilityPanelProps) {
   const { t } = useI18n();
   const { isApproved, kycLoading } = kycGate;
 
@@ -219,6 +223,10 @@ export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProp
       void loadListings();
     }
   }, [kycLoading, isApproved, loadListings]);
+
+  useEffect(() => {
+    onAvailabilitySnapshot?.({ count: listings.length, loading: listingsLoading });
+  }, [listings.length, listingsLoading, onAvailabilitySnapshot]);
 
   const updateForm = (patch: Partial<FormState>) => {
     setForm((prev) => ({ ...prev, ...patch }));
