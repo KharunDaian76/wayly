@@ -13,6 +13,14 @@ import {
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
+import {
+  isWaylerAvailabilityReady,
+  WaylerAvailabilityAccessNote,
+  WaylerAvailabilityHowItWorks,
+  WaylerAvailabilityPreview,
+  WaylerAvailabilityPublishingChecklist,
+  WaylerAvailabilityReadyBadge,
+} from '@/components/app/wayler-availability-composer';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -395,6 +403,10 @@ export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProp
             onSubmit={(e) => void handleCreate(e)}
           >
             <h3 className="text-sm font-semibold">{t('app.waylerAvailability.createTitle')}</h3>
+
+            <WaylerAvailabilityHowItWorks />
+            <WaylerAvailabilityAccessNote />
+
             <p className="text-xs text-muted-foreground">
               {isLocal
                 ? t('app.waylerAvailability.localHint')
@@ -598,8 +610,17 @@ export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProp
               />
             </label>
 
+            <WaylerAvailabilityPreview form={form} />
+            <WaylerAvailabilityPublishingChecklist />
+
+            <div className="flex flex-wrap items-center gap-2">
+              <WaylerAvailabilityReadyBadge ready={isWaylerAvailabilityReady(form)} />
+            </div>
+
             <Button type="submit" variant="primary" disabled={creating || actionDisabled}>
-              {creating ? t('app.waylerAvailability.creating') : t('app.waylerAvailability.create')}
+              {creating
+                ? t('app.waylerAvailabilityComposer.publishing')
+                : t('app.waylerAvailability.create')}
             </Button>
           </form>
 

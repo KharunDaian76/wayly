@@ -280,6 +280,9 @@ export function WaylerAccessPanel({ kycGate, onAccessChanged }: WaylerAccessPane
                   <p className="mt-3 text-sm text-muted-foreground">
                     {t('app.waylerAccess.inactiveNote')}
                   </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {t('app.waylerAvailabilityComposer.accessNote')}
+                  </p>
                   {demoToolsEnabled ? (
                     <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                       <Button

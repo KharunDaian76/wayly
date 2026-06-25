@@ -997,6 +997,38 @@ const en = {
   'app.waylerAvailability.tripHint':
     'Origin and destination country/city, departure date, and trip direction are required.',
   'app.waylerAvailability.returnDateRequired': 'Return date is required for return trips.',
+  'app.waylerAvailabilityComposer.previewTitle': 'Availability preview',
+  'app.waylerAvailabilityComposer.previewEmpty':
+    'Fill in the fields above to preview your listing.',
+  'app.waylerAvailabilityComposer.previewType': 'Type',
+  'app.waylerAvailabilityComposer.previewOrigin': 'Origin',
+  'app.waylerAvailabilityComposer.previewDestination': 'Destination',
+  'app.waylerAvailabilityComposer.previewDates': 'Active dates',
+  'app.waylerAvailabilityComposer.previewCapacity': 'Capacity',
+  'app.waylerAvailabilityComposer.checklistTitle': 'Publishing checklist',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'How marketplace publishing works',
+  'app.waylerAvailabilityComposer.stepPublish':
+    'Create a draft, then publish when your availability or trip is ready.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'Senders can find your listing and send a delivery request.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'You accept or decline each request.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'Accepted requests become orders and secure chat opens inside Wayly.',
+  'app.waylerAvailabilityComposer.checkLocationsDates':
+    'Double-check locations and dates before publishing.',
+  'app.waylerAvailabilityComposer.checkPublicReady':
+    'Publish only when your availability is accurate and ready to share.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly':
+    'Respond to Sender requests inside Wayly.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept': 'Chat opens after you accept a request.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems':
+    'Do not accept restricted or unsafe items.',
+  'app.waylerAvailabilityComposer.checkReviewTools':
+    'Wayly review tools help admins and arbitrators handle disputes.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'Wayler work access may be required before some marketplace actions. This is a manual/demo flow — not real payment.',
+  'app.waylerAvailabilityComposer.ready': 'Draft ready to create',
+  'app.waylerAvailabilityComposer.publishing': 'Creating draft…',
   'app.senderWaylers.title': 'Browse active Waylers',
   'app.senderWaylers.subtitle':
     'Discover active local couriers and travel routes published by Waylers.',
@@ -2225,6 +2257,36 @@ const ru: Dictionary = {
   'app.waylerAvailability.tripHint':
     'Нужны страна/город отправления и назначения, дата отправления и направление поездки.',
   'app.waylerAvailability.returnDateRequired': 'Для поездки туда-обратно нужна дата возврата.',
+  'app.waylerAvailabilityComposer.previewTitle': 'Предпросмотр доступности',
+  'app.waylerAvailabilityComposer.previewEmpty': 'Заполните поля выше для предпросмотра.',
+  'app.waylerAvailabilityComposer.previewType': 'Тип',
+  'app.waylerAvailabilityComposer.previewOrigin': 'Отправление',
+  'app.waylerAvailabilityComposer.previewDestination': 'Назначение',
+  'app.waylerAvailabilityComposer.previewDates': 'Активные даты',
+  'app.waylerAvailabilityComposer.previewCapacity': 'Вместимость',
+  'app.waylerAvailabilityComposer.checklistTitle': 'Чек-лист публикации',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'Как работает публикация',
+  'app.waylerAvailabilityComposer.stepPublish':
+    'Создайте черновик и опубликуйте, когда всё готово.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'Отправители найдут объявление и отправят запрос.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'Вы принимаете или отклоняете запрос.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'Принятые запросы становятся заказами, открывается чат в Wayly.',
+  'app.waylerAvailabilityComposer.checkLocationsDates':
+    'Проверьте локации и даты перед публикацией.',
+  'app.waylerAvailabilityComposer.checkPublicReady':
+    'Публикуйте только когда информация точна и готова.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly':
+    'Отвечайте на запросы отправителей внутри Wayly.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept': 'Чат открывается после принятия запроса.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems':
+    'Не принимайте запрещённые или небезопасные предметы.',
+  'app.waylerAvailabilityComposer.checkReviewTools': 'Инструменты Wayly помогают при спорах.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'Для некоторых действий может потребоваться доступ Wayler. Это ручной/demo режим — не реальная оплата.',
+  'app.waylerAvailabilityComposer.ready': 'Черновик готов к созданию',
+  'app.waylerAvailabilityComposer.publishing': 'Создание черновика…',
   'app.senderWaylers.title': 'Просмотр активных курьеров',
   'app.senderWaylers.subtitle':
     'Найдите активных локальных курьеров и маршруты, опубликованные Waylers.',
@@ -3456,6 +3518,37 @@ const es: Dictionary = {
     'Se requieren país/ciudad de origen y destino, fecha de salida y dirección del viaje.',
   'app.waylerAvailability.returnDateRequired':
     'La fecha de regreso es obligatoria para viajes de ida y vuelta.',
+  'app.waylerAvailabilityComposer.previewTitle': 'Vista previa de disponibilidad',
+  'app.waylerAvailabilityComposer.previewEmpty': 'Completa los campos arriba para previsualizar.',
+  'app.waylerAvailabilityComposer.previewType': 'Tipo',
+  'app.waylerAvailabilityComposer.previewOrigin': 'Origen',
+  'app.waylerAvailabilityComposer.previewDestination': 'Destino',
+  'app.waylerAvailabilityComposer.previewDates': 'Fechas activas',
+  'app.waylerAvailabilityComposer.previewCapacity': 'Capacidad',
+  'app.waylerAvailabilityComposer.checklistTitle': 'Lista de publicación',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'Cómo funciona la publicación',
+  'app.waylerAvailabilityComposer.stepPublish': 'Crea un borrador y publícalo cuando esté listo.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'Los Senders encontrarán tu anuncio y enviarán solicitudes.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'Aceptas o rechazas cada solicitud.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'Las solicitudes aceptadas crean pedidos y abren chat seguro en Wayly.',
+  'app.waylerAvailabilityComposer.checkLocationsDates':
+    'Verifica ubicaciones y fechas antes de publicar.',
+  'app.waylerAvailabilityComposer.checkPublicReady':
+    'Publica solo cuando la información sea precisa y esté lista.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly':
+    'Responde solicitudes de Senders dentro de Wayly.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept':
+    'El chat se abre después de aceptar una solicitud.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems':
+    'No aceptes artículos restringidos o inseguros.',
+  'app.waylerAvailabilityComposer.checkReviewTools':
+    'Las herramientas de Wayly ayudan en disputas.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'Puede requerirse acceso Wayler para algunas acciones. Flujo manual/demo — no pago real.',
+  'app.waylerAvailabilityComposer.ready': 'Borrador listo para crear',
+  'app.waylerAvailabilityComposer.publishing': 'Creando borrador…',
   'app.senderWaylers.title': 'Explorar Waylers activos',
   'app.senderWaylers.subtitle':
     'Descubre couriers locales activos y rutas de viaje publicadas por Waylers.',
@@ -4701,6 +4794,37 @@ const fr: Dictionary = {
     "Pays/ville d'origine et de destination, date de départ et sens du voyage requis.",
   'app.waylerAvailability.returnDateRequired':
     'La date de retour est requise pour les voyages aller-retour.',
+  'app.waylerAvailabilityComposer.previewTitle': 'Aperçu de la disponibilité',
+  'app.waylerAvailabilityComposer.previewEmpty':
+    'Remplissez les champs ci-dessus pour prévisualiser.',
+  'app.waylerAvailabilityComposer.previewType': 'Type',
+  'app.waylerAvailabilityComposer.previewOrigin': 'Origine',
+  'app.waylerAvailabilityComposer.previewDestination': 'Destination',
+  'app.waylerAvailabilityComposer.previewDates': 'Dates actives',
+  'app.waylerAvailabilityComposer.previewCapacity': 'Capacité',
+  'app.waylerAvailabilityComposer.checklistTitle': 'Liste de publication',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'Comment fonctionne la publication',
+  'app.waylerAvailabilityComposer.stepPublish':
+    'Créez un brouillon, puis publiez quand tout est prêt.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'Les Senders trouvent votre annonce et envoient une demande.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'Vous acceptez ou refusez chaque demande.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'Les demandes acceptées deviennent des commandes et ouvrent un chat sécurisé.',
+  'app.waylerAvailabilityComposer.checkLocationsDates': 'Vérifiez lieux et dates avant de publier.',
+  'app.waylerAvailabilityComposer.checkPublicReady':
+    'Publiez seulement quand les informations sont exactes.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly':
+    'Répondez aux demandes des Senders dans Wayly.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept':
+    'Le chat s’ouvre après acceptation d’une demande.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems':
+    'N’acceptez pas d’articles restreints ou dangereux.',
+  'app.waylerAvailabilityComposer.checkReviewTools': 'Les outils Wayly aident lors des litiges.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'Un accès Wayler peut être requis pour certaines actions. Flux manuel/démo — pas de paiement réel.',
+  'app.waylerAvailabilityComposer.ready': 'Brouillon prêt à créer',
+  'app.waylerAvailabilityComposer.publishing': 'Création du brouillon…',
   'app.senderWaylers.title': 'Parcourir les Waylers actifs',
   'app.senderWaylers.subtitle':
     'Découvrez les coursiers locaux actifs et les itinéraires publiés par les Waylers.',
@@ -5962,6 +6086,37 @@ const de: Dictionary = {
     'Herkunfts- und Zielland/-stadt, Abfahrtsdatum und Reiserichtung erforderlich.',
   'app.waylerAvailability.returnDateRequired':
     'Rückkehrdatum ist für Hin-und-Rück-Reisen erforderlich.',
+  'app.waylerAvailabilityComposer.previewTitle': 'Verfügbarkeitsvorschau',
+  'app.waylerAvailabilityComposer.previewEmpty': 'Felder oben ausfüllen für die Vorschau.',
+  'app.waylerAvailabilityComposer.previewType': 'Typ',
+  'app.waylerAvailabilityComposer.previewOrigin': 'Herkunft',
+  'app.waylerAvailabilityComposer.previewDestination': 'Ziel',
+  'app.waylerAvailabilityComposer.previewDates': 'Aktive Daten',
+  'app.waylerAvailabilityComposer.previewCapacity': 'Kapazität',
+  'app.waylerAvailabilityComposer.checklistTitle': 'Veröffentlichungs-Checkliste',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'So funktioniert die Veröffentlichung',
+  'app.waylerAvailabilityComposer.stepPublish':
+    'Entwurf erstellen und veröffentlichen, wenn alles stimmt.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'Sender finden Ihr Angebot und senden Anfragen.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'Sie nehmen jede Anfrage an oder lehnen ab.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'Angenommene Anfragen werden Aufträge mit sicherem Chat in Wayly.',
+  'app.waylerAvailabilityComposer.checkLocationsDates':
+    'Orte und Daten vor der Veröffentlichung prüfen.',
+  'app.waylerAvailabilityComposer.checkPublicReady':
+    'Nur veröffentlichen, wenn die Angaben korrekt sind.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly':
+    'Auf Sender-Anfragen innerhalb von Wayly antworten.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept':
+    'Chat öffnet sich nach Annahme einer Anfrage.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems':
+    'Keine eingeschränkten oder unsicheren Artikel annehmen.',
+  'app.waylerAvailabilityComposer.checkReviewTools': 'Wayly-Prüftools helfen bei Streitfällen.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'Wayler-Zugang kann für einige Aktionen nötig sein. Manueller/Demo-Ablauf — keine echte Zahlung.',
+  'app.waylerAvailabilityComposer.ready': 'Entwurf bereit zum Erstellen',
+  'app.waylerAvailabilityComposer.publishing': 'Entwurf wird erstellt…',
   'app.senderWaylers.title': 'Aktive Wayler durchsuchen',
   'app.senderWaylers.subtitle':
     'Entdecken Sie aktive lokale Kuriere und von Waylern veröffentlichte Reiserouten.',
@@ -7182,6 +7337,37 @@ const tr: Dictionary = {
   'app.waylerAvailability.tripHint':
     'Çıkış/varış ülke-şehir, kalkış tarihi ve seyahat yönü gerekli.',
   'app.waylerAvailability.returnDateRequired': 'Gidiş-dönüş seyahatlerinde dönüş tarihi gerekli.',
+  'app.waylerAvailabilityComposer.previewTitle': 'Müsaitlik önizlemesi',
+  'app.waylerAvailabilityComposer.previewEmpty': 'Önizleme için yukarıdaki alanları doldurun.',
+  'app.waylerAvailabilityComposer.previewType': 'Tür',
+  'app.waylerAvailabilityComposer.previewOrigin': 'Kalkış',
+  'app.waylerAvailabilityComposer.previewDestination': 'Varış',
+  'app.waylerAvailabilityComposer.previewDates': 'Aktif tarihler',
+  'app.waylerAvailabilityComposer.previewCapacity': 'Kapasite',
+  'app.waylerAvailabilityComposer.checklistTitle': 'Yayınlama kontrol listesi',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'Yayınlama nasıl çalışır',
+  'app.waylerAvailabilityComposer.stepPublish': 'Taslak oluşturun, hazır olduğunda yayınlayın.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'Göndericiler ilanınızı bulup talep gönderebilir.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'Her talebi kabul veya reddedersiniz.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'Kabul edilen talepler sipariş olur ve Wayly içinde güvenli sohbet açılır.',
+  'app.waylerAvailabilityComposer.checkLocationsDates':
+    'Yayınlamadan önce konum ve tarihleri kontrol edin.',
+  'app.waylerAvailabilityComposer.checkPublicReady':
+    'Yalnızca bilgiler doğru ve hazır olduğunda yayınlayın.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly':
+    'Gönderici taleplerine Wayly içinde yanıt verin.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept':
+    'Talep kabul edildikten sonra sohbet açılır.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems':
+    'Kısıtlı veya güvensiz eşyaları kabul etmeyin.',
+  'app.waylerAvailabilityComposer.checkReviewTools':
+    'Wayly inceleme araçları anlaşmazlıklarda yardımcı olur.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'Bazı marketplace işlemleri için Wayler erişimi gerekebilir. Manuel/demo akış — gerçek ödeme değil.',
+  'app.waylerAvailabilityComposer.ready': 'Taslak oluşturmaya hazır',
+  'app.waylerAvailabilityComposer.publishing': 'Taslak oluşturuluyor…',
   'app.senderWaylers.title': 'Aktif Waylerları göz at',
   'app.senderWaylers.subtitle':
     'Waylerların yayınladığı aktif yerel kuryeleri ve seyahat rotalarını keşfedin.',
@@ -8363,6 +8549,31 @@ const ar: Dictionary = {
   'app.waylerAvailability.tripHint':
     'بلد/مدينة المنشأ والوجهة وتاريخ المغادرة واتجاه الرحلة مطلوبة.',
   'app.waylerAvailability.returnDateRequired': 'تاريخ العودة مطلوب لرحلات الذهاب والإياب.',
+  'app.waylerAvailabilityComposer.previewTitle': 'معاينة التوفر',
+  'app.waylerAvailabilityComposer.previewEmpty': 'املأ الحقول أعلاه للمعاينة.',
+  'app.waylerAvailabilityComposer.previewType': 'النوع',
+  'app.waylerAvailabilityComposer.previewOrigin': 'المنشأ',
+  'app.waylerAvailabilityComposer.previewDestination': 'الوجهة',
+  'app.waylerAvailabilityComposer.previewDates': 'التواريخ النشطة',
+  'app.waylerAvailabilityComposer.previewCapacity': 'السعة',
+  'app.waylerAvailabilityComposer.checklistTitle': 'قائمة النشر',
+  'app.waylerAvailabilityComposer.howItWorksTitle': 'كيف يعمل النشر',
+  'app.waylerAvailabilityComposer.stepPublish': 'أنشئ مسودة ثم انشر عندما تكون جاهزًا.',
+  'app.waylerAvailabilityComposer.stepSenderRequests':
+    'يمكن للمرسلين العثور على إعلانك وإرسال طلب.',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': 'تقبل أو ترفض كل طلب.',
+  'app.waylerAvailabilityComposer.stepOrderChat':
+    'الطلبات المقبولة تصبح أوامر ويُفتح محادثة آمنة داخل Wayly.',
+  'app.waylerAvailabilityComposer.checkLocationsDates': 'تحقق من المواقع والتواريخ قبل النشر.',
+  'app.waylerAvailabilityComposer.checkPublicReady': 'انشر فقط عندما تكون المعلومات دقيقة وجاهزة.',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly': 'رد على طلبات المرسلين داخل Wayly.',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept': 'تفتح الدردشة بعد قبول الطلب.',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems': 'لا تقبل عناصر محظورة أو غير آمنة.',
+  'app.waylerAvailabilityComposer.checkReviewTools': 'أدوات Wayly تساعد في النزاعات.',
+  'app.waylerAvailabilityComposer.accessNote':
+    'قد يلزم وصول Wayler لبعض إجراءات السوق. تدفق يدوي/تجريبي — ليس دفعًا حقيقيًا.',
+  'app.waylerAvailabilityComposer.ready': 'المسودة جاهزة للإنشاء',
+  'app.waylerAvailabilityComposer.publishing': 'جارٍ إنشاء المسودة…',
   'app.senderWaylers.title': 'تصفح سعاة Wayler النشطين',
   'app.senderWaylers.subtitle': 'اكتشف السعاة المحليين النشطين ومسارات السفر المنشورة من Waylers.',
   'app.senderWaylers.filters': 'فلاتر البحث',
@@ -9519,6 +9730,29 @@ const zh: Dictionary = {
   'app.waylerAvailability.localHint': '需要出发国家和城市或地区。设置您本地可用的时间。',
   'app.waylerAvailability.tripHint': '需要出发/目的国家城市、出发日期和行程方向。',
   'app.waylerAvailability.returnDateRequired': '往返行程需要返回日期。',
+  'app.waylerAvailabilityComposer.previewTitle': '可用性预览',
+  'app.waylerAvailabilityComposer.previewEmpty': '填写上方字段以预览您的 listing。',
+  'app.waylerAvailabilityComposer.previewType': '类型',
+  'app.waylerAvailabilityComposer.previewOrigin': '出发地',
+  'app.waylerAvailabilityComposer.previewDestination': '目的地',
+  'app.waylerAvailabilityComposer.previewDates': '有效日期',
+  'app.waylerAvailabilityComposer.previewCapacity': '容量',
+  'app.waylerAvailabilityComposer.checklistTitle': '发布清单',
+  'app.waylerAvailabilityComposer.howItWorksTitle': '发布流程说明',
+  'app.waylerAvailabilityComposer.stepPublish': '创建草稿，准备好后再发布。',
+  'app.waylerAvailabilityComposer.stepSenderRequests': 'Sender 可找到您的 listing 并发送请求。',
+  'app.waylerAvailabilityComposer.stepAcceptDecline': '您接受或拒绝每个请求。',
+  'app.waylerAvailabilityComposer.stepOrderChat': '接受的请求会变为订单并在 Wayly 内开启安全聊天。',
+  'app.waylerAvailabilityComposer.checkLocationsDates': '发布前请核对地点和日期。',
+  'app.waylerAvailabilityComposer.checkPublicReady': '仅在信息准确且准备好时发布。',
+  'app.waylerAvailabilityComposer.checkRespondInsideWayly': '在 Wayly 内回复 Sender 请求。',
+  'app.waylerAvailabilityComposer.checkChatAfterAccept': '接受请求后聊天才会开启。',
+  'app.waylerAvailabilityComposer.checkNoRestrictedItems': '不要接受受限或不安全物品。',
+  'app.waylerAvailabilityComposer.checkReviewTools': 'Wayly 审核工具可在争议时协助处理。',
+  'app.waylerAvailabilityComposer.accessNote':
+    '部分 marketplace 操作可能需要 Wayler 工作访问权限。此为手动/演示流程，非真实支付。',
+  'app.waylerAvailabilityComposer.ready': '草稿可创建',
+  'app.waylerAvailabilityComposer.publishing': '正在创建草稿…',
   'app.senderWaylers.title': '浏览活跃快递员',
   'app.senderWaylers.subtitle': '发现 Wayler 发布的活跃本地快递员和旅行路线。',
   'app.senderWaylers.filters': '搜索筛选',
