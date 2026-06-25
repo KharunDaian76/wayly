@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@wayly/ui';
 
 import { AdminDisputesQueuePanel } from '@/components/app/admin-disputes-queue-panel';
 import { AdminKycQueuePanel } from '@/components/app/admin-kyc-queue-panel';
+import { AdminOperationsOverviewPanel } from '@/components/app/admin-operations-overview-panel';
 import { AdminOrdersQueuePanel } from '@/components/app/admin-orders-queue-panel';
 import { AdminPaymentsQueuePanel } from '@/components/app/admin-payments-queue-panel';
 import { AdminSystemHealthPanel } from '@/components/app/admin-system-health-panel';
@@ -55,6 +56,7 @@ export function AdminOperationsDashboard({ roles }: AdminOperationsDashboardProp
         ) : null}
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <AdminOperationsOverviewPanel roles={roles} />
         <div className="grid gap-4 sm:grid-cols-2">
           <AdminDisputesQueuePanel roles={roles} />
           <AdminKycQueuePanel roles={roles} />
