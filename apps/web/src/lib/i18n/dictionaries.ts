@@ -1136,6 +1136,8 @@ const en = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'Counts are aggregated and privacy-safe — no individual Wayler identity is shown.',
   'app.marketplaceTrust.browseAvailableWaylers': 'Browse available Waylers below.',
+  'app.marketplaceTrust.verifiedWayler': 'Verified Wayler',
+  'app.marketplaceTrust.identityChecked': 'Identity checked by Wayly',
   'app.marketplaceRouteMatch.label': 'Match',
   'app.marketplaceRouteMatch.basedOnSearch': 'Based on your current search',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -2590,6 +2592,8 @@ const ru: Dictionary = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'Счётчики агрегированы и безопасны — личность Wayler не раскрывается.',
   'app.marketplaceTrust.browseAvailableWaylers': 'Просмотрите доступных Wayler ниже.',
+  'app.marketplaceTrust.verifiedWayler': 'Проверенный Wayler',
+  'app.marketplaceTrust.identityChecked': 'Личность проверена Wayly',
   'app.marketplaceRouteMatch.label': 'Совпадение',
   'app.marketplaceRouteMatch.basedOnSearch': 'На основе вашего текущего поиска',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -4047,6 +4051,8 @@ const es: Dictionary = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'Los conteos son agregados y seguros — no se muestra la identidad individual.',
   'app.marketplaceTrust.browseAvailableWaylers': 'Explora Waylers disponibles abajo.',
+  'app.marketplaceTrust.verifiedWayler': 'Wayler verificado',
+  'app.marketplaceTrust.identityChecked': 'Identidad verificada por Wayly',
   'app.marketplaceRouteMatch.label': 'Coincidencia',
   'app.marketplaceRouteMatch.basedOnSearch': 'Según tu búsqueda actual',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -5518,6 +5524,8 @@ const fr: Dictionary = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'Comptes agrégés et respectueux de la vie privée — aucune identité individuelle.',
   'app.marketplaceTrust.browseAvailableWaylers': 'Parcourez les Waylers disponibles ci-dessous.',
+  'app.marketplaceTrust.verifiedWayler': 'Wayler vérifié',
+  'app.marketplaceTrust.identityChecked': 'Identité vérifiée par Wayly',
   'app.marketplaceRouteMatch.label': 'Correspondance',
   'app.marketplaceRouteMatch.basedOnSearch': 'Selon votre recherche actuelle',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -7007,6 +7015,8 @@ const de: Dictionary = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'Zähler sind aggregiert und datenschutzfreundlich — keine Einzelidentität.',
   'app.marketplaceTrust.browseAvailableWaylers': 'Verfügbare Wayler unten durchsuchen.',
+  'app.marketplaceTrust.verifiedWayler': 'Verifizierter Wayler',
+  'app.marketplaceTrust.identityChecked': 'Identität von Wayly geprüft',
   'app.marketplaceRouteMatch.label': 'Übereinstimmung',
   'app.marketplaceRouteMatch.basedOnSearch': 'Basierend auf Ihrer aktuellen Suche',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -8454,6 +8464,8 @@ const tr: Dictionary = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'Sayılar toplanmış ve gizlilik dostu — bireysel kimlik gösterilmez.',
   'app.marketplaceTrust.browseAvailableWaylers': "Aşağıda müsait Wayler'ları inceleyin.",
+  'app.marketplaceTrust.verifiedWayler': 'Doğrulanmış Wayler',
+  'app.marketplaceTrust.identityChecked': 'Kimlik Wayly tarafından doğrulandı',
   'app.marketplaceRouteMatch.label': 'Eşleşme',
   'app.marketplaceRouteMatch.basedOnSearch': 'Mevcut aramanıza göre',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -9846,6 +9858,8 @@ const ar: Dictionary = {
   'app.marketplaceTrust.aggregatedCountsNote':
     'الأعداد مجمّعة وآمنة للخصوصية — لا تُعرض هوية فردية.',
   'app.marketplaceTrust.browseAvailableWaylers': 'تصفّح Waylers المتاحين أدناه.',
+  'app.marketplaceTrust.verifiedWayler': 'Wayler موثّق',
+  'app.marketplaceTrust.identityChecked': 'تم التحقق من الهوية بواسطة Wayly',
   'app.marketplaceRouteMatch.label': 'تطابق',
   'app.marketplaceRouteMatch.basedOnSearch': 'بناءً على بحثك الحالي',
   'app.marketplaceRouteMatch.noRouteFilter':
@@ -11202,6 +11216,8 @@ const zh: Dictionary = {
   'app.marketplaceTrust.keepAgreementInsideWayly': '请在 Wayly 内处理付款与重要约定。',
   'app.marketplaceTrust.aggregatedCountsNote': '计数为汇总且保护隐私 — 不显示个人身份。',
   'app.marketplaceTrust.browseAvailableWaylers': '请在下方浏览可用的 Wayler。',
+  'app.marketplaceTrust.verifiedWayler': '已验证 Wayler',
+  'app.marketplaceTrust.identityChecked': '身份已由 Wayly 验证',
   'app.marketplaceRouteMatch.label': '匹配',
   'app.marketplaceRouteMatch.basedOnSearch': '基于您当前的搜索',
   'app.marketplaceRouteMatch.noRouteFilter': '尚未设置路线筛选 — 添加起点或终点以查看匹配',

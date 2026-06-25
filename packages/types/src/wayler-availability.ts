@@ -29,6 +29,8 @@ export interface WaylerAvailabilitySummary {
   expiresAt: ISODateString | null;
   createdAt: ISODateString;
   updatedAt: ISODateString;
+  /** Public trust signal: true when Wayler identity is verified (KYC approved). */
+  isWaylerVerified: boolean;
 }
 
 /** Full Wayler availability payload (API routes land in a later batch). */

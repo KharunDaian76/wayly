@@ -45,7 +45,7 @@ export class WaylerAvailabilitiesService {
 
     const data = this.buildCreateData(user.id, body);
     const record = await this.prisma.waylerAvailability.create({ data });
-    return toWaylerAvailabilityDetail(record);
+    return toWaylerAvailabilityDetail(record, user);
   }
 
   async listMine(
@@ -73,7 +73,7 @@ export class WaylerAvailabilitiesService {
     ]);
 
     return {
-      items: records.map(toWaylerAvailabilitySummary),
+      items: records.map((record) => toWaylerAvailabilitySummary(record, user)),
       page: query.page,
       limit: query.limit,
       total,
@@ -95,12 +95,17 @@ export class WaylerAvailabilitiesService {
         orderBy: { createdAt: 'desc' },
         skip,
         take: query.limit,
+        include: {
+          wayler: {
+            select: { verified: true, kycStatus: true },
+          },
+        },
       }),
       this.prisma.waylerAvailability.count({ where }),
     ]);
 
     return {
-      items: records.map(toWaylerAvailabilitySummary),
+      items: records.map((record) => toWaylerAvailabilitySummary(record, record.wayler)),
       page: query.page,
       limit: query.limit,
       total,
@@ -159,20 +164,27 @@ export class WaylerAvailabilitiesService {
   async getDetail(user: RequestUser, id: string): Promise<WaylerAvailabilityDetail> {
     requireKycApproved(user);
 
-    const record = await this.prisma.waylerAvailability.findUnique({ where: { id } });
+    const record = await this.prisma.waylerAvailability.findUnique({
+      where: { id },
+      include: {
+        wayler: {
+          select: { verified: true, kycStatus: true },
+        },
+      },
+    });
     if (!record) {
       throw new NotFoundException('Wayler availability not found');
     }
 
     if (record.waylerId === user.id) {
-      return toWaylerAvailabilityDetail(record);
+      return toWaylerAvailabilityDetail(record, user);
     }
 
     if (!this.isPubliclyVisible(record)) {
       throw new NotFoundException('Wayler availability not found');
     }
 
-    return toWaylerAvailabilityDetail(record);
+    return toWaylerAvailabilityDetail(record, record.wayler);
   }
 
   async publish(user: RequestUser, id: string): Promise<WaylerAvailabilityDetail> {
@@ -198,7 +210,7 @@ export class WaylerAvailabilitiesService {
       },
     });
 
-    return toWaylerAvailabilityDetail(updated);
+    return toWaylerAvailabilityDetail(updated, user);
   }
 
   async pause(user: RequestUser, id: string): Promise<WaylerAvailabilityDetail> {
@@ -218,7 +230,7 @@ export class WaylerAvailabilitiesService {
       },
     });
 
-    return toWaylerAvailabilityDetail(updated);
+    return toWaylerAvailabilityDetail(updated, user);
   }
 
   async cancel(user: RequestUser, id: string): Promise<WaylerAvailabilityDetail> {
@@ -238,7 +250,7 @@ export class WaylerAvailabilitiesService {
       },
     });
 
-    return toWaylerAvailabilityDetail(updated);
+    return toWaylerAvailabilityDetail(updated, user);
   }
 
   private buildCreateData(

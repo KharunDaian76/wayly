@@ -1,7 +1,17 @@
 import type { WaylerAvailability } from '@prisma/client';
 import type { Decimal } from '@prisma/client/runtime/library';
 import type { WaylerAvailabilityDetail, WaylerAvailabilitySummary } from '@wayly/types';
-import { TripDirection, WaylerAvailabilityStatus, WaylerAvailabilityType } from '@wayly/types';
+import {
+  KycStatus,
+  TripDirection,
+  WaylerAvailabilityStatus,
+  WaylerAvailabilityType,
+} from '@wayly/types';
+
+export type WaylerVerificationFields = {
+  verified: boolean;
+  kycStatus: KycStatus | string;
+};
 
 function decimalToString(value: Decimal | null | undefined): string | null {
   if (value == null) {
@@ -14,8 +24,16 @@ function toIso(value: Date | null): string | null {
   return value?.toISOString() ?? null;
 }
 
+/** True when Wayler has completed identity verification (verified + KYC approved). */
+export function computeIsWaylerVerified(wayler: WaylerVerificationFields): boolean {
+  return wayler.verified === true && wayler.kycStatus === KycStatus.APPROVED;
+}
+
 /** Maps a Prisma WaylerAvailability to the safe API summary shape. */
-export function toWaylerAvailabilitySummary(record: WaylerAvailability): WaylerAvailabilitySummary {
+export function toWaylerAvailabilitySummary(
+  record: WaylerAvailability,
+  wayler?: WaylerVerificationFields | null,
+): WaylerAvailabilitySummary {
   return {
     id: record.id,
     waylerId: record.waylerId,
@@ -42,10 +60,14 @@ export function toWaylerAvailabilitySummary(record: WaylerAvailability): WaylerA
     expiresAt: toIso(record.expiresAt),
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
+    isWaylerVerified: wayler ? computeIsWaylerVerified(wayler) : false,
   };
 }
 
 /** Maps a Prisma WaylerAvailability to the safe API detail shape. */
-export function toWaylerAvailabilityDetail(record: WaylerAvailability): WaylerAvailabilityDetail {
-  return toWaylerAvailabilitySummary(record);
+export function toWaylerAvailabilityDetail(
+  record: WaylerAvailability,
+  wayler?: WaylerVerificationFields | null,
+): WaylerAvailabilityDetail {
+  return toWaylerAvailabilitySummary(record, wayler);
 }

@@ -15,6 +15,11 @@ const TRUST_BADGE_CLASS = cn(
   'border border-primary/15 bg-primary/5 text-foreground',
 );
 
+const VERIFIED_WAYLER_BADGE_CLASS = cn(
+  'wayly-status-badge inline-flex items-center gap-1 text-xs font-medium',
+  'border border-emerald-500/35 bg-emerald-500/10 text-emerald-950 dark:text-emerald-50',
+);
+
 type ListingTrustSignal =
   | 'publicAvailability'
   | 'activeListing'
@@ -93,6 +98,17 @@ export function MarketplaceTrustBadgeRow({ listing, className }: MarketplaceTrus
       className={cn('flex flex-wrap gap-1.5', className)}
       aria-label={t('app.marketplaceTrust.badgesLabel')}
     >
+      {listing.isWaylerVerified ? (
+        <li>
+          <span
+            className={VERIFIED_WAYLER_BADGE_CLASS}
+            title={t('app.marketplaceTrust.identityChecked')}
+          >
+            <span aria-hidden>✓</span>
+            {t('app.marketplaceTrust.verifiedWayler')}
+          </span>
+        </li>
+      ) : null}
       {signals.map((signal) => (
         <li key={signal}>
           <span className={TRUST_BADGE_CLASS}>

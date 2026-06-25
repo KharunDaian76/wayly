@@ -77,6 +77,11 @@ export class WaylerAvailabilitySummaryDto {
 
   @ApiProperty({ format: 'date-time' })
   updatedAt!: string;
+
+  @ApiProperty({
+    description: 'Public trust signal: true when the Wayler identity is verified (KYC approved).',
+  })
+  isWaylerVerified!: boolean;
 }
 
 export class WaylerAvailabilityDetailDto extends WaylerAvailabilitySummaryDto {}
