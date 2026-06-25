@@ -7,11 +7,8 @@ import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
-import {
-  PanelEmptyState,
-  PanelErrorState,
-  RequestsListSkeleton,
-} from '@/components/app/panel-status-states';
+import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
+import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import {
@@ -230,9 +227,11 @@ export function WaylerIncomingRequestsPanel({
               <RequestsListSkeleton rows={2} itemClassName="h-28 w-full rounded-lg" />
             </div>
           ) : !loading && !loadError && requests.length === 0 ? (
-            <PanelEmptyState
-              title={t('app.availabilityRequests.waylerEmptyTitle')}
-              body={t('app.availabilityRequests.waylerEmptyBody')}
+            <MarketplaceEmptyState
+              variant="wayler"
+              title={t('app.marketplaceEmpty.noIncomingRequestsTitle')}
+              description={t('app.marketplaceEmpty.noIncomingRequestsDescription')}
+              helperItems={[t('app.marketplaceEmpty.keepInsideWayly')]}
             />
           ) : requests.length > 0 ? (
             <ul className="flex flex-col gap-4">

@@ -48,6 +48,7 @@ import {
 } from '@/components/app/kyc-marketplace-gate';
 import { KycIdentityPanel } from '@/components/app/kyc-identity-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
+import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { SuspendedAccountNotice } from '@/components/app/suspended-account-notice';
@@ -2129,9 +2130,11 @@ export default function AppHomePage() {
                   !acceptedLoading &&
                   !acceptedError &&
                   acceptedOrders.length === 0 ? (
-                  <PanelEmptyState
-                    title={t('app.waylerFeed.acceptedPanel.emptyTitle')}
-                    body={t('app.waylerFeed.acceptedPanel.emptyBody')}
+                  <MarketplaceEmptyState
+                    variant="wayler"
+                    title={t('app.marketplaceEmpty.noWaylerOrdersTitle')}
+                    description={t('app.marketplaceEmpty.noWaylerOrdersDescription')}
+                    helperItems={[t('app.marketplaceEmpty.keepInsideWayly')]}
                   />
                 ) : isApproved && acceptedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">
@@ -2874,9 +2877,14 @@ export default function AppHomePage() {
                   !publishedLoading &&
                   !publishedError &&
                   publishedOrders.length === 0 ? (
-                  <PanelEmptyState
-                    title={t('app.senderPanel.postedOrdersEmptyTitle')}
-                    body={t('app.senderPanel.postedOrdersEmptyBody')}
+                  <MarketplaceEmptyState
+                    variant="sender"
+                    title={t('app.marketplaceEmpty.noSenderOrdersTitle')}
+                    description={t('app.marketplaceEmpty.noSenderOrdersDescription')}
+                    helperItems={[
+                      t('app.marketplaceEmpty.browseWaylers'),
+                      t('app.marketplaceEmpty.keepInsideWayly'),
+                    ]}
                   />
                 ) : canViewSenderOrders && publishedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">
@@ -3007,9 +3015,14 @@ export default function AppHomePage() {
                   !senderAcceptedLoading &&
                   !senderAcceptedError &&
                   senderAcceptedOrders.length === 0 ? (
-                  <PanelEmptyState
-                    title={t('app.senderPanel.acceptedEmptyTitle')}
-                    body={t('app.senderPanel.acceptedEmptyBody')}
+                  <MarketplaceEmptyState
+                    variant="sender"
+                    title={t('app.marketplaceEmpty.noSenderOrdersTitle')}
+                    description={t('app.marketplaceEmpty.noSenderOrdersDescription')}
+                    helperItems={[
+                      t('app.marketplaceEmpty.browseWaylers'),
+                      t('app.marketplaceEmpty.keepInsideWayly'),
+                    ]}
                   />
                 ) : canViewSenderOrders && senderAcceptedOrders.length > 0 ? (
                   <ul className="flex flex-col gap-4">

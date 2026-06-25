@@ -7,11 +7,8 @@ import type { CreateWaylerAvailabilityInput } from '@wayly/validation';
 import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
-import {
-  PanelEmptyState,
-  PanelErrorState,
-  RequestsListSkeleton,
-} from '@/components/app/panel-status-states';
+import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
+import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import {
   isWaylerAvailabilityReady,
@@ -400,6 +397,7 @@ export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProp
       {isApproved ? (
         <>
           <form
+            id="wayler-availability-publish"
             className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4"
             onSubmit={(e) => void handleCreate(e)}
           >
@@ -664,9 +662,22 @@ export function WaylerAvailabilityPanel({ kycGate }: WaylerAvailabilityPanelProp
                 <RequestsListSkeleton rows={2} itemClassName="h-24 w-full rounded-xl" />
               </div>
             ) : !listingsLoading && !listingsError && listings.length === 0 ? (
-              <PanelEmptyState
-                title={t('app.waylerAvailability.availabilityEmptyTitle')}
-                body={t('app.waylerAvailability.availabilityEmptyBody')}
+              <MarketplaceEmptyState
+                variant="wayler"
+                icon="📍"
+                title={t('app.marketplaceEmpty.noAvailabilityTitle')}
+                description={t('app.marketplaceEmpty.noAvailabilityDescription')}
+                helperItems={[
+                  t('app.marketplaceEmpty.acceptedCreatesOrderChat'),
+                  t('app.marketplaceEmpty.keepInsideWayly'),
+                ]}
+                primaryActionLabel={t('app.marketplaceEmpty.publishAvailability')}
+                onPrimaryAction={() => {
+                  document.getElementById('wayler-availability-publish')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  });
+                }}
               />
             ) : listings.length > 0 ? (
               <ul className="flex flex-col gap-4">

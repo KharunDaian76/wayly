@@ -1341,6 +1341,39 @@ const en = {
   'app.senderRequests.continueInsideWayly': 'Keep request details and communication inside Wayly.',
   'app.senderRequests.responseMessageTitle': 'Wayler response',
   'app.senderRequests.convertedOrderTitle': 'Linked delivery order',
+  'app.marketplaceEmpty.noWaylersTitle': 'No matching Waylers yet',
+  'app.marketplaceEmpty.noWaylersDescription':
+    'Adjust your search or check where Waylers are active — availability changes as new routes are published.',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation':
+    'Try a broader country or city in your filters.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'Check active Wayler counts in the locations panel above.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'Adjust pickup or drop-off timing to match published routes.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'Clear filters that may be too narrow for current listings.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'No requests sent yet',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    'Browse Waylers, send a request with clear package and route details, and track the response here. Waylers accept or decline inside Wayly.',
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'No active deliveries yet',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Deliveries appear here after a Wayler accepts your request or posted order. Start by finding a Wayler and use request tracking while you wait.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'No availability published yet',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'Publish local availability or a trip route so Senders can find you and send a request.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'No Sender requests yet',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'Keep your availability public and accurate. Active routes help Senders discover you — respond to requests inside Wayly.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'No active deliveries yet',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'Accepted requests appear here. Use the order timeline and proof guidance as you progress the delivery.',
+  'app.marketplaceEmpty.nextSteps': 'Next steps',
+  'app.marketplaceEmpty.clearFilters': 'Clear filters',
+  'app.marketplaceEmpty.browseWaylers': 'Browse Waylers',
+  'app.marketplaceEmpty.publishAvailability': 'Publish availability',
+  'app.marketplaceEmpty.keepInsideWayly': 'Keep details and communication inside Wayly.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'An accepted request becomes a delivery order with chat inside Wayly.',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -2717,6 +2750,39 @@ const ru: Dictionary = {
   'app.senderRequests.continueInsideWayly': 'Держите детали запроса и общение в Wayly.',
   'app.senderRequests.responseMessageTitle': 'Ответ Wayler',
   'app.senderRequests.convertedOrderTitle': 'Связанный заказ на доставку',
+  'app.marketplaceEmpty.noWaylersTitle': 'Подходящих курьеров пока нет',
+  'app.marketplaceEmpty.noWaylersDescription':
+    'Измените поиск или проверьте, где сейчас активны курьеры — доступность обновляется по мере публикации маршрутов.',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation':
+    'Попробуйте более широкую страну или город в фильтрах.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'Проверьте количество активных курьеров в панели локаций выше.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'Скорректируйте время забора или доставки под опубликованные маршруты.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'Сбросьте фильтры, которые могут быть слишком узкими для текущих объявлений.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'Запросы пока не отправлены',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    'Просматривайте курьеров, отправляйте запрос с понятными деталями посылки и маршрута и отслеживайте ответ здесь. Курьеры принимают или отклоняют внутри Wayly.',
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'Активных доставок пока нет',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Доставки появятся здесь после принятия вашего запроса или опубликованного заказа. Начните с поиска курьера и отслеживайте запрос, пока ждёте.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'Доступность пока не опубликована',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'Опубликуйте локальную доступность или маршрут поездки, чтобы отправители могли найти вас и отправить запрос.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'Запросов от отправителей пока нет',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'Держите доступность публичной и актуальной. Активные маршруты помогают отправителям найти вас — отвечайте на запросы внутри Wayly.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'Активных доставок пока нет',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'Принятые запросы появятся здесь. Используйте таймлайн заказа и подсказки по подтверждению доставки по ходу работы.',
+  'app.marketplaceEmpty.nextSteps': 'Следующие шаги',
+  'app.marketplaceEmpty.clearFilters': 'Сбросить фильтры',
+  'app.marketplaceEmpty.browseWaylers': 'Смотреть курьеров',
+  'app.marketplaceEmpty.publishAvailability': 'Опубликовать доступность',
+  'app.marketplaceEmpty.keepInsideWayly': 'Держите детали и общение внутри Wayly.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'Принятый запрос становится заказом на доставку с чатом внутри Wayly.',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -4101,6 +4167,39 @@ const es: Dictionary = {
   'app.senderRequests.continueInsideWayly': 'Mantén los detalles y la comunicación en Wayly.',
   'app.senderRequests.responseMessageTitle': 'Respuesta del Wayler',
   'app.senderRequests.convertedOrderTitle': 'Pedido de entrega vinculado',
+  'app.marketplaceEmpty.noWaylersTitle': 'Aún no hay Waylers que coincidan',
+  'app.marketplaceEmpty.noWaylersDescription':
+    'Ajusta tu búsqueda o revisa dónde hay Waylers activos — la disponibilidad cambia cuando se publican nuevas rutas.',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation':
+    'Prueba un país o ciudad más amplio en tus filtros.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'Revisa los conteos de Waylers activos en el panel de ubicaciones de arriba.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'Ajusta el horario de recogida o entrega para coincidir con rutas publicadas.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'Limpia filtros que puedan ser demasiado restrictivos para los listados actuales.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'Aún no has enviado solicitudes',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    'Explora Waylers, envía una solicitud con detalles claros del paquete y la ruta, y haz seguimiento aquí. Los Waylers aceptan o declinan dentro de Wayly.',
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'Aún no hay entregas activas',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Las entregas aparecen aquí cuando un Wayler acepta tu solicitud u orden publicada. Empieza buscando un Wayler y usa el seguimiento de solicitudes mientras esperas.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'Aún no has publicado disponibilidad',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'Publica disponibilidad local o una ruta de viaje para que los Senders te encuentren y envíen una solicitud.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'Aún no hay solicitudes de Senders',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'Mantén tu disponibilidad pública y precisa. Las rutas activas ayudan a que te descubran — responde dentro de Wayly.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'Aún no hay entregas activas',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'Las solicitudes aceptadas aparecen aquí. Usa la línea de tiempo del pedido y la guía de prueba de entrega a medida que avanzas.',
+  'app.marketplaceEmpty.nextSteps': 'Próximos pasos',
+  'app.marketplaceEmpty.clearFilters': 'Limpiar filtros',
+  'app.marketplaceEmpty.browseWaylers': 'Explorar Waylers',
+  'app.marketplaceEmpty.publishAvailability': 'Publicar disponibilidad',
+  'app.marketplaceEmpty.keepInsideWayly': 'Mantén detalles y comunicación dentro de Wayly.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'Una solicitud aceptada se convierte en pedido de entrega con chat dentro de Wayly.',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -5501,6 +5600,39 @@ const fr: Dictionary = {
   'app.senderRequests.continueInsideWayly': 'Gardez les détails et la communication dans Wayly.',
   'app.senderRequests.responseMessageTitle': 'Réponse du Wayler',
   'app.senderRequests.convertedOrderTitle': 'Commande de livraison liée',
+  'app.marketplaceEmpty.noWaylersTitle': 'Aucun Wayler correspondant pour le moment',
+  'app.marketplaceEmpty.noWaylersDescription':
+    'Ajustez votre recherche ou vérifiez où les Waylers sont actifs — la disponibilité évolue au fil des nouvelles routes publiées.',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation':
+    'Essayez un pays ou une ville plus large dans vos filtres.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'Consultez le nombre de Waylers actifs dans le panneau des localisations ci-dessus.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'Ajustez les horaires de collecte ou de livraison pour correspondre aux routes publiées.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'Effacez les filtres peut-être trop restrictifs pour les annonces actuelles.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'Aucune demande envoyée pour le moment',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    'Parcourez les Waylers, envoyez une demande avec des détails clairs sur le colis et la route, et suivez la réponse ici. Les Waylers acceptent ou refusent dans Wayly.',
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'Aucune livraison active pour le moment',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Les livraisons apparaissent ici après qu’un Wayler accepte votre demande ou commande publiée. Commencez par trouver un Wayler et suivez votre demande en attendant.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'Aucune disponibilité publiée pour le moment',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'Publiez une disponibilité locale ou un itinéraire de voyage pour que les Senders vous trouvent et envoient une demande.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'Aucune demande Sender pour le moment',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'Gardez votre disponibilité publique et à jour. Les routes actives aident les Senders à vous découvrir — répondez dans Wayly.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'Aucune livraison active pour le moment',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'Les demandes acceptées apparaissent ici. Utilisez la chronologie de commande et les conseils de preuve de livraison au fil de l’avancement.',
+  'app.marketplaceEmpty.nextSteps': 'Prochaines étapes',
+  'app.marketplaceEmpty.clearFilters': 'Effacer les filtres',
+  'app.marketplaceEmpty.browseWaylers': 'Parcourir les Waylers',
+  'app.marketplaceEmpty.publishAvailability': 'Publier une disponibilité',
+  'app.marketplaceEmpty.keepInsideWayly': 'Gardez les détails et la communication dans Wayly.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'Une demande acceptée devient une commande de livraison avec chat dans Wayly.',
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -6918,6 +7050,39 @@ const de: Dictionary = {
   'app.senderRequests.continueInsideWayly': 'Halten Sie Details und Kommunikation in Wayly.',
   'app.senderRequests.responseMessageTitle': 'Wayler-Antwort',
   'app.senderRequests.convertedOrderTitle': 'Verknüpfter Lieferauftrag',
+  'app.marketplaceEmpty.noWaylersTitle': 'Noch keine passenden Wayler',
+  'app.marketplaceEmpty.noWaylersDescription':
+    'Passen Sie Ihre Suche an oder prüfen Sie, wo Wayler aktiv sind — Verfügbarkeit ändert sich, wenn neue Routen veröffentlicht werden.',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation':
+    'Versuchen Sie ein breiteres Land oder eine größere Stadt in Ihren Filtern.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'Prüfen Sie die Anzahl aktiver Wayler im Standortpanel oben.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'Passen Sie Abhol- oder Lieferzeiten an veröffentlichte Routen an.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'Entfernen Sie Filter, die für aktuelle Angebote zu eng sein könnten.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'Noch keine Anfragen gesendet',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    'Wayler durchsuchen, eine Anfrage mit klaren Paket- und Routendetails senden und die Antwort hier verfolgen. Wayler akzeptieren oder lehnen innerhalb von Wayly ab.',
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'Noch keine aktiven Lieferungen',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Lieferungen erscheinen hier, nachdem ein Wayler Ihre Anfrage oder veröffentlichte Bestellung akzeptiert. Finden Sie zuerst einen Wayler und verfolgen Sie Ihre Anfrage.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'Noch keine Verfügbarkeit veröffentlicht',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'Veröffentlichen Sie lokale Verfügbarkeit oder eine Reiseroute, damit Sender Sie finden und eine Anfrage senden können.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'Noch keine Sender-Anfragen',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'Halten Sie Ihre Verfügbarkeit öffentlich und aktuell. Aktive Routen helfen Sendern, Sie zu finden — antworten Sie in Wayly.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'Noch keine aktiven Lieferungen',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'Akzeptierte Anfragen erscheinen hier. Nutzen Sie die Bestell-Timeline und Hinweise zum Liefernachweis während der Lieferung.',
+  'app.marketplaceEmpty.nextSteps': 'Nächste Schritte',
+  'app.marketplaceEmpty.clearFilters': 'Filter löschen',
+  'app.marketplaceEmpty.browseWaylers': 'Wayler durchsuchen',
+  'app.marketplaceEmpty.publishAvailability': 'Verfügbarkeit veröffentlichen',
+  'app.marketplaceEmpty.keepInsideWayly': 'Details und Kommunikation in Wayly behalten.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'Eine akzeptierte Anfrage wird zu einer Lieferbestellung mit Chat in Wayly.',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -8284,6 +8449,39 @@ const tr: Dictionary = {
   'app.senderRequests.continueInsideWayly': 'Talep detaylarını ve iletişimi Wayly içinde tutun.',
   'app.senderRequests.responseMessageTitle': 'Wayler yanıtı',
   'app.senderRequests.convertedOrderTitle': 'Bağlı teslimat siparişi',
+  'app.marketplaceEmpty.noWaylersTitle': 'Henüz eşleşen Wayler yok',
+  'app.marketplaceEmpty.noWaylersDescription':
+    "Aramanızı ayarlayın veya Wayler'ların nerede aktif olduğunu kontrol edin — yeni rotalar yayınlandıkça müsaitlik değişir.",
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation':
+    'Filtrelerinizde daha geniş bir ülke veya şehir deneyin.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'Yukarıdaki konum panelinde aktif Wayler sayılarını kontrol edin.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'Yayınlanan rotalara uymak için alma veya teslim zamanlamasını ayarlayın.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'Mevcut ilanlar için çok dar olabilecek filtreleri temizleyin.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'Henüz talep gönderilmedi',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    "Wayler'lara göz atın, net paket ve rota detaylarıyla talep gönderin ve yanıtı burada takip edin. Wayler'lar Wayly içinde kabul eder veya reddeder.",
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'Henüz aktif teslimat yok',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Bir Wayler talebinizi veya yayınlanan siparişinizi kabul ettikten sonra teslimatlar burada görünür. Bir Wayler bularak başlayın ve beklerken talep takibini kullanın.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'Henüz müsaitlik yayınlanmadı',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'Göndericilerin sizi bulup talep gönderebilmesi için yerel müsaitlik veya seyahat rotası yayınlayın.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'Henüz Gönderici talebi yok',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'Müsaitliğinizi herkese açık ve güncel tutun. Aktif rotalar Göndericilerin sizi bulmasına yardımcı olur — Wayly içinde yanıtlayın.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'Henüz aktif teslimat yok',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'Kabul edilen talepler burada görünür. Teslimat ilerledikçe sipariş zaman çizelgesini ve teslim kanıtı rehberini kullanın.',
+  'app.marketplaceEmpty.nextSteps': 'Sonraki adımlar',
+  'app.marketplaceEmpty.clearFilters': 'Filtreleri temizle',
+  'app.marketplaceEmpty.browseWaylers': "Wayler'lara göz at",
+  'app.marketplaceEmpty.publishAvailability': 'Müsaitlik yayınla',
+  'app.marketplaceEmpty.keepInsideWayly': 'Detayları ve iletişimi Wayly içinde tutun.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'Kabul edilen bir talep, Wayly içinde sohbetli bir teslimat siparişine dönüşür.',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -9598,6 +9796,38 @@ const ar: Dictionary = {
   'app.senderRequests.continueInsideWayly': 'احتفظ بتفاصيل الطلب والتواصل داخل Wayly.',
   'app.senderRequests.responseMessageTitle': 'رد Wayler',
   'app.senderRequests.convertedOrderTitle': 'طلب التسليم المرتبط',
+  'app.marketplaceEmpty.noWaylersTitle': 'لا يوجد وايلر مطابق بعد',
+  'app.marketplaceEmpty.noWaylersDescription':
+    'عدّل بحثك أو تحقق من أماكن نشاط الوايلر — يتغير التوفر مع نشر مسارات جديدة.',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation': 'جرّب بلداً أو مدينة أوسع في الفلاتر.',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts':
+    'تحقق من عدد الوايلر النشطين في لوحة المواقع أعلاه.',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming':
+    'عدّل توقيت الاستلام أو التسليم ليتوافق مع المسارات المنشورة.',
+  'app.marketplaceEmpty.noWaylersTipClearFilters':
+    'امسح الفلاتر التي قد تكون ضيقة جداً للقوائم الحالية.',
+  'app.marketplaceEmpty.noSentRequestsTitle': 'لم تُرسل طلبات بعد',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    'تصفّح الوايلر، أرسل طلباً بتفاصيل واضحة للطرد والمسار، وتتبع الرد هنا. يقبل الوايلر أو يرفض داخل Wayly.',
+  'app.marketplaceEmpty.noSenderOrdersTitle': 'لا توجد تسليمات نشطة بعد',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'تظهر التسليمات هنا بعد أن يقبل وايلر طلبك أو طلبك المنشور. ابدأ بالعثور على وايلر واستخدم تتبع الطلب أثناء الانتظار.',
+  'app.marketplaceEmpty.noAvailabilityTitle': 'لم يُنشر توفر بعد',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    'انشر توفراً محلياً أو مسار رحلة ليتمكن المرسلون من العثور عليك وإرسال طلب.',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': 'لا توجد طلبات مرسل بعد',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    'حافظ على توفرك عاماً ودقيقاً. المسارات النشطة تساعد المرسلين على اكتشافك — رد داخل Wayly.',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': 'لا توجد تسليمات نشطة بعد',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    'تظهر الطلبات المقبولة هنا. استخدم الجدول الزمني للطلب وإرشادات إثبات التسليم أثناء التقدم.',
+  'app.marketplaceEmpty.nextSteps': 'الخطوات التالية',
+  'app.marketplaceEmpty.clearFilters': 'مسح الفلاتر',
+  'app.marketplaceEmpty.browseWaylers': 'تصفّح الوايلر',
+  'app.marketplaceEmpty.publishAvailability': 'نشر التوفر',
+  'app.marketplaceEmpty.keepInsideWayly': 'احتفظ بالتفاصيل والتواصل داخل Wayly.',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    'يصبح الطلب المقبول طلب تسليم مع دردشة داخل Wayly.',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -10873,6 +11103,35 @@ const zh: Dictionary = {
   'app.senderRequests.continueInsideWayly': '请在 Wayly 内保留请求详情与沟通。',
   'app.senderRequests.responseMessageTitle': 'Wayler 回复',
   'app.senderRequests.convertedOrderTitle': '关联配送订单',
+  'app.marketplaceEmpty.noWaylersTitle': '暂无匹配的 Wayler',
+  'app.marketplaceEmpty.noWaylersDescription':
+    '调整搜索或查看 Wayler 活跃地区 — 新路线发布时可用性会变化。',
+  'app.marketplaceEmpty.noWaylersTipBroadenLocation': '在筛选条件中尝试更宽泛的国家或城市。',
+  'app.marketplaceEmpty.noWaylersTipCheckCounts': '查看上方位置面板中的活跃 Wayler 数量。',
+  'app.marketplaceEmpty.noWaylersTipAdjustTiming': '调整取件或送达时间以匹配已发布的路线。',
+  'app.marketplaceEmpty.noWaylersTipClearFilters': '清除可能对当前列表过于严格的筛选条件。',
+  'app.marketplaceEmpty.noSentRequestsTitle': '尚未发送请求',
+  'app.marketplaceEmpty.noSentRequestsDescription':
+    '浏览 Wayler，发送包含清晰包裹和路线细节的请求，并在此跟踪回复。Wayler 在 Wayly 内接受或拒绝。',
+  'app.marketplaceEmpty.noSenderOrdersTitle': '暂无进行中的配送',
+  'app.marketplaceEmpty.noSenderOrdersDescription':
+    'Wayler 接受您的请求或已发布订单后，配送会显示在此。先找到 Wayler，等待时使用请求跟踪。',
+  'app.marketplaceEmpty.noAvailabilityTitle': '尚未发布可用性',
+  'app.marketplaceEmpty.noAvailabilityDescription':
+    '发布本地可用性或旅行路线，以便 Sender 找到您并发送请求。',
+  'app.marketplaceEmpty.noIncomingRequestsTitle': '暂无 Sender 请求',
+  'app.marketplaceEmpty.noIncomingRequestsDescription':
+    '保持可用性公开且准确。活跃路线帮助 Sender 发现您 — 在 Wayly 内回复请求。',
+  'app.marketplaceEmpty.noWaylerOrdersTitle': '暂无进行中的配送',
+  'app.marketplaceEmpty.noWaylerOrdersDescription':
+    '已接受的请求会显示在此。配送过程中使用订单时间线和送达凭证指引。',
+  'app.marketplaceEmpty.nextSteps': '下一步',
+  'app.marketplaceEmpty.clearFilters': '清除筛选',
+  'app.marketplaceEmpty.browseWaylers': '浏览 Wayler',
+  'app.marketplaceEmpty.publishAvailability': '发布可用性',
+  'app.marketplaceEmpty.keepInsideWayly': '在 Wayly 内保留详情和沟通。',
+  'app.marketplaceEmpty.acceptedCreatesOrderChat':
+    '已接受的请求会在 Wayly 内转为配送订单并开启聊天。',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',

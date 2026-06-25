@@ -29,13 +29,10 @@ import {
   SenderRequestSafetyChecklist,
   SenderRequestSummary,
 } from '@/components/app/sender-request-composer';
+import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
-import {
-  PanelEmptyState,
-  PanelErrorState,
-  RequestsListSkeleton,
-} from '@/components/app/panel-status-states';
+import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
@@ -391,6 +388,18 @@ export function SenderWaylersPanel({
     void loadMyRequests();
   };
 
+  const handleClearFilters = () => {
+    setFilters(INITIAL_FILTERS);
+    void runSearch(INITIAL_FILTERS);
+  };
+
+  const scrollToWaylerResults = () => {
+    document.getElementById('sender-waylers-results')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
   const openRequestForm = (listing: WaylerAvailabilitySummary) => {
     setRequestTargetId(listing.id);
     setRequestForm(buildInitialRequestForm(listing));
@@ -663,17 +672,26 @@ export function SenderWaylersPanel({
                 <RequestsListSkeleton rows={2} itemClassName="h-24 w-full rounded-xl" />
               </div>
             ) : !listingsLoading && !listingsError && listings.length === 0 ? (
-              hasActiveFilters(loadedFilters) ? (
-                <PanelEmptyState
-                  title={t('app.senderWaylers.waylersFilterEmptyTitle')}
-                  body={t('app.senderWaylers.waylersFilterEmptyBody')}
-                />
-              ) : (
-                <PanelEmptyState
-                  title={t('app.senderWaylers.waylersEmptyTitle')}
-                  body={t('app.senderWaylers.waylersEmptyBody')}
-                />
-              )
+              <MarketplaceEmptyState
+                variant="sender"
+                icon="🌐"
+                title={t('app.marketplaceEmpty.noWaylersTitle')}
+                description={t('app.marketplaceEmpty.noWaylersDescription')}
+                helperItems={[
+                  t('app.marketplaceEmpty.noWaylersTipBroadenLocation'),
+                  t('app.marketplaceEmpty.noWaylersTipCheckCounts'),
+                  t('app.marketplaceEmpty.noWaylersTipAdjustTiming'),
+                  ...(hasActiveFilters(loadedFilters)
+                    ? [t('app.marketplaceEmpty.noWaylersTipClearFilters')]
+                    : []),
+                ]}
+                primaryActionLabel={
+                  hasActiveFilters(loadedFilters)
+                    ? t('app.marketplaceEmpty.clearFilters')
+                    : undefined
+                }
+                onPrimaryAction={hasActiveFilters(loadedFilters) ? handleClearFilters : undefined}
+              />
             ) : listings.length > 0 ? (
               <ul className="flex flex-col gap-4">
                 {listings.map((listing) => {
@@ -1116,9 +1134,16 @@ export function SenderWaylersPanel({
                 <RequestsListSkeleton />
               </div>
             ) : !myRequestsLoading && !myRequestsError && myRequests.length === 0 ? (
-              <PanelEmptyState
-                title={t('app.availabilityRequests.senderEmptyTitle')}
-                body={t('app.availabilityRequests.senderEmptyBody')}
+              <MarketplaceEmptyState
+                variant="sender"
+                title={t('app.marketplaceEmpty.noSentRequestsTitle')}
+                description={t('app.marketplaceEmpty.noSentRequestsDescription')}
+                helperItems={[
+                  t('app.marketplaceEmpty.acceptedCreatesOrderChat'),
+                  t('app.marketplaceEmpty.keepInsideWayly'),
+                ]}
+                primaryActionLabel={t('app.marketplaceEmpty.browseWaylers')}
+                onPrimaryAction={scrollToWaylerResults}
               />
             ) : myRequests.length > 0 ? (
               <ul className="flex flex-col gap-4">
