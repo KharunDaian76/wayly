@@ -1,24 +1,18 @@
 'use client';
 
 import { ApiError } from '@wayly/sdk';
-import type {
-  ActiveWaylerCountSummary,
-  WaylerAvailabilityRequestSummary,
-  WaylerAvailabilitySummary,
-} from '@wayly/types';
+import type { WaylerAvailabilityRequestSummary, WaylerAvailabilitySummary } from '@wayly/types';
 import {
   TripDirection,
   WaylerAvailabilityRequestStatus,
   WaylerAvailabilityStatus,
   WaylerAvailabilityType,
 } from '@wayly/types';
-import type {
-  ActiveWaylerCountsQueryInput,
-  WaylerAvailabilitiesPublicQueryInput,
-} from '@wayly/validation';
-import { Button, Input, Skeleton } from '@wayly/ui';
+import type { WaylerAvailabilitiesPublicQueryInput } from '@wayly/validation';
+import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
+import { ActiveWaylersMarketplaceSection } from '@/components/app/active-waylers-marketplace-section';
 import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
 import {
   PanelEmptyState,
@@ -45,8 +39,6 @@ const LISTING_CARD_CLASS = cn(
   'wayly-order-card rounded-xl px-4 py-4 text-sm',
   'wayly-feed-item-enter',
 );
-
-const COUNT_CARD_CLASS = cn('rounded-lg border border-border bg-background/60 px-3 py-2 text-sm');
 
 const REQUEST_CARD_CLASS = cn(
   'rounded-lg border border-border bg-background/60 px-3 py-3 text-sm',
@@ -177,27 +169,6 @@ function buildPublicQuery(filters: FilterState): Partial<WaylerAvailabilitiesPub
   return query;
 }
 
-function buildCountsQuery(filters: FilterState): Partial<ActiveWaylerCountsQueryInput> {
-  const query: Partial<ActiveWaylerCountsQueryInput> = {};
-  const country = normalizeCountry(filters.originCountry);
-  if (country) {
-    query.country = country;
-  }
-  const city = optionalText(filters.originCity);
-  if (city) {
-    query.city = city;
-  }
-  const region = optionalText(filters.originRegion);
-  if (region) {
-    query.region = region;
-  }
-  const date = optionalText(filters.date);
-  if (date) {
-    query.date = date;
-  }
-  return query;
-}
-
 function hasActiveFilters(filterState: FilterState): boolean {
   return (
     filterState.type !== '' ||
@@ -315,10 +286,6 @@ function formatRequestRoute(request: WaylerAvailabilityRequestSummary): string {
   return `${pickup} → ${dropoff}`;
 }
 
-function formatCountLocation(entry: ActiveWaylerCountSummary): string {
-  return formatLocationParts(entry.city, entry.region, entry.country);
-}
-
 function formatDateTime(value: string | null): string {
   if (!value) {
     return '—';
@@ -357,11 +324,9 @@ export function SenderWaylersPanel({
   const [filters, setFilters] = useState<FilterState>(INITIAL_FILTERS);
   const [listings, setListings] = useState<WaylerAvailabilitySummary[]>([]);
   const [loadedFilters, setLoadedFilters] = useState<FilterState>(INITIAL_FILTERS);
-  const [counts, setCounts] = useState<ActiveWaylerCountSummary[]>([]);
+  const [activeWaylersRefreshKey, setActiveWaylersRefreshKey] = useState(0);
   const [listingsLoading, setListingsLoading] = useState(false);
-  const [countsLoading, setCountsLoading] = useState(false);
   const [listingsError, setListingsError] = useState<string | null>(null);
-  const [countsError, setCountsError] = useState<string | null>(null);
 
   const [requestTargetId, setRequestTargetId] = useState<string | null>(null);
   const [requestForm, setRequestForm] = useState<RequestFormState | null>(null);
@@ -408,24 +373,12 @@ export function SenderWaylersPanel({
     [canBrowse, t],
   );
 
-  const loadCounts = useCallback(
+  const runSearch = useCallback(
     async (filterState: FilterState) => {
-      if (!canBrowse) {
-        setCounts([]);
-        return;
-      }
-      setCountsLoading(true);
-      setCountsError(null);
-      try {
-        const result = await api.waylerAvailabilities.activeCounts(buildCountsQuery(filterState));
-        setCounts(result);
-      } catch {
-        setCountsError(t('app.senderWaylers.loadFailed'));
-      } finally {
-        setCountsLoading(false);
-      }
+      await loadListings(filterState);
+      setActiveWaylersRefreshKey((key) => key + 1);
     },
-    [canBrowse, t],
+    [loadListings],
   );
 
   const loadMyRequests = useCallback(async () => {
@@ -447,13 +400,6 @@ export function SenderWaylersPanel({
       setMyRequestsLoading(false);
     }
   }, [canBrowse, t, onAcceptedOrdersRefresh]);
-
-  const runSearch = useCallback(
-    async (filterState: FilterState) => {
-      await Promise.all([loadListings(filterState), loadCounts(filterState)]);
-    },
-    [loadListings, loadCounts],
-  );
 
   useEffect(() => {
     if (!kycLoading && canBrowse) {
@@ -588,7 +534,7 @@ export function SenderWaylersPanel({
     }
   };
 
-  const busy = listingsLoading || countsLoading;
+  const busy = listingsLoading;
 
   return (
     <div className="flex flex-col gap-6">
@@ -600,6 +546,17 @@ export function SenderWaylersPanel({
 
       {canBrowse ? (
         <>
+          <ActiveWaylersMarketplaceSection
+            canBrowse={canBrowse}
+            refreshKey={activeWaylersRefreshKey}
+            routeFilters={{
+              fromCountry: filters.originCountry,
+              fromCity: filters.originCity,
+              toCountry: filters.destinationCountry,
+              toCity: filters.destinationCity,
+            }}
+          />
+
           <div className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4">
             <h3 className="text-sm font-semibold">{t('app.senderWaylers.filters')}</h3>
 
@@ -695,34 +652,6 @@ export function SenderWaylersPanel({
                   : t('app.senderWaylers.refresh')}
               </Button>
             </div>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h3 className="text-sm font-semibold">{t('app.senderWaylers.countsTitle')}</h3>
-            {countsError ? <p className={ALERT_ERROR_CLASS}>{countsError}</p> : null}
-            {countsLoading ? (
-              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3" aria-hidden>
-                {[0, 1, 2].map((key) => (
-                  <Skeleton key={key} className="h-14 w-full rounded-lg" />
-                ))}
-              </div>
-            ) : counts.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('app.senderWaylers.countsEmpty')}</p>
-            ) : (
-              <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {counts.map((entry, index) => (
-                  <li
-                    key={`${entry.country ?? ''}-${entry.city ?? ''}-${entry.region ?? ''}-${index}`}
-                    className={COUNT_CARD_CLASS}
-                  >
-                    <p className="font-medium">{formatCountLocation(entry)}</p>
-                    <p className="text-muted-foreground">
-                      {entry.activeCount} {t('app.senderWaylers.activeCouriers')}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
 
           <div className="flex flex-col gap-4">

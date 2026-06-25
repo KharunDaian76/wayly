@@ -15,6 +15,9 @@ import {
 } from '@wayly/validation';
 import { useCallback, useEffect, useState } from 'react';
 
+import type { AdminPanelRef, AdminTriageRequest } from '@/lib/admin/admin-triage';
+import { useAdminTriageEffect } from '@/lib/admin/admin-triage';
+
 import { disputeReasonKey, disputeStatusKey } from '@/components/app/dispute-panel';
 import {
   PanelEmptyState,
@@ -95,6 +98,9 @@ const DISPUTE_OUTCOME_OPTIONS = [
 
 export type AdminDisputesQueuePanelProps = {
   roles: UserRole[];
+  triageRequest?: AdminTriageRequest | null;
+  highlighted?: boolean;
+  panelRef?: AdminPanelRef;
 };
 
 function formatDateTime(value: string | null): string {
@@ -165,7 +171,12 @@ export function adminDisputeResolutionKey(
   }
 }
 
-export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps) {
+export function AdminDisputesQueuePanel({
+  roles,
+  triageRequest,
+  highlighted = false,
+  panelRef,
+}: AdminDisputesQueuePanelProps) {
   const { t } = useI18n();
   const [items, setItems] = useState<AdminDisputeQueueItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -227,6 +238,23 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
     }
   }, [roles, fetchDisputes]);
 
+  const applyTriageFilters = useCallback(
+    (filters: DisputeFilterForm) => {
+      setFilterForm(filters);
+      setAppliedFilters(filters);
+      void fetchDisputes(1, filters);
+    },
+    [fetchDisputes],
+  );
+
+  useAdminTriageEffect(
+    triageRequest,
+    'disputes',
+    DEFAULT_DISPUTE_FILTER_FORM,
+    (request) => request.disputeFilters,
+    applyTriageFilters,
+  );
+
   const updateItemInList = useCallback((updated: AdminDisputeQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
   }, []);
@@ -287,7 +315,12 @@ export function AdminDisputesQueuePanel({ roles }: AdminDisputesQueuePanelProps)
 
   return (
     <section
-      className="flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2"
+      ref={panelRef}
+      className={cn(
+        'flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2',
+        'transition-shadow duration-300',
+        highlighted ? 'ring-2 ring-primary/45 border-primary/35' : '',
+      )}
       aria-labelledby="admin-disputes-queue-title"
     >
       <div className="flex flex-col gap-1 px-3 pt-3 sm:flex-row sm:items-start sm:justify-between">

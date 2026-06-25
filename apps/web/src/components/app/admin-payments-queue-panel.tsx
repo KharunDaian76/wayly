@@ -16,6 +16,9 @@ import type { AdminPaymentsListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import type { AdminPanelRef, AdminTriageRequest } from '@/lib/admin/admin-triage';
+import { useAdminTriageEffect } from '@/lib/admin/admin-triage';
+
 import { adminPaymentStatusKey } from '@/components/app/admin-orders-queue-panel';
 import { disputeStatusKey } from '@/components/app/dispute-panel';
 import {
@@ -115,6 +118,9 @@ const RELEASE_DECISION_OPTIONS = [
 
 export type AdminPaymentsQueuePanelProps = {
   roles: UserRole[];
+  triageRequest?: AdminTriageRequest | null;
+  highlighted?: boolean;
+  panelRef?: AdminPanelRef;
 };
 
 type CardAction =
@@ -176,7 +182,12 @@ function formatAmount(currency: string, amount: string): string {
   return `${currency} ${amount}`;
 }
 
-export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps) {
+export function AdminPaymentsQueuePanel({
+  roles,
+  triageRequest,
+  highlighted = false,
+  panelRef,
+}: AdminPaymentsQueuePanelProps) {
   const { t } = useI18n();
   const canModerate = hasAdminModerationAccess(roles);
   const [items, setItems] = useState<AdminPaymentQueueItem[]>([]);
@@ -242,6 +253,23 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
       void fetchPayments(1, DEFAULT_PAYMENT_FILTER_FORM);
     }
   }, [roles, fetchPayments]);
+
+  const applyTriageFilters = useCallback(
+    (filters: PaymentFilterForm) => {
+      setFilterForm(filters);
+      setAppliedFilters(filters);
+      void fetchPayments(1, filters);
+    },
+    [fetchPayments],
+  );
+
+  useAdminTriageEffect(
+    triageRequest,
+    'payments',
+    DEFAULT_PAYMENT_FILTER_FORM,
+    (request) => request.paymentFilters,
+    applyTriageFilters,
+  );
 
   const updateItemInList = useCallback((updated: AdminPaymentQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -439,7 +467,12 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
 
   return (
     <section
-      className="flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2"
+      ref={panelRef}
+      className={cn(
+        'flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2',
+        'transition-shadow duration-300',
+        highlighted ? 'ring-2 ring-primary/45 border-primary/35' : '',
+      )}
       aria-labelledby="admin-payments-queue-title"
     >
       <div className="flex flex-col gap-1 px-3 pt-3 sm:flex-row sm:items-start sm:justify-between">

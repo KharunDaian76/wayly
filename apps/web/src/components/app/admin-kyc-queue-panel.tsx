@@ -6,6 +6,9 @@ import type { KycVerificationsListQuery } from '@wayly/sdk';
 import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import type { AdminPanelRef, AdminTriageRequest } from '@/lib/admin/admin-triage';
+import { useAdminTriageEffect } from '@/lib/admin/admin-triage';
+
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -66,6 +69,9 @@ function buildKycListQuery(page: number, filters: KycFilterForm): KycVerificatio
 
 export type AdminKycQueuePanelProps = {
   roles: UserRole[];
+  triageRequest?: AdminTriageRequest | null;
+  highlighted?: boolean;
+  panelRef?: AdminPanelRef;
 };
 
 type CardAction = 'approve' | 'reject';
@@ -99,7 +105,12 @@ function canReviewKyc(status: KycStatus): boolean {
   return status === 'PENDING' || status === 'REJECTED';
 }
 
-export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
+export function AdminKycQueuePanel({
+  roles,
+  triageRequest,
+  highlighted = false,
+  panelRef,
+}: AdminKycQueuePanelProps) {
   const { t } = useI18n();
   const [items, setItems] = useState<AdminKycQueueItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -157,6 +168,23 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
       void fetchKycQueue(1, DEFAULT_KYC_FILTER_FORM);
     }
   }, [roles, fetchKycQueue]);
+
+  const applyTriageFilters = useCallback(
+    (filters: KycFilterForm) => {
+      setFilterForm(filters);
+      setAppliedFilters(filters);
+      void fetchKycQueue(1, filters);
+    },
+    [fetchKycQueue],
+  );
+
+  useAdminTriageEffect(
+    triageRequest,
+    'kyc',
+    DEFAULT_KYC_FILTER_FORM,
+    (request) => request.kycFilters,
+    applyTriageFilters,
+  );
 
   const updateItemInList = useCallback((updated: AdminKycQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -239,7 +267,12 @@ export function AdminKycQueuePanel({ roles }: AdminKycQueuePanelProps) {
 
   return (
     <section
-      className="flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2"
+      ref={panelRef}
+      className={cn(
+        'flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2',
+        'transition-shadow duration-300',
+        highlighted ? 'ring-2 ring-primary/45 border-primary/35' : '',
+      )}
       aria-labelledby="admin-kyc-queue-title"
     >
       <div className="flex flex-col gap-1 px-3 pt-3 sm:flex-row sm:items-start sm:justify-between">

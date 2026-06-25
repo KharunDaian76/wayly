@@ -10,6 +10,9 @@ import type { AdminUsersListQuery } from '@wayly/sdk';
 import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import type { AdminPanelRef, AdminTriageRequest } from '@/lib/admin/admin-triage';
+import { useAdminTriageEffect } from '@/lib/admin/admin-triage';
+
 import { adminKycStatusKey } from '@/components/app/admin-kyc-queue-panel';
 import {
   PanelEmptyState,
@@ -92,6 +95,9 @@ function roleFilterLabel(role: UserRole, t: (key: TranslationKey) => string): st
 
 export type AdminUsersQueuePanelProps = {
   roles: UserRole[];
+  triageRequest?: AdminTriageRequest | null;
+  highlighted?: boolean;
+  panelRef?: AdminPanelRef;
 };
 
 type CardAction = 'suspend' | 'unsuspend';
@@ -135,7 +141,12 @@ function isModeratableUser(item: AdminUserQueueItem): boolean {
   return !item.roles.includes(UserRoleEnum.ADMIN) && !item.roles.includes(UserRoleEnum.ARBITRATOR);
 }
 
-export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
+export function AdminUsersQueuePanel({
+  roles,
+  triageRequest,
+  highlighted = false,
+  panelRef,
+}: AdminUsersQueuePanelProps) {
   const { t } = useI18n();
   const canModerate = hasAdminModerationAccess(roles);
   const [items, setItems] = useState<AdminUserQueueItem[]>([]);
@@ -194,6 +205,23 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
       void fetchUsers(1, DEFAULT_USER_FILTER_FORM);
     }
   }, [roles, fetchUsers]);
+
+  const applyTriageFilters = useCallback(
+    (filters: UserFilterForm) => {
+      setFilterForm(filters);
+      setAppliedFilters(filters);
+      void fetchUsers(1, filters);
+    },
+    [fetchUsers],
+  );
+
+  useAdminTriageEffect(
+    triageRequest,
+    'users',
+    DEFAULT_USER_FILTER_FORM,
+    (request) => request.userFilters,
+    applyTriageFilters,
+  );
 
   const updateItemInList = useCallback((updated: AdminUserQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -278,7 +306,12 @@ export function AdminUsersQueuePanel({ roles }: AdminUsersQueuePanelProps) {
 
   return (
     <section
-      className="flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2"
+      ref={panelRef}
+      className={cn(
+        'flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2',
+        'transition-shadow duration-300',
+        highlighted ? 'ring-2 ring-primary/45 border-primary/35' : '',
+      )}
       aria-labelledby="admin-users-queue-title"
     >
       <div className="flex flex-col gap-1 px-3 pt-3 sm:flex-row sm:items-start sm:justify-between">

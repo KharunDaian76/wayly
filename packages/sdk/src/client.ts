@@ -10,6 +10,8 @@ import { ApiError } from './errors';
 import { createHealthApi, type HealthApi } from './health';
 import { createKycApi } from './kyc';
 import type { KycApi } from './kyc.types';
+import { createMarketplaceApi } from './marketplace';
+import type { MarketplaceApi } from './marketplace';
 import { createNotificationsApi } from './notifications';
 import type { NotificationsApi } from './notifications.types';
 import { createOrdersApi } from './orders';
@@ -68,6 +70,9 @@ export class ApiClient {
   /** Admin / operations endpoints (role-gated; read-only in current batches). */
   readonly admin: AdminApi;
 
+  /** Marketplace discovery endpoints (aggregate, privacy-safe signals). */
+  readonly marketplace: MarketplaceApi;
+
   /** Wayler availability and trip listing endpoints. */
   readonly waylerAvailabilities: WaylerAvailabilitiesApi;
 
@@ -101,6 +106,7 @@ export class ApiClient {
     this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
     this.disputes = createDisputesApi((path, opts) => this.request(path, opts));
     this.admin = createAdminApi((path, opts) => this.request(path, opts));
+    this.marketplace = createMarketplaceApi((path, opts) => this.request(path, opts));
     this.waylerAvailabilities = createWaylerAvailabilitiesApi((path, opts) =>
       this.request(path, opts),
     );

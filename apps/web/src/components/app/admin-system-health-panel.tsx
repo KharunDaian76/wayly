@@ -19,6 +19,8 @@ import type { AdminAuditLogsListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import type { AdminPanelRef } from '@/lib/admin/admin-triage';
+
 import { adminPaymentStatusKey } from '@/components/app/admin-orders-queue-panel';
 import {
   PanelEmptyState,
@@ -114,6 +116,8 @@ function buildAuditLogsQuery(page: number, filters: AuditFilterForm): AdminAudit
 
 export type AdminSystemHealthPanelProps = {
   roles: UserRole[];
+  highlighted?: boolean;
+  panelRef?: AdminPanelRef;
 };
 
 export function adminAuditActionKey(action: AdminAuditLogAction): TranslationKey {
@@ -207,7 +211,11 @@ function HealthRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
+export function AdminSystemHealthPanel({
+  roles,
+  highlighted = false,
+  panelRef,
+}: AdminSystemHealthPanelProps) {
   const { t } = useI18n();
   const [snapshot, setSnapshot] = useState<AdminSystemHealthResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -294,7 +302,12 @@ export function AdminSystemHealthPanel({ roles }: AdminSystemHealthPanelProps) {
 
   return (
     <section
-      className="flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2"
+      ref={panelRef}
+      className={cn(
+        'flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2',
+        'transition-shadow duration-300',
+        highlighted ? 'ring-2 ring-primary/45 border-primary/35' : '',
+      )}
       aria-labelledby="admin-system-health-title"
     >
       <div className="flex flex-col gap-1 px-3 pt-3 sm:flex-row sm:items-start sm:justify-between">

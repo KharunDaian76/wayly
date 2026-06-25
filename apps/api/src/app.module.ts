@@ -17,6 +17,7 @@ import { ConversationsModule } from './modules/conversations/conversations.modul
 import { DisputesModule } from './modules/disputes/disputes.module';
 import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
+import { MarketplaceModule } from './modules/marketplace/marketplace.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { PaymentsModule } from './modules/payments/payments.module';
@@ -48,6 +49,7 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
     AuthModule,
     UsersModule,
     KycModule,
+    MarketplaceModule,
     OrdersModule,
     NotificationsModule,
     ConversationsModule,

@@ -35,6 +35,8 @@ export { type PaymentsApi } from './payments.types';
 export { createDisputesApi } from './disputes';
 export { createWaylerAccessApi } from './wayler-access';
 export { type WaylerAccessApi, type WaylerAccessPassesListQuery } from './wayler-access.types';
+export { createMarketplaceApi } from './marketplace';
+export { type MarketplaceApi, type ActiveWaylerMarketplaceQuery } from './marketplace';
 export { createWaylerAvailabilitiesApi } from './wayler-availabilities';
 export { createWaylerAvailabilityRequestsApi } from './wayler-availability-requests';
 export {
@@ -61,6 +63,8 @@ export type {
   ConversationDetail,
   ConversationListResponse,
   ActiveWaylerCountSummary,
+  ActiveWaylerLocationCount,
+  ActiveWaylerMarketplaceResponse,
   DisputeDetail,
   DisputeEvidenceSummary,
   DisputeListResponse,
@@ -80,6 +84,7 @@ export type {
   WaylerAvailabilityRequestListResponse,
 } from '@wayly/types';
 export type {
+  ActiveWaylerMarketplaceQueryInput,
   CreateWaylerAvailabilityRequestInput,
   RespondWaylerAvailabilityRequestInput,
   SendChatMessageInput,

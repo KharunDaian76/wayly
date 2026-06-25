@@ -12,6 +12,7 @@ import { Button, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
+import type { AdminTriageKpiKey } from '@/lib/admin/admin-triage';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
@@ -19,21 +20,16 @@ import { cn } from '@/lib/utils';
 
 export type AdminOperationsOverviewPanelProps = {
   roles: UserRole[];
+  onTriageShortcut?: (key: AdminTriageKpiKey) => void;
 };
 
-type KpiKey =
-  | 'pendingKyc'
-  | 'openDisputes'
-  | 'suspendedUsers'
-  | 'paymentsReview'
-  | 'ordersReview'
-  | 'riskOrders'
-  | 'recentActions';
+type KpiKey = AdminTriageKpiKey;
 
 type KpiCardConfig = {
   key: KpiKey;
   labelKey: TranslationKey;
   helpKey: TranslationKey;
+  shortcutKey: TranslationKey;
   symbol: string;
 };
 
@@ -42,42 +38,49 @@ const KPI_CARDS: KpiCardConfig[] = [
     key: 'pendingKyc',
     labelKey: 'app.admin.adminOverviewPendingKyc',
     helpKey: 'app.admin.adminOverviewPendingKycHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutPendingKyc',
     symbol: '🪪',
   },
   {
     key: 'openDisputes',
     labelKey: 'app.admin.adminOverviewOpenDisputes',
     helpKey: 'app.admin.adminOverviewOpenDisputesHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutOpenDisputes',
     symbol: '⚖️',
   },
   {
     key: 'suspendedUsers',
     labelKey: 'app.admin.adminOverviewSuspendedUsers',
     helpKey: 'app.admin.adminOverviewSuspendedUsersHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutSuspendedUsers',
     symbol: '🚫',
   },
   {
     key: 'paymentsReview',
     labelKey: 'app.admin.adminOverviewPaymentsReview',
     helpKey: 'app.admin.adminOverviewPaymentsReviewHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutPaymentsReview',
     symbol: '💳',
   },
   {
     key: 'ordersReview',
     labelKey: 'app.admin.adminOverviewOrdersReview',
     helpKey: 'app.admin.adminOverviewOrdersReviewHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutOrdersReview',
     symbol: '📦',
   },
   {
     key: 'riskOrders',
     labelKey: 'app.admin.adminOverviewRiskOrders',
     helpKey: 'app.admin.adminOverviewRiskOrdersHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutRiskOrders',
     symbol: '⚠️',
   },
   {
     key: 'recentActions',
     labelKey: 'app.admin.adminOverviewRecentActions',
     helpKey: 'app.admin.adminOverviewRecentActionsHelp',
+    shortcutKey: 'app.admin.adminOverviewShortcutRecentActions',
     symbol: '📋',
   },
 ];
@@ -136,7 +139,10 @@ function formatCount(value: number | null, loading: boolean): string {
   return value.toLocaleString();
 }
 
-export function AdminOperationsOverviewPanel({ roles }: AdminOperationsOverviewPanelProps) {
+export function AdminOperationsOverviewPanel({
+  roles,
+  onTriageShortcut,
+}: AdminOperationsOverviewPanelProps) {
   const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [values, setValues] = useState<KpiValues>(INITIAL_VALUES);
@@ -272,37 +278,50 @@ export function AdminOperationsOverviewPanel({ roles }: AdminOperationsOverviewP
           const cardFailed = errors[card.key];
 
           return (
-            <li
-              key={card.key}
-              className={cn(
-                'flex flex-col rounded-lg border border-border/50 bg-background/80 p-3',
-                'shadow-sm backdrop-blur-sm transition-colors',
-                cardFailed && !cardLoading ? 'border-destructive/30' : '',
-              )}
-            >
-              <div className="flex items-start justify-between gap-1">
-                <span className="text-[11px] font-medium leading-tight text-muted-foreground">
-                  {t(card.labelKey)}
-                </span>
-                <span className="text-sm leading-none opacity-70" aria-hidden="true">
-                  {card.symbol}
-                </span>
-              </div>
-              {cardLoading ? (
-                <Skeleton className="mt-2 h-8 w-16" />
-              ) : (
-                <p
-                  className={cn(
-                    'mt-2 text-2xl font-bold tabular-nums tracking-tight',
-                    cardFailed ? 'text-muted-foreground' : 'text-foreground',
-                  )}
-                >
-                  {formatCount(cardValue, cardLoading)}
+            <li key={card.key}>
+              <button
+                type="button"
+                disabled={cardLoading || cardFailed || !onTriageShortcut}
+                className={cn(
+                  'flex h-full w-full flex-col rounded-lg border border-border/50 bg-background/80 p-3',
+                  'text-left shadow-sm backdrop-blur-sm transition-colors',
+                  'hover:border-primary/35 hover:bg-muted/20',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                  cardFailed && !cardLoading ? 'border-destructive/30' : '',
+                  cardLoading || cardFailed ? 'cursor-default opacity-80' : 'cursor-pointer',
+                )}
+                aria-label={`${t(card.labelKey)} — ${t('app.admin.adminOverviewViewQueue')}`}
+                onClick={() => onTriageShortcut?.(card.key)}
+              >
+                <div className="flex items-start justify-between gap-1">
+                  <span className="text-[11px] font-medium leading-tight text-muted-foreground">
+                    {t(card.labelKey)}
+                  </span>
+                  <span className="text-sm leading-none opacity-70" aria-hidden="true">
+                    {card.symbol}
+                  </span>
+                </div>
+                {cardLoading ? (
+                  <Skeleton className="mt-2 h-8 w-16" />
+                ) : (
+                  <p
+                    className={cn(
+                      'mt-2 text-2xl font-bold tabular-nums tracking-tight',
+                      cardFailed ? 'text-muted-foreground' : 'text-foreground',
+                    )}
+                  >
+                    {formatCount(cardValue, cardLoading)}
+                  </p>
+                )}
+                <p className="mt-1.5 text-[10px] leading-snug text-muted-foreground">
+                  {t(card.helpKey)}
                 </p>
-              )}
-              <p className="mt-1.5 text-[10px] leading-snug text-muted-foreground">
-                {t(card.helpKey)}
-              </p>
+                {!cardLoading && !cardFailed && onTriageShortcut ? (
+                  <span className="mt-2 text-[10px] font-medium text-primary">
+                    {t('app.admin.adminOverviewViewQueue')} →
+                  </span>
+                ) : null}
+              </button>
             </li>
           );
         })}

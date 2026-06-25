@@ -19,6 +19,9 @@ import type { AdminOrdersListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
+import type { AdminPanelRef, AdminTriageRequest } from '@/lib/admin/admin-triage';
+import { useAdminTriageEffect } from '@/lib/admin/admin-triage';
+
 import { disputeStatusKey } from '@/components/app/dispute-panel';
 import {
   PanelEmptyState,
@@ -98,6 +101,9 @@ const DECISION_OPTIONS = [
 
 export type AdminOrdersQueuePanelProps = {
   roles: UserRole[];
+  triageRequest?: AdminTriageRequest | null;
+  highlighted?: boolean;
+  panelRef?: AdminPanelRef;
 };
 
 type CardAction =
@@ -193,7 +199,12 @@ function sourceTypeLabel(
   return t('app.orders.postedOrder');
 }
 
-export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
+export function AdminOrdersQueuePanel({
+  roles,
+  triageRequest,
+  highlighted = false,
+  panelRef,
+}: AdminOrdersQueuePanelProps) {
   const { t } = useI18n();
   const canModerate = hasAdminModerationAccess(roles);
   const [items, setItems] = useState<AdminOrderQueueItem[]>([]);
@@ -252,6 +263,23 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
       void fetchOrders(1, DEFAULT_ORDER_FILTER_FORM);
     }
   }, [roles, fetchOrders]);
+
+  const applyTriageFilters = useCallback(
+    (filters: OrderFilterForm) => {
+      setFilterForm(filters);
+      setAppliedFilters(filters);
+      void fetchOrders(1, filters);
+    },
+    [fetchOrders],
+  );
+
+  useAdminTriageEffect(
+    triageRequest,
+    'orders',
+    DEFAULT_ORDER_FILTER_FORM,
+    (request) => request.orderFilters,
+    applyTriageFilters,
+  );
 
   const updateItemInList = useCallback((updated: AdminOrderQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -468,7 +496,12 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
 
   return (
     <section
-      className="flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2"
+      ref={panelRef}
+      className={cn(
+        'flex flex-col gap-3 rounded-xl border border-border/50 bg-muted/10 p-1 sm:col-span-2',
+        'transition-shadow duration-300',
+        highlighted ? 'ring-2 ring-primary/45 border-primary/35' : '',
+      )}
       aria-labelledby="admin-orders-queue-title"
     >
       <div className="flex flex-col gap-1 px-3 pt-3 sm:flex-row sm:items-start sm:justify-between">
