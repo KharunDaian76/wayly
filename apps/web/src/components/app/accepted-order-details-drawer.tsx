@@ -13,6 +13,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { formatShortOrderReference } from '@/components/app/availability-request-converted-order';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
+import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -458,6 +459,15 @@ export function AcceptedOrderDetailsDrawer({
                 cancelledAt={detail?.cancelledAt ?? null}
                 proofFlowEnabled={proofFlowEnabled}
               />
+
+              {proofFlowEnabled ? (
+                <DeliveryProofGuidance
+                  variant={panelRole}
+                  status={orderStatus}
+                  proofSubmittedAt={detail?.proofSubmittedAt ?? null}
+                  paymentStatus={order.paymentStatus}
+                />
+              ) : null}
 
               {showMissingDetail ? (
                 <PanelEmptyState

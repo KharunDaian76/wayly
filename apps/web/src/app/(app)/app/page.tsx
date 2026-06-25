@@ -36,6 +36,7 @@ import {
   type AcceptedOrderDetailsInput,
   type AcceptedOrderDetailsPanelRole,
 } from '@/components/app/accepted-order-details-drawer';
+import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
@@ -2424,7 +2425,14 @@ export default function AppHomePage() {
                           </div>
                           {showProofForm ? (
                             <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
-                              <p className="text-sm font-medium">
+                              <DeliveryProofGuidance
+                                compact
+                                variant="wayler"
+                                status={order.status}
+                                proofSubmittedAt={order.proofSubmittedAt}
+                                proofLoadFailed={order.proofLoadFailed}
+                              />
+                              <p className="mt-3 text-sm font-medium">
                                 {t('app.waylerFeed.acceptedPanel.proofTitle')}
                               </p>
                               {isProofDetailLoading ? (
@@ -3127,7 +3135,15 @@ export default function AppHomePage() {
                           </dl>
                           {showSenderProofPanel ? (
                             <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
-                              <p className="text-sm font-medium">
+                              <DeliveryProofGuidance
+                                compact
+                                variant="sender"
+                                status={order.status}
+                                proofSubmittedAt={order.proofSubmittedAt}
+                                proofLoadFailed={order.proofLoadFailed}
+                                paymentStatus={order.paymentLoadFailed ? undefined : paymentStatus}
+                              />
+                              <p className="mt-3 text-sm font-medium">
                                 {t('app.senderPanel.proofTitle')}
                               </p>
                               {isSenderProofLoading ? (

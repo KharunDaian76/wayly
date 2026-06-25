@@ -636,6 +636,25 @@ const en = {
   'app.orderTimeline.reviewToolsHelp':
     'Admin review tools can help resolve disputes when both sides share details in Wayly.',
   'app.orderTimeline.noTimelineData': 'Timeline unavailable for this order.',
+  'app.deliveryProof.title': 'Delivery proof',
+  'app.deliveryProof.subtitle':
+    'Proof helps document delivery — confirm only when details look right.',
+  'app.deliveryProof.proofMayBeRequired': 'Proof may be required before completion.',
+  'app.deliveryProof.proofSubmitted': 'Proof submitted',
+  'app.deliveryProof.waitingSenderConfirmation': 'Waiting for sender confirmation',
+  'app.deliveryProof.deliveryConfirmed': 'Delivery confirmed',
+  'app.deliveryProof.proofNotAvailable': 'Proof status unavailable',
+  'app.deliveryProof.waylerGuidance':
+    'Waylers may need to provide delivery proof before the job is fully complete.',
+  'app.deliveryProof.senderGuidance':
+    'Review proof and delivery details inside Wayly before confirming completion.',
+  'app.deliveryProof.keepRelevantSafe':
+    'Keep photos and notes relevant, accurate, and safe to share.',
+  'app.deliveryProof.noPrivatePayment': 'Do not share private payment details in proof notes.',
+  'app.deliveryProof.reviewToolsHelp':
+    'Disputes can be reviewed using Wayly admin review tools when details stay in the platform.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'Confirm delivery only after checking the details and proof provided.',
   'app.waylerFeed.title': 'Available delivery requests',
   'app.waylerFeed.refresh': 'Refresh',
   'app.waylerFeed.loading': 'Loading delivery requests…',
@@ -1936,6 +1955,26 @@ const ru: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     'Инструменты администратора помогают решать споры, когда обе стороны делятся деталями в Wayly.',
   'app.orderTimeline.noTimelineData': 'Хронология для этого заказа недоступна.',
+  'app.deliveryProof.title': 'Подтверждение доставки',
+  'app.deliveryProof.subtitle':
+    'Подтверждение помогает задокументировать доставку — подтверждайте только после проверки.',
+  'app.deliveryProof.proofMayBeRequired': 'Перед завершением может потребоваться подтверждение.',
+  'app.deliveryProof.proofSubmitted': 'Подтверждение отправлено',
+  'app.deliveryProof.waitingSenderConfirmation': 'Ожидает подтверждения отправителя',
+  'app.deliveryProof.deliveryConfirmed': 'Доставка подтверждена',
+  'app.deliveryProof.proofNotAvailable': 'Статус подтверждения недоступен',
+  'app.deliveryProof.waylerGuidance':
+    'Wayler может предоставить подтверждение доставки до полного завершения заказа.',
+  'app.deliveryProof.senderGuidance':
+    'Проверьте подтверждение и детали доставки в Wayly перед подтверждением завершения.',
+  'app.deliveryProof.keepRelevantSafe':
+    'Делайте фото и заметки уместными, точными и безопасными для обмена.',
+  'app.deliveryProof.noPrivatePayment':
+    'Не указывайте личные платёжные данные в заметках к подтверждению.',
+  'app.deliveryProof.reviewToolsHelp':
+    'Споры можно рассмотреть с помощью инструментов администратора Wayly, если детали остаются на платформе.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'Подтверждайте доставку только после проверки деталей и предоставленного подтверждения.',
   'app.waylerFeed.title': 'Доступные заявки на доставку',
   'app.waylerFeed.refresh': 'Обновить',
   'app.waylerFeed.loading': 'Загрузка заявок…',
@@ -3241,6 +3280,26 @@ const es: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     'Las herramientas de revisión de admin pueden ayudar a resolver disputas cuando ambas partes comparten detalles en Wayly.',
   'app.orderTimeline.noTimelineData': 'Línea de tiempo no disponible para este pedido.',
+  'app.deliveryProof.title': 'Prueba de entrega',
+  'app.deliveryProof.subtitle':
+    'La prueba ayuda a documentar la entrega — confirma solo cuando los detalles sean correctos.',
+  'app.deliveryProof.proofMayBeRequired': 'Puede requerirse prueba antes de completar.',
+  'app.deliveryProof.proofSubmitted': 'Prueba enviada',
+  'app.deliveryProof.waitingSenderConfirmation': 'Esperando confirmación del remitente',
+  'app.deliveryProof.deliveryConfirmed': 'Entrega confirmada',
+  'app.deliveryProof.proofNotAvailable': 'Estado de prueba no disponible',
+  'app.deliveryProof.waylerGuidance':
+    'Los Waylers pueden necesitar proporcionar prueba de entrega antes de completar el trabajo.',
+  'app.deliveryProof.senderGuidance':
+    'Revisa la prueba y los detalles de entrega en Wayly antes de confirmar la finalización.',
+  'app.deliveryProof.keepRelevantSafe':
+    'Mantén fotos y notas relevantes, precisas y seguras para compartir.',
+  'app.deliveryProof.noPrivatePayment':
+    'No compartas datos de pago privados en las notas de prueba.',
+  'app.deliveryProof.reviewToolsHelp':
+    'Las disputas pueden revisarse con las herramientas de admin de Wayly cuando los detalles permanecen en la plataforma.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'Confirma la entrega solo después de revisar los detalles y la prueba proporcionada.',
   'app.waylerFeed.title': 'Solicitudes de entrega disponibles',
   'app.waylerFeed.refresh': 'Actualizar',
   'app.waylerFeed.loading': 'Cargando solicitudes de entrega…',
@@ -4553,6 +4612,26 @@ const fr: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     'Les outils de revue admin peuvent aider à résoudre les litiges lorsque les deux parties partagent les détails dans Wayly.',
   'app.orderTimeline.noTimelineData': 'Chronologie indisponible pour cette commande.',
+  'app.deliveryProof.title': 'Preuve de livraison',
+  'app.deliveryProof.subtitle':
+    'La preuve aide à documenter la livraison — confirmez seulement quand les détails sont corrects.',
+  'app.deliveryProof.proofMayBeRequired': 'Une preuve peut être requise avant la clôture.',
+  'app.deliveryProof.proofSubmitted': 'Preuve envoyée',
+  'app.deliveryProof.waitingSenderConfirmation': "En attente de confirmation de l'expéditeur",
+  'app.deliveryProof.deliveryConfirmed': 'Livraison confirmée',
+  'app.deliveryProof.proofNotAvailable': 'Statut de preuve indisponible',
+  'app.deliveryProof.waylerGuidance':
+    'Les Waylers peuvent devoir fournir une preuve de livraison avant la fin complète du travail.',
+  'app.deliveryProof.senderGuidance':
+    'Vérifiez la preuve et les détails de livraison dans Wayly avant de confirmer la fin.',
+  'app.deliveryProof.keepRelevantSafe':
+    'Gardez photos et notes pertinentes, exactes et sûres à partager.',
+  'app.deliveryProof.noPrivatePayment':
+    'Ne partagez pas de données de paiement privées dans les notes de preuve.',
+  'app.deliveryProof.reviewToolsHelp':
+    'Les litiges peuvent être examinés via les outils admin Wayly lorsque les détails restent sur la plateforme.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'Confirmez la livraison seulement après avoir vérifié les détails et la preuve fournie.',
   'app.waylerFeed.title': 'Demandes de livraison disponibles',
   'app.waylerFeed.refresh': 'Actualiser',
   'app.waylerFeed.loading': 'Chargement des demandes de livraison…',
@@ -5877,6 +5956,26 @@ const de: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     'Admin-Prüftools können bei Streitigkeiten helfen, wenn beide Seiten Details in Wayly teilen.',
   'app.orderTimeline.noTimelineData': 'Zeitachse für diese Bestellung nicht verfügbar.',
+  'app.deliveryProof.title': 'Liefernachweis',
+  'app.deliveryProof.subtitle':
+    'Nachweise dokumentieren die Lieferung — bestätigen Sie erst nach Prüfung der Details.',
+  'app.deliveryProof.proofMayBeRequired': 'Vor Abschluss kann ein Nachweis erforderlich sein.',
+  'app.deliveryProof.proofSubmitted': 'Nachweis eingereicht',
+  'app.deliveryProof.waitingSenderConfirmation': 'Wartet auf Bestätigung des Senders',
+  'app.deliveryProof.deliveryConfirmed': 'Lieferung bestätigt',
+  'app.deliveryProof.proofNotAvailable': 'Nachweisstatus nicht verfügbar',
+  'app.deliveryProof.waylerGuidance':
+    'Wayler müssen ggf. einen Liefernachweis vor vollständigem Abschluss bereitstellen.',
+  'app.deliveryProof.senderGuidance':
+    'Prüfen Sie Nachweis und Lieferdetails in Wayly, bevor Sie den Abschluss bestätigen.',
+  'app.deliveryProof.keepRelevantSafe':
+    'Halten Sie Fotos und Notizen relevant, korrekt und sicher zum Teilen.',
+  'app.deliveryProof.noPrivatePayment':
+    'Teilen Sie keine privaten Zahlungsdaten in Nachweisnotizen.',
+  'app.deliveryProof.reviewToolsHelp':
+    'Streitigkeiten können mit Wayly-Admin-Tools geprüft werden, wenn Details auf der Plattform bleiben.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'Bestätigen Sie die Lieferung erst nach Prüfung der Details und des bereitgestellten Nachweises.',
   'app.waylerFeed.title': 'Verfügbare Lieferanfragen',
   'app.waylerFeed.refresh': 'Aktualisieren',
   'app.waylerFeed.loading': 'Lieferanfragen werden geladen…',
@@ -7193,6 +7292,25 @@ const tr: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     "Her iki taraf Wayly'de ayrıntı paylaştığında admin inceleme araçları anlaşmazlıkları çözmeye yardımcı olabilir.",
   'app.orderTimeline.noTimelineData': 'Bu sipariş için zaman çizelgesi kullanılamıyor.',
+  'app.deliveryProof.title': 'Teslimat kanıtı',
+  'app.deliveryProof.subtitle':
+    'Kanıt teslimatı belgelemeye yardımcı olur — yalnızca ayrıntılar doğruysa onaylayın.',
+  'app.deliveryProof.proofMayBeRequired': 'Tamamlanmadan önce kanıt gerekebilir.',
+  'app.deliveryProof.proofSubmitted': 'Kanıt gönderildi',
+  'app.deliveryProof.waitingSenderConfirmation': 'Gönderen onayı bekleniyor',
+  'app.deliveryProof.deliveryConfirmed': 'Teslimat onaylandı',
+  'app.deliveryProof.proofNotAvailable': 'Kanıt durumu kullanılamıyor',
+  'app.deliveryProof.waylerGuidance':
+    "Wayler'lar iş tamamlanmadan önce teslimat kanıtı sağlamak zorunda kalabilir.",
+  'app.deliveryProof.senderGuidance':
+    "Tamamlamayı onaylamadan önce Wayly'de kanıtı ve teslimat ayrıntılarını inceleyin.",
+  'app.deliveryProof.keepRelevantSafe':
+    'Fotoğraf ve notları ilgili, doğru ve paylaşım için güvenli tutun.',
+  'app.deliveryProof.noPrivatePayment': 'Kanıt notlarında özel ödeme bilgilerini paylaşmayın.',
+  'app.deliveryProof.reviewToolsHelp':
+    'Ayrıntılar platformda kaldığında anlaşmazlıklar Wayly admin inceleme araçlarıyla gözden geçirilebilir.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'Teslimatı yalnızca ayrıntıları ve sağlanan kanıtı kontrol ettikten sonra onaylayın.',
   'app.waylerFeed.title': 'Mevcut teslimat talepleri',
   'app.waylerFeed.refresh': 'Yenile',
   'app.waylerFeed.loading': 'Teslimat talepleri yükleniyor…',
@@ -8462,6 +8580,22 @@ const ar: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     'يمكن لأدوات مراجعة المسؤول المساعدة في حل النزاعات عندما يشارك الطرفان التفاصيل في Wayly.',
   'app.orderTimeline.noTimelineData': 'الجدول الزمني غير متاح لهذا الطلب.',
+  'app.deliveryProof.title': 'إثبات التسليم',
+  'app.deliveryProof.subtitle':
+    'يساعد الإثبات في توثيق التسليم — أكّد فقط عندما تكون التفاصيل صحيحة.',
+  'app.deliveryProof.proofMayBeRequired': 'قد يلزم إثبات قبل الإكمال.',
+  'app.deliveryProof.proofSubmitted': 'تم إرسال الإثبات',
+  'app.deliveryProof.waitingSenderConfirmation': 'في انتظار تأكيد المرسل',
+  'app.deliveryProof.deliveryConfirmed': 'تم تأكيد التسليم',
+  'app.deliveryProof.proofNotAvailable': 'حالة الإثبات غير متاحة',
+  'app.deliveryProof.waylerGuidance': 'قد يحتاج Wayler إلى تقديم إثبات تسليم قبل اكتمال المهمة.',
+  'app.deliveryProof.senderGuidance': 'راجع الإثبات وتفاصيل التسليم داخل Wayly قبل تأكيد الإكمال.',
+  'app.deliveryProof.keepRelevantSafe': 'اجعل الصور والملاحظات ذات صلة ودقيقة وآمنة للمشاركة.',
+  'app.deliveryProof.noPrivatePayment': 'لا تشارك تفاصيل الدفع الخاصة في ملاحظات الإثبات.',
+  'app.deliveryProof.reviewToolsHelp':
+    'يمكن مراجعة النزاعات باستخدام أدوات مراجعة Wayly عندما تبقى التفاصيل على المنصة.',
+  'app.deliveryProof.confirmOnlyAfterChecking':
+    'أكّد التسليم فقط بعد التحقق من التفاصيل والإثبات المقدم.',
   'app.waylerFeed.title': 'طلبات التوصيل المتاحة',
   'app.waylerFeed.refresh': 'تحديث',
   'app.waylerFeed.loading': 'جارٍ تحميل طلبات التوصيل…',
@@ -9691,6 +9825,20 @@ const zh: Dictionary = {
   'app.orderTimeline.reviewToolsHelp':
     '当双方在 Wayly 内分享详情时，管理员审核工具可协助解决争议。',
   'app.orderTimeline.noTimelineData': '此订单暂无时间线数据。',
+  'app.deliveryProof.title': '配送证明',
+  'app.deliveryProof.subtitle': '证明有助于记录配送——请在确认细节无误后再确认。',
+  'app.deliveryProof.proofMayBeRequired': '完成前可能需要配送证明。',
+  'app.deliveryProof.proofSubmitted': '证明已提交',
+  'app.deliveryProof.waitingSenderConfirmation': '等待寄件人确认',
+  'app.deliveryProof.deliveryConfirmed': '配送已确认',
+  'app.deliveryProof.proofNotAvailable': '证明状态不可用',
+  'app.deliveryProof.waylerGuidance': 'Wayler 可能需要在任务完全完成前提供配送证明。',
+  'app.deliveryProof.senderGuidance': '确认完成前请在 Wayly 内查看证明与配送详情。',
+  'app.deliveryProof.keepRelevantSafe': '照片与备注应相关、准确且适合分享。',
+  'app.deliveryProof.noPrivatePayment': '请勿在证明备注中分享私人支付信息。',
+  'app.deliveryProof.reviewToolsHelp':
+    '当详情保留在平台内时，可通过 Wayly 管理员审核工具处理争议。',
+  'app.deliveryProof.confirmOnlyAfterChecking': '仅在核对详情与所提供证明后再确认配送。',
   'app.waylerFeed.title': '可用配送请求',
   'app.waylerFeed.refresh': '刷新',
   'app.waylerFeed.loading': '正在加载配送请求…',
