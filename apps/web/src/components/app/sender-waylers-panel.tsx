@@ -20,6 +20,16 @@ import {
   MarketplaceTrustBadgeRow,
 } from '@/components/app/marketplace-trust-signals';
 import {
+  isSenderRequestReady,
+  SenderRequestGoodTips,
+  SenderRequestHowItWorks,
+  SenderRequestMessageCounter,
+  SENDER_REQUEST_MESSAGE_MAX_LENGTH,
+  SenderRequestReadyBadge,
+  SenderRequestSafetyChecklist,
+  SenderRequestSummary,
+} from '@/components/app/sender-request-composer';
+import {
   PanelEmptyState,
   PanelErrorState,
   RequestsListSkeleton,
@@ -866,7 +876,7 @@ export function SenderWaylersPanel({
                             {t('app.availabilityRequests.requestDelivery')}
                           </h4>
 
-                          <MarketplaceRequestSafetyNote variant="panel" />
+                          <SenderRequestHowItWorks />
 
                           {requestFormError ? (
                             <p className={ALERT_ERROR_CLASS}>{requestFormError}</p>
@@ -1068,9 +1078,19 @@ export function SenderWaylersPanel({
                               className={TEXTAREA_CLASS}
                               value={requestForm.message}
                               disabled={requestSubmitting}
+                              maxLength={SENDER_REQUEST_MESSAGE_MAX_LENGTH}
                               onChange={(e) => updateRequestForm({ message: e.target.value })}
                             />
+                            <SenderRequestMessageCounter message={requestForm.message} />
                           </label>
+
+                          <SenderRequestSummary form={requestForm} />
+                          <SenderRequestSafetyChecklist />
+                          <SenderRequestGoodTips />
+
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <SenderRequestReadyBadge ready={isSenderRequestReady(requestForm)} />
+                          </div>
 
                           <div className="wayly-action-group">
                             <Button
@@ -1080,7 +1100,7 @@ export function SenderWaylersPanel({
                               disabled={requestSubmitting}
                             >
                               {requestSubmitting
-                                ? t('app.senderWaylers.loading')
+                                ? t('app.senderRequest.submitting')
                                 : t('app.availabilityRequests.sendRequest')}
                             </Button>
                             <Button
