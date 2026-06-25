@@ -7,6 +7,7 @@ export interface AdminPaymentsListQuery {
   status?: PaymentStatus;
   currency?: string;
   adminReviewStatus?: PaymentAdminReviewStatus;
+  orderId?: string;
 }
 
 /** POST /admin/payments/:id/mark-manual-review body. */

@@ -188,6 +188,31 @@ export class AdminPaymentReleaseDecisionBodyDto {
   note!: string;
 }
 
+/** Query parameters for GET /admin/payments. */
+export class AdminPaymentsListQueryDto {
+  @ApiPropertyOptional({ example: 1, default: 1, minimum: 1 })
+  page?: number;
+
+  @ApiPropertyOptional({ example: 20, default: 20, minimum: 1, maximum: 100 })
+  limit?: number;
+
+  @ApiPropertyOptional({
+    enum: ['PENDING', 'AUTHORIZED', 'ESCROWED', 'RELEASED', 'REFUNDED', 'FAILED', 'CANCELLED'],
+  })
+  status?: string;
+
+  @ApiPropertyOptional({ example: 'EUR' })
+  currency?: string;
+
+  @ApiPropertyOptional({
+    enum: ['NONE', 'MANUAL_REVIEW', 'REFUND_DECISION_RECORDED', 'RELEASE_DECISION_RECORDED'],
+  })
+  adminReviewStatus?: string;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  orderId?: string;
+}
+
 export class AdminPaymentListResponseDto {
   @ApiProperty({ type: [AdminPaymentQueueItemDto] })
   items!: AdminPaymentQueueItemDto[];

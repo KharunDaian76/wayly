@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
+  DeliveryOrderSource as PrismaDeliveryOrderSource,
   DeliveryOrderStatus as PrismaDeliveryOrderStatus,
   DeliveryOrderType as PrismaDeliveryOrderType,
   OrderAdminReviewStatus as PrismaOrderAdminReviewStatus,
@@ -135,6 +136,7 @@ export class OrdersService {
       ...(query.adminReviewStatus
         ? { adminReviewStatus: query.adminReviewStatus as PrismaOrderAdminReviewStatus }
         : {}),
+      ...(query.sourceType ? { sourceType: query.sourceType as PrismaDeliveryOrderSource } : {}),
     };
 
     const skip = (query.page - 1) * query.limit;

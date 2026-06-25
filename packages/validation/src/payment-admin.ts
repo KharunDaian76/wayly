@@ -2,7 +2,7 @@ import { PaymentAdminReviewDecision, PaymentAdminReviewStatus, PaymentStatus } f
 import { z } from 'zod';
 
 import { enumSchema } from './helpers';
-import { currencySchema, nonEmptyStringSchema } from './schemas';
+import { currencySchema, idSchema, nonEmptyStringSchema } from './schemas';
 
 /** GET /admin/payments query parameters (operations read-only list). */
 export const adminPaymentsListQuerySchema = z.object({
@@ -11,6 +11,7 @@ export const adminPaymentsListQuerySchema = z.object({
   status: enumSchema(PaymentStatus).optional(),
   currency: currencySchema.optional(),
   adminReviewStatus: enumSchema(PaymentAdminReviewStatus).optional(),
+  orderId: idSchema.optional(),
 });
 
 export type AdminPaymentsListQueryInput = z.infer<typeof adminPaymentsListQuerySchema>;

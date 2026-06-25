@@ -97,6 +97,9 @@ function buildAdminOrdersQuery(query?: AdminOrdersListQuery): string {
   if (query.adminReviewStatus !== undefined) {
     params.set('adminReviewStatus', query.adminReviewStatus);
   }
+  if (query.sourceType !== undefined) {
+    params.set('sourceType', query.sourceType);
+  }
   const qs = params.toString();
   return qs ? `?${qs}` : '';
 }
@@ -147,6 +150,9 @@ function buildAdminPaymentsQuery(query?: AdminPaymentsListQuery): string {
   }
   if (query.adminReviewStatus !== undefined) {
     params.set('adminReviewStatus', query.adminReviewStatus);
+  }
+  if (query.orderId !== undefined) {
+    params.set('orderId', query.orderId);
   }
   const qs = params.toString();
   return qs ? `?${qs}` : '';

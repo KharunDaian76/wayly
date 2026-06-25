@@ -3,6 +3,8 @@ export { ApiError, type ApiErrorBody } from './errors';
 export { createAdminApi } from './admin';
 export { type AdminApi } from './admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
+export type { AdminOrdersListQuery } from './orders-admin.types';
+export type { AdminPaymentsListQuery } from './payments-admin.types';
 export { createAuthApi } from './auth';
 export {
   type AuthApi,

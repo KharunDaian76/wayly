@@ -1,4 +1,5 @@
 import {
+  DeliveryOrderSource,
   DeliveryOrderStatus,
   DeliveryOrderType,
   OrderAdminReviewStatus,
@@ -74,6 +75,7 @@ export const adminOrdersListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   status: enumSchema(DeliveryOrderStatus).optional(),
   adminReviewStatus: enumSchema(OrderAdminReviewStatus).optional(),
+  sourceType: enumSchema(DeliveryOrderSource).optional(),
 });
 
 export type AdminOrdersListQueryInput = z.infer<typeof adminOrdersListQuerySchema>;

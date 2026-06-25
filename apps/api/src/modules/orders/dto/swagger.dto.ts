@@ -329,6 +329,28 @@ export class AdminOrderClearRiskBodyDto {
   note?: string;
 }
 
+/** Query parameters for GET /admin/orders. */
+export class AdminOrdersListQueryDto {
+  @ApiPropertyOptional({ example: 1, default: 1, minimum: 1 })
+  page?: number;
+
+  @ApiPropertyOptional({ example: 20, default: 20, minimum: 1, maximum: 100 })
+  limit?: number;
+
+  @ApiPropertyOptional({
+    enum: ['DRAFT', 'OPEN', 'ACCEPTED', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'DISPUTED'],
+  })
+  status?: string;
+
+  @ApiPropertyOptional({
+    enum: ['NONE', 'MANUAL_REVIEW', 'DECISION_RECORDED', 'RISK_FLAGGED'],
+  })
+  adminReviewStatus?: string;
+
+  @ApiPropertyOptional({ enum: ['SENDER_POSTED_ORDER', 'WAYLER_AVAILABILITY_REQUEST'] })
+  sourceType?: string;
+}
+
 export class AdminOrderListResponseDto {
   @ApiProperty({ type: [AdminOrderQueueItemDto] })
   items!: AdminOrderQueueItemDto[];

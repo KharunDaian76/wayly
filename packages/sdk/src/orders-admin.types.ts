@@ -1,4 +1,8 @@
-import type { DeliveryOrderStatus, OrderAdminReviewStatus } from '@wayly/types';
+import type {
+  DeliveryOrderSource,
+  DeliveryOrderStatus,
+  OrderAdminReviewStatus,
+} from '@wayly/types';
 
 /** Query parameters for GET /admin/orders. */
 export interface AdminOrdersListQuery {
@@ -6,6 +10,7 @@ export interface AdminOrdersListQuery {
   limit?: number;
   status?: DeliveryOrderStatus;
   adminReviewStatus?: OrderAdminReviewStatus;
+  sourceType?: DeliveryOrderSource;
 }
 
 /** POST /admin/orders/:id/mark-manual-review body. */

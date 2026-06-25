@@ -76,6 +76,7 @@ export class PaymentsService {
       ...(query.adminReviewStatus
         ? { adminReviewStatus: query.adminReviewStatus as PrismaPaymentAdminReviewStatus }
         : {}),
+      ...(query.orderId ? { orderId: query.orderId } : {}),
     };
 
     const skip = (query.page - 1) * query.limit;

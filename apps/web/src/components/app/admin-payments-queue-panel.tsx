@@ -4,12 +4,15 @@ import type {
   AdminPaymentQueueItem,
   PaymentAdminReviewDecision,
   PaymentAdminReviewStatus,
+  PaymentStatus,
   UserRole,
 } from '@wayly/types';
 import {
   PaymentAdminReviewDecision as PaymentAdminReviewDecisionEnum,
   PaymentAdminReviewStatus as PaymentAdminReviewStatusEnum,
+  PaymentStatus as PaymentStatusEnum,
 } from '@wayly/types';
+import type { AdminPaymentsListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -43,6 +46,59 @@ const TEXTAREA_CLASS = cn(
 
 const SELECT_CLASS =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
+
+const FILTER_SELECT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const FILTER_INPUT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const QUEUE_PAGE_LIMIT = 50;
+
+const PAYMENT_STATUS_OPTIONS = Object.values(PaymentStatusEnum);
+const PAYMENT_REVIEW_STATUS_OPTIONS = Object.values(PaymentAdminReviewStatusEnum);
+
+type PaymentFilterForm = {
+  status: PaymentStatus | '';
+  adminReviewStatus: PaymentAdminReviewStatus | '';
+  currency: string;
+  orderId: string;
+};
+
+const DEFAULT_PAYMENT_FILTER_FORM: PaymentFilterForm = {
+  status: '',
+  adminReviewStatus: '',
+  currency: '',
+  orderId: '',
+};
+
+function hasActivePaymentFilters(filters: PaymentFilterForm): boolean {
+  return Boolean(
+    filters.status ||
+    filters.adminReviewStatus ||
+    filters.currency.trim() ||
+    filters.orderId.trim(),
+  );
+}
+
+function buildPaymentsListQuery(page: number, filters: PaymentFilterForm): AdminPaymentsListQuery {
+  const query: AdminPaymentsListQuery = { page, limit: QUEUE_PAGE_LIMIT };
+  if (filters.status) {
+    query.status = filters.status;
+  }
+  if (filters.adminReviewStatus) {
+    query.adminReviewStatus = filters.adminReviewStatus;
+  }
+  const currency = filters.currency.trim();
+  if (currency) {
+    query.currency = currency.toUpperCase();
+  }
+  const orderId = filters.orderId.trim();
+  if (orderId) {
+    query.orderId = orderId;
+  }
+  return query;
+}
 
 const REFUND_DECISION_OPTIONS = [
   PaymentAdminReviewDecisionEnum.RECOMMEND_FULL_REFUND,
@@ -140,26 +196,52 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
   const [cardActions, setCardActions] = useState<Record<string, CardAction | null>>({});
   const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
   const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filterForm, setFilterForm] = useState<PaymentFilterForm>(DEFAULT_PAYMENT_FILTER_FORM);
+  const [appliedFilters, setAppliedFilters] = useState<PaymentFilterForm>(
+    DEFAULT_PAYMENT_FILTER_FORM,
+  );
 
-  const loadPayments = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const response = await api.admin.listPayments({ page: 1, limit: 50 });
-      setItems(response.items);
-      setLoadedOnce(true);
-    } catch {
-      setLoadError(t('app.admin.paymentsLoadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const fetchPayments = useCallback(
+    async (pageNumber: number, filters: PaymentFilterForm) => {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const response = await api.admin.listPayments(buildPaymentsListQuery(pageNumber, filters));
+        setItems(response.items);
+        setPage(response.page);
+        setTotal(response.total);
+        setLoadedOnce(true);
+      } catch {
+        setLoadError(t('app.admin.paymentsLoadFailed'));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [t],
+  );
+
+  const loadPayments = useCallback(() => {
+    void fetchPayments(page, appliedFilters);
+  }, [appliedFilters, fetchPayments, page]);
+
+  const handleApplyFilters = useCallback(() => {
+    setAppliedFilters(filterForm);
+    void fetchPayments(1, filterForm);
+  }, [fetchPayments, filterForm]);
+
+  const handleClearFilters = useCallback(() => {
+    setFilterForm(DEFAULT_PAYMENT_FILTER_FORM);
+    setAppliedFilters(DEFAULT_PAYMENT_FILTER_FORM);
+    void fetchPayments(1, DEFAULT_PAYMENT_FILTER_FORM);
+  }, [fetchPayments]);
 
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
-      void loadPayments();
+      void fetchPayments(1, DEFAULT_PAYMENT_FILTER_FORM);
     }
-  }, [roles, loadPayments]);
+  }, [roles, fetchPayments]);
 
   const updateItemInList = useCallback((updated: AdminPaymentQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -350,7 +432,10 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
   }
 
   const showInitialLoading = loading && !loadedOnce;
-  const showEmpty = loadedOnce && !loadError && items.length === 0;
+  const filtersActive = hasActivePaymentFilters(appliedFilters);
+  const showEmpty = loadedOnce && !loadError && items.length === 0 && !filtersActive;
+  const showFilteredEmpty = loadedOnce && !loadError && items.length === 0 && filtersActive;
+  const totalPages = Math.max(1, Math.ceil(total / QUEUE_PAGE_LIMIT));
 
   return (
     <section
@@ -378,6 +463,115 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
       ) : null}
 
       <div className="px-1 pb-1">
+        <div className="mb-3 px-2">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">
+            {t('app.admin.adminQueueFilters')}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminPaymentsStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.status}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    status: event.target.value as PaymentFilterForm['status'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminQueueAllStatuses')}</option>
+                {PAYMENT_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminPaymentStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminPaymentsReviewStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.adminReviewStatus}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    adminReviewStatus: event.target.value as PaymentFilterForm['adminReviewStatus'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminPaymentsAllReviewStatuses')}</option>
+                {PAYMENT_REVIEW_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminPaymentReviewStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminPaymentsCurrencyFilter')}
+              </span>
+              <input
+                type="text"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.currency}
+                placeholder="EUR"
+                maxLength={3}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    currency: event.target.value.toUpperCase(),
+                  }))
+                }
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminPaymentsOrderIdFilter')}
+              </span>
+              <input
+                type="text"
+                className={FILTER_INPUT_CLASS}
+                value={filterForm.orderId}
+                placeholder={t('app.admin.adminPaymentsOrderIdFilter')}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    orderId: event.target.value.trim(),
+                  }))
+                }
+              />
+            </label>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleApplyFilters}
+            >
+              {t('app.admin.adminQueueApplyFilters')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleClearFilters}
+            >
+              {t('app.admin.adminQueueClearFilters')}
+            </Button>
+          </div>
+        </div>
+
         {loadError ? (
           <PanelErrorState
             message={loadError}
@@ -397,6 +591,13 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
         {showEmpty ? (
           <PanelEmptyState
             title={t('app.admin.noPaymentsTitle')}
+            body={t('app.admin.noPaymentsBody')}
+          />
+        ) : null}
+
+        {showFilteredEmpty ? (
+          <PanelEmptyState
+            title={t('app.admin.adminQueueNoFilteredResults')}
             body={t('app.admin.noPaymentsBody')}
           />
         ) : null}
@@ -805,8 +1006,39 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
           </ul>
         ) : null}
 
-        {!showInitialLoading && items.length > 0 && !loadError ? (
-          <div className="flex justify-end px-3 pb-2">
+        {!showInitialLoading && (loadedOnce || items.length > 0) && !loadError ? (
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-2">
+            {totalPages > 1 ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page <= 1}
+                  onClick={() => void fetchPayments(page - 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueuePreviousPage')}
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {t('app.admin.adminQueuePageLabel')
+                    .replace('{page}', String(page))
+                    .replace('{total}', String(totalPages))}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page >= totalPages}
+                  onClick={() => void fetchPayments(page + 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueueNextPage')}
+                </Button>
+              </div>
+            ) : (
+              <span />
+            )}
             <Button
               type="button"
               variant="outline"

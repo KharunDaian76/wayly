@@ -11,9 +11,11 @@ import type {
 } from '@wayly/types';
 import {
   DeliveryOrderSource as DeliveryOrderSourceEnum,
+  DeliveryOrderStatus as DeliveryOrderStatusEnum,
   OrderAdminReviewDecision as OrderAdminReviewDecisionEnum,
   OrderAdminReviewStatus as OrderAdminReviewStatusEnum,
 } from '@wayly/types';
+import type { AdminOrdersListQuery } from '@wayly/sdk';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -46,6 +48,45 @@ const TEXTAREA_CLASS = cn(
 
 const SELECT_CLASS =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
+
+const FILTER_SELECT_CLASS =
+  'flex h-9 w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs shadow-sm';
+
+const QUEUE_PAGE_LIMIT = 50;
+
+const ORDER_STATUS_OPTIONS = Object.values(DeliveryOrderStatusEnum);
+const ORDER_REVIEW_STATUS_OPTIONS = Object.values(OrderAdminReviewStatusEnum);
+const ORDER_SOURCE_TYPE_OPTIONS = Object.values(DeliveryOrderSourceEnum);
+
+type OrderFilterForm = {
+  status: DeliveryOrderStatus | '';
+  adminReviewStatus: OrderAdminReviewStatus | '';
+  sourceType: DeliveryOrderSource | '';
+};
+
+const DEFAULT_ORDER_FILTER_FORM: OrderFilterForm = {
+  status: '',
+  adminReviewStatus: '',
+  sourceType: '',
+};
+
+function hasActiveOrderFilters(filters: OrderFilterForm): boolean {
+  return Boolean(filters.status || filters.adminReviewStatus || filters.sourceType);
+}
+
+function buildOrdersListQuery(page: number, filters: OrderFilterForm): AdminOrdersListQuery {
+  const query: AdminOrdersListQuery = { page, limit: QUEUE_PAGE_LIMIT };
+  if (filters.status) {
+    query.status = filters.status;
+  }
+  if (filters.adminReviewStatus) {
+    query.adminReviewStatus = filters.adminReviewStatus;
+  }
+  if (filters.sourceType) {
+    query.sourceType = filters.sourceType;
+  }
+  return query;
+}
 
 const DECISION_OPTIONS = [
   OrderAdminReviewDecisionEnum.MONITOR,
@@ -167,26 +208,50 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
   const [cardActions, setCardActions] = useState<Record<string, CardAction | null>>({});
   const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
   const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filterForm, setFilterForm] = useState<OrderFilterForm>(DEFAULT_ORDER_FILTER_FORM);
+  const [appliedFilters, setAppliedFilters] = useState<OrderFilterForm>(DEFAULT_ORDER_FILTER_FORM);
 
-  const loadOrders = useCallback(async () => {
-    setLoading(true);
-    setLoadError(null);
-    try {
-      const response = await api.admin.listOrders({ page: 1, limit: 50 });
-      setItems(response.items);
-      setLoadedOnce(true);
-    } catch {
-      setLoadError(t('app.admin.ordersLoadFailed'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const fetchOrders = useCallback(
+    async (pageNumber: number, filters: OrderFilterForm) => {
+      setLoading(true);
+      setLoadError(null);
+      try {
+        const response = await api.admin.listOrders(buildOrdersListQuery(pageNumber, filters));
+        setItems(response.items);
+        setPage(response.page);
+        setTotal(response.total);
+        setLoadedOnce(true);
+      } catch {
+        setLoadError(t('app.admin.ordersLoadFailed'));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [t],
+  );
+
+  const loadOrders = useCallback(() => {
+    void fetchOrders(page, appliedFilters);
+  }, [appliedFilters, fetchOrders, page]);
+
+  const handleApplyFilters = useCallback(() => {
+    setAppliedFilters(filterForm);
+    void fetchOrders(1, filterForm);
+  }, [fetchOrders, filterForm]);
+
+  const handleClearFilters = useCallback(() => {
+    setFilterForm(DEFAULT_ORDER_FILTER_FORM);
+    setAppliedFilters(DEFAULT_ORDER_FILTER_FORM);
+    void fetchOrders(1, DEFAULT_ORDER_FILTER_FORM);
+  }, [fetchOrders]);
 
   useEffect(() => {
     if (hasOperationsDashboardAccess(roles)) {
-      void loadOrders();
+      void fetchOrders(1, DEFAULT_ORDER_FILTER_FORM);
     }
-  }, [roles, loadOrders]);
+  }, [roles, fetchOrders]);
 
   const updateItemInList = useCallback((updated: AdminOrderQueueItem) => {
     setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -396,7 +461,10 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
   }
 
   const showInitialLoading = loading && !loadedOnce;
-  const showEmpty = loadedOnce && !loadError && items.length === 0;
+  const filtersActive = hasActiveOrderFilters(appliedFilters);
+  const showEmpty = loadedOnce && !loadError && items.length === 0 && !filtersActive;
+  const showFilteredEmpty = loadedOnce && !loadError && items.length === 0 && filtersActive;
+  const totalPages = Math.max(1, Math.ceil(total / QUEUE_PAGE_LIMIT));
 
   return (
     <section
@@ -422,11 +490,107 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
       ) : null}
 
       <div className="px-1 pb-1">
+        <div className="mb-3 px-2">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">
+            {t('app.admin.adminQueueFilters')}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminOrdersStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.status}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    status: event.target.value as OrderFilterForm['status'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminQueueAllStatuses')}</option>
+                {ORDER_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminOrderStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminOrdersReviewStatusFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.adminReviewStatus}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    adminReviewStatus: event.target.value as OrderFilterForm['adminReviewStatus'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminOrdersAllReviewStatuses')}</option>
+                {ORDER_REVIEW_STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {t(adminOrderReviewStatusKey(status))}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1 text-xs">
+              <span className="text-muted-foreground">
+                {t('app.admin.adminOrdersSourceTypeFilter')}
+              </span>
+              <select
+                className={FILTER_SELECT_CLASS}
+                value={filterForm.sourceType}
+                onChange={(event) =>
+                  setFilterForm((prev) => ({
+                    ...prev,
+                    sourceType: event.target.value as OrderFilterForm['sourceType'],
+                  }))
+                }
+              >
+                <option value="">{t('app.admin.adminOrdersAllSourceTypes')}</option>
+                {ORDER_SOURCE_TYPE_OPTIONS.map((sourceType) => (
+                  <option key={sourceType} value={sourceType}>
+                    {sourceTypeLabel(sourceType, t)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleApplyFilters}
+            >
+              {t('app.admin.adminQueueApplyFilters')}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs"
+              disabled={loading}
+              onClick={handleClearFilters}
+            >
+              {t('app.admin.adminQueueClearFilters')}
+            </Button>
+          </div>
+        </div>
+
         {loadError ? (
           <PanelErrorState
             message={loadError}
             retryLabel={t('app.admin.retryOrders')}
-            onRetry={() => void loadOrders()}
+            onRetry={loadOrders}
             retryDisabled={loading}
           />
         ) : null}
@@ -441,6 +605,13 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
         {showEmpty ? (
           <PanelEmptyState
             title={t('app.admin.noOrdersTitle')}
+            body={t('app.admin.noOrdersBody')}
+          />
+        ) : null}
+
+        {showFilteredEmpty ? (
+          <PanelEmptyState
+            title={t('app.admin.adminQueueNoFilteredResults')}
             body={t('app.admin.noOrdersBody')}
           />
         ) : null}
@@ -896,15 +1067,46 @@ export function AdminOrdersQueuePanel({ roles }: AdminOrdersQueuePanelProps) {
           </ul>
         ) : null}
 
-        {!showInitialLoading && items.length > 0 && !loadError ? (
-          <div className="flex justify-end px-3 pb-2">
+        {!showInitialLoading && (loadedOnce || items.length > 0) && !loadError ? (
+          <div className="flex flex-wrap items-center justify-between gap-2 px-3 pb-2">
+            {totalPages > 1 ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page <= 1}
+                  onClick={() => void fetchOrders(page - 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueuePreviousPage')}
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {t('app.admin.adminQueuePageLabel')
+                    .replace('{page}', String(page))
+                    .replace('{total}', String(totalPages))}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 text-xs"
+                  disabled={loading || page >= totalPages}
+                  onClick={() => void fetchOrders(page + 1, appliedFilters)}
+                >
+                  {t('app.admin.adminQueueNextPage')}
+                </Button>
+              </div>
+            ) : (
+              <span />
+            )}
             <Button
               type="button"
               variant="outline"
               size="sm"
               className="h-8 text-xs"
               disabled={loading}
-              onClick={() => void loadOrders()}
+              onClick={loadOrders}
             >
               {loading ? t('app.admin.ordersLoading') : t('app.admin.refreshOrders')}
             </Button>
