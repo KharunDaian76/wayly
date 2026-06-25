@@ -15,6 +15,11 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ActiveWaylersMarketplaceSection } from '@/components/app/active-waylers-marketplace-section';
 import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
 import {
+  MarketplaceHowRequestsWork,
+  MarketplaceRequestSafetyNote,
+  MarketplaceTrustBadgeRow,
+} from '@/components/app/marketplace-trust-signals';
+import {
   PanelEmptyState,
   PanelErrorState,
   RequestsListSkeleton,
@@ -534,6 +539,14 @@ export function SenderWaylersPanel({
     }
   };
 
+  const handleLocationSelect = useCallback((country: string, city: string | null) => {
+    setFilters((prev) => ({
+      ...prev,
+      originCountry: country,
+      originCity: city ?? '',
+    }));
+  }, []);
+
   const busy = listingsLoading;
 
   return (
@@ -555,6 +568,7 @@ export function SenderWaylersPanel({
               toCountry: filters.destinationCountry,
               toCity: filters.destinationCity,
             }}
+            onLocationSelect={handleLocationSelect}
           />
 
           <div className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4">
@@ -654,8 +668,15 @@ export function SenderWaylersPanel({
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold">{t('app.senderWaylers.resultsTitle')}</h3>
+          <MarketplaceHowRequestsWork />
+
+          <div id="sender-waylers-results" className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-sm font-semibold">{t('app.senderWaylers.resultsTitle')}</h3>
+              <p className="text-xs text-muted-foreground">
+                {t('app.marketplaceTrust.browseAvailableWaylers')}
+              </p>
+            </div>
             {listingsError ? (
               <PanelErrorState
                 message={listingsError}
@@ -702,6 +723,8 @@ export function SenderWaylersPanel({
                           {t(availabilityStatusKey(listing.status))}
                         </span>
                       </div>
+
+                      <MarketplaceTrustBadgeRow listing={listing} className="mt-2" />
 
                       <dl className="mt-2 flex flex-col gap-1">
                         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
@@ -815,20 +838,23 @@ export function SenderWaylersPanel({
                         ) : null}
                       </dl>
 
-                      <div className="wayly-action-group mt-3">
-                        {isRequestOpen ? (
-                          <Button variant="outline" size="sm" onClick={closeRequestForm}>
-                            {t('app.availabilityRequests.closeForm')}
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            onClick={() => openRequestForm(listing)}
-                          >
-                            {t('app.availabilityRequests.requestThisWayler')}
-                          </Button>
-                        )}
+                      <div className="mt-3 flex flex-col gap-2">
+                        <div className="wayly-action-group">
+                          {isRequestOpen ? (
+                            <Button variant="outline" size="sm" onClick={closeRequestForm}>
+                              {t('app.availabilityRequests.closeForm')}
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              onClick={() => openRequestForm(listing)}
+                            >
+                              {t('app.availabilityRequests.requestThisWayler')}
+                            </Button>
+                          )}
+                        </div>
+                        {!isRequestOpen ? <MarketplaceRequestSafetyNote /> : null}
                       </div>
 
                       {isRequestOpen ? (
@@ -839,6 +865,8 @@ export function SenderWaylersPanel({
                           <h4 className="text-sm font-semibold">
                             {t('app.availabilityRequests.requestDelivery')}
                           </h4>
+
+                          <MarketplaceRequestSafetyNote variant="panel" />
 
                           {requestFormError ? (
                             <p className={ALERT_ERROR_CLASS}>{requestFormError}</p>

@@ -14,6 +14,11 @@ const LOCATION_CARD_CLASS = cn(
   'transition-colors hover:border-primary/30',
 );
 
+const LOCATION_CARD_INTERACTIVE_CLASS = cn(
+  LOCATION_CARD_CLASS,
+  'w-full cursor-pointer text-left transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+);
+
 type LocationFilters = {
   country: string;
   city: string;
@@ -30,6 +35,7 @@ type ActiveWaylersMarketplaceSectionProps = {
   canBrowse: boolean;
   routeFilters?: RouteFilters;
   refreshKey?: number;
+  onLocationSelect?: (country: string, city: string | null) => void;
 };
 
 function normalizeCountry(value: string): string | undefined {
@@ -53,6 +59,7 @@ export function ActiveWaylersMarketplaceSection({
   canBrowse,
   routeFilters,
   refreshKey = 0,
+  onLocationSelect,
 }: ActiveWaylersMarketplaceSectionProps) {
   const { t } = useI18n();
 
@@ -117,6 +124,14 @@ export function ActiveWaylersMarketplaceSection({
   const handleClearFilters = () => {
     setDraftFilters({ country: '', city: '' });
     setAppliedFilters({ country: '', city: '' });
+  };
+
+  const handleLocationClick = (entry: ActiveWaylerLocationCount) => {
+    if (!onLocationSelect) {
+      return;
+    }
+    setDraftFilters({ country: entry.country, city: entry.city ?? '' });
+    onLocationSelect(entry.country, entry.city ?? null);
   };
 
   if (!canBrowse) {
@@ -214,32 +229,52 @@ export function ActiveWaylersMarketplaceSection({
         <p className="text-sm text-muted-foreground">{t('app.activeWaylers.empty')}</p>
       ) : !error && data && data.locations.length > 0 ? (
         <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {data.locations.map((entry, index) => (
-            <li
-              key={`${entry.country}-${entry.city ?? ''}-${index}`}
-              className={LOCATION_CARD_CLASS}
-            >
-              <p className="font-medium">{formatLocationLabel(entry)}</p>
-              <p className="text-muted-foreground">
-                {t('app.activeWaylers.locationCount').replace(
-                  '{count}',
-                  String(entry.activeWaylerCount),
-                )}
-              </p>
-              {entry.availableTripCount != null && entry.availableTripCount > 0 ? (
-                <p className="text-xs text-muted-foreground">
-                  {t('app.activeWaylers.tripCount').replace(
+          {data.locations.map((entry, index) => {
+            const content = (
+              <>
+                <p className="font-medium">{formatLocationLabel(entry)}</p>
+                <p className="text-muted-foreground">
+                  {t('app.activeWaylers.locationCount').replace(
                     '{count}',
-                    String(entry.availableTripCount),
+                    String(entry.activeWaylerCount),
                   )}
                 </p>
-              ) : null}
-            </li>
-          ))}
+                {entry.availableTripCount != null && entry.availableTripCount > 0 ? (
+                  <p className="text-xs text-muted-foreground">
+                    {t('app.activeWaylers.tripCount').replace(
+                      '{count}',
+                      String(entry.availableTripCount),
+                    )}
+                  </p>
+                ) : null}
+              </>
+            );
+
+            return (
+              <li key={`${entry.country}-${entry.city ?? ''}-${index}`}>
+                {onLocationSelect ? (
+                  <button
+                    type="button"
+                    className={LOCATION_CARD_INTERACTIVE_CLASS}
+                    onClick={() => handleLocationClick(entry)}
+                  >
+                    {content}
+                  </button>
+                ) : (
+                  <div className={LOCATION_CARD_CLASS}>{content}</div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       ) : null}
 
-      <p className="text-xs text-muted-foreground">{t('app.activeWaylers.privacyNote')}</p>
+      <p className="text-xs text-muted-foreground">
+        {t('app.marketplaceTrust.aggregatedCountsNote')}
+      </p>
+      <p className="text-xs text-muted-foreground">
+        {t('app.marketplaceTrust.browseAvailableWaylers')}
+      </p>
     </section>
   );
 }
