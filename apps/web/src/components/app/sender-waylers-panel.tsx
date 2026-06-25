@@ -19,6 +19,7 @@ import {
   MarketplaceRequestSafetyNote,
   MarketplaceTrustBadgeRow,
 } from '@/components/app/marketplace-trust-signals';
+import { MarketplaceRouteMatchRow } from '@/components/app/marketplace-route-match';
 import {
   isSenderRequestReady,
   SenderRequestGoodTips,
@@ -736,6 +737,18 @@ export function SenderWaylersPanel({
                       </div>
 
                       <MarketplaceTrustBadgeRow listing={listing} className="mt-2" />
+                      <MarketplaceRouteMatchRow
+                        compact
+                        listing={listing}
+                        search={{
+                          originCountry: filters.originCountry,
+                          originCity: filters.originCity,
+                          originRegion: filters.originRegion,
+                          destinationCountry: filters.destinationCountry,
+                          destinationCity: filters.destinationCity,
+                          destinationRegion: filters.destinationRegion,
+                        }}
+                      />
 
                       <dl className="mt-2 flex flex-col gap-1">
                         <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
