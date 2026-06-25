@@ -12,6 +12,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 import { formatShortOrderReference } from '@/components/app/availability-request-converted-order';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
+import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -187,214 +188,6 @@ function OrderReferenceCopyAction({ orderId }: { orderId: string }) {
   );
 }
 
-type TimelineStepState = 'complete' | 'current' | 'pending';
-
-type TimelineStep = {
-  id: string;
-  label: string;
-  state: TimelineStepState;
-  detail: string | null;
-};
-
-function isPaymentProgressed(status: PaymentStatus | null | undefined): boolean {
-  if (status === null || status === undefined) {
-    return false;
-  }
-  return (
-    status === PaymentStatus.AUTHORIZED ||
-    status === PaymentStatus.HELD_IN_ESCROW ||
-    status === PaymentStatus.RELEASED ||
-    status === PaymentStatus.REFUNDED
-  );
-}
-
-function paymentStatusLabel(
-  paymentStatus: PaymentStatus | null,
-  panelRole: AcceptedOrderDetailsPanelRole,
-  t: (key: TranslationKey) => string,
-): string {
-  if (panelRole === 'sender') {
-    switch (paymentStatus) {
-      case PaymentStatus.AUTHORIZED:
-        return t('app.senderPanel.payment.authorized');
-      case PaymentStatus.HELD_IN_ESCROW:
-        return t('app.senderPanel.payment.heldInEscrow');
-      case PaymentStatus.RELEASED:
-        return t('app.senderPanel.payment.released');
-      case PaymentStatus.REFUNDED:
-        return t('app.senderPanel.payment.refunded');
-      case PaymentStatus.FAILED:
-        return t('app.senderPanel.payment.failed');
-      case PaymentStatus.CANCELLED:
-        return t('app.senderPanel.payment.cancelled');
-      default:
-        return t('app.senderPanel.payment.notAuthorized');
-    }
-  }
-
-  switch (paymentStatus) {
-    case PaymentStatus.AUTHORIZED:
-      return t('app.waylerFeed.acceptedPanel.payment.authorized');
-    case PaymentStatus.HELD_IN_ESCROW:
-      return t('app.waylerFeed.acceptedPanel.payment.heldInEscrow');
-    case PaymentStatus.RELEASED:
-      return t('app.waylerFeed.acceptedPanel.payment.released');
-    case PaymentStatus.REFUNDED:
-      return t('app.waylerFeed.acceptedPanel.payment.refunded');
-    case PaymentStatus.FAILED:
-      return t('app.waylerFeed.acceptedPanel.payment.failed');
-    case PaymentStatus.CANCELLED:
-      return t('app.waylerFeed.acceptedPanel.payment.cancelled');
-    default:
-      return t('app.waylerFeed.acceptedPanel.payment.notAuthorized');
-  }
-}
-
-function resolveCurrentStepId(
-  status: DeliveryOrderDetail['status'],
-  includePayment: boolean,
-  paymentStatus: PaymentStatus | null | undefined,
-): string {
-  if (status === DeliveryOrderStatus.DELIVERED) {
-    return 'delivered';
-  }
-  if (status === DeliveryOrderStatus.IN_TRANSIT) {
-    return 'in-delivery';
-  }
-  if (includePayment && !isPaymentProgressed(paymentStatus)) {
-    return 'payment';
-  }
-  return 'in-delivery';
-}
-
-function buildDeliveryTimelineSteps(
-  status: DeliveryOrderDetail['status'],
-  acceptedAt: string | null | undefined,
-  deliveredAt: string | null | undefined,
-  paymentStatus: PaymentStatus | null | undefined,
-  panelRole: AcceptedOrderDetailsPanelRole,
-  t: (key: TranslationKey) => string,
-): TimelineStep[] {
-  const includePayment = paymentStatus !== undefined;
-  const allComplete = status === DeliveryOrderStatus.DELIVERED;
-  const currentStepId = resolveCurrentStepId(status, includePayment, paymentStatus);
-  const currentIndex = (() => {
-    const ids = ['accepted', ...(includePayment ? ['payment'] : []), 'in-delivery', 'delivered'];
-    return ids.indexOf(currentStepId);
-  })();
-
-  const stepDefs: { id: string; label: string; detail: string | null }[] = [
-    {
-      id: 'accepted',
-      label: t('app.senderPanel.statusAccepted'),
-      detail: formatDate(acceptedAt) ?? (acceptedAt ? null : t('app.orders.dateUnavailable')),
-    },
-  ];
-
-  if (includePayment) {
-    stepDefs.push({
-      id: 'payment',
-      label: t('app.senderPanel.payment.title'),
-      detail: paymentStatusLabel(paymentStatus ?? null, panelRole, t),
-    });
-  }
-
-  stepDefs.push(
-    {
-      id: 'in-delivery',
-      label: t('app.senderPanel.statusInTransit'),
-      detail: null,
-    },
-    {
-      id: 'delivered',
-      label: t('app.senderPanel.statusDelivered'),
-      detail: formatDate(deliveredAt) ?? (deliveredAt ? null : t('app.orders.dateUnavailable')),
-    },
-  );
-
-  return stepDefs.map((step, index) => {
-    let state: TimelineStepState;
-    if (allComplete) {
-      state = 'complete';
-    } else if (index < currentIndex) {
-      state = 'complete';
-    } else if (index === currentIndex) {
-      state = 'current';
-    } else {
-      state = 'pending';
-    }
-
-    let detail = step.detail;
-    if (state === 'pending' && step.id !== 'payment') {
-      detail = t('app.orders.progressPending');
-    } else if (state === 'current' && step.id === 'in-delivery') {
-      detail = t('app.orders.progressCurrent');
-    } else if (state === 'current' && step.id === 'payment') {
-      detail = paymentStatusLabel(paymentStatus ?? null, panelRole, t);
-    } else if (state === 'pending' && step.id === 'payment') {
-      detail = t('app.orders.progressPending');
-    } else if (state === 'complete' && step.id === 'delivered' && !deliveredAt) {
-      detail = null;
-    }
-
-    return { ...step, state, detail };
-  });
-}
-
-function DeliveryProgressTimeline({ steps }: { steps: TimelineStep[] }) {
-  const { t } = useI18n();
-
-  return (
-    <section
-      className="rounded-lg border border-border/60 bg-muted/10 p-3"
-      aria-label={t('app.orders.deliveryProgress')}
-    >
-      <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {t('app.orders.deliveryProgress')}
-      </h3>
-      <ol className="flex flex-col">
-        {steps.map((step, index) => (
-          <li key={step.id} className="flex gap-3">
-            <div className="flex flex-col items-center pt-0.5">
-              <span
-                className={cn(
-                  'flex h-3 w-3 shrink-0 rounded-full border-2',
-                  step.state === 'complete' && 'border-primary bg-primary',
-                  step.state === 'current' && 'border-primary bg-background ring-2 ring-primary/25',
-                  step.state === 'pending' && 'border-muted-foreground/35 bg-background',
-                )}
-                aria-hidden
-              />
-              {index < steps.length - 1 ? (
-                <span
-                  className={cn(
-                    'my-0.5 w-px min-h-[1.125rem] flex-1',
-                    step.state === 'complete' ? 'bg-primary/50' : 'bg-border',
-                  )}
-                  aria-hidden
-                />
-              ) : null}
-            </div>
-            <div className={cn('min-w-0', index < steps.length - 1 ? 'pb-3' : 'pb-0')}>
-              <p
-                className={cn(
-                  'text-sm font-medium leading-snug',
-                  step.state === 'pending' && 'text-muted-foreground',
-                )}
-              >
-                {step.label}
-              </p>
-              {step.detail ? (
-                <p className="mt-0.5 text-xs text-muted-foreground">{step.detail}</p>
-              ) : null}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
-  );
-}
-
 function DetailFieldsSection({
   detail,
   order,
@@ -547,20 +340,17 @@ export function AcceptedOrderDetailsDrawer({
 
   const acceptedAt = detail?.acceptedAt ?? order.acceptedAt;
   const deliveredAt = detail?.deliveredAt ?? order.deliveredAt;
+  const orderStatus = detail?.status ?? order.status;
+  const proofFlowEnabled =
+    orderStatus === DeliveryOrderStatus.IN_TRANSIT ||
+    orderStatus === DeliveryOrderStatus.DELIVERED ||
+    Boolean(detail?.proofSubmittedAt);
   const typeLabel =
     (detail?.type ?? order.type) === DeliveryOrderType.LOCAL
       ? t('app.orders.typeLocal')
       : t('app.orders.typeInternational');
   const roleLabel =
     panelRole === 'sender' ? t('app.orders.detailsRoleSender') : t('app.orders.detailsRoleWayler');
-  const timelineSteps = buildDeliveryTimelineSteps(
-    detail?.status ?? order.status,
-    acceptedAt,
-    deliveredAt,
-    order.paymentStatus,
-    panelRole,
-    t,
-  );
 
   return (
     <div
@@ -658,7 +448,16 @@ export function AcceptedOrderDetailsDrawer({
                 </span>
               )}
 
-              <DeliveryProgressTimeline steps={timelineSteps} />
+              <OrderLifecycleTimeline
+                status={orderStatus}
+                sourceType={detail?.sourceType ?? order.sourceType}
+                createdAt={detail?.createdAt ?? null}
+                publishedAt={detail?.publishedAt ?? null}
+                acceptedAt={acceptedAt}
+                deliveredAt={deliveredAt}
+                cancelledAt={detail?.cancelledAt ?? null}
+                proofFlowEnabled={proofFlowEnabled}
+              />
 
               {showMissingDetail ? (
                 <PanelEmptyState

@@ -38,6 +38,7 @@ import {
 } from '@/components/app/accepted-order-details-drawer';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
+import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
 import { DisputePanel, disputeReasonKey, disputeStatusKey } from '@/components/app/dispute-panel';
 import {
   KycActionBlockedHint,
@@ -2178,6 +2179,16 @@ export default function AppHomePage() {
                             sourceType={order.sourceType}
                             availabilityRequestId={order.availabilityRequestId}
                           />
+                          <OrderLifecycleTimeline
+                            compact
+                            className="mt-3"
+                            status={order.status}
+                            sourceType={order.sourceType}
+                            createdAt={order.createdAt}
+                            publishedAt={order.publishedAt}
+                            acceptedAt={order.acceptedAt}
+                            proofFlowEnabled={showProofForm}
+                          />
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -2880,6 +2891,14 @@ export default function AppHomePage() {
                             />
                           </div>
                           <p className="mt-1 text-muted-foreground">{order.type}</p>
+                          <OrderLifecycleTimeline
+                            compact
+                            className="mt-2"
+                            status={DeliveryOrderStatus.OPEN}
+                            sourceType={order.sourceType}
+                            createdAt={order.createdAt}
+                            publishedAt={order.publishedAt}
+                          />
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
@@ -3055,6 +3074,17 @@ export default function AppHomePage() {
                               {statusNote}
                             </p>
                           ) : null}
+                          <OrderLifecycleTimeline
+                            compact
+                            className="mt-3"
+                            status={order.status}
+                            sourceType={order.sourceType}
+                            createdAt={order.createdAt}
+                            publishedAt={order.publishedAt}
+                            acceptedAt={order.acceptedAt}
+                            deliveredAt={order.deliveredAt}
+                            proofFlowEnabled={showSenderProofPanel}
+                          />
                           <dl className="mt-2 flex flex-col gap-1">
                             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                               <dt className="text-muted-foreground">
