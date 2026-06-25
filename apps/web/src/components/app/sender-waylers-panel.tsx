@@ -13,7 +13,6 @@ import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 
 import { ActiveWaylersMarketplaceSection } from '@/components/app/active-waylers-marketplace-section';
-import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
 import {
   MarketplaceHowRequestsWork,
   MarketplaceRequestSafetyNote,
@@ -31,6 +30,7 @@ import {
   SenderRequestSummary,
 } from '@/components/app/sender-request-composer';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
+import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -57,8 +57,8 @@ const LISTING_CARD_CLASS = cn(
   'wayly-feed-item-enter',
 );
 
-const REQUEST_CARD_CLASS = cn(
-  'rounded-lg border border-border bg-background/60 px-3 py-3 text-sm',
+const SENT_REQUEST_CARD_CLASS = cn(
+  'wayly-order-card rounded-xl px-4 py-4 text-sm',
   'wayly-feed-item-enter',
 );
 
@@ -144,10 +144,6 @@ function parseRewardToCents(amountStr: string): number | null {
     return null;
   }
   return Math.round(amount * 100);
-}
-
-function formatRewardCents(cents: number, currency: string): string {
-  return `${(cents / 100).toFixed(2)} ${currency}`;
 }
 
 function buildPublicQuery(filters: FilterState): Partial<WaylerAvailabilitiesPublicQueryInput> {
@@ -237,23 +233,6 @@ function availabilityStatusKey(status: WaylerAvailabilityStatus): TranslationKey
   }
 }
 
-function requestStatusKey(status: WaylerAvailabilityRequestStatus): TranslationKey {
-  switch (status) {
-    case WaylerAvailabilityRequestStatus.PENDING:
-      return 'app.availabilityRequests.statusPending';
-    case WaylerAvailabilityRequestStatus.ACCEPTED:
-      return 'app.availabilityRequests.statusAccepted';
-    case WaylerAvailabilityRequestStatus.DECLINED:
-      return 'app.availabilityRequests.statusDeclined';
-    case WaylerAvailabilityRequestStatus.CANCELLED:
-      return 'app.availabilityRequests.statusCancelled';
-    case WaylerAvailabilityRequestStatus.EXPIRED:
-      return 'app.availabilityRequests.statusExpired';
-    default:
-      return 'app.senderWaylers.status';
-  }
-}
-
 function availabilityStatusBadgeClass(status: WaylerAvailabilityStatus): string {
   const base = 'wayly-status-badge';
   switch (status) {
@@ -272,22 +251,6 @@ function availabilityStatusBadgeClass(status: WaylerAvailabilityStatus): string 
   }
 }
 
-function requestStatusBadgeClass(status: WaylerAvailabilityRequestStatus): string {
-  const base = 'wayly-status-badge';
-  switch (status) {
-    case WaylerAvailabilityRequestStatus.PENDING:
-      return cn(base, 'wayly-status-open');
-    case WaylerAvailabilityRequestStatus.ACCEPTED:
-      return cn(base, 'wayly-status-default');
-    case WaylerAvailabilityRequestStatus.DECLINED:
-    case WaylerAvailabilityRequestStatus.CANCELLED:
-    case WaylerAvailabilityRequestStatus.EXPIRED:
-      return cn(base, 'wayly-status-cancelled');
-    default:
-      return cn(base, 'wayly-status-default');
-  }
-}
-
 function formatLocationParts(
   city: string | null,
   region: string | null,
@@ -295,12 +258,6 @@ function formatLocationParts(
 ): string {
   const parts = [city, region, country].filter(Boolean);
   return parts.length > 0 ? parts.join(', ') : '—';
-}
-
-function formatRequestRoute(request: WaylerAvailabilityRequestSummary): string {
-  const pickup = formatLocationParts(request.pickupCity, null, request.pickupCountry);
-  const dropoff = formatLocationParts(request.dropoffCity, null, request.dropoffCountry);
-  return `${pickup} → ${dropoff}`;
 }
 
 function formatDateTime(value: string | null): string {
@@ -1164,40 +1121,16 @@ export function SenderWaylersPanel({
                 body={t('app.availabilityRequests.senderEmptyBody')}
               />
             ) : myRequests.length > 0 ? (
-              <ul className="flex flex-col gap-2">
+              <ul className="flex flex-col gap-4">
                 {myRequests.map((request) => (
-                  <li key={request.id} className={REQUEST_CARD_CLASS}>
-                    <div className="flex flex-wrap items-start justify-between gap-2">
-                      <p className="font-medium">{request.title}</p>
-                      <span className={requestStatusBadgeClass(request.status)}>
-                        {t(requestStatusKey(request.status))}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-muted-foreground">{formatRequestRoute(request)}</p>
-                    <p className="mt-1">
-                      {formatRewardCents(request.proposedRewardCents, request.currency)}
-                    </p>
-                    <p className="mt-1 text-muted-foreground">
-                      {formatDateTime(request.createdAt)}
-                    </p>
-                    {request.responseMessage ? (
-                      <p className="mt-2 break-words">
-                        <span className="text-muted-foreground">
-                          {t('app.availabilityRequests.responseMessage')}:{' '}
-                        </span>
-                        {request.responseMessage}
-                      </p>
-                    ) : null}
-                    {request.deliveryOrderId ? (
-                      <AvailabilityRequestConvertedOrder
-                        deliveryOrderId={request.deliveryOrderId}
-                      />
-                    ) : null}
+                  <li key={request.id} className={SENT_REQUEST_CARD_CLASS}>
+                    <SenderRequestStatusSummary compact request={request} />
                     {request.status === WaylerAvailabilityRequestStatus.PENDING ? (
-                      <div className="wayly-action-group mt-3">
+                      <div className="wayly-action-group mt-4 border-t border-border/50 pt-4">
                         <Button
                           variant="outline"
                           size="sm"
+                          className="w-full sm:w-auto"
                           disabled={cancellingId === request.id}
                           onClick={() => void handleCancelRequest(request.id)}
                         >
