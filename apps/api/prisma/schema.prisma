@@ -202,12 +202,33 @@ enum AdminAuditLogAction {
   DISPUTE_RESOLVED
   USER_SUSPENDED
   USER_UNSUSPENDED
+  PAYMENT_MANUAL_REVIEW_MARKED
+  PAYMENT_MANUAL_REVIEW_CLEARED
+  PAYMENT_REFUND_DECISION_RECORDED
+  PAYMENT_RELEASE_DECISION_RECORDED
 }
 
 enum AdminAuditLogTargetType {
   KYC_VERIFICATION
   DISPUTE
   USER
+  PAYMENT_INTENT
+}
+
+// Admin metadata-only payment review (no real money movement).
+enum PaymentAdminReviewStatus {
+  NONE
+  MANUAL_REVIEW
+  REFUND_DECISION_RECORDED
+  RELEASE_DECISION_RECORDED
+}
+
+enum PaymentAdminReviewDecision {
+  RECOMMEND_FULL_REFUND
+  RECOMMEND_PARTIAL_REFUND
+  RECOMMEND_RELEASE
+  NO_ACTION
+  OTHER
 }
 
 enum AdminAuditLogStatus {
@@ -272,6 +293,7 @@ model User {
   availabilityRequestsSent      WaylerAvailabilityRequest[] @relation("AvailabilityRequestSender")
   availabilityRequestsAsWayler  WaylerAvailabilityRequest[] @relation("AvailabilityRequestWayler")
   adminAuditLogs                AdminAuditLog[]             @relation("AdminAuditLogActor")
+  paymentIntentsReviewed        PaymentIntent[]             @relation("PaymentIntentAdminReviewer")
 
   @@index([deletedAt])
   @@index([accountStatus])
@@ -496,6 +518,14 @@ model PaymentIntent {
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
+  // Admin metadata-only review (does not change PaymentStatus or move money).
+  adminReviewStatus     PaymentAdminReviewStatus     @default(NONE)
+  adminReviewDecision   PaymentAdminReviewDecision?
+  adminReviewNote       String?
+  adminReviewAt         DateTime?
+  adminReviewByUserId   String?                      @db.Uuid
+  adminReviewBy         User?                        @relation("PaymentIntentAdminReviewer", fields: [adminReviewByUserId], references: [id], onDelete: SetNull)
+
   payouts       Payout[]
   ledgerEntries LedgerEntry[]
 
@@ -505,6 +535,9 @@ model PaymentIntent {
   @@index([status])
   @@index([provider])
   @@index([createdAt])
+  @@index([adminReviewStatus])
+  @@index([adminReviewAt])
+  @@index([adminReviewByUserId])
   @@map("payment_intents")
 }
 

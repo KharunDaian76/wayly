@@ -6,6 +6,7 @@ import type {
   AdminKycQueueItem,
   AdminOrderListResponse,
   AdminPaymentListResponse,
+  AdminPaymentQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
@@ -17,7 +18,13 @@ import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
-import type { AdminPaymentsListQuery } from './payments-admin.types';
+import type {
+  AdminPaymentClearManualReviewBody,
+  AdminPaymentManualReviewBody,
+  AdminPaymentRefundDecisionBody,
+  AdminPaymentReleaseDecisionBody,
+  AdminPaymentsListQuery,
+} from './payments-admin.types';
 import type { RequestOptions } from './types';
 import type {
   AdminUsersListQuery,
@@ -127,6 +134,9 @@ function buildAdminPaymentsQuery(query?: AdminPaymentsListQuery): string {
   if (query.currency !== undefined) {
     params.set('currency', query.currency);
   }
+  if (query.adminReviewStatus !== undefined) {
+    params.set('adminReviewStatus', query.adminReviewStatus);
+  }
   const qs = params.toString();
   return qs ? `?${qs}` : '';
 }
@@ -230,6 +240,50 @@ export function createAdminApi(request: Requester): AdminApi {
     listPayments: (query?: AdminPaymentsListQuery, accessToken?: string | null) =>
       request<AdminPaymentListResponse>(`/admin/payments${buildAdminPaymentsQuery(query)}`, {
         method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    markPaymentManualReview: (
+      id: string,
+      body: AdminPaymentManualReviewBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminPaymentQueueItem>(`/admin/payments/${id}/mark-manual-review`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    clearPaymentManualReview: (
+      id: string,
+      body?: AdminPaymentClearManualReviewBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminPaymentQueueItem>(`/admin/payments/${id}/clear-manual-review`, {
+        method: 'POST',
+        body: body ?? {},
+        ...withCookies,
+        accessToken,
+      }),
+    recordPaymentRefundDecision: (
+      id: string,
+      body: AdminPaymentRefundDecisionBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminPaymentQueueItem>(`/admin/payments/${id}/record-refund-decision`, {
+        method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    recordPaymentReleaseDecision: (
+      id: string,
+      body: AdminPaymentReleaseDecisionBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminPaymentQueueItem>(`/admin/payments/${id}/record-release-decision`, {
+        method: 'POST',
+        body,
         ...withCookies,
         accessToken,
       }),

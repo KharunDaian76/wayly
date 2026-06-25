@@ -1,6 +1,15 @@
 'use client';
 
-import type { AdminPaymentQueueItem, UserRole } from '@wayly/types';
+import type {
+  AdminPaymentQueueItem,
+  PaymentAdminReviewDecision,
+  PaymentAdminReviewStatus,
+  UserRole,
+} from '@wayly/types';
+import {
+  PaymentAdminReviewDecision as PaymentAdminReviewDecisionEnum,
+  PaymentAdminReviewStatus as PaymentAdminReviewStatusEnum,
+} from '@wayly/types';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -11,7 +20,11 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
-import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
+import {
+  hasAdminModerationAccess,
+  hasOperationsDashboardAccess,
+} from '@/lib/auth/operations-dashboard-access';
+import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
@@ -21,9 +34,66 @@ const LISTING_CARD_CLASS = cn(
   'wayly-feed-item-enter',
 );
 
+const TEXTAREA_CLASS = cn(
+  'flex min-h-[72px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm',
+  'ring-offset-background placeholder:text-muted-foreground',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  'disabled:cursor-not-allowed disabled:opacity-50',
+);
+
+const SELECT_CLASS =
+  'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
+
+const REFUND_DECISION_OPTIONS = [
+  PaymentAdminReviewDecisionEnum.RECOMMEND_FULL_REFUND,
+  PaymentAdminReviewDecisionEnum.RECOMMEND_PARTIAL_REFUND,
+  PaymentAdminReviewDecisionEnum.NO_ACTION,
+  PaymentAdminReviewDecisionEnum.OTHER,
+] as const;
+
+const RELEASE_DECISION_OPTIONS = [
+  PaymentAdminReviewDecisionEnum.RECOMMEND_RELEASE,
+  PaymentAdminReviewDecisionEnum.NO_ACTION,
+  PaymentAdminReviewDecisionEnum.OTHER,
+] as const;
+
 export type AdminPaymentsQueuePanelProps = {
   roles: UserRole[];
 };
+
+type CardAction =
+  | 'markManualReview'
+  | 'clearManualReview'
+  | 'recordRefundDecision'
+  | 'recordReleaseDecision';
+
+type ActiveForm = 'manualReview' | 'clearManualReview' | 'refundDecision' | 'releaseDecision';
+
+export function adminPaymentReviewStatusKey(status: PaymentAdminReviewStatus): TranslationKey {
+  if (status === PaymentAdminReviewStatusEnum.MANUAL_REVIEW) {
+    return 'app.admin.paymentManualReview';
+  }
+  if (status === PaymentAdminReviewStatusEnum.REFUND_DECISION_RECORDED) {
+    return 'app.admin.paymentReviewRefundDecisionRecorded';
+  }
+  if (status === PaymentAdminReviewStatusEnum.RELEASE_DECISION_RECORDED) {
+    return 'app.admin.paymentReviewReleaseDecisionRecorded';
+  }
+  return 'app.admin.paymentReviewNone';
+}
+
+export function adminPaymentReviewDecisionKey(
+  decision: PaymentAdminReviewDecision,
+): TranslationKey {
+  const map: Record<PaymentAdminReviewDecision, TranslationKey> = {
+    RECOMMEND_FULL_REFUND: 'app.admin.paymentDecisionRecommendFullRefund',
+    RECOMMEND_PARTIAL_REFUND: 'app.admin.paymentDecisionRecommendPartialRefund',
+    RECOMMEND_RELEASE: 'app.admin.paymentDecisionRecommendRelease',
+    NO_ACTION: 'app.admin.paymentDecisionNoAction',
+    OTHER: 'app.admin.paymentDecisionOther',
+  };
+  return map[decision];
+}
 
 function formatDateTime(value: string | null): string {
   if (!value) {
@@ -52,10 +122,24 @@ function formatAmount(currency: string, amount: string): string {
 
 export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps) {
   const { t } = useI18n();
+  const canModerate = hasAdminModerationAccess(roles);
   const [items, setItems] = useState<AdminPaymentQueueItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loadedOnce, setLoadedOnce] = useState(false);
+  const [activeFormId, setActiveFormId] = useState<string | null>(null);
+  const [activeFormType, setActiveFormType] = useState<ActiveForm | null>(null);
+  const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
+  const [refundDecisions, setRefundDecisions] = useState<
+    Record<string, PaymentAdminReviewDecision>
+  >({});
+  const [releaseDecisions, setReleaseDecisions] = useState<
+    Record<string, PaymentAdminReviewDecision>
+  >({});
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [cardActions, setCardActions] = useState<Record<string, CardAction | null>>({});
+  const [cardActionErrors, setCardActionErrors] = useState<Record<string, string>>({});
+  const [cardActionSuccess, setCardActionSuccess] = useState<Record<string, string>>({});
 
   const loadPayments = useCallback(async () => {
     setLoading(true);
@@ -76,6 +160,190 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
       void loadPayments();
     }
   }, [roles, loadPayments]);
+
+  const updateItemInList = useCallback((updated: AdminPaymentQueueItem) => {
+    setItems((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+  }, []);
+
+  const closeForm = useCallback((itemId: string) => {
+    setActiveFormId(null);
+    setActiveFormType(null);
+    setFormErrors((current) => ({ ...current, [itemId]: '' }));
+  }, []);
+
+  const openForm = useCallback((itemId: string, formType: ActiveForm) => {
+    setActiveFormId(itemId);
+    setActiveFormType(formType);
+    setFormErrors((current) => ({ ...current, [itemId]: '' }));
+    setCardActionErrors((current) => ({ ...current, [itemId]: '' }));
+    setCardActionSuccess((current) => ({ ...current, [itemId]: '' }));
+  }, []);
+
+  const handleMarkManualReview = useCallback(
+    async (item: AdminPaymentQueueItem) => {
+      const note = (reviewNotes[item.id] ?? '').trim();
+      if (!note) {
+        setFormErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewNoteRequired'),
+        }));
+        return;
+      }
+
+      setCardActions((current) => ({ ...current, [item.id]: 'markManualReview' }));
+      setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+      setFormErrors((current) => ({ ...current, [item.id]: '' }));
+
+      try {
+        const updated = await api.admin.markPaymentManualReview(item.id, { note });
+        updateItemInList(updated);
+        closeForm(item.id);
+        setReviewNotes((current) => ({ ...current, [item.id]: '' }));
+        setCardActionSuccess((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentManualReviewMarkedSuccess'),
+        }));
+      } catch {
+        setCardActionErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewActionFailed'),
+        }));
+      } finally {
+        setCardActions((current) => ({ ...current, [item.id]: null }));
+      }
+    },
+    [closeForm, reviewNotes, t, updateItemInList],
+  );
+
+  const handleClearManualReview = useCallback(
+    async (item: AdminPaymentQueueItem) => {
+      setCardActions((current) => ({ ...current, [item.id]: 'clearManualReview' }));
+      setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+      setFormErrors((current) => ({ ...current, [item.id]: '' }));
+
+      const note = (reviewNotes[item.id] ?? '').trim();
+
+      try {
+        const updated = await api.admin.clearPaymentManualReview(
+          item.id,
+          note ? { note } : undefined,
+        );
+        updateItemInList(updated);
+        closeForm(item.id);
+        setReviewNotes((current) => ({ ...current, [item.id]: '' }));
+        setCardActionSuccess((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentManualReviewClearedSuccess'),
+        }));
+      } catch {
+        setCardActionErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewActionFailed'),
+        }));
+      } finally {
+        setCardActions((current) => ({ ...current, [item.id]: null }));
+      }
+    },
+    [closeForm, reviewNotes, t, updateItemInList],
+  );
+
+  const handleRecordRefundDecision = useCallback(
+    async (item: AdminPaymentQueueItem) => {
+      const note = (reviewNotes[item.id] ?? '').trim();
+      const decision = refundDecisions[item.id];
+      if (!decision) {
+        setFormErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewDecisionRequired'),
+        }));
+        return;
+      }
+      if (!note) {
+        setFormErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewNoteRequired'),
+        }));
+        return;
+      }
+
+      setCardActions((current) => ({ ...current, [item.id]: 'recordRefundDecision' }));
+      setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+      setFormErrors((current) => ({ ...current, [item.id]: '' }));
+
+      try {
+        const updated = await api.admin.recordPaymentRefundDecision(item.id, {
+          decision: decision as (typeof REFUND_DECISION_OPTIONS)[number],
+          note,
+        });
+        updateItemInList(updated);
+        closeForm(item.id);
+        setReviewNotes((current) => ({ ...current, [item.id]: '' }));
+        setCardActionSuccess((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentRefundDecisionRecordedSuccess'),
+        }));
+      } catch {
+        setCardActionErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewActionFailed'),
+        }));
+      } finally {
+        setCardActions((current) => ({ ...current, [item.id]: null }));
+      }
+    },
+    [closeForm, refundDecisions, reviewNotes, t, updateItemInList],
+  );
+
+  const handleRecordReleaseDecision = useCallback(
+    async (item: AdminPaymentQueueItem) => {
+      const note = (reviewNotes[item.id] ?? '').trim();
+      const decision = releaseDecisions[item.id];
+      if (!decision) {
+        setFormErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewDecisionRequired'),
+        }));
+        return;
+      }
+      if (!note) {
+        setFormErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewNoteRequired'),
+        }));
+        return;
+      }
+
+      setCardActions((current) => ({ ...current, [item.id]: 'recordReleaseDecision' }));
+      setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
+      setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
+      setFormErrors((current) => ({ ...current, [item.id]: '' }));
+
+      try {
+        const updated = await api.admin.recordPaymentReleaseDecision(item.id, {
+          decision: decision as (typeof RELEASE_DECISION_OPTIONS)[number],
+          note,
+        });
+        updateItemInList(updated);
+        closeForm(item.id);
+        setReviewNotes((current) => ({ ...current, [item.id]: '' }));
+        setCardActionSuccess((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReleaseDecisionRecordedSuccess'),
+        }));
+      } catch {
+        setCardActionErrors((current) => ({
+          ...current,
+          [item.id]: t('app.admin.paymentReviewActionFailed'),
+        }));
+      } finally {
+        setCardActions((current) => ({ ...current, [item.id]: null }));
+      }
+    },
+    [closeForm, releaseDecisions, reviewNotes, t, updateItemInList],
+  );
 
   if (!hasOperationsDashboardAccess(roles)) {
     return null;
@@ -98,8 +366,16 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
             {t('app.admin.paymentsQueueDescription')}
           </p>
         </div>
-        <span className="text-xs text-muted-foreground">{t('app.admin.readOnlyQueue')}</span>
+        {!canModerate ? (
+          <span className="text-xs text-muted-foreground">{t('app.admin.readOnlyQueue')}</span>
+        ) : null}
       </div>
+
+      {canModerate ? (
+        <p className="px-3 text-xs text-muted-foreground">
+          {t('app.admin.paymentDecisionOnlyNotice')}
+        </p>
+      ) : null}
 
       <div className="px-1 pb-1">
         {loadError ? (
@@ -127,90 +403,405 @@ export function AdminPaymentsQueuePanel({ roles }: AdminPaymentsQueuePanelProps)
 
         {!showInitialLoading && !loadError && items.length > 0 ? (
           <ul className="flex flex-col gap-2 px-2 pb-2">
-            {items.map((item) => (
-              <li key={item.id} className={LISTING_CARD_CLASS}>
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground">
-                      {formatAmount(item.currency, item.amount)}
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {item.orderTitle?.trim() || t('app.admin.disputeOrderFallback')}
-                    </p>
-                    <p className="mt-1 font-mono text-xs text-muted-foreground">
-                      {t('app.admin.paymentOrder')}: {item.orderId}
-                    </p>
-                  </div>
-                  <span className="wayly-status-badge wayly-status-default shrink-0 text-xs">
-                    {t(adminPaymentStatusKey(item.status))}
-                  </span>
-                </div>
+            {items.map((item) => {
+              const isActionLoading = cardActions[item.id] != null;
+              const showForm = activeFormId === item.id && activeFormType != null;
 
-                <dl className="mt-3 flex flex-col gap-1.5 text-sm">
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.paymentAmount')}</dt>
-                    <dd className="font-medium">{formatAmount(item.currency, item.amount)}</dd>
-                  </div>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.platformFee')}</dt>
-                    <dd className="font-medium">
-                      {item.platformFeeAmount
-                        ? formatAmount(item.currency, item.platformFeeAmount)
-                        : '—'}
-                    </dd>
-                  </div>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.escrowState')}</dt>
-                    <dd className="font-medium">{t(adminPaymentStatusKey(item.status))}</dd>
-                  </div>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.paymentCreated')}</dt>
-                    <dd>{formatDateTime(item.createdAt)}</dd>
-                  </div>
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.paymentUpdated')}</dt>
-                    <dd>{formatDateTime(item.updatedAt)}</dd>
-                  </div>
-                  {item.escrowedAt ? (
-                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                      <dt className="text-muted-foreground">{t('app.admin.escrowHeldAt')}</dt>
-                      <dd>{formatDateTime(item.escrowedAt)}</dd>
+              return (
+                <li key={item.id} className={LISTING_CARD_CLASS}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-foreground">
+                        {formatAmount(item.currency, item.amount)}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {item.orderTitle?.trim() || t('app.admin.disputeOrderFallback')}
+                      </p>
+                      <p className="mt-1 font-mono text-xs text-muted-foreground">
+                        {t('app.admin.paymentOrder')}: {item.orderId}
+                      </p>
                     </div>
-                  ) : null}
-                  {item.releasedAt ? (
-                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                      <dt className="text-muted-foreground">{t('app.admin.escrowReleasedAt')}</dt>
-                      <dd>{formatDateTime(item.releasedAt)}</dd>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className="wayly-status-badge wayly-status-default shrink-0 text-xs">
+                        {t(adminPaymentStatusKey(item.status))}
+                      </span>
+                      <span className="wayly-status-badge wayly-status-default shrink-0 text-xs">
+                        {t(adminPaymentReviewStatusKey(item.adminReviewStatus))}
+                      </span>
                     </div>
-                  ) : null}
-                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                    <dt className="text-muted-foreground">{t('app.admin.paymentDisputeStatus')}</dt>
-                    <dd className="font-medium">
-                      {item.latestDisputeStatus
-                        ? t(disputeStatusKey(item.latestDisputeStatus))
-                        : '—'}
-                    </dd>
                   </div>
-                </dl>
 
-                <div className="mt-3 border-t border-border/40 pt-3">
-                  <dl className="flex flex-col gap-1.5 text-sm">
+                  <dl className="mt-3 flex flex-col gap-1.5 text-sm">
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                      <dt className="text-muted-foreground">{t('app.admin.paymentSender')}</dt>
-                      <dd className="break-all text-right sm:max-w-[65%]">
-                        {formatParty(item.senderDisplayName, item.senderEmail)}
+                      <dt className="text-muted-foreground">
+                        {t('app.admin.paymentReviewStatus')}
+                      </dt>
+                      <dd className="font-medium">
+                        {t(adminPaymentReviewStatusKey(item.adminReviewStatus))}
+                      </dd>
+                    </div>
+                    {item.adminReviewDecision ? (
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                        <dt className="text-muted-foreground">
+                          {t('app.admin.paymentReviewDecision')}
+                        </dt>
+                        <dd className="font-medium">
+                          {t(adminPaymentReviewDecisionKey(item.adminReviewDecision))}
+                        </dd>
+                      </div>
+                    ) : null}
+                    {item.adminReviewAt ? (
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                        <dt className="text-muted-foreground">
+                          {t('app.admin.paymentReviewRecordedAt')}
+                        </dt>
+                        <dd>{formatDateTime(item.adminReviewAt)}</dd>
+                      </div>
+                    ) : null}
+                    {item.adminReviewNote ? (
+                      <div className="flex flex-col gap-0.5">
+                        <dt className="text-muted-foreground">
+                          {t('app.admin.paymentReviewNote')}
+                        </dt>
+                        <dd className="whitespace-pre-wrap text-sm">{item.adminReviewNote}</dd>
+                      </div>
+                    ) : null}
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                      <dt className="text-muted-foreground">{t('app.admin.paymentAmount')}</dt>
+                      <dd className="font-medium">{formatAmount(item.currency, item.amount)}</dd>
+                    </div>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                      <dt className="text-muted-foreground">{t('app.admin.platformFee')}</dt>
+                      <dd className="font-medium">
+                        {item.platformFeeAmount
+                          ? formatAmount(item.currency, item.platformFeeAmount)
+                          : '—'}
                       </dd>
                     </div>
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                      <dt className="text-muted-foreground">{t('app.admin.paymentWayler')}</dt>
-                      <dd className="break-all text-right sm:max-w-[65%]">
-                        {formatParty(item.waylerDisplayName, item.waylerEmail)}
+                      <dt className="text-muted-foreground">{t('app.admin.escrowState')}</dt>
+                      <dd className="font-medium">{t(adminPaymentStatusKey(item.status))}</dd>
+                    </div>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                      <dt className="text-muted-foreground">
+                        {t('app.admin.paymentDisputeStatus')}
+                      </dt>
+                      <dd className="font-medium">
+                        {item.latestDisputeStatus
+                          ? t(disputeStatusKey(item.latestDisputeStatus))
+                          : '—'}
                       </dd>
                     </div>
                   </dl>
-                </div>
-              </li>
-            ))}
+
+                  <div className="mt-3 border-t border-border/40 pt-3">
+                    <dl className="flex flex-col gap-1.5 text-sm">
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                        <dt className="text-muted-foreground">{t('app.admin.paymentSender')}</dt>
+                        <dd className="break-all text-right sm:max-w-[65%]">
+                          {formatParty(item.senderDisplayName, item.senderEmail)}
+                        </dd>
+                      </div>
+                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                        <dt className="text-muted-foreground">{t('app.admin.paymentWayler')}</dt>
+                        <dd className="break-all text-right sm:max-w-[65%]">
+                          {formatParty(item.waylerDisplayName, item.waylerEmail)}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  {cardActionErrors[item.id] ? (
+                    <p className="mt-3 text-xs text-destructive" role="alert">
+                      {cardActionErrors[item.id]}
+                    </p>
+                  ) : null}
+                  {cardActionSuccess[item.id] ? (
+                    <p
+                      className="mt-3 text-xs text-emerald-600 dark:text-emerald-400"
+                      role="status"
+                    >
+                      {cardActionSuccess[item.id]}
+                    </p>
+                  ) : null}
+                  {formErrors[item.id] ? (
+                    <p className="mt-3 text-xs text-destructive" role="alert">
+                      {formErrors[item.id]}
+                    </p>
+                  ) : null}
+
+                  {canModerate ? (
+                    <div className="mt-3 flex flex-wrap gap-2 border-t border-border/40 pt-3">
+                      {!showForm ? (
+                        <>
+                          {item.adminReviewStatus !== PaymentAdminReviewStatusEnum.MANUAL_REVIEW ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => openForm(item.id, 'manualReview')}
+                            >
+                              {t('app.admin.markPaymentManualReview')}
+                            </Button>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => openForm(item.id, 'clearManualReview')}
+                            >
+                              {t('app.admin.clearPaymentManualReview')}
+                            </Button>
+                          )}
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs"
+                            disabled={isActionLoading}
+                            onClick={() => openForm(item.id, 'refundDecision')}
+                          >
+                            {t('app.admin.recordPaymentRefundDecision')}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs"
+                            disabled={isActionLoading}
+                            onClick={() => openForm(item.id, 'releaseDecision')}
+                          >
+                            {t('app.admin.recordPaymentReleaseDecision')}
+                          </Button>
+                        </>
+                      ) : null}
+
+                      {showForm && activeFormType === 'manualReview' ? (
+                        <div className="w-full space-y-2">
+                          <label className="block text-xs font-medium text-foreground">
+                            {t('app.admin.paymentReviewNote')}
+                          </label>
+                          <textarea
+                            className={TEXTAREA_CLASS}
+                            value={reviewNotes[item.id] ?? ''}
+                            placeholder={t('app.admin.paymentReviewNotePlaceholder')}
+                            maxLength={500}
+                            disabled={isActionLoading}
+                            onChange={(event) =>
+                              setReviewNotes((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))
+                            }
+                          />
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => void handleMarkManualReview(item)}
+                            >
+                              {isActionLoading
+                                ? t('app.admin.paymentReviewSaving')
+                                : t('app.admin.markPaymentManualReview')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => closeForm(item.id)}
+                            >
+                              {t('app.admin.cancelPaymentReview')}
+                            </Button>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {showForm && activeFormType === 'clearManualReview' ? (
+                        <div className="w-full space-y-2">
+                          <label className="block text-xs font-medium text-foreground">
+                            {t('app.admin.paymentReviewNoteOptional')}
+                          </label>
+                          <textarea
+                            className={TEXTAREA_CLASS}
+                            value={reviewNotes[item.id] ?? ''}
+                            placeholder={t('app.admin.paymentReviewNotePlaceholder')}
+                            maxLength={500}
+                            disabled={isActionLoading}
+                            onChange={(event) =>
+                              setReviewNotes((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))
+                            }
+                          />
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => void handleClearManualReview(item)}
+                            >
+                              {isActionLoading
+                                ? t('app.admin.paymentReviewSaving')
+                                : t('app.admin.clearPaymentManualReview')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => closeForm(item.id)}
+                            >
+                              {t('app.admin.cancelPaymentReview')}
+                            </Button>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {showForm && activeFormType === 'refundDecision' ? (
+                        <div className="w-full space-y-2">
+                          <label className="block text-xs font-medium text-foreground">
+                            {t('app.admin.paymentReviewDecision')}
+                          </label>
+                          <select
+                            className={SELECT_CLASS}
+                            value={refundDecisions[item.id] ?? ''}
+                            disabled={isActionLoading}
+                            onChange={(event) =>
+                              setRefundDecisions((current) => ({
+                                ...current,
+                                [item.id]: event.target.value as PaymentAdminReviewDecision,
+                              }))
+                            }
+                          >
+                            <option value="">{t('app.admin.paymentReviewSelectDecision')}</option>
+                            {REFUND_DECISION_OPTIONS.map((option) => (
+                              <option key={option} value={option}>
+                                {t(adminPaymentReviewDecisionKey(option))}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="block text-xs font-medium text-foreground">
+                            {t('app.admin.paymentReviewNote')}
+                          </label>
+                          <textarea
+                            className={TEXTAREA_CLASS}
+                            value={reviewNotes[item.id] ?? ''}
+                            placeholder={t('app.admin.paymentReviewNotePlaceholder')}
+                            maxLength={500}
+                            disabled={isActionLoading}
+                            onChange={(event) =>
+                              setReviewNotes((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))
+                            }
+                          />
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => void handleRecordRefundDecision(item)}
+                            >
+                              {isActionLoading
+                                ? t('app.admin.paymentReviewSaving')
+                                : t('app.admin.recordPaymentRefundDecision')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => closeForm(item.id)}
+                            >
+                              {t('app.admin.cancelPaymentReview')}
+                            </Button>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {showForm && activeFormType === 'releaseDecision' ? (
+                        <div className="w-full space-y-2">
+                          <label className="block text-xs font-medium text-foreground">
+                            {t('app.admin.paymentReviewDecision')}
+                          </label>
+                          <select
+                            className={SELECT_CLASS}
+                            value={releaseDecisions[item.id] ?? ''}
+                            disabled={isActionLoading}
+                            onChange={(event) =>
+                              setReleaseDecisions((current) => ({
+                                ...current,
+                                [item.id]: event.target.value as PaymentAdminReviewDecision,
+                              }))
+                            }
+                          >
+                            <option value="">{t('app.admin.paymentReviewSelectDecision')}</option>
+                            {RELEASE_DECISION_OPTIONS.map((option) => (
+                              <option key={option} value={option}>
+                                {t(adminPaymentReviewDecisionKey(option))}
+                              </option>
+                            ))}
+                          </select>
+                          <label className="block text-xs font-medium text-foreground">
+                            {t('app.admin.paymentReviewNote')}
+                          </label>
+                          <textarea
+                            className={TEXTAREA_CLASS}
+                            value={reviewNotes[item.id] ?? ''}
+                            placeholder={t('app.admin.paymentReviewNotePlaceholder')}
+                            maxLength={500}
+                            disabled={isActionLoading}
+                            onChange={(event) =>
+                              setReviewNotes((current) => ({
+                                ...current,
+                                [item.id]: event.target.value,
+                              }))
+                            }
+                          />
+                          <div className="flex flex-wrap gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => void handleRecordReleaseDecision(item)}
+                            >
+                              {isActionLoading
+                                ? t('app.admin.paymentReviewSaving')
+                                : t('app.admin.recordPaymentReleaseDecision')}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-xs"
+                              disabled={isActionLoading}
+                              onClick={() => closeForm(item.id)}
+                            >
+                              {t('app.admin.cancelPaymentReview')}
+                            </Button>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         ) : null}
 

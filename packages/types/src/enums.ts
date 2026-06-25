@@ -70,6 +70,27 @@ export const UserAccountStatus = {
 } as const;
 export type UserAccountStatus = (typeof UserAccountStatus)[keyof typeof UserAccountStatus];
 
+/** Admin metadata-only payment review status (does not change PaymentStatus). */
+export const PaymentAdminReviewStatus = {
+  NONE: 'NONE',
+  MANUAL_REVIEW: 'MANUAL_REVIEW',
+  REFUND_DECISION_RECORDED: 'REFUND_DECISION_RECORDED',
+  RELEASE_DECISION_RECORDED: 'RELEASE_DECISION_RECORDED',
+} as const;
+export type PaymentAdminReviewStatus =
+  (typeof PaymentAdminReviewStatus)[keyof typeof PaymentAdminReviewStatus];
+
+/** Admin metadata-only payment review decision (recommendation only; no money movement). */
+export const PaymentAdminReviewDecision = {
+  RECOMMEND_FULL_REFUND: 'RECOMMEND_FULL_REFUND',
+  RECOMMEND_PARTIAL_REFUND: 'RECOMMEND_PARTIAL_REFUND',
+  RECOMMEND_RELEASE: 'RECOMMEND_RELEASE',
+  NO_ACTION: 'NO_ACTION',
+  OTHER: 'OTHER',
+} as const;
+export type PaymentAdminReviewDecision =
+  (typeof PaymentAdminReviewDecision)[keyof typeof PaymentAdminReviewDecision];
+
 /** In-app notification categories (dispatch routes land in a later batch). */
 export const NotificationType = {
   ORDER_PUBLISHED: 'ORDER_PUBLISHED',

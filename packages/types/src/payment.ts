@@ -3,6 +3,8 @@ import type { DecimalString } from './delivery-order';
 import type {
   DisputeStatus,
   LedgerEntryType,
+  PaymentAdminReviewDecision,
+  PaymentAdminReviewStatus,
   PaymentProvider,
   PaymentStatus,
   PayoutStatus,
@@ -50,6 +52,11 @@ export interface AdminPaymentQueueItem {
   escrowedAt: ISODateString | null;
   releasedAt: ISODateString | null;
   latestDisputeStatus: DisputeStatus | null;
+  adminReviewStatus: PaymentAdminReviewStatus;
+  adminReviewDecision: PaymentAdminReviewDecision | null;
+  adminReviewNote: string | null;
+  adminReviewAt: ISODateString | null;
+  adminReviewByUserId: string | null;
 }
 
 /** Paginated admin payments queue (GET /admin/payments). */

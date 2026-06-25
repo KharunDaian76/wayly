@@ -132,6 +132,60 @@ export class AdminPaymentQueueItemDto {
     enum: ['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED', 'CANCELLED'],
   })
   latestDisputeStatus!: string | null;
+
+  @ApiProperty({
+    enum: ['NONE', 'MANUAL_REVIEW', 'REFUND_DECISION_RECORDED', 'RELEASE_DECISION_RECORDED'],
+    example: 'NONE',
+  })
+  adminReviewStatus!: string;
+
+  @ApiPropertyOptional({
+    enum: [
+      'RECOMMEND_FULL_REFUND',
+      'RECOMMEND_PARTIAL_REFUND',
+      'RECOMMEND_RELEASE',
+      'NO_ACTION',
+      'OTHER',
+    ],
+  })
+  adminReviewDecision!: string | null;
+
+  @ApiPropertyOptional({ example: 'Internal ops note' })
+  adminReviewNote!: string | null;
+
+  @ApiPropertyOptional({ format: 'date-time' })
+  adminReviewAt!: string | null;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  adminReviewByUserId!: string | null;
+}
+
+export class AdminPaymentManualReviewBodyDto {
+  @ApiProperty({ example: 'Escrow hold requires manual review', maxLength: 500 })
+  note!: string;
+}
+
+export class AdminPaymentClearManualReviewBodyDto {
+  @ApiPropertyOptional({ example: 'Review completed', maxLength: 500 })
+  note?: string;
+}
+
+export class AdminPaymentRefundDecisionBodyDto {
+  @ApiProperty({
+    enum: ['RECOMMEND_FULL_REFUND', 'RECOMMEND_PARTIAL_REFUND', 'NO_ACTION', 'OTHER'],
+  })
+  decision!: string;
+
+  @ApiProperty({ example: 'Recommend full refund pending provider integration', maxLength: 500 })
+  note!: string;
+}
+
+export class AdminPaymentReleaseDecisionBodyDto {
+  @ApiProperty({ enum: ['RECOMMEND_RELEASE', 'NO_ACTION', 'OTHER'] })
+  decision!: string;
+
+  @ApiProperty({ example: 'Recommend release after proof verified', maxLength: 500 })
+  note!: string;
 }
 
 export class AdminPaymentListResponseDto {

@@ -1,7 +1,13 @@
 import type { PaymentIntent } from '@prisma/client';
 import type { Decimal } from '@prisma/client/runtime/library';
 import type { AdminPaymentQueueItem, PaymentIntentSummary } from '@wayly/types';
-import { DisputeStatus, PaymentProvider, PaymentStatus } from '@wayly/types';
+import {
+  DisputeStatus,
+  PaymentAdminReviewDecision,
+  PaymentAdminReviewStatus,
+  PaymentProvider,
+  PaymentStatus,
+} from '@wayly/types';
 
 function decimalToString(value: Decimal | null | undefined): string | null {
   if (value == null) {
@@ -45,6 +51,11 @@ export function toAdminPaymentQueueItem(
     latestDisputeStatus: record.order.disputes[0]
       ? (record.order.disputes[0].status as DisputeStatus)
       : null,
+    adminReviewStatus: record.adminReviewStatus as PaymentAdminReviewStatus,
+    adminReviewDecision: record.adminReviewDecision as PaymentAdminReviewDecision | null,
+    adminReviewNote: record.adminReviewNote,
+    adminReviewAt: toIso(record.adminReviewAt),
+    adminReviewByUserId: record.adminReviewByUserId,
   };
 }
 

@@ -6,6 +6,7 @@ import type {
   AdminKycQueueItem,
   AdminOrderListResponse,
   AdminPaymentListResponse,
+  AdminPaymentQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
@@ -16,7 +17,13 @@ import type { AdminDisputeResolveBody } from './disputes-admin.types';
 import type { DisputesListQuery } from './disputes.types';
 import type { AdminKycRejectBody, KycVerificationsListQuery } from './kyc-admin.types';
 import type { AdminOrdersListQuery } from './orders-admin.types';
-import type { AdminPaymentsListQuery } from './payments-admin.types';
+import type {
+  AdminPaymentClearManualReviewBody,
+  AdminPaymentManualReviewBody,
+  AdminPaymentRefundDecisionBody,
+  AdminPaymentReleaseDecisionBody,
+  AdminPaymentsListQuery,
+} from './payments-admin.types';
 import type {
   AdminUsersListQuery,
   AdminUserSuspendBody,
@@ -66,6 +73,26 @@ export interface AdminApi {
     query?: AdminPaymentsListQuery,
     accessToken?: string | null,
   ): Promise<AdminPaymentListResponse>;
+  markPaymentManualReview(
+    id: string,
+    body: AdminPaymentManualReviewBody,
+    accessToken?: string | null,
+  ): Promise<AdminPaymentQueueItem>;
+  clearPaymentManualReview(
+    id: string,
+    body?: AdminPaymentClearManualReviewBody,
+    accessToken?: string | null,
+  ): Promise<AdminPaymentQueueItem>;
+  recordPaymentRefundDecision(
+    id: string,
+    body: AdminPaymentRefundDecisionBody,
+    accessToken?: string | null,
+  ): Promise<AdminPaymentQueueItem>;
+  recordPaymentReleaseDecision(
+    id: string,
+    body: AdminPaymentReleaseDecisionBody,
+    accessToken?: string | null,
+  ): Promise<AdminPaymentQueueItem>;
   getSystemHealth(accessToken?: string | null): Promise<AdminSystemHealthResponse>;
   listAuditLogs(
     query?: AdminAuditLogsListQuery,
@@ -81,10 +108,18 @@ export type {
   AdminKycQueueItem,
   AdminOrderListResponse,
   AdminPaymentListResponse,
+  AdminPaymentQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
 };
+export type {
+  AdminPaymentClearManualReviewBody,
+  AdminPaymentManualReviewBody,
+  AdminPaymentRefundDecisionBody,
+  AdminPaymentReleaseDecisionBody,
+  AdminPaymentsListQuery,
+} from './payments-admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
 export type { AdminDisputeResolveBody } from './disputes-admin.types';
 export type {

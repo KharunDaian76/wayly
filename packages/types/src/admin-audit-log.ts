@@ -7,6 +7,10 @@ export const AdminAuditLogAction = {
   DISPUTE_RESOLVED: 'DISPUTE_RESOLVED',
   USER_SUSPENDED: 'USER_SUSPENDED',
   USER_UNSUSPENDED: 'USER_UNSUSPENDED',
+  PAYMENT_MANUAL_REVIEW_MARKED: 'PAYMENT_MANUAL_REVIEW_MARKED',
+  PAYMENT_MANUAL_REVIEW_CLEARED: 'PAYMENT_MANUAL_REVIEW_CLEARED',
+  PAYMENT_REFUND_DECISION_RECORDED: 'PAYMENT_REFUND_DECISION_RECORDED',
+  PAYMENT_RELEASE_DECISION_RECORDED: 'PAYMENT_RELEASE_DECISION_RECORDED',
 } as const;
 export type AdminAuditLogAction = (typeof AdminAuditLogAction)[keyof typeof AdminAuditLogAction];
 
@@ -15,6 +19,7 @@ export const AdminAuditLogTargetType = {
   KYC_VERIFICATION: 'KYC_VERIFICATION',
   DISPUTE: 'DISPUTE',
   USER: 'USER',
+  PAYMENT_INTENT: 'PAYMENT_INTENT',
 } as const;
 export type AdminAuditLogTargetType =
   (typeof AdminAuditLogTargetType)[keyof typeof AdminAuditLogTargetType];

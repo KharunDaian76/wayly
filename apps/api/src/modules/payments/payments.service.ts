@@ -6,19 +6,40 @@ import {
 } from '@nestjs/common';
 import {
   LedgerEntryType as PrismaLedgerEntryType,
+  PaymentAdminReviewStatus as PrismaPaymentAdminReviewStatus,
   PaymentProvider as PrismaPaymentProvider,
   PaymentStatus as PrismaPaymentStatus,
   PayoutStatus as PrismaPayoutStatus,
   Prisma,
 } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
-import type { AdminPaymentListResponse, PaymentIntentSummary } from '@wayly/types';
-import { DeliveryOrderStatus, NotificationType } from '@wayly/types';
-import type { AdminPaymentsListQueryInput } from '@wayly/validation';
+import type {
+  AdminPaymentListResponse,
+  AdminPaymentQueueItem,
+  PaymentIntentSummary,
+} from '@wayly/types';
+import {
+  AdminAuditLogAction,
+  AdminAuditLogTargetType,
+  DeliveryOrderStatus,
+  NotificationType,
+  PaymentAdminReviewStatus,
+} from '@wayly/types';
+import type {
+  AdminPaymentClearManualReviewInput,
+  AdminPaymentManualReviewInput,
+  AdminPaymentRefundDecisionInput,
+  AdminPaymentReleaseDecisionInput,
+  AdminPaymentsListQueryInput,
+} from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import {
+  AdminAuditLogService,
+  type AdminAuditRequestContext,
+} from '../admin-audit/admin-audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
 import { toAdminPaymentQueueItem, toPaymentIntentSummary } from './payments.mapper';
@@ -30,12 +51,31 @@ export class PaymentsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly adminAuditLog: AdminAuditLogService,
   ) {}
+
+  private readonly adminPaymentInclude = {
+    payer: { select: { displayName: true, email: true } },
+    payee: { select: { displayName: true, email: true } },
+    order: {
+      select: {
+        title: true,
+        disputes: {
+          select: { id: true, status: true },
+          orderBy: { createdAt: 'desc' as const },
+          take: 1,
+        },
+      },
+    },
+  } satisfies Prisma.PaymentIntentInclude;
 
   async listForOperations(query: AdminPaymentsListQueryInput): Promise<AdminPaymentListResponse> {
     const where: Prisma.PaymentIntentWhereInput = {
       ...(query.status ? { status: query.status as PrismaPaymentStatus } : {}),
       ...(query.currency ? { currency: query.currency } : {}),
+      ...(query.adminReviewStatus
+        ? { adminReviewStatus: query.adminReviewStatus as PrismaPaymentAdminReviewStatus }
+        : {}),
     };
 
     const skip = (query.page - 1) * query.limit;
@@ -46,20 +86,7 @@ export class PaymentsService {
         orderBy: { createdAt: 'desc' },
         skip,
         take: query.limit,
-        include: {
-          payer: { select: { displayName: true, email: true } },
-          payee: { select: { displayName: true, email: true } },
-          order: {
-            select: {
-              title: true,
-              disputes: {
-                select: { status: true },
-                orderBy: { createdAt: 'desc' },
-                take: 1,
-              },
-            },
-          },
-        },
+        include: this.adminPaymentInclude,
       }),
       this.prisma.paymentIntent.count({ where }),
     ]);
@@ -362,5 +389,206 @@ export class PaymentsService {
     }
 
     return toPaymentIntentSummary(intent);
+  }
+
+  async markManualReviewForOperations(
+    actor: RequestUser,
+    paymentId: string,
+    body: AdminPaymentManualReviewInput,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminPaymentQueueItem> {
+    const payment = await this.findPaymentForOperations(paymentId);
+    const previousReviewStatus = payment.adminReviewStatus as PaymentAdminReviewStatus;
+
+    if (previousReviewStatus === PaymentAdminReviewStatus.MANUAL_REVIEW) {
+      throw new ConflictException('Payment is already marked for manual review');
+    }
+
+    const note = body.note.trim();
+    const now = new Date();
+
+    await this.prisma.paymentIntent.update({
+      where: { id: paymentId },
+      data: {
+        adminReviewStatus: PrismaPaymentAdminReviewStatus.MANUAL_REVIEW,
+        adminReviewDecision: null,
+        adminReviewNote: note,
+        adminReviewAt: now,
+        adminReviewByUserId: actor.id,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.PAYMENT_MANUAL_REVIEW_MARKED,
+      targetType: AdminAuditLogTargetType.PAYMENT_INTENT,
+      targetId: payment.id,
+      targetUserId: payment.payerId,
+      summary: `Marked payment ${payment.id} for manual review`,
+      metadata: this.buildPaymentReviewAuditMetadata(payment, {
+        previousReviewStatus,
+        newReviewStatus: PaymentAdminReviewStatus.MANUAL_REVIEW,
+        reasonLength: note.length,
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(paymentId);
+  }
+
+  async clearManualReviewForOperations(
+    actor: RequestUser,
+    paymentId: string,
+    body: AdminPaymentClearManualReviewInput | undefined,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminPaymentQueueItem> {
+    const payment = await this.findPaymentForOperations(paymentId);
+    const previousReviewStatus = payment.adminReviewStatus as PaymentAdminReviewStatus;
+
+    if (previousReviewStatus !== PaymentAdminReviewStatus.MANUAL_REVIEW) {
+      throw new ConflictException('Payment is not marked for manual review');
+    }
+
+    const note = body?.note?.trim();
+
+    await this.prisma.paymentIntent.update({
+      where: { id: paymentId },
+      data: {
+        adminReviewStatus: PrismaPaymentAdminReviewStatus.NONE,
+        adminReviewDecision: null,
+        adminReviewNote: null,
+        adminReviewAt: null,
+        adminReviewByUserId: null,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.PAYMENT_MANUAL_REVIEW_CLEARED,
+      targetType: AdminAuditLogTargetType.PAYMENT_INTENT,
+      targetId: payment.id,
+      targetUserId: payment.payerId,
+      summary: `Cleared manual review flag on payment ${payment.id}`,
+      metadata: this.buildPaymentReviewAuditMetadata(payment, {
+        previousReviewStatus,
+        newReviewStatus: PaymentAdminReviewStatus.NONE,
+        ...(note ? { noteLength: note.length } : {}),
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(paymentId);
+  }
+
+  async recordRefundDecisionForOperations(
+    actor: RequestUser,
+    paymentId: string,
+    body: AdminPaymentRefundDecisionInput,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminPaymentQueueItem> {
+    const payment = await this.findPaymentForOperations(paymentId);
+    const previousReviewStatus = payment.adminReviewStatus as PaymentAdminReviewStatus;
+    const note = body.note.trim();
+    const now = new Date();
+
+    await this.prisma.paymentIntent.update({
+      where: { id: paymentId },
+      data: {
+        adminReviewStatus: PrismaPaymentAdminReviewStatus.REFUND_DECISION_RECORDED,
+        adminReviewDecision: body.decision,
+        adminReviewNote: note,
+        adminReviewAt: now,
+        adminReviewByUserId: actor.id,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.PAYMENT_REFUND_DECISION_RECORDED,
+      targetType: AdminAuditLogTargetType.PAYMENT_INTENT,
+      targetId: payment.id,
+      targetUserId: payment.payerId,
+      summary: `Recorded refund decision on payment ${payment.id}`,
+      metadata: this.buildPaymentReviewAuditMetadata(payment, {
+        previousReviewStatus,
+        newReviewStatus: PaymentAdminReviewStatus.REFUND_DECISION_RECORDED,
+        decision: body.decision,
+        noteLength: note.length,
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(paymentId);
+  }
+
+  async recordReleaseDecisionForOperations(
+    actor: RequestUser,
+    paymentId: string,
+    body: AdminPaymentReleaseDecisionInput,
+    requestContext?: AdminAuditRequestContext,
+  ): Promise<AdminPaymentQueueItem> {
+    const payment = await this.findPaymentForOperations(paymentId);
+    const previousReviewStatus = payment.adminReviewStatus as PaymentAdminReviewStatus;
+    const note = body.note.trim();
+    const now = new Date();
+
+    await this.prisma.paymentIntent.update({
+      where: { id: paymentId },
+      data: {
+        adminReviewStatus: PrismaPaymentAdminReviewStatus.RELEASE_DECISION_RECORDED,
+        adminReviewDecision: body.decision,
+        adminReviewNote: note,
+        adminReviewAt: now,
+        adminReviewByUserId: actor.id,
+      },
+    });
+
+    this.adminAuditLog.recordBestEffort({
+      actor,
+      action: AdminAuditLogAction.PAYMENT_RELEASE_DECISION_RECORDED,
+      targetType: AdminAuditLogTargetType.PAYMENT_INTENT,
+      targetId: payment.id,
+      targetUserId: payment.payerId,
+      summary: `Recorded release decision on payment ${payment.id}`,
+      metadata: this.buildPaymentReviewAuditMetadata(payment, {
+        previousReviewStatus,
+        newReviewStatus: PaymentAdminReviewStatus.RELEASE_DECISION_RECORDED,
+        decision: body.decision,
+        noteLength: note.length,
+      }),
+      requestContext,
+    });
+
+    return this.getAdminQueueItem(paymentId);
+  }
+
+  private async findPaymentForOperations(paymentId: string) {
+    const payment = await this.prisma.paymentIntent.findUnique({
+      where: { id: paymentId },
+      include: this.adminPaymentInclude,
+    });
+    if (!payment) {
+      throw new NotFoundException('Payment intent not found');
+    }
+    return payment;
+  }
+
+  private async getAdminQueueItem(paymentId: string): Promise<AdminPaymentQueueItem> {
+    const payment = await this.findPaymentForOperations(paymentId);
+    return toAdminPaymentQueueItem(payment);
+  }
+
+  private buildPaymentReviewAuditMetadata(
+    payment: Awaited<ReturnType<PaymentsService['findPaymentForOperations']>>,
+    extra: Record<string, unknown>,
+  ): Record<string, unknown> {
+    const latestDispute = payment.order.disputes[0];
+    return {
+      amount: payment.amount.toString(),
+      currency: payment.currency,
+      orderId: payment.orderId,
+      ...(latestDispute ? { disputeId: latestDispute.id } : {}),
+      ...extra,
+    };
   }
 }
