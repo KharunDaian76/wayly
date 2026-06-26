@@ -792,9 +792,15 @@ export function WaylerAvailabilityPanel({
             </label>
 
             <WaylerAvailabilityPreview form={form} />
-            <ListingQualityCoach form={form} type={listingQualityTypeFromForm(form.type)} />
-            <WaylerAvailabilityPublishingChecklist />
-            <RestrictedItemsSafetyNote variant="wayler" />
+            <div className="flex flex-col gap-2">
+              <ListingQualityCoach
+                form={form}
+                type={listingQualityTypeFromForm(form.type)}
+                compact
+              />
+              <WaylerAvailabilityPublishingChecklist />
+              <RestrictedItemsSafetyNote variant="wayler" />
+            </div>
 
             <div className="flex flex-wrap items-center gap-2">
               <WaylerAvailabilityReadyBadge ready={isWaylerAvailabilityReady(form)} />

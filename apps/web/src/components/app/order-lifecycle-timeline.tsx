@@ -16,6 +16,8 @@ export type OrderLifecycleTimelineProps = {
   cancelledAt?: string | null;
   /** When true, show honest proof helper (current flow supports proof submission). */
   proofFlowEnabled?: boolean;
+  /** Hide footer reminder lines (e.g. when proof guidance is shown nearby). */
+  hideFooterHints?: boolean;
   compact?: boolean;
   className?: string;
 };
@@ -240,7 +242,7 @@ function StepIndicator({ state }: { state: StepState }) {
 
 export function OrderLifecycleTimeline(props: OrderLifecycleTimelineProps) {
   const { t } = useI18n();
-  const { compact = false, className, proofFlowEnabled = false } = props;
+  const { compact = false, className, proofFlowEnabled = false, hideFooterHints = false } = props;
 
   const allComplete = props.status === DeliveryOrderStatus.DELIVERED;
   const { steps, activeIndex, terminal } = buildLifecycleSteps(props);
@@ -377,26 +379,28 @@ export function OrderLifecycleTimeline(props: OrderLifecycleTimelineProps) {
         })}
       </ol>
 
-      <div
-        className={cn(
-          'flex flex-col gap-1 border-t border-border/40',
-          compact ? 'mt-2 pt-2' : 'mt-3 pt-2',
-        )}
-      >
-        <p className="text-[11px] text-muted-foreground sm:text-xs">
-          {t('app.orderTimeline.chatInsideWayly')}
-        </p>
-        {proofFlowEnabled ? (
+      {!hideFooterHints ? (
+        <div
+          className={cn(
+            'flex flex-col gap-1 border-t border-border/40',
+            compact ? 'mt-2 pt-2' : 'mt-3 pt-2',
+          )}
+        >
           <p className="text-[11px] text-muted-foreground sm:text-xs">
-            {t('app.orderTimeline.proofMayBeRequired')}
+            {t('app.orderTimeline.chatInsideWayly')}
           </p>
-        ) : null}
-        {terminal === 'disputed' ? (
-          <p className="text-[11px] text-muted-foreground sm:text-xs">
-            {t('app.orderTimeline.reviewToolsHelp')}
-          </p>
-        ) : null}
-      </div>
+          {proofFlowEnabled ? (
+            <p className="text-[11px] text-muted-foreground sm:text-xs">
+              {t('app.orderTimeline.proofMayBeRequired')}
+            </p>
+          ) : null}
+          {terminal === 'disputed' ? (
+            <p className="text-[11px] text-muted-foreground sm:text-xs">
+              {t('app.orderTimeline.reviewToolsHelp')}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </section>
   );
 }

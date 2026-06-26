@@ -81,9 +81,15 @@ function disputeStatusHelpKey(status: DisputeStatus): TranslationKey | null {
 type DisputeStatusHelpProps = {
   status: DisputeStatus;
   compact?: boolean;
+  /** When true, show only status label and primary status line (skip extra context). */
+  minimal?: boolean;
 };
 
-export function DisputeStatusHelp({ status, compact = false }: DisputeStatusHelpProps) {
+export function DisputeStatusHelp({
+  status,
+  compact = false,
+  minimal = false,
+}: DisputeStatusHelpProps) {
   const { t } = useI18n();
   const helpKey = disputeStatusHelpKey(status);
   const isActive = status === DisputeStatus.OPEN || status === DisputeStatus.UNDER_REVIEW;
@@ -102,8 +108,12 @@ export function DisputeStatusHelp({ status, compact = false }: DisputeStatusHelp
         <span className={STATUS_BADGE_CLASS}>{t(disputeStatusLabelKey(status))}</span>
       </div>
       {helpKey ? <p className="mt-1.5">{t(helpKey)}</p> : null}
-      {isActive ? <p className="mt-1">{t('app.disputeGuidance.disputedOrderHelp')}</p> : null}
-      {isResolved ? <p className="mt-1">{t('app.disputeGuidance.resolvedHelp')}</p> : null}
+      {!minimal && isActive ? (
+        <p className="mt-1">{t('app.disputeGuidance.disputedOrderHelp')}</p>
+      ) : null}
+      {!minimal && isResolved ? (
+        <p className="mt-1">{t('app.disputeGuidance.resolvedHelp')}</p>
+      ) : null}
     </div>
   );
 }

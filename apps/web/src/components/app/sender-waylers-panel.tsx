@@ -1444,10 +1444,12 @@ export function SenderWaylersPanel({
                           </label>
 
                           <SenderRequestSummary form={requestForm} />
-                          <SenderRequestQualityCoach form={requestForm} />
-                          <SenderRequestSafetyChecklist />
-                          <RestrictedItemsSafetyNote variant="sender" />
-                          <SenderRequestGoodTips />
+                          <div className="flex flex-col gap-2">
+                            <SenderRequestQualityCoach form={requestForm} compact />
+                            <SenderRequestSafetyChecklist />
+                            <RestrictedItemsSafetyNote variant="sender" />
+                            <SenderRequestGoodTips />
+                          </div>
 
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <SenderRequestReadyBadge ready={isSenderRequestReady(requestForm)} />

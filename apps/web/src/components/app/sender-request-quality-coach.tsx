@@ -21,7 +21,12 @@ type QualityHint = {
 };
 
 const PANEL_CLASS = cn(
-  'rounded-lg border border-violet-500/20 bg-violet-500/[0.04] px-3 py-2.5 text-xs text-muted-foreground',
+  'rounded-md border border-violet-500/20 bg-violet-500/[0.04] px-3 py-2 text-xs text-muted-foreground',
+);
+
+const SUMMARY_CLASS = cn(
+  'flex cursor-pointer list-none items-center justify-between gap-2',
+  '[&::-webkit-details-marker]:hidden',
 );
 
 function optionalText(value: string): string | undefined {
@@ -187,22 +192,19 @@ export function SenderRequestQualityCoach({
   const completedShown = compact ? complete.slice(-2) : complete;
 
   return (
-    <section
-      className={cn(PANEL_CLASS, className)}
-      aria-labelledby="sender-request-quality-coach-title"
-    >
-      <div className="flex flex-wrap items-start justify-between gap-2">
+    <details className={cn(PANEL_CLASS, className)}>
+      <summary className={SUMMARY_CLASS}>
         <div className="flex min-w-0 items-center gap-2">
           <Sparkles
             className="h-3.5 w-3.5 shrink-0 text-violet-700/80 dark:text-violet-400/90"
             aria-hidden
           />
-          <h4
+          <span
             id="sender-request-quality-coach-title"
             className="text-sm font-medium text-foreground"
           >
             {t('app.senderRequestQuality.title')}
-          </h4>
+          </span>
         </div>
         <span
           className={cn(
@@ -213,48 +215,50 @@ export function SenderRequestQualityCoach({
         >
           {t(qualityStateLabelKey(qualityState))}
         </span>
+      </summary>
+
+      <div className="mt-2">
+        <p>{t('app.senderRequestQuality.subtitle')}</p>
+        <p className="mt-1 text-[11px] opacity-90">
+          {t('app.senderRequestQuality.noGuaranteedAcceptance')}
+        </p>
+
+        {completedShown.length > 0 ? (
+          <div className="mt-2">
+            <p className="font-medium text-foreground">{t('app.senderRequestQuality.completed')}</p>
+            <ul className="mt-1 flex flex-col gap-1">
+              {completedShown.map((hint) => (
+                <li key={hint.id} className="flex items-start gap-2">
+                  <Check
+                    className="mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-600 dark:text-violet-400"
+                    aria-hidden
+                  />
+                  <span>{t(hint.labelKey)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {nextImprovements.length > 0 ? (
+          <div className="mt-2">
+            <p className="font-medium text-foreground">
+              {t('app.senderRequestQuality.nextImprovements')}
+            </p>
+            <ul className="mt-1 flex flex-col gap-1">
+              {nextImprovements.map((hint) => (
+                <li key={hint.id} className="flex items-start gap-2">
+                  <Circle
+                    className="mt-0.5 h-3 w-3 shrink-0 fill-transparent stroke-muted-foreground/60"
+                    aria-hidden
+                  />
+                  <span>{t(hint.labelKey)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
-
-      <p className="mt-2">{t('app.senderRequestQuality.subtitle')}</p>
-      <p className="mt-1 text-[11px] opacity-90">
-        {t('app.senderRequestQuality.noGuaranteedAcceptance')}
-      </p>
-
-      {completedShown.length > 0 ? (
-        <div className="mt-3">
-          <p className="font-medium text-foreground">{t('app.senderRequestQuality.completed')}</p>
-          <ul className="mt-1.5 flex flex-col gap-1">
-            {completedShown.map((hint) => (
-              <li key={hint.id} className="flex items-start gap-2">
-                <Check
-                  className="mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-600 dark:text-violet-400"
-                  aria-hidden
-                />
-                <span>{t(hint.labelKey)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {nextImprovements.length > 0 ? (
-        <div className="mt-3">
-          <p className="font-medium text-foreground">
-            {t('app.senderRequestQuality.nextImprovements')}
-          </p>
-          <ul className="mt-1.5 flex flex-col gap-1">
-            {nextImprovements.map((hint) => (
-              <li key={hint.id} className="flex items-start gap-2">
-                <Circle
-                  className="mt-0.5 h-3 w-3 shrink-0 fill-transparent stroke-muted-foreground/60"
-                  aria-hidden
-                />
-                <span>{t(hint.labelKey)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </section>
+    </details>
   );
 }

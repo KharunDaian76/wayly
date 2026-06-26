@@ -59,14 +59,18 @@ function variantExtraKeys(variant: PaymentTransparencyVariant): TranslationKey[]
 
 type PaymentTransparencyNoteProps = {
   variant?: PaymentTransparencyVariant;
+  className?: string;
 };
 
-export function PaymentTransparencyNote({ variant = 'neutral' }: PaymentTransparencyNoteProps) {
+export function PaymentTransparencyNote({
+  variant = 'neutral',
+  className,
+}: PaymentTransparencyNoteProps) {
   const { t } = useI18n();
   const bulletKeys = [...COMMON_KEYS, ...variantExtraKeys(variant)];
 
   return (
-    <details className={PANEL_CLASS}>
+    <details className={cn(PANEL_CLASS, className)}>
       <summary className={SUMMARY_CLASS}>
         <Receipt
           className="h-3.5 w-3.5 shrink-0 text-sky-700/80 dark:text-sky-400/90"

@@ -332,10 +332,10 @@ export function WaylerAvailabilityPublishingChecklist({
   const { t } = useI18n();
 
   return (
-    <div className={cn(PANEL_CLASS, className)}>
-      <p className="font-medium text-foreground">
+    <details className={cn(PANEL_CLASS, className)}>
+      <summary className="cursor-pointer font-medium text-foreground">
         {t('app.waylerAvailabilityComposer.checklistTitle')}
-      </p>
+      </summary>
       <ul className="mt-2 flex flex-col gap-1.5">
         {CHECKLIST_KEYS.map((key) => (
           <li key={key} className={CHECKLIST_ITEM_CLASS}>
@@ -346,7 +346,7 @@ export function WaylerAvailabilityPublishingChecklist({
           </li>
         ))}
       </ul>
-    </div>
+    </details>
   );
 }
 

@@ -582,9 +582,9 @@ function AcceptedOrderDisputeSection({
   const hasKnownDispute = Boolean(dispute);
 
   return (
-    <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+    <div className="wayly-proof-panel mt-3 rounded-xl border p-2.5">
       <p className="text-sm font-medium">{t('app.disputes.title')}</p>
-      <div className="mt-2">
+      <div className="mt-1.5">
         <DisputeGuidanceNote variant={panelRole} />
       </div>
       {disputesLoading ? (
@@ -603,8 +603,8 @@ function AcceptedOrderDisputeSection({
         </div>
       ) : null}
       {dispute ? (
-        <div className="mt-2 flex flex-col gap-2">
-          <DisputeStatusHelp status={dispute.status} compact />
+        <div className="mt-2 flex flex-col gap-1.5">
+          <DisputeStatusHelp status={dispute.status} compact minimal />
           <dl className="flex flex-col gap-1 text-sm">
             <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
               <dt className="text-muted-foreground">{t('app.disputes.reason')}</dt>
@@ -2170,7 +2170,7 @@ export default function AppHomePage() {
                   />
                 ) : isApproved && acceptedOrders.length > 0 ? (
                   <>
-                    <PaymentTransparencyNote variant="wayler" />
+                    <PaymentTransparencyNote variant="wayler" className="mb-2" />
                     <ul className="flex flex-col gap-4">
                       {acceptedOrders.map((order) => {
                         const isProgressing = progressingOrderId === order.id;
@@ -2228,6 +2228,7 @@ export default function AppHomePage() {
                               publishedAt={order.publishedAt}
                               acceptedAt={order.acceptedAt}
                               proofFlowEnabled={showProofForm}
+                              hideFooterHints={showProofForm}
                             />
                             <dl className="mt-2 flex flex-col gap-1">
                               <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
@@ -2300,7 +2301,7 @@ export default function AppHomePage() {
                               </p>
                             ) : null}
                             {paymentIntent ? (
-                              <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                              <div className="wayly-proof-panel mt-3 rounded-xl border p-2.5">
                                 <p className="text-sm font-medium">
                                   {t('app.waylerFeed.acceptedPanel.payment.title')}
                                 </p>
@@ -2372,7 +2373,7 @@ export default function AppHomePage() {
                                     {progressError}
                                   </p>
                                 ) : null}
-                                <OrderActionGuidance action="startTransit" className="mt-3" />
+                                <OrderActionGuidance action="startTransit" className="mt-2" />
                                 <Button
                                   className="mt-3 w-full sm:w-auto"
                                   size="sm"
@@ -2395,7 +2396,7 @@ export default function AppHomePage() {
                                     {progressError}
                                   </p>
                                 ) : null}
-                                <OrderActionGuidance action="markDelivered" className="mt-3" />
+                                <OrderActionGuidance action="markDelivered" className="mt-2" />
                                 <Button
                                   className="mt-3 w-full sm:w-auto"
                                   size="sm"
@@ -2469,7 +2470,7 @@ export default function AppHomePage() {
                               ) : null}
                             </div>
                             {showProofForm ? (
-                              <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                              <div className="wayly-proof-panel mt-3 rounded-xl border p-2.5">
                                 <DeliveryProofGuidance
                                   compact
                                   variant="wayler"
@@ -2593,7 +2594,6 @@ export default function AppHomePage() {
                                       {t('app.waylerFeed.acceptedPanel.proofAtLeastOne')}
                                     </p>
                                   ) : null}
-                                  <OrderActionGuidance action="submitProof" className="mb-3" />
                                   <Button
                                     className="w-full sm:w-auto"
                                     size="sm"
@@ -2853,7 +2853,7 @@ export default function AppHomePage() {
                               <dd>{new Date(order.createdAt).toLocaleString()}</dd>
                             </div>
                           </dl>
-                          <OrderActionGuidance action="cancelOrder" className="mt-3" />
+                          <OrderActionGuidance action="cancelOrder" className="mt-2" />
                           <div className="wayly-action-group">
                             <Button
                               variant="secondary"
@@ -2998,7 +2998,7 @@ export default function AppHomePage() {
                               </dd>
                             </div>
                           </dl>
-                          <OrderActionGuidance action="cancelOrder" className="mt-3" />
+                          <OrderActionGuidance action="cancelOrder" className="mt-2" />
                           <div className="wayly-action-group">
                             <Button
                               variant="outline"
@@ -3078,7 +3078,7 @@ export default function AppHomePage() {
                   />
                 ) : canViewSenderOrders && senderAcceptedOrders.length > 0 ? (
                   <>
-                    <PaymentTransparencyNote variant="sender" />
+                    <PaymentTransparencyNote variant="sender" className="mb-2" />
                     <ul className="flex flex-col gap-4">
                       {senderAcceptedOrders.map((order) => {
                         const statusNote = senderStatusNote(order.status, t);
@@ -3159,6 +3159,7 @@ export default function AppHomePage() {
                               acceptedAt={order.acceptedAt}
                               deliveredAt={order.deliveredAt}
                               proofFlowEnabled={showSenderProofPanel}
+                              hideFooterHints={showSenderProofPanel}
                             />
                             <dl className="mt-2 flex flex-col gap-1">
                               <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
@@ -3201,7 +3202,7 @@ export default function AppHomePage() {
                               ) : null}
                             </dl>
                             {showSenderProofPanel ? (
-                              <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                              <div className="wayly-proof-panel mt-3 rounded-xl border p-2.5">
                                 <DeliveryProofGuidance
                                   compact
                                   variant="sender"
@@ -3285,7 +3286,7 @@ export default function AppHomePage() {
                                 ) : null}
                               </div>
                             ) : null}
-                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                            <div className="wayly-proof-panel mt-3 rounded-xl border p-2.5">
                               <p className="text-sm font-medium">
                                 {t('app.senderPanel.payment.title')}
                               </p>
@@ -3396,54 +3397,50 @@ export default function AppHomePage() {
                               {demoToolsEnabled &&
                               !terminalPaymentStatus &&
                               paymentStatus !== PaymentStatus.RELEASED ? (
-                                <>
-                                  <OrderActionGuidance action="paymentAction" className="mt-3" />
-                                  <div className="wayly-action-group mt-3">
-                                    {canAuthorizePayment ? (
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        disabled={paymentActionBusy}
-                                        onClick={() => void handleMockAuthorizePayment(order.id)}
-                                      >
-                                        {paymentActionOrderId === order.id &&
-                                        paymentAction === 'authorize'
-                                          ? t('app.senderPanel.payment.mockAuthorizing')
-                                          : t('app.senderPanel.payment.mockAuthorize')}
-                                      </Button>
-                                    ) : null}
-                                    {canHoldEscrow && paymentIntent ? (
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        disabled={paymentActionBusy}
-                                        onClick={() =>
-                                          void handleMockHoldEscrow(order.id, paymentIntent.id)
-                                        }
-                                      >
-                                        {paymentActionOrderId === order.id &&
-                                        paymentAction === 'hold'
-                                          ? t('app.senderPanel.payment.capturing')
-                                          : t('app.senderPanel.payment.mockHoldEscrow')}
-                                      </Button>
-                                    ) : null}
-                                    {canReleasePayment && paymentIntent ? (
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        disabled={paymentActionBusy}
-                                        onClick={() =>
-                                          void handleMockReleasePayment(order.id, paymentIntent.id)
-                                        }
-                                      >
-                                        {paymentActionOrderId === order.id &&
-                                        paymentAction === 'release'
-                                          ? t('app.senderPanel.payment.mockReleasing')
-                                          : t('app.senderPanel.payment.mockRelease')}
-                                      </Button>
-                                    ) : null}
-                                  </div>
-                                </>
+                                <div className="wayly-action-group mt-3">
+                                  {canAuthorizePayment ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      disabled={paymentActionBusy}
+                                      onClick={() => void handleMockAuthorizePayment(order.id)}
+                                    >
+                                      {paymentActionOrderId === order.id &&
+                                      paymentAction === 'authorize'
+                                        ? t('app.senderPanel.payment.mockAuthorizing')
+                                        : t('app.senderPanel.payment.mockAuthorize')}
+                                    </Button>
+                                  ) : null}
+                                  {canHoldEscrow && paymentIntent ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      disabled={paymentActionBusy}
+                                      onClick={() =>
+                                        void handleMockHoldEscrow(order.id, paymentIntent.id)
+                                      }
+                                    >
+                                      {paymentActionOrderId === order.id && paymentAction === 'hold'
+                                        ? t('app.senderPanel.payment.capturing')
+                                        : t('app.senderPanel.payment.mockHoldEscrow')}
+                                    </Button>
+                                  ) : null}
+                                  {canReleasePayment && paymentIntent ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      disabled={paymentActionBusy}
+                                      onClick={() =>
+                                        void handleMockReleasePayment(order.id, paymentIntent.id)
+                                      }
+                                    >
+                                      {paymentActionOrderId === order.id &&
+                                      paymentAction === 'release'
+                                        ? t('app.senderPanel.payment.mockReleasing')
+                                        : t('app.senderPanel.payment.mockRelease')}
+                                    </Button>
+                                  ) : null}
+                                </div>
                               ) : null}
                             </div>
                             {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (

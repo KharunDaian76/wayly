@@ -337,7 +337,7 @@ export function DisputePanel({
           </div>
         </div>
 
-        <div className="border-b border-border/40 px-4 py-2">
+        <div className="border-b border-border/40 px-4 py-1.5">
           <DisputeGuidanceNote variant="neutral" />
         </div>
 
@@ -372,7 +372,7 @@ export function DisputePanel({
                       {t('app.disputes.disputeRefreshing')}
                     </p>
                   ) : null}
-                  <DisputeStatusHelp status={detail.status} />
+                  <DisputeStatusHelp status={detail.status} compact minimal />
                   <dl className="flex flex-col gap-2 text-sm">
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                       <dt className="text-muted-foreground">{t('app.disputes.reason')}</dt>
@@ -432,7 +432,6 @@ export function DisputePanel({
                   {ACTIVE_DISPUTE_STATUSES.has(detail.status) ? (
                     <div className="flex flex-col gap-2 border-t border-border/60 pt-3">
                       {messageError ? <p className="text-xs text-danger">{messageError}</p> : null}
-                      <DisputeEvidenceFormHints />
                       <label className="flex flex-col gap-1.5 text-sm">
                         <textarea
                           className={TEXTAREA_CLASS}

@@ -226,8 +226,10 @@ export function SenderRequestSafetyChecklist({ className }: SenderRequestSafetyC
   const { t } = useI18n();
 
   return (
-    <div className={cn(PANEL_CLASS, className)}>
-      <p className="font-medium text-foreground">{t('app.senderRequest.safetyChecklistTitle')}</p>
+    <details className={cn(PANEL_CLASS, className)}>
+      <summary className="cursor-pointer font-medium text-foreground">
+        {t('app.senderRequest.safetyChecklistTitle')}
+      </summary>
       <ul className="mt-2 flex flex-col gap-1.5">
         {SAFETY_CHECKLIST_KEYS.map((key) => (
           <li key={key} className={CHECKLIST_ITEM_CLASS}>
@@ -238,7 +240,7 @@ export function SenderRequestSafetyChecklist({ className }: SenderRequestSafetyC
           </li>
         ))}
       </ul>
-    </div>
+    </details>
   );
 }
 

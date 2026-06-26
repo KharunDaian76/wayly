@@ -459,14 +459,17 @@ export function AcceptedOrderDetailsDrawer({
                 deliveredAt={deliveredAt}
                 cancelledAt={detail?.cancelledAt ?? null}
                 proofFlowEnabled={proofFlowEnabled}
+                hideFooterHints={proofFlowEnabled}
               />
 
               {order.paymentStatus !== undefined || proofFlowEnabled ? (
-                <PaymentTransparencyNote variant={panelRole} />
+                <PaymentTransparencyNote variant={panelRole} className="mt-2" />
               ) : null}
 
               {proofFlowEnabled ? (
                 <DeliveryProofGuidance
+                  compact
+                  className="mt-2"
                   variant={panelRole}
                   status={orderStatus}
                   proofSubmittedAt={detail?.proofSubmittedAt ?? null}

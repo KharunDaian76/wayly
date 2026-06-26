@@ -254,14 +254,14 @@ export function ConversationPanel({
         </div>
 
         {conversationId ? (
-          <div className="border-b border-border/40 px-3 py-2">
+          <div className="border-b border-border/40 px-3 py-1.5">
             <ConversationSafetyNote />
           </div>
         ) : null}
 
         {conversationId && showDisputeStatusHelp && disputeStatus ? (
-          <div className="border-b border-border/40 px-3 py-2">
-            <DisputeStatusHelp status={disputeStatus} compact />
+          <div className="border-b border-border/40 px-3 py-1.5">
+            <DisputeStatusHelp status={disputeStatus} compact minimal />
           </div>
         ) : null}
 
