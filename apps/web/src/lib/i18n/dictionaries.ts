@@ -1459,6 +1459,19 @@ const en = {
   'app.waylerShortlist.compareYes': 'Yes',
   'app.waylerShortlist.compareNo': 'No',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'Draft saved locally',
+  'app.senderRequestDraft.saving': 'Saving draft…',
+  'app.senderRequestDraft.restore': 'Restore draft',
+  'app.senderRequestDraft.discard': 'Discard draft',
+  'app.senderRequestDraft.restored': 'Draft restored.',
+  'app.senderRequestDraft.discarded': 'Draft discarded.',
+  'app.senderRequestDraft.localOnly':
+    'Drafts are saved only in this browser. Local only — not synced across devices.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails':
+    'Do not put private payment details in the request.',
+  'app.senderRequestDraft.draftAvailable': 'A saved draft is available for this listing.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    'Local draft autosave is unavailable in this browser.',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -2954,6 +2967,19 @@ const ru: Dictionary = {
   'app.waylerShortlist.compareYes': 'Да',
   'app.waylerShortlist.compareNo': 'Нет',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'Черновик сохранён локально',
+  'app.senderRequestDraft.saving': 'Сохранение черновика…',
+  'app.senderRequestDraft.restore': 'Восстановить черновик',
+  'app.senderRequestDraft.discard': 'Удалить черновик',
+  'app.senderRequestDraft.restored': 'Черновик восстановлен.',
+  'app.senderRequestDraft.discarded': 'Черновик удалён.',
+  'app.senderRequestDraft.localOnly':
+    'Черновики сохраняются только в этом браузере. Только локально — без синхронизации между устройствами.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails':
+    'Не указывайте в запросе конфиденциальные платёжные данные.',
+  'app.senderRequestDraft.draftAvailable': 'Для этого объявления есть сохранённый черновик.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    'Локальное автосохранение черновиков недоступно в этом браузере.',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -4456,6 +4482,19 @@ const es: Dictionary = {
   'app.waylerShortlist.compareYes': 'Sí',
   'app.waylerShortlist.compareNo': 'No',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'Borrador guardado localmente',
+  'app.senderRequestDraft.saving': 'Guardando borrador…',
+  'app.senderRequestDraft.restore': 'Restaurar borrador',
+  'app.senderRequestDraft.discard': 'Descartar borrador',
+  'app.senderRequestDraft.restored': 'Borrador restaurado.',
+  'app.senderRequestDraft.discarded': 'Borrador descartado.',
+  'app.senderRequestDraft.localOnly':
+    'Los borradores se guardan solo en este navegador. Solo local — no se sincronizan entre dispositivos.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails':
+    'No incluya datos de pago privados en la solicitud.',
+  'app.senderRequestDraft.draftAvailable': 'Hay un borrador guardado para este anuncio.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    'El autoguardado local de borradores no está disponible en este navegador.',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -5975,6 +6014,20 @@ const fr: Dictionary = {
   'app.waylerShortlist.compareYes': 'Oui',
   'app.waylerShortlist.compareNo': 'Non',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'Brouillon enregistré localement',
+  'app.senderRequestDraft.saving': 'Enregistrement du brouillon…',
+  'app.senderRequestDraft.restore': 'Restaurer le brouillon',
+  'app.senderRequestDraft.discard': 'Supprimer le brouillon',
+  'app.senderRequestDraft.restored': 'Brouillon restauré.',
+  'app.senderRequestDraft.discarded': 'Brouillon supprimé.',
+  'app.senderRequestDraft.localOnly':
+    'Les brouillons sont enregistrés uniquement dans ce navigateur. Local uniquement — non synchronisé entre appareils.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails':
+    "N'incluez pas de données de paiement privées dans la demande.",
+  'app.senderRequestDraft.draftAvailable':
+    'Un brouillon enregistré est disponible pour cette annonce.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    "L'enregistrement automatique local des brouillons est indisponible dans ce navigateur.",
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -7510,6 +7563,20 @@ const de: Dictionary = {
   'app.waylerShortlist.compareYes': 'Ja',
   'app.waylerShortlist.compareNo': 'Nein',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'Entwurf lokal gespeichert',
+  'app.senderRequestDraft.saving': 'Entwurf wird gespeichert…',
+  'app.senderRequestDraft.restore': 'Entwurf wiederherstellen',
+  'app.senderRequestDraft.discard': 'Entwurf verwerfen',
+  'app.senderRequestDraft.restored': 'Entwurf wiederhergestellt.',
+  'app.senderRequestDraft.discarded': 'Entwurf verworfen.',
+  'app.senderRequestDraft.localOnly':
+    'Entwürfe werden nur in diesem Browser gespeichert. Nur lokal — nicht geräteübergreifend synchronisiert.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails':
+    'Geben Sie keine privaten Zahlungsdaten in der Anfrage an.',
+  'app.senderRequestDraft.draftAvailable':
+    'Für dieses Inserat ist ein gespeicherter Entwurf verfügbar.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    'Lokales Entwurfs-Autospeichern ist in diesem Browser nicht verfügbar.',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -8993,6 +9060,18 @@ const tr: Dictionary = {
   'app.waylerShortlist.compareYes': 'Evet',
   'app.waylerShortlist.compareNo': 'Hayır',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'Taslak yerel olarak kaydedildi',
+  'app.senderRequestDraft.saving': 'Taslak kaydediliyor…',
+  'app.senderRequestDraft.restore': 'Taslağı geri yükle',
+  'app.senderRequestDraft.discard': 'Taslağı sil',
+  'app.senderRequestDraft.restored': 'Taslak geri yüklendi.',
+  'app.senderRequestDraft.discarded': 'Taslak silindi.',
+  'app.senderRequestDraft.localOnly':
+    'Taslaklar yalnızca bu tarayıcıda kaydedilir. Yalnızca yerel — cihazlar arasında senkronize edilmez.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails': 'Talebe özel ödeme bilgileri eklemeyin.',
+  'app.senderRequestDraft.draftAvailable': 'Bu ilan için kayıtlı bir taslak mevcut.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    'Yerel taslak otomatik kaydetme bu tarayıcıda kullanılamıyor.',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -10420,6 +10499,18 @@ const ar: Dictionary = {
   'app.waylerShortlist.compareYes': 'نعم',
   'app.waylerShortlist.compareNo': 'لا',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': 'تم حفظ المسودة محليًا',
+  'app.senderRequestDraft.saving': 'جارٍ حفظ المسودة…',
+  'app.senderRequestDraft.restore': 'استعادة المسودة',
+  'app.senderRequestDraft.discard': 'حذف المسودة',
+  'app.senderRequestDraft.restored': 'تمت استعادة المسودة.',
+  'app.senderRequestDraft.discarded': 'تم حذف المسودة.',
+  'app.senderRequestDraft.localOnly':
+    'تُحفظ المسودات في هذا المتصفح فقط. محلي فقط — غير متزامن عبر الأجهزة.',
+  'app.senderRequestDraft.doNotIncludePaymentDetails': 'لا تضع تفاصيل دفع خاصة في الطلب.',
+  'app.senderRequestDraft.draftAvailable': 'توجد مسودة محفوظة لهذا الإعلان.',
+  'app.senderRequestDraft.autosaveUnavailable':
+    'الحفظ التلقائي المحلي للمسودات غير متاح في هذا المتصفح.',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -11800,6 +11891,16 @@ const zh: Dictionary = {
   'app.waylerShortlist.compareYes': '是',
   'app.waylerShortlist.compareNo': '否',
   'app.waylerShortlist.compareNotAvailable': '—',
+  'app.senderRequestDraft.saved': '草稿已保存在本地',
+  'app.senderRequestDraft.saving': '正在保存草稿…',
+  'app.senderRequestDraft.restore': '恢复草稿',
+  'app.senderRequestDraft.discard': '丢弃草稿',
+  'app.senderRequestDraft.restored': '草稿已恢复。',
+  'app.senderRequestDraft.discarded': '草稿已丢弃。',
+  'app.senderRequestDraft.localOnly': '草稿仅保存在此浏览器中。仅限本地 — 不会跨设备同步。',
+  'app.senderRequestDraft.doNotIncludePaymentDetails': '请勿在请求中包含私人支付信息。',
+  'app.senderRequestDraft.draftAvailable': '此路线有已保存的草稿。',
+  'app.senderRequestDraft.autosaveUnavailable': '此浏览器无法使用本地草稿自动保存。',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',

@@ -10,7 +10,7 @@ import {
 } from '@wayly/types';
 import type { WaylerAvailabilitiesPublicQueryInput } from '@wayly/validation';
 import { Button, Input } from '@wayly/ui';
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 
 import { ActiveWaylersMarketplaceSection } from '@/components/app/active-waylers-marketplace-section';
 import {
@@ -35,7 +35,16 @@ import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-saf
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
+import { SenderRequestDraftBar } from '@/components/app/sender-request-draft-bar';
 import { WaylerShortlistPanel } from '@/components/app/wayler-shortlist-panel';
+import {
+  clearSenderRequestDraft,
+  hasSenderRequestDraft,
+  isSenderRequestDraftStorageAvailable,
+  readSenderRequestDraft,
+  writeSenderRequestDraft,
+  type SenderRequestDraftSaveStatus,
+} from '@/lib/sender-request-draft-storage';
 import { useWaylerShortlist } from '@/lib/wayler-shortlist-storage';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -315,6 +324,12 @@ export function SenderWaylersPanel({
   const [requestError, setRequestError] = useState<string | null>(null);
   const [requestSuccess, setRequestSuccess] = useState<string | null>(null);
   const [requestFormError, setRequestFormError] = useState<string | null>(null);
+  const [draftStorageAvailable, setDraftStorageAvailable] = useState(true);
+  const [draftSaveStatus, setDraftSaveStatus] = useState<SenderRequestDraftSaveStatus>('idle');
+  const [storedDraftPending, setStoredDraftPending] = useState(false);
+  const [draftNotice, setDraftNotice] = useState<'restored' | 'discarded' | null>(null);
+  const draftSkipSaveRef = useRef(true);
+  const draftDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [myRequests, setMyRequests] = useState<WaylerAvailabilityRequestSummary[]>([]);
   const [myRequestsLoading, setMyRequestsLoading] = useState(false);
@@ -328,10 +343,44 @@ export function SenderWaylersPanel({
   };
 
   const updateRequestForm = (patch: Partial<RequestFormState>) => {
+    draftSkipSaveRef.current = false;
+    setDraftNotice(null);
     setRequestForm((prev) => (prev ? { ...prev, ...patch } : prev));
     setRequestFormError(null);
     setRequestError(null);
   };
+
+  useEffect(() => {
+    setDraftStorageAvailable(isSenderRequestDraftStorageAvailable());
+  }, []);
+
+  useEffect(() => {
+    if (!requestTargetId || !requestForm || draftSkipSaveRef.current || !draftStorageAvailable) {
+      return;
+    }
+
+    setDraftSaveStatus('saving');
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+    }
+
+    draftDebounceRef.current = setTimeout(() => {
+      const persisted = writeSenderRequestDraft(requestTargetId, requestForm);
+      if (!persisted) {
+        setDraftStorageAvailable(false);
+        setDraftSaveStatus('idle');
+        return;
+      }
+      setDraftSaveStatus('saved');
+      setStoredDraftPending(false);
+    }, 500);
+
+    return () => {
+      if (draftDebounceRef.current) {
+        clearTimeout(draftDebounceRef.current);
+      }
+    };
+  }, [requestForm, requestTargetId, draftStorageAvailable]);
 
   const loadListings = useCallback(
     async (filterState: FilterState) => {
@@ -420,18 +469,70 @@ export function SenderWaylersPanel({
   );
 
   const openRequestForm = (listing: WaylerAvailabilitySummary) => {
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+      draftDebounceRef.current = null;
+    }
+    draftSkipSaveRef.current = true;
     setRequestTargetId(listing.id);
     setRequestForm(buildInitialRequestForm(listing));
     setRequestError(null);
     setRequestSuccess(null);
     setRequestFormError(null);
+    setDraftSaveStatus('idle');
+    setDraftNotice(null);
+    setStoredDraftPending(draftStorageAvailable && hasSenderRequestDraft(listing.id));
   };
 
   const closeRequestForm = () => {
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+      draftDebounceRef.current = null;
+    }
+    draftSkipSaveRef.current = true;
     setRequestTargetId(null);
     setRequestForm(null);
     setRequestError(null);
     setRequestFormError(null);
+    setDraftSaveStatus('idle');
+    setStoredDraftPending(false);
+    setDraftNotice(null);
+  };
+
+  const handleRestoreRequestDraft = () => {
+    if (!requestTargetId) {
+      return;
+    }
+    const draft = readSenderRequestDraft(requestTargetId);
+    if (!draft) {
+      setStoredDraftPending(false);
+      return;
+    }
+    draftSkipSaveRef.current = true;
+    setRequestForm(draft);
+    setStoredDraftPending(false);
+    setDraftSaveStatus('saved');
+    setDraftNotice('restored');
+    setRequestFormError(null);
+    setRequestError(null);
+  };
+
+  const handleDiscardRequestDraft = (listing: WaylerAvailabilitySummary) => {
+    if (!requestTargetId) {
+      return;
+    }
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+      draftDebounceRef.current = null;
+    }
+    clearSenderRequestDraft(requestTargetId);
+    draftSkipSaveRef.current = true;
+    setRequestForm(buildInitialRequestForm(listing));
+    setStoredDraftPending(false);
+    setDraftSaveStatus('idle');
+    setDraftNotice('discarded');
+    setRequestFormError(null);
+    setRequestError(null);
   };
 
   const handleSubmitRequest = async (event: FormEvent<HTMLFormElement>, availabilityId: string) => {
@@ -489,6 +590,7 @@ export function SenderWaylersPanel({
         currency: requestForm.currency.trim().toUpperCase() || 'EUR',
         message: optionalText(requestForm.message),
       });
+      clearSenderRequestDraft(availabilityId);
       setRequestSuccess(t('app.availabilityRequests.requestSent'));
       closeRequestForm();
       await loadMyRequests();
@@ -979,6 +1081,16 @@ export function SenderWaylersPanel({
                           </h4>
 
                           <SenderRequestHowItWorks />
+
+                          <SenderRequestDraftBar
+                            storageAvailable={draftStorageAvailable}
+                            saveStatus={draftSaveStatus}
+                            showRestoreActions={storedDraftPending}
+                            notice={draftNotice}
+                            disabled={requestSubmitting}
+                            onRestore={handleRestoreRequestDraft}
+                            onDiscard={() => handleDiscardRequestDraft(listing)}
+                          />
 
                           {requestFormError ? (
                             <p className={ALERT_ERROR_CLASS}>{requestFormError}</p>
