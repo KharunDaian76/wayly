@@ -938,6 +938,31 @@ const en = {
     'Keep messages and evidence inside Wayly while this dispute is active.',
   'app.disputeGuidance.resolvedHelp':
     'This dispute is closed. Keep future coordination inside Wayly when possible.',
+  'app.disputeEvidence.title': 'Evidence guidance',
+  'app.disputeEvidence.subtitle':
+    'Submit clear delivery facts so reviewers can understand the case.',
+  'app.disputeEvidence.whatToInclude': 'What to include:',
+  'app.disputeEvidence.whatNotToInclude': 'What not to include:',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    'Item details, timing, handoff expectations, and agreement details from Wayly chat.',
+  'app.disputeEvidence.includeAgreementDetails':
+    'Reference relevant chat messages or delivery proof when they support your case.',
+  'app.disputeEvidence.includeProofReference':
+    'Mention delivery proof or handoff details already recorded in the order when applicable.',
+  'app.disputeEvidence.keepRelevant': 'Keep evidence related to this delivery only.',
+  'app.disputeEvidence.noPasswords': 'Do not include passwords or login credentials.',
+  'app.disputeEvidence.noPaymentDetails':
+    'Do not include bank card details, private payment data, or unrelated financial information.',
+  'app.disputeEvidence.noDocumentsNumbers':
+    'Do not include passport numbers or unrelated personal identity documents.',
+  'app.disputeEvidence.noIllegalContent': 'Do not upload or share illegal or unsafe content.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'Admin and arbitrator review tools can use clear evidence to understand the case.',
+  'app.disputeEvidence.noEvidenceTitle': 'No evidence submitted yet',
+  'app.disputeEvidence.noEvidenceDescription':
+    'Add clear delivery facts and keep sensitive information out.',
+  'app.disputeEvidence.messageCounter': '{count} characters remaining',
+  'app.disputeEvidence.submitting': 'Submitting…',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -2528,6 +2553,32 @@ const ru: Dictionary = {
     'Пока спор активен, храните сообщения и доказательства в Wayly.',
   'app.disputeGuidance.resolvedHelp':
     'Этот спор закрыт. По возможности продолжайте координацию в Wayly.',
+  'app.disputeEvidence.title': 'Руководство по доказательствам',
+  'app.disputeEvidence.subtitle':
+    'Предоставляйте чёткие факты о доставке, чтобы рецензенты поняли ситуацию.',
+  'app.disputeEvidence.whatToInclude': 'Что включать:',
+  'app.disputeEvidence.whatNotToInclude': 'Чего не включать:',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    'Детали посылки, сроки, ожидания по передаче и договорённости из чата Wayly.',
+  'app.disputeEvidence.includeAgreementDetails':
+    'Ссылайтесь на сообщения чата или подтверждение доставки, если они поддерживают ваш случай.',
+  'app.disputeEvidence.includeProofReference':
+    'Упоминайте подтверждение доставки или передачи, уже записанное в заказе, если применимо.',
+  'app.disputeEvidence.keepRelevant': 'Доказательства должны относиться только к этой доставке.',
+  'app.disputeEvidence.noPasswords': 'Не включайте пароли или данные для входа.',
+  'app.disputeEvidence.noPaymentDetails':
+    'Не включайте данные банковских карт, конфиденциальные платёжные или посторонние финансовые данные.',
+  'app.disputeEvidence.noDocumentsNumbers':
+    'Не включайте номера паспортов или посторонние документы личности.',
+  'app.disputeEvidence.noIllegalContent':
+    'Не загружайте и не делитесь незаконным или небезопасным контентом.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'Инструменты администратора и арбитра могут использовать чёткие доказательства для понимания дела.',
+  'app.disputeEvidence.noEvidenceTitle': 'Доказательства ещё не отправлены',
+  'app.disputeEvidence.noEvidenceDescription':
+    'Добавьте чёткие факты о доставке и не включайте конфиденциальную информацию.',
+  'app.disputeEvidence.messageCounter': 'Осталось символов: {count}',
+  'app.disputeEvidence.submitting': 'Отправка…',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -4119,6 +4170,31 @@ const es: Dictionary = {
     'Mantenga mensajes y pruebas en Wayly mientras esta disputa esté activa.',
   'app.disputeGuidance.resolvedHelp':
     'Esta disputa está cerrada. Mantenga futura coordinación en Wayly cuando sea posible.',
+  'app.disputeEvidence.title': 'Guía de evidencia',
+  'app.disputeEvidence.subtitle':
+    'Envíe hechos claros de entrega para que los revisores entiendan el caso.',
+  'app.disputeEvidence.whatToInclude': 'Qué incluir:',
+  'app.disputeEvidence.whatNotToInclude': 'Qué no incluir:',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    'Detalles del artículo, plazos, expectativas de entrega y acuerdos del chat de Wayly.',
+  'app.disputeEvidence.includeAgreementDetails':
+    'Referencie mensajes de chat o prueba de entrega cuando apoyen su caso.',
+  'app.disputeEvidence.includeProofReference':
+    'Mencione prueba de entrega o entrega ya registrada en el pedido cuando aplique.',
+  'app.disputeEvidence.keepRelevant': 'Mantenga la evidencia relacionada solo con esta entrega.',
+  'app.disputeEvidence.noPasswords': 'No incluya contraseñas ni credenciales de acceso.',
+  'app.disputeEvidence.noPaymentDetails':
+    'No incluya datos de tarjetas bancarias, pagos privados ni información financiera no relacionada.',
+  'app.disputeEvidence.noDocumentsNumbers':
+    'No incluya números de pasaporte ni documentos de identidad no relacionados.',
+  'app.disputeEvidence.noIllegalContent': 'No suba ni comparta contenido ilegal o inseguro.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'Las herramientas de revisión de admin y árbitro pueden usar evidencia clara para entender el caso.',
+  'app.disputeEvidence.noEvidenceTitle': 'Aún no se envió evidencia',
+  'app.disputeEvidence.noEvidenceDescription':
+    'Añada hechos claros de entrega y evite información sensible.',
+  'app.disputeEvidence.messageCounter': '{count} caracteres restantes',
+  'app.disputeEvidence.submitting': 'Enviando…',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -5729,6 +5805,32 @@ const fr: Dictionary = {
     'Gardez messages et preuves dans Wayly pendant que ce litige est actif.',
   'app.disputeGuidance.resolvedHelp':
     "Ce litige est clos. Continuez la coordination dans Wayly lorsque c'est possible.",
+  'app.disputeEvidence.title': 'Guide des preuves',
+  'app.disputeEvidence.subtitle':
+    'Soumettez des faits de livraison clairs pour aider les examinateurs.',
+  'app.disputeEvidence.whatToInclude': 'À inclure :',
+  'app.disputeEvidence.whatNotToInclude': 'À ne pas inclure :',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    "Détails de l'article, délais, attentes de remise et accords du chat Wayly.",
+  'app.disputeEvidence.includeAgreementDetails':
+    'Référez-vous aux messages de chat ou preuves de livraison qui soutiennent votre cas.',
+  'app.disputeEvidence.includeProofReference':
+    'Mentionnez les preuves de livraison ou remise déjà enregistrées sur la commande si applicable.',
+  'app.disputeEvidence.keepRelevant': 'Gardez les preuves liées à cette livraison uniquement.',
+  'app.disputeEvidence.noPasswords': "N'incluez pas de mots de passe ni identifiants de connexion.",
+  'app.disputeEvidence.noPaymentDetails':
+    "N'incluez pas de données de carte bancaire, paiements privés ou informations financières non liées.",
+  'app.disputeEvidence.noDocumentsNumbers':
+    "N'incluez pas de numéros de passeport ni documents d'identité non liés.",
+  'app.disputeEvidence.noIllegalContent':
+    'Ne téléversez ni ne partagez de contenu illégal ou dangereux.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'Les outils admin et arbitre peuvent utiliser des preuves claires pour comprendre le dossier.',
+  'app.disputeEvidence.noEvidenceTitle': "Aucune preuve soumise pour l'instant",
+  'app.disputeEvidence.noEvidenceDescription':
+    'Ajoutez des faits de livraison clairs et excluez les informations sensibles.',
+  'app.disputeEvidence.messageCounter': '{count} caractères restants',
+  'app.disputeEvidence.submitting': 'Envoi…',
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -7357,6 +7459,32 @@ const de: Dictionary = {
     'Bewahren Sie Nachrichten und Nachweise in Wayly, solange dieser Streitfall aktiv ist.',
   'app.disputeGuidance.resolvedHelp':
     'Dieser Streitfall ist geschlossen. Koordinieren Sie künftig nach Möglichkeit in Wayly.',
+  'app.disputeEvidence.title': 'Beweis-Leitfaden',
+  'app.disputeEvidence.subtitle':
+    'Reichen Sie klare Lieferfakten ein, damit Prüfer den Fall verstehen.',
+  'app.disputeEvidence.whatToInclude': 'Was einreichen:',
+  'app.disputeEvidence.whatNotToInclude': 'Was nicht einreichen:',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    'Artikeldetails, Zeitplan, Übergabeerwartungen und Vereinbarungen aus dem Wayly-Chat.',
+  'app.disputeEvidence.includeAgreementDetails':
+    'Verweisen Sie auf relevante Chat-Nachrichten oder Liefernachweise, wenn sie Ihren Fall stützen.',
+  'app.disputeEvidence.includeProofReference':
+    'Erwähnen Sie Liefer- oder Übergabenachweise aus der Bestellung, falls zutreffend.',
+  'app.disputeEvidence.keepRelevant': 'Beweise nur zu dieser Lieferung einreichen.',
+  'app.disputeEvidence.noPasswords': 'Keine Passwörter oder Anmeldedaten angeben.',
+  'app.disputeEvidence.noPaymentDetails':
+    'Keine Bankkartendaten, privaten Zahlungsdaten oder nicht relevante Finanzinformationen angeben.',
+  'app.disputeEvidence.noDocumentsNumbers':
+    'Keine Passnummern oder nicht relevante Ausweisdokumente angeben.',
+  'app.disputeEvidence.noIllegalContent':
+    'Keine illegalen oder unsicheren Inhalte hochladen oder teilen.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'Admin- und Schiedsrichter-Tools können klare Beweise nutzen, um den Fall zu verstehen.',
+  'app.disputeEvidence.noEvidenceTitle': 'Noch keine Beweise eingereicht',
+  'app.disputeEvidence.noEvidenceDescription':
+    'Fügen Sie klare Lieferfakten hinzu und lassen Sie sensible Informationen weg.',
+  'app.disputeEvidence.messageCounter': '{count} Zeichen verbleibend',
+  'app.disputeEvidence.submitting': 'Wird gesendet…',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -8945,6 +9073,32 @@ const tr: Dictionary = {
     'Bu anlaşmazlık aktifken mesajları ve kanıtları Wayly içinde tutun.',
   'app.disputeGuidance.resolvedHelp':
     'Bu anlaşmazlık kapandı. Mümkün olduğunda gelecek koordinasyonu Wayly içinde sürdürün.',
+  'app.disputeEvidence.title': 'Kanıt rehberi',
+  'app.disputeEvidence.subtitle':
+    'İnceleyicilerin durumu anlaması için net teslimat gerçekleri gönderin.',
+  'app.disputeEvidence.whatToInclude': 'Neleri eklemeli:',
+  'app.disputeEvidence.whatNotToInclude': 'Neleri eklememeli:',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    'Ürün detayları, zamanlama, devir beklentileri ve Wayly sohbetindeki anlaşmalar.',
+  'app.disputeEvidence.includeAgreementDetails':
+    'Durumunuzu destekliyorsa ilgili sohbet mesajlarına veya teslimat kanıtına atıfta bulunun.',
+  'app.disputeEvidence.includeProofReference':
+    'Uygunsa siparişte kayıtlı teslimat veya devir kanıtından bahsedin.',
+  'app.disputeEvidence.keepRelevant': 'Kanıtları yalnızca bu teslimatla ilgili tutun.',
+  'app.disputeEvidence.noPasswords': 'Parola veya giriş bilgileri eklemeyin.',
+  'app.disputeEvidence.noPaymentDetails':
+    'Banka kartı bilgileri, özel ödeme verileri veya ilgisiz finansal bilgiler eklemeyin.',
+  'app.disputeEvidence.noDocumentsNumbers':
+    'Pasaport numaraları veya ilgisiz kimlik belgeleri eklemeyin.',
+  'app.disputeEvidence.noIllegalContent':
+    'Yasadışı veya güvensiz içerik yüklemeyin veya paylaşmayın.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'Yönetici ve hakem inceleme araçları net kanıtları anlamak için kullanabilir.',
+  'app.disputeEvidence.noEvidenceTitle': 'Henüz kanıt gönderilmedi',
+  'app.disputeEvidence.noEvidenceDescription':
+    'Net teslimat gerçekleri ekleyin ve hassas bilgilerden kaçının.',
+  'app.disputeEvidence.messageCounter': '{count} karakter kaldı',
+  'app.disputeEvidence.submitting': 'Gönderiliyor…',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -10474,6 +10628,29 @@ const ar: Dictionary = {
   'app.disputeGuidance.disputedOrderHelp': 'أبقِ الرسائل والأدلة داخل Wayly بينما هذا النزاع نشط.',
   'app.disputeGuidance.resolvedHelp':
     'هذا النزاع مغلق. استمر في التنسيق داخل Wayly عندما يكون ذلك ممكناً.',
+  'app.disputeEvidence.title': 'إرشادات الأدلة',
+  'app.disputeEvidence.subtitle': 'قدّم حقائق تسليم واضحة ليساعد المراجعون على فهم الحالة.',
+  'app.disputeEvidence.whatToInclude': 'ما يجب تضمينه:',
+  'app.disputeEvidence.whatNotToInclude': 'ما لا يجب تضمينه:',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    'تفاصيل العنصر والتوقيت وتوقعات التسليم والاتفاقات من محادثة Wayly.',
+  'app.disputeEvidence.includeAgreementDetails':
+    'أشر إلى رسائل المحادثة أو إثبات التسليم عندما تدعم حالتك.',
+  'app.disputeEvidence.includeProofReference':
+    'اذكر إثبات التسليم أو التسليم المسجل في الطلب عند الانطباق.',
+  'app.disputeEvidence.keepRelevant': 'اجعل الأدلة متعلقة بهذا التسليم فقط.',
+  'app.disputeEvidence.noPasswords': 'لا تضمّن كلمات مرور أو بيانات تسجيل الدخول.',
+  'app.disputeEvidence.noPaymentDetails':
+    'لا تضمّن بيانات بطاقات بنكية أو مدفوعات خاصة أو معلومات مالية غير ذات صلة.',
+  'app.disputeEvidence.noDocumentsNumbers':
+    'لا تضمّن أرقام جوازات أو مستندات هوية شخصية غير ذات صلة.',
+  'app.disputeEvidence.noIllegalContent': 'لا ترفع أو تشارك محتوى غير قانوني أو غير آمن.',
+  'app.disputeEvidence.reviewToolsHelp':
+    'يمكن لأدوات مراجعة المسؤول والمحكّم استخدام أدلة واضحة لفهم الحالة.',
+  'app.disputeEvidence.noEvidenceTitle': 'لم تُقدَّم أدلة بعد',
+  'app.disputeEvidence.noEvidenceDescription': 'أضف حقائق تسليم واضحة واستبعد المعلومات الحساسة.',
+  'app.disputeEvidence.messageCounter': 'متبقٍ {count} حرفًا',
+  'app.disputeEvidence.submitting': 'جارٍ الإرسال…',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -11953,6 +12130,24 @@ const zh: Dictionary = {
   'app.disputeGuidance.noDisputeYet': '此订单尚未发起争议。',
   'app.disputeGuidance.disputedOrderHelp': '争议活跃期间，请将消息和证据保留在 Wayly 内。',
   'app.disputeGuidance.resolvedHelp': '此争议已关闭。今后请尽可能在 Wayly 内协调。',
+  'app.disputeEvidence.title': '证据指引',
+  'app.disputeEvidence.subtitle': '提交清晰的配送事实，以便审查人员了解案件。',
+  'app.disputeEvidence.whatToInclude': '应包含：',
+  'app.disputeEvidence.whatNotToInclude': '不应包含：',
+  'app.disputeEvidence.includeItemTimingHandoff':
+    '物品详情、时间、交接预期以及 Wayly 聊天中的协议内容。',
+  'app.disputeEvidence.includeAgreementDetails': '如有帮助，请引用相关聊天消息或配送证明。',
+  'app.disputeEvidence.includeProofReference': '如适用，请提及订单中已记录的配送或交接证明。',
+  'app.disputeEvidence.keepRelevant': '证据应仅与本次配送相关。',
+  'app.disputeEvidence.noPasswords': '不要包含密码或登录凭据。',
+  'app.disputeEvidence.noPaymentDetails': '不要包含银行卡信息、私人支付数据或无关财务信息。',
+  'app.disputeEvidence.noDocumentsNumbers': '不要包含护照号码或无关身份证件。',
+  'app.disputeEvidence.noIllegalContent': '不要上传或分享非法或不安全内容。',
+  'app.disputeEvidence.reviewToolsHelp': '管理员和仲裁审查工具可使用清晰证据了解案件。',
+  'app.disputeEvidence.noEvidenceTitle': '尚未提交证据',
+  'app.disputeEvidence.noEvidenceDescription': '添加清晰的配送事实，并避免敏感信息。',
+  'app.disputeEvidence.messageCounter': '剩余 {count} 个字符',
+  'app.disputeEvidence.submitting': '提交中…',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',

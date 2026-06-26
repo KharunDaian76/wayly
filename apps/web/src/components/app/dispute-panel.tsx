@@ -20,6 +20,11 @@ import {
   DisputeNoDisputeGuidance,
   DisputeStatusHelp,
 } from '@/components/app/dispute-guidance-note';
+import {
+  DisputeEvidenceEmpty,
+  DisputeEvidenceFormHints,
+  DisputeEvidenceGuidance,
+} from '@/components/app/dispute-evidence-guidance';
 
 const MIN_DESCRIPTION_LENGTH = 10;
 const MAX_DESCRIPTION_LENGTH = 3000;
@@ -107,6 +112,7 @@ export function DisputePanel({
   const trimmedDescription = description.trim();
   const trimmedMessage = messageDraft.trim();
   const trimmedEvidenceTitle = evidenceTitle.trim();
+  const messageRemainingChars = MAX_MESSAGE_LENGTH - messageDraft.length;
   const canSubmitOpen =
     orderId !== null &&
     trimmedDescription.length >= MIN_DESCRIPTION_LENGTH &&
@@ -382,6 +388,8 @@ export function DisputePanel({
                     </div>
                   </dl>
 
+                  {ACTIVE_DISPUTE_STATUSES.has(detail.status) ? <DisputeEvidenceGuidance /> : null}
+
                   <section className="flex flex-col gap-2">
                     <p className="text-sm font-medium">{t('app.disputes.messages')}</p>
                     {detail.messages.length === 0 ? (
@@ -424,6 +432,7 @@ export function DisputePanel({
                   {ACTIVE_DISPUTE_STATUSES.has(detail.status) ? (
                     <div className="flex flex-col gap-2 border-t border-border/60 pt-3">
                       {messageError ? <p className="text-xs text-danger">{messageError}</p> : null}
+                      <DisputeEvidenceFormHints />
                       <label className="flex flex-col gap-1.5 text-sm">
                         <textarea
                           className={TEXTAREA_CLASS}
@@ -434,6 +443,12 @@ export function DisputePanel({
                           onChange={(event) => setMessageDraft(event.target.value)}
                           rows={3}
                         />
+                        <span className="text-xs text-muted-foreground">
+                          {t('app.disputeEvidence.messageCounter').replace(
+                            '{count}',
+                            String(messageRemainingChars),
+                          )}
+                        </span>
                       </label>
                       <Button
                         type="button"
@@ -443,7 +458,7 @@ export function DisputePanel({
                         onClick={() => void handleSendMessage()}
                       >
                         {sendingMessage
-                          ? t('app.disputes.sendingMessage')
+                          ? t('app.disputeEvidence.submitting')
                           : t('app.disputes.sendMessage')}
                       </Button>
                     </div>
@@ -452,10 +467,7 @@ export function DisputePanel({
                   <section className="flex flex-col gap-2 border-t border-border/60 pt-3">
                     <p className="text-sm font-medium">{t('app.disputes.evidence')}</p>
                     {detail.evidence.length === 0 ? (
-                      <PanelEmptyState
-                        title={t('app.disputes.noEvidenceTitle')}
-                        body={t('app.disputes.noEvidenceBody')}
-                      />
+                      <DisputeEvidenceEmpty />
                     ) : (
                       <ul className="flex flex-col gap-2">
                         {detail.evidence.map((item: DisputeEvidenceSummary) => (
@@ -488,6 +500,7 @@ export function DisputePanel({
                       {evidenceError ? (
                         <p className="text-xs text-danger">{evidenceError}</p>
                       ) : null}
+                      <DisputeEvidenceFormHints />
                       <label className="flex flex-col gap-1.5 text-sm">
                         <span className="font-medium">{t('app.disputes.evidenceTitle')}</span>
                         <input
@@ -529,7 +542,7 @@ export function DisputePanel({
                         onClick={() => void handleAddEvidence()}
                       >
                         {addingEvidence
-                          ? t('app.disputes.addingEvidence')
+                          ? t('app.disputeEvidence.submitting')
                           : t('app.disputes.addEvidence')}
                       </Button>
                     </div>
