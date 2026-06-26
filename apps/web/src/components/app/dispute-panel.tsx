@@ -15,6 +15,11 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
+import {
+  DisputeGuidanceNote,
+  DisputeNoDisputeGuidance,
+  DisputeStatusHelp,
+} from '@/components/app/dispute-guidance-note';
 
 const MIN_DESCRIPTION_LENGTH = 10;
 const MAX_DESCRIPTION_LENGTH = 3000;
@@ -326,6 +331,10 @@ export function DisputePanel({
           </div>
         </div>
 
+        <div className="border-b border-border/40 px-4 py-2">
+          <DisputeGuidanceNote variant="neutral" />
+        </div>
+
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-4">
           {loadError ? (
             <PanelErrorState
@@ -357,11 +366,8 @@ export function DisputePanel({
                       {t('app.disputes.disputeRefreshing')}
                     </p>
                   ) : null}
+                  <DisputeStatusHelp status={detail.status} />
                   <dl className="flex flex-col gap-2 text-sm">
-                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                      <dt className="text-muted-foreground">{t('app.disputes.status')}</dt>
-                      <dd className="font-medium">{t(disputeStatusKey(detail.status))}</dd>
-                    </div>
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                       <dt className="text-muted-foreground">{t('app.disputes.reason')}</dt>
                       <dd className="font-medium">{t(disputeReasonKey(detail.reason))}</dd>
@@ -533,10 +539,7 @@ export function DisputePanel({
             </>
           ) : (
             <div className="flex flex-col gap-3">
-              <PanelEmptyState
-                title={t('app.disputes.noDisputeYet')}
-                body={t('app.disputes.noDisputeYetBody')}
-              />
+              <DisputeNoDisputeGuidance />
               {openError ? (
                 <p
                   className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger"

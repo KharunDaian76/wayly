@@ -40,7 +40,12 @@ import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance'
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
-import { DisputePanel, disputeReasonKey, disputeStatusKey } from '@/components/app/dispute-panel';
+import { DisputePanel, disputeReasonKey } from '@/components/app/dispute-panel';
+import {
+  DisputeGuidanceNote,
+  DisputeNoDisputeGuidance,
+  DisputeStatusHelp,
+} from '@/components/app/dispute-guidance-note';
 import {
   KycActionBlockedHint,
   KycMarketplaceGateNotice,
@@ -562,12 +567,14 @@ function AcceptedOrderDisputeSection({
   disputesLoading,
   disputesListLoadFailed,
   onRetryDisputes,
+  panelRole,
   t,
 }: {
   dispute: DisputeSummary | undefined;
   disputesLoading: boolean;
   disputesListLoadFailed: boolean;
   onRetryDisputes: () => void;
+  panelRole: AcceptedOrderDetailsPanelRole;
   t: (key: TranslationKey) => string;
 }) {
   const hasKnownDispute = Boolean(dispute);
@@ -575,8 +582,11 @@ function AcceptedOrderDisputeSection({
   return (
     <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
       <p className="text-sm font-medium">{t('app.disputes.title')}</p>
+      <div className="mt-2">
+        <DisputeGuidanceNote variant={panelRole} />
+      </div>
       {disputesLoading ? (
-        <p className="mt-1 text-xs text-muted-foreground" role="status" aria-live="polite">
+        <p className="mt-2 text-xs text-muted-foreground" role="status" aria-live="polite">
           {hasKnownDispute ? t('app.disputes.disputeRefreshing') : t('app.disputes.disputeLoading')}
         </p>
       ) : null}
@@ -591,26 +601,22 @@ function AcceptedOrderDisputeSection({
         </div>
       ) : null}
       {dispute ? (
-        <dl className="mt-2 flex flex-col gap-1 text-sm">
-          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">{t('app.disputes.status')}</dt>
-            <dd className="font-medium">{t(disputeStatusKey(dispute.status))}</dd>
-          </div>
-          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">{t('app.disputes.reason')}</dt>
-            <dd className="font-medium">{t(disputeReasonKey(dispute.reason))}</dd>
-          </div>
-          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">{t('app.disputes.createdAt')}</dt>
-            <dd>{new Date(dispute.createdAt).toLocaleString()}</dd>
-          </div>
-        </dl>
+        <div className="mt-2 flex flex-col gap-2">
+          <DisputeStatusHelp status={dispute.status} compact />
+          <dl className="flex flex-col gap-1 text-sm">
+            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+              <dt className="text-muted-foreground">{t('app.disputes.reason')}</dt>
+              <dd className="font-medium">{t(disputeReasonKey(dispute.reason))}</dd>
+            </div>
+            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+              <dt className="text-muted-foreground">{t('app.disputes.createdAt')}</dt>
+              <dd>{new Date(dispute.createdAt).toLocaleString()}</dd>
+            </div>
+          </dl>
+        </div>
       ) : !disputesListLoadFailed && !disputesLoading ? (
         <div className="mt-2">
-          <PanelEmptyState
-            title={t('app.disputes.noDisputeYet')}
-            body={t('app.disputes.noDisputeYetBody')}
-          />
+          <DisputeNoDisputeGuidance />
         </div>
       ) : null}
     </div>
@@ -2405,6 +2411,7 @@ export default function AppHomePage() {
                               disputesLoading={disputesLoading}
                               disputesListLoadFailed={disputesListLoadFailed}
                               onRetryDisputes={() => void loadUserDisputes()}
+                              panelRole="wayler"
                               t={t}
                             />
                           ) : null}
@@ -3420,6 +3427,7 @@ export default function AppHomePage() {
                               disputesLoading={disputesLoading}
                               disputesListLoadFailed={disputesListLoadFailed}
                               onRetryDisputes={() => void loadUserDisputes()}
+                              panelRole="sender"
                               t={t}
                             />
                           ) : null}
@@ -3495,6 +3503,7 @@ export default function AppHomePage() {
           orderId={chatOrderId}
           currentUserId={user.id}
           waylerSendBlocked={mode === 'wayler' && !waylerHasActiveAccess}
+          disputeStatus={chatOrderId ? (disputesByOrderId[chatOrderId]?.status ?? null) : null}
         />
 
         <DisputePanel

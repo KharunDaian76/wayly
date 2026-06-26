@@ -911,6 +911,33 @@ const en = {
     'Open chat from an accepted order to coordinate pickup, delivery, and handoff.',
   'app.conversationSafety.chatOpensAfterAcceptance':
     'Chat opens after a request is accepted and an order is created.',
+  'app.disputeGuidance.title': 'Dispute guidance',
+  'app.disputeGuidance.subtitle':
+    'Use disputes thoughtfully when delivery coordination breaks down.',
+  'app.disputeGuidance.senderTitle': 'Sender dispute guidance',
+  'app.disputeGuidance.waylerTitle': 'Wayler dispute guidance',
+  'app.disputeGuidance.tryChatFirst':
+    'Try to clarify delivery details in chat first when it is safe to do so.',
+  'app.disputeGuidance.keepEvidenceInsideWayly':
+    'Keep evidence and important agreement details inside Wayly.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'Disputes can be reviewed using Wayly admin and arbitrator tools.',
+  'app.disputeGuidance.includeClearFacts':
+    'Include clear facts: item, timing, handoff, proof, and payment status if already visible in the app.',
+  'app.disputeGuidance.noPrivatePayment':
+    'Do not share private payment details in dispute messages.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    'Do not use disputes for illegal or restricted-item issues — follow safety and legal rules.',
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'Open a dispute only when normal chat and order confirmation cannot resolve the issue.',
+  'app.disputeGuidance.statusOpen': 'Dispute open — keep communication inside Wayly.',
+  'app.disputeGuidance.statusUnderReview': 'Under review — an admin or arbitrator may follow up.',
+  'app.disputeGuidance.statusResolved': 'Resolved — review the outcome in Wayly.',
+  'app.disputeGuidance.noDisputeYet': 'No dispute opened for this order yet.',
+  'app.disputeGuidance.disputedOrderHelp':
+    'Keep messages and evidence inside Wayly while this dispute is active.',
+  'app.disputeGuidance.resolvedHelp':
+    'This dispute is closed. Keep future coordination inside Wayly when possible.',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -2474,6 +2501,33 @@ const ru: Dictionary = {
     'Откройте чат из принятого заказа для координации получения, доставки и передачи.',
   'app.conversationSafety.chatOpensAfterAcceptance':
     'Чат открывается после принятия запроса и создания заказа.',
+  'app.disputeGuidance.title': 'Руководство по спорам',
+  'app.disputeGuidance.subtitle': 'Используйте споры, когда координация доставки не удаётся.',
+  'app.disputeGuidance.senderTitle': 'Руководство для отправителя по спорам',
+  'app.disputeGuidance.waylerTitle': 'Руководство для Wayler по спорам',
+  'app.disputeGuidance.tryChatFirst':
+    'Сначала попробуйте уточнить детали доставки в чате, если это безопасно.',
+  'app.disputeGuidance.keepEvidenceInsideWayly':
+    'Храните доказательства и важные договорённости в Wayly.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'Споры могут рассматриваться с помощью инструментов администратора и арбитра Wayly.',
+  'app.disputeGuidance.includeClearFacts':
+    'Указывайте чёткие факты: предмет, сроки, передача, подтверждение и статус оплаты, если он виден в приложении.',
+  'app.disputeGuidance.noPrivatePayment':
+    'Не делитесь конфиденциальными платёжными данными в сообщениях спора.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    'Не используйте споры для незаконных или запрещённых предметов — соблюдайте правила безопасности и закона.',
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'Открывайте спор только если обычный чат и подтверждение заказа не решают проблему.',
+  'app.disputeGuidance.statusOpen': 'Спор открыт — ведите общение в Wayly.',
+  'app.disputeGuidance.statusUnderReview':
+    'На рассмотрении — администратор или арбитр может связаться с вами.',
+  'app.disputeGuidance.statusResolved': 'Решён — ознакомьтесь с результатом в Wayly.',
+  'app.disputeGuidance.noDisputeYet': 'По этому заказу спор ещё не открыт.',
+  'app.disputeGuidance.disputedOrderHelp':
+    'Пока спор активен, храните сообщения и доказательства в Wayly.',
+  'app.disputeGuidance.resolvedHelp':
+    'Этот спор закрыт. По возможности продолжайте координацию в Wayly.',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -4038,6 +4092,33 @@ const es: Dictionary = {
     'Abre el chat desde un pedido aceptado para coordinar recogida, entrega y handoff.',
   'app.conversationSafety.chatOpensAfterAcceptance':
     'El chat se abre después de que se acepta una solicitud y se crea un pedido.',
+  'app.disputeGuidance.title': 'Guía de disputas',
+  'app.disputeGuidance.subtitle': 'Use disputas cuando la coordinación de entrega no funcione.',
+  'app.disputeGuidance.senderTitle': 'Guía de disputas para remitente',
+  'app.disputeGuidance.waylerTitle': 'Guía de disputas para Wayler',
+  'app.disputeGuidance.tryChatFirst':
+    'Intente aclarar los detalles de entrega en el chat primero cuando sea seguro.',
+  'app.disputeGuidance.keepEvidenceInsideWayly':
+    'Mantenga pruebas y acuerdos importantes dentro de Wayly.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'Las disputas pueden revisarse con herramientas de admin y árbitro de Wayly.',
+  'app.disputeGuidance.includeClearFacts':
+    'Incluya hechos claros: artículo, plazos, entrega, prueba y estado de pago si ya es visible en la app.',
+  'app.disputeGuidance.noPrivatePayment':
+    'No comparta datos de pago privados en mensajes de disputa.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    'No use disputas para artículos ilegales o restringidos — siga las reglas de seguridad y legales.',
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'Abra una disputa solo cuando el chat normal y la confirmación del pedido no resuelvan el problema.',
+  'app.disputeGuidance.statusOpen': 'Disputa abierta — mantenga la comunicación en Wayly.',
+  'app.disputeGuidance.statusUnderReview':
+    'En revisión — un admin o árbitro puede hacer seguimiento.',
+  'app.disputeGuidance.statusResolved': 'Resuelta — revise el resultado en Wayly.',
+  'app.disputeGuidance.noDisputeYet': 'Aún no hay disputa abierta para este pedido.',
+  'app.disputeGuidance.disputedOrderHelp':
+    'Mantenga mensajes y pruebas en Wayly mientras esta disputa esté activa.',
+  'app.disputeGuidance.resolvedHelp':
+    'Esta disputa está cerrada. Mantenga futura coordinación en Wayly cuando sea posible.',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -5620,6 +5701,34 @@ const fr: Dictionary = {
     'Ouvrez le chat depuis une commande acceptée pour coordonner collecte, livraison et remise.',
   'app.conversationSafety.chatOpensAfterAcceptance':
     "Le chat s'ouvre après l'acceptation d'une demande et la création d'une commande.",
+  'app.disputeGuidance.title': 'Guide des litiges',
+  'app.disputeGuidance.subtitle':
+    'Utilisez les litiges lorsque la coordination de livraison échoue.',
+  'app.disputeGuidance.senderTitle': 'Guide litige expéditeur',
+  'app.disputeGuidance.waylerTitle': 'Guide litige Wayler',
+  'app.disputeGuidance.tryChatFirst':
+    "Essayez d'abord de clarifier les détails de livraison dans le chat lorsque c'est sûr.",
+  'app.disputeGuidance.keepEvidenceInsideWayly':
+    'Conservez les preuves et accords importants dans Wayly.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'Les litiges peuvent être examinés avec les outils admin et arbitre de Wayly.',
+  'app.disputeGuidance.includeClearFacts':
+    "Incluez des faits clairs : article, délais, remise, preuve et statut de paiement si déjà visible dans l'app.",
+  'app.disputeGuidance.noPrivatePayment':
+    'Ne partagez pas de données de paiement privées dans les messages de litige.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    "N'utilisez pas les litiges pour des articles illégaux ou restreints — respectez les règles de sécurité et légales.",
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'Ouvrez un litige seulement si le chat normal et la confirmation de commande ne résolvent pas le problème.',
+  'app.disputeGuidance.statusOpen': 'Litige ouvert — gardez la communication dans Wayly.',
+  'app.disputeGuidance.statusUnderReview':
+    "En cours d'examen — un admin ou arbitre peut faire un suivi.",
+  'app.disputeGuidance.statusResolved': 'Résolu — consultez le résultat dans Wayly.',
+  'app.disputeGuidance.noDisputeYet': 'Aucun litige ouvert pour cette commande.',
+  'app.disputeGuidance.disputedOrderHelp':
+    'Gardez messages et preuves dans Wayly pendant que ce litige est actif.',
+  'app.disputeGuidance.resolvedHelp':
+    "Ce litige est clos. Continuez la coordination dans Wayly lorsque c'est possible.",
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -7221,6 +7330,33 @@ const de: Dictionary = {
     'Öffnen Sie den Chat über eine angenommene Bestellung zur Koordination von Abholung, Lieferung und Übergabe.',
   'app.conversationSafety.chatOpensAfterAcceptance':
     'Der Chat öffnet sich, nachdem eine Anfrage angenommen und eine Bestellung erstellt wurde.',
+  'app.disputeGuidance.title': 'Streitfall-Leitfaden',
+  'app.disputeGuidance.subtitle': 'Nutzen Sie Streitfälle, wenn die Lieferkoordination scheitert.',
+  'app.disputeGuidance.senderTitle': 'Streitfall-Leitfaden für Sender',
+  'app.disputeGuidance.waylerTitle': 'Streitfall-Leitfaden für Wayler',
+  'app.disputeGuidance.tryChatFirst':
+    'Versuchen Sie zuerst, Lieferdetails im Chat zu klären, wenn es sicher ist.',
+  'app.disputeGuidance.keepEvidenceInsideWayly':
+    'Bewahren Sie Nachweise und wichtige Vereinbarungen in Wayly auf.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'Streitfälle können mit Wayly-Admin- und Schiedsrichter-Tools geprüft werden.',
+  'app.disputeGuidance.includeClearFacts':
+    'Nennen Sie klare Fakten: Artikel, Zeitplan, Übergabe, Nachweis und Zahlungsstatus, falls in der App sichtbar.',
+  'app.disputeGuidance.noPrivatePayment':
+    'Teilen Sie keine privaten Zahlungsdaten in Streitfall-Nachrichten.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    'Nutzen Sie Streitfälle nicht für illegale oder eingeschränkte Artikel — befolgen Sie Sicherheits- und Rechtsregeln.',
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'Eröffnen Sie einen Streitfall nur, wenn normaler Chat und Bestellbestätigung das Problem nicht lösen.',
+  'app.disputeGuidance.statusOpen': 'Streitfall offen — kommunizieren Sie in Wayly.',
+  'app.disputeGuidance.statusUnderReview':
+    'In Prüfung — ein Admin oder Schiedsrichter kann nachfassen.',
+  'app.disputeGuidance.statusResolved': 'Gelöst — prüfen Sie das Ergebnis in Wayly.',
+  'app.disputeGuidance.noDisputeYet': 'Für diese Bestellung wurde noch kein Streitfall eröffnet.',
+  'app.disputeGuidance.disputedOrderHelp':
+    'Bewahren Sie Nachrichten und Nachweise in Wayly, solange dieser Streitfall aktiv ist.',
+  'app.disputeGuidance.resolvedHelp':
+    'Dieser Streitfall ist geschlossen. Koordinieren Sie künftig nach Möglichkeit in Wayly.',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -8783,6 +8919,32 @@ const tr: Dictionary = {
     'Teslim alma, teslimat ve devir koordinasyonu için kabul edilmiş bir siparişten sohbeti açın.',
   'app.conversationSafety.chatOpensAfterAcceptance':
     'Sohbet, bir talep kabul edildikten ve sipariş oluşturulduktan sonra açılır.',
+  'app.disputeGuidance.title': 'Anlaşmazlık rehberi',
+  'app.disputeGuidance.subtitle': 'Teslimat koordinasyonu çözülmediğinde anlaşmazlıkları kullanın.',
+  'app.disputeGuidance.senderTitle': 'Gönderici anlaşmazlık rehberi',
+  'app.disputeGuidance.waylerTitle': 'Wayler anlaşmazlık rehberi',
+  'app.disputeGuidance.tryChatFirst':
+    'Güvenli olduğunda önce sohbette teslimat detaylarını netleştirmeyi deneyin.',
+  'app.disputeGuidance.keepEvidenceInsideWayly':
+    'Kanıtları ve önemli anlaşmaları Wayly içinde tutun.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'Anlaşmazlıklar Wayly yönetici ve hakem araçlarıyla incelenebilir.',
+  'app.disputeGuidance.includeClearFacts':
+    'Net gerçekler ekleyin: ürün, zamanlama, devir, kanıt ve uygulamada görünüyorsa ödeme durumu.',
+  'app.disputeGuidance.noPrivatePayment':
+    'Anlaşmazlık mesajlarında özel ödeme bilgilerini paylaşmayın.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    'Yasadışı veya kısıtlı ürünler için anlaşmazlık kullanmayın — güvenlik ve yasal kurallara uyun.',
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'Normal sohbet ve sipariş onayı sorunu çözemediğinde anlaşmazlık açın.',
+  'app.disputeGuidance.statusOpen': 'Anlaşmazlık açık — iletişimi Wayly içinde tutun.',
+  'app.disputeGuidance.statusUnderReview': 'İnceleniyor — bir yönetici veya hakem takip edebilir.',
+  'app.disputeGuidance.statusResolved': "Çözüldü — sonucu Wayly'de inceleyin.",
+  'app.disputeGuidance.noDisputeYet': 'Bu sipariş için henüz anlaşmazlık açılmadı.',
+  'app.disputeGuidance.disputedOrderHelp':
+    'Bu anlaşmazlık aktifken mesajları ve kanıtları Wayly içinde tutun.',
+  'app.disputeGuidance.resolvedHelp':
+    'Bu anlaşmazlık kapandı. Mümkün olduğunda gelecek koordinasyonu Wayly içinde sürdürün.',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -10289,6 +10451,29 @@ const ar: Dictionary = {
   'app.conversationSafety.emptyDescription':
     'افتح المحادثة من طلب مقبول لتنسيق الاستلام والتسليم والتسليم.',
   'app.conversationSafety.chatOpensAfterAcceptance': 'تفتح المحادثة بعد قبول الطلب وإنشاء الطلب.',
+  'app.disputeGuidance.title': 'إرشادات النزاع',
+  'app.disputeGuidance.subtitle': 'استخدم النزاعات عندما تفشل تنسيق التسليم.',
+  'app.disputeGuidance.senderTitle': 'إرشادات النزاع للمرسل',
+  'app.disputeGuidance.waylerTitle': 'إرشادات النزاع للوايلر',
+  'app.disputeGuidance.tryChatFirst':
+    'حاول توضيح تفاصيل التسليم في المحادثة أولاً عندما يكون ذلك آمناً.',
+  'app.disputeGuidance.keepEvidenceInsideWayly': 'احتفظ بالأدلة والاتفاقات المهمة داخل Wayly.',
+  'app.disputeGuidance.reviewToolsHelp':
+    'يمكن مراجعة النزاعات باستخدام أدوات المسؤول والمحكّم في Wayly.',
+  'app.disputeGuidance.includeClearFacts':
+    'اذكر حقائق واضحة: العنصر، التوقيت، التسليم، الإثبات، وحالة الدفع إن كانت ظاهرة في التطبيق.',
+  'app.disputeGuidance.noPrivatePayment': 'لا تشارك تفاصيل الدفع الخاصة في رسائل النزاع.',
+  'app.disputeGuidance.restrictedItemsSafety':
+    'لا تستخدم النزاعات لقضايا غير قانونية أو عناصر محظورة — اتبع قواعد السلامة والقانون.',
+  'app.disputeGuidance.openOnlyWhenNeeded':
+    'افتح نزاعاً فقط عندما لا يحل المحادثة العادية وتأكيد الطلب المشكلة.',
+  'app.disputeGuidance.statusOpen': 'النزاع مفتوح — أبقِ التواصل داخل Wayly.',
+  'app.disputeGuidance.statusUnderReview': 'قيد المراجعة — قد يتابع مسؤول أو محكّم.',
+  'app.disputeGuidance.statusResolved': 'تم الحل — راجع النتيجة في Wayly.',
+  'app.disputeGuidance.noDisputeYet': 'لم يُفتح نزاع لهذا الطلب بعد.',
+  'app.disputeGuidance.disputedOrderHelp': 'أبقِ الرسائل والأدلة داخل Wayly بينما هذا النزاع نشط.',
+  'app.disputeGuidance.resolvedHelp':
+    'هذا النزاع مغلق. استمر في التنسيق داخل Wayly عندما يكون ذلك ممكناً.',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -11749,6 +11934,25 @@ const zh: Dictionary = {
   'app.conversationSafety.emptyTitle': '选择订单对话以在 Wayly 内安全继续',
   'app.conversationSafety.emptyDescription': '从已接受的订单打开聊天，协调取件、配送和交接。',
   'app.conversationSafety.chatOpensAfterAcceptance': '请求被接受并创建订单后，聊天才会打开。',
+  'app.disputeGuidance.title': '争议指引',
+  'app.disputeGuidance.subtitle': '当配送协调无法解决时，再使用争议功能。',
+  'app.disputeGuidance.senderTitle': '发件人争议指引',
+  'app.disputeGuidance.waylerTitle': 'Wayler 争议指引',
+  'app.disputeGuidance.tryChatFirst': '在安全的情况下，先尝试在聊天中澄清配送细节。',
+  'app.disputeGuidance.keepEvidenceInsideWayly': '将证据和重要协议保留在 Wayly 内。',
+  'app.disputeGuidance.reviewToolsHelp': '争议可通过 Wayly 管理员和仲裁工具进行审查。',
+  'app.disputeGuidance.includeClearFacts':
+    '提供清晰事实：物品、时间、交接、证明，以及应用中已可见的支付状态。',
+  'app.disputeGuidance.noPrivatePayment': '不要在争议消息中分享私人支付信息。',
+  'app.disputeGuidance.restrictedItemsSafety':
+    '不要为非法或受限物品使用争议 — 请遵守安全和法律规则。',
+  'app.disputeGuidance.openOnlyWhenNeeded': '仅在普通聊天和订单确认无法解决问题时发起争议。',
+  'app.disputeGuidance.statusOpen': '争议进行中 — 请在 Wayly 内保持沟通。',
+  'app.disputeGuidance.statusUnderReview': '审核中 — 管理员或仲裁员可能会跟进。',
+  'app.disputeGuidance.statusResolved': '已解决 — 请在 Wayly 中查看结果。',
+  'app.disputeGuidance.noDisputeYet': '此订单尚未发起争议。',
+  'app.disputeGuidance.disputedOrderHelp': '争议活跃期间，请将消息和证据保留在 Wayly 内。',
+  'app.disputeGuidance.resolvedHelp': '此争议已关闭。今后请尽可能在 Wayly 内协调。',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',

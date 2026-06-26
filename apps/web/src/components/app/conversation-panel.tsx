@@ -2,6 +2,7 @@
 
 import { ApiError } from '@wayly/sdk';
 import type { ChatMessageSummary } from '@wayly/types';
+import { DisputeStatus } from '@wayly/types';
 import { Button } from '@wayly/ui';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -14,6 +15,7 @@ import {
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
 import { ConversationSafetyNote } from '@/components/app/conversation-safety-note';
+import { DisputeStatusHelp } from '@/components/app/dispute-guidance-note';
 
 const MAX_MESSAGE_LENGTH = 2000;
 const DETAIL_POLL_MS = 10_000;
@@ -26,6 +28,7 @@ type ConversationPanelProps = {
   orderId: string | null;
   currentUserId: string;
   waylerSendBlocked?: boolean;
+  disputeStatus?: DisputeStatus | null;
 };
 
 export function ConversationPanel({
@@ -36,6 +39,7 @@ export function ConversationPanel({
   orderId,
   currentUserId,
   waylerSendBlocked = false,
+  disputeStatus = null,
 }: ConversationPanelProps) {
   const { t } = useI18n();
   const detailInFlightRef = useRef(false);
@@ -191,6 +195,11 @@ export function ConversationPanel({
     }
   }
 
+  const showDisputeStatusHelp =
+    disputeStatus === DisputeStatus.OPEN ||
+    disputeStatus === DisputeStatus.UNDER_REVIEW ||
+    disputeStatus === DisputeStatus.RESOLVED;
+
   if (!open) {
     return null;
   }
@@ -247,6 +256,12 @@ export function ConversationPanel({
         {conversationId ? (
           <div className="border-b border-border/40 px-3 py-2">
             <ConversationSafetyNote />
+          </div>
+        ) : null}
+
+        {conversationId && showDisputeStatusHelp && disputeStatus ? (
+          <div className="border-b border-border/40 px-3 py-2">
+            <DisputeStatusHelp status={disputeStatus} compact />
           </div>
         ) : null}
 
