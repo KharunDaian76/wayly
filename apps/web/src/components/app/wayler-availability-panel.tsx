@@ -18,6 +18,10 @@ import {
   WaylerAvailabilityPublishingChecklist,
   WaylerAvailabilityReadyBadge,
 } from '@/components/app/wayler-availability-composer';
+import {
+  ListingQualityCoach,
+  listingQualityTypeFromForm,
+} from '@/components/app/listing-quality-coach';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { WaylerAvailabilityDraftBar } from '@/components/app/wayler-availability-draft-bar';
 import {
@@ -741,6 +745,7 @@ export function WaylerAvailabilityPanel({
             </label>
 
             <WaylerAvailabilityPreview form={form} />
+            <ListingQualityCoach form={form} type={listingQualityTypeFromForm(form.type)} />
             <WaylerAvailabilityPublishingChecklist />
             <RestrictedItemsSafetyNote variant="wayler" />
 
