@@ -1,6 +1,11 @@
 export const LOCAL_SAVED_DATA_CHANGED_EVENT = 'wayly:local-saved-data-changed';
 
-export type LocalSavedDataScope = 'shortlist' | 'senderDrafts' | 'waylerDraft' | 'all';
+export type LocalSavedDataScope =
+  | 'shortlist'
+  | 'senderDrafts'
+  | 'waylerDraft'
+  | 'recentSearches'
+  | 'all';
 
 export function dispatchLocalSavedDataChanged(scope: LocalSavedDataScope): void {
   if (typeof window === 'undefined') {
@@ -11,6 +16,10 @@ export function dispatchLocalSavedDataChanged(scope: LocalSavedDataScope): void 
 
 export function isLocalSavedDataScope(value: unknown): value is LocalSavedDataScope {
   return (
-    value === 'shortlist' || value === 'senderDrafts' || value === 'waylerDraft' || value === 'all'
+    value === 'shortlist' ||
+    value === 'senderDrafts' ||
+    value === 'waylerDraft' ||
+    value === 'recentSearches' ||
+    value === 'all'
   );
 }

@@ -31,6 +31,7 @@ import {
 } from '@/components/app/sender-request-composer';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { SenderNextBestActions } from '@/components/app/sender-next-best-actions';
+import { RecentRouteSearches } from '@/components/app/recent-route-searches';
 import { SenderRequestQualityCoach } from '@/components/app/sender-request-quality-coach';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
@@ -47,9 +48,14 @@ import {
   type SenderRequestDraftSaveStatus,
 } from '@/lib/sender-request-draft-storage';
 import {
+  dispatchLocalSavedDataChanged,
   LOCAL_SAVED_DATA_CHANGED_EVENT,
   isLocalSavedDataScope,
 } from '@/lib/local-saved-data-events';
+import {
+  useRecentRouteSearches,
+  type RecentRouteSearchRecord,
+} from '@/lib/recent-route-search-storage';
 import { useWaylerShortlist } from '@/lib/wayler-shortlist-storage';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -323,6 +329,14 @@ export function SenderWaylersPanel({
   const { shortlistCount, toggleShortlist, clearShortlist, isShortlisted, clearedNotice } =
     useWaylerShortlist();
 
+  const {
+    searches: recentRouteSearches,
+    saveFromFields: saveRecentRouteSearch,
+    removeSearch: removeRecentRouteSearch,
+    clearSearches: clearRecentRouteSearches,
+    clearedNotice: recentSearchesClearedNotice,
+  } = useRecentRouteSearches();
+
   const [requestTargetId, setRequestTargetId] = useState<string | null>(null);
   const [requestForm, setRequestForm] = useState<RequestFormState | null>(null);
   const [requestSubmitting, setRequestSubmitting] = useState(false);
@@ -463,13 +477,66 @@ export function SenderWaylersPanel({
   }, [kycLoading, canBrowse, runSearch, loadMyRequests]);
 
   const handleSearch = () => {
+    if (
+      saveRecentRouteSearch({
+        originCountry: filters.originCountry,
+        originCity: filters.originCity,
+        destinationCountry: filters.destinationCountry,
+        destinationCity: filters.destinationCity,
+      })
+    ) {
+      dispatchLocalSavedDataChanged('recentSearches');
+    }
     void runSearch(filters);
   };
 
   const handleRefresh = () => {
+    if (
+      saveRecentRouteSearch({
+        originCountry: filters.originCountry,
+        originCity: filters.originCity,
+        destinationCountry: filters.destinationCountry,
+        destinationCity: filters.destinationCity,
+      })
+    ) {
+      dispatchLocalSavedDataChanged('recentSearches');
+    }
     void runSearch(filters);
     void loadMyRequests();
   };
+
+  const handleApplyRecentRouteSearch = useCallback(
+    (search: RecentRouteSearchRecord) => {
+      let nextFilters: FilterState | null = null;
+      setFilters((prev) => {
+        nextFilters = {
+          ...prev,
+          originCountry: search.originCountry,
+          originCity: search.originCity,
+          destinationCountry: search.destinationCountry,
+          destinationCity: search.destinationCity,
+        };
+        return nextFilters;
+      });
+      if (nextFilters) {
+        void runSearch(nextFilters);
+      }
+    },
+    [runSearch],
+  );
+
+  const handleRemoveRecentRouteSearch = useCallback(
+    (id: string) => {
+      removeRecentRouteSearch(id);
+      dispatchLocalSavedDataChanged('recentSearches');
+    },
+    [removeRecentRouteSearch],
+  );
+
+  const handleClearRecentRouteSearches = useCallback(() => {
+    clearRecentRouteSearches();
+    dispatchLocalSavedDataChanged('recentSearches');
+  }, [clearRecentRouteSearches]);
 
   const handleClearFilters = () => {
     setFilters(INITIAL_FILTERS);
@@ -716,6 +783,14 @@ export function SenderWaylersPanel({
             className="wayly-filter-panel flex flex-col gap-4 rounded-xl border p-4"
           >
             <h3 className="text-sm font-semibold">{t('app.senderWaylers.filters')}</h3>
+
+            <RecentRouteSearches
+              searches={recentRouteSearches}
+              clearedNotice={recentSearchesClearedNotice}
+              onApply={handleApplyRecentRouteSearch}
+              onRemove={handleRemoveRecentRouteSearch}
+              onClear={handleClearRecentRouteSearches}
+            />
 
             <label className="flex flex-col gap-1.5 text-sm">
               <span className="font-medium">{t('app.senderWaylers.type')}</span>
