@@ -56,6 +56,7 @@ import { LocalSavedDataPanel } from '@/components/app/local-saved-data-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { PaymentTransparencyNote } from '@/components/app/payment-transparency-note';
+import { OrderActionGuidance } from '@/components/app/order-action-guidance';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { SuspendedAccountNotice } from '@/components/app/suspended-account-notice';
@@ -2371,6 +2372,7 @@ export default function AppHomePage() {
                                     {progressError}
                                   </p>
                                 ) : null}
+                                <OrderActionGuidance action="startTransit" className="mt-3" />
                                 <Button
                                   className="mt-3 w-full sm:w-auto"
                                   size="sm"
@@ -2393,6 +2395,7 @@ export default function AppHomePage() {
                                     {progressError}
                                   </p>
                                 ) : null}
+                                <OrderActionGuidance action="markDelivered" className="mt-3" />
                                 <Button
                                   className="mt-3 w-full sm:w-auto"
                                   size="sm"
@@ -2590,6 +2593,7 @@ export default function AppHomePage() {
                                       {t('app.waylerFeed.acceptedPanel.proofAtLeastOne')}
                                     </p>
                                   ) : null}
+                                  <OrderActionGuidance action="submitProof" className="mb-3" />
                                   <Button
                                     className="w-full sm:w-auto"
                                     size="sm"
@@ -2849,6 +2853,7 @@ export default function AppHomePage() {
                               <dd>{new Date(order.createdAt).toLocaleString()}</dd>
                             </div>
                           </dl>
+                          <OrderActionGuidance action="cancelOrder" className="mt-3" />
                           <div className="wayly-action-group">
                             <Button
                               variant="secondary"
@@ -2993,6 +2998,7 @@ export default function AppHomePage() {
                               </dd>
                             </div>
                           </dl>
+                          <OrderActionGuidance action="cancelOrder" className="mt-3" />
                           <div className="wayly-action-group">
                             <Button
                               variant="outline"
@@ -3390,50 +3396,54 @@ export default function AppHomePage() {
                               {demoToolsEnabled &&
                               !terminalPaymentStatus &&
                               paymentStatus !== PaymentStatus.RELEASED ? (
-                                <div className="wayly-action-group mt-3">
-                                  {canAuthorizePayment ? (
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      disabled={paymentActionBusy}
-                                      onClick={() => void handleMockAuthorizePayment(order.id)}
-                                    >
-                                      {paymentActionOrderId === order.id &&
-                                      paymentAction === 'authorize'
-                                        ? t('app.senderPanel.payment.mockAuthorizing')
-                                        : t('app.senderPanel.payment.mockAuthorize')}
-                                    </Button>
-                                  ) : null}
-                                  {canHoldEscrow && paymentIntent ? (
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      disabled={paymentActionBusy}
-                                      onClick={() =>
-                                        void handleMockHoldEscrow(order.id, paymentIntent.id)
-                                      }
-                                    >
-                                      {paymentActionOrderId === order.id && paymentAction === 'hold'
-                                        ? t('app.senderPanel.payment.capturing')
-                                        : t('app.senderPanel.payment.mockHoldEscrow')}
-                                    </Button>
-                                  ) : null}
-                                  {canReleasePayment && paymentIntent ? (
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      disabled={paymentActionBusy}
-                                      onClick={() =>
-                                        void handleMockReleasePayment(order.id, paymentIntent.id)
-                                      }
-                                    >
-                                      {paymentActionOrderId === order.id &&
-                                      paymentAction === 'release'
-                                        ? t('app.senderPanel.payment.mockReleasing')
-                                        : t('app.senderPanel.payment.mockRelease')}
-                                    </Button>
-                                  ) : null}
-                                </div>
+                                <>
+                                  <OrderActionGuidance action="paymentAction" className="mt-3" />
+                                  <div className="wayly-action-group mt-3">
+                                    {canAuthorizePayment ? (
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        disabled={paymentActionBusy}
+                                        onClick={() => void handleMockAuthorizePayment(order.id)}
+                                      >
+                                        {paymentActionOrderId === order.id &&
+                                        paymentAction === 'authorize'
+                                          ? t('app.senderPanel.payment.mockAuthorizing')
+                                          : t('app.senderPanel.payment.mockAuthorize')}
+                                      </Button>
+                                    ) : null}
+                                    {canHoldEscrow && paymentIntent ? (
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        disabled={paymentActionBusy}
+                                        onClick={() =>
+                                          void handleMockHoldEscrow(order.id, paymentIntent.id)
+                                        }
+                                      >
+                                        {paymentActionOrderId === order.id &&
+                                        paymentAction === 'hold'
+                                          ? t('app.senderPanel.payment.capturing')
+                                          : t('app.senderPanel.payment.mockHoldEscrow')}
+                                      </Button>
+                                    ) : null}
+                                    {canReleasePayment && paymentIntent ? (
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        disabled={paymentActionBusy}
+                                        onClick={() =>
+                                          void handleMockReleasePayment(order.id, paymentIntent.id)
+                                        }
+                                      >
+                                        {paymentActionOrderId === order.id &&
+                                        paymentAction === 'release'
+                                          ? t('app.senderPanel.payment.mockReleasing')
+                                          : t('app.senderPanel.payment.mockRelease')}
+                                      </Button>
+                                    ) : null}
+                                  </div>
+                                </>
                               ) : null}
                             </div>
                             {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (

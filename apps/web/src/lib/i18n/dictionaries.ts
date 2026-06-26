@@ -655,6 +655,42 @@ const en = {
     'Disputes can be reviewed using Wayly admin review tools when details stay in the platform.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'Confirm delivery only after checking the details and proof provided.',
+  'app.orderActionGuidance.cancelOrderTitle': 'Cancel order',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'Cancels this listing before a Wayler accepts it or while it is still open.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'Cancellation applies to draft or published orders — not accepted or in-progress work.',
+  'app.orderActionGuidance.startTransitTitle': 'Start transit',
+  'app.orderActionGuidance.startTransitDescription':
+    'Tells the sender you have started the delivery trip or handoff process.',
+  'app.orderActionGuidance.startWhenReady':
+    'Use only when you are actually beginning delivery — not before you are ready.',
+  'app.orderActionGuidance.markDeliveredTitle': 'Mark delivered',
+  'app.orderActionGuidance.markDeliveredDescription':
+    'Records that the package was handed off or delivery was completed.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'Mark delivered only after the recipient has the item or handoff is complete.',
+  'app.orderActionGuidance.submitProofTitle': 'Submit proof',
+  'app.orderActionGuidance.submitProofDescription':
+    'Adds a note or confirmation code to document how delivery was completed.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'Proof helps document delivery if details need to be reviewed later.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'Confirm delivery',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'Acknowledges that proof and delivery details look correct before closing the order.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'Confirm delivery only after checking the details and proof provided.',
+  'app.orderActionGuidance.openDisputeTitle': 'Open dispute',
+  'app.orderActionGuidance.openDisputeDescription':
+    'Escalates a delivery problem when chat and coordination inside Wayly are not enough.',
+  'app.orderActionGuidance.tryChatFirst':
+    'Try chat inside Wayly first — disputes work best with clear facts on the platform.',
+  'app.orderActionGuidance.paymentActionTitle': 'Payment action',
+  'app.orderActionGuidance.paymentActionDescription':
+    'Demo payment buttons update status records only — they do not charge or transfer real money.',
+  'app.orderActionGuidance.noRealMoneyMovement':
+    'This flow does not move real money through a payment provider.',
+  'app.orderActionGuidance.keepInsideWayly': 'Keep details and communication inside Wayly.',
   'app.waylerFeed.title': 'Available delivery requests',
   'app.waylerFeed.refresh': 'Refresh',
   'app.waylerFeed.loading': 'Loading delivery requests…',
@@ -2398,6 +2434,42 @@ const ru: Dictionary = {
     'Споры можно рассмотреть с помощью инструментов администратора Wayly, если детали остаются на платформе.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'Подтверждайте доставку только после проверки деталей и предоставленного подтверждения.',
+  'app.orderActionGuidance.cancelOrderTitle': 'Отменить заказ',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'Отменяет объявление до принятия Wayler или пока оно ещё открыто.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'Отмена доступна для черновика или опубликованного заказа — не для принятой или активной работы.',
+  'app.orderActionGuidance.startTransitTitle': 'Начать транзит',
+  'app.orderActionGuidance.startTransitDescription':
+    'Сообщает отправителю, что вы начали поездку или процесс передачи.',
+  'app.orderActionGuidance.startWhenReady':
+    'Используйте только когда реально начинаете доставку — не раньше.',
+  'app.orderActionGuidance.markDeliveredTitle': 'Отметить доставленным',
+  'app.orderActionGuidance.markDeliveredDescription':
+    'Фиксирует, что посылка передана или доставка завершена.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'Отмечайте доставленным только после передачи получателю.',
+  'app.orderActionGuidance.submitProofTitle': 'Отправить подтверждение',
+  'app.orderActionGuidance.submitProofDescription':
+    'Добавляет заметку или код подтверждения о завершении доставки.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'Подтверждение помогает задокументировать доставку при последующей проверке.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'Подтвердить доставку',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'Подтверждает, что детали и подтверждение выглядят корректно перед закрытием заказа.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'Подтверждайте доставку только после проверки деталей и предоставленного подтверждения.',
+  'app.orderActionGuidance.openDisputeTitle': 'Открыть спор',
+  'app.orderActionGuidance.openDisputeDescription':
+    'Эскалирует проблему доставки, когда чат и координация в Wayly не помогают.',
+  'app.orderActionGuidance.tryChatFirst':
+    'Сначала попробуйте чат в Wayly — споры эффективнее с чёткими фактами на платформе.',
+  'app.orderActionGuidance.paymentActionTitle': 'Платёжное действие',
+  'app.orderActionGuidance.paymentActionDescription':
+    'Демо-кнопки обновляют только записи статуса — реальные деньги не списываются и не переводятся.',
+  'app.orderActionGuidance.noRealMoneyMovement':
+    'Этот поток не перемещает реальные деньги через платёжного провайдера.',
+  'app.orderActionGuidance.keepInsideWayly': 'Держите детали и общение внутри Wayly.',
   'app.waylerFeed.title': 'Доступные заявки на доставку',
   'app.waylerFeed.refresh': 'Обновить',
   'app.waylerFeed.loading': 'Загрузка заявок…',
@@ -4154,6 +4226,42 @@ const es: Dictionary = {
     'Las disputas pueden revisarse con las herramientas de admin de Wayly cuando los detalles permanecen en la plataforma.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'Confirma la entrega solo después de revisar los detalles y la prueba proporcionada.',
+  'app.orderActionGuidance.cancelOrderTitle': 'Cancelar pedido',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'Cancela este anuncio antes de que un Wayler lo acepte o mientras sigue abierto.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'La cancelación aplica a borradores o pedidos publicados — no a trabajo aceptado o en curso.',
+  'app.orderActionGuidance.startTransitTitle': 'Iniciar tránsito',
+  'app.orderActionGuidance.startTransitDescription':
+    'Indica al remitente que has comenzado el viaje o el proceso de entrega.',
+  'app.orderActionGuidance.startWhenReady':
+    'Úsalo solo cuando realmente empieces la entrega — no antes de estar listo.',
+  'app.orderActionGuidance.markDeliveredTitle': 'Marcar entregado',
+  'app.orderActionGuidance.markDeliveredDescription':
+    'Registra que el paquete fue entregado o la entrega se completó.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'Marca entregado solo después de que el destinatario tenga el artículo.',
+  'app.orderActionGuidance.submitProofTitle': 'Enviar prueba',
+  'app.orderActionGuidance.submitProofDescription':
+    'Añade una nota o código de confirmación para documentar la entrega.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'La prueba ayuda a documentar la entrega si los detalles deben revisarse después.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'Confirmar entrega',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'Reconoce que la prueba y los detalles de entrega son correctos antes de cerrar el pedido.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'Confirma la entrega solo después de revisar los detalles y la prueba proporcionada.',
+  'app.orderActionGuidance.openDisputeTitle': 'Abrir disputa',
+  'app.orderActionGuidance.openDisputeDescription':
+    'Escala un problema de entrega cuando el chat y la coordinación en Wayly no bastan.',
+  'app.orderActionGuidance.tryChatFirst':
+    'Prueba el chat en Wayly primero — las disputas funcionan mejor con hechos claros en la plataforma.',
+  'app.orderActionGuidance.paymentActionTitle': 'Acción de pago',
+  'app.orderActionGuidance.paymentActionDescription':
+    'Los botones de pago demo solo actualizan registros de estado — no cobran ni transfieren dinero real.',
+  'app.orderActionGuidance.noRealMoneyMovement':
+    'Este flujo no mueve dinero real a través de un proveedor de pagos.',
+  'app.orderActionGuidance.keepInsideWayly': 'Mantén detalles y comunicación dentro de Wayly.',
   'app.waylerFeed.title': 'Solicitudes de entrega disponibles',
   'app.waylerFeed.refresh': 'Actualizar',
   'app.waylerFeed.loading': 'Cargando solicitudes de entrega…',
@@ -5920,6 +6028,42 @@ const fr: Dictionary = {
     'Les litiges peuvent être examinés via les outils admin Wayly lorsque les détails restent sur la plateforme.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'Confirmez la livraison seulement après avoir vérifié les détails et la preuve fournie.',
+  'app.orderActionGuidance.cancelOrderTitle': 'Annuler la commande',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'Annule cette annonce avant qu’un Wayler l’accepte ou tant qu’elle est encore ouverte.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'L’annulation s’applique aux brouillons ou commandes publiées — pas au travail accepté ou en cours.',
+  'app.orderActionGuidance.startTransitTitle': 'Démarrer le transit',
+  'app.orderActionGuidance.startTransitDescription':
+    'Indique à l’expéditeur que vous avez commencé le trajet ou le processus de remise.',
+  'app.orderActionGuidance.startWhenReady':
+    'Utilisez uniquement quand vous commencez réellement la livraison — pas avant d’être prêt.',
+  'app.orderActionGuidance.markDeliveredTitle': 'Marquer livré',
+  'app.orderActionGuidance.markDeliveredDescription':
+    'Enregistre que le colis a été remis ou que la livraison est terminée.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'Marquez livré seulement après la remise au destinataire.',
+  'app.orderActionGuidance.submitProofTitle': 'Soumettre une preuve',
+  'app.orderActionGuidance.submitProofDescription':
+    'Ajoute une note ou un code de confirmation pour documenter la livraison.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'La preuve aide à documenter la livraison si les détails doivent être revus plus tard.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'Confirmer la livraison',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'Reconnaît que la preuve et les détails de livraison sont corrects avant de clôturer la commande.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'Confirmez la livraison seulement après avoir vérifié les détails et la preuve fournie.',
+  'app.orderActionGuidance.openDisputeTitle': 'Ouvrir un litige',
+  'app.orderActionGuidance.openDisputeDescription':
+    'Escalade un problème de livraison quand le chat et la coordination dans Wayly ne suffisent pas.',
+  'app.orderActionGuidance.tryChatFirst':
+    'Essayez d’abord le chat dans Wayly — les litiges fonctionnent mieux avec des faits clairs sur la plateforme.',
+  'app.orderActionGuidance.paymentActionTitle': 'Action de paiement',
+  'app.orderActionGuidance.paymentActionDescription':
+    'Les boutons de paiement démo mettent à jour uniquement les statuts — aucun argent réel n’est débité ou transféré.',
+  'app.orderActionGuidance.noRealMoneyMovement':
+    'Ce flux ne déplace pas d’argent réel via un prestataire de paiement.',
+  'app.orderActionGuidance.keepInsideWayly': 'Gardez les détails et la communication dans Wayly.',
   'app.waylerFeed.title': 'Demandes de livraison disponibles',
   'app.waylerFeed.refresh': 'Actualiser',
   'app.waylerFeed.loading': 'Chargement des demandes de livraison…',
@@ -7710,6 +7854,42 @@ const de: Dictionary = {
     'Streitigkeiten können mit Wayly-Admin-Tools geprüft werden, wenn Details auf der Plattform bleiben.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'Bestätigen Sie die Lieferung erst nach Prüfung der Details und des bereitgestellten Nachweises.',
+  'app.orderActionGuidance.cancelOrderTitle': 'Bestellung stornieren',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'Storniert dieses Inserat, bevor ein Wayler es annimmt oder solange es noch offen ist.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'Stornierung gilt für Entwürfe oder veröffentlichte Bestellungen — nicht für angenommene oder laufende Arbeit.',
+  'app.orderActionGuidance.startTransitTitle': 'Transit starten',
+  'app.orderActionGuidance.startTransitDescription':
+    'Teilt dem Absender mit, dass Sie die Lieferfahrt oder Übergabe begonnen haben.',
+  'app.orderActionGuidance.startWhenReady':
+    'Nur verwenden, wenn Sie die Lieferung tatsächlich beginnen — nicht vorher.',
+  'app.orderActionGuidance.markDeliveredTitle': 'Als geliefert markieren',
+  'app.orderActionGuidance.markDeliveredDescription':
+    'Erfasst, dass das Paket übergeben wurde oder die Lieferung abgeschlossen ist.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'Erst als geliefert markieren, nachdem der Empfänger den Artikel hat.',
+  'app.orderActionGuidance.submitProofTitle': 'Nachweis einreichen',
+  'app.orderActionGuidance.submitProofDescription':
+    'Fügt eine Notiz oder Bestätigungscode hinzu, um die Lieferung zu dokumentieren.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'Nachweis hilft, die Lieferung zu dokumentieren, falls Details später geprüft werden.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'Lieferung bestätigen',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'Bestätigt, dass Nachweis und Lieferdetails korrekt aussehen, bevor die Bestellung geschlossen wird.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'Bestätigen Sie die Lieferung erst nach Prüfung der Details und des bereitgestellten Nachweises.',
+  'app.orderActionGuidance.openDisputeTitle': 'Streitfall eröffnen',
+  'app.orderActionGuidance.openDisputeDescription':
+    'Eskaliert ein Lieferproblem, wenn Chat und Koordination in Wayly nicht ausreichen.',
+  'app.orderActionGuidance.tryChatFirst':
+    'Versuchen Sie zuerst den Chat in Wayly — Streitfälle funktionieren besser mit klaren Fakten auf der Plattform.',
+  'app.orderActionGuidance.paymentActionTitle': 'Zahlungsaktion',
+  'app.orderActionGuidance.paymentActionDescription':
+    'Demo-Zahlungsbuttons aktualisieren nur Statusdatensätze — keine echten Abbuchungen oder Überweisungen.',
+  'app.orderActionGuidance.noRealMoneyMovement':
+    'Dieser Flow bewegt kein echtes Geld über einen Zahlungsanbieter.',
+  'app.orderActionGuidance.keepInsideWayly': 'Details und Kommunikation in Wayly behalten.',
   'app.waylerFeed.title': 'Verfügbare Lieferanfragen',
   'app.waylerFeed.refresh': 'Aktualisieren',
   'app.waylerFeed.loading': 'Lieferanfragen werden geladen…',
@@ -9485,6 +9665,42 @@ const tr: Dictionary = {
     'Ayrıntılar platformda kaldığında anlaşmazlıklar Wayly admin inceleme araçlarıyla gözden geçirilebilir.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'Teslimatı yalnızca ayrıntıları ve sağlanan kanıtı kontrol ettikten sonra onaylayın.',
+  'app.orderActionGuidance.cancelOrderTitle': 'Siparişi iptal et',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'Bir Wayler kabul etmeden veya ilan hâlâ açıkken bu ilanı iptal eder.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'İptal taslak veya yayınlanmış siparişler için geçerlidir — kabul edilmiş veya devam eden iş için değil.',
+  'app.orderActionGuidance.startTransitTitle': 'Transit başlat',
+  'app.orderActionGuidance.startTransitDescription':
+    'Göndericiye teslimat yolculuğuna veya teslim sürecine başladığınızı bildirir.',
+  'app.orderActionGuidance.startWhenReady':
+    'Yalnızca teslimata gerçekten başladığınızda kullanın — hazır olmadan önce değil.',
+  'app.orderActionGuidance.markDeliveredTitle': 'Teslim edildi işaretle',
+  'app.orderActionGuidance.markDeliveredDescription':
+    'Paketin teslim edildiğini veya teslimatın tamamlandığını kaydeder.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'Alıcı ürünü aldıktan sonra teslim edildi işaretleyin.',
+  'app.orderActionGuidance.submitProofTitle': 'Kanıt gönder',
+  'app.orderActionGuidance.submitProofDescription':
+    'Teslimatın nasıl tamamlandığını belgelemek için not veya onay kodu ekler.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'Kanıt, ayrıntılar daha sonra incelenirse teslimatı belgelemeye yardımcı olur.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'Teslimatı onayla',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'Sipariş kapatılmadan önce kanıt ve teslimat ayrıntılarının doğru göründüğünü kabul eder.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'Teslimatı yalnızca ayrıntıları ve sağlanan kanıtı kontrol ettikten sonra onaylayın.',
+  'app.orderActionGuidance.openDisputeTitle': 'Anlaşmazlık aç',
+  'app.orderActionGuidance.openDisputeDescription':
+    'Wayly içinde sohbet ve koordinasyon yeterli olmadığında teslimat sorununu yükseltir.',
+  'app.orderActionGuidance.tryChatFirst':
+    'Önce Wayly içinde sohbeti deneyin — anlaşmazlıklar platformdaki net gerçeklerle daha iyi işler.',
+  'app.orderActionGuidance.paymentActionTitle': 'Ödeme işlemi',
+  'app.orderActionGuidance.paymentActionDescription':
+    'Demo ödeme düğmeleri yalnızca durum kayıtlarını günceller — gerçek para tahsil etmez veya transfer etmez.',
+  'app.orderActionGuidance.noRealMoneyMovement':
+    'Bu akış ödeme sağlayıcısı üzerinden gerçek para taşımaz.',
+  'app.orderActionGuidance.keepInsideWayly': 'Detayları ve iletişimi Wayly içinde tutun.',
   'app.waylerFeed.title': 'Mevcut teslimat talepleri',
   'app.waylerFeed.refresh': 'Yenile',
   'app.waylerFeed.loading': 'Teslimat talepleri yükleniyor…',
@@ -11195,6 +11411,40 @@ const ar: Dictionary = {
     'يمكن مراجعة النزاعات باستخدام أدوات مراجعة Wayly عندما تبقى التفاصيل على المنصة.',
   'app.deliveryProof.confirmOnlyAfterChecking':
     'أكّد التسليم فقط بعد التحقق من التفاصيل والإثبات المقدم.',
+  'app.orderActionGuidance.cancelOrderTitle': 'إلغاء الطلب',
+  'app.orderActionGuidance.cancelOrderDescription':
+    'يلغي هذا الإعلان قبل أن يقبله Wayler أو بينما لا يزال مفتوحاً.',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    'الإلغاء ينطبق على المسودات أو الطلبات المنشورة — وليس العمل المقبول أو الجاري.',
+  'app.orderActionGuidance.startTransitTitle': 'بدء النقل',
+  'app.orderActionGuidance.startTransitDescription':
+    'يُخبر المرسل أنك بدأت رحلة التسليم أو عملية التسليم.',
+  'app.orderActionGuidance.startWhenReady':
+    'استخدمه فقط عندما تبدأ التسليم فعلياً — وليس قبل أن تكون جاهزاً.',
+  'app.orderActionGuidance.markDeliveredTitle': 'تعليم كمُسلَّم',
+  'app.orderActionGuidance.markDeliveredDescription': 'يسجل أن الطرد سُلِّم أو اكتمل التسليم.',
+  'app.orderActionGuidance.markOnlyAfterHandoff':
+    'علِّم كمُسلَّم فقط بعد أن يحصل المستلم على العنصر.',
+  'app.orderActionGuidance.submitProofTitle': 'إرسال إثبات',
+  'app.orderActionGuidance.submitProofDescription':
+    'يضيف ملاحظة أو رمز تأكيد لتوثيق كيفية إتمام التسليم.',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery':
+    'الإثبات يساعد على توثيق التسليم إذا احتاجت التفاصيل إلى مراجعة لاحقاً.',
+  'app.orderActionGuidance.confirmDeliveryTitle': 'تأكيد التسليم',
+  'app.orderActionGuidance.confirmDeliveryDescription':
+    'يقر بأن الإثبات وتفاصيل التسليم تبدو صحيحة قبل إغلاق الطلب.',
+  'app.orderActionGuidance.confirmOnlyAfterChecking':
+    'أكّد التسليم فقط بعد التحقق من التفاصيل والإثبات المقدم.',
+  'app.orderActionGuidance.openDisputeTitle': 'فتح نزاع',
+  'app.orderActionGuidance.openDisputeDescription':
+    'يرفع مشكلة تسليم عندما لا يكفي الدردشة والتنسيق داخل Wayly.',
+  'app.orderActionGuidance.tryChatFirst':
+    'جرّب الدردشة داخل Wayly أولاً — النزاعات تعمل أفضل مع حقائق واضحة على المنصة.',
+  'app.orderActionGuidance.paymentActionTitle': 'إجراء دفع',
+  'app.orderActionGuidance.paymentActionDescription':
+    'أزرار الدفع التجريبية تحدّث سجلات الحالة فقط — لا تخصم أو تحوّل أموالاً حقيقية.',
+  'app.orderActionGuidance.noRealMoneyMovement': 'هذا التدفق لا ينقل أموالاً حقيقية عبر مزود دفع.',
+  'app.orderActionGuidance.keepInsideWayly': 'احتفظ بالتفاصيل والتواصل داخل Wayly.',
   'app.waylerFeed.title': 'طلبات التوصيل المتاحة',
   'app.waylerFeed.refresh': 'تحديث',
   'app.waylerFeed.loading': 'جارٍ تحميل طلبات التوصيل…',
@@ -12835,6 +13085,31 @@ const zh: Dictionary = {
   'app.deliveryProof.reviewToolsHelp':
     '当详情保留在平台内时，可通过 Wayly 管理员审核工具处理争议。',
   'app.deliveryProof.confirmOnlyAfterChecking': '仅在核对详情与所提供证明后再确认配送。',
+  'app.orderActionGuidance.cancelOrderTitle': '取消订单',
+  'app.orderActionGuidance.cancelOrderDescription':
+    '在 Wayler 接受前或订单仍开放时取消此 listing。',
+  'app.orderActionGuidance.cancelBeforeAccepted':
+    '取消适用于草稿或已发布订单 — 不适用于已接受或进行中的工作。',
+  'app.orderActionGuidance.startTransitTitle': '开始运输',
+  'app.orderActionGuidance.startTransitDescription': '告知发件人您已开始配送行程或交接流程。',
+  'app.orderActionGuidance.startWhenReady': '仅在真正开始配送时使用 — 未准备好前不要使用。',
+  'app.orderActionGuidance.markDeliveredTitle': '标记已送达',
+  'app.orderActionGuidance.markDeliveredDescription': '记录包裹已交接或配送已完成。',
+  'app.orderActionGuidance.markOnlyAfterHandoff': '仅在收件人收到物品或交接完成后标记已送达。',
+  'app.orderActionGuidance.submitProofTitle': '提交证明',
+  'app.orderActionGuidance.submitProofDescription': '添加备注或确认码以记录配送完成情况。',
+  'app.orderActionGuidance.proofHelpsDocumentDelivery': '证明有助于记录配送，便于日后核对详情。',
+  'app.orderActionGuidance.confirmDeliveryTitle': '确认配送',
+  'app.orderActionGuidance.confirmDeliveryDescription': '在关闭订单前确认证明与配送详情无误。',
+  'app.orderActionGuidance.confirmOnlyAfterChecking': '仅在核对详情与所提供证明后再确认配送。',
+  'app.orderActionGuidance.openDisputeTitle': '发起争议',
+  'app.orderActionGuidance.openDisputeDescription': '当 Wayly 内聊天与协调不足时，升级配送问题。',
+  'app.orderActionGuidance.tryChatFirst': '请先尝试 Wayly 内聊天 — 争议在平台内事实清晰时更有效。',
+  'app.orderActionGuidance.paymentActionTitle': '支付操作',
+  'app.orderActionGuidance.paymentActionDescription':
+    '演示支付按钮仅更新状态记录 — 不会扣款或转移真实资金。',
+  'app.orderActionGuidance.noRealMoneyMovement': '此流程不会通过支付提供商移动真实资金。',
+  'app.orderActionGuidance.keepInsideWayly': '在 Wayly 内保留详情和沟通。',
   'app.waylerFeed.title': '可用配送请求',
   'app.waylerFeed.refresh': '刷新',
   'app.waylerFeed.loading': '正在加载配送请求…',
