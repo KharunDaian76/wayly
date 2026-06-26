@@ -23,6 +23,7 @@ import {
   listingQualityTypeFromForm,
 } from '@/components/app/listing-quality-coach';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
+import { WaylerAvailabilityTemplates } from '@/components/app/wayler-availability-templates';
 import { WaylerAvailabilityDraftBar } from '@/components/app/wayler-availability-draft-bar';
 import {
   clearWaylerAvailabilityDraft,
@@ -33,9 +34,14 @@ import {
   type WaylerAvailabilityDraftSaveStatus,
 } from '@/lib/wayler-availability-draft-storage';
 import {
+  dispatchLocalSavedDataChanged,
   LOCAL_SAVED_DATA_CHANGED_EVENT,
   isLocalSavedDataScope,
 } from '@/lib/local-saved-data-events';
+import {
+  templateFieldsToFormPatch,
+  useWaylerAvailabilityTemplates,
+} from '@/lib/wayler-availability-template-storage';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -216,6 +222,14 @@ export function WaylerAvailabilityPanel({
   const draftSkipSaveRef = useRef(true);
   const draftDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const {
+    templates: availabilityTemplates,
+    storageAvailable: templateStorageAvailable,
+    saveTemplate,
+    deleteTemplate,
+    clearTemplates,
+  } = useWaylerAvailabilityTemplates();
+
   const [actionBusy, setActionBusy] = useState<{ id: string; action: ActionKind } | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
@@ -281,6 +295,28 @@ export function WaylerAvailabilityPanel({
     setFormError(null);
     setCreateError(null);
     setCreateSuccess(false);
+  };
+
+  const handleSaveAvailabilityTemplate = (templateName: string, currentForm: FormState) => {
+    const result = saveTemplate(templateName, currentForm);
+    if (result.ok) {
+      dispatchLocalSavedDataChanged('availabilityTemplates');
+    }
+    return result;
+  };
+
+  const handleApplyAvailabilityTemplate = (template: (typeof availabilityTemplates)[number]) => {
+    updateForm(templateFieldsToFormPatch(template));
+  };
+
+  const handleDeleteAvailabilityTemplate = (templateId: string) => {
+    deleteTemplate(templateId);
+    dispatchLocalSavedDataChanged('availabilityTemplates');
+  };
+
+  const handleClearAvailabilityTemplates = () => {
+    clearTemplates();
+    dispatchLocalSavedDataChanged('availabilityTemplates');
   };
 
   useEffect(() => {
@@ -539,6 +575,17 @@ export function WaylerAvailabilityPanel({
               disabled={creating}
               onRestore={handleRestoreAvailabilityDraft}
               onDiscard={handleDiscardAvailabilityDraft}
+            />
+
+            <WaylerAvailabilityTemplates
+              templates={availabilityTemplates}
+              form={form}
+              disabled={creating}
+              storageAvailable={templateStorageAvailable}
+              onSave={handleSaveAvailabilityTemplate}
+              onApply={handleApplyAvailabilityTemplate}
+              onDelete={handleDeleteAvailabilityTemplate}
+              onClear={handleClearAvailabilityTemplates}
             />
 
             <p className="text-xs text-muted-foreground">

@@ -1039,6 +1039,29 @@ const en = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'Availability templates',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'Save reusable route or local availability patterns for faster listing.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'Saved only in this browser. Not synced across devices.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'Template name',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'e.g. Bishkek local weekends',
+  'app.waylerAvailabilityTemplates.save': 'Save template',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'Save current form',
+  'app.waylerAvailabilityTemplates.saved': 'Template saved locally.',
+  'app.waylerAvailabilityTemplates.apply': 'Apply',
+  'app.waylerAvailabilityTemplates.applied': 'Template applied — add dates before publishing.',
+  'app.waylerAvailabilityTemplates.delete': 'Delete template',
+  'app.waylerAvailabilityTemplates.deleted': 'Template deleted.',
+  'app.waylerAvailabilityTemplates.clear': 'Clear all templates',
+  'app.waylerAvailabilityTemplates.cleared':
+    'All availability templates cleared from this browser.',
+  'app.waylerAvailabilityTemplates.empty': 'Save a template to reuse common listing patterns.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'Maximum {max} templates saved. Delete one to add another.',
+  'app.waylerAvailabilityTemplates.count': '{count} of {max} templates saved',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    'Templates store listing fields only — not identity, contact, payment, or KYC data. Dates are not saved.',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -1644,6 +1667,10 @@ const en = {
   'app.localSavedData.recentSearchCount': 'Recent route searches: {count}',
   'app.localSavedData.clearRecentSearches': 'Clear recent searches',
   'app.localSavedData.clearedRecentSearches': 'Recent route searches cleared from this browser.',
+  'app.localSavedData.availabilityTemplateCount': 'Availability templates: {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'Clear availability templates',
+  'app.localSavedData.clearedAvailabilityTemplates':
+    'Availability templates cleared from this browser.',
   'app.localSavedData.clearAll': 'Clear all local marketplace data',
   'app.localSavedData.clearedShortlist': 'Shortlist cleared from this browser.',
   'app.localSavedData.clearedSenderDrafts': 'Sender request drafts cleared from this browser.',
@@ -2735,6 +2762,29 @@ const ru: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'Шаблоны доступности',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'Сохраняйте типовые маршруты или локальные паттерны для быстрого создания объявлений.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'Сохраняется только в этом браузере. Не синхронизируется между устройствами.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'Название шаблона',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'напр. Бишкек локально по выходным',
+  'app.waylerAvailabilityTemplates.save': 'Сохранить шаблон',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'Сохранить текущую форму',
+  'app.waylerAvailabilityTemplates.saved': 'Шаблон сохранён локально.',
+  'app.waylerAvailabilityTemplates.apply': 'Применить',
+  'app.waylerAvailabilityTemplates.applied': 'Шаблон применён — добавьте даты перед публикацией.',
+  'app.waylerAvailabilityTemplates.delete': 'Удалить шаблон',
+  'app.waylerAvailabilityTemplates.deleted': 'Шаблон удалён.',
+  'app.waylerAvailabilityTemplates.clear': 'Очистить все шаблоны',
+  'app.waylerAvailabilityTemplates.cleared': 'Все шаблоны доступности удалены из этого браузера.',
+  'app.waylerAvailabilityTemplates.empty':
+    'Сохраните шаблон для повторного использования типовых объявлений.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'Сохранено максимум {max} шаблонов. Удалите один, чтобы добавить новый.',
+  'app.waylerAvailabilityTemplates.count': '{count} из {max} шаблонов сохранено',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    'Шаблоны хранят только поля объявления — не личность, контакты, платежи или KYC. Даты не сохраняются.',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -3338,6 +3388,10 @@ const ru: Dictionary = {
   'app.localSavedData.clearRecentSearches': 'Очистить недавние поиски',
   'app.localSavedData.clearedRecentSearches':
     'Недавние поиски маршрутов удалены из этого браузера.',
+  'app.localSavedData.availabilityTemplateCount': 'Шаблоны доступности: {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'Очистить шаблоны доступности',
+  'app.localSavedData.clearedAvailabilityTemplates':
+    'Шаблоны доступности удалены из этого браузера.',
   'app.localSavedData.clearAll': 'Очистить все локальные данные маркетплейса',
   'app.localSavedData.clearedShortlist': 'Избранное удалено из этого браузера.',
   'app.localSavedData.clearedSenderDrafts':
@@ -4434,6 +4488,29 @@ const es: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'Plantillas de disponibilidad',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'Guarde patrones reutilizables de ruta o disponibilidad local para publicar más rápido.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'Guardado solo en este navegador. No se sincroniza entre dispositivos.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'Nombre de plantilla',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'p. ej. Bishkek local fines de semana',
+  'app.waylerAvailabilityTemplates.save': 'Guardar plantilla',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'Guardar formulario actual',
+  'app.waylerAvailabilityTemplates.saved': 'Plantilla guardada localmente.',
+  'app.waylerAvailabilityTemplates.apply': 'Aplicar',
+  'app.waylerAvailabilityTemplates.applied': 'Plantilla aplicada — añada fechas antes de publicar.',
+  'app.waylerAvailabilityTemplates.delete': 'Eliminar plantilla',
+  'app.waylerAvailabilityTemplates.deleted': 'Plantilla eliminada.',
+  'app.waylerAvailabilityTemplates.clear': 'Borrar todas las plantillas',
+  'app.waylerAvailabilityTemplates.cleared':
+    'Todas las plantillas de disponibilidad eliminadas de este navegador.',
+  'app.waylerAvailabilityTemplates.empty': 'Guarde una plantilla para reutilizar patrones comunes.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'Máximo {max} plantillas guardadas. Elimine una para añadir otra.',
+  'app.waylerAvailabilityTemplates.count': '{count} de {max} plantillas guardadas',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    'Las plantillas guardan solo campos del anuncio — no identidad, contacto, pago ni KYC. Las fechas no se guardan.',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -5040,6 +5117,10 @@ const es: Dictionary = {
   'app.localSavedData.clearRecentSearches': 'Borrar búsquedas recientes',
   'app.localSavedData.clearedRecentSearches':
     'Búsquedas de ruta recientes eliminadas de este navegador.',
+  'app.localSavedData.availabilityTemplateCount': 'Plantillas de disponibilidad: {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'Borrar plantillas de disponibilidad',
+  'app.localSavedData.clearedAvailabilityTemplates':
+    'Plantillas de disponibilidad eliminadas de este navegador.',
   'app.localSavedData.clearAll': 'Borrar todos los datos locales del marketplace',
   'app.localSavedData.clearedShortlist': 'Lista corta eliminada de este navegador.',
   'app.localSavedData.clearedSenderDrafts':
@@ -6156,6 +6237,31 @@ const fr: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'Modèles de disponibilité',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'Enregistrez des modèles réutilisables de trajet ou de disponibilité locale pour publier plus vite.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'Enregistré uniquement dans ce navigateur. Non synchronisé entre appareils.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'Nom du modèle',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'ex. Bishkek local week-ends',
+  'app.waylerAvailabilityTemplates.save': 'Enregistrer le modèle',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'Enregistrer le formulaire actuel',
+  'app.waylerAvailabilityTemplates.saved': 'Modèle enregistré localement.',
+  'app.waylerAvailabilityTemplates.apply': 'Appliquer',
+  'app.waylerAvailabilityTemplates.applied':
+    'Modèle appliqué — ajoutez des dates avant de publier.',
+  'app.waylerAvailabilityTemplates.delete': 'Supprimer le modèle',
+  'app.waylerAvailabilityTemplates.deleted': 'Modèle supprimé.',
+  'app.waylerAvailabilityTemplates.clear': 'Effacer tous les modèles',
+  'app.waylerAvailabilityTemplates.cleared':
+    'Tous les modèles de disponibilité effacés de ce navigateur.',
+  'app.waylerAvailabilityTemplates.empty':
+    'Enregistrez un modèle pour réutiliser des annonces courantes.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'Maximum {max} modèles enregistrés. Supprimez-en un pour en ajouter un autre.',
+  'app.waylerAvailabilityTemplates.count': '{count} sur {max} modèles enregistrés',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    "Les modèles stockent uniquement les champs d'annonce — pas d'identité, contact, paiement ou KYC. Les dates ne sont pas enregistrées.",
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -6769,6 +6875,10 @@ const fr: Dictionary = {
   'app.localSavedData.clearRecentSearches': 'Effacer les recherches récentes',
   'app.localSavedData.clearedRecentSearches':
     'Recherches de route récentes effacées de ce navigateur.',
+  'app.localSavedData.availabilityTemplateCount': 'Modèles de disponibilité : {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'Effacer les modèles de disponibilité',
+  'app.localSavedData.clearedAvailabilityTemplates':
+    'Modèles de disponibilité effacés de ce navigateur.',
   'app.localSavedData.clearAll': 'Effacer toutes les données marketplace locales',
   'app.localSavedData.clearedShortlist': 'Liste effacée de ce navigateur.',
   'app.localSavedData.clearedSenderDrafts': 'Brouillons expéditeur effacés de ce navigateur.',
@@ -7895,6 +8005,31 @@ const de: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'Verfügbarkeitsvorlagen',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'Speichern Sie wiederverwendbare Routen- oder Lokalmuster für schnellere Angebote.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'Nur in diesem Browser gespeichert. Nicht geräteübergreifend synchronisiert.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'Vorlagenname',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'z. B. Bishkek lokal am Wochenende',
+  'app.waylerAvailabilityTemplates.save': 'Vorlage speichern',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'Aktuelles Formular speichern',
+  'app.waylerAvailabilityTemplates.saved': 'Vorlage lokal gespeichert.',
+  'app.waylerAvailabilityTemplates.apply': 'Anwenden',
+  'app.waylerAvailabilityTemplates.applied':
+    'Vorlage angewendet — fügen Sie Daten vor der Veröffentlichung hinzu.',
+  'app.waylerAvailabilityTemplates.delete': 'Vorlage löschen',
+  'app.waylerAvailabilityTemplates.deleted': 'Vorlage gelöscht.',
+  'app.waylerAvailabilityTemplates.clear': 'Alle Vorlagen löschen',
+  'app.waylerAvailabilityTemplates.cleared':
+    'Alle Verfügbarkeitsvorlagen aus diesem Browser gelöscht.',
+  'app.waylerAvailabilityTemplates.empty':
+    'Speichern Sie eine Vorlage, um häufige Angebotsmuster wiederzuverwenden.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'Maximal {max} Vorlagen gespeichert. Löschen Sie eine, um eine neue hinzuzufügen.',
+  'app.waylerAvailabilityTemplates.count': '{count} von {max} Vorlagen gespeichert',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    'Vorlagen speichern nur Angebotsfelder — keine Identität, Kontakt, Zahlung oder KYC. Daten werden nicht gespeichert.',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -8512,6 +8647,10 @@ const de: Dictionary = {
   'app.localSavedData.clearRecentSearches': 'Letzte Suchen löschen',
   'app.localSavedData.clearedRecentSearches':
     'Zuletzt gesuchte Routen aus diesem Browser gelöscht.',
+  'app.localSavedData.availabilityTemplateCount': 'Verfügbarkeitsvorlagen: {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'Verfügbarkeitsvorlagen löschen',
+  'app.localSavedData.clearedAvailabilityTemplates':
+    'Verfügbarkeitsvorlagen aus diesem Browser gelöscht.',
   'app.localSavedData.clearAll': 'Alle lokalen Marketplace-Daten löschen',
   'app.localSavedData.clearedShortlist': 'Merkliste aus diesem Browser gelöscht.',
   'app.localSavedData.clearedSenderDrafts': 'Sender-Entwürfe aus diesem Browser gelöscht.',
@@ -9590,6 +9729,30 @@ const tr: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'Müsaitlik şablonları',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'Daha hızlı ilan için yeniden kullanılabilir rota veya yerel müsaitlik kalıpları kaydedin.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'Yalnızca bu tarayıcıda kaydedilir. Cihazlar arası senkronize edilmez.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'Şablon adı',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'örn. Bishkek yerel hafta sonları',
+  'app.waylerAvailabilityTemplates.save': 'Şablonu kaydet',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'Mevcut formu kaydet',
+  'app.waylerAvailabilityTemplates.saved': 'Şablon yerel olarak kaydedildi.',
+  'app.waylerAvailabilityTemplates.apply': 'Uygula',
+  'app.waylerAvailabilityTemplates.applied':
+    'Şablon uygulandı — yayınlamadan önce tarihleri ekleyin.',
+  'app.waylerAvailabilityTemplates.delete': 'Şablonu sil',
+  'app.waylerAvailabilityTemplates.deleted': 'Şablon silindi.',
+  'app.waylerAvailabilityTemplates.clear': 'Tüm şablonları temizle',
+  'app.waylerAvailabilityTemplates.cleared': 'Tüm müsaitlik şablonları bu tarayıcıdan temizlendi.',
+  'app.waylerAvailabilityTemplates.empty':
+    'Yaygın ilan kalıplarını yeniden kullanmak için şablon kaydedin.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'En fazla {max} şablon kaydedildi. Yeni eklemek için birini silin.',
+  'app.waylerAvailabilityTemplates.count': '{count} / {max} şablon kaydedildi',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    'Şablonlar yalnızca ilan alanlarını saklar — kimlik, iletişim, ödeme veya KYC değil. Tarihler kaydedilmez.',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -10191,6 +10354,10 @@ const tr: Dictionary = {
   'app.localSavedData.recentSearchCount': 'Son rota aramaları: {count}',
   'app.localSavedData.clearRecentSearches': 'Son aramaları temizle',
   'app.localSavedData.clearedRecentSearches': 'Son rota aramaları bu tarayıcıdan temizlendi.',
+  'app.localSavedData.availabilityTemplateCount': 'Müsaitlik şablonları: {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'Müsaitlik şablonlarını temizle',
+  'app.localSavedData.clearedAvailabilityTemplates':
+    'Müsaitlik şablonları bu tarayıcıdan temizlendi.',
   'app.localSavedData.clearAll': 'Tüm yerel marketplace verilerini temizle',
   'app.localSavedData.clearedShortlist': 'Kısa liste bu tarayıcıdan temizlendi.',
   'app.localSavedData.clearedSenderDrafts': 'Gönderici taslakları bu tarayıcıdan temizlendi.',
@@ -11218,6 +11385,28 @@ const ar: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': 'قوالب التوفر',
+  'app.waylerAvailabilityTemplates.subtitle':
+    'احفظ أنماط مسارات أو توفر محلي قابلة لإعادة الاستخدام لنشر أسرع.',
+  'app.waylerAvailabilityTemplates.localOnly':
+    'يُحفظ في هذا المتصفح فقط. لا يتم المزامنة بين الأجهزة.',
+  'app.waylerAvailabilityTemplates.nameLabel': 'اسم القالب',
+  'app.waylerAvailabilityTemplates.namePlaceholder': 'مثال: Bishkek محلي في عطلة نهاية الأسبوع',
+  'app.waylerAvailabilityTemplates.save': 'حفظ القالب',
+  'app.waylerAvailabilityTemplates.saveCurrent': 'حفظ النموذج الحالي',
+  'app.waylerAvailabilityTemplates.saved': 'تم حفظ القالب محليًا.',
+  'app.waylerAvailabilityTemplates.apply': 'تطبيق',
+  'app.waylerAvailabilityTemplates.applied': 'تم تطبيق القالب — أضف التواريخ قبل النشر.',
+  'app.waylerAvailabilityTemplates.delete': 'حذف القالب',
+  'app.waylerAvailabilityTemplates.deleted': 'تم حذف القالب.',
+  'app.waylerAvailabilityTemplates.clear': 'مسح جميع القوالب',
+  'app.waylerAvailabilityTemplates.cleared': 'تم مسح جميع قوالب التوفر من هذا المتصفح.',
+  'app.waylerAvailabilityTemplates.empty': 'احفظ قالبًا لإعادة استخدام أنماط الإعلان الشائعة.',
+  'app.waylerAvailabilityTemplates.maxReached':
+    'تم حفظ الحد الأقصى {max} قوالب. احذف واحدًا لإضافة آخر.',
+  'app.waylerAvailabilityTemplates.count': '{count} من {max} قوالب محفوظة',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    'القوالب تخزن حقول الإعلان فقط — لا الهوية أو التواصل أو الدفع أو KYC. التواريخ لا تُحفظ.',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -11799,6 +11988,9 @@ const ar: Dictionary = {
   'app.localSavedData.clearRecentSearches': 'مسح عمليات البحث الأخيرة',
   'app.localSavedData.clearedRecentSearches':
     'تم مسح عمليات البحث الأخيرة عن المسارات من هذا المتصفح.',
+  'app.localSavedData.availabilityTemplateCount': 'قوالب التوفر: {count}',
+  'app.localSavedData.clearAvailabilityTemplates': 'مسح قوالب التوفر',
+  'app.localSavedData.clearedAvailabilityTemplates': 'تم مسح قوالب التوفر من هذا المتصفح.',
   'app.localSavedData.clearAll': 'مسح جميع بيانات السوق المحلية',
   'app.localSavedData.clearedShortlist': 'تم مسح القائمة المختصرة من هذا المتصفح.',
   'app.localSavedData.clearedSenderDrafts': 'تم مسح مسودات المرسل من هذا المتصفح.',
@@ -12781,6 +12973,26 @@ const zh: Dictionary = {
   'app.recentRoutes.originToDestination': '{origin} → {destination}',
   'app.recentRoutes.originOnly': '{origin}',
   'app.recentRoutes.noDestination': '→ {destination}',
+  'app.waylerAvailabilityTemplates.title': '可用性模板',
+  'app.waylerAvailabilityTemplates.subtitle':
+    '保存可复用的路线或本地可用性模式，更快发布 listing。',
+  'app.waylerAvailabilityTemplates.localOnly': '仅保存在此浏览器中。不会跨设备同步。',
+  'app.waylerAvailabilityTemplates.nameLabel': '模板名称',
+  'app.waylerAvailabilityTemplates.namePlaceholder': '例如：比什凯克本地周末',
+  'app.waylerAvailabilityTemplates.save': '保存模板',
+  'app.waylerAvailabilityTemplates.saveCurrent': '保存当前表单',
+  'app.waylerAvailabilityTemplates.saved': '模板已本地保存。',
+  'app.waylerAvailabilityTemplates.apply': '应用',
+  'app.waylerAvailabilityTemplates.applied': '模板已应用 — 发布前请添加日期。',
+  'app.waylerAvailabilityTemplates.delete': '删除模板',
+  'app.waylerAvailabilityTemplates.deleted': '模板已删除。',
+  'app.waylerAvailabilityTemplates.clear': '清除所有模板',
+  'app.waylerAvailabilityTemplates.cleared': '已从此浏览器清除所有可用性模板。',
+  'app.waylerAvailabilityTemplates.empty': '保存模板以复用常见 listing 模式。',
+  'app.waylerAvailabilityTemplates.maxReached': '最多保存 {max} 个模板。删除一个后可再添加。',
+  'app.waylerAvailabilityTemplates.count': '已保存 {count} / {max} 个模板',
+  'app.waylerAvailabilityTemplates.noSensitiveData':
+    '模板仅存储 listing 字段 — 不含身份、联系方式、支付或 KYC 数据。不保存日期。',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',
@@ -13330,6 +13542,9 @@ const zh: Dictionary = {
   'app.localSavedData.recentSearchCount': '最近路线搜索：{count}',
   'app.localSavedData.clearRecentSearches': '清除最近搜索',
   'app.localSavedData.clearedRecentSearches': '已从此浏览器清除最近路线搜索。',
+  'app.localSavedData.availabilityTemplateCount': '可用性模板：{count}',
+  'app.localSavedData.clearAvailabilityTemplates': '清除可用性模板',
+  'app.localSavedData.clearedAvailabilityTemplates': '已从此浏览器清除可用性模板。',
   'app.localSavedData.clearAll': '清除所有本地 marketplace 数据',
   'app.localSavedData.clearedShortlist': '已从此浏览器清除收藏列表。',
   'app.localSavedData.clearedSenderDrafts': '已从此浏览器清除发件人草稿。',

@@ -23,6 +23,10 @@ import {
   clearRecentRouteSearches,
   countRecentRouteSearches,
 } from '@/lib/recent-route-search-storage';
+import {
+  clearWaylerAvailabilityTemplates,
+  countWaylerAvailabilityTemplates,
+} from '@/lib/wayler-availability-template-storage';
 import { clearWaylerShortlistIds, getWaylerShortlistCount } from '@/lib/wayler-shortlist-storage';
 
 type LocalSavedDataSnapshot = {
@@ -30,6 +34,7 @@ type LocalSavedDataSnapshot = {
   senderDraftCount: number;
   waylerDraftExists: boolean;
   recentSearchCount: number;
+  availabilityTemplateCount: number;
 };
 
 type ClearNotice = LocalSavedDataScope | null;
@@ -52,6 +57,7 @@ function readLocalSavedDataSnapshot(): LocalSavedDataSnapshot {
     senderDraftCount: countSenderRequestDrafts(),
     waylerDraftExists: hasWaylerAvailabilityDraft(),
     recentSearchCount: countRecentRouteSearches(),
+    availabilityTemplateCount: countWaylerAvailabilityTemplates(),
   };
 }
 
@@ -62,6 +68,7 @@ export function LocalSavedDataPanel() {
     senderDraftCount: 0,
     waylerDraftExists: false,
     recentSearchCount: 0,
+    availabilityTemplateCount: 0,
   }));
   const [clearNotice, setClearNotice] = useState<ClearNotice>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -89,7 +96,8 @@ export function LocalSavedDataPanel() {
     snapshot.shortlistCount > 0 ||
     snapshot.senderDraftCount > 0 ||
     snapshot.waylerDraftExists ||
-    snapshot.recentSearchCount > 0;
+    snapshot.recentSearchCount > 0 ||
+    snapshot.availabilityTemplateCount > 0;
 
   const showNotice = (scope: LocalSavedDataScope) => {
     setClearNotice(scope);
@@ -117,11 +125,17 @@ export function LocalSavedDataPanel() {
     showNotice('recentSearches');
   };
 
+  const handleClearAvailabilityTemplates = () => {
+    clearWaylerAvailabilityTemplates();
+    showNotice('availabilityTemplates');
+  };
+
   const handleClearAll = () => {
     clearWaylerShortlistIds();
     clearAllSenderRequestDrafts();
     clearWaylerAvailabilityDraft();
     clearRecentRouteSearches();
+    clearWaylerAvailabilityTemplates();
     showNotice('all');
   };
 
@@ -135,6 +149,8 @@ export function LocalSavedDataPanel() {
         return t('app.localSavedData.clearedWaylerDraft');
       case 'recentSearches':
         return t('app.localSavedData.clearedRecentSearches');
+      case 'availabilityTemplates':
+        return t('app.localSavedData.clearedAvailabilityTemplates');
       case 'all':
         return t('app.localSavedData.clearedAll');
       default:
@@ -246,6 +262,25 @@ export function LocalSavedDataPanel() {
                   onClick={handleClearRecentSearches}
                 >
                   {t('app.localSavedData.clearRecentSearches')}
+                </Button>
+              </dd>
+            </div>
+            <div className={ROW_CLASS}>
+              <dt>
+                {t('app.localSavedData.availabilityTemplateCount').replace(
+                  '{count}',
+                  String(snapshot.availabilityTemplateCount),
+                )}
+              </dt>
+              <dd className="flex shrink-0">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={snapshot.availabilityTemplateCount === 0}
+                  onClick={handleClearAvailabilityTemplates}
+                >
+                  {t('app.localSavedData.clearAvailabilityTemplates')}
                 </Button>
               </dd>
             </div>
