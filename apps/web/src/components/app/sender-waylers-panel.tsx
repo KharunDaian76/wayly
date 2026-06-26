@@ -35,7 +35,8 @@ import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-saf
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
-import { useI18n } from '@/lib/i18n/i18n-context';
+import { WaylerShortlistPanel } from '@/components/app/wayler-shortlist-panel';
+import { useWaylerShortlist } from '@/lib/wayler-shortlist-storage';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
@@ -305,6 +306,9 @@ export function SenderWaylersPanel({
   const [listingsError, setListingsError] = useState<string | null>(null);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
 
+  const { shortlistCount, toggleShortlist, clearShortlist, isShortlisted, clearedNotice } =
+    useWaylerShortlist();
+
   const [requestTargetId, setRequestTargetId] = useState<string | null>(null);
   const [requestForm, setRequestForm] = useState<RequestFormState | null>(null);
   const [requestSubmitting, setRequestSubmitting] = useState(false);
@@ -544,6 +548,8 @@ export function SenderWaylersPanel({
   const displayedListings = verifiedOnly
     ? listings.filter((listing) => listing.isWaylerVerified)
     : listings;
+  const savedInCurrentResults = listings.filter((listing) => isShortlisted(listing.id));
+  const hiddenSavedCount = Math.max(0, shortlistCount - savedInCurrentResults.length);
 
   return (
     <div className="flex flex-col gap-6">
@@ -697,6 +703,15 @@ export function SenderWaylersPanel({
             </div>
           </div>
 
+          <WaylerShortlistPanel
+            shortlistCount={shortlistCount}
+            savedInCurrentResults={savedInCurrentResults}
+            hiddenSavedCount={hiddenSavedCount}
+            clearedNotice={clearedNotice}
+            onClear={clearShortlist}
+            onToggleListing={toggleShortlist}
+          />
+
           <MarketplaceHowRequestsWork />
 
           <div id="sender-waylers-results" className="flex flex-col gap-4">
@@ -767,14 +782,38 @@ export function SenderWaylersPanel({
                   return (
                     <li key={listing.id} className={LISTING_CARD_CLASS}>
                       <div className="flex flex-wrap items-start justify-between gap-2">
-                        <p className="font-medium">
-                          {isLocalListing
-                            ? t('app.senderWaylers.localAvailability')
-                            : t('app.senderWaylers.tripRoute')}
-                        </p>
-                        <span className={availabilityStatusBadgeClass(listing.status)}>
-                          {t(availabilityStatusKey(listing.status))}
-                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium">
+                            {isLocalListing
+                              ? t('app.senderWaylers.localAvailability')
+                              : t('app.senderWaylers.tripRoute')}
+                          </p>
+                          {isShortlisted(listing.id) ? (
+                            <span className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-primary">
+                              <span aria-hidden>🔖</span>
+                              {t('app.waylerShortlist.saved')}
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="flex shrink-0 flex-wrap items-center gap-2">
+                          <Button
+                            type="button"
+                            variant={isShortlisted(listing.id) ? 'secondary' : 'outline'}
+                            size="sm"
+                            className="h-8 text-xs"
+                            onClick={() => toggleShortlist(listing.id)}
+                          >
+                            <span aria-hidden className="mr-1">
+                              🔖
+                            </span>
+                            {isShortlisted(listing.id)
+                              ? t('app.waylerShortlist.saved')
+                              : t('app.waylerShortlist.save')}
+                          </Button>
+                          <span className={availabilityStatusBadgeClass(listing.status)}>
+                            {t(availabilityStatusKey(listing.status))}
+                          </span>
+                        </div>
                       </div>
 
                       <MarketplaceTrustBadgeRow listing={listing} className="mt-2" />
