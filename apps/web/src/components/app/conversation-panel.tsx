@@ -13,6 +13,7 @@ import {
   PanelErrorState,
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
+import { ConversationSafetyNote } from '@/components/app/conversation-safety-note';
 
 const MAX_MESSAGE_LENGTH = 2000;
 const DETAIL_POLL_MS = 10_000;
@@ -243,8 +244,30 @@ export function ConversationPanel({
           </div>
         </div>
 
+        {conversationId ? (
+          <div className="border-b border-border/40 px-3 py-2">
+            <ConversationSafetyNote />
+          </div>
+        ) : null}
+
         <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-3">
-          {loadError ? (
+          {!conversationId ? (
+            <div
+              className="rounded-lg border border-border/60 bg-muted/15 px-4 py-5 text-center sm:text-left"
+              role="status"
+            >
+              <p className="text-sm font-medium text-foreground">
+                {t('app.conversationSafety.emptyTitle')}
+              </p>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                {t('app.conversationSafety.emptyDescription')}
+              </p>
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                {t('app.conversationSafety.chatOpensAfterAcceptance')}
+              </p>
+            </div>
+          ) : null}
+          {conversationId && loadError ? (
             <PanelErrorState
               message={loadError}
               retryLabel={t('app.chat.retry')}
@@ -252,7 +275,7 @@ export function ConversationPanel({
               retryDisabled={loading}
             />
           ) : null}
-          {sendError ? (
+          {conversationId && sendError ? (
             <p
               className="rounded-md border border-danger/30 bg-danger/10 px-2 py-1.5 text-xs text-danger"
               role="alert"
@@ -260,22 +283,22 @@ export function ConversationPanel({
               {sendError}
             </p>
           ) : null}
-          {markReadError ? (
+          {conversationId && markReadError ? (
             <p className="rounded-md border border-accent/30 bg-accent/10 px-2 py-1.5 text-xs text-foreground">
               {markReadError}
             </p>
           ) : null}
-          {showInitialLoading ? (
+          {conversationId && showInitialLoading ? (
             <div className="flex flex-col gap-2 py-2">
               <p className="text-xs text-muted-foreground" role="status" aria-live="polite">
                 {t('app.chat.loading')}
               </p>
               <RequestsListSkeleton rows={3} itemClassName="h-12 w-full rounded-md" />
             </div>
-          ) : showEmpty ? (
+          ) : conversationId && showEmpty ? (
             <PanelEmptyState title={t('app.chat.emptyTitle')} body={t('app.chat.emptyBody')} />
           ) : null}
-          {messages.length > 0 ? (
+          {conversationId && messages.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {messages.map((message) => {
                 const isMine = message.senderId === currentUserId;
@@ -310,6 +333,11 @@ export function ConversationPanel({
           {waylerSendBlocked ? (
             <p className="mb-2 text-xs text-muted-foreground" role="note">
               {t('app.chat.accessRequiredForMessage')}
+            </p>
+          ) : null}
+          {conversationId ? (
+            <p className="mb-2 text-xs text-muted-foreground" role="note">
+              {t('app.conversationSafety.inputHelper')}
             </p>
           ) : null}
           <label className="flex flex-col gap-1.5 text-sm">

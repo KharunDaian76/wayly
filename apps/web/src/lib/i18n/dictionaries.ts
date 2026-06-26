@@ -892,6 +892,25 @@ const en = {
     'Active Wayler work access is required before contacting this Sender.',
   'app.chat.accessRequiredMessageFailed':
     'Active Wayler work access is required before sending messages.',
+  'app.conversationSafety.title': 'Chat safety',
+  'app.conversationSafety.subtitle':
+    'Keep delivery coordination inside Wayly so both parties have a shared record.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'Keep delivery agreements and updates inside Wayly.',
+  'app.conversationSafety.confirmDetailsTiming':
+    'Confirm item details, timing, and handoff expectations in chat.',
+  'app.conversationSafety.noPrivatePayment': 'Do not share private payment details in messages.',
+  'app.conversationSafety.noRestrictedItems': 'Do not agree to carry restricted or unsafe items.',
+  'app.conversationSafety.reviewToolsHelp':
+    'Wayly dispute tools can help if problems arise — in-app chat helps document what was agreed.',
+  'app.conversationSafety.inputHelper':
+    'Keep important agreement details in Wayly. Do not share private payment details.',
+  'app.conversationSafety.emptyTitle':
+    'Select an order conversation to continue safely inside Wayly',
+  'app.conversationSafety.emptyDescription':
+    'Open chat from an accepted order to coordinate pickup, delivery, and handoff.',
+  'app.conversationSafety.chatOpensAfterAcceptance':
+    'Chat opens after a request is accepted and an order is created.',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -2434,6 +2453,27 @@ const ru: Dictionary = {
     'Для связи с этим отправителем требуется активный доступ курьера к работе.',
   'app.chat.accessRequiredMessageFailed':
     'Для отправки сообщений требуется активный доступ курьера к работе.',
+  'app.conversationSafety.title': 'Безопасность чата',
+  'app.conversationSafety.subtitle':
+    'Ведите координацию доставки в Wayly, чтобы у обеих сторон была общая запись.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'Держите договорённости и обновления по доставке в Wayly.',
+  'app.conversationSafety.confirmDetailsTiming':
+    'Подтверждайте детали посылки, сроки и ожидания по передаче в чате.',
+  'app.conversationSafety.noPrivatePayment':
+    'Не делитесь конфиденциальными платёжными данными в сообщениях.',
+  'app.conversationSafety.noRestrictedItems':
+    'Не соглашайтесь перевозить запрещённые или небезопасные предметы.',
+  'app.conversationSafety.reviewToolsHelp':
+    'Инструменты споров Wayly могут помочь при проблемах — чат в приложении фиксирует договорённости.',
+  'app.conversationSafety.inputHelper':
+    'Держите важные договорённости в Wayly. Не делитесь конфиденциальными платёжными данными.',
+  'app.conversationSafety.emptyTitle':
+    'Выберите беседу по заказу, чтобы безопасно продолжить в Wayly',
+  'app.conversationSafety.emptyDescription':
+    'Откройте чат из принятого заказа для координации получения, доставки и передачи.',
+  'app.conversationSafety.chatOpensAfterAcceptance':
+    'Чат открывается после принятия запроса и создания заказа.',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -3978,6 +4018,26 @@ const es: Dictionary = {
     'Se requiere acceso de trabajo Wayler activo antes de contactar a este Sender.',
   'app.chat.accessRequiredMessageFailed':
     'Se requiere acceso de trabajo Wayler activo antes de enviar mensajes.',
+  'app.conversationSafety.title': 'Seguridad del chat',
+  'app.conversationSafety.subtitle':
+    'Coordina la entrega dentro de Wayly para que ambas partes tengan un registro compartido.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'Mantén acuerdos y actualizaciones de entrega dentro de Wayly.',
+  'app.conversationSafety.confirmDetailsTiming':
+    'Confirma detalles del artículo, plazos y expectativas de entrega en el chat.',
+  'app.conversationSafety.noPrivatePayment': 'No compartas datos de pago privados en los mensajes.',
+  'app.conversationSafety.noRestrictedItems':
+    'No aceptes transportar artículos restringidos o inseguros.',
+  'app.conversationSafety.reviewToolsHelp':
+    'Las herramientas de disputa de Wayly pueden ayudar si hay problemas — el chat en la app documenta lo acordado.',
+  'app.conversationSafety.inputHelper':
+    'Mantén los acuerdos importantes en Wayly. No compartas datos de pago privados.',
+  'app.conversationSafety.emptyTitle':
+    'Selecciona una conversación de pedido para continuar con seguridad en Wayly',
+  'app.conversationSafety.emptyDescription':
+    'Abre el chat desde un pedido aceptado para coordinar recogida, entrega y handoff.',
+  'app.conversationSafety.chatOpensAfterAcceptance':
+    'El chat se abre después de que se acepta una solicitud y se crea un pedido.',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -5539,6 +5599,27 @@ const fr: Dictionary = {
     'Un accès de travail Wayler actif est requis avant de contacter ce Sender.',
   'app.chat.accessRequiredMessageFailed':
     "Un accès de travail Wayler actif est requis avant d'envoyer des messages.",
+  'app.conversationSafety.title': 'Sécurité du chat',
+  'app.conversationSafety.subtitle':
+    'Coordonnez la livraison dans Wayly pour que les deux parties aient un enregistrement partagé.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'Gardez les accords et mises à jour de livraison dans Wayly.',
+  'app.conversationSafety.confirmDetailsTiming':
+    "Confirmez les détails de l'article, les délais et les attentes de remise dans le chat.",
+  'app.conversationSafety.noPrivatePayment':
+    'Ne partagez pas de données de paiement privées dans les messages.',
+  'app.conversationSafety.noRestrictedItems':
+    "N'acceptez pas de transporter des articles restreints ou dangereux.",
+  'app.conversationSafety.reviewToolsHelp':
+    'Les outils de litige Wayly peuvent aider en cas de problème — le chat in-app documente ce qui a été convenu.',
+  'app.conversationSafety.inputHelper':
+    'Gardez les accords importants dans Wayly. Ne partagez pas de données de paiement privées.',
+  'app.conversationSafety.emptyTitle':
+    'Sélectionnez une conversation de commande pour continuer en sécurité dans Wayly',
+  'app.conversationSafety.emptyDescription':
+    'Ouvrez le chat depuis une commande acceptée pour coordonner collecte, livraison et remise.',
+  'app.conversationSafety.chatOpensAfterAcceptance':
+    "Le chat s'ouvre après l'acceptation d'une demande et la création d'une commande.",
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -7119,6 +7200,27 @@ const de: Dictionary = {
     'Aktiver Wayler-Arbeitszugang ist erforderlich, bevor Sie diesen Sender kontaktieren.',
   'app.chat.accessRequiredMessageFailed':
     'Aktiver Wayler-Arbeitszugang ist erforderlich, bevor Sie Nachrichten senden.',
+  'app.conversationSafety.title': 'Chat-Sicherheit',
+  'app.conversationSafety.subtitle':
+    'Koordinieren Sie die Lieferung in Wayly, damit beide Parteien eine gemeinsame Aufzeichnung haben.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'Halten Sie Liefervereinbarungen und Updates in Wayly.',
+  'app.conversationSafety.confirmDetailsTiming':
+    'Bestätigen Sie Artikeldetails, Zeitplan und Übergabeerwartungen im Chat.',
+  'app.conversationSafety.noPrivatePayment':
+    'Teilen Sie keine privaten Zahlungsdaten in Nachrichten.',
+  'app.conversationSafety.noRestrictedItems':
+    'Stimmen Sie nicht zu, eingeschränkte oder unsichere Gegenstände zu transportieren.',
+  'app.conversationSafety.reviewToolsHelp':
+    'Wayly-Streitfall-Tools können bei Problemen helfen — In-App-Chat dokumentiert Vereinbarungen.',
+  'app.conversationSafety.inputHelper':
+    'Halten Sie wichtige Vereinbarungen in Wayly. Teilen Sie keine privaten Zahlungsdaten.',
+  'app.conversationSafety.emptyTitle':
+    'Wählen Sie eine Bestellunterhaltung, um sicher in Wayly fortzufahren',
+  'app.conversationSafety.emptyDescription':
+    'Öffnen Sie den Chat über eine angenommene Bestellung zur Koordination von Abholung, Lieferung und Übergabe.',
+  'app.conversationSafety.chatOpensAfterAcceptance':
+    'Der Chat öffnet sich, nachdem eine Anfrage angenommen und eine Bestellung erstellt wurde.',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -8661,6 +8763,26 @@ const tr: Dictionary = {
   'app.chat.accessRequiredContactFailed':
     'Bu Göndericiyle iletişime geçmeden önce aktif Wayler iş erişimi gerekir.',
   'app.chat.accessRequiredMessageFailed': 'Mesaj göndermeden önce aktif Wayler iş erişimi gerekir.',
+  'app.conversationSafety.title': 'Sohbet güvenliği',
+  'app.conversationSafety.subtitle':
+    'Her iki tarafın ortak bir kaydı olması için teslimat koordinasyonunu Wayly içinde tutun.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'Teslimat anlaşmalarını ve güncellemelerini Wayly içinde tutun.',
+  'app.conversationSafety.confirmDetailsTiming':
+    'Sohbette ürün detaylarını, zamanlamayı ve teslim beklentilerini onaylayın.',
+  'app.conversationSafety.noPrivatePayment': 'Mesajlarda özel ödeme bilgilerini paylaşmayın.',
+  'app.conversationSafety.noRestrictedItems':
+    'Kısıtlı veya güvensiz eşyalar taşımayı kabul etmeyin.',
+  'app.conversationSafety.reviewToolsHelp':
+    'Sorun olursa Wayly anlaşmazlık araçları yardımcı olabilir — uygulama içi sohbet anlaşılanları belgeler.',
+  'app.conversationSafety.inputHelper':
+    'Önemli anlaşma detaylarını Wayly içinde tutun. Özel ödeme bilgilerini paylaşmayın.',
+  'app.conversationSafety.emptyTitle':
+    'Wayly içinde güvenle devam etmek için bir sipariş sohbeti seçin',
+  'app.conversationSafety.emptyDescription':
+    'Teslim alma, teslimat ve devir koordinasyonu için kabul edilmiş bir siparişten sohbeti açın.',
+  'app.conversationSafety.chatOpensAfterAcceptance':
+    'Sohbet, bir talep kabul edildikten ve sipariş oluşturulduktan sonra açılır.',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -10151,6 +10273,22 @@ const ar: Dictionary = {
   'app.chat.accessRequiredForMessage': 'فعّل وصول عمل الوايلر لليوم قبل إرسال الرسائل.',
   'app.chat.accessRequiredContactFailed': 'مطلوب وصول عمل وايلر نشط قبل التواصل مع هذا المرسل.',
   'app.chat.accessRequiredMessageFailed': 'مطلوب وصول عمل وايلر نشط قبل إرسال الرسائل.',
+  'app.conversationSafety.title': 'أمان المحادثة',
+  'app.conversationSafety.subtitle': 'نسّق التسليم داخل Wayly حتى يكون لدى الطرفين سجل مشترك.',
+  'app.conversationSafety.keepAgreementInsideWayly':
+    'احتفظ باتفاقيات التسليم والتحديثات داخل Wayly.',
+  'app.conversationSafety.confirmDetailsTiming':
+    'أكّد تفاصيل العنصر والتوقيت وتوقعات التسليم في المحادثة.',
+  'app.conversationSafety.noPrivatePayment': 'لا تشارك تفاصيل الدفع الخاصة في الرسائل.',
+  'app.conversationSafety.noRestrictedItems': 'لا توافق على نقل عناصر محظورة أو غير آمنة.',
+  'app.conversationSafety.reviewToolsHelp':
+    'يمكن لأدوات النزاع في Wayly المساعدة عند وجود مشاكل — المحادثة داخل التطبيق توثّق ما تم الاتفاق عليه.',
+  'app.conversationSafety.inputHelper':
+    'احتفظ بتفاصيل الاتفاق المهمة في Wayly. لا تشارك تفاصيل الدفع الخاصة.',
+  'app.conversationSafety.emptyTitle': 'اختر محادثة طلب للمتابعة بأمان داخل Wayly',
+  'app.conversationSafety.emptyDescription':
+    'افتح المحادثة من طلب مقبول لتنسيق الاستلام والتسليم والتسليم.',
+  'app.conversationSafety.chatOpensAfterAcceptance': 'تفتح المحادثة بعد قبول الطلب وإنشاء الطلب.',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -11599,6 +11737,18 @@ const zh: Dictionary = {
   'app.chat.accessRequiredForMessage': '发送消息前请先激活今日 Wayler 工作权限。',
   'app.chat.accessRequiredContactFailed': '联系此 Sender 需要有效的 Wayler 工作权限。',
   'app.chat.accessRequiredMessageFailed': '发送消息需要有效的 Wayler 工作权限。',
+  'app.conversationSafety.title': '聊天安全',
+  'app.conversationSafety.subtitle': '在 Wayly 内协调配送，以便双方有共同记录。',
+  'app.conversationSafety.keepAgreementInsideWayly': '将配送协议和更新保留在 Wayly 内。',
+  'app.conversationSafety.confirmDetailsTiming': '在聊天中确认物品详情、时间和交接预期。',
+  'app.conversationSafety.noPrivatePayment': '不要在消息中分享私人支付信息。',
+  'app.conversationSafety.noRestrictedItems': '不要同意运送受限或不安全物品。',
+  'app.conversationSafety.reviewToolsHelp':
+    '如有问题，Wayly 争议工具可以提供帮助 — 应用内聊天有助于记录已达成的事项。',
+  'app.conversationSafety.inputHelper': '将重要协议细节保留在 Wayly 内。不要分享私人支付信息。',
+  'app.conversationSafety.emptyTitle': '选择订单对话以在 Wayly 内安全继续',
+  'app.conversationSafety.emptyDescription': '从已接受的订单打开聊天，协调取件、配送和交接。',
+  'app.conversationSafety.chatOpensAfterAcceptance': '请求被接受并创建订单后，聊天才会打开。',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',
