@@ -31,6 +31,7 @@ import {
 } from '@/components/app/sender-request-composer';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { SenderNextBestActions } from '@/components/app/sender-next-best-actions';
+import { SenderRequestQualityCoach } from '@/components/app/sender-request-quality-coach';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
@@ -1322,6 +1323,7 @@ export function SenderWaylersPanel({
                           </label>
 
                           <SenderRequestSummary form={requestForm} />
+                          <SenderRequestQualityCoach form={requestForm} />
                           <SenderRequestSafetyChecklist />
                           <RestrictedItemsSafetyNote variant="sender" />
                           <SenderRequestGoodTips />
