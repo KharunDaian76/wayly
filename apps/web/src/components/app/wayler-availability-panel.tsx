@@ -5,7 +5,7 @@ import type { WaylerAvailabilitySummary } from '@wayly/types';
 import { TripDirection, WaylerAvailabilityStatus, WaylerAvailabilityType } from '@wayly/types';
 import type { CreateWaylerAvailabilityInput } from '@wayly/validation';
 import { Button, Input } from '@wayly/ui';
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
@@ -19,6 +19,15 @@ import {
   WaylerAvailabilityReadyBadge,
 } from '@/components/app/wayler-availability-composer';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
+import { WaylerAvailabilityDraftBar } from '@/components/app/wayler-availability-draft-bar';
+import {
+  clearWaylerAvailabilityDraft,
+  hasWaylerAvailabilityDraft,
+  isWaylerAvailabilityDraftStorageAvailable,
+  readWaylerAvailabilityDraft,
+  writeWaylerAvailabilityDraft,
+  type WaylerAvailabilityDraftSaveStatus,
+} from '@/lib/wayler-availability-draft-storage';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -192,6 +201,12 @@ export function WaylerAvailabilityPanel({
   const [createError, setCreateError] = useState<string | null>(null);
   const [createSuccess, setCreateSuccess] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [draftStorageAvailable, setDraftStorageAvailable] = useState(true);
+  const [draftSaveStatus, setDraftSaveStatus] = useState<WaylerAvailabilityDraftSaveStatus>('idle');
+  const [storedDraftPending, setStoredDraftPending] = useState(false);
+  const [draftNotice, setDraftNotice] = useState<'restored' | 'discarded' | null>(null);
+  const draftSkipSaveRef = useRef(true);
+  const draftDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [actionBusy, setActionBusy] = useState<{ id: string; action: ActionKind } | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -228,17 +243,92 @@ export function WaylerAvailabilityPanel({
     onAvailabilitySnapshot?.({ count: listings.length, loading: listingsLoading });
   }, [listings.length, listingsLoading, onAvailabilitySnapshot]);
 
+  useEffect(() => {
+    const storageAvailable = isWaylerAvailabilityDraftStorageAvailable();
+    setDraftStorageAvailable(storageAvailable);
+    setStoredDraftPending(storageAvailable && hasWaylerAvailabilityDraft());
+  }, []);
+
   const updateForm = (patch: Partial<FormState>) => {
+    draftSkipSaveRef.current = false;
+    setDraftNotice(null);
     setForm((prev) => ({ ...prev, ...patch }));
     setFormError(null);
     setCreateError(null);
     setCreateSuccess(false);
   };
 
+  useEffect(() => {
+    if (draftSkipSaveRef.current || !draftStorageAvailable) {
+      return;
+    }
+
+    setDraftSaveStatus('saving');
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+    }
+
+    draftDebounceRef.current = setTimeout(() => {
+      const persisted = writeWaylerAvailabilityDraft(form);
+      if (!persisted) {
+        setDraftStorageAvailable(false);
+        setDraftSaveStatus('idle');
+        return;
+      }
+      setDraftSaveStatus('saved');
+      setStoredDraftPending(false);
+    }, 500);
+
+    return () => {
+      if (draftDebounceRef.current) {
+        clearTimeout(draftDebounceRef.current);
+      }
+    };
+  }, [form, draftStorageAvailable]);
+
   const resetForm = () => {
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+      draftDebounceRef.current = null;
+    }
+    draftSkipSaveRef.current = true;
     setForm(INITIAL_FORM);
     setFormError(null);
     setCreateError(null);
+    setDraftSaveStatus('idle');
+    setDraftNotice(null);
+  };
+
+  const handleRestoreAvailabilityDraft = () => {
+    const draft = readWaylerAvailabilityDraft();
+    if (!draft) {
+      setStoredDraftPending(false);
+      return;
+    }
+    draftSkipSaveRef.current = true;
+    setForm(draft);
+    setStoredDraftPending(false);
+    setDraftSaveStatus('saved');
+    setDraftNotice('restored');
+    setFormError(null);
+    setCreateError(null);
+    setCreateSuccess(false);
+  };
+
+  const handleDiscardAvailabilityDraft = () => {
+    if (draftDebounceRef.current) {
+      clearTimeout(draftDebounceRef.current);
+      draftDebounceRef.current = null;
+    }
+    clearWaylerAvailabilityDraft();
+    draftSkipSaveRef.current = true;
+    setForm(INITIAL_FORM);
+    setStoredDraftPending(false);
+    setDraftSaveStatus('idle');
+    setDraftNotice('discarded');
+    setFormError(null);
+    setCreateError(null);
+    setCreateSuccess(false);
   };
 
   const buildCreateBody = (): CreateWaylerAvailabilityInput | null => {
@@ -335,8 +425,10 @@ export function WaylerAvailabilityPanel({
     setCreating(true);
     try {
       await api.waylerAvailabilities.create(body);
+      clearWaylerAvailabilityDraft();
       setCreateSuccess(true);
       resetForm();
+      setStoredDraftPending(false);
       await loadListings();
     } catch (err) {
       if (err instanceof ApiError) {
@@ -413,6 +505,16 @@ export function WaylerAvailabilityPanel({
 
             <WaylerAvailabilityHowItWorks />
             <WaylerAvailabilityAccessNote />
+
+            <WaylerAvailabilityDraftBar
+              storageAvailable={draftStorageAvailable}
+              saveStatus={draftSaveStatus}
+              showRestoreActions={storedDraftPending}
+              notice={draftNotice}
+              disabled={creating}
+              onRestore={handleRestoreAvailabilityDraft}
+              onDiscard={handleDiscardAvailabilityDraft}
+            />
 
             <p className="text-xs text-muted-foreground">
               {isLocal
