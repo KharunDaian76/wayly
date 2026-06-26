@@ -55,6 +55,7 @@ import { KycIdentityPanel } from '@/components/app/kyc-identity-panel';
 import { LocalSavedDataPanel } from '@/components/app/local-saved-data-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
+import { PaymentTransparencyNote } from '@/components/app/payment-transparency-note';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { SuspendedAccountNotice } from '@/components/app/suspended-account-notice';
@@ -2167,438 +2168,448 @@ export default function AppHomePage() {
                     helperItems={[t('app.marketplaceEmpty.keepInsideWayly')]}
                   />
                 ) : isApproved && acceptedOrders.length > 0 ? (
-                  <ul className="flex flex-col gap-4">
-                    {acceptedOrders.map((order) => {
-                      const isProgressing = progressingOrderId === order.id;
-                      const isSubmittingProof = submittingProofOrderId === order.id;
-                      const actionDisabled =
-                        progressingOrderId !== null || submittingProofOrderId !== null;
-                      const proofDraft = getProofDraft(order);
-                      const proofNoteValue = proofDraft.note.trim();
-                      const proofCodeValue = proofDraft.confirmationCode.trim();
-                      const canSubmitProof = proofNoteValue.length > 0 || proofCodeValue.length > 0;
-                      const hasExistingProof = Boolean(order.proofSubmittedAt);
-                      const showProofForm =
-                        order.status === DeliveryOrderStatus.IN_TRANSIT ||
-                        order.status === DeliveryOrderStatus.DELIVERED;
-                      const isProofDetailLoading =
-                        proofDetailLoadingOrderIds.has(order.id) ||
-                        (acceptedLoading && acceptedOrders.length > 0 && showProofForm);
-                      const hasKnownProof =
-                        hasExistingProof || Boolean(order.proofNote || order.proofConfirmationCode);
-                      const paymentIntent = order.paymentIntent;
-                      const paymentStatusNote = paymentIntent
-                        ? waylerPaymentStatusNote(paymentIntent, t)
-                        : null;
+                  <>
+                    <PaymentTransparencyNote variant="wayler" />
+                    <ul className="flex flex-col gap-4">
+                      {acceptedOrders.map((order) => {
+                        const isProgressing = progressingOrderId === order.id;
+                        const isSubmittingProof = submittingProofOrderId === order.id;
+                        const actionDisabled =
+                          progressingOrderId !== null || submittingProofOrderId !== null;
+                        const proofDraft = getProofDraft(order);
+                        const proofNoteValue = proofDraft.note.trim();
+                        const proofCodeValue = proofDraft.confirmationCode.trim();
+                        const canSubmitProof =
+                          proofNoteValue.length > 0 || proofCodeValue.length > 0;
+                        const hasExistingProof = Boolean(order.proofSubmittedAt);
+                        const showProofForm =
+                          order.status === DeliveryOrderStatus.IN_TRANSIT ||
+                          order.status === DeliveryOrderStatus.DELIVERED;
+                        const isProofDetailLoading =
+                          proofDetailLoadingOrderIds.has(order.id) ||
+                          (acceptedLoading && acceptedOrders.length > 0 && showProofForm);
+                        const hasKnownProof =
+                          hasExistingProof ||
+                          Boolean(order.proofNote || order.proofConfirmationCode);
+                        const paymentIntent = order.paymentIntent;
+                        const paymentStatusNote = paymentIntent
+                          ? waylerPaymentStatusNote(paymentIntent, t)
+                          : null;
 
-                      return (
-                        <li
-                          key={order.id}
-                          id={acceptedOrderElementId(order.id)}
-                          className={cn(
-                            ORDER_CARD_CLASS,
-                            highlightedOrderId === order.id &&
-                              'ring-2 ring-primary ring-offset-2 ring-offset-background',
-                          )}
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <p className="font-medium">{order.title}</p>
-                            <OrderStatusBadge
-                              status={order.status}
-                              label={orderStatusLabel(order.status, t)}
-                            />
-                          </div>
-                          <p className="mt-1 text-muted-foreground">{order.type}</p>
-                          <DeliveryOrderSourceBadge
-                            sourceType={order.sourceType}
-                            availabilityRequestId={order.availabilityRequestId}
-                          />
-                          <OrderLifecycleTimeline
-                            compact
-                            className="mt-3"
-                            status={order.status}
-                            sourceType={order.sourceType}
-                            createdAt={order.createdAt}
-                            publishedAt={order.publishedAt}
-                            acceptedAt={order.acceptedAt}
-                            proofFlowEnabled={showProofForm}
-                          />
-                          <dl className="mt-2 flex flex-col gap-1">
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.orders.labelRoute')}
-                              </dt>
-                              <dd>
-                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
-                                {t('app.orders.routeSeparator')}{' '}
-                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
-                              </dd>
-                            </div>
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.orders.labelReward')}
-                              </dt>
-                              <dd>
-                                {formatReward(
-                                  order.offeredRewardAmount,
-                                  order.currency,
-                                  t('app.orders.rewardNone'),
-                                )}
-                              </dd>
-                            </div>
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.waylerFeed.acceptedPanel.labelAcceptedAt')}
-                              </dt>
-                              <dd>
-                                {order.acceptedAt
-                                  ? new Date(order.acceptedAt).toLocaleString()
-                                  : '—'}
-                              </dd>
-                            </div>
-                          </dl>
-                          {order.paymentLoadFailed ? (
-                            <div className="mt-2">
-                              <PanelErrorState
-                                message={t('app.waylerFeed.acceptedPanel.payment.loadFailed')}
-                                retryLabel={t(
-                                  'app.waylerFeed.acceptedPanel.payment.retryPaymentStatus',
-                                )}
-                                onRetry={() => void refreshWaylerOrderPayment(order.id)}
-                                retryDisabled={
-                                  paymentStatusLoadingOrderIds.has(order.id) ||
-                                  acceptedLoading ||
-                                  paymentActionBusy
-                                }
+                        return (
+                          <li
+                            key={order.id}
+                            id={acceptedOrderElementId(order.id)}
+                            className={cn(
+                              ORDER_CARD_CLASS,
+                              highlightedOrderId === order.id &&
+                                'ring-2 ring-primary ring-offset-2 ring-offset-background',
+                            )}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <p className="font-medium">{order.title}</p>
+                              <OrderStatusBadge
+                                status={order.status}
+                                label={orderStatusLabel(order.status, t)}
                               />
                             </div>
-                          ) : null}
-                          {paymentStatusLoadingOrderIds.has(order.id) ||
-                          (acceptedLoading && acceptedOrders.length > 0) ? (
-                            <p
-                              className="mt-2 text-xs text-muted-foreground"
-                              role="status"
-                              aria-live="polite"
-                            >
-                              {paymentIntent
-                                ? t('app.waylerFeed.acceptedPanel.payment.paymentRefreshing')
-                                : t('app.waylerFeed.acceptedPanel.payment.paymentLoading')}
-                            </p>
-                          ) : null}
-                          {!order.paymentLoadFailed &&
-                          !paymentIntent &&
-                          !paymentStatusLoadingOrderIds.has(order.id) &&
-                          !(acceptedLoading && acceptedOrders.length > 0) ? (
-                            <p className="mt-2 text-sm text-muted-foreground">
-                              {t('app.waylerFeed.acceptedPanel.payment.notAuthorized')}
-                            </p>
-                          ) : null}
-                          {paymentIntent ? (
-                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
-                              <p className="text-sm font-medium">
-                                {t('app.waylerFeed.acceptedPanel.payment.title')}
-                              </p>
-                              <p className="mt-1 text-sm font-medium">
-                                {waylerPaymentStatusLabel(paymentIntent, t)}
-                              </p>
-                              {paymentStatusNote ? (
-                                <p className="mt-2 text-sm text-muted-foreground">
-                                  {paymentStatusNote}
-                                </p>
-                              ) : null}
-                              <dl className="mt-2 flex flex-col gap-1 text-sm">
-                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                  <dt className="text-muted-foreground">
-                                    {t('app.waylerFeed.acceptedPanel.payment.provider')}
-                                  </dt>
-                                  <dd>{paymentIntent.provider}</dd>
-                                </div>
-                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                  <dt className="text-muted-foreground">
-                                    {t('app.waylerFeed.acceptedPanel.payment.status')}
-                                  </dt>
-                                  <dd>{waylerPaymentStatusLabel(paymentIntent, t)}</dd>
-                                </div>
-                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                  <dt className="text-muted-foreground">
-                                    {t('app.waylerFeed.acceptedPanel.payment.amount')}
-                                  </dt>
-                                  <dd>
-                                    {formatPaymentAmount(
-                                      paymentIntent.amount,
-                                      paymentIntent.currency,
-                                    )}
-                                  </dd>
-                                </div>
-                                {paymentIntent.platformFeeAmount ? (
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.waylerFeed.acceptedPanel.payment.platformFee')}
-                                    </dt>
-                                    <dd>
-                                      {formatPaymentAmount(
-                                        paymentIntent.platformFeeAmount,
-                                        paymentIntent.currency,
-                                      )}
-                                    </dd>
-                                  </div>
-                                ) : null}
-                                {paymentIntent.escrowAmount ? (
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.waylerFeed.acceptedPanel.payment.escrowAmount')}
-                                    </dt>
-                                    <dd>
-                                      {formatPaymentAmount(
-                                        paymentIntent.escrowAmount,
-                                        paymentIntent.currency,
-                                      )}
-                                    </dd>
-                                  </div>
-                                ) : null}
-                              </dl>
-                            </div>
-                          ) : null}
-                          {order.status === DeliveryOrderStatus.ACCEPTED ? (
-                            <>
-                              {progressErrorOrderId === order.id && progressError ? (
-                                <p className={cn(ALERT_ERROR_CLASS, 'mt-3 text-sm')} role="alert">
-                                  {progressError}
-                                </p>
-                              ) : null}
-                              <Button
-                                className="mt-3 w-full sm:w-auto"
-                                size="sm"
-                                disabled={actionDisabled}
-                                onClick={() => void handleStartTransit(order.id)}
-                              >
-                                {isProgressing && progressAction === 'start-transit'
-                                  ? t('app.waylerFeed.acceptedPanel.startingTransit')
-                                  : t('app.waylerFeed.acceptedPanel.startTransit')}
-                              </Button>
-                              <p className="mt-2 text-sm text-muted-foreground">
-                                {t('app.waylerFeed.acceptedPanel.proofTransitRequired')}
-                              </p>
-                            </>
-                          ) : null}
-                          {order.status === DeliveryOrderStatus.IN_TRANSIT ? (
-                            <>
-                              {progressErrorOrderId === order.id && progressError ? (
-                                <p className={cn(ALERT_ERROR_CLASS, 'mt-3 text-sm')} role="alert">
-                                  {progressError}
-                                </p>
-                              ) : null}
-                              <Button
-                                className="mt-3 w-full sm:w-auto"
-                                size="sm"
-                                disabled={actionDisabled}
-                                onClick={() => void handleMarkDelivered(order.id)}
-                              >
-                                {isProgressing && progressAction === 'mark-delivered'
-                                  ? t('app.waylerFeed.acceptedPanel.markingDelivered')
-                                  : t('app.waylerFeed.acceptedPanel.markDelivered')}
-                              </Button>
-                            </>
-                          ) : null}
-                          {order.status === DeliveryOrderStatus.DELIVERED ? (
-                            <p className="mt-3 text-sm text-muted-foreground">
-                              {t('app.waylerFeed.acceptedPanel.delivered')}
-                            </p>
-                          ) : null}
-                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
-                            <AcceptedOrderDisputeSection
-                              dispute={disputesByOrderId[order.id]}
-                              disputesLoading={disputesLoading}
-                              disputesListLoadFailed={disputesListLoadFailed}
-                              onRetryDisputes={() => void loadUserDisputes()}
-                              panelRole="wayler"
-                              t={t}
+                            <p className="mt-1 text-muted-foreground">{order.type}</p>
+                            <DeliveryOrderSourceBadge
+                              sourceType={order.sourceType}
+                              availabilityRequestId={order.availabilityRequestId}
                             />
-                          ) : null}
-                          <div className="wayly-action-group mt-3">
-                            <Button
-                              className="w-full sm:w-auto"
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                handleOpenOrderDetails(toAcceptedOrderDetailsInput(order), 'wayler')
-                              }
-                            >
-                              {t('app.orders.viewDetails')}
-                            </Button>
-                            {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
-                              <>
-                                <Button
-                                  className="w-full sm:w-auto"
-                                  variant="outline"
-                                  size="sm"
-                                  disabled={openingChatOrderId !== null || !waylerHasActiveAccess}
-                                  onClick={() => void handleOpenChat(order.id, order.title)}
-                                >
-                                  {openingChatOrderId === order.id
-                                    ? t('app.chat.loading')
-                                    : t('app.chat.open')}
-                                </Button>
-                                {!waylerHasActiveAccess ? (
-                                  <p className="text-xs text-muted-foreground" role="note">
-                                    {t('app.chat.accessRequiredForContact')}
+                            <OrderLifecycleTimeline
+                              compact
+                              className="mt-3"
+                              status={order.status}
+                              sourceType={order.sourceType}
+                              createdAt={order.createdAt}
+                              publishedAt={order.publishedAt}
+                              acceptedAt={order.acceptedAt}
+                              proofFlowEnabled={showProofForm}
+                            />
+                            <dl className="mt-2 flex flex-col gap-1">
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.orders.labelRoute')}
+                                </dt>
+                                <dd>
+                                  {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                  {t('app.orders.routeSeparator')}{' '}
+                                  {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                                </dd>
+                              </div>
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.orders.labelReward')}
+                                </dt>
+                                <dd>
+                                  {formatReward(
+                                    order.offeredRewardAmount,
+                                    order.currency,
+                                    t('app.orders.rewardNone'),
+                                  )}
+                                </dd>
+                              </div>
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.waylerFeed.acceptedPanel.labelAcceptedAt')}
+                                </dt>
+                                <dd>
+                                  {order.acceptedAt
+                                    ? new Date(order.acceptedAt).toLocaleString()
+                                    : '—'}
+                                </dd>
+                              </div>
+                            </dl>
+                            {order.paymentLoadFailed ? (
+                              <div className="mt-2">
+                                <PanelErrorState
+                                  message={t('app.waylerFeed.acceptedPanel.payment.loadFailed')}
+                                  retryLabel={t(
+                                    'app.waylerFeed.acceptedPanel.payment.retryPaymentStatus',
+                                  )}
+                                  onRetry={() => void refreshWaylerOrderPayment(order.id)}
+                                  retryDisabled={
+                                    paymentStatusLoadingOrderIds.has(order.id) ||
+                                    acceptedLoading ||
+                                    paymentActionBusy
+                                  }
+                                />
+                              </div>
+                            ) : null}
+                            {paymentStatusLoadingOrderIds.has(order.id) ||
+                            (acceptedLoading && acceptedOrders.length > 0) ? (
+                              <p
+                                className="mt-2 text-xs text-muted-foreground"
+                                role="status"
+                                aria-live="polite"
+                              >
+                                {paymentIntent
+                                  ? t('app.waylerFeed.acceptedPanel.payment.paymentRefreshing')
+                                  : t('app.waylerFeed.acceptedPanel.payment.paymentLoading')}
+                              </p>
+                            ) : null}
+                            {!order.paymentLoadFailed &&
+                            !paymentIntent &&
+                            !paymentStatusLoadingOrderIds.has(order.id) &&
+                            !(acceptedLoading && acceptedOrders.length > 0) ? (
+                              <p className="mt-2 text-sm text-muted-foreground">
+                                {t('app.waylerFeed.acceptedPanel.payment.notAuthorized')}
+                              </p>
+                            ) : null}
+                            {paymentIntent ? (
+                              <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                                <p className="text-sm font-medium">
+                                  {t('app.waylerFeed.acceptedPanel.payment.title')}
+                                </p>
+                                <p className="mt-1 text-sm font-medium">
+                                  {waylerPaymentStatusLabel(paymentIntent, t)}
+                                </p>
+                                {paymentStatusNote ? (
+                                  <p className="mt-2 text-sm text-muted-foreground">
+                                    {paymentStatusNote}
                                   </p>
                                 ) : null}
-                                <Button
-                                  className="w-full sm:w-auto"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleOpenDispute(order.id, order.title)}
-                                >
-                                  {disputesByOrderId[order.id]
-                                    ? t('app.disputes.view')
-                                    : t('app.disputes.open')}
-                                </Button>
-                              </>
-                            ) : null}
-                          </div>
-                          {showProofForm ? (
-                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
-                              <DeliveryProofGuidance
-                                compact
-                                variant="wayler"
-                                status={order.status}
-                                proofSubmittedAt={order.proofSubmittedAt}
-                                proofLoadFailed={order.proofLoadFailed}
-                              />
-                              <p className="mt-3 text-sm font-medium">
-                                {t('app.waylerFeed.acceptedPanel.proofTitle')}
-                              </p>
-                              {isProofDetailLoading ? (
-                                <p
-                                  className="mt-1 text-xs text-muted-foreground"
-                                  role="status"
-                                  aria-live="polite"
-                                >
-                                  {hasKnownProof
-                                    ? t('app.waylerFeed.acceptedPanel.proofRefreshing')
-                                    : t('app.waylerFeed.acceptedPanel.proofLoading')}
-                                </p>
-                              ) : null}
-                              {order.proofLoadFailed ? (
-                                <div className="mt-2">
-                                  <PanelErrorState
-                                    message={t('app.waylerFeed.acceptedPanel.proofLoadFailed')}
-                                    retryLabel={t('app.waylerFeed.acceptedPanel.retryProofStatus')}
-                                    onRetry={() => void refreshWaylerOrderProof(order.id)}
-                                    retryDisabled={
-                                      isProofDetailLoading || actionDisabled || paymentActionBusy
-                                    }
-                                  />
-                                </div>
-                              ) : null}
-                              {order.proofNote ||
-                              order.proofConfirmationCode ||
-                              order.proofSubmittedAt ? (
                                 <dl className="mt-2 flex flex-col gap-1 text-sm">
-                                  {order.proofNote ? (
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.waylerFeed.acceptedPanel.payment.provider')}
+                                    </dt>
+                                    <dd>{paymentIntent.provider}</dd>
+                                  </div>
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.waylerFeed.acceptedPanel.payment.status')}
+                                    </dt>
+                                    <dd>{waylerPaymentStatusLabel(paymentIntent, t)}</dd>
+                                  </div>
+                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                    <dt className="text-muted-foreground">
+                                      {t('app.waylerFeed.acceptedPanel.payment.amount')}
+                                    </dt>
+                                    <dd>
+                                      {formatPaymentAmount(
+                                        paymentIntent.amount,
+                                        paymentIntent.currency,
+                                      )}
+                                    </dd>
+                                  </div>
+                                  {paymentIntent.platformFeeAmount ? (
                                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                                       <dt className="text-muted-foreground">
-                                        {t('app.waylerFeed.acceptedPanel.proofNote')}
+                                        {t('app.waylerFeed.acceptedPanel.payment.platformFee')}
                                       </dt>
-                                      <dd>{order.proofNote}</dd>
-                                    </div>
-                                  ) : null}
-                                  {order.proofConfirmationCode ? (
-                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                      <dt className="text-muted-foreground">
-                                        {t('app.waylerFeed.acceptedPanel.proofConfirmationCode')}
-                                      </dt>
-                                      <dd className="font-mono text-xs">
-                                        {order.proofConfirmationCode}
+                                      <dd>
+                                        {formatPaymentAmount(
+                                          paymentIntent.platformFeeAmount,
+                                          paymentIntent.currency,
+                                        )}
                                       </dd>
                                     </div>
                                   ) : null}
-                                  {order.proofSubmittedAt ? (
+                                  {paymentIntent.escrowAmount ? (
                                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                                       <dt className="text-muted-foreground">
-                                        {t('app.waylerFeed.acceptedPanel.proofSubmittedAt')}
+                                        {t('app.waylerFeed.acceptedPanel.payment.escrowAmount')}
                                       </dt>
-                                      <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                                      <dd>
+                                        {formatPaymentAmount(
+                                          paymentIntent.escrowAmount,
+                                          paymentIntent.currency,
+                                        )}
+                                      </dd>
                                     </div>
                                   ) : null}
                                 </dl>
-                              ) : !order.proofLoadFailed &&
-                                !isProofDetailLoading &&
-                                !hasExistingProof ? (
-                                <div className="mt-2">
-                                  <PanelEmptyState
-                                    title={t('app.waylerFeed.acceptedPanel.proofEmptyTitle')}
-                                    body={t('app.waylerFeed.acceptedPanel.proofEmptyBody')}
-                                  />
-                                </div>
-                              ) : null}
-                              {proofSuccessOrderId === order.id ? (
-                                <p
-                                  className={cn('mt-2', ALERT_SUCCESS_CLASS, 'px-2 py-1.5')}
-                                  role="status"
-                                >
-                                  {t('app.waylerFeed.acceptedPanel.proofSuccess')}
-                                </p>
-                              ) : null}
-                              {proofErrorOrderId === order.id && proofError ? (
-                                <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')} role="alert">
-                                  {proofError}
-                                </p>
-                              ) : null}
-                              <div className="mt-3 flex flex-col gap-3">
-                                <label className="flex flex-col gap-1.5 text-sm">
-                                  <span className="font-medium">
-                                    {t('app.waylerFeed.acceptedPanel.proofNote')}
-                                  </span>
-                                  <textarea
-                                    className={PROOF_TEXTAREA_CLASS}
-                                    value={proofDraft.note}
-                                    onChange={(e) =>
-                                      updateProofDraft(order.id, { note: e.target.value })
-                                    }
-                                    disabled={actionDisabled}
-                                    rows={3}
-                                  />
-                                </label>
-                                <label className="flex flex-col gap-1.5 text-sm">
-                                  <span className="font-medium">
-                                    {t('app.waylerFeed.acceptedPanel.proofConfirmationCode')}
-                                  </span>
-                                  <Input
-                                    value={proofDraft.confirmationCode}
-                                    onChange={(e) =>
-                                      updateProofDraft(order.id, {
-                                        confirmationCode: e.target.value,
-                                      })
-                                    }
-                                    disabled={actionDisabled}
-                                  />
-                                </label>
-                                {!canSubmitProof ? (
-                                  <p className="text-xs text-muted-foreground">
-                                    {t('app.waylerFeed.acceptedPanel.proofAtLeastOne')}
+                              </div>
+                            ) : null}
+                            {order.status === DeliveryOrderStatus.ACCEPTED ? (
+                              <>
+                                {progressErrorOrderId === order.id && progressError ? (
+                                  <p className={cn(ALERT_ERROR_CLASS, 'mt-3 text-sm')} role="alert">
+                                    {progressError}
                                   </p>
                                 ) : null}
                                 <Button
-                                  className="w-full sm:w-auto"
+                                  className="mt-3 w-full sm:w-auto"
                                   size="sm"
-                                  disabled={actionDisabled || !canSubmitProof}
-                                  onClick={() => void handleSubmitProof(order.id)}
+                                  disabled={actionDisabled}
+                                  onClick={() => void handleStartTransit(order.id)}
                                 >
-                                  {isSubmittingProof
-                                    ? t('app.waylerFeed.acceptedPanel.submittingProof')
-                                    : hasExistingProof
-                                      ? t('app.waylerFeed.acceptedPanel.updateProof')
-                                      : t('app.waylerFeed.acceptedPanel.submitProof')}
+                                  {isProgressing && progressAction === 'start-transit'
+                                    ? t('app.waylerFeed.acceptedPanel.startingTransit')
+                                    : t('app.waylerFeed.acceptedPanel.startTransit')}
                                 </Button>
-                              </div>
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                  {t('app.waylerFeed.acceptedPanel.proofTransitRequired')}
+                                </p>
+                              </>
+                            ) : null}
+                            {order.status === DeliveryOrderStatus.IN_TRANSIT ? (
+                              <>
+                                {progressErrorOrderId === order.id && progressError ? (
+                                  <p className={cn(ALERT_ERROR_CLASS, 'mt-3 text-sm')} role="alert">
+                                    {progressError}
+                                  </p>
+                                ) : null}
+                                <Button
+                                  className="mt-3 w-full sm:w-auto"
+                                  size="sm"
+                                  disabled={actionDisabled}
+                                  onClick={() => void handleMarkDelivered(order.id)}
+                                >
+                                  {isProgressing && progressAction === 'mark-delivered'
+                                    ? t('app.waylerFeed.acceptedPanel.markingDelivered')
+                                    : t('app.waylerFeed.acceptedPanel.markDelivered')}
+                                </Button>
+                              </>
+                            ) : null}
+                            {order.status === DeliveryOrderStatus.DELIVERED ? (
+                              <p className="mt-3 text-sm text-muted-foreground">
+                                {t('app.waylerFeed.acceptedPanel.delivered')}
+                              </p>
+                            ) : null}
+                            {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                              <AcceptedOrderDisputeSection
+                                dispute={disputesByOrderId[order.id]}
+                                disputesLoading={disputesLoading}
+                                disputesListLoadFailed={disputesListLoadFailed}
+                                onRetryDisputes={() => void loadUserDisputes()}
+                                panelRole="wayler"
+                                t={t}
+                              />
+                            ) : null}
+                            <div className="wayly-action-group mt-3">
+                              <Button
+                                className="w-full sm:w-auto"
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleOpenOrderDetails(
+                                    toAcceptedOrderDetailsInput(order),
+                                    'wayler',
+                                  )
+                                }
+                              >
+                                {t('app.orders.viewDetails')}
+                              </Button>
+                              {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                                <>
+                                  <Button
+                                    className="w-full sm:w-auto"
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={openingChatOrderId !== null || !waylerHasActiveAccess}
+                                    onClick={() => void handleOpenChat(order.id, order.title)}
+                                  >
+                                    {openingChatOrderId === order.id
+                                      ? t('app.chat.loading')
+                                      : t('app.chat.open')}
+                                  </Button>
+                                  {!waylerHasActiveAccess ? (
+                                    <p className="text-xs text-muted-foreground" role="note">
+                                      {t('app.chat.accessRequiredForContact')}
+                                    </p>
+                                  ) : null}
+                                  <Button
+                                    className="w-full sm:w-auto"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleOpenDispute(order.id, order.title)}
+                                  >
+                                    {disputesByOrderId[order.id]
+                                      ? t('app.disputes.view')
+                                      : t('app.disputes.open')}
+                                  </Button>
+                                </>
+                              ) : null}
                             </div>
-                          ) : null}
-                        </li>
-                      );
-                    })}
-                  </ul>
+                            {showProofForm ? (
+                              <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                                <DeliveryProofGuidance
+                                  compact
+                                  variant="wayler"
+                                  status={order.status}
+                                  proofSubmittedAt={order.proofSubmittedAt}
+                                  proofLoadFailed={order.proofLoadFailed}
+                                />
+                                <p className="mt-3 text-sm font-medium">
+                                  {t('app.waylerFeed.acceptedPanel.proofTitle')}
+                                </p>
+                                {isProofDetailLoading ? (
+                                  <p
+                                    className="mt-1 text-xs text-muted-foreground"
+                                    role="status"
+                                    aria-live="polite"
+                                  >
+                                    {hasKnownProof
+                                      ? t('app.waylerFeed.acceptedPanel.proofRefreshing')
+                                      : t('app.waylerFeed.acceptedPanel.proofLoading')}
+                                  </p>
+                                ) : null}
+                                {order.proofLoadFailed ? (
+                                  <div className="mt-2">
+                                    <PanelErrorState
+                                      message={t('app.waylerFeed.acceptedPanel.proofLoadFailed')}
+                                      retryLabel={t(
+                                        'app.waylerFeed.acceptedPanel.retryProofStatus',
+                                      )}
+                                      onRetry={() => void refreshWaylerOrderProof(order.id)}
+                                      retryDisabled={
+                                        isProofDetailLoading || actionDisabled || paymentActionBusy
+                                      }
+                                    />
+                                  </div>
+                                ) : null}
+                                {order.proofNote ||
+                                order.proofConfirmationCode ||
+                                order.proofSubmittedAt ? (
+                                  <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                    {order.proofNote ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.waylerFeed.acceptedPanel.proofNote')}
+                                        </dt>
+                                        <dd>{order.proofNote}</dd>
+                                      </div>
+                                    ) : null}
+                                    {order.proofConfirmationCode ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.waylerFeed.acceptedPanel.proofConfirmationCode')}
+                                        </dt>
+                                        <dd className="font-mono text-xs">
+                                          {order.proofConfirmationCode}
+                                        </dd>
+                                      </div>
+                                    ) : null}
+                                    {order.proofSubmittedAt ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.waylerFeed.acceptedPanel.proofSubmittedAt')}
+                                        </dt>
+                                        <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                                      </div>
+                                    ) : null}
+                                  </dl>
+                                ) : !order.proofLoadFailed &&
+                                  !isProofDetailLoading &&
+                                  !hasExistingProof ? (
+                                  <div className="mt-2">
+                                    <PanelEmptyState
+                                      title={t('app.waylerFeed.acceptedPanel.proofEmptyTitle')}
+                                      body={t('app.waylerFeed.acceptedPanel.proofEmptyBody')}
+                                    />
+                                  </div>
+                                ) : null}
+                                {proofSuccessOrderId === order.id ? (
+                                  <p
+                                    className={cn('mt-2', ALERT_SUCCESS_CLASS, 'px-2 py-1.5')}
+                                    role="status"
+                                  >
+                                    {t('app.waylerFeed.acceptedPanel.proofSuccess')}
+                                  </p>
+                                ) : null}
+                                {proofErrorOrderId === order.id && proofError ? (
+                                  <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')} role="alert">
+                                    {proofError}
+                                  </p>
+                                ) : null}
+                                <div className="mt-3 flex flex-col gap-3">
+                                  <label className="flex flex-col gap-1.5 text-sm">
+                                    <span className="font-medium">
+                                      {t('app.waylerFeed.acceptedPanel.proofNote')}
+                                    </span>
+                                    <textarea
+                                      className={PROOF_TEXTAREA_CLASS}
+                                      value={proofDraft.note}
+                                      onChange={(e) =>
+                                        updateProofDraft(order.id, { note: e.target.value })
+                                      }
+                                      disabled={actionDisabled}
+                                      rows={3}
+                                    />
+                                  </label>
+                                  <label className="flex flex-col gap-1.5 text-sm">
+                                    <span className="font-medium">
+                                      {t('app.waylerFeed.acceptedPanel.proofConfirmationCode')}
+                                    </span>
+                                    <Input
+                                      value={proofDraft.confirmationCode}
+                                      onChange={(e) =>
+                                        updateProofDraft(order.id, {
+                                          confirmationCode: e.target.value,
+                                        })
+                                      }
+                                      disabled={actionDisabled}
+                                    />
+                                  </label>
+                                  {!canSubmitProof ? (
+                                    <p className="text-xs text-muted-foreground">
+                                      {t('app.waylerFeed.acceptedPanel.proofAtLeastOne')}
+                                    </p>
+                                  ) : null}
+                                  <Button
+                                    className="w-full sm:w-auto"
+                                    size="sm"
+                                    disabled={actionDisabled || !canSubmitProof}
+                                    onClick={() => void handleSubmitProof(order.id)}
+                                  >
+                                    {isSubmittingProof
+                                      ? t('app.waylerFeed.acceptedPanel.submittingProof')
+                                      : hasExistingProof
+                                        ? t('app.waylerFeed.acceptedPanel.updateProof')
+                                        : t('app.waylerFeed.acceptedPanel.submitProof')}
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : null}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
                 ) : null}
               </CardContent>
             </Card>
@@ -3060,418 +3071,426 @@ export default function AppHomePage() {
                     ]}
                   />
                 ) : canViewSenderOrders && senderAcceptedOrders.length > 0 ? (
-                  <ul className="flex flex-col gap-4">
-                    {senderAcceptedOrders.map((order) => {
-                      const statusNote = senderStatusNote(order.status, t);
-                      const paymentIntent = order.paymentIntent;
-                      const paymentStatus = paymentIntent?.status ?? null;
-                      const canAuthorizePayment =
-                        (!paymentIntent || paymentStatus === PaymentStatus.PENDING) &&
-                        (order.status === DeliveryOrderStatus.ACCEPTED ||
-                          order.status === DeliveryOrderStatus.IN_TRANSIT);
-                      const canHoldEscrow = paymentStatus === PaymentStatus.AUTHORIZED;
-                      const canReleasePayment =
-                        paymentStatus === PaymentStatus.HELD_IN_ESCROW &&
-                        order.status === DeliveryOrderStatus.DELIVERED &&
-                        Boolean(order.proofSubmittedAt);
-                      const showReleaseRequirements =
-                        paymentStatus === PaymentStatus.HELD_IN_ESCROW && !canReleasePayment;
-                      const terminalPaymentStatus =
-                        paymentStatus === PaymentStatus.REFUNDED ||
-                        paymentStatus === PaymentStatus.FAILED ||
-                        paymentStatus === PaymentStatus.CANCELLED;
-                      const paymentSuccessMessage =
-                        paymentSuccessOrderId === order.id
-                          ? paymentSuccessKind === 'authorize'
-                            ? t('app.senderPanel.payment.authorizeSuccess')
-                            : paymentSuccessKind === 'hold'
-                              ? t('app.senderPanel.payment.holdSuccess')
-                              : paymentSuccessKind === 'release'
-                                ? t('app.senderPanel.payment.releaseSuccess')
-                                : null
-                          : null;
-                      const showSenderProofPanel =
-                        order.status === DeliveryOrderStatus.IN_TRANSIT ||
-                        order.status === DeliveryOrderStatus.DELIVERED ||
-                        Boolean(order.proofSubmittedAt);
-                      const isSenderProofLoading =
-                        proofDetailLoadingOrderIds.has(order.id) ||
-                        (senderAcceptedLoading &&
-                          senderAcceptedOrders.length > 0 &&
-                          showSenderProofPanel);
-                      const hasSenderKnownProof =
-                        Boolean(order.proofSubmittedAt) ||
-                        Boolean(order.proofNote || order.proofConfirmationCode);
+                  <>
+                    <PaymentTransparencyNote variant="sender" />
+                    <ul className="flex flex-col gap-4">
+                      {senderAcceptedOrders.map((order) => {
+                        const statusNote = senderStatusNote(order.status, t);
+                        const paymentIntent = order.paymentIntent;
+                        const paymentStatus = paymentIntent?.status ?? null;
+                        const canAuthorizePayment =
+                          (!paymentIntent || paymentStatus === PaymentStatus.PENDING) &&
+                          (order.status === DeliveryOrderStatus.ACCEPTED ||
+                            order.status === DeliveryOrderStatus.IN_TRANSIT);
+                        const canHoldEscrow = paymentStatus === PaymentStatus.AUTHORIZED;
+                        const canReleasePayment =
+                          paymentStatus === PaymentStatus.HELD_IN_ESCROW &&
+                          order.status === DeliveryOrderStatus.DELIVERED &&
+                          Boolean(order.proofSubmittedAt);
+                        const showReleaseRequirements =
+                          paymentStatus === PaymentStatus.HELD_IN_ESCROW && !canReleasePayment;
+                        const terminalPaymentStatus =
+                          paymentStatus === PaymentStatus.REFUNDED ||
+                          paymentStatus === PaymentStatus.FAILED ||
+                          paymentStatus === PaymentStatus.CANCELLED;
+                        const paymentSuccessMessage =
+                          paymentSuccessOrderId === order.id
+                            ? paymentSuccessKind === 'authorize'
+                              ? t('app.senderPanel.payment.authorizeSuccess')
+                              : paymentSuccessKind === 'hold'
+                                ? t('app.senderPanel.payment.holdSuccess')
+                                : paymentSuccessKind === 'release'
+                                  ? t('app.senderPanel.payment.releaseSuccess')
+                                  : null
+                            : null;
+                        const showSenderProofPanel =
+                          order.status === DeliveryOrderStatus.IN_TRANSIT ||
+                          order.status === DeliveryOrderStatus.DELIVERED ||
+                          Boolean(order.proofSubmittedAt);
+                        const isSenderProofLoading =
+                          proofDetailLoadingOrderIds.has(order.id) ||
+                          (senderAcceptedLoading &&
+                            senderAcceptedOrders.length > 0 &&
+                            showSenderProofPanel);
+                        const hasSenderKnownProof =
+                          Boolean(order.proofSubmittedAt) ||
+                          Boolean(order.proofNote || order.proofConfirmationCode);
 
-                      return (
-                        <li
-                          key={order.id}
-                          id={acceptedOrderElementId(order.id)}
-                          className={cn(
-                            ORDER_CARD_CLASS,
-                            highlightedOrderId === order.id &&
-                              'ring-2 ring-primary ring-offset-2 ring-offset-background',
-                          )}
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <p className="font-medium">{order.title}</p>
-                            <OrderStatusBadge
-                              status={order.status}
-                              label={orderStatusLabel(order.status, t)}
-                            />
-                          </div>
-                          <p className="mt-1 text-muted-foreground">{order.type}</p>
-                          <DeliveryOrderSourceBadge
-                            sourceType={order.sourceType}
-                            availabilityRequestId={order.availabilityRequestId}
-                          />
-                          {statusNote ? (
-                            <p className="wayly-inline-note mt-2 rounded-lg border px-3 py-2 text-sm text-muted-foreground">
-                              {statusNote}
-                            </p>
-                          ) : null}
-                          <OrderLifecycleTimeline
-                            compact
-                            className="mt-3"
-                            status={order.status}
-                            sourceType={order.sourceType}
-                            createdAt={order.createdAt}
-                            publishedAt={order.publishedAt}
-                            acceptedAt={order.acceptedAt}
-                            deliveredAt={order.deliveredAt}
-                            proofFlowEnabled={showSenderProofPanel}
-                          />
-                          <dl className="mt-2 flex flex-col gap-1">
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.senderPanel.labelRoute')}
-                              </dt>
-                              <dd>
-                                {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
-                                {t('app.orders.routeSeparator')}{' '}
-                                {formatLocation(order.dropoffCity, order.dropoffCountry)}
-                              </dd>
-                            </div>
-                            <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                              <dt className="text-muted-foreground">
-                                {t('app.senderPanel.labelReward')}
-                              </dt>
-                              <dd>
-                                {formatReward(
-                                  order.offeredRewardAmount,
-                                  order.currency,
-                                  t('app.orders.rewardNone'),
-                                )}
-                              </dd>
-                            </div>
-                            {order.acceptedAt ? (
-                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                <dt className="text-muted-foreground">
-                                  {t('app.senderPanel.labelAcceptedAt')}
-                                </dt>
-                                <dd>{new Date(order.acceptedAt).toLocaleString()}</dd>
-                              </div>
-                            ) : null}
-                            {order.deliveredAt ? (
-                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                <dt className="text-muted-foreground">
-                                  {t('app.senderPanel.labelDeliveredAt')}
-                                </dt>
-                                <dd>{new Date(order.deliveredAt).toLocaleString()}</dd>
-                              </div>
-                            ) : null}
-                          </dl>
-                          {showSenderProofPanel ? (
-                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
-                              <DeliveryProofGuidance
-                                compact
-                                variant="sender"
+                        return (
+                          <li
+                            key={order.id}
+                            id={acceptedOrderElementId(order.id)}
+                            className={cn(
+                              ORDER_CARD_CLASS,
+                              highlightedOrderId === order.id &&
+                                'ring-2 ring-primary ring-offset-2 ring-offset-background',
+                            )}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <p className="font-medium">{order.title}</p>
+                              <OrderStatusBadge
                                 status={order.status}
-                                proofSubmittedAt={order.proofSubmittedAt}
-                                proofLoadFailed={order.proofLoadFailed}
-                                paymentStatus={order.paymentLoadFailed ? undefined : paymentStatus}
+                                label={orderStatusLabel(order.status, t)}
                               />
-                              <p className="mt-3 text-sm font-medium">
-                                {t('app.senderPanel.proofTitle')}
+                            </div>
+                            <p className="mt-1 text-muted-foreground">{order.type}</p>
+                            <DeliveryOrderSourceBadge
+                              sourceType={order.sourceType}
+                              availabilityRequestId={order.availabilityRequestId}
+                            />
+                            {statusNote ? (
+                              <p className="wayly-inline-note mt-2 rounded-lg border px-3 py-2 text-sm text-muted-foreground">
+                                {statusNote}
                               </p>
-                              {isSenderProofLoading ? (
+                            ) : null}
+                            <OrderLifecycleTimeline
+                              compact
+                              className="mt-3"
+                              status={order.status}
+                              sourceType={order.sourceType}
+                              createdAt={order.createdAt}
+                              publishedAt={order.publishedAt}
+                              acceptedAt={order.acceptedAt}
+                              deliveredAt={order.deliveredAt}
+                              proofFlowEnabled={showSenderProofPanel}
+                            />
+                            <dl className="mt-2 flex flex-col gap-1">
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.senderPanel.labelRoute')}
+                                </dt>
+                                <dd>
+                                  {formatLocation(order.pickupCity, order.pickupCountry)}{' '}
+                                  {t('app.orders.routeSeparator')}{' '}
+                                  {formatLocation(order.dropoffCity, order.dropoffCountry)}
+                                </dd>
+                              </div>
+                              <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                <dt className="text-muted-foreground">
+                                  {t('app.senderPanel.labelReward')}
+                                </dt>
+                                <dd>
+                                  {formatReward(
+                                    order.offeredRewardAmount,
+                                    order.currency,
+                                    t('app.orders.rewardNone'),
+                                  )}
+                                </dd>
+                              </div>
+                              {order.acceptedAt ? (
+                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                  <dt className="text-muted-foreground">
+                                    {t('app.senderPanel.labelAcceptedAt')}
+                                  </dt>
+                                  <dd>{new Date(order.acceptedAt).toLocaleString()}</dd>
+                                </div>
+                              ) : null}
+                              {order.deliveredAt ? (
+                                <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                  <dt className="text-muted-foreground">
+                                    {t('app.senderPanel.labelDeliveredAt')}
+                                  </dt>
+                                  <dd>{new Date(order.deliveredAt).toLocaleString()}</dd>
+                                </div>
+                              ) : null}
+                            </dl>
+                            {showSenderProofPanel ? (
+                              <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                                <DeliveryProofGuidance
+                                  compact
+                                  variant="sender"
+                                  status={order.status}
+                                  proofSubmittedAt={order.proofSubmittedAt}
+                                  proofLoadFailed={order.proofLoadFailed}
+                                  paymentStatus={
+                                    order.paymentLoadFailed ? undefined : paymentStatus
+                                  }
+                                />
+                                <p className="mt-3 text-sm font-medium">
+                                  {t('app.senderPanel.proofTitle')}
+                                </p>
+                                {isSenderProofLoading ? (
+                                  <p
+                                    className="mt-1 text-xs text-muted-foreground"
+                                    role="status"
+                                    aria-live="polite"
+                                  >
+                                    {hasSenderKnownProof
+                                      ? t('app.senderPanel.proofRefreshing')
+                                      : t('app.senderPanel.proofLoading')}
+                                  </p>
+                                ) : null}
+                                {order.proofLoadFailed ? (
+                                  <div className="mt-2">
+                                    <PanelErrorState
+                                      message={t('app.senderPanel.proofLoadFailed')}
+                                      retryLabel={t('app.senderPanel.retryProofStatus')}
+                                      onRetry={() => void refreshSenderOrderProof(order.id)}
+                                      retryDisabled={
+                                        isSenderProofLoading ||
+                                        senderAcceptedLoading ||
+                                        paymentActionBusy
+                                      }
+                                    />
+                                  </div>
+                                ) : null}
+                                {order.proofSubmittedAt ? (
+                                  <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                    {order.proofNote ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.senderPanel.proofNote')}
+                                        </dt>
+                                        <dd>{order.proofNote}</dd>
+                                      </div>
+                                    ) : null}
+                                    {order.proofConfirmationCode ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.senderPanel.proofConfirmationCode')}
+                                        </dt>
+                                        <dd className="font-mono text-xs">
+                                          {order.proofConfirmationCode}
+                                        </dd>
+                                      </div>
+                                    ) : null}
+                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                      <dt className="text-muted-foreground">
+                                        {t('app.senderPanel.proofSubmittedAt')}
+                                      </dt>
+                                      <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
+                                    </div>
+                                  </dl>
+                                ) : !order.proofLoadFailed && !isSenderProofLoading ? (
+                                  <div className="mt-2">
+                                    <PanelEmptyState
+                                      title={
+                                        order.status === DeliveryOrderStatus.DELIVERED
+                                          ? t('app.senderPanel.proofMissingTitle')
+                                          : t('app.senderPanel.proofPendingTitle')
+                                      }
+                                      body={
+                                        order.status === DeliveryOrderStatus.DELIVERED
+                                          ? t('app.senderPanel.proofMissingBody')
+                                          : t('app.senderPanel.proofPendingBody')
+                                      }
+                                    />
+                                  </div>
+                                ) : null}
+                              </div>
+                            ) : null}
+                            <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
+                              <p className="text-sm font-medium">
+                                {t('app.senderPanel.payment.title')}
+                              </p>
+                              {senderAcceptedLoading && senderAcceptedOrders.length > 0 ? (
                                 <p
                                   className="mt-1 text-xs text-muted-foreground"
                                   role="status"
                                   aria-live="polite"
                                 >
-                                  {hasSenderKnownProof
-                                    ? t('app.senderPanel.proofRefreshing')
-                                    : t('app.senderPanel.proofLoading')}
+                                  {paymentIntent
+                                    ? t('app.senderPanel.payment.paymentRefreshing')
+                                    : t('app.senderPanel.payment.paymentLoading')}
                                 </p>
                               ) : null}
-                              {order.proofLoadFailed ? (
+                              {paymentStatusLoadingOrderIds.has(order.id) &&
+                              !senderAcceptedLoading ? (
+                                <p
+                                  className="mt-1 text-xs text-muted-foreground"
+                                  role="status"
+                                  aria-live="polite"
+                                >
+                                  {paymentIntent
+                                    ? t('app.senderPanel.payment.paymentRefreshing')
+                                    : t('app.senderPanel.payment.paymentLoading')}
+                                </p>
+                              ) : null}
+                              {order.paymentLoadFailed ? (
                                 <div className="mt-2">
                                   <PanelErrorState
-                                    message={t('app.senderPanel.proofLoadFailed')}
-                                    retryLabel={t('app.senderPanel.retryProofStatus')}
-                                    onRetry={() => void refreshSenderOrderProof(order.id)}
+                                    message={t('app.senderPanel.payment.loadFailed')}
+                                    retryLabel={t('app.senderPanel.payment.retryPaymentStatus')}
+                                    onRetry={() => void refreshSenderOrderPayment(order.id)}
                                     retryDisabled={
-                                      isSenderProofLoading ||
+                                      paymentStatusLoadingOrderIds.has(order.id) ||
                                       senderAcceptedLoading ||
                                       paymentActionBusy
                                     }
                                   />
                                 </div>
                               ) : null}
-                              {order.proofSubmittedAt ? (
-                                <dl className="mt-2 flex flex-col gap-1 text-sm">
-                                  {order.proofNote ? (
+                              {paymentSuccessMessage ? (
+                                <p className={cn(ALERT_SUCCESS_CLASS, 'mt-2 text-sm')}>
+                                  {paymentSuccessMessage}
+                                </p>
+                              ) : null}
+                              {paymentErrorOrderId === order.id && paymentError ? (
+                                <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')} role="alert">
+                                  {paymentError}
+                                </p>
+                              ) : null}
+                              <p className="mt-1 text-sm font-medium">
+                                {senderPaymentStatusLabel(paymentIntent, t)}
+                              </p>
+                              <dl className="mt-2 flex flex-col gap-1 text-sm">
+                                {paymentIntent ? (
+                                  <>
                                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                                       <dt className="text-muted-foreground">
-                                        {t('app.senderPanel.proofNote')}
+                                        {t('app.senderPanel.payment.provider')}
                                       </dt>
-                                      <dd>{order.proofNote}</dd>
+                                      <dd>{paymentIntent.provider}</dd>
                                     </div>
-                                  ) : null}
-                                  {order.proofConfirmationCode ? (
                                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                                       <dt className="text-muted-foreground">
-                                        {t('app.senderPanel.proofConfirmationCode')}
+                                        {t('app.senderPanel.payment.amount')}
                                       </dt>
-                                      <dd className="font-mono text-xs">
-                                        {order.proofConfirmationCode}
+                                      <dd>
+                                        {formatPaymentAmount(
+                                          paymentIntent.amount,
+                                          paymentIntent.currency,
+                                        )}
                                       </dd>
                                     </div>
+                                    {paymentIntent.platformFeeAmount ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.senderPanel.payment.platformFee')}
+                                        </dt>
+                                        <dd>
+                                          {formatPaymentAmount(
+                                            paymentIntent.platformFeeAmount,
+                                            paymentIntent.currency,
+                                          )}
+                                        </dd>
+                                      </div>
+                                    ) : null}
+                                    {paymentIntent.escrowAmount ? (
+                                      <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
+                                        <dt className="text-muted-foreground">
+                                          {t('app.senderPanel.payment.escrowAmount')}
+                                        </dt>
+                                        <dd>
+                                          {formatPaymentAmount(
+                                            paymentIntent.escrowAmount,
+                                            paymentIntent.currency,
+                                          )}
+                                        </dd>
+                                      </div>
+                                    ) : null}
+                                  </>
+                                ) : null}
+                              </dl>
+                              {showReleaseRequirements ? (
+                                <p className="mt-2 text-sm text-muted-foreground">
+                                  {t('app.senderPanel.payment.releaseRequirements')}
+                                </p>
+                              ) : null}
+                              {demoToolsEnabled &&
+                              !terminalPaymentStatus &&
+                              paymentStatus !== PaymentStatus.RELEASED ? (
+                                <div className="wayly-action-group mt-3">
+                                  {canAuthorizePayment ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      disabled={paymentActionBusy}
+                                      onClick={() => void handleMockAuthorizePayment(order.id)}
+                                    >
+                                      {paymentActionOrderId === order.id &&
+                                      paymentAction === 'authorize'
+                                        ? t('app.senderPanel.payment.mockAuthorizing')
+                                        : t('app.senderPanel.payment.mockAuthorize')}
+                                    </Button>
                                   ) : null}
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.senderPanel.proofSubmittedAt')}
-                                    </dt>
-                                    <dd>{new Date(order.proofSubmittedAt).toLocaleString()}</dd>
-                                  </div>
-                                </dl>
-                              ) : !order.proofLoadFailed && !isSenderProofLoading ? (
-                                <div className="mt-2">
-                                  <PanelEmptyState
-                                    title={
-                                      order.status === DeliveryOrderStatus.DELIVERED
-                                        ? t('app.senderPanel.proofMissingTitle')
-                                        : t('app.senderPanel.proofPendingTitle')
-                                    }
-                                    body={
-                                      order.status === DeliveryOrderStatus.DELIVERED
-                                        ? t('app.senderPanel.proofMissingBody')
-                                        : t('app.senderPanel.proofPendingBody')
-                                    }
-                                  />
+                                  {canHoldEscrow && paymentIntent ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      disabled={paymentActionBusy}
+                                      onClick={() =>
+                                        void handleMockHoldEscrow(order.id, paymentIntent.id)
+                                      }
+                                    >
+                                      {paymentActionOrderId === order.id && paymentAction === 'hold'
+                                        ? t('app.senderPanel.payment.capturing')
+                                        : t('app.senderPanel.payment.mockHoldEscrow')}
+                                    </Button>
+                                  ) : null}
+                                  {canReleasePayment && paymentIntent ? (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      disabled={paymentActionBusy}
+                                      onClick={() =>
+                                        void handleMockReleasePayment(order.id, paymentIntent.id)
+                                      }
+                                    >
+                                      {paymentActionOrderId === order.id &&
+                                      paymentAction === 'release'
+                                        ? t('app.senderPanel.payment.mockReleasing')
+                                        : t('app.senderPanel.payment.mockRelease')}
+                                    </Button>
+                                  ) : null}
                                 </div>
                               ) : null}
                             </div>
-                          ) : null}
-                          <div className="wayly-proof-panel mt-3 rounded-xl border p-3">
-                            <p className="text-sm font-medium">
-                              {t('app.senderPanel.payment.title')}
-                            </p>
-                            {senderAcceptedLoading && senderAcceptedOrders.length > 0 ? (
-                              <p
-                                className="mt-1 text-xs text-muted-foreground"
-                                role="status"
-                                aria-live="polite"
+                            {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
+                              <AcceptedOrderDisputeSection
+                                dispute={disputesByOrderId[order.id]}
+                                disputesLoading={disputesLoading}
+                                disputesListLoadFailed={disputesListLoadFailed}
+                                onRetryDisputes={() => void loadUserDisputes()}
+                                panelRole="sender"
+                                t={t}
+                              />
+                            ) : null}
+                            <div className="wayly-action-group mt-3">
+                              <Button
+                                className="w-full sm:w-auto"
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleOpenOrderDetails(
+                                    toAcceptedOrderDetailsInput(order),
+                                    'sender',
+                                  )
+                                }
                               >
-                                {paymentIntent
-                                  ? t('app.senderPanel.payment.paymentRefreshing')
-                                  : t('app.senderPanel.payment.paymentLoading')}
-                              </p>
-                            ) : null}
-                            {paymentStatusLoadingOrderIds.has(order.id) &&
-                            !senderAcceptedLoading ? (
-                              <p
-                                className="mt-1 text-xs text-muted-foreground"
-                                role="status"
-                                aria-live="polite"
-                              >
-                                {paymentIntent
-                                  ? t('app.senderPanel.payment.paymentRefreshing')
-                                  : t('app.senderPanel.payment.paymentLoading')}
-                              </p>
-                            ) : null}
-                            {order.paymentLoadFailed ? (
-                              <div className="mt-2">
-                                <PanelErrorState
-                                  message={t('app.senderPanel.payment.loadFailed')}
-                                  retryLabel={t('app.senderPanel.payment.retryPaymentStatus')}
-                                  onRetry={() => void refreshSenderOrderPayment(order.id)}
-                                  retryDisabled={
-                                    paymentStatusLoadingOrderIds.has(order.id) ||
-                                    senderAcceptedLoading ||
-                                    paymentActionBusy
-                                  }
-                                />
-                              </div>
-                            ) : null}
-                            {paymentSuccessMessage ? (
-                              <p className={cn(ALERT_SUCCESS_CLASS, 'mt-2 text-sm')}>
-                                {paymentSuccessMessage}
-                              </p>
-                            ) : null}
-                            {paymentErrorOrderId === order.id && paymentError ? (
-                              <p className={cn(ALERT_ERROR_CLASS, 'mt-2 text-sm')} role="alert">
-                                {paymentError}
-                              </p>
-                            ) : null}
-                            <p className="mt-1 text-sm font-medium">
-                              {senderPaymentStatusLabel(paymentIntent, t)}
-                            </p>
-                            <dl className="mt-2 flex flex-col gap-1 text-sm">
-                              {paymentIntent ? (
+                                {t('app.orders.viewDetails')}
+                              </Button>
+                              {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
                                 <>
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.senderPanel.payment.provider')}
-                                    </dt>
-                                    <dd>{paymentIntent.provider}</dd>
-                                  </div>
-                                  <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                    <dt className="text-muted-foreground">
-                                      {t('app.senderPanel.payment.amount')}
-                                    </dt>
-                                    <dd>
-                                      {formatPaymentAmount(
-                                        paymentIntent.amount,
-                                        paymentIntent.currency,
-                                      )}
-                                    </dd>
-                                  </div>
-                                  {paymentIntent.platformFeeAmount ? (
-                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                      <dt className="text-muted-foreground">
-                                        {t('app.senderPanel.payment.platformFee')}
-                                      </dt>
-                                      <dd>
-                                        {formatPaymentAmount(
-                                          paymentIntent.platformFeeAmount,
-                                          paymentIntent.currency,
-                                        )}
-                                      </dd>
-                                    </div>
-                                  ) : null}
-                                  {paymentIntent.escrowAmount ? (
-                                    <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-                                      <dt className="text-muted-foreground">
-                                        {t('app.senderPanel.payment.escrowAmount')}
-                                      </dt>
-                                      <dd>
-                                        {formatPaymentAmount(
-                                          paymentIntent.escrowAmount,
-                                          paymentIntent.currency,
-                                        )}
-                                      </dd>
-                                    </div>
-                                  ) : null}
+                                  <Button
+                                    className="w-full sm:w-auto"
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={openingChatOrderId !== null}
+                                    onClick={() => void handleOpenChat(order.id, order.title)}
+                                  >
+                                    {openingChatOrderId === order.id
+                                      ? t('app.chat.loading')
+                                      : t('app.chat.open')}
+                                  </Button>
+                                  <Button
+                                    className="w-full sm:w-auto"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleOpenDispute(order.id, order.title)}
+                                  >
+                                    {disputesByOrderId[order.id]
+                                      ? t('app.disputes.view')
+                                      : t('app.disputes.open')}
+                                  </Button>
                                 </>
                               ) : null}
-                            </dl>
-                            {showReleaseRequirements ? (
-                              <p className="mt-2 text-sm text-muted-foreground">
-                                {t('app.senderPanel.payment.releaseRequirements')}
-                              </p>
-                            ) : null}
-                            {demoToolsEnabled &&
-                            !terminalPaymentStatus &&
-                            paymentStatus !== PaymentStatus.RELEASED ? (
-                              <div className="wayly-action-group mt-3">
-                                {canAuthorizePayment ? (
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={paymentActionBusy}
-                                    onClick={() => void handleMockAuthorizePayment(order.id)}
-                                  >
-                                    {paymentActionOrderId === order.id &&
-                                    paymentAction === 'authorize'
-                                      ? t('app.senderPanel.payment.mockAuthorizing')
-                                      : t('app.senderPanel.payment.mockAuthorize')}
-                                  </Button>
-                                ) : null}
-                                {canHoldEscrow && paymentIntent ? (
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={paymentActionBusy}
-                                    onClick={() =>
-                                      void handleMockHoldEscrow(order.id, paymentIntent.id)
-                                    }
-                                  >
-                                    {paymentActionOrderId === order.id && paymentAction === 'hold'
-                                      ? t('app.senderPanel.payment.capturing')
-                                      : t('app.senderPanel.payment.mockHoldEscrow')}
-                                  </Button>
-                                ) : null}
-                                {canReleasePayment && paymentIntent ? (
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    disabled={paymentActionBusy}
-                                    onClick={() =>
-                                      void handleMockReleasePayment(order.id, paymentIntent.id)
-                                    }
-                                  >
-                                    {paymentActionOrderId === order.id &&
-                                    paymentAction === 'release'
-                                      ? t('app.senderPanel.payment.mockReleasing')
-                                      : t('app.senderPanel.payment.mockRelease')}
-                                  </Button>
-                                ) : null}
-                              </div>
-                            ) : null}
-                          </div>
-                          {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
-                            <AcceptedOrderDisputeSection
-                              dispute={disputesByOrderId[order.id]}
-                              disputesLoading={disputesLoading}
-                              disputesListLoadFailed={disputesListLoadFailed}
-                              onRetryDisputes={() => void loadUserDisputes()}
-                              panelRole="sender"
-                              t={t}
-                            />
-                          ) : null}
-                          <div className="wayly-action-group mt-3">
-                            <Button
-                              className="w-full sm:w-auto"
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                handleOpenOrderDetails(toAcceptedOrderDetailsInput(order), 'sender')
-                              }
-                            >
-                              {t('app.orders.viewDetails')}
-                            </Button>
-                            {SENDER_LIFECYCLE_STATUSES.has(order.status) ? (
-                              <>
-                                <Button
-                                  className="w-full sm:w-auto"
-                                  variant="outline"
-                                  size="sm"
-                                  disabled={openingChatOrderId !== null}
-                                  onClick={() => void handleOpenChat(order.id, order.title)}
-                                >
-                                  {openingChatOrderId === order.id
-                                    ? t('app.chat.loading')
-                                    : t('app.chat.open')}
-                                </Button>
-                                <Button
-                                  className="w-full sm:w-auto"
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => handleOpenDispute(order.id, order.title)}
-                                >
-                                  {disputesByOrderId[order.id]
-                                    ? t('app.disputes.view')
-                                    : t('app.disputes.open')}
-                                </Button>
-                              </>
-                            ) : null}
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
                 ) : null}
               </CardContent>
             </Card>

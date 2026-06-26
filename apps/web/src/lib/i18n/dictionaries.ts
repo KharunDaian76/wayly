@@ -963,6 +963,32 @@ const en = {
     'Add clear delivery facts and keep sensitive information out.',
   'app.disputeEvidence.messageCounter': '{count} characters remaining',
   'app.disputeEvidence.submitting': 'Submitting…',
+  'app.paymentTransparency.title': 'Payment transparency',
+  'app.paymentTransparency.subtitle':
+    'Payment status reflects current platform records — not real money movement in this mock/manual flow.',
+  'app.paymentTransparency.senderTitle': 'Sender payment transparency',
+  'app.paymentTransparency.waylerTitle': 'Wayler payment transparency',
+  'app.paymentTransparency.adminTitle': 'Admin payment review transparency',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'Payment status is shown based on current platform records.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'Keep payment agreements and delivery details inside Wayly.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'Do not share private payment card or bank details in chat.',
+  'app.paymentTransparency.mockManualFlow':
+    'The current mock/manual payment flow is for testing and operations review.',
+  'app.paymentTransparency.noRealMoneyMovement':
+    'This flow does not move real money through a payment provider.',
+  'app.paymentTransparency.adminDecisionOnly':
+    'Manual review, refund, and release decisions are metadata records only.',
+  'app.paymentTransparency.futureProviderIntegration':
+    'Provider payout and refund integration is future work.',
+  'app.paymentTransparency.noGuaranteedRefund':
+    'Payment status helps track stages — it does not guarantee a refund.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    'Payment completion depends on the platform payment flow — payout is not guaranteed.',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'Keep delivery proof and communication inside Wayly to support payment review.',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -2579,6 +2605,32 @@ const ru: Dictionary = {
     'Добавьте чёткие факты о доставке и не включайте конфиденциальную информацию.',
   'app.disputeEvidence.messageCounter': 'Осталось символов: {count}',
   'app.disputeEvidence.submitting': 'Отправка…',
+  'app.paymentTransparency.title': 'Прозрачность платежей',
+  'app.paymentTransparency.subtitle':
+    'Статус платежа отражает записи платформы — не реальное движение денег в mock/ручном потоке.',
+  'app.paymentTransparency.senderTitle': 'Прозрачность платежей для отправителя',
+  'app.paymentTransparency.waylerTitle': 'Прозрачность платежей для Wayler',
+  'app.paymentTransparency.adminTitle': 'Прозрачность платёжной проверки для админа',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'Статус платежа показывается на основе текущих записей платформы.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'Держите платёжные договорённости и детали доставки в Wayly.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'Не делитесь данными банковских карт или счетов в чате.',
+  'app.paymentTransparency.mockManualFlow':
+    'Текущий mock/ручной платёжный поток предназначен для тестирования и операционного обзора.',
+  'app.paymentTransparency.noRealMoneyMovement':
+    'Этот поток не перемещает реальные деньги через платёжного провайдера.',
+  'app.paymentTransparency.adminDecisionOnly':
+    'Ручная проверка и решения о возврате/выпуске — только записи метаданных.',
+  'app.paymentTransparency.futureProviderIntegration':
+    'Интеграция выплат и возвратов через провайдера — будущая работа.',
+  'app.paymentTransparency.noGuaranteedRefund':
+    'Статус помогает отслеживать этапы — он не гарантирует возврат.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    'Завершение платежа зависит от потока платформы — выплата не гарантирована.',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'Храните подтверждение доставки и общение в Wayly для поддержки проверки платежа.',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -4195,6 +4247,32 @@ const es: Dictionary = {
     'Añada hechos claros de entrega y evite información sensible.',
   'app.disputeEvidence.messageCounter': '{count} caracteres restantes',
   'app.disputeEvidence.submitting': 'Enviando…',
+  'app.paymentTransparency.title': 'Transparencia de pagos',
+  'app.paymentTransparency.subtitle':
+    'El estado del pago refleja registros de la plataforma — no movimiento real de dinero en este flujo mock/manual.',
+  'app.paymentTransparency.senderTitle': 'Transparencia de pago del remitente',
+  'app.paymentTransparency.waylerTitle': 'Transparencia de pago del Wayler',
+  'app.paymentTransparency.adminTitle': 'Transparencia de revisión de pagos admin',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'El estado del pago se muestra según los registros actuales de la plataforma.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'Mantenga acuerdos de pago y detalles de entrega dentro de Wayly.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'No comparta datos de tarjetas bancarias o cuentas en el chat.',
+  'app.paymentTransparency.mockManualFlow':
+    'El flujo mock/manual actual es para pruebas y revisión operativa.',
+  'app.paymentTransparency.noRealMoneyMovement':
+    'Este flujo no mueve dinero real a través de un proveedor de pagos.',
+  'app.paymentTransparency.adminDecisionOnly':
+    'Revisión manual y decisiones de reembolso/liberación son solo registros de metadatos.',
+  'app.paymentTransparency.futureProviderIntegration':
+    'La integración de pagos y reembolsos con proveedor es trabajo futuro.',
+  'app.paymentTransparency.noGuaranteedRefund':
+    'El estado ayuda a seguir etapas — no garantiza un reembolso.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    'La finalización del pago depende del flujo de la plataforma — el pago al Wayler no está garantizado.',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'Mantenga prueba de entrega y comunicación en Wayly para apoyar la revisión de pagos.',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -5831,6 +5909,32 @@ const fr: Dictionary = {
     'Ajoutez des faits de livraison clairs et excluez les informations sensibles.',
   'app.disputeEvidence.messageCounter': '{count} caractères restants',
   'app.disputeEvidence.submitting': 'Envoi…',
+  'app.paymentTransparency.title': 'Transparence des paiements',
+  'app.paymentTransparency.subtitle':
+    "Le statut de paiement reflète les enregistrements de la plateforme — pas de mouvement réel d'argent dans ce flux mock/manuel.",
+  'app.paymentTransparency.senderTitle': 'Transparence paiement expéditeur',
+  'app.paymentTransparency.waylerTitle': 'Transparence paiement Wayler',
+  'app.paymentTransparency.adminTitle': 'Transparence revue paiement admin',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'Le statut de paiement est affiché selon les enregistrements actuels de la plateforme.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'Gardez les accords de paiement et détails de livraison dans Wayly.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'Ne partagez pas de données de carte bancaire ou de compte dans le chat.',
+  'app.paymentTransparency.mockManualFlow':
+    'Le flux mock/manuel actuel sert aux tests et à la revue opérationnelle.',
+  'app.paymentTransparency.noRealMoneyMovement':
+    "Ce flux ne déplace pas d'argent réel via un prestataire de paiement.",
+  'app.paymentTransparency.adminDecisionOnly':
+    'Revue manuelle et décisions remboursement/libération sont des enregistrements de métadonnées uniquement.',
+  'app.paymentTransparency.futureProviderIntegration':
+    "L'intégration paiement/remboursement via prestataire est un travail futur.",
+  'app.paymentTransparency.noGuaranteedRefund':
+    'Le statut aide à suivre les étapes — il ne garantit pas un remboursement.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    "L'achèvement du paiement dépend du flux plateforme — le paiement Wayler n'est pas garanti.",
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'Gardez preuve de livraison et communication dans Wayly pour la revue de paiement.',
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -7485,6 +7589,32 @@ const de: Dictionary = {
     'Fügen Sie klare Lieferfakten hinzu und lassen Sie sensible Informationen weg.',
   'app.disputeEvidence.messageCounter': '{count} Zeichen verbleibend',
   'app.disputeEvidence.submitting': 'Wird gesendet…',
+  'app.paymentTransparency.title': 'Zahlungstransparenz',
+  'app.paymentTransparency.subtitle':
+    'Der Zahlungsstatus spiegelt Plattformdaten wider — kein echtes Geld in diesem Mock/Manuell-Flow.',
+  'app.paymentTransparency.senderTitle': 'Zahlungstransparenz für Sender',
+  'app.paymentTransparency.waylerTitle': 'Zahlungstransparenz für Wayler',
+  'app.paymentTransparency.adminTitle': 'Admin-Zahlungsprüfung Transparenz',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'Der Zahlungsstatus basiert auf aktuellen Plattformdatensätzen.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'Halten Sie Zahlungsvereinbarungen und Lieferdetails in Wayly.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'Teilen Sie keine privaten Karten- oder Bankdaten im Chat.',
+  'app.paymentTransparency.mockManualFlow':
+    'Der aktuelle Mock/Manuell-Zahlungsflow dient Tests und Operations-Review.',
+  'app.paymentTransparency.noRealMoneyMovement':
+    'Dieser Flow bewegt kein echtes Geld über einen Zahlungsanbieter.',
+  'app.paymentTransparency.adminDecisionOnly':
+    'Manuelle Prüfung sowie Erstattungs-/Freigabeentscheidungen sind nur Metadaten-Einträge.',
+  'app.paymentTransparency.futureProviderIntegration':
+    'Anbieter-Auszahlungs- und Erstattungsintegration ist zukünftige Arbeit.',
+  'app.paymentTransparency.noGuaranteedRefund':
+    'Der Status hilft bei der Nachverfolgung — er garantiert keine Erstattung.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    'Zahlungsabschluss hängt vom Plattform-Flow ab — Auszahlung ist nicht garantiert.',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'Bewahren Sie Liefernachweis und Kommunikation in Wayly für die Zahlungsprüfung.',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -9099,6 +9229,32 @@ const tr: Dictionary = {
     'Net teslimat gerçekleri ekleyin ve hassas bilgilerden kaçının.',
   'app.disputeEvidence.messageCounter': '{count} karakter kaldı',
   'app.disputeEvidence.submitting': 'Gönderiliyor…',
+  'app.paymentTransparency.title': 'Ödeme şeffaflığı',
+  'app.paymentTransparency.subtitle':
+    'Ödeme durumu platform kayıtlarını yansıtır — bu mock/manuel akışta gerçek para hareketi yoktur.',
+  'app.paymentTransparency.senderTitle': 'Gönderici ödeme şeffaflığı',
+  'app.paymentTransparency.waylerTitle': 'Wayler ödeme şeffaflığı',
+  'app.paymentTransparency.adminTitle': 'Admin ödeme inceleme şeffaflığı',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'Ödeme durumu mevcut platform kayıtlarına göre gösterilir.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'Ödeme anlaşmalarını ve teslimat detaylarını Wayly içinde tutun.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'Sohbette özel kart veya banka bilgilerini paylaşmayın.',
+  'app.paymentTransparency.mockManualFlow':
+    'Mevcut mock/manuel ödeme akışı test ve operasyon incelemesi içindir.',
+  'app.paymentTransparency.noRealMoneyMovement':
+    'Bu akış ödeme sağlayıcısı üzerinden gerçek para taşımaz.',
+  'app.paymentTransparency.adminDecisionOnly':
+    'Manuel inceleme ve iade/serbest bırakma kararları yalnızca metadata kayıtlarıdır.',
+  'app.paymentTransparency.futureProviderIntegration':
+    'Sağlayıcı ödeme ve iade entegrasyonu gelecek çalışmadır.',
+  'app.paymentTransparency.noGuaranteedRefund':
+    'Durum aşamaları takip etmeye yardımcı olur — iade garantisi vermez.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    'Ödeme tamamlanması platform akışına bağlıdır — ödeme garanti değildir.',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'Ödeme incelemesini desteklemek için teslimat kanıtı ve iletişimi Wayly içinde tutun.',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -10651,6 +10807,31 @@ const ar: Dictionary = {
   'app.disputeEvidence.noEvidenceDescription': 'أضف حقائق تسليم واضحة واستبعد المعلومات الحساسة.',
   'app.disputeEvidence.messageCounter': 'متبقٍ {count} حرفًا',
   'app.disputeEvidence.submitting': 'جارٍ الإرسال…',
+  'app.paymentTransparency.title': 'شفافية الدفع',
+  'app.paymentTransparency.subtitle':
+    'حالة الدفع تعكس سجلات المنصة — وليس حركة أموال حقيقية في هذا التدفق التجريبي/اليدوي.',
+  'app.paymentTransparency.senderTitle': 'شفافية الدفع للمرسل',
+  'app.paymentTransparency.waylerTitle': 'شفافية الدفع للوايلر',
+  'app.paymentTransparency.adminTitle': 'شفافية مراجعة الدفع للمسؤول',
+  'app.paymentTransparency.statusBasedOnRecords':
+    'تُعرض حالة الدفع بناءً على سجلات المنصة الحالية.',
+  'app.paymentTransparency.keepAgreementInsideWayly':
+    'احتفظ باتفاقيات الدفع وتفاصيل التسليم داخل Wayly.',
+  'app.paymentTransparency.noPrivatePaymentDetails':
+    'لا تشارك بيانات البطاقة أو الحساب البنكي في المحادثة.',
+  'app.paymentTransparency.mockManualFlow':
+    'تدفق الدفع التجريبي/اليدوي الحالي للاختبار ومراجعة العمليات.',
+  'app.paymentTransparency.noRealMoneyMovement': 'هذا التدفق لا ينقل أموالاً حقيقية عبر مزود دفع.',
+  'app.paymentTransparency.adminDecisionOnly':
+    'المراجعة اليدوية وقرارات الاسترداد/الإفراج هي سجلات بيانات وصفية فقط.',
+  'app.paymentTransparency.futureProviderIntegration':
+    'تكامل المدفوعات والاسترداد عبر المزود هو عمل مستقبلي.',
+  'app.paymentTransparency.noGuaranteedRefund':
+    'الحالة تساعد على تتبع المراحل — ولا تضمن استرداداً.',
+  'app.paymentTransparency.noGuaranteedPayout':
+    'اكتمال الدفع يعتمد على تدفق المنصة — الدفع للوايلر غير مضمون.',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    'احتفظ بإثبات التسليم والتواصل داخل Wayly لدعم مراجعة الدفع.',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -12148,6 +12329,22 @@ const zh: Dictionary = {
   'app.disputeEvidence.noEvidenceDescription': '添加清晰的配送事实，并避免敏感信息。',
   'app.disputeEvidence.messageCounter': '剩余 {count} 个字符',
   'app.disputeEvidence.submitting': '提交中…',
+  'app.paymentTransparency.title': '支付透明度',
+  'app.paymentTransparency.subtitle': '支付状态反映平台记录 — 此模拟/手动流程不会移动真实资金。',
+  'app.paymentTransparency.senderTitle': '发件人支付透明度',
+  'app.paymentTransparency.waylerTitle': 'Wayler 支付透明度',
+  'app.paymentTransparency.adminTitle': '管理员支付审查透明度',
+  'app.paymentTransparency.statusBasedOnRecords': '支付状态根据当前平台记录显示。',
+  'app.paymentTransparency.keepAgreementInsideWayly': '将支付协议和配送详情保留在 Wayly 内。',
+  'app.paymentTransparency.noPrivatePaymentDetails': '请勿在聊天中分享私人银行卡或账户信息。',
+  'app.paymentTransparency.mockManualFlow': '当前模拟/手动支付流程用于测试和运营审查。',
+  'app.paymentTransparency.noRealMoneyMovement': '此流程不会通过支付提供商移动真实资金。',
+  'app.paymentTransparency.adminDecisionOnly': '人工审查及退款/释放决定仅为元数据记录。',
+  'app.paymentTransparency.futureProviderIntegration': '支付提供商的打款与退款集成是未来工作。',
+  'app.paymentTransparency.noGuaranteedRefund': '状态有助于跟踪阶段 — 不保证退款。',
+  'app.paymentTransparency.noGuaranteedPayout': '支付完成取决于平台流程 — 不保证打款。',
+  'app.paymentTransparency.proofAndCommunicationHelp':
+    '将配送证明和沟通保留在 Wayly 内以支持支付审查。',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',

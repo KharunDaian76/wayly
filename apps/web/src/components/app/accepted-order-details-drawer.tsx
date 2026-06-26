@@ -14,6 +14,7 @@ import { formatShortOrderReference } from '@/components/app/availability-request
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
 import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
+import { PaymentTransparencyNote } from '@/components/app/payment-transparency-note';
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -459,6 +460,10 @@ export function AcceptedOrderDetailsDrawer({
                 cancelledAt={detail?.cancelledAt ?? null}
                 proofFlowEnabled={proofFlowEnabled}
               />
+
+              {order.paymentStatus !== undefined || proofFlowEnabled ? (
+                <PaymentTransparencyNote variant={panelRole} />
+              ) : null}
 
               {proofFlowEnabled ? (
                 <DeliveryProofGuidance

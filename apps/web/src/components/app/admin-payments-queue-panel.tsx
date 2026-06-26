@@ -21,6 +21,7 @@ import { useAdminTriageEffect } from '@/lib/admin/admin-triage';
 
 import { adminPaymentStatusKey } from '@/components/app/admin-orders-queue-panel';
 import { disputeStatusKey } from '@/components/app/dispute-panel';
+import { PaymentTransparencyNote } from '@/components/app/payment-transparency-note';
 import {
   PanelEmptyState,
   PanelErrorState,
@@ -483,6 +484,9 @@ export function AdminPaymentsQueuePanel({
           <p className="mt-1 text-xs text-muted-foreground">
             {t('app.admin.paymentsQueueDescription')}
           </p>
+          <div className="mt-2">
+            <PaymentTransparencyNote variant="admin" />
+          </div>
         </div>
         {!canModerate ? (
           <span className="text-xs text-muted-foreground">{t('app.admin.readOnlyQueue')}</span>
