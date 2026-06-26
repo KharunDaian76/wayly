@@ -28,6 +28,10 @@ import {
   writeWaylerAvailabilityDraft,
   type WaylerAvailabilityDraftSaveStatus,
 } from '@/lib/wayler-availability-draft-storage';
+import {
+  LOCAL_SAVED_DATA_CHANGED_EVENT,
+  isLocalSavedDataScope,
+} from '@/lib/local-saved-data-events';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -248,6 +252,23 @@ export function WaylerAvailabilityPanel({
     setDraftStorageAvailable(storageAvailable);
     setStoredDraftPending(storageAvailable && hasWaylerAvailabilityDraft());
   }, []);
+
+  useEffect(() => {
+    const handleLocalSavedDataChanged = (event: Event) => {
+      const scope = (event as CustomEvent<{ scope?: unknown }>).detail?.scope;
+      if (!isLocalSavedDataScope(scope) || (scope !== 'waylerDraft' && scope !== 'all')) {
+        return;
+      }
+      setDraftNotice(null);
+      setDraftSaveStatus('idle');
+      setStoredDraftPending(draftStorageAvailable && hasWaylerAvailabilityDraft());
+    };
+
+    window.addEventListener(LOCAL_SAVED_DATA_CHANGED_EVENT, handleLocalSavedDataChanged);
+    return () => {
+      window.removeEventListener(LOCAL_SAVED_DATA_CHANGED_EVENT, handleLocalSavedDataChanged);
+    };
+  }, [draftStorageAvailable]);
 
   const updateForm = (patch: Partial<FormState>) => {
     draftSkipSaveRef.current = false;

@@ -2,6 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import {
+  LOCAL_SAVED_DATA_CHANGED_EVENT,
+  isLocalSavedDataScope,
+} from '@/lib/local-saved-data-events';
+
 export const WAYLER_SHORTLIST_STORAGE_KEY = 'wayly.shortlistedAvailabilityIds.v1';
 
 function parseStoredIds(raw: string | null): Set<string> {
@@ -42,6 +47,10 @@ export function clearWaylerShortlistIds(): boolean {
   return writeWaylerShortlistIds(new Set());
 }
 
+export function getWaylerShortlistCount(): number {
+  return readWaylerShortlistIds().size;
+}
+
 export function useWaylerShortlist() {
   const [shortlistedIds, setShortlistedIds] = useState<Set<string>>(() => new Set());
   const [storageAvailable, setStorageAvailable] = useState(true);
@@ -49,6 +58,20 @@ export function useWaylerShortlist() {
 
   useEffect(() => {
     setShortlistedIds(readWaylerShortlistIds());
+  }, []);
+
+  useEffect(() => {
+    const handleLocalSavedDataChanged = (event: Event) => {
+      const scope = (event as CustomEvent<{ scope?: unknown }>).detail?.scope;
+      if (isLocalSavedDataScope(scope) && (scope === 'shortlist' || scope === 'all')) {
+        setShortlistedIds(readWaylerShortlistIds());
+      }
+    };
+
+    window.addEventListener(LOCAL_SAVED_DATA_CHANGED_EVENT, handleLocalSavedDataChanged);
+    return () => {
+      window.removeEventListener(LOCAL_SAVED_DATA_CHANGED_EVENT, handleLocalSavedDataChanged);
+    };
   }, []);
 
   const toggleShortlist = useCallback((listingId: string) => {

@@ -47,6 +47,7 @@ import {
   type KycGateProps,
 } from '@/components/app/kyc-marketplace-gate';
 import { KycIdentityPanel } from '@/components/app/kyc-identity-panel';
+import { LocalSavedDataPanel } from '@/components/app/local-saved-data-panel';
 import { NotificationBell } from '@/components/app/notification-bell';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
@@ -3483,6 +3484,8 @@ export default function AppHomePage() {
             </Card>
           </>
         ) : null}
+
+        <LocalSavedDataPanel />
 
         <ConversationPanel
           open={chatOpen}

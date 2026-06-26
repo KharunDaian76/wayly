@@ -45,6 +45,10 @@ import {
   writeSenderRequestDraft,
   type SenderRequestDraftSaveStatus,
 } from '@/lib/sender-request-draft-storage';
+import {
+  LOCAL_SAVED_DATA_CHANGED_EVENT,
+  isLocalSavedDataScope,
+} from '@/lib/local-saved-data-events';
 import { useWaylerShortlist } from '@/lib/wayler-shortlist-storage';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -353,6 +357,25 @@ export function SenderWaylersPanel({
   useEffect(() => {
     setDraftStorageAvailable(isSenderRequestDraftStorageAvailable());
   }, []);
+
+  useEffect(() => {
+    const handleLocalSavedDataChanged = (event: Event) => {
+      const scope = (event as CustomEvent<{ scope?: unknown }>).detail?.scope;
+      if (!isLocalSavedDataScope(scope) || (scope !== 'senderDrafts' && scope !== 'all')) {
+        return;
+      }
+      setDraftNotice(null);
+      setDraftSaveStatus('idle');
+      setStoredDraftPending(
+        requestTargetId !== null && draftStorageAvailable && hasSenderRequestDraft(requestTargetId),
+      );
+    };
+
+    window.addEventListener(LOCAL_SAVED_DATA_CHANGED_EVENT, handleLocalSavedDataChanged);
+    return () => {
+      window.removeEventListener(LOCAL_SAVED_DATA_CHANGED_EVENT, handleLocalSavedDataChanged);
+    };
+  }, [requestTargetId, draftStorageAvailable]);
 
   useEffect(() => {
     if (!requestTargetId || !requestForm || draftSkipSaveRef.current || !draftStorageAvailable) {

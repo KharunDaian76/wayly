@@ -97,3 +97,44 @@ export function isSenderRequestDraftStorageAvailable(): boolean {
     return false;
   }
 }
+
+function isSenderRequestDraftStorageKey(key: string): boolean {
+  return key.startsWith(SENDER_REQUEST_DRAFT_KEY_PREFIX) && !key.includes('__probe__');
+}
+
+export function countSenderRequestDrafts(): number {
+  if (typeof window === 'undefined') {
+    return 0;
+  }
+  try {
+    let count = 0;
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (key && isSenderRequestDraftStorageKey(key)) {
+        count += 1;
+      }
+    }
+    return count;
+  } catch {
+    return 0;
+  }
+}
+
+export function clearAllSenderRequestDrafts(): boolean {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  try {
+    const keysToRemove: string[] = [];
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (key && isSenderRequestDraftStorageKey(key)) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+    return true;
+  } catch {
+    return false;
+  }
+}
