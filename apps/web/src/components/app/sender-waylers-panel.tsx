@@ -37,6 +37,7 @@ import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-saf
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
+import { SenderRequestTemplates } from '@/components/app/sender-request-templates';
 import { SenderRequestDraftBar } from '@/components/app/sender-request-draft-bar';
 import { WaylerShortlistPanel } from '@/components/app/wayler-shortlist-panel';
 import {
@@ -56,6 +57,10 @@ import {
   useRecentRouteSearches,
   type RecentRouteSearchRecord,
 } from '@/lib/recent-route-search-storage';
+import {
+  templateFieldsToFormPatch,
+  useSenderRequestTemplates,
+} from '@/lib/sender-request-template-storage';
 import { useWaylerShortlist } from '@/lib/wayler-shortlist-storage';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
@@ -337,6 +342,14 @@ export function SenderWaylersPanel({
     clearedNotice: recentSearchesClearedNotice,
   } = useRecentRouteSearches();
 
+  const {
+    templates: senderRequestTemplates,
+    storageAvailable: senderTemplateStorageAvailable,
+    saveTemplate: saveSenderRequestTemplate,
+    deleteTemplate: deleteSenderRequestTemplate,
+    clearTemplates: clearSenderRequestTemplates,
+  } = useSenderRequestTemplates();
+
   const [requestTargetId, setRequestTargetId] = useState<string | null>(null);
   const [requestForm, setRequestForm] = useState<RequestFormState | null>(null);
   const [requestSubmitting, setRequestSubmitting] = useState(false);
@@ -367,6 +380,28 @@ export function SenderWaylersPanel({
     setRequestForm((prev) => (prev ? { ...prev, ...patch } : prev));
     setRequestFormError(null);
     setRequestError(null);
+  };
+
+  const handleSaveSenderRequestTemplate = (templateName: string, currentForm: RequestFormState) => {
+    const result = saveSenderRequestTemplate(templateName, currentForm);
+    if (result.ok) {
+      dispatchLocalSavedDataChanged('senderRequestTemplates');
+    }
+    return result;
+  };
+
+  const handleApplySenderRequestTemplate = (template: (typeof senderRequestTemplates)[number]) => {
+    updateRequestForm(templateFieldsToFormPatch(template));
+  };
+
+  const handleDeleteSenderRequestTemplate = (templateId: string) => {
+    deleteSenderRequestTemplate(templateId);
+    dispatchLocalSavedDataChanged('senderRequestTemplates');
+  };
+
+  const handleClearSenderRequestTemplates = () => {
+    clearSenderRequestTemplates();
+    dispatchLocalSavedDataChanged('senderRequestTemplates');
   };
 
   useEffect(() => {
@@ -1189,6 +1224,17 @@ export function SenderWaylersPanel({
                             disabled={requestSubmitting}
                             onRestore={handleRestoreRequestDraft}
                             onDiscard={() => handleDiscardRequestDraft(listing)}
+                          />
+
+                          <SenderRequestTemplates
+                            templates={senderRequestTemplates}
+                            form={requestForm}
+                            disabled={requestSubmitting}
+                            storageAvailable={senderTemplateStorageAvailable}
+                            onSave={handleSaveSenderRequestTemplate}
+                            onApply={handleApplySenderRequestTemplate}
+                            onDelete={handleDeleteSenderRequestTemplate}
+                            onClear={handleClearSenderRequestTemplates}
                           />
 
                           {requestFormError ? (

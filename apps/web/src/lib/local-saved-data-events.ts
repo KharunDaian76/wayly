@@ -6,6 +6,7 @@ export type LocalSavedDataScope =
   | 'waylerDraft'
   | 'recentSearches'
   | 'availabilityTemplates'
+  | 'senderRequestTemplates'
   | 'all';
 
 export function dispatchLocalSavedDataChanged(scope: LocalSavedDataScope): void {
@@ -22,6 +23,7 @@ export function isLocalSavedDataScope(value: unknown): value is LocalSavedDataSc
     value === 'waylerDraft' ||
     value === 'recentSearches' ||
     value === 'availabilityTemplates' ||
+    value === 'senderRequestTemplates' ||
     value === 'all'
   );
 }

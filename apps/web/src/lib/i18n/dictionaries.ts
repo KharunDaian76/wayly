@@ -1062,6 +1062,29 @@ const en = {
   'app.waylerAvailabilityTemplates.count': '{count} of {max} templates saved',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     'Templates store listing fields only — not identity, contact, payment, or KYC data. Dates are not saved.',
+  'app.senderRequestTemplates.title': 'Request templates',
+  'app.senderRequestTemplates.subtitle':
+    'Save reusable package and request details for faster Wayler requests.',
+  'app.senderRequestTemplates.localOnly': 'Saved only in this browser. Not synced across devices.',
+  'app.senderRequestTemplates.nameLabel': 'Template name',
+  'app.senderRequestTemplates.namePlaceholder': 'e.g. Small documents to Europe',
+  'app.senderRequestTemplates.save': 'Save template',
+  'app.senderRequestTemplates.saveCurrent': 'Save current request',
+  'app.senderRequestTemplates.saved': 'Request template saved locally.',
+  'app.senderRequestTemplates.apply': 'Apply',
+  'app.senderRequestTemplates.applied': 'Template applied.',
+  'app.senderRequestTemplates.delete': 'Delete template',
+  'app.senderRequestTemplates.deleted': 'Template deleted.',
+  'app.senderRequestTemplates.clear': 'Clear all templates',
+  'app.senderRequestTemplates.cleared': 'All request templates cleared from this browser.',
+  'app.senderRequestTemplates.empty': 'Save a template to reuse common request details.',
+  'app.senderRequestTemplates.maxReached':
+    'Maximum {max} templates saved. Delete one to add another.',
+  'app.senderRequestTemplates.count': '{count} of {max} templates saved',
+  'app.senderRequestTemplates.noSensitiveData':
+    'Templates store reusable request fields only — not addresses, dates, identity, payment, or KYC data.',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    'Listing route, addresses, and timing fields were kept unless the template included route details.',
   'app.disputes.open': 'Open dispute',
   'app.disputes.view': 'View dispute',
   'app.disputes.title': 'Dispute',
@@ -1671,6 +1694,10 @@ const en = {
   'app.localSavedData.clearAvailabilityTemplates': 'Clear availability templates',
   'app.localSavedData.clearedAvailabilityTemplates':
     'Availability templates cleared from this browser.',
+  'app.localSavedData.senderRequestTemplateCount': 'Sender request templates: {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'Clear sender request templates',
+  'app.localSavedData.clearedSenderRequestTemplates':
+    'Sender request templates cleared from this browser.',
   'app.localSavedData.clearAll': 'Clear all local marketplace data',
   'app.localSavedData.clearedShortlist': 'Shortlist cleared from this browser.',
   'app.localSavedData.clearedSenderDrafts': 'Sender request drafts cleared from this browser.',
@@ -2785,6 +2812,31 @@ const ru: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '{count} из {max} шаблонов сохранено',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     'Шаблоны хранят только поля объявления — не личность, контакты, платежи или KYC. Даты не сохраняются.',
+  'app.senderRequestTemplates.title': 'Шаблоны запросов',
+  'app.senderRequestTemplates.subtitle':
+    'Сохраняйте типовые детали посылки и запроса для быстрых обращений к Wayler.',
+  'app.senderRequestTemplates.localOnly':
+    'Сохраняется только в этом браузере. Не синхронизируется между устройствами.',
+  'app.senderRequestTemplates.nameLabel': 'Название шаблона',
+  'app.senderRequestTemplates.namePlaceholder': 'напр. Мелкие документы в Европу',
+  'app.senderRequestTemplates.save': 'Сохранить шаблон',
+  'app.senderRequestTemplates.saveCurrent': 'Сохранить текущий запрос',
+  'app.senderRequestTemplates.saved': 'Шаблон запроса сохранён локально.',
+  'app.senderRequestTemplates.apply': 'Применить',
+  'app.senderRequestTemplates.applied': 'Шаблон применён.',
+  'app.senderRequestTemplates.delete': 'Удалить шаблон',
+  'app.senderRequestTemplates.deleted': 'Шаблон удалён.',
+  'app.senderRequestTemplates.clear': 'Очистить все шаблоны',
+  'app.senderRequestTemplates.cleared': 'Все шаблоны запросов удалены из этого браузера.',
+  'app.senderRequestTemplates.empty':
+    'Сохраните шаблон для повторного использования типовых запросов.',
+  'app.senderRequestTemplates.maxReached':
+    'Сохранено максимум {max} шаблонов. Удалите один, чтобы добавить новый.',
+  'app.senderRequestTemplates.count': '{count} из {max} шаблонов сохранено',
+  'app.senderRequestTemplates.noSensitiveData':
+    'Шаблоны хранят только поля запроса — не адреса, даты, личность, платежи или KYC.',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    'Маршрут объявления, адреса и время сохранены, если шаблон не содержал детали маршрута.',
   'app.disputes.open': 'Открыть спор',
   'app.disputes.view': 'Просмотр спора',
   'app.disputes.title': 'Спор',
@@ -3392,6 +3444,10 @@ const ru: Dictionary = {
   'app.localSavedData.clearAvailabilityTemplates': 'Очистить шаблоны доступности',
   'app.localSavedData.clearedAvailabilityTemplates':
     'Шаблоны доступности удалены из этого браузера.',
+  'app.localSavedData.senderRequestTemplateCount': 'Шаблоны запросов отправителя: {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'Очистить шаблоны запросов',
+  'app.localSavedData.clearedSenderRequestTemplates':
+    'Шаблоны запросов отправителя удалены из этого браузера.',
   'app.localSavedData.clearAll': 'Очистить все локальные данные маркетплейса',
   'app.localSavedData.clearedShortlist': 'Избранное удалено из этого браузера.',
   'app.localSavedData.clearedSenderDrafts':
@@ -4511,6 +4567,31 @@ const es: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '{count} de {max} plantillas guardadas',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     'Las plantillas guardan solo campos del anuncio — no identidad, contacto, pago ni KYC. Las fechas no se guardan.',
+  'app.senderRequestTemplates.title': 'Plantillas de solicitud',
+  'app.senderRequestTemplates.subtitle':
+    'Guarde detalles reutilizables de paquete y solicitud para pedir a Waylers más rápido.',
+  'app.senderRequestTemplates.localOnly':
+    'Guardado solo en este navegador. No se sincroniza entre dispositivos.',
+  'app.senderRequestTemplates.nameLabel': 'Nombre de plantilla',
+  'app.senderRequestTemplates.namePlaceholder': 'p. ej. Documentos pequeños a Europa',
+  'app.senderRequestTemplates.save': 'Guardar plantilla',
+  'app.senderRequestTemplates.saveCurrent': 'Guardar solicitud actual',
+  'app.senderRequestTemplates.saved': 'Plantilla de solicitud guardada localmente.',
+  'app.senderRequestTemplates.apply': 'Aplicar',
+  'app.senderRequestTemplates.applied': 'Plantilla aplicada.',
+  'app.senderRequestTemplates.delete': 'Eliminar plantilla',
+  'app.senderRequestTemplates.deleted': 'Plantilla eliminada.',
+  'app.senderRequestTemplates.clear': 'Borrar todas las plantillas',
+  'app.senderRequestTemplates.cleared':
+    'Todas las plantillas de solicitud eliminadas de este navegador.',
+  'app.senderRequestTemplates.empty': 'Guarde una plantilla para reutilizar solicitudes comunes.',
+  'app.senderRequestTemplates.maxReached':
+    'Máximo {max} plantillas guardadas. Elimine una para añadir otra.',
+  'app.senderRequestTemplates.count': '{count} de {max} plantillas guardadas',
+  'app.senderRequestTemplates.noSensitiveData':
+    'Las plantillas guardan solo campos reutilizables — no direcciones, fechas, identidad, pago ni KYC.',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    'Se mantuvieron ruta del anuncio, direcciones y horarios salvo que la plantilla incluyera ruta.',
   'app.disputes.open': 'Abrir disputa',
   'app.disputes.view': 'Ver disputa',
   'app.disputes.title': 'Disputa',
@@ -5121,6 +5202,10 @@ const es: Dictionary = {
   'app.localSavedData.clearAvailabilityTemplates': 'Borrar plantillas de disponibilidad',
   'app.localSavedData.clearedAvailabilityTemplates':
     'Plantillas de disponibilidad eliminadas de este navegador.',
+  'app.localSavedData.senderRequestTemplateCount': 'Plantillas de solicitud del remitente: {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'Borrar plantillas de solicitud',
+  'app.localSavedData.clearedSenderRequestTemplates':
+    'Plantillas de solicitud del remitente eliminadas de este navegador.',
   'app.localSavedData.clearAll': 'Borrar todos los datos locales del marketplace',
   'app.localSavedData.clearedShortlist': 'Lista corta eliminada de este navegador.',
   'app.localSavedData.clearedSenderDrafts':
@@ -6262,6 +6347,31 @@ const fr: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '{count} sur {max} modèles enregistrés',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     "Les modèles stockent uniquement les champs d'annonce — pas d'identité, contact, paiement ou KYC. Les dates ne sont pas enregistrées.",
+  'app.senderRequestTemplates.title': 'Modèles de demande',
+  'app.senderRequestTemplates.subtitle':
+    'Enregistrez des détails réutilisables de colis et demande pour des requêtes Wayler plus rapides.',
+  'app.senderRequestTemplates.localOnly':
+    'Enregistré uniquement dans ce navigateur. Non synchronisé entre appareils.',
+  'app.senderRequestTemplates.nameLabel': 'Nom du modèle',
+  'app.senderRequestTemplates.namePlaceholder': "ex. Petits documents vers l'Europe",
+  'app.senderRequestTemplates.save': 'Enregistrer le modèle',
+  'app.senderRequestTemplates.saveCurrent': 'Enregistrer la demande actuelle',
+  'app.senderRequestTemplates.saved': 'Modèle de demande enregistré localement.',
+  'app.senderRequestTemplates.apply': 'Appliquer',
+  'app.senderRequestTemplates.applied': 'Modèle appliqué.',
+  'app.senderRequestTemplates.delete': 'Supprimer le modèle',
+  'app.senderRequestTemplates.deleted': 'Modèle supprimé.',
+  'app.senderRequestTemplates.clear': 'Effacer tous les modèles',
+  'app.senderRequestTemplates.cleared': 'Tous les modèles de demande effacés de ce navigateur.',
+  'app.senderRequestTemplates.empty':
+    'Enregistrez un modèle pour réutiliser des demandes courantes.',
+  'app.senderRequestTemplates.maxReached':
+    'Maximum {max} modèles enregistrés. Supprimez-en un pour en ajouter un autre.',
+  'app.senderRequestTemplates.count': '{count} sur {max} modèles enregistrés',
+  'app.senderRequestTemplates.noSensitiveData':
+    "Les modèles stockent uniquement des champs réutilisables — pas d'adresses, dates, identité, paiement ou KYC.",
+  'app.senderRequestTemplates.applyKeepsRoute':
+    "Itinéraire de l'annonce, adresses et horaires conservés sauf si le modèle incluait la route.",
   'app.disputes.open': 'Ouvrir un litige',
   'app.disputes.view': 'Voir le litige',
   'app.disputes.title': 'Litige',
@@ -6879,6 +6989,10 @@ const fr: Dictionary = {
   'app.localSavedData.clearAvailabilityTemplates': 'Effacer les modèles de disponibilité',
   'app.localSavedData.clearedAvailabilityTemplates':
     'Modèles de disponibilité effacés de ce navigateur.',
+  'app.localSavedData.senderRequestTemplateCount': 'Modèles de demande expéditeur : {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'Effacer les modèles de demande',
+  'app.localSavedData.clearedSenderRequestTemplates':
+    'Modèles de demande expéditeur effacés de ce navigateur.',
   'app.localSavedData.clearAll': 'Effacer toutes les données marketplace locales',
   'app.localSavedData.clearedShortlist': 'Liste effacée de ce navigateur.',
   'app.localSavedData.clearedSenderDrafts': 'Brouillons expéditeur effacés de ce navigateur.',
@@ -8030,6 +8144,31 @@ const de: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '{count} von {max} Vorlagen gespeichert',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     'Vorlagen speichern nur Angebotsfelder — keine Identität, Kontakt, Zahlung oder KYC. Daten werden nicht gespeichert.',
+  'app.senderRequestTemplates.title': 'Anfragevorlagen',
+  'app.senderRequestTemplates.subtitle':
+    'Speichern Sie wiederverwendbare Paket- und Anfragedetails für schnellere Wayler-Anfragen.',
+  'app.senderRequestTemplates.localOnly':
+    'Nur in diesem Browser gespeichert. Nicht geräteübergreifend synchronisiert.',
+  'app.senderRequestTemplates.nameLabel': 'Vorlagenname',
+  'app.senderRequestTemplates.namePlaceholder': 'z. B. Kleine Dokumente nach Europa',
+  'app.senderRequestTemplates.save': 'Vorlage speichern',
+  'app.senderRequestTemplates.saveCurrent': 'Aktuelle Anfrage speichern',
+  'app.senderRequestTemplates.saved': 'Anfragevorlage lokal gespeichert.',
+  'app.senderRequestTemplates.apply': 'Anwenden',
+  'app.senderRequestTemplates.applied': 'Vorlage angewendet.',
+  'app.senderRequestTemplates.delete': 'Vorlage löschen',
+  'app.senderRequestTemplates.deleted': 'Vorlage gelöscht.',
+  'app.senderRequestTemplates.clear': 'Alle Vorlagen löschen',
+  'app.senderRequestTemplates.cleared': 'Alle Anfragevorlagen aus diesem Browser gelöscht.',
+  'app.senderRequestTemplates.empty':
+    'Speichern Sie eine Vorlage, um häufige Anfragedetails wiederzuverwenden.',
+  'app.senderRequestTemplates.maxReached':
+    'Maximal {max} Vorlagen gespeichert. Löschen Sie eine, um eine neue hinzuzufügen.',
+  'app.senderRequestTemplates.count': '{count} von {max} Vorlagen gespeichert',
+  'app.senderRequestTemplates.noSensitiveData':
+    'Vorlagen speichern nur wiederverwendbare Anfragefelder — keine Adressen, Daten, Identität, Zahlung oder KYC.',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    'Angebotsroute, Adressen und Zeitfelder blieben erhalten, sofern die Vorlage keine Routendetails enthielt.',
   'app.disputes.open': 'Streitfall eröffnen',
   'app.disputes.view': 'Streitfall ansehen',
   'app.disputes.title': 'Streitfall',
@@ -8651,6 +8790,10 @@ const de: Dictionary = {
   'app.localSavedData.clearAvailabilityTemplates': 'Verfügbarkeitsvorlagen löschen',
   'app.localSavedData.clearedAvailabilityTemplates':
     'Verfügbarkeitsvorlagen aus diesem Browser gelöscht.',
+  'app.localSavedData.senderRequestTemplateCount': 'Sender-Anfragevorlagen: {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'Sender-Anfragevorlagen löschen',
+  'app.localSavedData.clearedSenderRequestTemplates':
+    'Sender-Anfragevorlagen aus diesem Browser gelöscht.',
   'app.localSavedData.clearAll': 'Alle lokalen Marketplace-Daten löschen',
   'app.localSavedData.clearedShortlist': 'Merkliste aus diesem Browser gelöscht.',
   'app.localSavedData.clearedSenderDrafts': 'Sender-Entwürfe aus diesem Browser gelöscht.',
@@ -9753,6 +9896,31 @@ const tr: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '{count} / {max} şablon kaydedildi',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     'Şablonlar yalnızca ilan alanlarını saklar — kimlik, iletişim, ödeme veya KYC değil. Tarihler kaydedilmez.',
+  'app.senderRequestTemplates.title': 'Talep şablonları',
+  'app.senderRequestTemplates.subtitle':
+    'Wayler taleplerini hızlandırmak için yeniden kullanılabilir paket ve talep detayları kaydedin.',
+  'app.senderRequestTemplates.localOnly':
+    'Yalnızca bu tarayıcıda kaydedilir. Cihazlar arası senkronize edilmez.',
+  'app.senderRequestTemplates.nameLabel': 'Şablon adı',
+  'app.senderRequestTemplates.namePlaceholder': "örn. Avrupa'ya küçük belgeler",
+  'app.senderRequestTemplates.save': 'Şablonu kaydet',
+  'app.senderRequestTemplates.saveCurrent': 'Mevcut talebi kaydet',
+  'app.senderRequestTemplates.saved': 'Talep şablonu yerel olarak kaydedildi.',
+  'app.senderRequestTemplates.apply': 'Uygula',
+  'app.senderRequestTemplates.applied': 'Şablon uygulandı.',
+  'app.senderRequestTemplates.delete': 'Şablonu sil',
+  'app.senderRequestTemplates.deleted': 'Şablon silindi.',
+  'app.senderRequestTemplates.clear': 'Tüm şablonları temizle',
+  'app.senderRequestTemplates.cleared': 'Tüm talep şablonları bu tarayıcıdan temizlendi.',
+  'app.senderRequestTemplates.empty':
+    'Yaygın talep detaylarını yeniden kullanmak için şablon kaydedin.',
+  'app.senderRequestTemplates.maxReached':
+    'En fazla {max} şablon kaydedildi. Yeni eklemek için birini silin.',
+  'app.senderRequestTemplates.count': '{count} / {max} şablon kaydedildi',
+  'app.senderRequestTemplates.noSensitiveData':
+    'Şablonlar yalnızca yeniden kullanılabilir talep alanlarını saklar — adres, tarih, kimlik, ödeme veya KYC değil.',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    'Şablon rota detayı içermedikçe ilan rotası, adresler ve zaman alanları korunur.',
   'app.disputes.open': 'Anlaşmazlık aç',
   'app.disputes.view': 'Anlaşmazlığı görüntüle',
   'app.disputes.title': 'Anlaşmazlık',
@@ -10358,6 +10526,10 @@ const tr: Dictionary = {
   'app.localSavedData.clearAvailabilityTemplates': 'Müsaitlik şablonlarını temizle',
   'app.localSavedData.clearedAvailabilityTemplates':
     'Müsaitlik şablonları bu tarayıcıdan temizlendi.',
+  'app.localSavedData.senderRequestTemplateCount': 'Gönderici talep şablonları: {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'Gönderici talep şablonlarını temizle',
+  'app.localSavedData.clearedSenderRequestTemplates':
+    'Gönderici talep şablonları bu tarayıcıdan temizlendi.',
   'app.localSavedData.clearAll': 'Tüm yerel marketplace verilerini temizle',
   'app.localSavedData.clearedShortlist': 'Kısa liste bu tarayıcıdan temizlendi.',
   'app.localSavedData.clearedSenderDrafts': 'Gönderici taslakları bu tarayıcıdan temizlendi.',
@@ -11407,6 +11579,29 @@ const ar: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '{count} من {max} قوالب محفوظة',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     'القوالب تخزن حقول الإعلان فقط — لا الهوية أو التواصل أو الدفع أو KYC. التواريخ لا تُحفظ.',
+  'app.senderRequestTemplates.title': 'قوالب الطلب',
+  'app.senderRequestTemplates.subtitle':
+    'احفظ تفاصيل الطرد والطلب القابلة لإعادة الاستخدام لطلبات Wayler أسرع.',
+  'app.senderRequestTemplates.localOnly': 'يُحفظ في هذا المتصفح فقط. لا يتم المزامنة بين الأجهزة.',
+  'app.senderRequestTemplates.nameLabel': 'اسم القالب',
+  'app.senderRequestTemplates.namePlaceholder': 'مثال: مستندات صغيرة إلى أوروبا',
+  'app.senderRequestTemplates.save': 'حفظ القالب',
+  'app.senderRequestTemplates.saveCurrent': 'حفظ الطلب الحالي',
+  'app.senderRequestTemplates.saved': 'تم حفظ قالب الطلب محليًا.',
+  'app.senderRequestTemplates.apply': 'تطبيق',
+  'app.senderRequestTemplates.applied': 'تم تطبيق القالب.',
+  'app.senderRequestTemplates.delete': 'حذف القالب',
+  'app.senderRequestTemplates.deleted': 'تم حذف القالب.',
+  'app.senderRequestTemplates.clear': 'مسح جميع القوالب',
+  'app.senderRequestTemplates.cleared': 'تم مسح جميع قوالب الطلب من هذا المتصفح.',
+  'app.senderRequestTemplates.empty': 'احفظ قالبًا لإعادة استخدام تفاصيل الطلب الشائعة.',
+  'app.senderRequestTemplates.maxReached':
+    'تم حفظ الحد الأقصى {max} قوالب. احذف واحدًا لإضافة آخر.',
+  'app.senderRequestTemplates.count': '{count} من {max} قوالب محفوظة',
+  'app.senderRequestTemplates.noSensitiveData':
+    'القوالب تخزن حقول الطلب القابلة لإعادة الاستخدام فقط — لا عناوين أو تواريخ أو هوية أو دفع أو KYC.',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    'تم الاحتفاظ بمسار الإعلان والعناوين والتوقيت ما لم يتضمن القالب تفاصيل المسار.',
   'app.disputes.open': 'فتح نزاع',
   'app.disputes.view': 'عرض النزاع',
   'app.disputes.title': 'نزاع',
@@ -11991,6 +12186,9 @@ const ar: Dictionary = {
   'app.localSavedData.availabilityTemplateCount': 'قوالب التوفر: {count}',
   'app.localSavedData.clearAvailabilityTemplates': 'مسح قوالب التوفر',
   'app.localSavedData.clearedAvailabilityTemplates': 'تم مسح قوالب التوفر من هذا المتصفح.',
+  'app.localSavedData.senderRequestTemplateCount': 'قوالب طلب المرسل: {count}',
+  'app.localSavedData.clearSenderRequestTemplates': 'مسح قوالب طلب المرسل',
+  'app.localSavedData.clearedSenderRequestTemplates': 'تم مسح قوالب طلب المرسل من هذا المتصفح.',
   'app.localSavedData.clearAll': 'مسح جميع بيانات السوق المحلية',
   'app.localSavedData.clearedShortlist': 'تم مسح القائمة المختصرة من هذا المتصفح.',
   'app.localSavedData.clearedSenderDrafts': 'تم مسح مسودات المرسل من هذا المتصفح.',
@@ -12993,6 +13191,27 @@ const zh: Dictionary = {
   'app.waylerAvailabilityTemplates.count': '已保存 {count} / {max} 个模板',
   'app.waylerAvailabilityTemplates.noSensitiveData':
     '模板仅存储 listing 字段 — 不含身份、联系方式、支付或 KYC 数据。不保存日期。',
+  'app.senderRequestTemplates.title': '请求模板',
+  'app.senderRequestTemplates.subtitle': '保存可复用的包裹和请求细节，更快向 Wayler 发送请求。',
+  'app.senderRequestTemplates.localOnly': '仅保存在此浏览器中。不会跨设备同步。',
+  'app.senderRequestTemplates.nameLabel': '模板名称',
+  'app.senderRequestTemplates.namePlaceholder': '例如：小文件寄欧洲',
+  'app.senderRequestTemplates.save': '保存模板',
+  'app.senderRequestTemplates.saveCurrent': '保存当前请求',
+  'app.senderRequestTemplates.saved': '请求模板已本地保存。',
+  'app.senderRequestTemplates.apply': '应用',
+  'app.senderRequestTemplates.applied': '模板已应用。',
+  'app.senderRequestTemplates.delete': '删除模板',
+  'app.senderRequestTemplates.deleted': '模板已删除。',
+  'app.senderRequestTemplates.clear': '清除所有模板',
+  'app.senderRequestTemplates.cleared': '已从此浏览器清除所有请求模板。',
+  'app.senderRequestTemplates.empty': '保存模板以复用常见请求细节。',
+  'app.senderRequestTemplates.maxReached': '最多保存 {max} 个模板。删除一个后可再添加。',
+  'app.senderRequestTemplates.count': '已保存 {count} / {max} 个模板',
+  'app.senderRequestTemplates.noSensitiveData':
+    '模板仅存储可复用请求字段 — 不含地址、日期、身份、支付或 KYC 数据。',
+  'app.senderRequestTemplates.applyKeepsRoute':
+    '除非模板包含路线细节，否则保留 listing 路线、地址和时间字段。',
   'app.disputes.open': '发起争议',
   'app.disputes.view': '查看争议',
   'app.disputes.title': '争议',
@@ -13545,6 +13764,9 @@ const zh: Dictionary = {
   'app.localSavedData.availabilityTemplateCount': '可用性模板：{count}',
   'app.localSavedData.clearAvailabilityTemplates': '清除可用性模板',
   'app.localSavedData.clearedAvailabilityTemplates': '已从此浏览器清除可用性模板。',
+  'app.localSavedData.senderRequestTemplateCount': '发件人请求模板：{count}',
+  'app.localSavedData.clearSenderRequestTemplates': '清除发件人请求模板',
+  'app.localSavedData.clearedSenderRequestTemplates': '已从此浏览器清除发件人请求模板。',
   'app.localSavedData.clearAll': '清除所有本地 marketplace 数据',
   'app.localSavedData.clearedShortlist': '已从此浏览器清除收藏列表。',
   'app.localSavedData.clearedSenderDrafts': '已从此浏览器清除发件人草稿。',
