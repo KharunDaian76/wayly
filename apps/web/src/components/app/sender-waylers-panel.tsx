@@ -708,6 +708,14 @@ export function SenderWaylersPanel({
             savedInCurrentResults={savedInCurrentResults}
             hiddenSavedCount={hiddenSavedCount}
             clearedNotice={clearedNotice}
+            search={{
+              originCountry: filters.originCountry,
+              originCity: filters.originCity,
+              originRegion: filters.originRegion,
+              destinationCountry: filters.destinationCountry,
+              destinationCity: filters.destinationCity,
+              destinationRegion: filters.destinationRegion,
+            }}
             onClear={clearShortlist}
             onToggleListing={toggleShortlist}
           />

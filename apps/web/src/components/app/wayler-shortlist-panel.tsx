@@ -1,9 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import type { WaylerAvailabilitySummary } from '@wayly/types';
 import { WaylerAvailabilityType } from '@wayly/types';
 import { Button } from '@wayly/ui';
 
+import type { MarketplaceSearchRoute } from '@/components/app/marketplace-route-match';
+import { WaylerShortlistCompare } from '@/components/app/wayler-shortlist-compare';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { cn } from '@/lib/utils';
 
@@ -21,6 +25,7 @@ type WaylerShortlistPanelProps = {
   savedInCurrentResults: WaylerAvailabilitySummary[];
   hiddenSavedCount: number;
   clearedNotice: boolean;
+  search: MarketplaceSearchRoute;
   onClear: () => void;
   onToggleListing: (listingId: string) => void;
   className?: string;
@@ -42,11 +47,21 @@ export function WaylerShortlistPanel({
   savedInCurrentResults,
   hiddenSavedCount,
   clearedNotice,
+  search,
   onClear,
   onToggleListing,
   className,
 }: WaylerShortlistPanelProps) {
   const { t } = useI18n();
+  const [compareOpen, setCompareOpen] = useState(false);
+
+  const canCompare = savedInCurrentResults.length >= 2;
+
+  useEffect(() => {
+    if (!canCompare) {
+      setCompareOpen(false);
+    }
+  }, [canCompare]);
 
   const localLabel = t('app.senderWaylers.localAvailability');
   const tripLabel = t('app.senderWaylers.tripRoute');
@@ -126,6 +141,31 @@ export function WaylerShortlistPanel({
             <p className="text-xs text-muted-foreground">
               {t('app.waylerShortlist.someSavedMayBeHidden')}
             </p>
+          ) : null}
+
+          {savedInCurrentResults.length === 1 ? (
+            <p className="text-xs text-muted-foreground">
+              {t('app.waylerShortlist.compareNeedTwo')}
+            </p>
+          ) : null}
+
+          {canCompare ? (
+            <div className="flex flex-col gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 w-full text-xs sm:w-auto"
+                onClick={() => setCompareOpen((open) => !open)}
+              >
+                {compareOpen
+                  ? t('app.waylerShortlist.hideCompare')
+                  : t('app.waylerShortlist.compare')}
+              </Button>
+              {compareOpen ? (
+                <WaylerShortlistCompare listings={savedInCurrentResults} search={search} />
+              ) : null}
+            </div>
           ) : null}
         </>
       )}
