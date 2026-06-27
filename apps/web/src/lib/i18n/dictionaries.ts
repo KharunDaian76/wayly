@@ -1894,6 +1894,41 @@ const en = {
   'marketing.faq.commercialLaunchQuestion': 'Is Wayly ready for real commercial launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly is actively developed. Core marketplace tools work, but real payments, production KYC, and full commercial guarantees are not in place yet. See the Trust Center for current limits.',
+  'marketing.restrictedItems.navLabel': 'Restricted items',
+  'marketing.restrictedItems.title': 'Restricted items & responsible use',
+  'marketing.restrictedItems.subtitle':
+    'General guidance on what should not travel through Wayly and what Senders and Waylers are responsible for. Not legal advice — check official rules for your route and destination.',
+  'marketing.restrictedItems.responsibleUseTitle': 'Responsible use',
+  'marketing.restrictedItems.responsibleUseBody':
+    'Users must follow local laws, transport rules, customs rules, airline and courier rules, and destination rules.\nWayly does not provide legal advice. This page is general guidance only — not a complete legal list.',
+  'marketing.restrictedItems.notSuitableTitle': 'Do not use Wayly for these items',
+  'marketing.restrictedItems.notSuitableBody':
+    'Illegal goods\nWeapons, explosives, ammunition, and other dangerous items\nDrugs, controlled substances, and prescription-only or restricted medicines\nCash, financial instruments, and high-value negotiable items\nHazardous chemicals, toxins, flammable liquids, and restricted batteries or pressurized items\nCounterfeit goods, stolen goods, wildlife or animal products, and protected cultural items\nItems that violate customs or security rules',
+  'marketing.restrictedItems.cautionTitle': 'Items needing extra caution',
+  'marketing.restrictedItems.cautionBody':
+    'Liquids\nBatteries and electronics\nFragile items\nTemperature-sensitive items\nImportant documents\nFood and cosmetics\nMedicines and supplements\nHigh-value items\nCheck official rules first and avoid anything you are unsure about.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'Sender responsibilities',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'Describe the item clearly and honestly.\nDo not hide contents or mislabel a parcel.\nDo not ask Waylers to bypass customs, security, or legal rules.\nKeep agreements inside Wayly chat.\nUse chat to confirm item details, timing, and handoff before relying on them.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Wayler responsibilities',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'Do not accept items you cannot inspect or do not understand.\nDo not carry items that feel unsafe, unclear, or restricted for your route.\nCheck airline, carrier, and destination rules for your trip.\nDecline suspicious or vague requests.\nKeep coordination inside Wayly chat.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'What Wayly does not guarantee',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly does not verify item legality or inspect parcels.\nWayly does not guarantee customs approval.\nWayly does not provide insurance.\nWayly does not provide legal protection.\nWayly does not guarantee refunds or payouts.',
+  'marketing.restrictedItems.ifUnsureTitle': 'If you are unsure',
+  'marketing.restrictedItems.ifUnsureBody':
+    'Do not proceed if you are uncertain.\nAsk for clear item details in Wayly chat.\nCheck official rules from airlines, carriers, customs, and local authorities.\nDecline unsafe or unclear requests.\nUse disputes for platform order coordination issues — not to bypass law or security rules.',
+  'marketing.restrictedItems.backHome': 'Back to home',
+  'marketing.restrictedItems.openApp': 'Open app',
+  'marketing.restrictedItems.trustCenter': 'Trust Center',
+  'marketing.restrictedItems.faq': 'FAQ',
+  'marketing.restrictedItems.noLegalAdvice':
+    'This page is general safety guidance only. Wayly does not provide legal advice.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly does not verify item legality, inspect parcels, or approve customs clearance.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'When in doubt, check official airline, carrier, customs, and local authority rules before sending or carrying anything.',
   'marketing.landing.trustCenterLink': 'How Wayly handles safety',
   'marketing.landing.faqLink': 'Browse common questions',
   'app.placeholderNotice':
@@ -3803,6 +3838,41 @@ const ru: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Готов ли Wayly к коммерческому запуску?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly активно развивается. Основные инструменты работают, но реальные платежи, production KYC и полные коммерческие гарантии пока отсутствуют. См. Центр доверия.',
+  'marketing.restrictedItems.navLabel': 'Запрещённые предметы',
+  'marketing.restrictedItems.title': 'Запрещённые предметы и ответственное использование',
+  'marketing.restrictedItems.subtitle':
+    'Общие рекомендации о том, что не следует отправлять через Wayly и за что отвечают отправители и Wayler. Не юридическая консультация — проверяйте официальные правила маршрута и пункта назначения.',
+  'marketing.restrictedItems.responsibleUseTitle': 'Ответственное использование',
+  'marketing.restrictedItems.responsibleUseBody':
+    'Пользователи должны соблюдать местные законы, правила перевозки, таможни, авиакомпаний, курьеров и правила пункта назначения.\nWayly не даёт юридических консультаций. Эта страница — общие рекомендации, а не полный правовой перечень.',
+  'marketing.restrictedItems.notSuitableTitle': 'Не используйте Wayly для этого',
+  'marketing.restrictedItems.notSuitableBody':
+    'Незаконные товары\nОружие, взрывчатка, боеприпасы и иные опасные предметы\nНаркотики, контролируемые вещества и рецептурные или ограниченные лекарства\nНаличные, финансовые инструменты и ценные оборотные активы\nОпасные химикаты, токсины, легковоспламеняющиеся жидкости и ограниченные батареи или баллоны\nКонтрафакт, краденое, продукция животного мира и охраняемые культурные предметы\nТовары, нарушающие таможенные или правила безопасности',
+  'marketing.restrictedItems.cautionTitle': 'Предметы, требующие особой осторожности',
+  'marketing.restrictedItems.cautionBody':
+    'Жидкости\nБатареи и электроника\nХрупкие предметы\nТемпературочувствительные предметы\nВажные документы\nЕда и косметика\nЛекарства и добавки\nЦенные предметы\nСначала проверьте официальные правила и избегайте всего неясного.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'Обязанности отправителя',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'Чётко и честно опишите предмет.\nНе скрывайте содержимое и не маркируйте посылку ложно.\nНе просите Wayler обходить таможню, безопасность или закон.\nДержите договорённости в чате Wayly.\nПодтверждайте детали предмета, сроки и передачу в чате.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Обязанности Wayler',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'Не принимайте предметы, которые нельзя проверить или понять.\nНе везите небезопасные, неясные или запрещённые для маршрута предметы.\nПроверяйте правила авиакомпании, перевозчика и пункта назначения.\nОтклоняйте подозрительные или расплывчатые запросы.\nКоординируйте в чате Wayly.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'Чего Wayly не гарантирует',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly не проверяет законность предметов и не осматривает посылки.\nWayly не гарантирует таможенное одобрение.\nWayly не предоставляет страховку.\nWayly не предоставляет правовую защиту.\nWayly не гарантирует возвраты или выплаты.',
+  'marketing.restrictedItems.ifUnsureTitle': 'Если вы не уверены',
+  'marketing.restrictedItems.ifUnsureBody':
+    'Не продолжайте при сомнениях.\nЗапросите чёткие детали предмета в чате Wayly.\nПроверьте официальные правила авиакомпаний, перевозчиков, таможни и местных органов.\nОтклоняйте небезопасные или неясные запросы.\nИспользуйте споры для проблем координации заказа — не для обхода закона или безопасности.',
+  'marketing.restrictedItems.backHome': 'На главную',
+  'marketing.restrictedItems.openApp': 'Открыть приложение',
+  'marketing.restrictedItems.trustCenter': 'Центр доверия',
+  'marketing.restrictedItems.faq': 'FAQ',
+  'marketing.restrictedItems.noLegalAdvice':
+    'Эта страница — общие рекомендации по безопасности. Wayly не даёт юридических консультаций.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly не проверяет законность предметов, не осматривает посылки и не одобряет таможенное оформление.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'При сомнениях проверьте официальные правила авиакомпаний, перевозчиков, таможни и местных органов до отправки или перевозки.',
   'marketing.landing.trustCenterLink': 'Как Wayly обеспечивает безопасность',
   'marketing.landing.faqLink': 'Частые вопросы',
   'app.placeholderNotice':
@@ -5720,6 +5790,41 @@ const es: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': '¿Wayly listo para lanzamiento comercial?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly se desarrolla activamente. Las herramientas core funcionan, pero pagos reales, KYC de producción y garantías comerciales completas aún no están. Ver Centro de confianza.',
+  'marketing.restrictedItems.navLabel': 'Artículos restringidos',
+  'marketing.restrictedItems.title': 'Artículos restringidos y uso responsable',
+  'marketing.restrictedItems.subtitle':
+    'Orientación general sobre qué no debe viajar por Wayly y responsabilidades de remitentes y Wayler. No es asesoramiento legal — consulta reglas oficiales de ruta y destino.',
+  'marketing.restrictedItems.responsibleUseTitle': 'Uso responsable',
+  'marketing.restrictedItems.responsibleUseBody':
+    'Los usuarios deben cumplir leyes locales, normas de transporte, aduanas, aerolíneas, mensajería y reglas del destino.\nWayly no ofrece asesoramiento legal. Esta página es orientación general — no una lista legal completa.',
+  'marketing.restrictedItems.notSuitableTitle': 'No uses Wayly para esto',
+  'marketing.restrictedItems.notSuitableBody':
+    'Bienes ilegales\nArmas, explosivos, munición y otros artículos peligrosos\nDrogas, sustancias controladas y medicamentos con receta o restringidos\nEfectivo, instrumentos financieros y valores negociables de alto valor\nQuímicos peligrosos, toxinas, líquidos inflamables y baterías o presurizados restringidos\nFalsificaciones, bienes robados, fauna y productos culturales protegidos\nArtículos que violen aduanas o normas de seguridad',
+  'marketing.restrictedItems.cautionTitle': 'Artículos que requieren extra cautela',
+  'marketing.restrictedItems.cautionBody':
+    'Líquidos\nBaterías y electrónica\nArtículos frágiles\nSensibles a temperatura\nDocumentos importantes\nAlimentos y cosméticos\nMedicinas y suplementos\nArtículos de alto valor\nConsulta reglas oficiales primero y evita lo incierto.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'Responsabilidades del remitente',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'Describe el artículo con claridad y honestidad.\nNo ocultes contenido ni etiquetes mal el paquete.\nNo pidas a Wayler eludir aduanas, seguridad o ley.\nMantén acuerdos en el chat de Wayly.\nConfirma detalles del artículo, tiempos y entrega en el chat.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Responsabilidades del Wayler',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'No aceptes artículos que no puedas inspeccionar o entender.\nNo transportes artículos inseguros, poco claros o restringidos en tu ruta.\nRevisa normas de aerolínea, transportista y destino.\nRechaza solicitudes sospechosas o vagas.\nCoordina dentro del chat de Wayly.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'Lo que Wayly no garantiza',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly no verifica legalidad ni inspecciona paquetes.\nWayly no garantiza aprobación aduanera.\nWayly no ofrece seguro.\nWayly no ofrece protección legal.\nWayly no garantiza reembolsos ni pagos.',
+  'marketing.restrictedItems.ifUnsureTitle': 'Si tienes dudas',
+  'marketing.restrictedItems.ifUnsureBody':
+    'No continúes si hay incertidumbre.\nPide detalles claros en el chat de Wayly.\nConsulta reglas oficiales de aerolíneas, transportistas, aduanas y autoridades locales.\nRechaza solicitudes inseguras o poco claras.\nUsa disputas para problemas de coordinación — no para eludir ley o seguridad.',
+  'marketing.restrictedItems.backHome': 'Volver al inicio',
+  'marketing.restrictedItems.openApp': 'Abrir app',
+  'marketing.restrictedItems.trustCenter': 'Centro de confianza',
+  'marketing.restrictedItems.faq': 'FAQ',
+  'marketing.restrictedItems.noLegalAdvice':
+    'Esta página es orientación general de seguridad. Wayly no ofrece asesoramiento legal.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly no verifica legalidad de artículos, no inspecciona paquetes ni aprueba aduanas.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'Ante dudas, consulta reglas oficiales de aerolíneas, transportistas, aduanas y autoridades locales antes de enviar o transportar.',
   'marketing.landing.trustCenterLink': 'Cómo Wayly gestiona la seguridad',
   'marketing.landing.faqLink': 'Ver preguntas frecuentes',
   'app.placeholderNotice':
@@ -7664,6 +7769,41 @@ const fr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly prêt pour un lancement commercial ?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly est en développement actif. Les outils core fonctionnent, mais paiements réels, KYC production et garanties commerciales complètes ne sont pas en place. Voir Centre de confiance.',
+  'marketing.restrictedItems.navLabel': 'Articles restreints',
+  'marketing.restrictedItems.title': 'Articles restreints et usage responsable',
+  'marketing.restrictedItems.subtitle':
+    'Guide général sur ce qui ne doit pas transiter via Wayly et les responsabilités des expéditeurs et Wayler. Pas un conseil juridique — vérifiez les règles officielles de route et destination.',
+  'marketing.restrictedItems.responsibleUseTitle': 'Usage responsable',
+  'marketing.restrictedItems.responsibleUseBody':
+    'Les utilisateurs doivent respecter lois locales, règles de transport, douanes, compagnies aériennes, coursiers et règles de destination.\nWayly ne fournit pas de conseil juridique. Cette page est un guide général — pas une liste juridique exhaustive.',
+  'marketing.restrictedItems.notSuitableTitle': 'N’utilisez pas Wayly pour ceci',
+  'marketing.restrictedItems.notSuitableBody':
+    'Biens illégaux\nArmes, explosifs, munitions et autres articles dangereux\nDrogues, substances contrôlées et médicaments sur ordonnance ou restreints\nEspèces, instruments financiers et valeurs négociables de grande valeur\nProduits chimiques dangereux, toxines, liquides inflammables et batteries ou pressurisés restreints\nContrefaçons, biens volés, faune et objets culturels protégés\nArticles violant douanes ou règles de sécurité',
+  'marketing.restrictedItems.cautionTitle': 'Articles nécessitant une prudence accrue',
+  'marketing.restrictedItems.cautionBody':
+    'Liquides\nBatteries et électronique\nArticles fragiles\nSensibles à la température\nDocuments importants\nAliments et cosmétiques\nMédicaments et compléments\nArticles de grande valeur\nVérifiez d’abord les règles officielles et évitez l’incertain.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'Responsabilités de l’expéditeur',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'Décrivez l’article clairement et honnêtement.\nNe cachez pas le contenu et n’étiquetez pas faussement.\nNe demandez pas à un Wayler de contourner douanes, sécurité ou loi.\nGardez les accords dans le chat Wayly.\nConfirmez détails, horaires et remise dans le chat.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Responsabilités du Wayler',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'N’acceptez pas d’articles que vous ne pouvez pas inspecter ou comprendre.\nNe transportez pas d’articles dangereux, flous ou restreints sur votre route.\nVérifiez règles compagnie aérienne, transporteur et destination.\nRefusez demandes suspectes ou vagues.\nCoordonnez dans le chat Wayly.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'Ce que Wayly ne garantit pas',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly ne vérifie pas la légalité ni n’inspecte les colis.\nWayly ne garantit pas l’approbation douanière.\nWayly ne fournit pas d’assurance.\nWayly ne fournit pas de protection juridique.\nWayly ne garantit pas remboursements ni paiements.',
+  'marketing.restrictedItems.ifUnsureTitle': 'En cas de doute',
+  'marketing.restrictedItems.ifUnsureBody':
+    'N’avancez pas si vous hésitez.\nDemandez des détails clairs dans le chat Wayly.\nConsultez règles officielles des compagnies, transporteurs, douanes et autorités locales.\nRefusez demandes dangereuses ou floues.\nUtilisez les litiges pour coordination de commande — pas pour contourner loi ou sécurité.',
+  'marketing.restrictedItems.backHome': 'Retour à l’accueil',
+  'marketing.restrictedItems.openApp': 'Ouvrir l’app',
+  'marketing.restrictedItems.trustCenter': 'Centre de confiance',
+  'marketing.restrictedItems.faq': 'FAQ',
+  'marketing.restrictedItems.noLegalAdvice':
+    'Cette page est un guide général de sécurité. Wayly ne fournit pas de conseil juridique.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly ne vérifie pas la légalité des articles, n’inspecte pas les colis et n’approuve pas le dédouanement.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'En cas de doute, consultez les règles officielles des compagnies, transporteurs, douanes et autorités locales avant d’envoyer ou transporter.',
   'marketing.landing.trustCenterLink': 'Comment Wayly gère la sécurité',
   'marketing.landing.faqLink': 'Parcourir les questions fréquentes',
   'app.placeholderNotice':
@@ -9619,6 +9759,41 @@ const de: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Bereit für kommerziellen Launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly wird aktiv entwickelt. Kern-Tools funktionieren, aber echte Zahlungen, Production-KYC und volle Garantien fehlen noch. Siehe Trust Center.',
+  'marketing.restrictedItems.navLabel': 'Eingeschränkte Gegenstände',
+  'marketing.restrictedItems.title': 'Eingeschränkte Gegenstände & verantwortungsvolle Nutzung',
+  'marketing.restrictedItems.subtitle':
+    'Allgemeine Hinweise, was nicht über Wayly transportiert werden sollte und welche Pflichten Sender und Wayler haben. Keine Rechtsberatung — prüfen Sie offizielle Regeln für Route und Ziel.',
+  'marketing.restrictedItems.responsibleUseTitle': 'Verantwortungsvolle Nutzung',
+  'marketing.restrictedItems.responsibleUseBody':
+    'Nutzer müssen lokale Gesetze, Transport-, Zoll-, Airline-, Kurier- und Zielregeln einhalten.\nWayly bietet keine Rechtsberatung. Diese Seite ist allgemeine Orientierung — keine vollständige Rechtsliste.',
+  'marketing.restrictedItems.notSuitableTitle': 'Wayly nicht für Folgendes nutzen',
+  'marketing.restrictedItems.notSuitableBody':
+    'Illegale Güter\nWaffen, Sprengstoff, Munition und andere gefährliche Gegenstände\nDrogen, kontrollierte Substanzen und verschreibungspflichtige oder eingeschränkte Medikamente\nBargeld, Finanzinstrumente und hochwertige Wertpapiere\nGefährliche Chemikalien, Toxine, brennbare Flüssigkeiten und eingeschränkte Batterien oder Druckbehälter\nFälschungen, Diebesgut, Wildtierprodukte und geschützte Kulturgüter\nGegenstände, die Zoll- oder Sicherheitsregeln verletzen',
+  'marketing.restrictedItems.cautionTitle': 'Gegenstände mit besonderer Vorsicht',
+  'marketing.restrictedItems.cautionBody':
+    'Flüssigkeiten\nBatterien und Elektronik\nZerbrechliche Gegenstände\nTemperaturempfindliche Gegenstände\nWichtige Dokumente\nLebensmittel und Kosmetik\nMedikamente und Nahrungsergänzung\nHochwertige Gegenstände\nOffizielle Regeln zuerst prüfen und Unsicheres vermeiden.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'Pflichten des Senders',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'Artikel klar und ehrlich beschreiben.\nInhalt nicht verbergen und Paket nicht falsch kennzeichnen.\nWayler nicht bitten, Zoll, Sicherheit oder Gesetz zu umgehen.\nAbsprachen im Wayly-Chat halten.\nArtikeldetails, Timing und Übergabe im Chat bestätigen.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Pflichten des Wayler',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'Keine Gegenstände annehmen, die Sie nicht prüfen oder verstehen können.\nKeine unsicheren, unklaren oder für die Route verbotenen Gegenstände transportieren.\nAirline-, Carrier- und Zielregeln prüfen.\nVerdächtige oder vage Anfragen ablehnen.\nKoordination im Wayly-Chat halten.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'Was Wayly nicht garantiert',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly prüft keine Legalität und inspiziert keine Pakete.\nWayly garantiert keine Zollfreigabe.\nWayly bietet keine Versicherung.\nWayly bietet keinen Rechtsschutz.\nWayly garantiert keine Erstattungen oder Auszahlungen.',
+  'marketing.restrictedItems.ifUnsureTitle': 'Bei Unsicherheit',
+  'marketing.restrictedItems.ifUnsureBody':
+    'Bei Zweifeln nicht fortfahren.\nKlare Artikeldetails im Wayly-Chat anfordern.\nOffizielle Regeln von Airlines, Carriern, Zoll und Behörden prüfen.\nUnsichere oder unklare Anfragen ablehnen.\nStreitfälle für Bestellkoordination — nicht zum Umgehen von Gesetz oder Sicherheit.',
+  'marketing.restrictedItems.backHome': 'Zur Startseite',
+  'marketing.restrictedItems.openApp': 'App öffnen',
+  'marketing.restrictedItems.trustCenter': 'Trust Center',
+  'marketing.restrictedItems.faq': 'FAQ',
+  'marketing.restrictedItems.noLegalAdvice':
+    'Diese Seite ist allgemeine Sicherheitsorientierung. Wayly bietet keine Rechtsberatung.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly prüft keine Artikellegalität, inspiziert keine Pakete und genehmigt keine Zollabfertigung.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'Bei Zweifeln offizielle Airline-, Carrier-, Zoll- und Behördenregeln prüfen, bevor Sie etwas senden oder transportieren.',
   'marketing.landing.trustCenterLink': 'Wie Wayly Sicherheit handhabt',
   'marketing.landing.faqLink': 'Häufige Fragen ansehen',
   'app.placeholderNotice':
@@ -11511,6 +11686,41 @@ const tr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly ticari lansmana hazır mı?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly aktif geliştiriliyor. Temel araçlar çalışıyor ancak gerçek ödemeler, production KYC ve tam ticari garantiler yok. Güven merkezine bakın.',
+  'marketing.restrictedItems.navLabel': 'Kısıtlı eşyalar',
+  'marketing.restrictedItems.title': 'Kısıtlı eşyalar ve sorumlu kullanım',
+  'marketing.restrictedItems.subtitle':
+    'Wayly üzerinden taşınmaması gerekenler ve gönderici/Wayler sorumlulukları hakkında genel rehber. Hukuki tavsiye değildir — rota ve varış için resmi kuralları kontrol edin.',
+  'marketing.restrictedItems.responsibleUseTitle': 'Sorumlu kullanım',
+  'marketing.restrictedItems.responsibleUseBody':
+    'Kullanıcılar yerel yasalar, taşıma kuralları, gümrük, havayolu, kurye ve varış kurallarına uymalıdır.\nWayly hukuki tavsiye vermez. Bu sayfa genel rehberdir — eksiksiz hukuki liste değildir.',
+  'marketing.restrictedItems.notSuitableTitle': 'Wayly’yi bunlar için kullanmayın',
+  'marketing.restrictedItems.notSuitableBody':
+    'Yasadışı eşyalar\nSilahlar, patlayıcılar, mühimmat ve diğer tehlikeli eşyalar\nUyuşturucu, kontrollü maddeler ve reçeteli veya kısıtlı ilaçlar\nNakit, finansal enstrümanlar ve yüksek değerli menkul kıymetler\nTehlikeli kimyasallar, toksinler, yanıcı sıvılar ve kısıtlı piller veya basınçlı kaplar\nSahte, çalıntı, yaban hayatı ürünleri ve korunan kültürel eşyalar\nGümrük veya güvenlik kurallarını ihlal eden eşyalar',
+  'marketing.restrictedItems.cautionTitle': 'Ekstra dikkat gerektiren eşyalar',
+  'marketing.restrictedItems.cautionBody':
+    'Sıvılar\nPiller ve elektronik\nKırılgan eşyalar\nSıcaklığa duyarlı eşyalar\nÖnemli belgeler\nGıda ve kozmetik\nİlaç ve takviyeler\nYüksek değerli eşyalar\nÖnce resmi kuralları kontrol edin ve emin olmadığınızdan kaçının.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'Gönderici sorumlulukları',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'Eşyayı açık ve dürüstçe tanımlayın.\nİçeriği gizlemeyin veya paketi yanlış etiketlemeyin.\nWayler’dan gümrük, güvenlik veya yasayı atlatmasını istemeyin.\nAnlaşmaları Wayly sohbetinde tutun.\nEşya detaylarını, zamanlamayı ve teslimi sohbette onaylayın.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Wayler sorumlulukları',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'İnceleyemediğiniz veya anlamadığınız eşyaları kabul etmeyin.\nGüvensiz, belirsiz veya rotanızda kısıtlı eşyaları taşımayın.\nHavayolu, taşıyıcı ve varış kurallarını kontrol edin.\nŞüpheli veya belirsiz talepleri reddedin.\nKoordinasyonu Wayly sohbetinde tutun.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'Wayly’nin garanti etmediği şeyler',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly eşya yasallığını doğrulamaz veya paket incelemez.\nWayly gümrük onayı garanti etmez.\nWayly sigorta sağlamaz.\nWayly hukuki koruma sağlamaz.\nWayly iade veya ödeme garanti etmez.',
+  'marketing.restrictedItems.ifUnsureTitle': 'Emin değilseniz',
+  'marketing.restrictedItems.ifUnsureBody':
+    'Belirsizseniz devam etmeyin.\nWayly sohbetinde net eşya detayları isteyin.\nHavayolu, taşıyıcı, gümrük ve yerel makamların resmi kurallarını kontrol edin.\nGüvensiz veya belirsiz talepleri reddedin.\nAnlaşmazlıkları sipariş koordinasyonu için kullanın — yasa veya güvenliği atlatmak için değil.',
+  'marketing.restrictedItems.backHome': 'Ana sayfaya dön',
+  'marketing.restrictedItems.openApp': 'Uygulamayı aç',
+  'marketing.restrictedItems.trustCenter': 'Güven merkezi',
+  'marketing.restrictedItems.faq': 'SSS',
+  'marketing.restrictedItems.noLegalAdvice':
+    'Bu sayfa genel güvenlik rehberidir. Wayly hukuki tavsiye vermez.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly eşya yasallığını doğrulamaz, paket incelemez veya gümrük onayı vermez.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'Şüphede havayolu, taşıyıcı, gümrük ve yerel makamların resmi kurallarını göndermeden veya taşımadan önce kontrol edin.',
   'marketing.landing.trustCenterLink': 'Wayly güvenliği nasıl yönetir',
   'marketing.landing.faqLink': 'Sık sorulan sorulara göz atın',
   'app.placeholderNotice':
@@ -13322,6 +13532,41 @@ const ar: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'هل Wayly جاهز للإطلاق التجاري؟',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly قيد التطوير النشط. الأدوات الأساسية تعمل لكن المدفوعات الحقيقية وKYC الإنتاج والضمانات التجارية الكاملة غير متوفرة بعد. راجع مركز الثقة.',
+  'marketing.restrictedItems.navLabel': 'عناصر مقيدة',
+  'marketing.restrictedItems.title': 'العناصر المقيدة والاستخدام المسؤول',
+  'marketing.restrictedItems.subtitle':
+    'إرشاد عام عما لا ينبغي أن يسافر عبر Wayly ومسؤوليات المرسلين و Wayler. ليس استشارة قانونية — راجع القواعد الرسمية للمسار والوجهة.',
+  'marketing.restrictedItems.responsibleUseTitle': 'الاستخدام المسؤول',
+  'marketing.restrictedItems.responsibleUseBody':
+    'يجب على المستخدمين اتباع القوانين المحلية وقواعد النقل والجمارك وشركات الطيران والبريد وقواعد الوجهة.\nWayly لا يقدم استشارة قانونية. هذه الصفحة إرشاد عام — وليست قائمة قانونية كاملة.',
+  'marketing.restrictedItems.notSuitableTitle': 'لا تستخدم Wayly لهذا',
+  'marketing.restrictedItems.notSuitableBody':
+    'بضائع غير قانونية\nأسلحة ومتفجرات وذخيرة وعناصر خطرة أخرى\nمخدرات ومواد خاضعة للرقابة وأدوية بوصفة أو مقيدة\nنقد وأدوات مالية وقيم قابلة للتداول عالية القيمة\nمواد كيميائية خطرة وسومات وسوائل قابلة للاشتعال وبطاريات أو أسطوانات مقيدة\nبضائع مقلدة ومسروقة ومنتجات حيوانية وقطع ثقافية محمية\nعناصر تخالف الجمارك أو قواعد الأمن',
+  'marketing.restrictedItems.cautionTitle': 'عناصر تحتاج حذراً إضافياً',
+  'marketing.restrictedItems.cautionBody':
+    'سوائل\nبطاريات وإلكترونيات\nعناصر هشة\nحساسة للحرارة\nمستندات مهمة\nطعام ومستحضرات تجميل\nأدوية ومكملات\nعناصر عالية القيمة\nراجع القواعد الرسمية أولاً وتجنب ما لست متأكداً منه.',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': 'مسؤوليات المرسل',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    'صف العنصر بوضوح وصدق.\nلا تخفِ المحتوى ولا تُوسّم الطرد بشكل خاطئ.\nلا تطلب من Wayler تجاوز الجمارك أو الأمن أو القانون.\nاحتفظ بالاتفاقات في دردشة Wayly.\nأكد تفاصيل العنصر والتوقيت والتسليم في الدردشة.',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'مسؤوليات Wayler',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    'لا تقبل عناصر لا تستطيع فحصها أو فهمها.\nلا تحمل عناصر غير آمنة أو غير واضحة أو مقيدة على مسارك.\nراجع قواعد شركة الطيران والناقل والوجهة.\nارفض الطلبات المشبوهة أو الغامضة.\nنسّق داخل دردشة Wayly.',
+  'marketing.restrictedItems.noGuaranteesTitle': 'ما لا يضمنه Wayly',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly لا يتحقق من قانونية العناصر ولا يفحص الطرود.\nWayly لا يضمن موافقة الجمارك.\nWayly لا يوفر تأميناً.\nWayly لا يوفر حماية قانونية.\nWayly لا يضمن استرداداً أو دفعاً.',
+  'marketing.restrictedItems.ifUnsureTitle': 'إذا لم تكن متأكداً',
+  'marketing.restrictedItems.ifUnsureBody':
+    'لا تتابع عند الشك.\nاطلب تفاصيل واضحة في دردشة Wayly.\nراجع القواعد الرسمية لشركات الطيران والناقلين والجمارك والسلطات المحلية.\nارفض الطلبات غير الآمنة أو غير الواضحة.\nاستخدم النزاعات لتنسيق الطلب — وليس لتجاوز القانون أو الأمن.',
+  'marketing.restrictedItems.backHome': 'العودة للرئيسية',
+  'marketing.restrictedItems.openApp': 'فتح التطبيق',
+  'marketing.restrictedItems.trustCenter': 'مركز الثقة',
+  'marketing.restrictedItems.faq': 'الأسئلة الشائعة',
+  'marketing.restrictedItems.noLegalAdvice':
+    'هذه الصفحة إرشاد عام للسلامة. Wayly لا يقدم استشارة قانونية.',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly لا يتحقق من قانونية العناصر ولا يفحص الطرود ولا يوافق على التخليص الجمركي.',
+  'marketing.restrictedItems.checkOfficialRules':
+    'عند الشك، راجع القواعد الرسمية لشركات الطيران والناقلين والجمارك والسلطات المحلية قبل الإرسال أو النقل.',
   'marketing.landing.trustCenterLink': 'كيف يتعامل Wayly مع السلامة',
   'marketing.landing.faqLink': 'تصفح الأسئلة الشائعة',
   'app.placeholderNotice':
@@ -15044,6 +15289,40 @@ const zh: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly 准备好商业发布了吗？',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly 仍在积极开发。核心 marketplace 工具可用，但真实支付、生产 KYC 与完整商业保证尚未到位。详见信任中心。',
+  'marketing.restrictedItems.navLabel': '受限物品',
+  'marketing.restrictedItems.title': '受限物品与负责任使用',
+  'marketing.restrictedItems.subtitle':
+    '关于不宜通过 Wayly 运输的物品及寄件人/Wayler 责任的通用指引。非法律建议——请查阅路线与目的地的官方规则。',
+  'marketing.restrictedItems.responsibleUseTitle': '负责任使用',
+  'marketing.restrictedItems.responsibleUseBody':
+    '用户须遵守当地法律、运输规则、海关规则、航司/快递规则及目的地规则。\nWayly 不提供法律建议。本页为通用指引——非完整法律清单。',
+  'marketing.restrictedItems.notSuitableTitle': '请勿通过 Wayly 运输以下物品',
+  'marketing.restrictedItems.notSuitableBody':
+    '非法物品\n武器、爆炸物、弹药及其他危险物品\n毒品、管制物质及处方药或受限药品\n现金、金融工具及高价值可流通物品\n危险化学品、毒素、易燃液体及受限电池或加压容器\n假冒、赃物、野生动物制品及受保护文化物品\n违反海关或安检规则的物品',
+  'marketing.restrictedItems.cautionTitle': '需格外谨慎的物品',
+  'marketing.restrictedItems.cautionBody':
+    '液体\n电池与电子产品\n易碎物品\n温控敏感物品\n重要文件\n食品与化妆品\n药品与保健品\n高价值物品\n请先查阅官方规则，不确定则避免。',
+  'marketing.restrictedItems.senderResponsibilitiesTitle': '寄件人责任',
+  'marketing.restrictedItems.senderResponsibilitiesBody':
+    '清楚、如实描述物品。\n不得隐瞒内容或错误标注包裹。\n不得要求 Wayler 规避海关、安检或法律。\n将约定留在 Wayly 聊天内。\n在聊天中确认物品细节、时间与交接后再依赖。',
+  'marketing.restrictedItems.waylerResponsibilitiesTitle': 'Wayler 责任',
+  'marketing.restrictedItems.waylerResponsibilitiesBody':
+    '不接受无法检查或不理解的物品。\n不携带感觉不安全、不清楚或路线受限的物品。\n查阅航司、承运人与目的地规则。\n拒绝可疑或模糊请求。\n在 Wayly 聊天内协调。',
+  'marketing.restrictedItems.noGuaranteesTitle': 'Wayly 不保证的事项',
+  'marketing.restrictedItems.noGuaranteesBody':
+    'Wayly 不验证物品合法性，不检查包裹。\nWayly 不保证海关放行。\nWayly 不提供保险。\nWayly 不提供法律保护。\nWayly 不保证退款或打款。',
+  'marketing.restrictedItems.ifUnsureTitle': '如有不确定',
+  'marketing.restrictedItems.ifUnsureBody':
+    '不确定时不要继续。\n在 Wayly 聊天中要求清楚说明物品细节。\n查阅航司、承运人、海关与地方官方的正式规则。\n拒绝不安全或不明确的请求。\n争议用于平台订单协调问题——不得用于规避法律或安检。',
+  'marketing.restrictedItems.backHome': '返回首页',
+  'marketing.restrictedItems.openApp': '打开应用',
+  'marketing.restrictedItems.trustCenter': '信任中心',
+  'marketing.restrictedItems.faq': '常见问题',
+  'marketing.restrictedItems.noLegalAdvice': '本页为通用安全指引。Wayly 不提供法律建议。',
+  'marketing.restrictedItems.noLegalityVerification':
+    'Wayly 不验证物品合法性、不检查包裹、不批准清关。',
+  'marketing.restrictedItems.checkOfficialRules':
+    '如有疑问，寄送或携带前请查阅航司、承运人、海关与地方官方的正式规则。',
   'marketing.landing.trustCenterLink': 'Wayly 如何处理安全',
   'marketing.landing.faqLink': '浏览常见问题',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',

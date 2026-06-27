@@ -160,6 +160,14 @@ export function TrustCenterPage() {
                     <div className="mt-3">
                       <TrustSectionBody bodyKey={section.bodyKey} />
                     </div>
+                    {section.id === 'restricted-items' ? (
+                      <Link
+                        href="/restricted-items"
+                        className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        {t('marketing.restrictedItems.navLabel')} →
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               </article>

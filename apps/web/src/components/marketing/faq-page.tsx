@@ -248,6 +248,14 @@ export function FaqPage() {
                     <FaqAccordionItem key={item.questionKey} {...item} />
                   ))}
                 </div>
+                {group.id === 'safety' ? (
+                  <Link
+                    href="/restricted-items"
+                    className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    {t('marketing.restrictedItems.navLabel')} →
+                  </Link>
+                ) : null}
               </section>
             </FadeIn>
           );
@@ -274,6 +282,14 @@ export function FaqPage() {
               )}
             >
               {t('marketing.faq.trustCenter')}
+            </Link>
+            <Link
+              href="/restricted-items"
+              className={cn(
+                'inline-flex items-center justify-center rounded-md border border-border/60 bg-card/40 px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-card/80',
+              )}
+            >
+              {t('marketing.restrictedItems.navLabel')}
             </Link>
           </div>
         </FadeIn>
