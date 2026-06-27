@@ -1775,6 +1775,39 @@ const en = {
   'app.waylerAccess.cancelled': 'Cancelled',
   'app.waylerAccess.refunded': 'Refunded',
   'app.waylerAccess.failed': 'Failed',
+  'marketing.trustCenter.navLabel': 'Trust Center',
+  'marketing.trustCenter.title': 'Trust Center',
+  'marketing.trustCenter.subtitle':
+    'How Wayly helps keep marketplace interactions clearer and safer — and what the platform does and does not guarantee today.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'How Wayly works',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'Senders post delivery requests or send requests to Wayler listings.\nWaylers publish local availability or trip routes.\nWhen work is accepted, it becomes a tracked order inside Wayly.\nChat and order updates stay on the platform after acceptance.',
+  'marketing.trustCenter.trustSignalsTitle': 'Trust signals',
+  'marketing.trustCenter.trustSignalsBody':
+    'Verified Wayler badges reflect Wayly verification status — not government or carrier certification.\nPublic active listings and route-match hints are informational only, not booking guarantees.\nClear profiles, routes, and messages help you decide — Wayly does not guarantee acceptance or delivery outcomes.',
+  'marketing.trustCenter.safeCommunicationTitle': 'Safe communication',
+  'marketing.trustCenter.safeCommunicationBody':
+    'Keep agreements, timing changes, and handoff details inside Wayly chat.\nConfirm item description, pickup/drop-off, and proof details before relying on them.\nDo not share private payment details, card numbers, bank transfers, or passwords in chat or proof notes.',
+  'marketing.trustCenter.restrictedItemsTitle': 'Restricted and unsafe items',
+  'marketing.trustCenter.restrictedItemsBody':
+    'You are responsible for local laws, customs, airline, and carrier rules for anything you send or carry.\nWayly does not verify item legality or suitability for transport.\nDo not use Wayly to bypass customs, security, or legal restrictions.',
+  'marketing.trustCenter.paymentsTitle': 'Payments',
+  'marketing.trustCenter.paymentsBody':
+    "Today's payment flow is mock/manual for development and operations testing unless a real payment provider is integrated later.\nPayment status in Wayly tracks workflow stages — not real escrow, guaranteed refund, guaranteed payout, or insurance.\nAdmin payment review actions record operational decisions only — they do not move money through a payment provider.",
+  'marketing.trustCenter.disputesTitle': 'Disputes and evidence',
+  'marketing.trustCenter.disputesBody':
+    'Disputes help organize facts, messages, and evidence when coordination breaks down.\nAdmin and arbitrator tools can review disputes inside Wayly — this is not legal advice or automatic money settlement.\nKeep evidence relevant; avoid sharing passwords, payment details, or unnecessary sensitive personal data.',
+  'marketing.trustCenter.localDataTitle': 'Local saved data and privacy',
+  'marketing.trustCenter.localDataBody':
+    'Recent route searches, templates, drafts, and Wayler shortlists are stored in your browser only — not synced across devices or accounts.\nYou can review and clear this data from the Local saved data panel in the app.\nClearing browser storage removes local tools; server-side order and account records are separate.',
+  'marketing.trustCenter.futureWorkTitle': 'Future production work',
+  'marketing.trustCenter.futureWorkBody':
+    'Real payment provider integration (for example Stripe).\nReal KYC provider integration and stronger identity workflows.\nPush notifications, stronger monitoring, and production hardening.\nNative mobile packaging when the product is ready.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly provides marketplace tools and guidance — not guaranteed delivery, payment protection, legal compliance, or insurance. The sections below describe current limits honestly.',
+  'marketing.trustCenter.backHome': 'Back to home',
+  'marketing.trustCenter.openApp': 'Open app',
+  'marketing.landing.trustCenterLink': 'How Wayly handles safety',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -3563,6 +3596,39 @@ const ru: Dictionary = {
   'app.waylerAccess.cancelled': 'Отменён',
   'app.waylerAccess.refunded': 'Возвращён',
   'app.waylerAccess.failed': 'Ошибка',
+  'marketing.trustCenter.navLabel': 'Центр доверия',
+  'marketing.trustCenter.title': 'Центр доверия',
+  'marketing.trustCenter.subtitle':
+    'Как Wayly помогает сделать взаимодействие на маркетплейсе понятнее и безопаснее — и чего платформа сегодня не гарантирует.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'Как работает Wayly',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'Отправители публикуют запросы на доставку или отправляют запросы к объявлениям Wayler.\nWayler публикуют локальную доступность или маршруты поездок.\nПосле принятия работа становится отслеживаемым заказом внутри Wayly.\nЧат и обновления заказа остаются на платформе после принятия.',
+  'marketing.trustCenter.trustSignalsTitle': 'Сигналы доверия',
+  'marketing.trustCenter.trustSignalsBody':
+    'Значки Verified Wayler отражают статус верификации Wayly — не государственную или перевозческую сертификацию.\nПубличные объявления и подсказки совпадения маршрута носят информационный характер, а не гарантию бронирования.\nПонятные профили, маршруты и сообщения помогают принять решение — Wayly не гарантирует принятие или результат доставки.',
+  'marketing.trustCenter.safeCommunicationTitle': 'Безопасное общение',
+  'marketing.trustCenter.safeCommunicationBody':
+    'Договорённости, изменения сроков и детали передачи держите в чате Wayly.\nПодтверждайте описание предмета, адреса и детали подтверждения до того, как на них полагаться.\nНе делитесь платёжными реквизитами, номерами карт, банковскими переводами или паролями в чате или заметках к подтверждению.',
+  'marketing.trustCenter.restrictedItemsTitle': 'Запрещённые и небезопасные предметы',
+  'marketing.trustCenter.restrictedItemsBody':
+    'Вы отвечаете за местные законы, таможню, правила авиакомпаний и перевозчиков для всего, что отправляете или везёте.\nWayly не проверяет законность или пригодность предмета к перевозке.\nНе используйте Wayly для обхода таможни, безопасности или правовых ограничений.',
+  'marketing.trustCenter.paymentsTitle': 'Платежи',
+  'marketing.trustCenter.paymentsBody':
+    'Сегодня платёжный поток mock/ручной для разработки и операционного тестирования, пока не подключён реальный платёжный провайдер.\nСтатус платежа в Wayly отражает этапы процесса — не реальный эскроу, гарантированный возврат, гарантированную выплату или страховку.\nДействия админа по платежам фиксируют только операционные решения — они не двигают деньги через платёжного провайдера.',
+  'marketing.trustCenter.disputesTitle': 'Споры и доказательства',
+  'marketing.trustCenter.disputesBody':
+    'Споры помогают упорядочить факты, сообщения и доказательства, когда координация ломается.\nИнструменты админа и арбитра могут рассматривать споры в Wayly — это не юридическая консультация и не автоматическое денежное урегулирование.\nПрикладывайте релевантные доказательства; не делитесь паролями, платёжными данными или лишними персональными данными.',
+  'marketing.trustCenter.localDataTitle': 'Локальные данные и конфиденциальность',
+  'marketing.trustCenter.localDataBody':
+    'Недавние поиски маршрутов, шаблоны, черновики и шортлисты Wayler хранятся только в браузере — без синхронизации между устройствами или аккаунтами.\nВы можете просмотреть и очистить эти данные в панели «Локальные сохранённые данные» в приложении.\nОчистка хранилища браузера удаляет локальные инструменты; серверные записи заказов и аккаунта отдельны.',
+  'marketing.trustCenter.futureWorkTitle': 'Будущая production-работа',
+  'marketing.trustCenter.futureWorkBody':
+    'Интеграция реального платёжного провайдера (например Stripe).\nИнтеграция реального KYC-провайдера и более строгие процессы идентификации.\nPush-уведомления, усиленный мониторинг и production-hardening.\nНативная мобильная упаковка, когда продукт будет готов.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly предоставляет инструменты маркетплейса и рекомендации — не гарантированную доставку, защиту платежей, правовое соответствие или страховку. Ниже честно описаны текущие ограничения.',
+  'marketing.trustCenter.backHome': 'На главную',
+  'marketing.trustCenter.openApp': 'Открыть приложение',
+  'marketing.landing.trustCenterLink': 'Как Wayly обеспечивает безопасность',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -5359,6 +5425,39 @@ const es: Dictionary = {
   'app.waylerAccess.cancelled': 'Cancelado',
   'app.waylerAccess.refunded': 'Reembolsado',
   'app.waylerAccess.failed': 'Fallido',
+  'marketing.trustCenter.navLabel': 'Centro de confianza',
+  'marketing.trustCenter.title': 'Centro de confianza',
+  'marketing.trustCenter.subtitle':
+    'Cómo Wayly ayuda a que las interacciones del marketplace sean más claras y seguras — y qué garantiza y qué no garantiza la plataforma hoy.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'Cómo funciona Wayly',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'Los remitentes publican solicitudes de entrega o envían solicitudes a anuncios de Wayler.\nLos Wayler publican disponibilidad local o rutas de viaje.\nCuando se acepta el trabajo, se convierte en un pedido rastreado dentro de Wayly.\nEl chat y las actualizaciones del pedido permanecen en la plataforma tras la aceptación.',
+  'marketing.trustCenter.trustSignalsTitle': 'Señales de confianza',
+  'marketing.trustCenter.trustSignalsBody':
+    'Las insignias Verified Wayler reflejan el estado de verificación de Wayly — no certificación gubernamental o de transportista.\nLos anuncios activos públicos y las pistas de coincidencia de ruta son solo informativos, no garantías de reserva.\nPerfiles, rutas y mensajes claros ayudan a decidir — Wayly no garantiza aceptación ni resultados de entrega.',
+  'marketing.trustCenter.safeCommunicationTitle': 'Comunicación segura',
+  'marketing.trustCenter.safeCommunicationBody':
+    'Mantén acuerdos, cambios de horario y detalles de entrega en el chat de Wayly.\nConfirma descripción del artículo, recogida/entrega y detalles de prueba antes de confiar en ellos.\nNo compartas datos de pago privados, números de tarjeta, transferencias bancarias ni contraseñas en el chat o notas de prueba.',
+  'marketing.trustCenter.restrictedItemsTitle': 'Artículos restringidos e inseguros',
+  'marketing.trustCenter.restrictedItemsBody':
+    'Eres responsable de las leyes locales, aduanas y normas de aerolíneas y transportistas de lo que envías o transportas.\nWayly no verifica la legalidad o idoneidad del artículo para el transporte.\nNo uses Wayly para eludir aduanas, seguridad o restricciones legales.',
+  'marketing.trustCenter.paymentsTitle': 'Pagos',
+  'marketing.trustCenter.paymentsBody':
+    'El flujo de pago actual es mock/manual para desarrollo y pruebas operativas hasta que se integre un proveedor de pagos real.\nEl estado de pago en Wayly refleja etapas del flujo — no depósito en garantía real, reembolso garantizado, pago garantizado ni seguro.\nLas acciones de revisión de pagos del admin registran solo decisiones operativas — no mueven dinero a través de un proveedor.',
+  'marketing.trustCenter.disputesTitle': 'Disputas y pruebas',
+  'marketing.trustCenter.disputesBody':
+    'Las disputas ayudan a organizar hechos, mensajes y pruebas cuando la coordinación falla.\nLas herramientas de admin y árbitro pueden revisar disputas en Wayly — esto no es asesoramiento legal ni liquidación automática de dinero.\nMantén pruebas relevantes; evita compartir contraseñas, datos de pago o datos personales sensibles innecesarios.',
+  'marketing.trustCenter.localDataTitle': 'Datos locales y privacidad',
+  'marketing.trustCenter.localDataBody':
+    'Búsquedas recientes de rutas, plantillas, borradores y listas cortas de Wayler se guardan solo en tu navegador — sin sincronización entre dispositivos o cuentas.\nPuedes revisar y borrar estos datos desde el panel Datos guardados localmente en la app.\nBorrar el almacenamiento del navegador elimina herramientas locales; los registros de pedidos y cuenta en el servidor son independientes.',
+  'marketing.trustCenter.futureWorkTitle': 'Trabajo futuro en producción',
+  'marketing.trustCenter.futureWorkBody':
+    'Integración de un proveedor de pagos real (por ejemplo Stripe).\nIntegración de un proveedor KYC real y flujos de identidad más sólidos.\nNotificaciones push, mejor monitorización y endurecimiento de producción.\nEmpaquetado móvil nativo cuando el producto esté listo.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly ofrece herramientas de marketplace y orientación — no entrega garantizada, protección de pagos, cumplimiento legal ni seguro. Las secciones siguientes describen los límites actuales con honestidad.',
+  'marketing.trustCenter.backHome': 'Volver al inicio',
+  'marketing.trustCenter.openApp': 'Abrir app',
+  'marketing.landing.trustCenterLink': 'Cómo Wayly gestiona la seguridad',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -7182,6 +7281,39 @@ const fr: Dictionary = {
   'app.waylerAccess.cancelled': 'Annulé',
   'app.waylerAccess.refunded': 'Remboursé',
   'app.waylerAccess.failed': 'Échoué',
+  'marketing.trustCenter.navLabel': 'Centre de confiance',
+  'marketing.trustCenter.title': 'Centre de confiance',
+  'marketing.trustCenter.subtitle':
+    'Comment Wayly rend les interactions du marketplace plus claires et plus sûres — et ce que la plateforme garantit ou non aujourd’hui.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'Comment Wayly fonctionne',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'Les expéditeurs publient des demandes de livraison ou envoient des demandes aux annonces Wayler.\nLes Wayler publient une disponibilité locale ou des itinéraires de voyage.\nLorsque le travail est accepté, il devient une commande suivie dans Wayly.\nLe chat et les mises à jour de commande restent sur la plateforme après acceptation.',
+  'marketing.trustCenter.trustSignalsTitle': 'Signaux de confiance',
+  'marketing.trustCenter.trustSignalsBody':
+    'Les badges Verified Wayler reflètent le statut de vérification Wayly — pas une certification gouvernementale ou transporteur.\nLes annonces actives publiques et les indices de correspondance d’itinéraire sont informatifs uniquement, pas des garanties de réservation.\nDes profils, itinéraires et messages clairs aident à décider — Wayly ne garantit ni l’acceptation ni les résultats de livraison.',
+  'marketing.trustCenter.safeCommunicationTitle': 'Communication sûre',
+  'marketing.trustCenter.safeCommunicationBody':
+    'Gardez accords, changements d’horaire et détails de remise dans le chat Wayly.\nConfirmez description de l’article, enlèvement/livraison et détails de preuve avant de vous y fier.\nNe partagez pas de coordonnées de paiement privées, numéros de carte, virements bancaires ou mots de passe dans le chat ou les notes de preuve.',
+  'marketing.trustCenter.restrictedItemsTitle': 'Articles restreints et dangereux',
+  'marketing.trustCenter.restrictedItemsBody':
+    'Vous êtes responsable des lois locales, douanes et règles des compagnies aériennes et transporteurs pour tout ce que vous envoyez ou transportez.\nWayly ne vérifie pas la légalité ou l’adéquation de l’article au transport.\nN’utilisez pas Wayly pour contourner douanes, sécurité ou restrictions légales.',
+  'marketing.trustCenter.paymentsTitle': 'Paiements',
+  'marketing.trustCenter.paymentsBody':
+    'Le flux de paiement actuel est mock/manuel pour le développement et les tests opérationnels tant qu’un vrai prestataire de paiement n’est pas intégré.\nLe statut de paiement dans Wayly suit les étapes du flux — pas un vrai séquestre, remboursement garanti, paiement garanti ou assurance.\nLes actions de revue paiement admin enregistrent uniquement des décisions opérationnelles — elles ne déplacent pas d’argent via un prestataire.',
+  'marketing.trustCenter.disputesTitle': 'Litiges et preuves',
+  'marketing.trustCenter.disputesBody':
+    'Les litiges aident à organiser faits, messages et preuves quand la coordination échoue.\nLes outils admin et arbitre peuvent examiner les litiges dans Wayly — ce n’est pas un conseil juridique ni un règlement automatique d’argent.\nGardez des preuves pertinentes ; évitez mots de passe, données de paiement ou données personnelles sensibles inutiles.',
+  'marketing.trustCenter.localDataTitle': 'Données locales et confidentialité',
+  'marketing.trustCenter.localDataBody':
+    'Recherches d’itinéraires récentes, modèles, brouillons et listes courtes Wayler sont stockés uniquement dans votre navigateur — sans sync entre appareils ou comptes.\nVous pouvez consulter et effacer ces données depuis le panneau Données locales enregistrées dans l’app.\nEffacer le stockage du navigateur supprime les outils locaux ; les enregistrements commande et compte côté serveur sont séparés.',
+  'marketing.trustCenter.futureWorkTitle': 'Travail production futur',
+  'marketing.trustCenter.futureWorkBody':
+    'Intégration d’un vrai prestataire de paiement (par ex. Stripe).\nIntégration d’un vrai prestataire KYC et workflows d’identité renforcés.\nNotifications push, monitoring renforcé et durcissement production.\nPackaging mobile natif quand le produit sera prêt.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly fournit des outils marketplace et des conseils — pas de livraison garantie, protection paiement, conformité légale ou assurance. Les sections ci-dessous décrivent honnêtement les limites actuelles.',
+  'marketing.trustCenter.backHome': 'Retour à l’accueil',
+  'marketing.trustCenter.openApp': 'Ouvrir l’app',
+  'marketing.landing.trustCenterLink': 'Comment Wayly gère la sécurité',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -9017,6 +9149,39 @@ const de: Dictionary = {
   'app.waylerAccess.cancelled': 'Gekündigt',
   'app.waylerAccess.refunded': 'Erstattet',
   'app.waylerAccess.failed': 'Fehlgeschlagen',
+  'marketing.trustCenter.navLabel': 'Trust Center',
+  'marketing.trustCenter.title': 'Trust Center',
+  'marketing.trustCenter.subtitle':
+    'Wie Wayly Marktplatz-Interaktionen klarer und sicherer macht — und was die Plattform heute garantiert und was nicht.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'So funktioniert Wayly',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'Sender veröffentlichen Lieferanfragen oder senden Anfragen an Wayler-Anzeigen.\nWayler veröffentlichen lokale Verfügbarkeit oder Reiserouten.\nNach Annahme wird daraus eine nachverfolgbare Bestellung in Wayly.\nChat und Bestellupdates bleiben nach Annahme auf der Plattform.',
+  'marketing.trustCenter.trustSignalsTitle': 'Vertrauenssignale',
+  'marketing.trustCenter.trustSignalsBody':
+    'Verified-Wayler-Abzeichen spiegeln den Wayly-Verifizierungsstatus wider — keine staatliche oder Carrier-Zertifizierung.\nÖffentliche aktive Anzeigen und Routen-Match-Hinweise sind nur informativ, keine Buchungsgarantien.\nKlare Profile, Routen und Nachrichten helfen bei Entscheidungen — Wayly garantiert keine Annahme oder Lieferergebnisse.',
+  'marketing.trustCenter.safeCommunicationTitle': 'Sichere Kommunikation',
+  'marketing.trustCenter.safeCommunicationBody':
+    'Halten Sie Absprachen, Terminänderungen und Übergabedetails im Wayly-Chat.\nBestätigen Sie Artikelbeschreibung, Abholung/Zustellung und Nachweisdetails, bevor Sie sich darauf verlassen.\nTeilen Sie keine privaten Zahlungsdaten, Kartennummern, Banküberweisungen oder Passwörter im Chat oder in Nachweisnotizen.',
+  'marketing.trustCenter.restrictedItemsTitle': 'Eingeschränkte und unsichere Gegenstände',
+  'marketing.trustCenter.restrictedItemsBody':
+    'Sie sind verantwortlich für lokale Gesetze, Zoll und Regeln von Airlines und Transporteuren für alles, was Sie senden oder transportieren.\nWayly prüft nicht die Legalität oder Eignung von Gegenständen für den Transport.\nNutzen Sie Wayly nicht, um Zoll, Sicherheit oder rechtliche Beschränkungen zu umgehen.',
+  'marketing.trustCenter.paymentsTitle': 'Zahlungen',
+  'marketing.trustCenter.paymentsBody':
+    'Der aktuelle Zahlungsfluss ist mock/manuell für Entwicklung und operative Tests, bis ein echter Zahlungsanbieter integriert ist.\nDer Zahlungsstatus in Wayly spiegelt Workflow-Stufen wider — kein echtes Escrow, garantierte Erstattung, garantierte Auszahlung oder Versicherung.\nAdmin-Zahlungsprüfungen erfassen nur operative Entscheidungen — sie bewegen kein Geld über einen Zahlungsanbieter.',
+  'marketing.trustCenter.disputesTitle': 'Streitfälle und Nachweise',
+  'marketing.trustCenter.disputesBody':
+    'Streitfälle helfen, Fakten, Nachrichten und Nachweise zu ordnen, wenn die Koordination scheitert.\nAdmin- und Schiedsrichter-Tools können Streitfälle in Wayly prüfen — das ist keine Rechtsberatung und keine automatische Geldabwicklung.\nHalten Sie Nachweise relevant; teilen Sie keine Passwörter, Zahlungsdaten oder unnötige sensible personenbezogene Daten.',
+  'marketing.trustCenter.localDataTitle': 'Lokal gespeicherte Daten und Datenschutz',
+  'marketing.trustCenter.localDataBody':
+    'Letzte Routensuchen, Vorlagen, Entwürfe und Wayler-Shortlists werden nur im Browser gespeichert — ohne Sync über Geräte oder Konten.\nSie können diese Daten im Panel Lokal gespeicherte Daten in der App einsehen und löschen.\nBrowser-Speicher löschen entfernt lokale Tools; serverseitige Bestell- und Kontodaten sind getrennt.',
+  'marketing.trustCenter.futureWorkTitle': 'Zukünftige Produktionsarbeit',
+  'marketing.trustCenter.futureWorkBody':
+    'Integration eines echten Zahlungsanbieters (z. B. Stripe).\nIntegration eines echten KYC-Anbieters und stärkere Identitäts-Workflows.\nPush-Benachrichtigungen, stärkeres Monitoring und Production-Hardening.\nNative Mobile-Verpackung, wenn das Produkt bereit ist.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly bietet Marktplatz-Tools und Orientierung — keine garantierte Lieferung, Zahlungsschutz, Rechtskonformität oder Versicherung. Die folgenden Abschnitte beschreiben die aktuellen Grenzen ehrlich.',
+  'marketing.trustCenter.backHome': 'Zur Startseite',
+  'marketing.trustCenter.openApp': 'App öffnen',
+  'marketing.landing.trustCenterLink': 'Wie Wayly Sicherheit handhabt',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -10788,6 +10953,39 @@ const tr: Dictionary = {
   'app.waylerAccess.cancelled': 'İptal edildi',
   'app.waylerAccess.refunded': 'İade edildi',
   'app.waylerAccess.failed': 'Başarısız',
+  'marketing.trustCenter.navLabel': 'Güven merkezi',
+  'marketing.trustCenter.title': 'Güven merkezi',
+  'marketing.trustCenter.subtitle':
+    'Wayly pazar yeri etkileşimlerini nasıl daha net ve güvenli hale getirir — ve platformun bugün neyi garanti edip etmediği.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'Wayly nasıl çalışır',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'Göndericiler teslimat talebi yayınlar veya Wayler ilanlarına istek gönderir.\nWayler’lar yerel müsaitlik veya seyahat rotaları yayınlar.\nİş kabul edildiğinde Wayly içinde takip edilen bir siparişe dönüşür.\nKabul sonrası sohbet ve sipariş güncellemeleri platformda kalır.',
+  'marketing.trustCenter.trustSignalsTitle': 'Güven sinyalleri',
+  'marketing.trustCenter.trustSignalsBody':
+    'Verified Wayler rozetleri Wayly doğrulama durumunu yansıtır — devlet veya taşıyıcı sertifikası değildir.\nHerkese açık aktif ilanlar ve rota eşleşme ipuçları yalnızca bilgilendiricidir, rezervasyon garantisi değildir.\nNet profiller, rotalar ve mesajlar karar vermenize yardımcı olur — Wayly kabul veya teslimat sonucunu garanti etmez.',
+  'marketing.trustCenter.safeCommunicationTitle': 'Güvenli iletişim',
+  'marketing.trustCenter.safeCommunicationBody':
+    'Anlaşmaları, zaman değişikliklerini ve teslim detaylarını Wayly sohbetinde tutun.\nGüvenmeden önce ürün açıklamasını, alım/teslim noktalarını ve kanıt detaylarını onaylayın.\nSohbette veya kanıt notlarında özel ödeme bilgileri, kart numaraları, banka transferleri veya şifreler paylaşmayın.',
+  'marketing.trustCenter.restrictedItemsTitle': 'Kısıtlı ve güvensiz eşyalar',
+  'marketing.trustCenter.restrictedItemsBody':
+    'Gönderdiğiniz veya taşıdığınız her şey için yerel yasalar, gümrük ve havayolu/taşıyıcı kurallarından siz sorumlusunuz.\nWayly eşyanın yasallığını veya taşımaya uygunluğunu doğrulamaz.\nGümrük, güvenlik veya yasal kısıtlamaları atlatmak için Wayly kullanmayın.',
+  'marketing.trustCenter.paymentsTitle': 'Ödemeler',
+  'marketing.trustCenter.paymentsBody':
+    'Gerçek bir ödeme sağlayıcısı entegre edilene kadar mevcut ödeme akışı geliştirme ve operasyon testleri için mock/manueldir.\nWayly’deki ödeme durumu iş akışı aşamalarını yansıtır — gerçek emanet, garantili iade, garantili ödeme veya sigorta değildir.\nAdmin ödeme inceleme işlemleri yalnızca operasyonel kararları kaydeder — ödeme sağlayıcısı üzerinden para taşımaz.',
+  'marketing.trustCenter.disputesTitle': 'Anlaşmazlıklar ve kanıtlar',
+  'marketing.trustCenter.disputesBody':
+    'Anlaşmazlıklar koordinasyon bozulduğunda gerçekleri, mesajları ve kanıtları düzenlemeye yardımcı olur.\nAdmin ve hakem araçları Wayly içinde anlaşmazlıkları inceleyebilir — bu hukuki tavsiye veya otomatik para uzlaşması değildir.\nKanıtları ilgili tutun; şifre, ödeme bilgisi veya gereksiz hassas kişisel veri paylaşmayın.',
+  'marketing.trustCenter.localDataTitle': 'Yerel kayıtlı veriler ve gizlilik',
+  'marketing.trustCenter.localDataBody':
+    'Son rota aramaları, şablonlar, taslaklar ve Wayler kısa listeleri yalnızca tarayıcınızda saklanır — cihazlar veya hesaplar arasında senkronize edilmez.\nUygulamadaki Yerel kayıtlı veriler panelinden bu verileri inceleyip temizleyebilirsiniz.\nTarayıcı depolamasını temizlemek yerel araçları kaldırır; sunucu tarafı sipariş ve hesap kayıtları ayrıdır.',
+  'marketing.trustCenter.futureWorkTitle': 'Gelecekteki production çalışması',
+  'marketing.trustCenter.futureWorkBody':
+    'Gerçek ödeme sağlayıcısı entegrasyonu (ör. Stripe).\nGerçek KYC sağlayıcısı entegrasyonu ve daha güçlü kimlik akışları.\nPush bildirimleri, daha güçlü izleme ve production sertleştirme.\nÜrün hazır olduğunda yerel mobil paketleme.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly pazar yeri araçları ve rehberlik sunar — garantili teslimat, ödeme koruması, yasal uyum veya sigorta değil. Aşağıdaki bölümler mevcut sınırları dürüstçe açıklar.',
+  'marketing.trustCenter.backHome': 'Ana sayfaya dön',
+  'marketing.trustCenter.openApp': 'Uygulamayı aç',
+  'marketing.landing.trustCenterLink': 'Wayly güvenliği nasıl yönetir',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -12478,6 +12676,39 @@ const ar: Dictionary = {
   'app.waylerAccess.cancelled': 'ملغى',
   'app.waylerAccess.refunded': 'مسترد',
   'app.waylerAccess.failed': 'فشل',
+  'marketing.trustCenter.navLabel': 'مركز الثقة',
+  'marketing.trustCenter.title': 'مركز الثقة',
+  'marketing.trustCenter.subtitle':
+    'كيف يساعد Wayly على جعل تفاعلات السوق أوضح وأكثر أماناً — وما تضمنه المنصة اليوم وما لا تضمنه.',
+  'marketing.trustCenter.howWaylyWorksTitle': 'كيف يعمل Wayly',
+  'marketing.trustCenter.howWaylyWorksBody':
+    'يرسل المرسلون طلبات توصيل أو يرسلون طلبات إلى إعلانات Wayler.\nينشر Wayler التوفر المحلي أو مسارات الرحلات.\nعند قبول العمل يصبح طلباً متتبعاً داخل Wayly.\nتبقى الدردشة وتحديثات الطلب على المنصة بعد القبول.',
+  'marketing.trustCenter.trustSignalsTitle': 'إشارات الثقة',
+  'marketing.trustCenter.trustSignalsBody':
+    'شارات Verified Wayler تعكس حالة التحقق في Wayly — وليست شهادة حكومية أو ناقل.\nالإعلانات النشطة العامة وتلميحات تطابق المسار إعلامية فقط وليست ضمان حجز.\nالملفات والمسارات والرسائل الواضحة تساعد على القرار — Wayly لا يضمن القبول أو نتائج التسليم.',
+  'marketing.trustCenter.safeCommunicationTitle': 'تواصل آمن',
+  'marketing.trustCenter.safeCommunicationBody':
+    'احتفظ بالاتفاقات وتغييرات المواعيد وتفاصيل التسليم داخل دردشة Wayly.\nأكد وصف العنصر ونقاط الاستلام/التسليم وتفاصيل الإثبات قبل الاعتماد عليها.\nلا تشارك تفاصيل دفع خاصة أو أرقام بطاقات أو تحويلات بنكية أو كلمات مرور في الدردشة أو ملاحظات الإثبات.',
+  'marketing.trustCenter.restrictedItemsTitle': 'عناصر مقيدة وغير آمنة',
+  'marketing.trustCenter.restrictedItemsBody':
+    'أنت مسؤول عن القوانين المحلية والجمارك وقواعد شركات الطيران والناقلين لكل ما ترسله أو تحمله.\nWayly لا يتحقق من قانونية العنصر أو ملاءمته للنقل.\nلا تستخدم Wayly لتجاوز الجمارك أو الأمن أو القيود القانونية.',
+  'marketing.trustCenter.paymentsTitle': 'المدفوعات',
+  'marketing.trustCenter.paymentsBody':
+    'تدفق الدفع الحالي mock/يدوي للتطوير واختبار العمليات حتى يتم دمج مزود دفع حقيقي لاحقاً.\nحالة الدفع في Wayly تعكس مراحل سير العمل — وليست ضماناً حقيقياً أو استرداداً مضموناً أو دفعاً مضموناً أو تأميناً.\nإجراءات مراجعة الدفع للمسؤول تسجل قرارات تشغيلية فقط — ولا تحرك أموالاً عبر مزود دفع.',
+  'marketing.trustCenter.disputesTitle': 'النزاعات والأدلة',
+  'marketing.trustCenter.disputesBody':
+    'النزاعات تساعد على تنظيم الحقائق والرسائل والأدلة عند فشل التنسيق.\nأدوات المسؤول والمحكم يمكنها مراجعة النزاعات داخل Wayly — هذا ليس استشارة قانونية ولا تسوية مالية تلقائية.\nاحتفظ بأدلة ذات صلة؛ تجنب مشاركة كلمات المرور أو بيانات الدفع أو بيانات شخصية حساسة غير ضرورية.',
+  'marketing.trustCenter.localDataTitle': 'البيانات المحلية والخصوصية',
+  'marketing.trustCenter.localDataBody':
+    'عمليات البحث الأخيرة عن المسارات والقوالب والمسودات وقوائم Wayler المختصرة تُخزَّن في متصفحك فقط — دون مزامنة بين الأجهزة أو الحسابات.\nيمكنك مراجعة هذه البيانات ومسحها من لوحة البيانات المحفوظة محلياً في التطبيق.\nمسح تخزين المتصفح يزيل الأدوات المحلية؛ سجلات الطلبات والحساب على الخادم منفصلة.',
+  'marketing.trustCenter.futureWorkTitle': 'عمل الإنتاج المستقبلي',
+  'marketing.trustCenter.futureWorkBody':
+    'دمج مزود دفع حقيقي (مثل Stripe).\nدمج مزود KYC حقيقي وسير عمل هوية أقوى.\nإشعارات push ومراقبة أقوى وتصلّب إنتاج.\nتغليف تطبيق جوال أصلي عندما يكون المنتج جاهزاً.',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly يقدم أدوات سوق وإرشاداً — وليس توصيلاً مضموناً أو حماية مدفوعات أو امتثالاً قانونياً أو تأميناً. الأقسام التالية تصف الحدود الحالية بصدق.',
+  'marketing.trustCenter.backHome': 'العودة للرئيسية',
+  'marketing.trustCenter.openApp': 'فتح التطبيق',
+  'marketing.landing.trustCenterLink': 'كيف يتعامل Wayly مع السلامة',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -14081,6 +14312,39 @@ const zh: Dictionary = {
   'app.waylerAccess.cancelled': '已取消',
   'app.waylerAccess.refunded': '已退款',
   'app.waylerAccess.failed': '失败',
+  'marketing.trustCenter.navLabel': '信任中心',
+  'marketing.trustCenter.title': '信任中心',
+  'marketing.trustCenter.subtitle':
+    'Wayly 如何让 marketplace 互动更清晰、更安全——以及平台目前保证与不保证的内容。',
+  'marketing.trustCenter.howWaylyWorksTitle': 'Wayly 如何运作',
+  'marketing.trustCenter.howWaylyWorksBody':
+    '寄件人发布配送请求或向 Wayler  listing 发送请求。\nWayler 发布本地可用性或行程路线。\n接受后会在 Wayly 内成为可跟踪的订单。\n接受后聊天与订单更新留在平台内。',
+  'marketing.trustCenter.trustSignalsTitle': '信任信号',
+  'marketing.trustCenter.trustSignalsBody':
+    'Verified Wayler 徽章反映 Wayly 验证状态——不是政府或承运人认证。\n公开活跃 listing 与路线匹配提示仅供参考，不是预订保证。\n清晰的资料、路线与消息有助于决策——Wayly 不保证接受或配送结果。',
+  'marketing.trustCenter.safeCommunicationTitle': '安全沟通',
+  'marketing.trustCenter.safeCommunicationBody':
+    '将约定、时间变更与交接细节留在 Wayly 聊天内。\n在依赖之前确认物品描述、取送地点与凭证细节。\n不要在聊天或凭证备注中分享私人支付信息、卡号、银行转账或密码。',
+  'marketing.trustCenter.restrictedItemsTitle': '受限与不安全物品',
+  'marketing.trustCenter.restrictedItemsBody':
+    '您需对寄送或携带物品遵守当地法律、海关及航司/承运规则负责。\nWayly 不验证物品合法性或是否适合运输。\n请勿利用 Wayly 规避海关、安检或法律限制。',
+  'marketing.trustCenter.paymentsTitle': '支付',
+  'marketing.trustCenter.paymentsBody':
+    '在接入真实支付提供商之前，当前支付流程为 mock/手动，用于开发与运营测试。\nWayly 中的支付状态反映流程阶段——不是真实托管、保证退款、保证打款或保险。\n管理员支付审核仅记录运营决策——不通过支付提供商转移资金。',
+  'marketing.trustCenter.disputesTitle': '争议与证据',
+  'marketing.trustCenter.disputesBody':
+    '争议有助于在协调失败时整理事实、消息与证据。\n管理员与仲裁工具可在 Wayly 内审查争议——这不是法律建议，也不是自动资金结算。\n证据应相关；避免分享密码、支付信息或不必要的敏感个人数据。',
+  'marketing.trustCenter.localDataTitle': '本地保存数据与隐私',
+  'marketing.trustCenter.localDataBody':
+    '最近路线搜索、模板、草稿与 Wayler 短名单仅保存在浏览器中——不同设备或账户间不同步。\n可在应用内「本地保存数据」面板查看并清除。\n清除浏览器存储会移除本地工具；服务器端订单与账户记录是分开的。',
+  'marketing.trustCenter.futureWorkTitle': '未来生产工作',
+  'marketing.trustCenter.futureWorkBody':
+    '接入真实支付提供商（如 Stripe）。\n接入真实 KYC 提供商与更强的身份流程。\n推送通知、更强监控与生产加固。\n产品就绪后的原生移动打包。',
+  'marketing.trustCenter.noGuaranteesNotice':
+    'Wayly 提供 marketplace 工具与指引——不提供保证配送、支付保护、法律合规或保险。以下各节如实说明当前限制。',
+  'marketing.trustCenter.backHome': '返回首页',
+  'marketing.trustCenter.openApp': '打开应用',
+  'marketing.landing.trustCenterLink': 'Wayly 如何处理安全',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 

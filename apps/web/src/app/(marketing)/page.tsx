@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { TrustCenterLandingLink } from '@/components/marketing/trust-center-landing-link';
 import { FadeIn } from '@/components/motion';
 import { siteConfig } from '@/config/site';
 
@@ -29,7 +30,8 @@ const SECTIONS: { id: string; title: string; blurb: string }[] = [
   {
     id: 'trust-safety',
     title: 'Trust & safety',
-    blurb: 'Verified identities, secure escrow, and dispute protection.',
+    blurb:
+      'Verified profiles, clear payment status, dispute review tools, and guidance to keep agreements inside Wayly.',
   },
   {
     id: 'kyc',
@@ -81,7 +83,7 @@ export default function LandingPage() {
           <FadeIn delay={0.15}>
             <div className="flex flex-col items-center gap-3 sm:flex-row">
               <Link
-                href="#"
+                href="/register"
                 className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
               >
                 Get started
@@ -93,6 +95,7 @@ export default function LandingPage() {
                 See how it works
               </a>
             </div>
+            <TrustCenterLandingLink className="mt-4" />
           </FadeIn>
         </div>
       </section>
@@ -108,8 +111,14 @@ export default function LandingPage() {
                 </h2>
                 <p className="max-w-xl text-muted-foreground">{section.blurb}</p>
               </div>
-              <div className="mt-8 grid place-items-center rounded-2xl border border-dashed border-border bg-card/40 p-12 text-sm text-muted-foreground">
-                Section content arrives in the design &amp; marketing milestone.
+              <div className="mt-8">
+                {section.id === 'trust-safety' ? (
+                  <TrustCenterLandingLink variant="card" />
+                ) : (
+                  <div className="grid place-items-center rounded-2xl border border-dashed border-border bg-card/40 p-12 text-sm text-muted-foreground">
+                    Section content arrives in the design &amp; marketing milestone.
+                  </div>
+                )}
               </div>
             </FadeIn>
           </div>

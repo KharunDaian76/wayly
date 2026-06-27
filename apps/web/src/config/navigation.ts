@@ -27,7 +27,7 @@ export const marketingNav: NavItem[] = [
   { label: 'International', href: '#international' },
   { label: 'Local', href: '#local' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Trust & Safety', href: '#trust-safety' },
+  { label: 'Trust Center', href: '/trust' },
   { label: 'FAQ', href: '#faq' },
 ];
 
