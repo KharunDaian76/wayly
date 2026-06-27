@@ -18,6 +18,9 @@ export function SiteFooter() {
           <Link href="/trust" className="transition-colors hover:text-foreground">
             {t('marketing.trustCenter.navLabel')}
           </Link>
+          <Link href="/faq" className="transition-colors hover:text-foreground">
+            {t('marketing.faq.navLabel')}
+          </Link>
           {/* Legal pages are added in a later milestone. */}
           <Link href="#" className="transition-colors hover:text-foreground">
             Terms

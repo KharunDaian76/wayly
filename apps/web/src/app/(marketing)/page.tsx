@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { FaqLandingLink } from '@/components/marketing/faq-landing-link';
 import { TrustCenterLandingLink } from '@/components/marketing/trust-center-landing-link';
 import { FadeIn } from '@/components/motion';
 import { siteConfig } from '@/config/site';
@@ -96,6 +97,7 @@ export default function LandingPage() {
               </a>
             </div>
             <TrustCenterLandingLink className="mt-4" />
+            <FaqLandingLink className="mt-2" />
           </FadeIn>
         </div>
       </section>
@@ -114,6 +116,8 @@ export default function LandingPage() {
               <div className="mt-8">
                 {section.id === 'trust-safety' ? (
                   <TrustCenterLandingLink variant="card" />
+                ) : section.id === 'faq' ? (
+                  <FaqLandingLink variant="card" />
                 ) : (
                   <div className="grid place-items-center rounded-2xl border border-dashed border-border bg-card/40 p-12 text-sm text-muted-foreground">
                     Section content arrives in the design &amp; marketing milestone.

@@ -1807,7 +1807,95 @@ const en = {
     'Wayly provides marketplace tools and guidance — not guaranteed delivery, payment protection, legal compliance, or insurance. The sections below describe current limits honestly.',
   'marketing.trustCenter.backHome': 'Back to home',
   'marketing.trustCenter.openApp': 'Open app',
+  'marketing.faq.navLabel': 'FAQ',
+  'marketing.faq.title': 'Frequently asked questions',
+  'marketing.faq.subtitle':
+    'Answers for Senders and Waylers about how Wayly works today — including honest limits on payments, disputes, and local data.',
+  'marketing.faq.backHome': 'Back to home',
+  'marketing.faq.openApp': 'Open app',
+  'marketing.faq.trustCenter': 'Trust Center',
+  'marketing.faq.gettingStartedTitle': 'Getting started',
+  'marketing.faq.sendersTitle': 'For Senders',
+  'marketing.faq.waylersTitle': 'For Waylers',
+  'marketing.faq.safetyTitle': 'Safety and restricted items',
+  'marketing.faq.paymentsTitle': 'Payments',
+  'marketing.faq.disputesTitle': 'Disputes and evidence',
+  'marketing.faq.localDataTitle': 'Local saved data',
+  'marketing.faq.limitationsTitle': 'Current limitations and future work',
+  'marketing.faq.whatIsWaylyQuestion': 'What is Wayly?',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly is a peer-to-peer delivery marketplace. Senders post delivery requests; Waylers publish availability or trip routes; when work is accepted, it becomes a tracked order with in-platform chat.',
+  'marketing.faq.whoCanUseQuestion': 'Who can use Wayly?',
+  'marketing.faq.whoCanUseAnswer':
+    'Registered users can browse and act as Senders or Waylers. Some actions may require verification or Wayler access depending on your role. Wayly does not guarantee that any request will be accepted.',
+  'marketing.faq.requestToOrderQuestion': 'How does a delivery request become an order?',
+  'marketing.faq.requestToOrderAnswer':
+    'A Sender posts a request or sends one to a Wayler listing. When a Wayler accepts, Wayly creates an order with status tracking, chat, and payment workflow fields. Acceptance is between users; Wayly provides coordination tools.',
+  'marketing.faq.findWaylerQuestion': 'How do I find a Wayler?',
+  'marketing.faq.findWaylerAnswer':
+    'Browse public Wayler listings, route-match hints, and availability in the app. Route matches are informational only — not a booking guarantee. Compare profiles, routes, and messages before committing.',
+  'marketing.faq.requestIncludeQuestion': 'What should I include in my request?',
+  'marketing.faq.requestIncludeAnswer':
+    'Describe the item clearly, pickup and drop-off areas, timing windows, and any handling notes. Keep agreements inside Wayly chat and confirm details before relying on them.',
+  'marketing.faq.saveRequestTemplatesQuestion': 'Can I save request templates?',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'Yes — request templates can be saved locally in your browser for faster reuse. They are not synced to your account or other devices.',
+  'marketing.faq.publishAvailabilityQuestion': 'How do I publish availability?',
+  'marketing.faq.publishAvailabilityAnswer':
+    'In the app, create a local availability listing or a trip route listing with route, timing, and capacity details. Active public listings help Senders discover you.',
+  'marketing.faq.tripVsLocalQuestion': 'What is a trip route vs local availability?',
+  'marketing.faq.tripVsLocalAnswer':
+    'Trip routes follow travel between cities or countries along a planned journey. Local availability covers same-city or nearby delivery windows. Both are discoverable listings — not guaranteed bookings.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': 'Can I save availability templates?',
+  'marketing.faq.saveAvailabilityTemplatesAnswer':
+    'Yes — availability templates are saved locally in your browser. They are not synced across devices or accounts.',
+  'marketing.faq.itemsNotAllowedQuestion': 'What items are not allowed?',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'Illegal, dangerous, or prohibited goods under local law, customs, airline, or carrier rules. You are responsible for knowing what you can send or carry. See the Trust Center for more guidance.',
+  'marketing.faq.verifyLegalityQuestion': 'Does Wayly verify item legality?',
+  'marketing.faq.verifyLegalityAnswer':
+    'No. Wayly does not inspect parcels or verify that an item is legal or safe to transport. Users must follow local laws and transport rules.',
+  'marketing.faq.communicateSafelyQuestion': 'How should users communicate safely?',
+  'marketing.faq.communicateSafelyAnswer':
+    'Keep agreements, timing changes, and handoff details inside Wayly chat. Do not share card numbers, bank details, or passwords outside the platform.',
+  'marketing.faq.realEscrowQuestion': 'Does Wayly currently provide real escrow?',
+  'marketing.faq.realEscrowAnswer':
+    'No. Today’s payment flow is mock/manual for development and operations unless a real payment provider is integrated later. Payment status tracks workflow stages — not funds held by a third party.',
+  'marketing.faq.refundsGuaranteedQuestion': 'Are refunds or payouts guaranteed?',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'No. Wayly does not guarantee refunds, payouts, or insurance. Admin payment review records operational decisions only — it does not move money through a payment provider.',
+  'marketing.faq.paymentStatusQuestion': 'What does payment status mean?',
+  'marketing.faq.paymentStatusAnswer':
+    'Payment status shows where an order is in the mock/manual payment workflow (for example authorized or marked held). It is a coordination record, not proof of real money movement.',
+  'marketing.faq.whenOpenDisputeQuestion': 'When should I open a dispute?',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'When coordination breaks down — missed handoffs, conflicting claims, or payment workflow disagreements. Disputes help organize facts and evidence; they do not automatically settle money.',
+  'marketing.faq.whatEvidenceQuestion': 'What evidence should I include?',
+  'marketing.faq.whatEvidenceAnswer':
+    'Relevant chat excerpts, delivery proof references, and a clear summary of what went wrong. Avoid passwords, payment credentials, or unnecessary sensitive personal data.',
+  'marketing.faq.legalAdviceQuestion': 'Does Wayly provide legal advice?',
+  'marketing.faq.legalAdviceAnswer':
+    'No. Disputes and admin or arbitrator review tools organize information — they are not legal advice or guaranteed resolution.',
+  'marketing.faq.whatDataLocalQuestion': 'What data is saved locally?',
+  'marketing.faq.whatDataLocalAnswer':
+    'Recent route searches, request and availability templates, drafts, and Wayler shortlists — stored in your browser only.',
+  'marketing.faq.localDataSyncedQuestion': 'Is local saved data synced to my account?',
+  'marketing.faq.localDataSyncedAnswer':
+    'No. Local saved data stays on the current browser and is not synced across devices or accounts.',
+  'marketing.faq.clearSavedDataQuestion': 'Can I clear saved data?',
+  'marketing.faq.clearSavedDataAnswer':
+    'Yes. Use the Local saved data panel in the app to review and clear browser-local tools. Server-side orders and account records are separate.',
+  'marketing.faq.mockManualQuestion': 'What is still mock/manual today?',
+  'marketing.faq.mockManualAnswer':
+    'Payments use mock/manual workflow records. KYC may reflect platform verification states rather than a full production identity provider. Notifications and monitoring are still maturing.',
+  'marketing.faq.plannedIntegrationsQuestion': 'What production integrations are planned?',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'Real payment provider integration, real KYC provider, push notifications, stronger monitoring, and native mobile packaging — timing depends on product milestones.',
+  'marketing.faq.commercialLaunchQuestion': 'Is Wayly ready for real commercial launch?',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly is actively developed. Core marketplace tools work, but real payments, production KYC, and full commercial guarantees are not in place yet. See the Trust Center for current limits.',
   'marketing.landing.trustCenterLink': 'How Wayly handles safety',
+  'marketing.landing.faqLink': 'Browse common questions',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -3628,7 +3716,95 @@ const ru: Dictionary = {
     'Wayly предоставляет инструменты маркетплейса и рекомендации — не гарантированную доставку, защиту платежей, правовое соответствие или страховку. Ниже честно описаны текущие ограничения.',
   'marketing.trustCenter.backHome': 'На главную',
   'marketing.trustCenter.openApp': 'Открыть приложение',
+  'marketing.faq.navLabel': 'FAQ',
+  'marketing.faq.title': 'Частые вопросы',
+  'marketing.faq.subtitle':
+    'Ответы для отправителей и Wayler о том, как Wayly работает сегодня — включая честные ограничения по платежам, спорам и локальным данным.',
+  'marketing.faq.backHome': 'На главную',
+  'marketing.faq.openApp': 'Открыть приложение',
+  'marketing.faq.trustCenter': 'Центр доверия',
+  'marketing.faq.gettingStartedTitle': 'Начало работы',
+  'marketing.faq.sendersTitle': 'Для отправителей',
+  'marketing.faq.waylersTitle': 'Для Wayler',
+  'marketing.faq.safetyTitle': 'Безопасность и запрещённые предметы',
+  'marketing.faq.paymentsTitle': 'Платежи',
+  'marketing.faq.disputesTitle': 'Споры и доказательства',
+  'marketing.faq.localDataTitle': 'Локальные сохранённые данные',
+  'marketing.faq.limitationsTitle': 'Текущие ограничения и будущая работа',
+  'marketing.faq.whatIsWaylyQuestion': 'Что такое Wayly?',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly — маркетплейс доставки P2P. Отправители публикуют запросы; Wayler публикуют доступность или маршруты; после принятия работа становится отслеживаемым заказом с чатом на платформе.',
+  'marketing.faq.whoCanUseQuestion': 'Кто может пользоваться Wayly?',
+  'marketing.faq.whoCanUseAnswer':
+    'Зарегистрированные пользователи могут действовать как отправители или Wayler. Некоторые действия могут требовать верификации или доступа Wayler. Wayly не гарантирует принятие запроса.',
+  'marketing.faq.requestToOrderQuestion': 'Как запрос на доставку становится заказом?',
+  'marketing.faq.requestToOrderAnswer':
+    'Отправитель публикует запрос или отправляет его к объявлению Wayler. При принятии Wayly создаёт заказ со статусом, чатом и полями платёжного процесса. Принятие — между пользователями; Wayly даёт инструменты координации.',
+  'marketing.faq.findWaylerQuestion': 'Как найти Wayler?',
+  'marketing.faq.findWaylerAnswer':
+    'Просматривайте публичные объявления, подсказки совпадения маршрута и доступность в приложении. Совпадения маршрута — только информация, не гарантия бронирования.',
+  'marketing.faq.requestIncludeQuestion': 'Что указать в запросе?',
+  'marketing.faq.requestIncludeAnswer':
+    'Чётко опишите предмет, зоны забора и доставки, окна времени и особенности обращения. Держите договорённости в чате Wayly и подтверждайте детали.',
+  'marketing.faq.saveRequestTemplatesQuestion': 'Можно ли сохранять шаблоны запросов?',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'Да — шаблоны запросов сохраняются локально в браузере. Они не синхронизируются с аккаунтом или другими устройствами.',
+  'marketing.faq.publishAvailabilityQuestion': 'Как опубликовать доступность?',
+  'marketing.faq.publishAvailabilityAnswer':
+    'В приложении создайте объявление локальной доступности или маршрута поездки с маршрутом, временем и вместимостью.',
+  'marketing.faq.tripVsLocalQuestion': 'Чем маршрут поездки отличается от локальной доступности?',
+  'marketing.faq.tripVsLocalAnswer':
+    'Маршруты поездок — между городами или странами по запланированному пути. Локальная доступность — доставка в городе или рядом. Оба типа — объявления для поиска, не гарантированные бронирования.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': 'Можно ли сохранять шаблоны доступности?',
+  'marketing.faq.saveAvailabilityTemplatesAnswer':
+    'Да — шаблоны доступности сохраняются локально в браузере без синхронизации между устройствами.',
+  'marketing.faq.itemsNotAllowedQuestion': 'Какие предметы запрещены?',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'Незаконные, опасные или запрещённые товары по местным законам, таможне, авиакомпаниям или перевозчикам. Вы отвечаете за то, что отправляете или везёте. Подробнее — в Центре доверия.',
+  'marketing.faq.verifyLegalityQuestion': 'Проверяет ли Wayly законность предмета?',
+  'marketing.faq.verifyLegalityAnswer':
+    'Нет. Wayly не осматривает посылки и не проверяет законность или безопасность перевозки. Соблюдайте местные законы и правила перевозки.',
+  'marketing.faq.communicateSafelyQuestion': 'Как безопасно общаться?',
+  'marketing.faq.communicateSafelyAnswer':
+    'Держите договорённости, изменения сроков и детали передачи в чате Wayly. Не делитесь номерами карт, банковскими данными или паролями вне платформы.',
+  'marketing.faq.realEscrowQuestion': 'Есть ли в Wayly настоящий эскроу?',
+  'marketing.faq.realEscrowAnswer':
+    'Нет. Сегодня платёжный поток mock/ручной, пока не подключён реальный провайдер. Статус платежа отражает этапы процесса — не удержание средств третьей стороной.',
+  'marketing.faq.refundsGuaranteedQuestion': 'Гарантированы ли возвраты или выплаты?',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'Нет. Wayly не гарантирует возвраты, выплаты или страховку. Ревью платежей админом — только операционные записи, без движения денег через провайдера.',
+  'marketing.faq.paymentStatusQuestion': 'Что означает статус платежа?',
+  'marketing.faq.paymentStatusAnswer':
+    'Статус показывает этап mock/ручного процесса (например авторизован или удержан). Это запись координации, не доказательство реального движения денег.',
+  'marketing.faq.whenOpenDisputeQuestion': 'Когда открывать спор?',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'Когда координация ломается — срыв передачи, противоречивые заявления или споры по платежному процессу. Споры упорядочивают факты; они не автоматически урегулируют деньги.',
+  'marketing.faq.whatEvidenceQuestion': 'Какие доказательства прикладывать?',
+  'marketing.faq.whatEvidenceAnswer':
+    'Релевантные фрагменты чата, ссылки на подтверждение доставки и краткое описание проблемы. Избегайте паролей, платёжных данных и лишних персональных данных.',
+  'marketing.faq.legalAdviceQuestion': 'Даёт ли Wayly юридические консультации?',
+  'marketing.faq.legalAdviceAnswer':
+    'Нет. Споры и инструменты админа/арбитра упорядочивают информацию — это не юридическая консультация и не гарантированное решение.',
+  'marketing.faq.whatDataLocalQuestion': 'Какие данные сохраняются локально?',
+  'marketing.faq.whatDataLocalAnswer':
+    'Недавние поиски маршрутов, шаблоны запросов и доступности, черновики и шортлисты Wayler — только в браузере.',
+  'marketing.faq.localDataSyncedQuestion': 'Синхронизируются ли локальные данные с аккаунтом?',
+  'marketing.faq.localDataSyncedAnswer':
+    'Нет. Локальные данные остаются в текущем браузере и не синхронизируются между устройствами или аккаунтами.',
+  'marketing.faq.clearSavedDataQuestion': 'Можно ли очистить сохранённые данные?',
+  'marketing.faq.clearSavedDataAnswer':
+    'Да. Используйте панель «Локальные сохранённые данные» в приложении. Серверные записи заказов и аккаунта отдельны.',
+  'marketing.faq.mockManualQuestion': 'Что сегодня mock/ручное?',
+  'marketing.faq.mockManualAnswer':
+    'Платежи — mock/ручные записи процесса. KYC может отражать статус верификации платформы, а не полноценного провайдера. Уведомления и мониторинг ещё развиваются.',
+  'marketing.faq.plannedIntegrationsQuestion': 'Какие production-интеграции планируются?',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'Реальный платёжный провайдер, KYC-провайдер, push-уведомления, усиленный мониторинг и нативное мобильное приложение — по мере готовности продукта.',
+  'marketing.faq.commercialLaunchQuestion': 'Готов ли Wayly к коммерческому запуску?',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly активно развивается. Основные инструменты работают, но реальные платежи, production KYC и полные коммерческие гарантии пока отсутствуют. См. Центр доверия.',
   'marketing.landing.trustCenterLink': 'Как Wayly обеспечивает безопасность',
+  'marketing.landing.faqLink': 'Частые вопросы',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -5457,7 +5633,95 @@ const es: Dictionary = {
     'Wayly ofrece herramientas de marketplace y orientación — no entrega garantizada, protección de pagos, cumplimiento legal ni seguro. Las secciones siguientes describen los límites actuales con honestidad.',
   'marketing.trustCenter.backHome': 'Volver al inicio',
   'marketing.trustCenter.openApp': 'Abrir app',
+  'marketing.faq.navLabel': 'FAQ',
+  'marketing.faq.title': 'Preguntas frecuentes',
+  'marketing.faq.subtitle':
+    'Respuestas para remitentes y Wayler sobre cómo funciona Wayly hoy — incluidos límites honestos en pagos, disputas y datos locales.',
+  'marketing.faq.backHome': 'Volver al inicio',
+  'marketing.faq.openApp': 'Abrir app',
+  'marketing.faq.trustCenter': 'Centro de confianza',
+  'marketing.faq.gettingStartedTitle': 'Primeros pasos',
+  'marketing.faq.sendersTitle': 'Para remitentes',
+  'marketing.faq.waylersTitle': 'Para Wayler',
+  'marketing.faq.safetyTitle': 'Seguridad y artículos restringidos',
+  'marketing.faq.paymentsTitle': 'Pagos',
+  'marketing.faq.disputesTitle': 'Disputas y pruebas',
+  'marketing.faq.localDataTitle': 'Datos guardados localmente',
+  'marketing.faq.limitationsTitle': 'Limitaciones actuales y trabajo futuro',
+  'marketing.faq.whatIsWaylyQuestion': '¿Qué es Wayly?',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly es un marketplace de entrega P2P. Los remitentes publican solicitudes; los Wayler publican disponibilidad o rutas; al aceptar, se convierte en pedido rastreado con chat en la plataforma.',
+  'marketing.faq.whoCanUseQuestion': '¿Quién puede usar Wayly?',
+  'marketing.faq.whoCanUseAnswer':
+    'Usuarios registrados pueden actuar como remitentes o Wayler. Algunas acciones pueden requerir verificación o acceso Wayler. Wayly no garantiza que se acepte ninguna solicitud.',
+  'marketing.faq.requestToOrderQuestion': '¿Cómo una solicitud se convierte en pedido?',
+  'marketing.faq.requestToOrderAnswer':
+    'El remitente publica o envía una solicitud a un anuncio Wayler. Al aceptar, Wayly crea un pedido con seguimiento, chat y campos de pago. La aceptación es entre usuarios; Wayly aporta herramientas de coordinación.',
+  'marketing.faq.findWaylerQuestion': '¿Cómo encuentro un Wayler?',
+  'marketing.faq.findWaylerAnswer':
+    'Explora anuncios públicos, coincidencias de ruta y disponibilidad en la app. Las coincidencias son informativas — no garantía de reserva.',
+  'marketing.faq.requestIncludeQuestion': '¿Qué incluir en mi solicitud?',
+  'marketing.faq.requestIncludeAnswer':
+    'Describe el artículo, zonas de recogida/entrega, ventanas de tiempo y notas de manejo. Mantén acuerdos en el chat de Wayly y confirma detalles.',
+  'marketing.faq.saveRequestTemplatesQuestion': '¿Puedo guardar plantillas de solicitud?',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'Sí — las plantillas se guardan localmente en el navegador. No se sincronizan con la cuenta ni otros dispositivos.',
+  'marketing.faq.publishAvailabilityQuestion': '¿Cómo publico disponibilidad?',
+  'marketing.faq.publishAvailabilityAnswer':
+    'En la app, crea un anuncio de disponibilidad local o ruta de viaje con ruta, horario y capacidad.',
+  'marketing.faq.tripVsLocalQuestion': '¿Ruta de viaje vs disponibilidad local?',
+  'marketing.faq.tripVsLocalAnswer':
+    'Las rutas de viaje conectan ciudades o países en un trayecto planificado. La disponibilidad local cubre entregas en la misma ciudad. Ambos son anuncios — no reservas garantizadas.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': '¿Puedo guardar plantillas de disponibilidad?',
+  'marketing.faq.saveAvailabilityTemplatesAnswer':
+    'Sí — se guardan localmente en el navegador sin sincronización entre dispositivos.',
+  'marketing.faq.itemsNotAllowedQuestion': '¿Qué artículos no están permitidos?',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'Bienes ilegales, peligrosos o prohibidos por ley local, aduanas o transportistas. Eres responsable de lo que envías o transportas. Ver Centro de confianza.',
+  'marketing.faq.verifyLegalityQuestion': '¿Wayly verifica la legalidad del artículo?',
+  'marketing.faq.verifyLegalityAnswer':
+    'No. Wayly no inspecciona paquetes ni verifica legalidad o seguridad de transporte. Debes cumplir leyes y normas locales.',
+  'marketing.faq.communicateSafelyQuestion': '¿Cómo comunicarse con seguridad?',
+  'marketing.faq.communicateSafelyAnswer':
+    'Mantén acuerdos y detalles de entrega en el chat de Wayly. No compartas tarjetas, datos bancarios ni contraseñas fuera de la plataforma.',
+  'marketing.faq.realEscrowQuestion': '¿Wayly ofrece depósito en garantía real?',
+  'marketing.faq.realEscrowAnswer':
+    'No. El flujo de pago actual es mock/manual hasta integrar un proveedor real. El estado refleja etapas del flujo — no fondos retenidos por un tercero.',
+  'marketing.faq.refundsGuaranteedQuestion': '¿Reembolsos o pagos garantizados?',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'No. Wayly no garantiza reembolsos, pagos ni seguro. La revisión admin registra decisiones operativas — no mueve dinero vía proveedor.',
+  'marketing.faq.paymentStatusQuestion': '¿Qué significa el estado de pago?',
+  'marketing.faq.paymentStatusAnswer':
+    'Muestra la etapa del flujo mock/manual (p. ej. autorizado o retenido). Es registro de coordinación, no prueba de movimiento real de dinero.',
+  'marketing.faq.whenOpenDisputeQuestion': '¿Cuándo abrir una disputa?',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'Cuando falla la coordinación — entregas perdidas, reclamos conflictivos o desacuerdos de pago. Las disputas organizan hechos; no liquidan dinero automáticamente.',
+  'marketing.faq.whatEvidenceQuestion': '¿Qué pruebas incluir?',
+  'marketing.faq.whatEvidenceAnswer':
+    'Extractos de chat relevantes, referencias de prueba de entrega y resumen claro. Evita contraseñas, credenciales de pago o datos personales innecesarios.',
+  'marketing.faq.legalAdviceQuestion': '¿Wayly da asesoramiento legal?',
+  'marketing.faq.legalAdviceAnswer':
+    'No. Disputas y herramientas de revisión organizan información — no son asesoramiento legal ni resolución garantizada.',
+  'marketing.faq.whatDataLocalQuestion': '¿Qué datos se guardan localmente?',
+  'marketing.faq.whatDataLocalAnswer':
+    'Búsquedas recientes, plantillas, borradores y listas cortas de Wayler — solo en el navegador.',
+  'marketing.faq.localDataSyncedQuestion': '¿Se sincronizan con mi cuenta?',
+  'marketing.faq.localDataSyncedAnswer':
+    'No. Los datos locales permanecen en el navegador actual sin sincronización entre dispositivos o cuentas.',
+  'marketing.faq.clearSavedDataQuestion': '¿Puedo borrar datos guardados?',
+  'marketing.faq.clearSavedDataAnswer':
+    'Sí. Usa el panel Datos guardados localmente en la app. Los registros de pedidos en servidor son independientes.',
+  'marketing.faq.mockManualQuestion': '¿Qué sigue siendo mock/manual hoy?',
+  'marketing.faq.mockManualAnswer':
+    'Pagos mock/manuales. KYC puede reflejar estados de verificación de plataforma. Notificaciones y monitoreo aún maduran.',
+  'marketing.faq.plannedIntegrationsQuestion': '¿Integraciones de producción planificadas?',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'Proveedor de pagos real, KYC real, notificaciones push, mejor monitoreo y app móvil nativa — según hitos del producto.',
+  'marketing.faq.commercialLaunchQuestion': '¿Wayly listo para lanzamiento comercial?',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly se desarrolla activamente. Las herramientas core funcionan, pero pagos reales, KYC de producción y garantías comerciales completas aún no están. Ver Centro de confianza.',
   'marketing.landing.trustCenterLink': 'Cómo Wayly gestiona la seguridad',
+  'marketing.landing.faqLink': 'Ver preguntas frecuentes',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -7313,7 +7577,95 @@ const fr: Dictionary = {
     'Wayly fournit des outils marketplace et des conseils — pas de livraison garantie, protection paiement, conformité légale ou assurance. Les sections ci-dessous décrivent honnêtement les limites actuelles.',
   'marketing.trustCenter.backHome': 'Retour à l’accueil',
   'marketing.trustCenter.openApp': 'Ouvrir l’app',
+  'marketing.faq.navLabel': 'FAQ',
+  'marketing.faq.title': 'Questions fréquentes',
+  'marketing.faq.subtitle':
+    'Réponses pour expéditeurs et Wayler sur le fonctionnement actuel de Wayly — limites honnêtes sur paiements, litiges et données locales.',
+  'marketing.faq.backHome': 'Retour à l’accueil',
+  'marketing.faq.openApp': 'Ouvrir l’app',
+  'marketing.faq.trustCenter': 'Centre de confiance',
+  'marketing.faq.gettingStartedTitle': 'Premiers pas',
+  'marketing.faq.sendersTitle': 'Pour les expéditeurs',
+  'marketing.faq.waylersTitle': 'Pour les Wayler',
+  'marketing.faq.safetyTitle': 'Sécurité et articles restreints',
+  'marketing.faq.paymentsTitle': 'Paiements',
+  'marketing.faq.disputesTitle': 'Litiges et preuves',
+  'marketing.faq.localDataTitle': 'Données locales enregistrées',
+  'marketing.faq.limitationsTitle': 'Limites actuelles et travail futur',
+  'marketing.faq.whatIsWaylyQuestion': 'Qu’est-ce que Wayly ?',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly est un marketplace de livraison P2P. Les expéditeurs publient des demandes ; les Wayler publient disponibilité ou itinéraires ; après acceptation, commande suivie avec chat sur la plateforme.',
+  'marketing.faq.whoCanUseQuestion': 'Qui peut utiliser Wayly ?',
+  'marketing.faq.whoCanUseAnswer':
+    'Les utilisateurs inscrits peuvent agir comme expéditeurs ou Wayler. Certaines actions peuvent exiger vérification ou accès Wayler. Wayly ne garantit pas l’acceptation d’une demande.',
+  'marketing.faq.requestToOrderQuestion': 'Comment une demande devient-elle commande ?',
+  'marketing.faq.requestToOrderAnswer':
+    'L’expéditeur publie ou envoie une demande à une annonce Wayler. À l’acceptation, Wayly crée une commande avec suivi, chat et champs de paiement. L’acceptation est entre utilisateurs ; Wayly fournit des outils de coordination.',
+  'marketing.faq.findWaylerQuestion': 'Comment trouver un Wayler ?',
+  'marketing.faq.findWaylerAnswer':
+    'Parcourez annonces publiques, indices de correspondance d’itinéraire et disponibilité. Les correspondances sont informatives — pas une garantie de réservation.',
+  'marketing.faq.requestIncludeQuestion': 'Que inclure dans ma demande ?',
+  'marketing.faq.requestIncludeAnswer':
+    'Décrivez l’article, zones de collecte/livraison, créneaux horaires et notes. Gardez les accords dans le chat Wayly et confirmez les détails.',
+  'marketing.faq.saveRequestTemplatesQuestion': 'Puis-je enregistrer des modèles de demande ?',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'Oui — les modèles sont enregistrés localement dans le navigateur, sans sync compte ou appareils.',
+  'marketing.faq.publishAvailabilityQuestion': 'Comment publier une disponibilité ?',
+  'marketing.faq.publishAvailabilityAnswer':
+    'Dans l’app, créez une annonce de disponibilité locale ou d’itinéraire de voyage avec route, horaire et capacité.',
+  'marketing.faq.tripVsLocalQuestion': 'Itinéraire de voyage vs disponibilité locale ?',
+  'marketing.faq.tripVsLocalAnswer':
+    'Les itinéraires relient villes ou pays le long d’un voyage planifié. La disponibilité locale couvre la même ville. Les deux sont des annonces — pas des réservations garanties.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': 'Modèles de disponibilité enregistrables ?',
+  'marketing.faq.saveAvailabilityTemplatesAnswer':
+    'Oui — enregistrés localement dans le navigateur, sans sync entre appareils.',
+  'marketing.faq.itemsNotAllowedQuestion': 'Quels articles sont interdits ?',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'Biens illégaux, dangereux ou interdits par loi locale, douanes ou transporteurs. Vous êtes responsable de ce que vous envoyez ou transportez. Voir Centre de confiance.',
+  'marketing.faq.verifyLegalityQuestion': 'Wayly vérifie-t-il la légalité ?',
+  'marketing.faq.verifyLegalityAnswer':
+    'Non. Wayly n’inspecte pas les colis ni ne vérifie légalité ou sécurité de transport. Respectez lois et règles locales.',
+  'marketing.faq.communicateSafelyQuestion': 'Comment communiquer en sécurité ?',
+  'marketing.faq.communicateSafelyAnswer':
+    'Gardez accords et détails de remise dans le chat Wayly. Ne partagez pas cartes, coordonnées bancaires ou mots de passe hors plateforme.',
+  'marketing.faq.realEscrowQuestion': 'Wayly offre-t-il un vrai séquestre ?',
+  'marketing.faq.realEscrowAnswer':
+    'Non. Le flux actuel est mock/manuel tant qu’aucun prestataire réel n’est intégré. Le statut suit les étapes — pas de fonds détenus par un tiers.',
+  'marketing.faq.refundsGuaranteedQuestion': 'Remboursements ou paiements garantis ?',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'Non. Wayly ne garantit remboursements, paiements ni assurance. La revue admin enregistre des décisions opérationnelles — sans mouvement d’argent via prestataire.',
+  'marketing.faq.paymentStatusQuestion': 'Que signifie le statut de paiement ?',
+  'marketing.faq.paymentStatusAnswer':
+    'Il indique l’étape du flux mock/manuel (ex. autorisé ou retenu). C’est un enregistrement de coordination, pas une preuve de mouvement réel d’argent.',
+  'marketing.faq.whenOpenDisputeQuestion': 'Quand ouvrir un litige ?',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'Quand la coordination échoue — remises manquées, revendications conflictuelles ou désaccords de paiement. Les litiges organisent les faits ; ils ne règlent pas l’argent automatiquement.',
+  'marketing.faq.whatEvidenceQuestion': 'Quelles preuves inclure ?',
+  'marketing.faq.whatEvidenceAnswer':
+    'Extraits de chat pertinents, références de preuve de livraison et résumé clair. Évitez mots de passe, identifiants de paiement ou données personnelles inutiles.',
+  'marketing.faq.legalAdviceQuestion': 'Wayly fournit-il un conseil juridique ?',
+  'marketing.faq.legalAdviceAnswer':
+    'Non. Litiges et outils de revue organisent l’information — ce n’est pas un conseil juridique ni une résolution garantie.',
+  'marketing.faq.whatDataLocalQuestion': 'Quelles données sont locales ?',
+  'marketing.faq.whatDataLocalAnswer':
+    'Recherches d’itinéraires récentes, modèles, brouillons et listes courtes Wayler — uniquement dans le navigateur.',
+  'marketing.faq.localDataSyncedQuestion': 'Données locales synchronisées au compte ?',
+  'marketing.faq.localDataSyncedAnswer':
+    'Non. Elles restent sur le navigateur actuel sans sync entre appareils ou comptes.',
+  'marketing.faq.clearSavedDataQuestion': 'Puis-je effacer les données ?',
+  'marketing.faq.clearSavedDataAnswer':
+    'Oui. Utilisez le panneau Données locales enregistrées. Les enregistrements serveur de commandes sont séparés.',
+  'marketing.faq.mockManualQuestion': 'Qu’est-ce qui reste mock/manuel ?',
+  'marketing.faq.mockManualAnswer':
+    'Paiements mock/manuels. KYC peut refléter l’état de vérification plateforme. Notifications et monitoring mûrissent encore.',
+  'marketing.faq.plannedIntegrationsQuestion': 'Intégrations production prévues ?',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'Prestataire de paiement réel, KYC réel, notifications push, monitoring renforcé et app mobile native — selon les jalons produit.',
+  'marketing.faq.commercialLaunchQuestion': 'Wayly prêt pour un lancement commercial ?',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly est en développement actif. Les outils core fonctionnent, mais paiements réels, KYC production et garanties commerciales complètes ne sont pas en place. Voir Centre de confiance.',
   'marketing.landing.trustCenterLink': 'Comment Wayly gère la sécurité',
+  'marketing.landing.faqLink': 'Parcourir les questions fréquentes',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -9181,7 +9533,94 @@ const de: Dictionary = {
     'Wayly bietet Marktplatz-Tools und Orientierung — keine garantierte Lieferung, Zahlungsschutz, Rechtskonformität oder Versicherung. Die folgenden Abschnitte beschreiben die aktuellen Grenzen ehrlich.',
   'marketing.trustCenter.backHome': 'Zur Startseite',
   'marketing.trustCenter.openApp': 'App öffnen',
+  'marketing.faq.navLabel': 'FAQ',
+  'marketing.faq.title': 'Häufig gestellte Fragen',
+  'marketing.faq.subtitle':
+    'Antworten für Sender und Wayler — wie Wayly heute funktioniert, einschließlich ehrlicher Grenzen bei Zahlungen, Streitfällen und lokalen Daten.',
+  'marketing.faq.backHome': 'Zur Startseite',
+  'marketing.faq.openApp': 'App öffnen',
+  'marketing.faq.trustCenter': 'Trust Center',
+  'marketing.faq.gettingStartedTitle': 'Erste Schritte',
+  'marketing.faq.sendersTitle': 'Für Sender',
+  'marketing.faq.waylersTitle': 'Für Wayler',
+  'marketing.faq.safetyTitle': 'Sicherheit und eingeschränkte Gegenstände',
+  'marketing.faq.paymentsTitle': 'Zahlungen',
+  'marketing.faq.disputesTitle': 'Streitfälle und Nachweise',
+  'marketing.faq.localDataTitle': 'Lokal gespeicherte Daten',
+  'marketing.faq.limitationsTitle': 'Aktuelle Grenzen und künftige Arbeit',
+  'marketing.faq.whatIsWaylyQuestion': 'Was ist Wayly?',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly ist ein P2P-Liefer-Marktplatz. Sender veröffentlichen Anfragen; Wayler Verfügbarkeit oder Routen; nach Annahme wird daraus eine nachverfolgbare Bestellung mit In-App-Chat.',
+  'marketing.faq.whoCanUseQuestion': 'Wer kann Wayly nutzen?',
+  'marketing.faq.whoCanUseAnswer':
+    'Registrierte Nutzer können als Sender oder Wayler agieren. Manche Aktionen erfordern Verifizierung oder Wayler-Zugang. Wayly garantiert keine Annahme.',
+  'marketing.faq.requestToOrderQuestion': 'Wie wird aus einer Anfrage eine Bestellung?',
+  'marketing.faq.requestToOrderAnswer':
+    'Sender veröffentlicht oder sendet an ein Wayler-Angebot. Bei Annahme erstellt Wayly eine Bestellung mit Status, Chat und Zahlungsfeldern. Annahme liegt bei den Nutzern; Wayly bietet Koordinations-Tools.',
+  'marketing.faq.findWaylerQuestion': 'Wie finde ich einen Wayler?',
+  'marketing.faq.findWaylerAnswer':
+    'Durchsuche öffentliche Anzeigen, Routen-Match-Hinweise und Verfügbarkeit. Matches sind informativ — keine Buchungsgarantie.',
+  'marketing.faq.requestIncludeQuestion': 'Was soll in die Anfrage?',
+  'marketing.faq.requestIncludeAnswer':
+    'Artikel, Abhol-/Zustellzonen, Zeitfenster und Hinweise klar beschreiben. Absprachen im Wayly-Chat halten und Details bestätigen.',
+  'marketing.faq.saveRequestTemplatesQuestion': 'Kann ich Anfrage-Vorlagen speichern?',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'Ja — lokal im Browser. Keine Sync mit Konto oder anderen Geräten.',
+  'marketing.faq.publishAvailabilityQuestion': 'Wie veröffentliche ich Verfügbarkeit?',
+  'marketing.faq.publishAvailabilityAnswer':
+    'In der App lokale Verfügbarkeit oder Reiseroute mit Route, Zeit und Kapazität anlegen.',
+  'marketing.faq.tripVsLocalQuestion': 'Reiseroute vs lokale Verfügbarkeit?',
+  'marketing.faq.tripVsLocalAnswer':
+    'Reiserouten verbinden Städte/Länder entlang einer geplanten Fahrt. Lokale Verfügbarkeit = Stadt/nah. Beides sind auffindbare Anzeigen — keine garantierten Buchungen.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': 'Verfügbarkeits-Vorlagen speichern?',
+  'marketing.faq.saveAvailabilityTemplatesAnswer': 'Ja — lokal im Browser, ohne Geräte-Sync.',
+  'marketing.faq.itemsNotAllowedQuestion': 'Welche Gegenstände sind nicht erlaubt?',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'Illegale, gefährliche oder verbotene Güter nach lokalem Recht, Zoll oder Carrier-Regeln. Sie sind verantwortlich. Siehe Trust Center.',
+  'marketing.faq.verifyLegalityQuestion': 'Prüft Wayly die Legalität?',
+  'marketing.faq.verifyLegalityAnswer':
+    'Nein. Wayly inspiziert keine Pakete und prüft nicht Legalität oder Transporteignung. Halten Sie lokale Gesetze ein.',
+  'marketing.faq.communicateSafelyQuestion': 'Wie sicher kommunizieren?',
+  'marketing.faq.communicateSafelyAnswer':
+    'Absprachen und Übergabedetails im Wayly-Chat. Keine Karten-, Bank- oder Passwortdaten außerhalb der Plattform teilen.',
+  'marketing.faq.realEscrowQuestion': 'Bietet Wayly echtes Escrow?',
+  'marketing.faq.realEscrowAnswer':
+    'Nein. Aktueller Zahlungsfluss ist mock/manuell bis ein echter Anbieter integriert ist. Status = Workflow-Stufen — kein Drittanbieter-Treuhand.',
+  'marketing.faq.refundsGuaranteedQuestion': 'Erstattungen oder Auszahlungen garantiert?',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'Nein. Keine garantierten Erstattungen, Auszahlungen oder Versicherung. Admin-Review = operative Aufzeichnung — kein Geld via Anbieter.',
+  'marketing.faq.paymentStatusQuestion': 'Was bedeutet der Zahlungsstatus?',
+  'marketing.faq.paymentStatusAnswer':
+    'Zeigt die Stufe im mock/manuellen Workflow (z. B. autorisiert oder gehalten). Koordinations-Eintrag — kein Beweis echter Geldbewegung.',
+  'marketing.faq.whenOpenDisputeQuestion': 'Wann Streitfall eröffnen?',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'Bei Koordinationsbruch — verpasste Übergaben, widersprüchliche Angaben oder Zahlungsstreit. Streitfälle ordnen Fakten; sie regeln kein Geld automatisch.',
+  'marketing.faq.whatEvidenceQuestion': 'Welche Nachweise beifügen?',
+  'marketing.faq.whatEvidenceAnswer':
+    'Relevante Chat-Auszüge, Liefernachweis-Referenzen und klare Zusammenfassung. Keine Passwörter oder unnötigen sensiblen Daten.',
+  'marketing.faq.legalAdviceQuestion': 'Rechtsberatung durch Wayly?',
+  'marketing.faq.legalAdviceAnswer':
+    'Nein. Streitfälle und Review-Tools ordnen Information — keine Rechtsberatung oder garantierte Lösung.',
+  'marketing.faq.whatDataLocalQuestion': 'Welche Daten lokal gespeichert?',
+  'marketing.faq.whatDataLocalAnswer':
+    'Letzte Routensuchen, Vorlagen, Entwürfe und Wayler-Shortlists — nur im Browser.',
+  'marketing.faq.localDataSyncedQuestion': 'Mit Konto synchronisiert?',
+  'marketing.faq.localDataSyncedAnswer':
+    'Nein. Bleibt im aktuellen Browser — keine Sync über Geräte oder Konten.',
+  'marketing.faq.clearSavedDataQuestion': 'Gespeicherte Daten löschen?',
+  'marketing.faq.clearSavedDataAnswer':
+    'Ja. Panel Lokal gespeicherte Daten in der App. Server-Bestellungen sind getrennt.',
+  'marketing.faq.mockManualQuestion': 'Was ist heute noch mock/manuell?',
+  'marketing.faq.mockManualAnswer':
+    'Zahlungen mock/manuell. KYC kann Plattform-Verifizierungsstatus widerspiegeln. Benachrichtigungen und Monitoring reifen noch.',
+  'marketing.faq.plannedIntegrationsQuestion': 'Geplante Production-Integrationen?',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'Echter Zahlungsanbieter, KYC, Push-Benachrichtigungen, stärkeres Monitoring, native Mobile-App — je nach Meilenstein.',
+  'marketing.faq.commercialLaunchQuestion': 'Bereit für kommerziellen Launch?',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly wird aktiv entwickelt. Kern-Tools funktionieren, aber echte Zahlungen, Production-KYC und volle Garantien fehlen noch. Siehe Trust Center.',
   'marketing.landing.trustCenterLink': 'Wie Wayly Sicherheit handhabt',
+  'marketing.landing.faqLink': 'Häufige Fragen ansehen',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -10985,7 +11424,95 @@ const tr: Dictionary = {
     'Wayly pazar yeri araçları ve rehberlik sunar — garantili teslimat, ödeme koruması, yasal uyum veya sigorta değil. Aşağıdaki bölümler mevcut sınırları dürüstçe açıklar.',
   'marketing.trustCenter.backHome': 'Ana sayfaya dön',
   'marketing.trustCenter.openApp': 'Uygulamayı aç',
+  'marketing.faq.navLabel': 'SSS',
+  'marketing.faq.title': 'Sık sorulan sorular',
+  'marketing.faq.subtitle':
+    'Göndericiler ve Wayler için Wayly’nin bugün nasıl çalıştığı — ödemeler, anlaşmazlıklar ve yerel verilerdeki dürüst sınırlar dahil.',
+  'marketing.faq.backHome': 'Ana sayfaya dön',
+  'marketing.faq.openApp': 'Uygulamayı aç',
+  'marketing.faq.trustCenter': 'Güven merkezi',
+  'marketing.faq.gettingStartedTitle': 'Başlarken',
+  'marketing.faq.sendersTitle': 'Göndericiler için',
+  'marketing.faq.waylersTitle': 'Wayler’lar için',
+  'marketing.faq.safetyTitle': 'Güvenlik ve kısıtlı eşyalar',
+  'marketing.faq.paymentsTitle': 'Ödemeler',
+  'marketing.faq.disputesTitle': 'Anlaşmazlıklar ve kanıtlar',
+  'marketing.faq.localDataTitle': 'Yerel kayıtlı veriler',
+  'marketing.faq.limitationsTitle': 'Mevcut sınırlar ve gelecek çalışma',
+  'marketing.faq.whatIsWaylyQuestion': 'Wayly nedir?',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly bir P2P teslimat pazar yeri. Göndericiler talep yayınlar; Wayler’lar müsaitlik veya rota yayınlar; kabul sonrası platform içi sohbetli takip edilen sipariş olur.',
+  'marketing.faq.whoCanUseQuestion': 'Kimler kullanabilir?',
+  'marketing.faq.whoCanUseAnswer':
+    'Kayıtlı kullanıcılar gönderici veya Wayler olabilir. Bazı işlemler doğrulama veya Wayler erişimi gerektirebilir. Wayly talep kabulünü garanti etmez.',
+  'marketing.faq.requestToOrderQuestion': 'Talep nasıl siparişe dönüşür?',
+  'marketing.faq.requestToOrderAnswer':
+    'Gönderici talep yayınlar veya Wayler ilanına gönderir. Kabulde Wayly durum, sohbet ve ödeme alanlarıyla sipariş oluşturur. Kabul kullanıcılar arasında; Wayly koordinasyon araçları sağlar.',
+  'marketing.faq.findWaylerQuestion': 'Wayler nasıl bulunur?',
+  'marketing.faq.findWaylerAnswer':
+    'Herkese açık ilanlar, rota eşleşme ipuçları ve müsaitliği inceleyin. Eşleşmeler bilgilendiricidir — rezervasyon garantisi değildir.',
+  'marketing.faq.requestIncludeQuestion': 'Talepte ne olmalı?',
+  'marketing.faq.requestIncludeAnswer':
+    'Eşyayı, alım/teslim bölgelerini, zaman pencerelerini ve notları açıkça yazın. Anlaşmaları Wayly sohbetinde tutun ve detayları onaylayın.',
+  'marketing.faq.saveRequestTemplatesQuestion': 'Talep şablonları kaydedilebilir mi?',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'Evet — tarayıcıda yerel olarak kaydedilir. Hesap veya cihazlar arasında senkronize edilmez.',
+  'marketing.faq.publishAvailabilityQuestion': 'Müsaitlik nasıl yayınlanır?',
+  'marketing.faq.publishAvailabilityAnswer':
+    'Uygulamada yerel müsaitlik veya seyahat rotası ilanı oluşturun — rota, zaman ve kapasite ile.',
+  'marketing.faq.tripVsLocalQuestion': 'Seyahat rotası vs yerel müsaitlik?',
+  'marketing.faq.tripVsLocalAnswer':
+    'Seyahat rotaları planlı yolculukla şehir/ülke arası. Yerel müsaitlik aynı şehir teslimatı. İkisi de keşfedilebilir ilan — garantili rezervasyon değil.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': 'Müsaitlik şablonları kaydedilebilir mi?',
+  'marketing.faq.saveAvailabilityTemplatesAnswer':
+    'Evet — tarayıcıda yerel, cihazlar arası senkron yok.',
+  'marketing.faq.itemsNotAllowedQuestion': 'Hangi eşyalar yasak?',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'Yerel yasa, gümrük veya taşıyıcı kurallarına göre yasadışı, tehlikeli veya yasak eşyalar. Sorumluluk sizdedir. Güven merkezine bakın.',
+  'marketing.faq.verifyLegalityQuestion': 'Wayly yasallığı doğrular mı?',
+  'marketing.faq.verifyLegalityAnswer':
+    'Hayır. Wayly paket incelemez veya yasallık/taşıma uygunluğunu doğrulamaz. Yerel kurallara uyun.',
+  'marketing.faq.communicateSafelyQuestion': 'Güvenli iletişim nasıl olmalı?',
+  'marketing.faq.communicateSafelyAnswer':
+    'Anlaşma ve teslim detaylarını Wayly sohbetinde tutun. Kart, banka veya şifre bilgilerini platform dışında paylaşmayın.',
+  'marketing.faq.realEscrowQuestion': 'Wayly gerçek emanet sağlıyor mu?',
+  'marketing.faq.realEscrowAnswer':
+    'Hayır. Gerçek ödeme sağlayıcısı eklenene kadar akış mock/manuel. Durum iş akışı aşamalarını yansıtır — üçüncü taraf fon tutumu değil.',
+  'marketing.faq.refundsGuaranteedQuestion': 'İade veya ödeme garanti mi?',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'Hayır. Wayly iade, ödeme veya sigorta garanti etmez. Admin incelemesi operasyonel kayıttır — sağlayıcı üzerinden para taşımaz.',
+  'marketing.faq.paymentStatusQuestion': 'Ödeme durumu ne anlama gelir?',
+  'marketing.faq.paymentStatusAnswer':
+    'Mock/manuel süreçteki aşamayı gösterir (ör. yetkilendirildi veya tutuldu). Koordinasyon kaydıdır — gerçek para hareketi kanıtı değil.',
+  'marketing.faq.whenOpenDisputeQuestion': 'Ne zaman anlaşmazlık açılır?',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'Koordinasyon bozulduğunda — kaçırılan teslim, çelişkili iddialar veya ödeme anlaşmazlığı. Anlaşmazlıklar gerçekleri düzenler; otomatik para uzlaşması değildir.',
+  'marketing.faq.whatEvidenceQuestion': 'Hangi kanıtlar eklenmeli?',
+  'marketing.faq.whatEvidenceAnswer':
+    'İlgili sohbet alıntıları, teslim kanıtı referansları ve net özet. Şifre, ödeme bilgisi veya gereksiz hassas veri eklemeyin.',
+  'marketing.faq.legalAdviceQuestion': 'Wayly hukuki tavsiye verir mi?',
+  'marketing.faq.legalAdviceAnswer':
+    'Hayır. Anlaşmazlık ve inceleme araçları bilgiyi düzenler — hukuki tavsiye veya garantili çözüm değildir.',
+  'marketing.faq.whatDataLocalQuestion': 'Hangi veriler yerel kaydedilir?',
+  'marketing.faq.whatDataLocalAnswer':
+    'Son rota aramaları, şablonlar, taslaklar ve Wayler kısa listeleri — yalnızca tarayıcıda.',
+  'marketing.faq.localDataSyncedQuestion': 'Yerel veriler hesapla senkron mu?',
+  'marketing.faq.localDataSyncedAnswer':
+    'Hayır. Mevcut tarayıcıda kalır; cihaz veya hesaplar arasında senkronize edilmez.',
+  'marketing.faq.clearSavedDataQuestion': 'Kayıtlı veriler silinebilir mi?',
+  'marketing.faq.clearSavedDataAnswer':
+    'Evet. Uygulamadaki Yerel kayıtlı veriler panelini kullanın. Sunucu sipariş kayıtları ayrıdır.',
+  'marketing.faq.mockManualQuestion': 'Bugün hâlâ mock/manuel olan ne?',
+  'marketing.faq.mockManualAnswer':
+    'Ödemeler mock/manuel. KYC platform doğrulama durumunu yansıtabilir. Bildirimler ve izleme olgunlaşıyor.',
+  'marketing.faq.plannedIntegrationsQuestion': 'Planlanan production entegrasyonları?',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'Gerçek ödeme sağlayıcısı, KYC, push bildirimleri, güçlü izleme ve yerel mobil uygulama — ürün kilometre taşlarına bağlı.',
+  'marketing.faq.commercialLaunchQuestion': 'Wayly ticari lansmana hazır mı?',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly aktif geliştiriliyor. Temel araçlar çalışıyor ancak gerçek ödemeler, production KYC ve tam ticari garantiler yok. Güven merkezine bakın.',
   'marketing.landing.trustCenterLink': 'Wayly güvenliği nasıl yönetir',
+  'marketing.landing.faqLink': 'Sık sorulan sorulara göz atın',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -12708,7 +13235,95 @@ const ar: Dictionary = {
     'Wayly يقدم أدوات سوق وإرشاداً — وليس توصيلاً مضموناً أو حماية مدفوعات أو امتثالاً قانونياً أو تأميناً. الأقسام التالية تصف الحدود الحالية بصدق.',
   'marketing.trustCenter.backHome': 'العودة للرئيسية',
   'marketing.trustCenter.openApp': 'فتح التطبيق',
+  'marketing.faq.navLabel': 'الأسئلة الشائعة',
+  'marketing.faq.title': 'الأسئلة الشائعة',
+  'marketing.faq.subtitle':
+    'إجابات للمرسلين و Wayler حول كيفية عمل Wayly اليوم — بما في ذلك حدود صادقة للمدفوعات والنزاعات والبيانات المحلية.',
+  'marketing.faq.backHome': 'العودة للرئيسية',
+  'marketing.faq.openApp': 'فتح التطبيق',
+  'marketing.faq.trustCenter': 'مركز الثقة',
+  'marketing.faq.gettingStartedTitle': 'البدء',
+  'marketing.faq.sendersTitle': 'للمرسلين',
+  'marketing.faq.waylersTitle': 'لـ Wayler',
+  'marketing.faq.safetyTitle': 'السلامة والعناصر المقيدة',
+  'marketing.faq.paymentsTitle': 'المدفوعات',
+  'marketing.faq.disputesTitle': 'النزاعات والأدلة',
+  'marketing.faq.localDataTitle': 'البيانات المحفوظة محلياً',
+  'marketing.faq.limitationsTitle': 'القيود الحالية والعمل المستقبلي',
+  'marketing.faq.whatIsWaylyQuestion': 'ما هو Wayly؟',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly سوق توصيل P2P. ينشر المرسلون طلبات؛ ينشر Wayler التوفر أو المسارات؛ عند القبول يصبح طلباً متتبعاً مع دردشة داخل المنصة.',
+  'marketing.faq.whoCanUseQuestion': 'من يمكنه استخدام Wayly؟',
+  'marketing.faq.whoCanUseAnswer':
+    'المستخدمون المسجلون يمكنهم العمل كمرسلين أو Wayler. قد تتطلب بعض الإجراءات تحققاً أو وصول Wayler. Wayly لا يضمن قبول أي طلب.',
+  'marketing.faq.requestToOrderQuestion': 'كيف يصبح طلب التوصيل طلباً؟',
+  'marketing.faq.requestToOrderAnswer':
+    'ينشر المرسل طلباً أو يرسله إلى إعلان Wayler. عند القبول ينشئ Wayly طلباً مع تتبع ودردشة وحقول دفع. القبول بين المستخدمين؛ Wayly يوفر أدوات التنسيق.',
+  'marketing.faq.findWaylerQuestion': 'كيف أجد Wayler؟',
+  'marketing.faq.findWaylerAnswer':
+    'تصفح الإعلانات العامة وتلميحات تطابق المسار والتوفر. التطابقات إعلامية — وليست ضمان حجز.',
+  'marketing.faq.requestIncludeQuestion': 'ماذا أضمّن في طلبي؟',
+  'marketing.faq.requestIncludeAnswer':
+    'صف العنصر ومناطق الاستلام/التسليم والنوافذ الزمنية والملاحظات. احتفظ بالاتفاقات في دردشة Wayly وأكد التفاصيل.',
+  'marketing.faq.saveRequestTemplatesQuestion': 'هل يمكن حفظ قوالب الطلبات؟',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    'نعم — تُحفظ محلياً في المتصفح. لا تُزامَن مع الحساب أو أجهزة أخرى.',
+  'marketing.faq.publishAvailabilityQuestion': 'كيف أنشر التوفر؟',
+  'marketing.faq.publishAvailabilityAnswer':
+    'في التطبيق أنشئ إعلان توفر محلي أو مسار رحلة مع المسار والوقت والسعة.',
+  'marketing.faq.tripVsLocalQuestion': 'مسار رحلة vs توفر محلي؟',
+  'marketing.faq.tripVsLocalAnswer':
+    'مسارات الرحلة بين مدن أو دول في رحلة مخططة. التوفر المحلي للمدينة نفسها. كلاهما إعلانات — وليست حجوزات مضمونة.',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': 'هل يمكن حفظ قوالب التوفر؟',
+  'marketing.faq.saveAvailabilityTemplatesAnswer':
+    'نعم — محلياً في المتصفح دون مزامنة بين الأجهزة.',
+  'marketing.faq.itemsNotAllowedQuestion': 'ما العناصر غير المسموحة؟',
+  'marketing.faq.itemsNotAllowedAnswer':
+    'بضائع غير قانونية أو خطرة أو محظورة بموجب القانون المحلي أو الجمارك أو الناقلين. أنت مسؤول. راجع مركز الثقة.',
+  'marketing.faq.verifyLegalityQuestion': 'هل يتحقق Wayly من قانونية العنصر؟',
+  'marketing.faq.verifyLegalityAnswer':
+    'لا. Wayly لا يفحص الطرود ولا يتحقق من القانونية أو أمان النقل. التزم بالقوانين المحلية.',
+  'marketing.faq.communicateSafelyQuestion': 'كيف يتواصل المستخدمون بأمان؟',
+  'marketing.faq.communicateSafelyAnswer':
+    'احتفظ بالاتفاقات وتفاصيل التسليم في دردشة Wayly. لا تشارك بطاقات أو بيانات بنكية أو كلمات مرور خارج المنصة.',
+  'marketing.faq.realEscrowQuestion': 'هل يوفر Wayly ضماناً حقيقياً؟',
+  'marketing.faq.realEscrowAnswer':
+    'لا. تدفق الدفع الحالي mock/يدوي حتى دمج مزود حقيقي. الحالة تعكس مراحل سير العمل — وليس احتجاز أموال لدى طرف ثالث.',
+  'marketing.faq.refundsGuaranteedQuestion': 'هل الاسترداد أو الدفع مضمون؟',
+  'marketing.faq.refundsGuaranteedAnswer':
+    'لا. Wayly لا يضمن استرداداً أو دفعاً أو تأميناً. مراجعة المسؤول تسجل قرارات تشغيلية — ولا تحرك أموالاً عبر مزود.',
+  'marketing.faq.paymentStatusQuestion': 'ماذا يعني حالة الدفع؟',
+  'marketing.faq.paymentStatusAnswer':
+    'تُظهر مرحلة سير العمل mock/اليدوي (مثل مصرّح أو محجوز). سجل تنسيق — وليس دليل حركة أموال حقيقية.',
+  'marketing.faq.whenOpenDisputeQuestion': 'متى أفتح نزاعاً؟',
+  'marketing.faq.whenOpenDisputeAnswer':
+    'عند فشل التنسيق — تسليم فائت أو مطالبات متعارضة أو خلاف دفع. النزاعات تنظم الحقائق؛ لا تسوي الأموال تلقائياً.',
+  'marketing.faq.whatEvidenceQuestion': 'ما الأدلة التي أرفقها؟',
+  'marketing.faq.whatEvidenceAnswer':
+    'مقتطفات دردشة ذات صلة ومراجع إثبات التسليم وملخص واضح. تجنب كلمات المرور أو بيانات الدفع أو بيانات شخصية غير ضرورية.',
+  'marketing.faq.legalAdviceQuestion': 'هل يقدم Wayly استشارة قانونية؟',
+  'marketing.faq.legalAdviceAnswer':
+    'لا. النزاعات وأدوات المراجعة تنظم المعلومات — وليست استشارة قانونية أو حلاً مضموناً.',
+  'marketing.faq.whatDataLocalQuestion': 'ما البيانات المحفوظة محلياً؟',
+  'marketing.faq.whatDataLocalAnswer':
+    'عمليات بحث المسارات الأخيرة والقوالب والمسودات وقوائم Wayler المختصرة — في المتصفح فقط.',
+  'marketing.faq.localDataSyncedQuestion': 'هل تُزامَن مع حسابي؟',
+  'marketing.faq.localDataSyncedAnswer':
+    'لا. تبقى في المتصفح الحالي دون مزامنة بين الأجهزة أو الحسابات.',
+  'marketing.faq.clearSavedDataQuestion': 'هل يمكن مسح البيانات؟',
+  'marketing.faq.clearSavedDataAnswer':
+    'نعم. استخدم لوحة البيانات المحفوظة محلياً. سجلات الطلبات على الخادم منفصلة.',
+  'marketing.faq.mockManualQuestion': 'ما الذي لا يزال mock/يدوياً اليوم؟',
+  'marketing.faq.mockManualAnswer':
+    'المدفوعات mock/يدوية. KYC قد يعكس حالة تحقق المنصة. الإشعارات والمراقبة لا تزال تتطور.',
+  'marketing.faq.plannedIntegrationsQuestion': 'ما تكاملات الإنتاج المخططة؟',
+  'marketing.faq.plannedIntegrationsAnswer':
+    'مزود دفع حقيقي وKYC وإشعارات push ومراقبة أقوى وتطبيق جوال أصلي — حسب مراحل المنتج.',
+  'marketing.faq.commercialLaunchQuestion': 'هل Wayly جاهز للإطلاق التجاري؟',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly قيد التطوير النشط. الأدوات الأساسية تعمل لكن المدفوعات الحقيقية وKYC الإنتاج والضمانات التجارية الكاملة غير متوفرة بعد. راجع مركز الثقة.',
   'marketing.landing.trustCenterLink': 'كيف يتعامل Wayly مع السلامة',
+  'marketing.landing.faqLink': 'تصفح الأسئلة الشائعة',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -14344,7 +14959,93 @@ const zh: Dictionary = {
     'Wayly 提供 marketplace 工具与指引——不提供保证配送、支付保护、法律合规或保险。以下各节如实说明当前限制。',
   'marketing.trustCenter.backHome': '返回首页',
   'marketing.trustCenter.openApp': '打开应用',
+  'marketing.faq.navLabel': '常见问题',
+  'marketing.faq.title': '常见问题',
+  'marketing.faq.subtitle':
+    '为寄件人与 Wayler 解答 Wayly 今日如何运作——包括支付、争议与本地数据的如实限制。',
+  'marketing.faq.backHome': '返回首页',
+  'marketing.faq.openApp': '打开应用',
+  'marketing.faq.trustCenter': '信任中心',
+  'marketing.faq.gettingStartedTitle': '入门',
+  'marketing.faq.sendersTitle': '寄件人',
+  'marketing.faq.waylersTitle': 'Wayler',
+  'marketing.faq.safetyTitle': '安全与受限物品',
+  'marketing.faq.paymentsTitle': '支付',
+  'marketing.faq.disputesTitle': '争议与证据',
+  'marketing.faq.localDataTitle': '本地保存数据',
+  'marketing.faq.limitationsTitle': '当前限制与未来工作',
+  'marketing.faq.whatIsWaylyQuestion': 'Wayly 是什么？',
+  'marketing.faq.whatIsWaylyAnswer':
+    'Wayly 是 P2P 配送 marketplace。寄件人发布请求；Wayler 发布可用性或路线；接受后成为可跟踪订单并含平台内聊天。',
+  'marketing.faq.whoCanUseQuestion': '谁可以使用 Wayly？',
+  'marketing.faq.whoCanUseAnswer':
+    '注册用户可作为寄件人或 Wayler。部分操作可能需要验证或 Wayler 访问权限。Wayly 不保证请求会被接受。',
+  'marketing.faq.requestToOrderQuestion': '配送请求如何变成订单？',
+  'marketing.faq.requestToOrderAnswer':
+    '寄件人发布或向 Wayler listing 发送请求。Wayler 接受后 Wayly 创建含状态、聊天与支付字段的订单。接受发生在用户之间；Wayly 提供协调工具。',
+  'marketing.faq.findWaylerQuestion': '如何找到 Wayler？',
+  'marketing.faq.findWaylerAnswer':
+    '在应用中浏览公开 listing、路线匹配提示与可用性。路线匹配仅供参考——不是预订保证。',
+  'marketing.faq.requestIncludeQuestion': '请求应包含什么？',
+  'marketing.faq.requestIncludeAnswer':
+    '清楚描述物品、取送区域、时间窗口与搬运说明。将约定留在 Wayly 聊天内并确认细节。',
+  'marketing.faq.saveRequestTemplatesQuestion': '可以保存请求模板吗？',
+  'marketing.faq.saveRequestTemplatesAnswer':
+    '可以——模板保存在浏览器本地。不会同步到账户或其他设备。',
+  'marketing.faq.publishAvailabilityQuestion': '如何发布可用性？',
+  'marketing.faq.publishAvailabilityAnswer':
+    '在应用中创建本地可用性或行程路线 listing，填写路线、时间与容量。',
+  'marketing.faq.tripVsLocalQuestion': '行程路线 vs 本地可用性？',
+  'marketing.faq.tripVsLocalAnswer':
+    '行程路线沿计划旅程连接城市或国家。本地可用性覆盖同城或附近窗口。两者均为可发现 listing——非保证预订。',
+  'marketing.faq.saveAvailabilityTemplatesQuestion': '可以保存可用性模板吗？',
+  'marketing.faq.saveAvailabilityTemplatesAnswer': '可以——保存在浏览器本地，不同设备间不同步。',
+  'marketing.faq.itemsNotAllowedQuestion': '哪些物品不允许？',
+  'marketing.faq.itemsNotAllowedAnswer':
+    '违反当地法律、海关或承运规则的非法、危险或禁运物品。您需自行负责。详见信任中心。',
+  'marketing.faq.verifyLegalityQuestion': 'Wayly 会验证物品合法性吗？',
+  'marketing.faq.verifyLegalityAnswer':
+    '不会。Wayly 不检查包裹，也不验证合法性或运输适用性。请遵守当地法律与运输规则。',
+  'marketing.faq.communicateSafelyQuestion': '如何安全沟通？',
+  'marketing.faq.communicateSafelyAnswer':
+    '将约定、时间变更与交接细节留在 Wayly 聊天内。不要在平台外分享卡号、银行信息或密码。',
+  'marketing.faq.realEscrowQuestion': 'Wayly 目前提供真实托管吗？',
+  'marketing.faq.realEscrowAnswer':
+    '不提供。在接入真实支付提供商前，当前为 mock/手动流程。支付状态反映流程阶段——非第三方资金托管。',
+  'marketing.faq.refundsGuaranteedQuestion': '退款或打款有保证吗？',
+  'marketing.faq.refundsGuaranteedAnswer':
+    '没有。Wayly 不保证退款、打款或保险。管理员支付审核仅记录运营决策——不通过支付提供商转移资金。',
+  'marketing.faq.paymentStatusQuestion': '支付状态是什么意思？',
+  'marketing.faq.paymentStatusAnswer':
+    '表示 mock/手动流程中的阶段（如已授权或标记托管）。这是协调记录，不是真实资金流动的证明。',
+  'marketing.faq.whenOpenDisputeQuestion': '何时应开启争议？',
+  'marketing.faq.whenOpenDisputeAnswer':
+    '当协调失败——错过交接、相互矛盾的主张或支付流程分歧。争议用于整理事实与证据；不会自动结算资金。',
+  'marketing.faq.whatEvidenceQuestion': '应包含哪些证据？',
+  'marketing.faq.whatEvidenceAnswer':
+    '相关聊天摘录、交付凭证引用与清晰问题摘要。避免密码、支付凭证或不必要的敏感个人信息。',
+  'marketing.faq.legalAdviceQuestion': 'Wayly 提供法律建议吗？',
+  'marketing.faq.legalAdviceAnswer':
+    '不提供。争议与管理员/仲裁审查工具用于整理信息——不是法律建议或保证结果。',
+  'marketing.faq.whatDataLocalQuestion': '哪些数据保存在本地？',
+  'marketing.faq.whatDataLocalAnswer':
+    '最近路线搜索、请求/可用性模板、草稿与 Wayler 短名单——仅保存在浏览器中。',
+  'marketing.faq.localDataSyncedQuestion': '本地数据会同步到账户吗？',
+  'marketing.faq.localDataSyncedAnswer': '不会。本地数据留在当前浏览器，不同设备或账户间不同步。',
+  'marketing.faq.clearSavedDataQuestion': '可以清除保存的数据吗？',
+  'marketing.faq.clearSavedDataAnswer':
+    '可以。在应用内使用「本地保存数据」面板查看并清除。服务器端订单与账户记录是分开的。',
+  'marketing.faq.mockManualQuestion': '今天哪些仍是 mock/手动？',
+  'marketing.faq.mockManualAnswer':
+    '支付为 mock/手动流程记录。KYC 可能反映平台验证状态而非完整生产身份提供商。通知与监控仍在完善。',
+  'marketing.faq.plannedIntegrationsQuestion': '计划中的生产集成有哪些？',
+  'marketing.faq.plannedIntegrationsAnswer':
+    '真实支付提供商、KYC、推送通知、更强监控与原生移动打包——取决于产品里程碑。',
+  'marketing.faq.commercialLaunchQuestion': 'Wayly 准备好商业发布了吗？',
+  'marketing.faq.commercialLaunchAnswer':
+    'Wayly 仍在积极开发。核心 marketplace 工具可用，但真实支付、生产 KYC 与完整商业保证尚未到位。详见信任中心。',
   'marketing.landing.trustCenterLink': 'Wayly 如何处理安全',
+  'marketing.landing.faqLink': '浏览常见问题',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 
