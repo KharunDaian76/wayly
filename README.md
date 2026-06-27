@@ -8,11 +8,24 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 
 ## Project documentation
 
-| Document                                                           | Description                                                                                                                              |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| [docs/admin-operations-center.md](docs/admin-operations-center.md) | Admin / Arbitrator Operations Center — read-only panels, KYC approve/reject v1, dispute resolution v1, access control, security, roadmap |
+| Document                                                                                       | Description                                                                                                                              |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| [docs/admin-operations-center.md](docs/admin-operations-center.md)                             | Admin / Arbitrator Operations Center — read-only panels, KYC approve/reject v1, dispute resolution v1, access control, security, roadmap |
+| [docs/marketplace-product-checkpoint.md](docs/marketplace-product-checkpoint.md)               | **Checkpoint** — marketplace UX added locally (trust, shortlist, templates, coaches, guidance)                                           |
+| [docs/admin-operations-checkpoint.md](docs/admin-operations-checkpoint.md)                     | **Checkpoint** — admin dashboard, queues, filters, triage shortcuts, metadata-only reviews                                               |
+| [docs/local-saved-data-checkpoint.md](docs/local-saved-data-checkpoint.md)                     | **Checkpoint** — browser `localStorage` keys, fields, privacy boundaries                                                                 |
+| [docs/payment-and-dispute-safety-checkpoint.md](docs/payment-and-dispute-safety-checkpoint.md) | **Checkpoint** — honest payment/dispute/demo wording; no real escrow/refund claims                                                       |
 
-Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling.
+Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The four **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
+
+### Recent local stack (checkpoint — not deployed)
+
+The branch is **ahead of `origin/main`** with marketplace trust/discovery UX, local templates & drafts, quality coaches, safety/guidance polish, and admin queue filters/triage — **nothing pushed or deployed yet**. Start here:
+
+1. [Marketplace product](docs/marketplace-product-checkpoint.md) — active Wayler counts, trust badges, shortlist, route match, templates, onboarding
+2. [Admin operations](docs/admin-operations-checkpoint.md) — overview KPIs, triage shortcuts, queue filters, metadata-only payment/dispute review
+3. [Local saved data](docs/local-saved-data-checkpoint.md) — `localStorage` keys and privacy limits
+4. [Payment & dispute safety](docs/payment-and-dispute-safety-checkpoint.md) — mock payments, no real money movement, honest demo language
 
 ## Tech stack
 
@@ -4296,21 +4309,21 @@ Use after `pnpm build`, `pnpm lint`, and `pnpm typecheck` pass. **Frontend UI-st
 
 Wayly has an **Admin / Arbitrator Operations Center** on `/app` for staff roles only. Normal **`USER`** accounts do not see it.
 
-| Panel                 | Admin API                             | Mutations v1                                                        |
-| --------------------- | ------------------------------------- | ------------------------------------------------------------------- |
-| Disputes queue        | `GET /api/v1/admin/disputes`          | `POST .../disputes/:id/resolve`                                     |
-| KYC review queue      | `GET /api/v1/admin/kyc-verifications` | `POST .../approve`, `POST .../reject`                               |
-| Orders monitoring     | `GET /api/v1/admin/orders`            | — (read-only)                                                       |
-| Users & Trust/Safety  | `GET /api/v1/admin/users`             | `POST .../users/:id/suspend`, `POST .../unsuspend` (**ADMIN** only) |
-| Payments & Escrow     | `GET /api/v1/admin/payments`          | — (read-only)                                                       |
-| System Health & Audit | `GET /api/v1/admin/system-health`     | — (read-only)                                                       |
-| Audit log             | `GET /api/v1/admin/audit-logs`        | — (read-only list; append-only writes)                              |
+| Panel                 | Admin API                             | Mutations v1                                                            |
+| --------------------- | ------------------------------------- | ----------------------------------------------------------------------- |
+| Disputes queue        | `GET /api/v1/admin/disputes`          | `POST .../disputes/:id/resolve`                                         |
+| KYC review queue      | `GET /api/v1/admin/kyc-verifications` | `POST .../approve`, `POST .../reject`                                   |
+| Orders monitoring     | `GET /api/v1/admin/orders`            | — (read-only)                                                           |
+| Users & Trust/Safety  | `GET /api/v1/admin/users`             | `POST .../users/:id/suspend`, `POST .../unsuspend` (**ADMIN** only)     |
+| Payments & Escrow     | `GET /api/v1/admin/payments`          | Review decisions v1 (**ADMIN** only; metadata-only — no money movement) |
+| System Health & Audit | `GET /api/v1/admin/system-health`     | — (read-only)                                                           |
+| Audit log             | `GET /api/v1/admin/audit-logs`        | — (read-only list; append-only writes)                                  |
 
 **Access:** `ADMIN` and `ARBITRATOR` only — JWT + `RolesGuard`; normal users get **403** on admin routes. UI double-checks via `hasOperationsDashboardAccess`.
 
-**Safety:** KYC approve/reject, dispute resolve, and user suspend/unsuspend are **controlled mutations** on existing schema fields — no refund, release, capture, payout, order cancel/reassign, ban, delete, or role changes. **Append-only audit log** records KYC, dispute, and user moderation actions (best-effort after success). Suspended users can still log in; marketplace-changing actions are blocked (`ACCOUNT_SUSPENDED`). Orders and Payments panels remain read-only. No secrets in admin responses.
+**Safety:** KYC approve/reject, dispute resolve, user suspend/unsuspend, and payment review decisions are **controlled mutations** on existing schema fields — payment review is **metadata-only** (no refund, release, capture, payout, or provider calls). No order cancel/reassign, ban, delete, or role changes. **Append-only audit log** records KYC, dispute, user moderation, and payment review actions (best-effort after success). Suspended users can still log in; marketplace-changing actions are blocked (`ACCOUNT_SUSPENDED`). Orders monitoring remains read-only. No secrets in admin responses.
 
-**Full reference:** [docs/admin-operations-center.md](docs/admin-operations-center.md) — endpoints, mutation workflows, security notes, roadmap, manual test checklist.
+**Full reference:** [docs/admin-operations-center.md](docs/admin-operations-center.md) — endpoints, mutation workflows, security notes, roadmap, manual test checklist. **Checkpoint summary:** [docs/admin-operations-checkpoint.md](docs/admin-operations-checkpoint.md).
 
 ## Common scripts
 

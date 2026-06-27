@@ -4,6 +4,8 @@ This document records the **current** Admin / Arbitrator Operations Center on Wa
 
 **Last updated:** payment admin review v1 (metadata-only) + audit log extensions.
 
+**Checkpoint summary (local stack):** [admin-operations-checkpoint.md](./admin-operations-checkpoint.md)
+
 ---
 
 ## Summary
