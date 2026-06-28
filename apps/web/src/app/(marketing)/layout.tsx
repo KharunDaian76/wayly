@@ -1,5 +1,6 @@
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
+import { WebsiteJsonLd } from '@/components/marketing/website-json-ld';
 
 /**
  * Marketing shell — public, SEO-oriented surface. Owns the site header/footer
@@ -8,6 +9,7 @@ import { SiteHeader } from '@/components/site-header';
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
+      <WebsiteJsonLd />
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />

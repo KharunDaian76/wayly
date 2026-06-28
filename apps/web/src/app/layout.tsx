@@ -3,17 +3,20 @@ import type { Metadata, Viewport } from 'next';
 import { Providers } from '@/components/providers';
 import { siteConfig } from '@/config/site';
 import { fontDisplay, fontSans } from '@/lib/fonts';
+import { getSiteUrl } from '@/lib/seo/site-url';
 
 import './globals.css';
 
+const defaultTitle = `${siteConfig.name} — ${siteConfig.tagline}`;
+
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
+    default: defaultTitle,
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(getSiteUrl()),
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -21,9 +24,20 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    title: siteConfig.name,
+    locale: 'en_US',
+    url: getSiteUrl(),
+    title: defaultTitle,
     description: siteConfig.description,
     siteName: siteConfig.name,
+  },
+  twitter: {
+    card: 'summary',
+    title: defaultTitle,
+    description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: {
     icon: '/icons/icon-192.png',

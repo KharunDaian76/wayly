@@ -1,12 +1,12 @@
-import type { Metadata } from 'next';
-
 import { HelpCenterPage } from '@/components/marketing/help-center-page';
 import { siteConfig } from '@/config/site';
+import { createPageMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: 'Help Center',
-  description: `Central hub for ${siteConfig.name} guides — how it works, safety, fees, disputes, and honest platform limits.`,
-};
+  description: `Central hub for ${siteConfig.name} public guides — how it works, trust & safety, fees, disputes, privacy, and honest platform limits.`,
+  path: '/help',
+});
 
 export default function HelpCenterRoute() {
   return <HelpCenterPage />;
