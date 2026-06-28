@@ -1,6 +1,6 @@
 'use client';
 
-import { CreditCard, Receipt, Rocket, Shield, ShieldAlert, Wallet } from 'lucide-react';
+import { Database, HardDrive, Lock, Monitor, Rocket, Shield } from 'lucide-react';
 import Link from 'next/link';
 import type { LucideIcon } from 'lucide-react';
 
@@ -9,57 +9,51 @@ import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { cn } from '@/lib/utils';
 
-type FeeSection = {
+type PrivacySection = {
   id: string;
   icon: LucideIcon;
   titleKey: TranslationKey;
   bodyKey: TranslationKey;
-  variant?: 'default' | 'warning';
+  variant?: 'default' | 'highlight';
 };
 
-const SECTIONS: FeeSection[] = [
+const SECTIONS: PrivacySection[] = [
   {
-    id: 'current-status',
-    icon: Wallet,
-    titleKey: 'marketing.fees.currentStatusTitle',
-    bodyKey: 'marketing.fees.currentStatusBody',
+    id: 'saved-locally',
+    icon: Database,
+    titleKey: 'marketing.privacyLocalData.savedTitle',
+    bodyKey: 'marketing.privacyLocalData.savedBody',
   },
   {
-    id: 'status-meaning',
-    icon: CreditCard,
-    titleKey: 'marketing.fees.statusMeaningTitle',
-    bodyKey: 'marketing.fees.statusMeaningBody',
+    id: 'not-stored',
+    icon: Lock,
+    titleKey: 'marketing.privacyLocalData.notStoredTitle',
+    bodyKey: 'marketing.privacyLocalData.notStoredBody',
+    variant: 'highlight',
   },
   {
-    id: 'platform-fee',
-    icon: Receipt,
-    titleKey: 'marketing.fees.platformFeeTitle',
-    bodyKey: 'marketing.fees.platformFeeBody',
+    id: 'browser-local',
+    icon: HardDrive,
+    titleKey: 'marketing.privacyLocalData.browserLocalTitle',
+    bodyKey: 'marketing.privacyLocalData.browserLocalBody',
   },
   {
-    id: 'refunds-payouts',
-    icon: ShieldAlert,
-    titleKey: 'marketing.fees.refundsPayoutsTitle',
-    bodyKey: 'marketing.fees.refundsPayoutsBody',
-    variant: 'warning',
+    id: 'controls',
+    icon: Monitor,
+    titleKey: 'marketing.privacyLocalData.controlsTitle',
+    bodyKey: 'marketing.privacyLocalData.controlsBody',
   },
   {
-    id: 'admin-review',
+    id: 'reminders',
     icon: Shield,
-    titleKey: 'marketing.fees.adminReviewTitle',
-    bodyKey: 'marketing.fees.adminReviewBody',
+    titleKey: 'marketing.privacyLocalData.remindersTitle',
+    bodyKey: 'marketing.privacyLocalData.remindersBody',
   },
   {
     id: 'future-work',
     icon: Rocket,
-    titleKey: 'marketing.fees.futureWorkTitle',
-    bodyKey: 'marketing.fees.futureWorkBody',
-  },
-  {
-    id: 'safety-reminder',
-    icon: ShieldAlert,
-    titleKey: 'marketing.fees.safetyReminderTitle',
-    bodyKey: 'marketing.fees.safetyReminderBody',
+    titleKey: 'marketing.privacyLocalData.futureWorkTitle',
+    bodyKey: 'marketing.privacyLocalData.futureWorkBody',
   },
 ];
 
@@ -83,7 +77,7 @@ function SectionBody({ bodyKey }: { bodyKey: TranslationKey }) {
   );
 }
 
-export function FeesPage() {
+export function PrivacyLocalDataPage() {
   const { t } = useI18n();
 
   return (
@@ -91,36 +85,38 @@ export function FeesPage() {
       <section className="relative overflow-hidden border-b border-border/60">
         <div className="bg-grid-faint pointer-events-none absolute inset-0" aria-hidden />
         <div
-          className="pointer-events-none absolute -top-24 right-0 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
+          className="pointer-events-none absolute -top-24 left-0 h-64 w-64 rounded-full bg-primary/10 blur-3xl"
           aria-hidden
         />
         <div className="container relative py-16 sm:py-20">
           <FadeIn>
-            <p className="text-sm font-medium text-primary">{t('marketing.fees.navLabel')}</p>
+            <p className="text-sm font-medium text-primary">
+              {t('marketing.privacyLocalData.navLabel')}
+            </p>
             <h1 className="mt-2 max-w-3xl font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-              {t('marketing.fees.title')}
+              {t('marketing.privacyLocalData.title')}
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {t('marketing.fees.subtitle')}
+              {t('marketing.privacyLocalData.subtitle')}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href="/app"
                 className="inline-flex items-center justify-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-[1.02]"
               >
-                {t('marketing.fees.openApp')}
+                {t('marketing.privacyLocalData.openApp')}
               </Link>
               <Link
                 href="/trust"
                 className="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
               >
-                {t('marketing.fees.trustCenter')}
+                {t('marketing.privacyLocalData.trustCenter')}
               </Link>
               <Link
                 href="/faq"
                 className="inline-flex items-center justify-center rounded-md border border-border/60 bg-card/40 px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-card/80"
               >
-                {t('marketing.fees.faq')}
+                {t('marketing.privacyLocalData.faq')}
               </Link>
             </div>
           </FadeIn>
@@ -129,8 +125,8 @@ export function FeesPage() {
 
       <section className="container py-8">
         <FadeIn>
-          <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-            {t('marketing.fees.noGuaranteesNotice')}
+          <div className="rounded-xl border border-primary/25 bg-primary/[0.06] px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+            {t('marketing.privacyLocalData.localOnlyNotice')}
           </div>
         </FadeIn>
       </section>
@@ -144,8 +140,8 @@ export function FeesPage() {
                 id={section.id}
                 className={cn(
                   'rounded-2xl border p-5 sm:p-6',
-                  section.variant === 'warning'
-                    ? 'border-amber-500/25 bg-amber-500/[0.04]'
+                  section.variant === 'highlight'
+                    ? 'border-primary/20 bg-primary/[0.04]'
                     : 'border-border/60 bg-card/40',
                   'transition-colors hover:border-border hover:bg-card/60',
                 )}
@@ -164,14 +160,6 @@ export function FeesPage() {
                     <div className="mt-3">
                       <SectionBody bodyKey={section.bodyKey} />
                     </div>
-                    {section.id === 'safety-reminder' ? (
-                      <Link
-                        href="/privacy-local-data"
-                        className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
-                      >
-                        {t('marketing.privacyLocalData.navLabel')} →
-                      </Link>
-                    ) : null}
                   </div>
                 </div>
               </article>
@@ -184,7 +172,7 @@ export function FeesPage() {
             href="/"
             className="inline-flex w-fit items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
           >
-            {t('marketing.fees.backHome')}
+            {t('marketing.privacyLocalData.backHome')}
           </Link>
         </FadeIn>
       </div>

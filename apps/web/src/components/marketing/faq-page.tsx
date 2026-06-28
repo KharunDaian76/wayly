@@ -264,6 +264,14 @@ export function FaqPage() {
                     {t('marketing.fees.navLabel')} →
                   </Link>
                 ) : null}
+                {group.id === 'local-data' ? (
+                  <Link
+                    href="/privacy-local-data"
+                    className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    {t('marketing.privacyLocalData.navLabel')} →
+                  </Link>
+                ) : null}
               </section>
             </FadeIn>
           );

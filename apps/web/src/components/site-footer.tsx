@@ -30,6 +30,9 @@ export function SiteFooter() {
           <Link href="/fees" className="transition-colors hover:text-foreground">
             {t('marketing.fees.navLabel')}
           </Link>
+          <Link href="/privacy-local-data" className="transition-colors hover:text-foreground">
+            {t('marketing.privacyLocalData.navLabel')}
+          </Link>
           {/* Legal pages are added in a later milestone. */}
           <Link href="#" className="transition-colors hover:text-foreground">
             Terms

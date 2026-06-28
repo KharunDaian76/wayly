@@ -1894,6 +1894,34 @@ const en = {
   'marketing.faq.commercialLaunchQuestion': 'Is Wayly ready for real commercial launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly is actively developed. Core marketplace tools work, but real payments, production KYC, and full commercial guarantees are not in place yet. See the Trust Center for current limits.',
+  'marketing.privacyLocalData.navLabel': 'Local saved data',
+  'marketing.privacyLocalData.title': 'Privacy & local saved data',
+  'marketing.privacyLocalData.subtitle':
+    'How Wayly’s browser-local marketplace tools work — what stays on your device, what they do not store, and how you can clear them.',
+  'marketing.privacyLocalData.openApp': 'Open app',
+  'marketing.privacyLocalData.trustCenter': 'Trust Center',
+  'marketing.privacyLocalData.faq': 'FAQ',
+  'marketing.privacyLocalData.savedTitle': 'What is saved locally',
+  'marketing.privacyLocalData.savedBody':
+    'Recent route searches — origin/destination countries and cities, not street addresses.\nSender request templates — named reusable request forms; some address and date fields are intentionally omitted from templates.\nWayler availability templates — named reusable listing forms; some date fields are intentionally omitted.\nSender request drafts — autosaved while you compose a request to a specific Wayler listing.\nWayler availability draft — autosaved while you compose a listing.\nWayler shortlist — IDs of saved Wayler listings for comparison.',
+  'marketing.privacyLocalData.notStoredTitle': 'What these tools do not store',
+  'marketing.privacyLocalData.notStoredBody':
+    'Payment card or bank account details.\nKYC documents or private identity documents.\nAdmin notes or internal operator records.\nDelivery proof codes or secrets.\nAccount passwords.\nFull chat history through these local tools.\nHidden tracking beyond these named localStorage features.',
+  'marketing.privacyLocalData.browserLocalTitle': 'Browser-local only',
+  'marketing.privacyLocalData.browserLocalBody':
+    'These features use browser localStorage on your device.\nData stays on the same browser and device — not synced to your Wayly account.\nSigning in on another device does not restore shortlist, drafts, or templates.\nClearing browser storage or site data may remove local saved marketplace tools.',
+  'marketing.privacyLocalData.controlsTitle': 'User controls',
+  'marketing.privacyLocalData.controlsBody':
+    'The Local saved data panel in the app shows counts for each category.\nYou can clear specific categories — shortlist, drafts, templates, and recent searches.\nYou can clear all local marketplace data in one action.\nServer-side orders, messages, and account records are separate from these browser tools.',
+  'marketing.privacyLocalData.remindersTitle': 'Safety and privacy reminders',
+  'marketing.privacyLocalData.remindersBody':
+    'Do not store sensitive payment or identity information in templates or draft notes.\nAvoid adding private payment details to requests or chats.\nClear local saved data after using shared or public computers when appropriate.\nThese local tools are convenience features — not a privacy compliance archive.',
+  'marketing.privacyLocalData.futureWorkTitle': 'Future privacy work',
+  'marketing.privacyLocalData.futureWorkBody':
+    'Account-level privacy settings.\nStronger privacy dashboard in the app.\nExport and delete tools for user data.\nFormal production privacy policy and legal review.',
+  'marketing.privacyLocalData.localOnlyNotice':
+    'These local saved data tools are browser-local only — not synced to your account. Wayly account, order, and chat records on the server are separate.',
+  'marketing.privacyLocalData.backHome': 'Back to home',
   'marketing.fees.navLabel': 'Fees & payments',
   'marketing.fees.title': 'Fees & payment transparency',
   'marketing.fees.subtitle':
@@ -3900,6 +3928,34 @@ const ru: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Готов ли Wayly к коммерческому запуску?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly активно развивается. Основные инструменты работают, но реальные платежи, production KYC и полные коммерческие гарантии пока отсутствуют. См. Центр доверия.',
+  'marketing.privacyLocalData.navLabel': 'Локальные данные',
+  'marketing.privacyLocalData.title': 'Конфиденциальность и локальные данные',
+  'marketing.privacyLocalData.subtitle':
+    'Как работают локальные инструменты Wayly в браузере — что остаётся на устройстве, что не хранится и как очистить.',
+  'marketing.privacyLocalData.openApp': 'Открыть приложение',
+  'marketing.privacyLocalData.trustCenter': 'Центр доверия',
+  'marketing.privacyLocalData.faq': 'FAQ',
+  'marketing.privacyLocalData.savedTitle': 'Что сохраняется локально',
+  'marketing.privacyLocalData.savedBody':
+    'Недавние поиски маршрутов — страны и города, не уличные адреса.\nШаблоны запросов отправителя — именованные формы; часть полей адреса и дат намеренно не сохраняется.\nШаблоны доступности Wayler — именованные формы объявлений; часть полей дат намеренно не сохраняется.\nЧерновики запросов отправителя — автосохранение при составлении запроса к объявлению.\nЧерновик доступности Wayler — автосохранение при составлении объявления.\nШортлист Wayler — ID сохранённых объявлений для сравнения.',
+  'marketing.privacyLocalData.notStoredTitle': 'Чего эти инструменты не хранят',
+  'marketing.privacyLocalData.notStoredBody':
+    'Данные карт или банковских счетов.\nKYC-документы или частные identity-документы.\nЗаметки админа или внутренние операционные записи.\nКоды подтверждения доставки или секреты.\nПароли аккаунта.\nПолную историю чата через эти локальные инструменты.\nСкрытое отслеживание за пределами этих localStorage-функций.',
+  'marketing.privacyLocalData.browserLocalTitle': 'Только в браузере',
+  'marketing.privacyLocalData.browserLocalBody':
+    'Функции используют localStorage браузера на вашем устройстве.\nДанные остаются в том же браузере и на устройстве — не синхронизируются с аккаунтом Wayly.\nВход на другом устройстве не восстанавливает шортлист, черновики или шаблоны.\nОчистка хранилища браузера может удалить локальные инструменты marketplace.',
+  'marketing.privacyLocalData.controlsTitle': 'Управление пользователем',
+  'marketing.privacyLocalData.controlsBody':
+    'Панель «Локальные сохранённые данные» показывает счётчики по категориям.\nМожно очистить отдельные категории — шортлист, черновики, шаблоны, недавние поиски.\nМожно очистить все локальные данные marketplace одним действием.\nСерверные заказы, сообщения и записи аккаунта отделены от этих браузерных инструментов.',
+  'marketing.privacyLocalData.remindersTitle': 'Напоминания о безопасности',
+  'marketing.privacyLocalData.remindersBody':
+    'Не храните чувствительные платёжные или identity-данные в шаблонах или черновиках.\nНе добавляйте частные платёжные данные в запросы или чат.\nОчищайте локальные данные после общих или публичных компьютеров при необходимости.\nЛокальные инструменты — удобство, а не архив compliance.',
+  'marketing.privacyLocalData.futureWorkTitle': 'Будущая работа по privacy',
+  'marketing.privacyLocalData.futureWorkBody':
+    'Настройки privacy на уровне аккаунта.\nУсиленная privacy-панель в приложении.\nИнструменты экспорта и удаления данных пользователя.\nФормальная production privacy policy и legal review.',
+  'marketing.privacyLocalData.localOnlyNotice':
+    'Эти локальные инструменты хранятся только в браузере — не синхронизируются с аккаунтом. Записи аккаунта, заказов и чата на сервере отделены.',
+  'marketing.privacyLocalData.backHome': 'На главную',
   'marketing.fees.navLabel': 'Тарифы и платежи',
   'marketing.fees.title': 'Тарифы и прозрачность платежей',
   'marketing.fees.subtitle':
@@ -5914,6 +5970,34 @@ const es: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': '¿Wayly listo para lanzamiento comercial?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly se desarrolla activamente. Las herramientas core funcionan, pero pagos reales, KYC de producción y garantías comerciales completas aún no están. Ver Centro de confianza.',
+  'marketing.privacyLocalData.navLabel': 'Datos locales',
+  'marketing.privacyLocalData.title': 'Privacidad y datos locales',
+  'marketing.privacyLocalData.subtitle':
+    'Cómo funcionan las herramientas locales del navegador de Wayly — qué queda en tu dispositivo, qué no almacenan y cómo borrarlos.',
+  'marketing.privacyLocalData.openApp': 'Abrir app',
+  'marketing.privacyLocalData.trustCenter': 'Centro de confianza',
+  'marketing.privacyLocalData.faq': 'FAQ',
+  'marketing.privacyLocalData.savedTitle': 'Qué se guarda localmente',
+  'marketing.privacyLocalData.savedBody':
+    'Búsquedas recientes de rutas — países y ciudades, no direcciones.\nPlantillas de solicitud del remitente — formularios reutilizables; algunos campos de dirección/fecha omitidos a propósito.\nPlantillas de disponibilidad Wayler — formularios reutilizables; algunas fechas omitidas a propósito.\nBorradores de solicitud del remitente — autoguardado al redactar una solicitud.\nBorrador de disponibilidad Wayler — autoguardado al redactar un anuncio.\nLista corta Wayler — IDs de anuncios guardados para comparar.',
+  'marketing.privacyLocalData.notStoredTitle': 'Qué no almacenan estas herramientas',
+  'marketing.privacyLocalData.notStoredBody':
+    'Datos de tarjeta o cuenta bancaria.\nDocumentos KYC o identidad privada.\nNotas admin o registros internos.\nCódigos de prueba de entrega o secretos.\nContraseñas de cuenta.\nHistorial completo de chat vía estas herramientas locales.\nRastreo oculto más allá de estas funciones localStorage.',
+  'marketing.privacyLocalData.browserLocalTitle': 'Solo en el navegador',
+  'marketing.privacyLocalData.browserLocalBody':
+    'Usan localStorage del navegador en tu dispositivo.\nLos datos permanecen en el mismo navegador y dispositivo — no se sincronizan con tu cuenta Wayly.\nIniciar sesión en otro dispositivo no restaura lista corta, borradores o plantillas.\nBorrar almacenamiento del navegador puede eliminar herramientas locales del marketplace.',
+  'marketing.privacyLocalData.controlsTitle': 'Controles del usuario',
+  'marketing.privacyLocalData.controlsBody':
+    'El panel Datos guardados localmente muestra conteos por categoría.\nPuedes borrar categorías específicas — lista corta, borradores, plantillas, búsquedas recientes.\nPuedes borrar todos los datos locales del marketplace de una vez.\nPedidos, mensajes y registros de cuenta en servidor son independientes.',
+  'marketing.privacyLocalData.remindersTitle': 'Recordatorios de privacidad',
+  'marketing.privacyLocalData.remindersBody':
+    'No guardes datos sensibles de pago o identidad en plantillas o borradores.\nEvita datos de pago privados en solicitudes o chat.\nBorra datos locales tras usar ordenadores compartidos cuando corresponda.\nSon herramientas de conveniencia — no archivo de cumplimiento.',
+  'marketing.privacyLocalData.futureWorkTitle': 'Trabajo futuro de privacidad',
+  'marketing.privacyLocalData.futureWorkBody':
+    'Ajustes de privacidad a nivel de cuenta.\nPanel de privacidad más completo.\nHerramientas de exportar/eliminar datos.\nPolítica de privacidad formal y revisión legal en producción.',
+  'marketing.privacyLocalData.localOnlyNotice':
+    'Estas herramientas son solo locales en el navegador — no se sincronizan con tu cuenta. Registros de cuenta, pedidos y chat en servidor son separados.',
+  'marketing.privacyLocalData.backHome': 'Volver al inicio',
   'marketing.fees.navLabel': 'Tarifas y pagos',
   'marketing.fees.title': 'Tarifas y transparencia de pagos',
   'marketing.fees.subtitle':
@@ -7955,6 +8039,34 @@ const fr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly prêt pour un lancement commercial ?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly est en développement actif. Les outils core fonctionnent, mais paiements réels, KYC production et garanties commerciales complètes ne sont pas en place. Voir Centre de confiance.',
+  'marketing.privacyLocalData.navLabel': 'Données locales',
+  'marketing.privacyLocalData.title': 'Confidentialité et données locales',
+  'marketing.privacyLocalData.subtitle':
+    "Comment fonctionnent les outils locaux du navigateur Wayly — ce qui reste sur votre appareil, ce qui n'est pas stocké et comment effacer.",
+  'marketing.privacyLocalData.openApp': "Ouvrir l'app",
+  'marketing.privacyLocalData.trustCenter': 'Centre de confiance',
+  'marketing.privacyLocalData.faq': 'FAQ',
+  'marketing.privacyLocalData.savedTitle': 'Ce qui est enregistré localement',
+  'marketing.privacyLocalData.savedBody':
+    "Recherches de routes récentes — pays et villes, pas adresses.\nModèles de demande expéditeur — formulaires réutilisables ; certains champs adresse/date omis volontairement.\nModèles de disponibilité Wayler — formulaires réutilisables ; certaines dates omises volontairement.\nBrouillons de demande expéditeur — sauvegarde auto lors de la rédaction.\nBrouillon de disponibilité Wayler — sauvegarde auto lors de la rédaction d'une annonce.\nListe courte Wayler — IDs d'annonces enregistrées pour comparer.",
+  'marketing.privacyLocalData.notStoredTitle': 'Ce que ces outils ne stockent pas',
+  'marketing.privacyLocalData.notStoredBody':
+    'Données de carte ou compte bancaire.\nDocuments KYC ou identité privée.\nNotes admin ou enregistrements internes.\nCodes de preuve de livraison ou secrets.\nMots de passe de compte.\nHistorique complet de chat via ces outils locaux.\nSuivi caché au-delà de ces fonctions localStorage.',
+  'marketing.privacyLocalData.browserLocalTitle': 'Uniquement dans le navigateur',
+  'marketing.privacyLocalData.browserLocalBody':
+    'Ils utilisent localStorage du navigateur sur votre appareil.\nLes données restent dans le même navigateur et appareil — non synchronisées avec votre compte Wayly.\nSe connecter sur un autre appareil ne restaure pas liste courte, brouillons ou modèles.\nEffacer le stockage du navigateur peut supprimer les outils locaux marketplace.',
+  'marketing.privacyLocalData.controlsTitle': 'Contrôles utilisateur',
+  'marketing.privacyLocalData.controlsBody':
+    "Le panneau Données enregistrées localement affiche les comptes par catégorie.\nVous pouvez effacer des catégories — liste courte, brouillons, modèles, recherches récentes.\nVous pouvez tout effacer d'un coup.\nCommandes, messages et enregistrements de compte serveur sont séparés.",
+  'marketing.privacyLocalData.remindersTitle': 'Rappels de confidentialité',
+  'marketing.privacyLocalData.remindersBody':
+    "Ne stockez pas de données sensibles de paiement ou d'identité dans modèles ou brouillons.\nÉvitez les infos de paiement privées dans demandes ou chat.\nEffacez les données locales après ordinateurs partagés si besoin.\nCe sont des outils de confort — pas un archive de conformité.",
+  'marketing.privacyLocalData.futureWorkTitle': 'Travail futur sur la confidentialité',
+  'marketing.privacyLocalData.futureWorkBody':
+    "Paramètres de confidentialité au niveau du compte.\nTableau de bord privacy renforcé.\nOutils d'export et suppression des données.\nPolitique de confidentialité formelle et revue juridique en production.",
+  'marketing.privacyLocalData.localOnlyNotice':
+    'Ces outils sont uniquement locaux dans le navigateur — non synchronisés avec votre compte. Enregistrements compte, commandes et chat serveur sont séparés.',
+  'marketing.privacyLocalData.backHome': "Retour à l'accueil",
   'marketing.fees.navLabel': 'Frais et paiements',
   'marketing.fees.title': 'Frais et transparence des paiements',
   'marketing.fees.subtitle':
@@ -10007,6 +10119,34 @@ const de: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Bereit für kommerziellen Launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly wird aktiv entwickelt. Kern-Tools funktionieren, aber echte Zahlungen, Production-KYC und volle Garantien fehlen noch. Siehe Trust Center.',
+  'marketing.privacyLocalData.navLabel': 'Lokale Daten',
+  'marketing.privacyLocalData.title': 'Datenschutz & lokale Daten',
+  'marketing.privacyLocalData.subtitle':
+    'Wie Waylys browser-lokale Tools funktionieren — was auf Ihrem Gerät bleibt, was nicht gespeichert wird und wie Sie löschen.',
+  'marketing.privacyLocalData.openApp': 'App öffnen',
+  'marketing.privacyLocalData.trustCenter': 'Trust Center',
+  'marketing.privacyLocalData.faq': 'FAQ',
+  'marketing.privacyLocalData.savedTitle': 'Was lokal gespeichert wird',
+  'marketing.privacyLocalData.savedBody':
+    'Letzte Routensuchen — Länder und Städte, keine Straßenadressen.\nAbsender-Anfragevorlagen — wiederverwendbare Formulare; einige Adress-/Datumsfelder absichtlich weggelassen.\nWayler-Verfügbarkeitsvorlagen — wiederverwendbare Formulare; einige Datumsfelder absichtlich weggelassen.\nAbsender-Anfrageentwürfe — Auto-Speichern beim Verfassen einer Anfrage.\nWayler-Verfügbarkeitsentwurf — Auto-Speichern beim Verfassen eines Listings.\nWayler-Merkliste — gespeicherte Listing-IDs zum Vergleichen.',
+  'marketing.privacyLocalData.notStoredTitle': 'Was diese Tools nicht speichern',
+  'marketing.privacyLocalData.notStoredBody':
+    'Karten- oder Bankkontodaten.\nKYC-Dokumente oder private Identitätsdokumente.\nAdmin-Notizen oder interne Betriebsdaten.\nLiefernachweis-Codes oder Geheimnisse.\nKontopasswörter.\nVollständigen Chat-Verlauf über diese lokalen Tools.\nVerstecktes Tracking jenseits dieser localStorage-Funktionen.',
+  'marketing.privacyLocalData.browserLocalTitle': 'Nur im Browser',
+  'marketing.privacyLocalData.browserLocalBody':
+    'Sie nutzen localStorage des Browsers auf Ihrem Gerät.\nDaten bleiben im gleichen Browser und Gerät — nicht mit Ihrem Wayly-Konto synchronisiert.\nAnmeldung auf anderem Gerät stellt Merkliste, Entwürfe oder Vorlagen nicht wieder her.\nBrowser-Speicher löschen kann lokale Marketplace-Tools entfernen.',
+  'marketing.privacyLocalData.controlsTitle': 'Benutzersteuerung',
+  'marketing.privacyLocalData.controlsBody':
+    'Das Panel Lokale gespeicherte Daten zeigt Zähler pro Kategorie.\nSie können einzelne Kategorien löschen — Merkliste, Entwürfe, Vorlagen, letzte Suchen.\nSie können alle lokalen Marketplace-Daten auf einmal löschen.\nServer-Bestellungen, Nachrichten und Kontodaten sind getrennt.',
+  'marketing.privacyLocalData.remindersTitle': 'Datenschutz-Hinweise',
+  'marketing.privacyLocalData.remindersBody':
+    'Speichern Sie keine sensiblen Zahlungs- oder Identitätsdaten in Vorlagen oder Entwürfen.\nVermeiden Sie private Zahlungsinfos in Anfragen oder Chat.\nLöschen Sie lokale Daten nach gemeinsam genutzten Computern bei Bedarf.\nLokale Tools sind Komfort — kein Compliance-Archiv.',
+  'marketing.privacyLocalData.futureWorkTitle': 'Zukünftige Datenschutz-Arbeit',
+  'marketing.privacyLocalData.futureWorkBody':
+    'Kontoebene Datenschutzeinstellungen.\nStärkeres Privacy-Dashboard.\nExport- und Lösch-Tools für Nutzerdaten.\nFormelle Production-Datenschutzrichtlinie und Legal Review.',
+  'marketing.privacyLocalData.localOnlyNotice':
+    'Diese lokalen Tools sind nur browser-lokal — nicht mit Ihrem Konto synchronisiert. Server-Konto-, Bestell- und Chat-Daten sind getrennt.',
+  'marketing.privacyLocalData.backHome': 'Zur Startseite',
   'marketing.fees.navLabel': 'Gebühren & Zahlungen',
   'marketing.fees.title': 'Gebühren & Zahlungstransparenz',
   'marketing.fees.subtitle':
@@ -11996,6 +12136,34 @@ const tr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly ticari lansmana hazır mı?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly aktif geliştiriliyor. Temel araçlar çalışıyor ancak gerçek ödemeler, production KYC ve tam ticari garantiler yok. Güven merkezine bakın.',
+  'marketing.privacyLocalData.navLabel': 'Yerel veriler',
+  'marketing.privacyLocalData.title': 'Gizlilik ve yerel kayıtlı veriler',
+  'marketing.privacyLocalData.subtitle':
+    "Wayly'nin tarayıcı-yerel araçları nasıl çalışır — cihazınızda kalanlar, saklanmayanlar ve nasıl temizlenir.",
+  'marketing.privacyLocalData.openApp': 'Uygulamayı aç',
+  'marketing.privacyLocalData.trustCenter': 'Güven merkezi',
+  'marketing.privacyLocalData.faq': 'SSS',
+  'marketing.privacyLocalData.savedTitle': 'Yerel olarak ne kaydedilir',
+  'marketing.privacyLocalData.savedBody':
+    "Son rota aramaları — ülkeler ve şehirler, sokak adresleri değil.\nGönderici istek şablonları — yeniden kullanılabilir formlar; bazı adres/tarih alanları kasıtlı atlanır.\nWayler müsaitlik şablonları — yeniden kullanılabilir formlar; bazı tarihler kasıtlı atlanır.\nGönderici istek taslakları — istek yazarken otomatik kayıt.\nWayler müsaitlik taslağı — ilan yazarken otomatik kayıt.\nWayler kısa listesi — karşılaştırma için kaydedilen ilan ID'leri.",
+  'marketing.privacyLocalData.notStoredTitle': 'Bu araçların saklamadıkları',
+  'marketing.privacyLocalData.notStoredBody':
+    'Kart veya banka hesabı verileri.\nKYC belgeleri veya özel kimlik belgeleri.\nAdmin notları veya dahili kayıtlar.\nTeslimat kanıt kodları veya sırlar.\nHesap şifreleri.\nBu yerel araçlarla tam sohbet geçmişi.\nBu localStorage özelliklerinin ötesinde gizli izleme.',
+  'marketing.privacyLocalData.browserLocalTitle': 'Yalnızca tarayıcıda',
+  'marketing.privacyLocalData.browserLocalBody':
+    'Cihazınızdaki tarayıcı localStorage kullanır.\nVeriler aynı tarayıcı ve cihazda kalır — Wayly hesabınızla senkronize edilmez.\nBaşka cihazda giriş kısa listeyi, taslakları veya şablonları geri getirmez.\nTarayıcı verilerini temizlemek yerel marketplace araçlarını silebilir.',
+  'marketing.privacyLocalData.controlsTitle': 'Kullanıcı kontrolleri',
+  'marketing.privacyLocalData.controlsBody':
+    'Yerel kayıtlı veriler paneli kategori sayılarını gösterir.\nBelirli kategorileri temizleyebilirsiniz — kısa liste, taslaklar, şablonlar, son aramalar.\nTüm yerel marketplace verilerini tek seferde temizleyebilirsiniz.\nSunucu siparişleri, mesajları ve hesap kayıtları ayrıdır.',
+  'marketing.privacyLocalData.remindersTitle': 'Gizlilik hatırlatmaları',
+  'marketing.privacyLocalData.remindersBody':
+    'Şablon veya taslaklarda hassas ödeme veya kimlik verisi saklamayın.\nİstek veya sohbette özel ödeme bilgisi eklemeyin.\nPaylaşımlı bilgisayarlardan sonra gerektiğinde yerel verileri temizleyin.\nYerel araçlar kolaylık içindir — uyumluluk arşivi değil.',
+  'marketing.privacyLocalData.futureWorkTitle': 'Gelecek gizlilik çalışması',
+  'marketing.privacyLocalData.futureWorkBody':
+    'Hesap düzeyinde gizlilik ayarları.\nDaha güçlü gizlilik paneli.\nVeri dışa aktarma ve silme araçları.\nResmi production gizlilik politikası ve hukuki inceleme.',
+  'marketing.privacyLocalData.localOnlyNotice':
+    'Bu yerel araçlar yalnızca tarayıcıda — hesabınızla senkronize edilmez. Sunucu hesap, sipariş ve sohbet kayıtları ayrıdır.',
+  'marketing.privacyLocalData.backHome': 'Ana sayfaya dön',
   'marketing.fees.navLabel': 'Ücretler ve ödemeler',
   'marketing.fees.title': 'Ücretler ve ödeme şeffaflığı',
   'marketing.fees.subtitle':
@@ -13904,6 +14072,34 @@ const ar: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'هل Wayly جاهز للإطلاق التجاري؟',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly قيد التطوير النشط. الأدوات الأساسية تعمل لكن المدفوعات الحقيقية وKYC الإنتاج والضمانات التجارية الكاملة غير متوفرة بعد. راجع مركز الثقة.',
+  'marketing.privacyLocalData.navLabel': 'البيانات المحلية',
+  'marketing.privacyLocalData.title': 'الخصوصية والبيانات المحلية',
+  'marketing.privacyLocalData.subtitle':
+    'كيف تعمل أدوات Wayly المحلية في المتصفح — ما يبقى على جهازك وما لا يُخزَّن وكيفية المسح.',
+  'marketing.privacyLocalData.openApp': 'فتح التطبيق',
+  'marketing.privacyLocalData.trustCenter': 'مركز الثقة',
+  'marketing.privacyLocalData.faq': 'الأسئلة الشائعة',
+  'marketing.privacyLocalData.savedTitle': 'ما يُحفظ محلياً',
+  'marketing.privacyLocalData.savedBody':
+    'عمليات البحث الأخيرة عن المسارات — دول ومدن وليس عناوين.\nقوالب طلب المرسل — نماذج قابلة لإعادة الاستخدام؛ بعض حقول العنوان/التاريخ تُحذف عمداً.\nقوالب توفر Wayler — نماذج قابلة لإعادة الاستخدام؛ بعض التواريخ تُحذف عمداً.\nمسودات طلب المرسل — حفظ تلقائي عند كتابة طلب.\nمسودة توفر Wayler — حفظ تلقائي عند كتابة إعلان.\nالقائمة المختصرة Wayler — معرفات إعلانات محفوظة للمقارنة.',
+  'marketing.privacyLocalData.notStoredTitle': 'ما لا تخزنه هذه الأدوات',
+  'marketing.privacyLocalData.notStoredBody':
+    'بيانات البطاقة أو الحساب البنكي.\nمستندات KYC أو هوية خاصة.\nملاحظات المسؤول أو سجلات داخلية.\nرموز إثبات التسليم أو أسرار.\nكلمات مرور الحساب.\nسجل الدردشة الكامل عبر هذه الأدوات المحلية.\nتتبع مخفي خارج وظائف localStorage هذه.',
+  'marketing.privacyLocalData.browserLocalTitle': 'في المتصفح فقط',
+  'marketing.privacyLocalData.browserLocalBody':
+    'تستخدم localStorage المتصفح على جهازك.\nالبيانات تبقى في نفس المتصفح والجهاز — غير متزامنة مع حساب Wayly.\nتسجيل الدخول على جهاز آخر لا يستعيد القائمة أو المسودات أو القوالب.\nمسح بيانات المتصفح قد يزيل أدوات marketplace المحلية.',
+  'marketing.privacyLocalData.controlsTitle': 'تحكم المستخدم',
+  'marketing.privacyLocalData.controlsBody':
+    'لوحة البيانات المحفوظة محلياً تعرض العدد حسب الفئة.\nيمكنك مسح فئات محددة — القائمة المختصرة، المسودات، القوالب، البحث الأخير.\nيمكنك مسح كل بيانات marketplace المحلية دفعة واحدة.\nالطلبات والرسائل وسجلات الحساب على الخادم منفصلة.',
+  'marketing.privacyLocalData.remindersTitle': 'تذكيرات الخصوصية',
+  'marketing.privacyLocalData.remindersBody':
+    'لا تخزّن بيانات دفع أو هوية حساسة في القوالب أو المسودات.\nتجنب معلومات الدفع الخاصة في الطلبات أو الدردشة.\nامسح البيانات المحلية بعد أجهزة مشتركة عند الحاجة.\nأدوات محلية للراحة — وليست أرشيف امتثال.',
+  'marketing.privacyLocalData.futureWorkTitle': 'عمل الخصوصية المستقبلي',
+  'marketing.privacyLocalData.futureWorkBody':
+    'إعدادات خصوصية على مستوى الحساب.\nلوحة خصوصية أقوى.\nأدوات تصدير وحذف البيانات.\nسياسة خصوصية رسمية ومراجعة قانونية في الإنتاج.',
+  'marketing.privacyLocalData.localOnlyNotice':
+    'هذه الأدوات محلية في المتصفح فقط — غير متزامنة مع حسابك. سجلات الحساب والطلبات والدردشة على الخادم منفصلة.',
+  'marketing.privacyLocalData.backHome': 'العودة للرئيسية',
   'marketing.fees.navLabel': 'الرسوم والمدفوعات',
   'marketing.fees.title': 'الرسوم وشفافية المدفوعات',
   'marketing.fees.subtitle':
@@ -15722,6 +15918,34 @@ const zh: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly 准备好商业发布了吗？',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly 仍在积极开发。核心 marketplace 工具可用，但真实支付、生产 KYC 与完整商业保证尚未到位。详见信任中心。',
+  'marketing.privacyLocalData.navLabel': '本地数据',
+  'marketing.privacyLocalData.title': '隐私与本地保存数据',
+  'marketing.privacyLocalData.subtitle':
+    'Wayly 浏览器本地工具如何工作 — 留在设备上的内容、不存储的内容以及如何清除。',
+  'marketing.privacyLocalData.openApp': '打开应用',
+  'marketing.privacyLocalData.trustCenter': '信任中心',
+  'marketing.privacyLocalData.faq': '常见问题',
+  'marketing.privacyLocalData.savedTitle': '本地保存的内容',
+  'marketing.privacyLocalData.savedBody':
+    '最近路线搜索 — 国家和城市，非街道地址。\n发件人请求模板 — 可复用表单；部分地址/日期字段有意省略。\nWayler 可用性模板 — 可复用表单；部分日期有意省略。\n发件人请求草稿 — 撰写请求时自动保存。\nWayler 可用性草稿 — 撰写 listing 时自动保存。\nWayler 短名单 — 保存的 listing ID 用于比较。',
+  'marketing.privacyLocalData.notStoredTitle': '这些工具不存储的内容',
+  'marketing.privacyLocalData.notStoredBody':
+    '银行卡或银行账户数据。\nKYC 文件或私人身份文件。\n管理员备注或内部运营记录。\n交付证明码或密钥。\n账户密码。\n通过这些本地工具的完整聊天记录。\n超出这些 localStorage 功能的隐藏跟踪。',
+  'marketing.privacyLocalData.browserLocalTitle': '仅限浏览器本地',
+  'marketing.privacyLocalData.browserLocalBody':
+    '使用您设备上浏览器的 localStorage。\n数据留在同一浏览器和设备 — 不同步到 Wayly 账户。\n在其他设备登录不会恢复短名单、草稿或模板。\n清除浏览器存储可能删除本地 marketplace 工具数据。',
+  'marketing.privacyLocalData.controlsTitle': '用户控制',
+  'marketing.privacyLocalData.controlsBody':
+    '本地保存数据面板显示各类别计数。\n可清除特定类别 — 短名单、草稿、模板、最近搜索。\n可一次性清除所有本地 marketplace 数据。\n服务器订单、消息和账户记录与此浏览器工具分离。',
+  'marketing.privacyLocalData.remindersTitle': '隐私提醒',
+  'marketing.privacyLocalData.remindersBody':
+    '不要在模板或草稿中存储敏感支付或身份数据。\n避免在请求或聊天中添加私人支付信息。\n使用共享/公共电脑后按需清除本地数据。\n本地工具是便利功能 — 非合规存档。',
+  'marketing.privacyLocalData.futureWorkTitle': '未来隐私工作',
+  'marketing.privacyLocalData.futureWorkBody':
+    '账户级隐私设置。\n更强的隐私仪表板。\n数据导出与删除工具。\n正式生产隐私政策与法律审查。',
+  'marketing.privacyLocalData.localOnlyNotice':
+    '这些本地工具仅保存在浏览器 — 不同步到账户。服务器账户、订单和聊天记录是分开的。',
+  'marketing.privacyLocalData.backHome': '返回首页',
   'marketing.fees.navLabel': '费用与支付',
   'marketing.fees.title': '费用与支付透明度',
   'marketing.fees.subtitle':

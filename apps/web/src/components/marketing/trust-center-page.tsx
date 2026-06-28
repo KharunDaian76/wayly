@@ -176,6 +176,14 @@ export function TrustCenterPage() {
                         {t('marketing.fees.navLabel')} →
                       </Link>
                     ) : null}
+                    {section.id === 'local-data' ? (
+                      <Link
+                        href="/privacy-local-data"
+                        className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        {t('marketing.privacyLocalData.navLabel')} →
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               </article>
