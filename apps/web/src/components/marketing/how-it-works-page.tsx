@@ -193,6 +193,12 @@ export function HowItWorksPage() {
               </div>
             </div>
             <LifecycleFlow bodyKey="marketing.howItWorks.lifecycleStepsBody" />
+            <Link
+              href="/fees"
+              className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+            >
+              {t('marketing.fees.navLabel')} →
+            </Link>
           </section>
         </FadeIn>
 

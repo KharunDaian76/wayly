@@ -168,6 +168,14 @@ export function TrustCenterPage() {
                         {t('marketing.restrictedItems.navLabel')} →
                       </Link>
                     ) : null}
+                    {section.id === 'payments' ? (
+                      <Link
+                        href="/fees"
+                        className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        {t('marketing.fees.navLabel')} →
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               </article>

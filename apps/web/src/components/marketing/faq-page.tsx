@@ -256,6 +256,14 @@ export function FaqPage() {
                     {t('marketing.restrictedItems.navLabel')} →
                   </Link>
                 ) : null}
+                {group.id === 'payments' ? (
+                  <Link
+                    href="/fees"
+                    className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    {t('marketing.fees.navLabel')} →
+                  </Link>
+                ) : null}
               </section>
             </FadeIn>
           );

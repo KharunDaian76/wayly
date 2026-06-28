@@ -1894,6 +1894,37 @@ const en = {
   'marketing.faq.commercialLaunchQuestion': 'Is Wayly ready for real commercial launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly is actively developed. Core marketplace tools work, but real payments, production KYC, and full commercial guarantees are not in place yet. See the Trust Center for current limits.',
+  'marketing.fees.navLabel': 'Fees & payments',
+  'marketing.fees.title': 'Fees & payment transparency',
+  'marketing.fees.subtitle':
+    'An honest overview of how Wayly shows payment status and fees today — and what is not guaranteed until real provider integration is live.',
+  'marketing.fees.openApp': 'Open app',
+  'marketing.fees.trustCenter': 'Trust Center',
+  'marketing.fees.faq': 'FAQ',
+  'marketing.fees.currentStatusTitle': 'Current payment status',
+  'marketing.fees.currentStatusBody':
+    'Wayly displays payment status based on platform records tied to each order.\nMock or manual payment flows may be used in development and demo environments.\nReal payment provider integration is future work unless explicitly enabled later.\nPayment status fields help coordinate the order — they are not proof of funds held with a provider.',
+  'marketing.fees.statusMeaningTitle': 'What payment status means',
+  'marketing.fees.statusMeaningBody':
+    'Payment status shows which stage an order is in (for example authorized or marked held).\nA status change records workflow progress — it does not automatically mean real money moved.\nKeep payment-related agreements and updates inside Wayly chat and order views.\nTreat status labels as coordination tools, not guaranteed financial outcomes.',
+  'marketing.fees.platformFeeTitle': 'Platform fee direction',
+  'marketing.fees.platformFeeBody':
+    'Wayly is designed to support a platform fee model as the commercial product matures.\nExact live fees may depend on payment provider, country, currency, and launch settings.\nDo not assume a fixed platform fee is active billing today unless your deployment explicitly enables it.\nAny fee shown in marketing or app copy should be confirmed against current product settings.',
+  'marketing.fees.refundsPayoutsTitle': 'Refunds and payouts',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly does not guarantee refunds to Senders.\nWayly does not guarantee payouts to Waylers.\nWayly does not provide insurance or real escrow today.\nAdmin payment review decisions are operational records — not real payment execution.\nOpening a dispute does not automatically trigger a refund or payout.',
+  'marketing.fees.adminReviewTitle': 'Admin payment review',
+  'marketing.fees.adminReviewBody':
+    'Admin tools can mark manual review, clear review, or record refund/release decisions.\nThose records help operations review payment workflow cases.\nThey update metadata on payment intents — they do not call a payment provider or move money.\nOperators should treat admin actions as decision logs until real provider integration exists.',
+  'marketing.fees.futureWorkTitle': 'Future payment work',
+  'marketing.fees.futureWorkBody':
+    'Real payment provider integration (for example Stripe)\nProvider webhooks and automated status sync\nRefunds, captures, and payouts through a provider\nClearer receipts and payer/payee records\nRegion and currency-specific fee rules\nProduction compliance and treasury review',
+  'marketing.fees.safetyReminderTitle': 'Safety reminder',
+  'marketing.fees.safetyReminderBody':
+    'Do not share card numbers, bank details, or passwords in Wayly chat or proof notes.\nKeep payment and delivery agreements inside Wayly.\nUse dispute and support tools for order coordination issues — not to bypass provider or legal rules.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly provides payment status records and operational review tools — not real escrow, guaranteed refunds or payouts, insurance, or compliance guarantees.',
+  'marketing.fees.backHome': 'Back to home',
   'marketing.howItWorks.navLabel': 'How it works',
   'marketing.howItWorks.title': 'How Wayly works',
   'marketing.howItWorks.subtitle':
@@ -3869,6 +3900,37 @@ const ru: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Готов ли Wayly к коммерческому запуску?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly активно развивается. Основные инструменты работают, но реальные платежи, production KYC и полные коммерческие гарантии пока отсутствуют. См. Центр доверия.',
+  'marketing.fees.navLabel': 'Тарифы и платежи',
+  'marketing.fees.title': 'Тарифы и прозрачность платежей',
+  'marketing.fees.subtitle':
+    'Честный обзор того, как Wayly показывает статус платежей и тарифы сегодня — и что не гарантируется до интеграции реального провайдера.',
+  'marketing.fees.openApp': 'Открыть приложение',
+  'marketing.fees.trustCenter': 'Центр доверия',
+  'marketing.fees.faq': 'FAQ',
+  'marketing.fees.currentStatusTitle': 'Текущий статус платежей',
+  'marketing.fees.currentStatusBody':
+    'Wayly отображает статус платежа на основе записей платформы, привязанных к заказу.\nMock/ручные платёжные потоки могут использоваться в разработке и демо.\nИнтеграция реального платёжного провайдера — будущая работа, если явно не включена.\nПоля статуса помогают координации — это не доказательство средств у провайдера.',
+  'marketing.fees.statusMeaningTitle': 'Что означает статус платежа',
+  'marketing.fees.statusMeaningBody':
+    'Статус показывает этап заказа (например авторизован или удержан).\nИзменение статуса фиксирует прогресс процесса — не означает автоматически движение реальных денег.\nДержите платёжные договорённости в чате и представлениях заказа Wayly.\nСтатусы — инструменты координации, не гарантированный финансовый результат.',
+  'marketing.fees.platformFeeTitle': 'Направление платформенной комиссии',
+  'marketing.fees.platformFeeBody':
+    'Wayly проектируется с моделью платформенной комиссии по мере зрелости продукта.\nТочные комиссии зависят от провайдера, страны, валюты и настроек запуска.\nНе предполагайте фиксированную активную комиссию, если развёртывание явно не включает её.\nЛюбая комиссия в копирайте должна сверяться с текущими настройками продукта.',
+  'marketing.fees.refundsPayoutsTitle': 'Возвраты и выплаты',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly не гарантирует возвраты отправителям.\nWayly не гарантирует выплаты Wayler.\nWayly не предоставляет страховку или реальный эскроу сегодня.\nРешения админа по платежам — операционные записи, не исполнение платежа.\nОткрытие спора не запускает автоматический возврат или выплату.',
+  'marketing.fees.adminReviewTitle': 'Админ-обзор платежей',
+  'marketing.fees.adminReviewBody':
+    'Админ может отметить ручной обзор, снять обзор или записать решение о возврате/выпуске.\nЗаписи помогают операциям рассматривать кейсы платёжного процесса.\nОбновляется metadata payment intent — без вызова провайдера и движения денег.\nДействия админа — журнал решений до интеграции реального провайдера.',
+  'marketing.fees.futureWorkTitle': 'Будущая платёжная работа',
+  'marketing.fees.futureWorkBody':
+    'Интеграция реального платёжного провайдера (например Stripe)\nWebhooks провайдера и автосинхронизация статуса\nВозвраты, захваты и выплаты через провайдера\nБолее понятные квитанции и записи плательщика/получателя\nПравила комиссий по региону и валюте\nProduction compliance и treasury review',
+  'marketing.fees.safetyReminderTitle': 'Напоминание о безопасности',
+  'marketing.fees.safetyReminderBody':
+    'Не делитесь номерами карт, банковскими данными или паролями в чате или заметках к подтверждению.\nДержите платёжные и delivery-договорённости в Wayly.\nИспользуйте споры и поддержку для координации заказа — не для обхода провайдера или закона.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly предоставляет записи статуса платежей и инструменты операционного обзора — не реальный эскроу, гарантированные возвраты или выплаты, страховку или compliance-гарантии.',
+  'marketing.fees.backHome': 'На главную',
   'marketing.howItWorks.navLabel': 'Как это работает',
   'marketing.howItWorks.title': 'Как работает Wayly',
   'marketing.howItWorks.subtitle':
@@ -5852,6 +5914,37 @@ const es: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': '¿Wayly listo para lanzamiento comercial?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly se desarrolla activamente. Las herramientas core funcionan, pero pagos reales, KYC de producción y garantías comerciales completas aún no están. Ver Centro de confianza.',
+  'marketing.fees.navLabel': 'Tarifas y pagos',
+  'marketing.fees.title': 'Tarifas y transparencia de pagos',
+  'marketing.fees.subtitle':
+    'Resumen honesto de cómo Wayly muestra estado de pago y tarifas hoy — y qué no garantiza hasta integrar un proveedor real.',
+  'marketing.fees.openApp': 'Abrir app',
+  'marketing.fees.trustCenter': 'Centro de confianza',
+  'marketing.fees.faq': 'FAQ',
+  'marketing.fees.currentStatusTitle': 'Estado de pago actual',
+  'marketing.fees.currentStatusBody':
+    'Wayly muestra estado de pago según registros de plataforma ligados al pedido.\nFlujos mock/manuales pueden usarse en desarrollo y demo.\nIntegración de proveedor real es trabajo futuro salvo activación explícita.\nLos campos de estado ayudan a coordinar — no prueban fondos retenidos con un proveedor.',
+  'marketing.fees.statusMeaningTitle': 'Qué significa el estado de pago',
+  'marketing.fees.statusMeaningBody':
+    'El estado muestra la etapa del pedido (p. ej. autorizado o retenido).\nUn cambio de estado registra progreso — no significa automáticamente movimiento real de dinero.\nMantén acuerdos de pago en chat y vistas de pedido de Wayly.\nTrata las etiquetas como herramientas de coordinación, no resultados financieros garantizados.',
+  'marketing.fees.platformFeeTitle': 'Dirección de comisión de plataforma',
+  'marketing.fees.platformFeeBody':
+    'Wayly está diseñado para un modelo de comisión a medida que el producto madura.\nLas tarifas en vivo dependen de proveedor, país, moneda y ajustes de lanzamiento.\nNo asumas una comisión fija activa hoy salvo que tu despliegue la habilite.\nCualquier tarifa en copy debe confirmarse con la configuración actual del producto.',
+  'marketing.fees.refundsPayoutsTitle': 'Reembolsos y pagos',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly no garantiza reembolsos a remitentes.\nWayly no garantiza pagos a Wayler.\nWayly no ofrece seguro ni depósito real hoy.\nDecisiones admin de pago son registros operativos — no ejecución real de pago.\nAbrir disputa no dispara reembolso o pago automático.',
+  'marketing.fees.adminReviewTitle': 'Revisión admin de pagos',
+  'marketing.fees.adminReviewBody':
+    'Herramientas admin pueden marcar revisión manual, limpiar revisión o registrar decisión de reembolso/liberación.\nEsos registros ayudan operaciones a revisar casos de flujo de pago.\nActualizan metadata del payment intent — no llaman proveedor ni mueven dinero.\nTrata acciones admin como bitácora de decisiones hasta integración real.',
+  'marketing.fees.futureWorkTitle': 'Trabajo futuro de pagos',
+  'marketing.fees.futureWorkBody':
+    'Integración de proveedor de pagos real (p. ej. Stripe)\nWebhooks del proveedor y sync automático de estado\nReembolsos, capturas y pagos vía proveedor\nRecibos más claros y registros pagador/beneficiario\nReglas de tarifas por región y moneda\nRevisión de compliance y tesorería en producción',
+  'marketing.fees.safetyReminderTitle': 'Recordatorio de seguridad',
+  'marketing.fees.safetyReminderBody':
+    'No compartas tarjetas, datos bancarios ni contraseñas en chat o notas de prueba.\nMantén acuerdos de pago y entrega dentro de Wayly.\nUsa disputas y soporte para coordinación de pedidos — no para eludir proveedor o ley.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly ofrece registros de estado y herramientas de revisión operativa — no depósito real, reembolsos o pagos garantizados, seguro ni garantías de compliance.',
+  'marketing.fees.backHome': 'Volver al inicio',
   'marketing.howItWorks.navLabel': 'Cómo funciona',
   'marketing.howItWorks.title': 'Cómo funciona Wayly',
   'marketing.howItWorks.subtitle':
@@ -7862,6 +7955,37 @@ const fr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly prêt pour un lancement commercial ?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly est en développement actif. Les outils core fonctionnent, mais paiements réels, KYC production et garanties commerciales complètes ne sont pas en place. Voir Centre de confiance.',
+  'marketing.fees.navLabel': 'Frais et paiements',
+  'marketing.fees.title': 'Frais et transparence des paiements',
+  'marketing.fees.subtitle':
+    'Aperçu honnête de l’affichage du statut de paiement et des frais Wayly aujourd’hui — et de ce qui n’est pas garanti avant intégration d’un vrai prestataire.',
+  'marketing.fees.openApp': 'Ouvrir l’app',
+  'marketing.fees.trustCenter': 'Centre de confiance',
+  'marketing.fees.faq': 'FAQ',
+  'marketing.fees.currentStatusTitle': 'Statut de paiement actuel',
+  'marketing.fees.currentStatusBody':
+    'Wayly affiche le statut selon les enregistrements plateforme liés à la commande.\nDes flux mock/manuels peuvent être utilisés en dev et démo.\nL’intégration d’un vrai prestataire est travail futur sauf activation explicite.\nLes champs de statut aident la coordination — pas une preuve de fonds chez un prestataire.',
+  'marketing.fees.statusMeaningTitle': 'Ce que signifie le statut de paiement',
+  'marketing.fees.statusMeaningBody':
+    'Le statut indique l’étape de la commande (ex. autorisé ou retenu).\nUn changement enregistre la progression — cela ne signifie pas automatiquement un mouvement réel d’argent.\nGardez accords de paiement dans le chat et les vues commande Wayly.\nTraitez les libellés comme outils de coordination, pas résultats financiers garantis.',
+  'marketing.fees.platformFeeTitle': 'Direction des frais plateforme',
+  'marketing.fees.platformFeeBody':
+    'Wayly est conçu pour un modèle de commission à mesure que le produit mûrit.\nLes frais en production dépendent du prestataire, pays, devise et paramètres de lancement.\nNe supposez pas une commission fixe active aujourd’hui sauf si votre déploiement l’active.\nTout frais affiché doit être confirmé avec les réglages produit actuels.',
+  'marketing.fees.refundsPayoutsTitle': 'Remboursements et paiements',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly ne garantit pas les remboursements aux expéditeurs.\nWayly ne garantit pas les paiements aux Wayler.\nWayly n’offre pas assurance ni séquestre réel aujourd’hui.\nLes décisions admin paiement sont des enregistrements opérationnels — pas exécution réelle.\nOuvrir un litige ne déclenche pas remboursement ou paiement automatique.',
+  'marketing.fees.adminReviewTitle': 'Revue admin des paiements',
+  'marketing.fees.adminReviewBody':
+    'Les outils admin peuvent marquer revue manuelle, la lever ou enregistrer décision remboursement/libération.\nCes enregistrements aident les opérations à examiner les cas de flux paiement.\nIls mettent à jour la metadata du payment intent — sans appeler prestataire ni déplacer argent.\nTraitez les actions admin comme journal de décisions jusqu’à intégration réelle.',
+  'marketing.fees.futureWorkTitle': 'Travail paiement futur',
+  'marketing.fees.futureWorkBody':
+    'Intégration d’un vrai prestataire de paiement (ex. Stripe)\nWebhooks prestataire et sync automatique du statut\nRemboursements, captures et paiements via prestataire\nReçus plus clairs et enregistrements payeur/bénéficiaire\nRègles de frais par région et devise\nRevue compliance et trésorerie en production',
+  'marketing.fees.safetyReminderTitle': 'Rappel sécurité',
+  'marketing.fees.safetyReminderBody':
+    'Ne partagez pas cartes, coordonnées bancaires ou mots de passe dans chat ou notes de preuve.\nGardez accords paiement et livraison dans Wayly.\nUtilisez litiges et support pour coordination commande — pas pour contourner prestataire ou loi.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly fournit enregistrements de statut et outils de revue opérationnelle — pas séquestre réel, remboursements ou paiements garantis, assurance ou garanties compliance.',
+  'marketing.fees.backHome': 'Retour à l’accueil',
   'marketing.howItWorks.navLabel': 'Comment ça marche',
   'marketing.howItWorks.title': 'Comment Wayly fonctionne',
   'marketing.howItWorks.subtitle':
@@ -9883,6 +10007,37 @@ const de: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Bereit für kommerziellen Launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly wird aktiv entwickelt. Kern-Tools funktionieren, aber echte Zahlungen, Production-KYC und volle Garantien fehlen noch. Siehe Trust Center.',
+  'marketing.fees.navLabel': 'Gebühren & Zahlungen',
+  'marketing.fees.title': 'Gebühren & Zahlungstransparenz',
+  'marketing.fees.subtitle':
+    'Ehrlicher Überblick, wie Wayly Zahlungsstatus und Gebühren heute zeigt — und was ohne echten Anbieter nicht garantiert ist.',
+  'marketing.fees.openApp': 'App öffnen',
+  'marketing.fees.trustCenter': 'Trust Center',
+  'marketing.fees.faq': 'FAQ',
+  'marketing.fees.currentStatusTitle': 'Aktueller Zahlungsstatus',
+  'marketing.fees.currentStatusBody':
+    'Wayly zeigt Zahlungsstatus basierend auf Plattform-Einträgen pro Bestellung.\nMock/manuelle Zahlungsflüsse können in Entwicklung und Demo genutzt werden.\nEchte Anbieter-Integration ist künftige Arbeit, sofern nicht explizit aktiviert.\nStatusfelder helfen bei Koordination — kein Beweis für beim Anbieter gehaltene Mittel.',
+  'marketing.fees.statusMeaningTitle': 'Was Zahlungsstatus bedeutet',
+  'marketing.fees.statusMeaningBody':
+    'Status zeigt die Bestellphase (z. B. autorisiert oder gehalten).\nEine Statusänderung protokolliert Fortschritt — bedeutet nicht automatisch echte Geldbewegung.\nHalten Sie Zahlungsabsprachen im Wayly-Chat und in Bestellansichten.\nStatuslabels sind Koordinations-Tools, keine garantierten Finanzergebnisse.',
+  'marketing.fees.platformFeeTitle': 'Plattformgebühren-Richtung',
+  'marketing.fees.platformFeeBody':
+    'Wayly ist für ein Plattformgebühren-Modell ausgelegt, wenn das Produkt reift.\nLive-Gebühren hängen von Anbieter, Land, Währung und Launch-Einstellungen ab.\nNehmen Sie keine feste aktive Gebühr an, sofern Ihr Deployment sie nicht explizit aktiviert.\nJede Gebühr in Copy sollte mit aktuellen Produkteinstellungen abgeglichen werden.',
+  'marketing.fees.refundsPayoutsTitle': 'Erstattungen und Auszahlungen',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly garantiert keine Erstattungen an Sender.\nWayly garantiert keine Auszahlungen an Wayler.\nWayly bietet heute keine Versicherung oder echtes Escrow.\nAdmin-Zahlungsentscheidungen sind operative Einträge — keine echte Zahlungsausführung.\nStreitfall eröffnen löst keine automatische Erstattung oder Auszahlung aus.',
+  'marketing.fees.adminReviewTitle': 'Admin-Zahlungsprüfung',
+  'marketing.fees.adminReviewBody':
+    'Admin-Tools können manuelle Prüfung markieren, löschen oder Erstattungs-/Freigabeentscheidung erfassen.\nDiese Einträge helfen Operations bei Zahlungs-Workflow-Fällen.\nSie aktualisieren Payment-Intent-Metadaten — rufen keinen Anbieter auf und bewegen kein Geld.\nAdmin-Aktionen sind Entscheidungsprotokolle bis echte Anbieter-Integration existiert.',
+  'marketing.fees.futureWorkTitle': 'Künftige Zahlungsarbeit',
+  'marketing.fees.futureWorkBody':
+    'Echte Zahlungsanbieter-Integration (z. B. Stripe)\nAnbieter-Webhooks und automatischer Status-Sync\nErstattungen, Captures und Auszahlungen über Anbieter\nKlarere Belege und Zahler/Empfänger-Einträge\nRegional- und währungsspezifische Gebührenregeln\nProduction-Compliance- und Treasury-Review',
+  'marketing.fees.safetyReminderTitle': 'Sicherheitshinweis',
+  'marketing.fees.safetyReminderBody':
+    'Teilen Sie keine Karten-, Bank- oder Passwortdaten im Chat oder in Nachweisnotizen.\nHalten Sie Zahlungs- und Lieferabsprachen in Wayly.\nNutzen Sie Streit- und Support-Tools für Bestellkoordination — nicht zum Umgehen von Anbieter oder Gesetz.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly bietet Status-Einträge und operative Review-Tools — kein echtes Escrow, garantierte Erstattungen/Auszahlungen, Versicherung oder Compliance-Garantien.',
+  'marketing.fees.backHome': 'Zur Startseite',
   'marketing.howItWorks.navLabel': 'So funktioniert’s',
   'marketing.howItWorks.title': 'So funktioniert Wayly',
   'marketing.howItWorks.subtitle':
@@ -11841,6 +11996,37 @@ const tr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly ticari lansmana hazır mı?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly aktif geliştiriliyor. Temel araçlar çalışıyor ancak gerçek ödemeler, production KYC ve tam ticari garantiler yok. Güven merkezine bakın.',
+  'marketing.fees.navLabel': 'Ücretler ve ödemeler',
+  'marketing.fees.title': 'Ücretler ve ödeme şeffaflığı',
+  'marketing.fees.subtitle':
+    'Wayly’nin ödeme durumu ve ücretleri bugün nasıl gösterdiğine dair dürüst özet — gerçek sağlayıcı entegrasyonuna kadar garanti edilmeyenler dahil.',
+  'marketing.fees.openApp': 'Uygulamayı aç',
+  'marketing.fees.trustCenter': 'Güven merkezi',
+  'marketing.fees.faq': 'SSS',
+  'marketing.fees.currentStatusTitle': 'Mevcut ödeme durumu',
+  'marketing.fees.currentStatusBody':
+    'Wayly, siparişe bağlı platform kayıtlarına göre ödeme durumu gösterir.\nGeliştirme ve demoda mock/manuel ödeme akışları kullanılabilir.\nGerçek ödeme sağlayıcısı entegrasyonu açıkça etkinleştirilmedikçe gelecekteki iştir.\nDurum alanları koordinasyona yardımcı olur — sağlayıcıda tutulan fon kanıtı değildir.',
+  'marketing.fees.statusMeaningTitle': 'Ödeme durumu ne anlama gelir',
+  'marketing.fees.statusMeaningBody':
+    'Durum siparişin hangi aşamada olduğunu gösterir (ör. yetkilendirildi veya tutuldu).\nDurum değişikliği süreç ilerlemesini kaydeder — otomatik olarak gerçek para hareketi anlamına gelmez.\nÖdeme anlaşmalarını Wayly sohbeti ve sipariş görünümlerinde tutun.\nDurum etiketlerini koordinasyon aracı olarak görün, garantili finansal sonuç değil.',
+  'marketing.fees.platformFeeTitle': 'Platform ücreti yönü',
+  'marketing.fees.platformFeeBody':
+    'Wayly, ürün olgunlaştıkça platform ücreti modelini destekleyecek şekilde tasarlanmıştır.\nCanlı ücretler sağlayıcı, ülke, para birimi ve lansman ayarlarına bağlı olabilir.\nDağıtımınız açıkça etkinleştirmedikçe sabit aktif ücret olduğunu varsaymayın.\nMetindeki her ücret mevcut ürün ayarlarıyla doğrulanmalıdır.',
+  'marketing.fees.refundsPayoutsTitle': 'İadeler ve ödemeler',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly göndericilere iade garanti etmez.\nWayly Wayler’lara ödeme garanti etmez.\nWayly bugün sigorta veya gerçek emanet sağlamaz.\nAdmin ödeme inceleme kararları operasyonel kayıttır — gerçek ödeme yürütmesi değil.\nAnlaşmazlık açmak otomatik iade veya ödeme tetiklemez.',
+  'marketing.fees.adminReviewTitle': 'Admin ödeme incelemesi',
+  'marketing.fees.adminReviewBody':
+    'Admin araçları manuel inceleme işaretleyebilir, temizleyebilir veya iade/serbest bırakma kararı kaydedebilir.\nKayıtlar operasyonların ödeme süreci vakalarını incelemesine yardımcı olur.\nPayment intent metadata güncellenir — sağlayıcı çağrılmaz veya para taşınmaz.\nGerçek sağlayıcı entegrasyonuna kadar admin eylemlerini karar günlüğü olarak görün.',
+  'marketing.fees.futureWorkTitle': 'Gelecekteki ödeme çalışması',
+  'marketing.fees.futureWorkBody':
+    'Gerçek ödeme sağlayıcısı entegrasyonu (ör. Stripe)\nSağlayıcı webhook’ları ve otomatik durum senkronu\nSağlayıcı üzerinden iade, capture ve ödemeler\nDaha net makbuzlar ve ödeyen/alıcı kayıtları\nBölge ve para birimine özel ücret kuralları\nProduction uyumluluk ve hazine incelemesi',
+  'marketing.fees.safetyReminderTitle': 'Güvenlik hatırlatması',
+  'marketing.fees.safetyReminderBody':
+    'Wayly sohbetinde veya kanıt notlarında kart, banka veya şifre paylaşmayın.\nÖdeme ve teslimat anlaşmalarını Wayly içinde tutun.\nSipariş koordinasyonu için anlaşmazlık ve destek kullanın — sağlayıcı veya yasayı atlatmak için değil.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly ödeme durumu kayıtları ve operasyonel inceleme araçları sunar — gerçek emanet, garantili iade/ödeme, sigorta veya uyumluluk garantisi değil.',
+  'marketing.fees.backHome': 'Ana sayfaya dön',
   'marketing.howItWorks.navLabel': 'Nasıl çalışır',
   'marketing.howItWorks.title': 'Wayly nasıl çalışır',
   'marketing.howItWorks.subtitle':
@@ -13718,6 +13904,37 @@ const ar: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'هل Wayly جاهز للإطلاق التجاري؟',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly قيد التطوير النشط. الأدوات الأساسية تعمل لكن المدفوعات الحقيقية وKYC الإنتاج والضمانات التجارية الكاملة غير متوفرة بعد. راجع مركز الثقة.',
+  'marketing.fees.navLabel': 'الرسوم والمدفوعات',
+  'marketing.fees.title': 'الرسوم وشفافية المدفوعات',
+  'marketing.fees.subtitle':
+    'نظرة صادقة على كيف يعرض Wayly حالة الدفع والرسوم اليوم — وما لا يُضمن حتى تكامل مزود حقيقي.',
+  'marketing.fees.openApp': 'فتح التطبيق',
+  'marketing.fees.trustCenter': 'مركز الثقة',
+  'marketing.fees.faq': 'الأسئلة الشائعة',
+  'marketing.fees.currentStatusTitle': 'حالة الدفع الحالية',
+  'marketing.fees.currentStatusBody':
+    'يعرض Wayly حالة الدفع بناءً على سجلات المنصة المرتبطة بالطلب.\nقد تُستخدم تدفقات mock/يدوية في التطوير والعرض التوضيحي.\nتكامل مزود دفع حقيقي عمل مستقبلي ما لم يُفعَّل صراحة.\nحقول الحالة تساعد التنسيق — وليست دليلاً على أموال محتجزة لدى مزود.',
+  'marketing.fees.statusMeaningTitle': 'ماذا تعني حالة الدفع',
+  'marketing.fees.statusMeaningBody':
+    'الحالة تُظهر مرحلة الطلب (مثل مصرّح أو محجوز).\nتغيير الحالة يسجل تقدم سير العمل — لا يعني تلقائياً حركة أموال حقيقية.\nاحتفظ باتفاقات الدفع في درdشة Wayly وعروض الطلب.\nعامل التسميات كأدوات تنسيق وليس نتائج مالية مضمونة.',
+  'marketing.fees.platformFeeTitle': 'اتجاه رسوم المنصة',
+  'marketing.fees.platformFeeBody':
+    'صُمم Wayly لدعم نموذج رسوم منصة مع نضوج المنتج.\nالرسوم الفعلية قد تعتمد على المزود والبلد والعملة وإعدادات الإطلاق.\nلا تفترض رسوماً ثابطة نشطة اليوم ما لم يفعّل نشرك ذلك صراحة.\nيجب تأكيد أي رسوم في النصوص مع إعدادات المنتج الحالية.',
+  'marketing.fees.refundsPayoutsTitle': 'الاسترداد والمدفوعات',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly لا يضمن استرداداً للمرسلين.\nWayly لا يضمن مدفوعات لـ Wayler.\nWayly لا يوفر تأميناً أو ضماناً حقيقياً اليوم.\nقرارات مراجعة الدفع للمسؤول سجلات تشغيلية — وليست تنفيذ دفع حقيقي.\nفتح نزاع لا يطلق استرداداً أو دفعاً تلقائياً.',
+  'marketing.fees.adminReviewTitle': 'مراجعة الدفع للمسؤول',
+  'marketing.fees.adminReviewBody':
+    'أدوات المسؤول يمكنها تعليم مراجعة يدوية أو مسحها أو تسجيل قرار استرداد/إطلاق.\nالسجلات تساعد العمليات على مراجعة حالات سير الدفع.\nتحدّث metadata لـ payment intent — دون استدعاء مزود أو تحريك أموال.\nعامل إجراءات المسؤول كسجل قرارات حتى يوجد تكامل مزود حقيقي.',
+  'marketing.fees.futureWorkTitle': 'عمل الدفع المستقبلي',
+  'marketing.fees.futureWorkBody':
+    'تكامل مزود دفع حقيقي (مثل Stripe)\nWebhooks المزود ومزامنة الحالة التلقائية\nاستردادات و captures ومدفوعات عبر المزود\nإيصالات أوضح وسجلات دافع/مستفيد\nقواعد رسوم حسب المنطقة والعملة\nمراجعة compliance والخزينة في الإنتاج',
+  'marketing.fees.safetyReminderTitle': 'تذكير بالسلامة',
+  'marketing.fees.safetyReminderBody':
+    'لا تشارك بطاقات أو بيانات بنكية أو كلمات مرور في الدردشة أو ملاحظات الإثبات.\nاحتفظ باتفاقات الدفع والتسليم داخل Wayly.\nاستخدم النزاع والدعم لتنسيق الطلب — وليس لتجاوز المزود أو القانون.',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly يوفر سجلات حالة الدفع وأدوات مراجعة تشغيلية — وليس ضماناً حقيقياً أو استرداداً/دفعاً مضموناً أو تأميناً أو ضمان compliance.',
+  'marketing.fees.backHome': 'العودة للرئيسية',
   'marketing.howItWorks.navLabel': 'كيف يعمل',
   'marketing.howItWorks.title': 'كيف يعمل Wayly',
   'marketing.howItWorks.subtitle':
@@ -15505,6 +15722,37 @@ const zh: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly 准备好商业发布了吗？',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly 仍在积极开发。核心 marketplace 工具可用，但真实支付、生产 KYC 与完整商业保证尚未到位。详见信任中心。',
+  'marketing.fees.navLabel': '费用与支付',
+  'marketing.fees.title': '费用与支付透明度',
+  'marketing.fees.subtitle':
+    '如实说明 Wayly 今日如何展示支付状态与费用——以及在真实支付提供商接入前不保证的内容。',
+  'marketing.fees.openApp': '打开应用',
+  'marketing.fees.trustCenter': '信任中心',
+  'marketing.fees.faq': '常见问题',
+  'marketing.fees.currentStatusTitle': '当前支付状态',
+  'marketing.fees.currentStatusBody':
+    'Wayly 根据与订单绑定的平台记录显示支付状态。\n开发与演示环境可能使用 mock/手动支付流程。\n真实支付提供商接入为未来工作，除非明确启用。\n状态字段用于协调——不是资金由提供商托管的证明。',
+  'marketing.fees.statusMeaningTitle': '支付状态的含义',
+  'marketing.fees.statusMeaningBody':
+    '状态表示订单所处阶段（如已授权或标记托管）。\n状态变更记录流程进度——不自动代表真实资金已移动。\n将支付相关约定留在 Wayly 聊天与订单视图中。\n将状态标签视为协调工具，而非保证的财务结果。',
+  'marketing.fees.platformFeeTitle': '平台费用方向',
+  'marketing.fees.platformFeeBody':
+    'Wayly 设计支持随产品成熟采用平台费用模型。\n实际上线费用可能取决于支付提供商、国家、货币与上线设置。\n除非部署明确启用，请勿假定固定平台费用已在计费。\n营销或应用文案中的任何费用应以当前产品设置为准。',
+  'marketing.fees.refundsPayoutsTitle': '退款与打款',
+  'marketing.fees.refundsPayoutsBody':
+    'Wayly 不保证向寄件人退款。\nWayly 不保证向 Wayler 打款。\nWayly 目前不提供保险或真实托管。\n管理员支付审核决策为运营记录——非真实支付执行。\n开启争议不会自动触发退款或打款。',
+  'marketing.fees.adminReviewTitle': '管理员支付审核',
+  'marketing.fees.adminReviewBody':
+    '管理员工具可标记人工审核、清除审核或记录退款/释放决策。\n这些记录帮助运营审查支付流程案例。\n它们更新 payment intent 元数据——不调用支付提供商或转移资金。\n在真实提供商接入前，应将管理员操作视为决策日志。',
+  'marketing.fees.futureWorkTitle': '未来支付工作',
+  'marketing.fees.futureWorkBody':
+    '真实支付提供商接入（如 Stripe）\n提供商 webhook 与自动状态同步\n通过提供商的退款、capture 与打款\n更清晰的收据与付款方/收款方记录\n按地区与货币的费率规则\n生产合规与资金审查',
+  'marketing.fees.safetyReminderTitle': '安全提醒',
+  'marketing.fees.safetyReminderBody':
+    '不要在 Wayly 聊天或凭证备注中分享卡号、银行信息或密码。\n将支付与交付约定留在 Wayly 内。\n争议与支持用于订单协调——不得用于规避提供商或法律规则。',
+  'marketing.fees.noGuaranteesNotice':
+    'Wayly 提供支付状态记录与运营审核工具——不提供真实托管、保证退款/打款、保险或合规保证。',
+  'marketing.fees.backHome': '返回首页',
   'marketing.howItWorks.navLabel': '如何运作',
   'marketing.howItWorks.title': 'Wayly 如何运作',
   'marketing.howItWorks.subtitle':

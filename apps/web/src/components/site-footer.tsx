@@ -27,6 +27,9 @@ export function SiteFooter() {
           <Link href="/restricted-items" className="transition-colors hover:text-foreground">
             {t('marketing.restrictedItems.navLabel')}
           </Link>
+          <Link href="/fees" className="transition-colors hover:text-foreground">
+            {t('marketing.fees.navLabel')}
+          </Link>
           {/* Legal pages are added in a later milestone. */}
           <Link href="#" className="transition-colors hover:text-foreground">
             Terms
