@@ -27,6 +27,14 @@ Remove-Item Env:DATABASE_URL
 - Exit **0** = critical checks pass (warnings allowed); exit **1** = re-run `seed:demo`.
 - Does **not** replace real automated E2E tests.
 
+### Environment mismatch (common blocker)
+
+If **`demo:smoke` passes** but the browser shows **empty listings, zero incoming requests, or inactive access**, the browser is likely calling a **different API host/database** than the one you seeded.
+
+- Check the **`API: {host}`** badge in the `/app` header (shown in development or when `NEXT_PUBLIC_SHOW_ENV_BADGE=true`).
+- Default local web target: `http://localhost:4000` — set `NEXT_PUBLIC_API_URL` explicitly if your API runs elsewhere.
+- See [mvp-completion-checkpoint.md](./mvp-completion-checkpoint.md) for deployment sync checklist.
+
 | Account | Email                    | Password env                           |
 | ------- | ------------------------ | -------------------------------------- |
 | Admin   | `admin@wayly.demo`       | `DEMO_ADMIN_PASSWORD`                  |

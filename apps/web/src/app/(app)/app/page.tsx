@@ -72,6 +72,7 @@ import { WaylerNextBestActions } from '@/components/app/wayler-next-best-actions
 import { LanguageSelect } from '@/components/language-select';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { EnvDiagnosticsBadge } from '@/components/app/env-diagnostics-badge';
+import { MvpWalkthroughStatusPanel } from '@/components/app/mvp-walkthrough-status-panel';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
@@ -700,6 +701,7 @@ export default function AppHomePage() {
   } | null>(null);
   const [waylerRequestsSnapshot, setWaylerRequestsSnapshot] = useState<{
     pendingCount: number;
+    totalCount: number;
     loading: boolean;
   } | null>(null);
   const [acceptedOrders, setAcceptedOrders] = useState<WaylerAcceptedOrderRow[]>([]);
@@ -1804,6 +1806,24 @@ export default function AppHomePage() {
           <RoleStarterChecklistCard />
           <HelpSafetyCenterCard />
         </div>
+
+        <MvpWalkthroughStatusPanel
+          userEmail={user.email}
+          userDisplayName={user.displayName}
+          roles={user.roles}
+          kycApproved={!!isApproved}
+          kycLoading={kycLoading}
+          waylerHasActiveAccess={waylerHasActiveAccess}
+          listingsCount={waylerAvailabilitySnapshot?.count ?? null}
+          listingsLoading={waylerAvailabilitySnapshot?.loading ?? false}
+          incomingTotalCount={waylerRequestsSnapshot?.totalCount ?? null}
+          incomingPendingCount={waylerRequestsSnapshot?.pendingCount ?? null}
+          incomingLoading={waylerRequestsSnapshot?.loading ?? false}
+          openOrdersCount={feedOrders.length}
+          waylerAcceptedCount={acceptedOrders.length}
+          senderPublishedCount={publishedOrders.length}
+          senderAcceptedCount={senderAcceptedOrders.length}
+        />
 
         <LaunchStatusNoticeCard />
 

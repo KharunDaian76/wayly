@@ -43,7 +43,11 @@ type WaylerIncomingRequestsPanelProps = {
   waylerHasActiveAccess: boolean;
   /** Refresh parent accepted-order lists after accept creates a DeliveryOrder. */
   onRequestAccepted?: () => void;
-  onRequestsSnapshot?: (snapshot: { pendingCount: number; loading: boolean }) => void;
+  onRequestsSnapshot?: (snapshot: {
+    pendingCount: number;
+    totalCount: number;
+    loading: boolean;
+  }) => void;
 };
 
 function formatDateTime(value: string | null): string {
@@ -157,7 +161,7 @@ export function WaylerIncomingRequestsPanel({
     const pendingCount = requests.filter(
       (request) => request.status === WaylerAvailabilityRequestStatus.PENDING,
     ).length;
-    onRequestsSnapshot?.({ pendingCount, loading });
+    onRequestsSnapshot?.({ pendingCount, totalCount: requests.length, loading });
   }, [requests, loading, onRequestsSnapshot]);
 
   const updateResponseDraft = (id: string, value: string) => {
