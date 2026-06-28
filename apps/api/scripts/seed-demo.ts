@@ -6,8 +6,8 @@
  *
  * Usage (PowerShell):
  *   $env:DEMO_ADMIN_EMAIL="admin@wayly.demo"
- *   $env:DEMO_ADMIN_PASSWORD="choose-a-local-demo-password"
- *   $env:DEMO_USER_PASSWORD="choose-a-local-demo-password"
+ *   $env:DEMO_ADMIN_PASSWORD="<your-strong-local-demo-password-min-12-chars>"
+ *   $env:DEMO_USER_PASSWORD="<optional-separate-strong-password>"
  *   pnpm --dir apps/api seed:demo
  *
  * Requires DATABASE_URL. Passwords must come from env — nothing is hardcoded.
@@ -41,6 +41,8 @@ import {
   WaylerAvailabilityType,
 } from '@prisma/client';
 import * as argon2 from 'argon2';
+
+import { assertDemoSeedPasswordSafe, assertDemoSeedSafeToRun } from './demo-seed-safety';
 
 const DEMO_SEED_MARKER = 'Created by Wayly demo seed';
 const DEMO_TITLE_PREFIX = '[Demo]';
@@ -82,25 +84,7 @@ function requireEnv(name: string): string {
 }
 
 function assertSafeToRun(): void {
-  if (!process.env.DATABASE_URL) {
-    console.error('[seed-demo] DATABASE_URL is required.');
-    process.exit(1);
-  }
-
-  if (process.env.NODE_ENV === 'production') {
-    console.error('[seed-demo] Refusing to run in NODE_ENV=production.');
-    process.exit(1);
-  }
-
-  const url = process.env.DATABASE_URL.toLowerCase();
-  const blockedHints = ['render.com', 'amazonaws.com', 'prod', 'production'];
-  if (blockedHints.some((hint) => url.includes(hint)) && process.env.ALLOW_DEMO_SEED !== 'true') {
-    console.error(
-      '[seed-demo] DATABASE_URL looks like a hosted/production database.',
-      'Set ALLOW_DEMO_SEED=true only if you intentionally target a non-production DB.',
-    );
-    process.exit(1);
-  }
+  assertDemoSeedSafeToRun('seed-demo');
 }
 
 function addDays(base: Date, days: number): Date {
@@ -1255,12 +1239,16 @@ async function main(): Promise<void> {
 
   const adminEmail = (process.env.DEMO_ADMIN_EMAIL?.trim() || DEFAULT_ADMIN_EMAIL).toLowerCase();
   const adminPassword = requireEnv('DEMO_ADMIN_PASSWORD');
+  assertDemoSeedPasswordSafe('DEMO_ADMIN_PASSWORD', adminPassword);
+
   const userPassword = process.env.DEMO_USER_PASSWORD?.trim() || adminPassword;
 
   if (!process.env.DEMO_USER_PASSWORD?.trim()) {
     console.warn(
       '[seed-demo] DEMO_USER_PASSWORD not set — using DEMO_ADMIN_PASSWORD for demo sender/wayler.',
     );
+  } else {
+    assertDemoSeedPasswordSafe('DEMO_USER_PASSWORD', userPassword);
   }
 
   const [adminHash, userHash] = await Promise.all([

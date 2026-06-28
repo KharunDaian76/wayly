@@ -151,13 +151,15 @@ Each notification may include `linkHref`, `entityType`, and `entityId` for in-ap
 
 ### Environment variables
 
-| Variable              | Required | Purpose                                                                 |
-| --------------------- | -------- | ----------------------------------------------------------------------- |
-| `DATABASE_URL`        | ✅       | Target database                                                         |
-| `DEMO_ADMIN_PASSWORD` | ✅       | Password for demo admin (and fallback for sender/wayler)                |
-| `DEMO_ADMIN_EMAIL`    | optional | Default `admin@wayly.demo`                                              |
-| `DEMO_USER_PASSWORD`  | optional | Sender/wayler password; falls back to `DEMO_ADMIN_PASSWORD`             |
-| `ALLOW_DEMO_SEED`     | optional | Set `true` to allow hosted-looking `DATABASE_URL` (non-production only) |
+| Variable              | Required | Purpose                                                                                                                                                  |
+| --------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`        | ✅       | Target database                                                                                                                                          |
+| `DEMO_ADMIN_PASSWORD` | ✅       | Password for demo admin (and fallback for sender/wayler)                                                                                                 |
+| `DEMO_ADMIN_EMAIL`    | optional | Default `admin@wayly.demo`                                                                                                                               |
+| `DEMO_USER_PASSWORD`  | optional | Sender/wayler password; falls back to `DEMO_ADMIN_PASSWORD`                                                                                              |
+| `ALLOW_DEMO_SEED`     | optional | Set `true` to allow hosted-looking `DATABASE_URL` (non-production only) — see [security-and-secrets-checkpoint.md](./security-and-secrets-checkpoint.md) |
+
+Preflight (no DB writes): `pnpm --dir apps/api seed:demo:check`
 
 ### Demo accounts
 
@@ -191,6 +193,7 @@ On each run, demo-marked rows (`[Demo]` title prefix / `Created by Wayly demo se
 - No hardcoded passwords
 - Obvious demo titles and marker text
 - **No real payments, escrow, or emergency support** — mock/metadata only
+- **Password policy:** min 12 chars; rejects known placeholders; see [security-and-secrets-checkpoint.md](./security-and-secrets-checkpoint.md)
 
 Legacy script `seed-demo-users.ts` (`pnpm db:seed-demo-users`) remains; prefer `seed:demo` for full demo data.
 
