@@ -1788,6 +1788,24 @@ const en = {
   'app.safetyPreflight.fees': 'Fees & Payments',
   'app.safetyPreflight.trustCenter': 'Trust Center',
   'app.safetyPreflight.supportDisputes': 'Support & Disputes',
+  'app.launchStatus.title': 'Launch status',
+  'app.launchStatus.subtitle':
+    'Honest snapshot of what works in the app today versus demo/manual areas and future production work.',
+  'app.launchStatus.availableLabel': 'Available',
+  'app.launchStatus.availableBody':
+    'Marketplace and demo app flows for Senders and Waylers.\nPublic guidance, Policy Center, and in-app safety tools.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'Payment provider flow may be mock or manual.\nKYC/provider steps may be mock or manual by environment.\nNotifications may be in-app polling or demo dispatch.',
+  'app.launchStatus.plannedLabel': 'Planned',
+  'app.launchStatus.plannedBody':
+    'Real payment provider integration.\nProduction KYC provider.\nProduction notifications, monitoring, and app-store packaging.',
+  'app.launchStatus.notice':
+    'No real escrow guarantee today. No guaranteed refund, payout, insurance, or legal protection. Follow local laws and transport/customs rules. See Roadmap and Policy Center for limits.',
+  'app.launchStatus.roadmap': 'Roadmap',
+  'app.launchStatus.fees': 'Fees & Payments',
+  'app.launchStatus.policies': 'Policy Center',
+  'app.launchStatus.helpCenter': 'Help Center',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -4081,6 +4099,24 @@ const ru: Dictionary = {
   'app.safetyPreflight.fees': 'Тарифы и платежи',
   'app.safetyPreflight.trustCenter': 'Центр доверия',
   'app.safetyPreflight.supportDisputes': 'Поддержка и споры',
+  'app.launchStatus.title': 'Статус запуска',
+  'app.launchStatus.subtitle':
+    'Честный снимок того, что работает сегодня, что demo/manual и что planned для production.',
+  'app.launchStatus.availableLabel': 'Доступно',
+  'app.launchStatus.availableBody':
+    'Marketplace и demo app flows для Senders и Waylers.\nPublic guidance, Policy Center и in-app safety tools.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'Payment flow может быть mock/manual.\nKYC/provider может быть mock/manual по environment.\nNotifications — polling или demo dispatch.',
+  'app.launchStatus.plannedLabel': 'Planned',
+  'app.launchStatus.plannedBody':
+    'Real payment provider.\nProduction KYC.\nProduction notifications, monitoring, app-store packaging.',
+  'app.launchStatus.notice':
+    'Нет real escrow сегодня. Нет guaranteed refund, payout, insurance или legal protection. Соблюдайте местные законы и правила перевозки/таможни. См. Roadmap и Policy Center.',
+  'app.launchStatus.roadmap': 'Roadmap',
+  'app.launchStatus.fees': 'Тарифы и платежи',
+  'app.launchStatus.policies': 'Центр политик',
+  'app.launchStatus.helpCenter': 'Справочный центр',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -6381,6 +6417,24 @@ const es: Dictionary = {
   'app.safetyPreflight.fees': 'Tarifas y pagos',
   'app.safetyPreflight.trustCenter': 'Centro de confianza',
   'app.safetyPreflight.supportDisputes': 'Soporte y disputas',
+  'app.launchStatus.title': 'Estado de lanzamiento',
+  'app.launchStatus.subtitle':
+    'Instantánea honesta de lo que funciona hoy, lo demo/manual y el trabajo de producción futuro.',
+  'app.launchStatus.availableLabel': 'Disponible',
+  'app.launchStatus.availableBody':
+    'Flujos marketplace y demo para Senders y Waylers.\nGuías públicas, Policy Center y herramientas de seguridad in-app.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'Pagos mock/manual según entorno.\nKYC/provider mock/manual según entorno.\nNotificaciones polling o demo.',
+  'app.launchStatus.plannedLabel': 'Planificado',
+  'app.launchStatus.plannedBody':
+    'Integración real de pagos.\nKYC production.\nNotificaciones production, monitoring, app stores.',
+  'app.launchStatus.notice':
+    'Sin escrow real hoy. Sin reembolso, pago, seguro ni protección legal garantizados. Siga leyes locales y normas de transporte/aduanas. Vea Roadmap y Policy Center.',
+  'app.launchStatus.roadmap': 'Roadmap',
+  'app.launchStatus.fees': 'Tarifas y pagos',
+  'app.launchStatus.policies': 'Centro de políticas',
+  'app.launchStatus.helpCenter': 'Centro de ayuda',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -8709,6 +8763,24 @@ const fr: Dictionary = {
   'app.safetyPreflight.fees': 'Frais et paiements',
   'app.safetyPreflight.trustCenter': 'Centre de confiance',
   'app.safetyPreflight.supportDisputes': 'Support et litiges',
+  'app.launchStatus.title': 'Statut de lancement',
+  'app.launchStatus.subtitle':
+    "Aperçu honnête de ce qui fonctionne aujourd'hui, des zones demo/manual et du travail production à venir.",
+  'app.launchStatus.availableLabel': 'Disponible',
+  'app.launchStatus.availableBody':
+    'Flux marketplace et demo pour Senders et Waylers.\nGuides publics, Policy Center et outils sécurité in-app.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'Paiements mock/manual selon environnement.\nKYC/provider mock/manual selon environnement.\nNotifications polling ou demo.',
+  'app.launchStatus.plannedLabel': 'Planifié',
+  'app.launchStatus.plannedBody':
+    'Intégration paiement réelle.\nKYC production.\nNotifications production, monitoring, app stores.',
+  'app.launchStatus.notice':
+    "Pas d'escrow réel aujourd'hui. Pas de remboursement, paiement, assurance ou protection juridique garantis. Respectez lois locales et règles transport/douanes. Voir Roadmap et Policy Center.",
+  'app.launchStatus.roadmap': 'Roadmap',
+  'app.launchStatus.fees': 'Frais et paiements',
+  'app.launchStatus.policies': 'Centre des politiques',
+  'app.launchStatus.helpCenter': "Centre d'aide",
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -11048,6 +11120,24 @@ const de: Dictionary = {
   'app.safetyPreflight.fees': 'Gebühren & Zahlungen',
   'app.safetyPreflight.trustCenter': 'Trust Center',
   'app.safetyPreflight.supportDisputes': 'Support & Streitfälle',
+  'app.launchStatus.title': 'Launch-Status',
+  'app.launchStatus.subtitle':
+    'Ehrlicher Überblick über heutige Funktionen, Demo/Manual-Bereiche und geplante Production-Arbeit.',
+  'app.launchStatus.availableLabel': 'Verfügbar',
+  'app.launchStatus.availableBody':
+    'Marketplace- und Demo-App-Flows für Sender und Wayler.\nÖffentliche Guides, Policy Center und In-App-Safety-Tools.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'Zahlungen mock/manual je Umgebung.\nKYC/Provider mock/manual je Umgebung.\nBenachrichtigungen Polling oder Demo.',
+  'app.launchStatus.plannedLabel': 'Geplant',
+  'app.launchStatus.plannedBody':
+    'Echter Payment-Provider.\nProduction-KYC.\nProduction-Benachrichtigungen, Monitoring, App Stores.',
+  'app.launchStatus.notice':
+    'Kein echtes Escrow heute. Keine garantierte Erstattung, Auszahlung, Versicherung oder Rechtsschutz. Beachten Sie lokale Gesetze und Transport/Zoll-Regeln. Siehe Roadmap und Policy Center.',
+  'app.launchStatus.roadmap': 'Roadmap',
+  'app.launchStatus.fees': 'Gebühren & Zahlungen',
+  'app.launchStatus.policies': 'Richtlinien-Center',
+  'app.launchStatus.helpCenter': 'Help Center',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -13322,6 +13412,24 @@ const tr: Dictionary = {
   'app.safetyPreflight.fees': 'Ücretler ve ödemeler',
   'app.safetyPreflight.trustCenter': 'Güven merkezi',
   'app.safetyPreflight.supportDisputes': 'Destek ve anlaşmazlıklar',
+  'app.launchStatus.title': 'Lansman durumu',
+  'app.launchStatus.subtitle':
+    'Bugün çalışanlar, demo/manual alanlar ve gelecek production çalışmasının dürüst özeti.',
+  'app.launchStatus.availableLabel': 'Mevcut',
+  'app.launchStatus.availableBody':
+    'Sender ve Wayler için marketplace ve demo app akışları.\nPublic rehberler, Policy Center ve in-app güvenlik araçları.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'Ödemeler ortama göre mock/manual.\nKYC/provider ortama göre mock/manual.\nBildirimler polling veya demo.',
+  'app.launchStatus.plannedLabel': 'Planlı',
+  'app.launchStatus.plannedBody':
+    'Gerçek ödeme sağlayıcısı.\nProduction KYC.\nProduction bildirimler, monitoring, app store paketleme.',
+  'app.launchStatus.notice':
+    "Bugün gerçek escrow yok. Garantili iade, ödeme, sigorta veya hukuki koruma yok. Yerel yasa ve taşıma/gümrük kurallarına uyun. Roadmap ve Policy Center'a bakın.",
+  'app.launchStatus.roadmap': 'Yol haritası',
+  'app.launchStatus.fees': 'Ücretler ve ödemeler',
+  'app.launchStatus.policies': 'Politika merkezi',
+  'app.launchStatus.helpCenter': 'Yardım merkezi',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -15516,6 +15624,24 @@ const ar: Dictionary = {
   'app.safetyPreflight.fees': 'الرسوم والمدفوعات',
   'app.safetyPreflight.trustCenter': 'مركز الثقة',
   'app.safetyPreflight.supportDisputes': 'الدعم والنزاعات',
+  'app.launchStatus.title': 'حالة الإطلاق',
+  'app.launchStatus.subtitle':
+    'لمحة صادقة عما يعمل اليوم ومناطق demo/manual وعمل الإنتاج المستقبلي.',
+  'app.launchStatus.availableLabel': 'متاح',
+  'app.launchStatus.availableBody':
+    'تدفقات marketplace وdemo للمرسل والوايلر.\nأدلة عامة وPolicy Center وأدوات أمان in-app.',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    'المدفوعات mock/manual حسب البيئة.\nKYC/provider mock/manual حسب البيئة.\nإشعارات polling أو demo.',
+  'app.launchStatus.plannedLabel': 'مخطط',
+  'app.launchStatus.plannedBody':
+    'تكامل دفع حقيقي.\nKYC إنتاج.\nإشعارات إنتاج وmonitoring وتغليف app stores.',
+  'app.launchStatus.notice':
+    'لا escrow حقيقي اليوم. لا استرداد أو دفع أو تأمين أو حماية قانونية مضمونة. اتبع القوانين المحلية وقواعد النقل/الجمارك. راجع Roadmap وPolicy Center.',
+  'app.launchStatus.roadmap': 'خارطة الطريق',
+  'app.launchStatus.fees': 'الرسوم والمدفوعات',
+  'app.launchStatus.policies': 'مركز السياسات',
+  'app.launchStatus.helpCenter': 'مركز المساعدة',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -17616,6 +17742,23 @@ const zh: Dictionary = {
   'app.safetyPreflight.fees': '费用与支付',
   'app.safetyPreflight.trustCenter': '信任中心',
   'app.safetyPreflight.supportDisputes': '支持与争议',
+  'app.launchStatus.title': '发布状态',
+  'app.launchStatus.subtitle': '诚实概览：今日可用功能、demo/manual 区域与未来 production 工作。',
+  'app.launchStatus.availableLabel': '可用',
+  'app.launchStatus.availableBody':
+    'Sender 与 Wayler 的 marketplace 与 demo app 流程。\n公共指南、Policy Center 与 in-app 安全工具。',
+  'app.launchStatus.mockManualLabel': 'Mock / manual',
+  'app.launchStatus.mockManualBody':
+    '支付可能 mock/manual（视环境）。\nKYC/provider 可能 mock/manual（视环境）。\n通知可能为 polling 或 demo。',
+  'app.launchStatus.plannedLabel': '计划中',
+  'app.launchStatus.plannedBody':
+    '真实支付集成。\nProduction KYC。\nProduction 通知、monitoring、app store 打包。',
+  'app.launchStatus.notice':
+    '今日无真实 escrow。无 guaranteed refund、payout、保险或法律保护。遵守当地法律与运输/海关规则。见 Roadmap 与 Policy Center。',
+  'app.launchStatus.roadmap': '路线图',
+  'app.launchStatus.fees': '费用与支付',
+  'app.launchStatus.policies': '政策中心',
+  'app.launchStatus.helpCenter': '帮助中心',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',

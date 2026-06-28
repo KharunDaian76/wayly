@@ -38,6 +38,7 @@ import {
 } from '@/components/app/accepted-order-details-drawer';
 import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
 import { HelpSafetyCenterCard } from '@/components/app/help-safety-center-card';
+import { LaunchStatusNoticeCard } from '@/components/app/launch-status-notice-card';
 import { RoleStarterChecklistCard } from '@/components/app/role-starter-checklist-card';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
@@ -1797,6 +1798,8 @@ export default function AppHomePage() {
           <RoleStarterChecklistCard />
           <HelpSafetyCenterCard />
         </div>
+
+        <LaunchStatusNoticeCard />
 
         {mode === 'wayler' ? (
           <>
