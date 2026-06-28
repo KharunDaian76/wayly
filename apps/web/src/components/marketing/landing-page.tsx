@@ -300,24 +300,23 @@ export function LandingPage() {
   return (
     <div className="dark bg-background text-foreground">
       {/* Hero */}
-      <section className="relative min-h-[640px] overflow-hidden border-b border-border/60 sm:min-h-[760px]">
+      <section className="relative min-h-[600px] overflow-hidden border-b border-border/60 sm:min-h-[720px] lg:min-h-[760px]">
         <div
           className="pointer-events-none absolute inset-0 wayly-landing-hero-grid opacity-40"
           aria-hidden
         />
-        <InteractiveRouteGlobe />
+        <div className="absolute inset-x-0 top-[4%] z-[1] flex justify-center sm:top-[3%] lg:top-[2%]">
+          <InteractiveRouteGlobe className="pointer-events-auto w-[min(92vw,520px)] sm:w-[min(88vw,640px)] lg:w-[min(78vw,720px)] xl:w-[min(72vw,820px)]" />
+        </div>
         <div
-          className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(ellipse_70%_55%_at_50%_42%,hsl(var(--background)/0.72)_0%,transparent_58%)]"
+          className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(ellipse_72%_48%_at_50%_36%,hsl(var(--background)/0.82)_0%,transparent_60%)]"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-background/15 via-transparent to-background/75"
+          className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-background/20 via-transparent to-background/80"
           aria-hidden
         />
-        <div className="container relative z-10 flex min-h-[640px] flex-col items-center justify-center gap-8 py-20 text-center sm:min-h-[760px] sm:py-28">
-          <p className="pointer-events-none absolute bottom-6 right-4 z-20 hidden rounded-full border border-border/50 bg-card/50 px-3 py-1.5 text-[11px] text-muted-foreground backdrop-blur sm:inline-block">
-            Drag globe to explore routes
-          </p>
+        <div className="container relative z-10 flex min-h-[600px] flex-col items-center justify-center gap-8 py-20 text-center sm:min-h-[720px] sm:py-28 lg:min-h-[760px]">
           <FadeIn>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
               <span className="size-1.5 rounded-full bg-success wayly-landing-route-dot" />

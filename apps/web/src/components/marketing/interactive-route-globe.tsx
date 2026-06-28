@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useI18n } from '@/lib/i18n/i18n-context';
 import { cn } from '@/lib/utils';
 
 type City = {
@@ -22,7 +23,6 @@ type Projected = {
 
 type LandMass = {
   points: [number, number][];
-  color: string;
 };
 
 const CITIES: City[] = [
@@ -65,165 +65,321 @@ const ROUTES: [string, string][] = [
   ['Los Angeles', 'Toronto'],
 ];
 
-/** Simplified original continent silhouettes — lat/lon polygons, not map tiles. */
+/** Regional land silhouettes — lat/lon polygons wrapped on a sphere, not map tiles. */
 const LAND_MASSES: LandMass[] = [
   {
-    color: 'land-a',
     points: [
       [72, -168],
-      [60, -145],
-      [55, -130],
-      [49, -125],
+      [68, -155],
+      [62, -145],
+      [58, -138],
+      [52, -130],
+      [48, -125],
+      [42, -124],
       [38, -122],
-      [32, -117],
+      [34, -118],
+      [30, -115],
       [25, -110],
-      [18, -105],
+      [20, -105],
+      [16, -98],
       [15, -92],
-      [10, -85],
-      [8, -77],
-      [12, -72],
-      [25, -80],
-      [30, -88],
+      [18, -88],
+      [22, -82],
+      [28, -82],
+      [32, -87],
+      [38, -90],
+      [42, -82],
       [45, -75],
-      [50, -58],
-      [47, -53],
-      [60, -65],
-      [70, -95],
-      [75, -140],
+      [48, -68],
+      [50, -62],
+      [52, -58],
+      [55, -62],
+      [58, -68],
+      [62, -75],
+      [66, -85],
+      [70, -100],
+      [72, -120],
+      [74, -145],
     ],
   },
   {
-    color: 'land-b',
+    points: [
+      [22, -105],
+      [18, -98],
+      [14, -92],
+      [10, -85],
+      [8, -80],
+      [10, -76],
+      [14, -78],
+      [18, -84],
+      [20, -92],
+    ],
+  },
+  {
     points: [
       [12, -82],
-      [5, -77],
+      [8, -78],
+      [4, -77],
+      [0, -78],
       [-5, -75],
-      [-15, -75],
+      [-10, -72],
+      [-15, -72],
+      [-20, -70],
       [-25, -65],
+      [-30, -62],
       [-35, -58],
-      [-50, -68],
-      [-55, -72],
+      [-40, -62],
       [-45, -65],
-      [-20, -45],
-      [-5, -35],
+      [-50, -68],
+      [-52, -72],
+      [-48, -74],
+      [-42, -72],
+      [-35, -68],
+      [-28, -62],
+      [-22, -55],
+      [-15, -48],
+      [-8, -42],
+      [-2, -38],
+      [2, -45],
       [5, -52],
-      [10, -62],
+      [8, -58],
+      [10, -65],
+      [12, -72],
     ],
   },
   {
-    color: 'land-c',
     points: [
-      [36, -10],
-      [43, -9],
-      [50, 0],
-      [55, 8],
-      [58, 22],
-      [62, 28],
-      [70, 28],
-      [72, 55],
-      [65, 75],
-      [55, 85],
-      [45, 95],
-      [35, 100],
-      [20, 105],
-      [5, 100],
-      [-5, 95],
-      [-15, 85],
-      [-35, 75],
-      [-35, 55],
-      [-25, 45],
-      [-10, 40],
-      [5, 35],
-      [15, 20],
-      [25, 10],
-      [32, -5],
+      [72, -28],
+      [70, -18],
+      [68, -12],
+      [65, -8],
+      [62, -5],
+      [58, -2],
+      [55, 2],
+      [52, 5],
+      [50, 8],
+      [48, 12],
+      [46, 8],
+      [44, 2],
+      [42, -2],
+      [40, -5],
+      [38, -8],
+      [36, -5],
+      [38, 2],
+      [40, 8],
+      [42, 12],
+      [44, 18],
+      [46, 22],
+      [48, 28],
+      [50, 32],
+      [52, 28],
+      [55, 22],
+      [58, 18],
+      [60, 12],
+      [62, 8],
+      [65, 5],
+      [68, 2],
+      [70, -5],
     ],
   },
   {
-    color: 'land-d',
     points: [
-      [72, -25],
-      [68, -10],
-      [60, 5],
-      [55, 15],
-      [50, 25],
-      [45, 38],
+      [37, -8],
+      [35, -12],
+      [32, -8],
+      [28, -12],
+      [22, -15],
+      [18, -12],
+      [12, -8],
+      [8, -5],
+      [5, 0],
+      [2, 8],
+      [0, 15],
+      [-2, 22],
+      [-5, 28],
+      [-8, 32],
+      [-12, 28],
+      [-15, 18],
+      [-18, 12],
+      [-22, 8],
+      [-28, 12],
+      [-32, 18],
+      [-34, 22],
+      [-32, 28],
+      [-28, 32],
+      [-22, 35],
+      [-15, 32],
+      [-8, 28],
+      [-2, 32],
+      [2, 35],
+      [5, 38],
+      [8, 42],
+      [12, 45],
+      [15, 48],
+      [18, 45],
+      [22, 42],
+      [25, 38],
+      [28, 32],
+      [32, 28],
+      [35, 22],
+      [36, 15],
+      [37, 8],
+    ],
+  },
+  {
+    points: [
       [42, 28],
-      [38, 22],
-      [35, 32],
-      [30, 32],
+      [40, 32],
+      [38, 38],
+      [35, 42],
+      [32, 45],
+      [28, 48],
+      [25, 52],
+      [22, 55],
+      [18, 58],
+      [15, 55],
+      [12, 50],
+      [15, 45],
+      [18, 42],
       [22, 38],
-      [12, 44],
-      [5, 50],
-      [-5, 40],
-      [-15, 12],
-      [-25, 15],
-      [-35, 18],
-      [-35, 28],
-      [-20, 35],
-      [0, 42],
-      [15, 52],
-      [30, 60],
-      [45, 68],
-      [55, 75],
-      [62, 85],
-      [68, 95],
-      [75, 110],
-      [70, 140],
-      [65, 160],
-      [55, 175],
-      [45, 170],
-      [35, 140],
-      [25, 120],
-      [15, 100],
-      [10, 80],
-      [15, 60],
-      [25, 45],
-      [35, 30],
-      [50, 20],
-      [60, 10],
-      [65, -5],
+      [25, 35],
+      [28, 32],
+      [32, 28],
+      [35, 25],
+      [38, 22],
+      [40, 25],
     ],
   },
   {
-    color: 'land-e',
+    points: [
+      [55, 38],
+      [52, 42],
+      [50, 48],
+      [48, 55],
+      [45, 62],
+      [42, 68],
+      [40, 72],
+      [38, 78],
+      [35, 82],
+      [32, 88],
+      [28, 92],
+      [25, 95],
+      [22, 98],
+      [18, 95],
+      [15, 88],
+      [12, 82],
+      [15, 75],
+      [18, 68],
+      [22, 62],
+      [25, 58],
+      [28, 55],
+      [32, 52],
+      [35, 48],
+      [38, 45],
+      [42, 42],
+      [45, 38],
+      [48, 35],
+      [52, 32],
+      [55, 35],
+    ],
+  },
+  {
+    points: [
+      [55, 95],
+      [52, 102],
+      [48, 108],
+      [45, 115],
+      [42, 122],
+      [38, 128],
+      [35, 135],
+      [32, 138],
+      [28, 135],
+      [25, 128],
+      [22, 122],
+      [25, 115],
+      [28, 108],
+      [32, 102],
+      [35, 98],
+      [38, 95],
+      [42, 92],
+      [45, 88],
+      [48, 85],
+      [52, 88],
+    ],
+  },
+  {
+    points: [
+      [45, 128],
+      [42, 135],
+      [38, 138],
+      [35, 142],
+      [32, 138],
+      [35, 132],
+      [38, 128],
+      [42, 125],
+    ],
+  },
+  {
+    points: [
+      [25, 95],
+      [18, 98],
+      [12, 102],
+      [5, 105],
+      [0, 108],
+      [-5, 105],
+      [-8, 110],
+      [-5, 115],
+      [0, 118],
+      [5, 115],
+      [10, 110],
+      [15, 105],
+      [20, 100],
+    ],
+  },
+  {
     points: [
       [-12, 130],
-      [-18, 122],
+      [-16, 125],
+      [-20, 122],
       [-25, 115],
-      [-32, 115],
-      [-38, 145],
-      [-35, 150],
-      [-28, 153],
-      [-20, 148],
-      [-15, 135],
+      [-30, 115],
+      [-34, 122],
+      [-36, 128],
+      [-38, 138],
+      [-36, 145],
+      [-32, 148],
+      [-28, 150],
+      [-22, 148],
+      [-18, 142],
+      [-14, 135],
     ],
   },
   {
-    color: 'land-f',
     points: [
-      [75, -55],
+      [76, -58],
+      [74, -52],
+      [72, -48],
       [70, -45],
-      [65, -40],
-      [60, -45],
-      [55, -60],
-      [60, -75],
-      [68, -85],
+      [68, -42],
+      [66, -45],
+      [68, -52],
+      [72, -55],
     ],
   },
 ];
 
-const MIN_ZOOM = 0.88;
-const MAX_ZOOM = 1.28;
-const AUTO_ROTATE_SPEED = 0.018;
-const TILT_LIMIT = 0.55;
+const MIN_ZOOM = 0.9;
+const MAX_ZOOM = 1.22;
+const AUTO_ROTATE_SPEED = 0.012;
+const TILT_LIMIT = 0.48;
+const MAX_VISIBLE_LABELS = 8;
 
-/** Deterministic star positions for starfield (no external assets). */
-const STARS = Array.from({ length: 120 }, (_, index) => ({
-  x: ((index * 73) % 100) / 100,
-  y: ((index * 41) % 100) / 100,
-  size: 0.4 + (index % 5) * 0.25,
-  alpha: 0.15 + (index % 7) * 0.08,
+/** Deterministic starfield — depth tiers, no external assets. */
+const STARS = Array.from({ length: 200 }, (_, index) => ({
+  x: ((index * 73 + 11) % 100) / 100,
+  y: ((index * 41 + 29) % 100) / 100,
+  size: index % 9 === 0 ? 1.1 : index % 4 === 0 ? 0.75 : 0.35 + (index % 3) * 0.15,
+  alpha: index % 9 === 0 ? 0.55 : index % 5 === 0 ? 0.32 : 0.12 + (index % 6) * 0.04,
 }));
 
 function degToRad(value: number): number {
@@ -311,17 +467,39 @@ function slerpLatLon(
   return [lat, lon];
 }
 
+function computeGlobeMetrics(width: number, height: number, zoom: number) {
+  const size = Math.min(width, height);
+  const cx = width / 2;
+  const cy = height / 2;
+  const radius = Math.min(size * 0.42, 390) * zoom;
+  return { size, cx, cy, radius };
+}
+
+function isInHeadlineZone(x: number, y: number, cx: number, cy: number, radius: number): boolean {
+  const dx = (x - cx) / (radius * 0.52);
+  const dy = (y - (cy - radius * 0.08)) / (radius * 0.38);
+  return dx * dx + dy * dy < 1;
+}
+
 function drawStarfield(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
+  cx: number,
+  cy: number,
+  radius: number,
   isDark: boolean,
 ) {
   const base = isDark ? '220 40% 98%' : '240 20% 30%';
   for (const star of STARS) {
-    ctx.fillStyle = hslAlpha(base, isDark ? star.alpha : star.alpha * 0.45);
+    const sx = star.x * width;
+    const sy = star.y * height;
+    if (isInHeadlineZone(sx, sy, cx, cy, radius)) {
+      continue;
+    }
+    ctx.fillStyle = hslAlpha(base, isDark ? star.alpha : star.alpha * 0.4);
     ctx.beginPath();
-    ctx.arc(star.x * width, star.y * height, star.size, 0, Math.PI * 2);
+    ctx.arc(sx, sy, star.size, 0, Math.PI * 2);
     ctx.fill();
   }
 }
@@ -330,18 +508,20 @@ function drawVignette(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
+  cx: number,
+  cy: number,
   isDark: boolean,
 ) {
   const vignette = ctx.createRadialGradient(
-    width / 2,
-    height / 2,
-    Math.min(width, height) * 0.2,
-    width / 2,
-    height / 2,
-    Math.max(width, height) * 0.72,
+    cx,
+    cy,
+    Math.min(width, height) * 0.18,
+    cx,
+    cy,
+    Math.max(width, height) * 0.62,
   );
   vignette.addColorStop(0, isDark ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)');
-  vignette.addColorStop(1, isDark ? 'rgba(0,0,0,0.45)' : 'rgba(240,242,248,0.35)');
+  vignette.addColorStop(1, isDark ? 'rgba(0,0,0,0.35)' : 'rgba(240,242,248,0.28)');
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, width, height);
 }
@@ -353,29 +533,48 @@ function drawOceanSphere(
   radius: number,
   isDark: boolean,
 ) {
-  const ocean = ctx.createRadialGradient(
-    cx - radius * 0.35,
-    cy - radius * 0.38,
-    radius * 0.08,
-    cx + radius * 0.08,
-    cy + radius * 0.12,
-    radius * 1.05,
-  );
-  if (isDark) {
-    ocean.addColorStop(0, 'hsl(210 55% 42% / 0.95)');
-    ocean.addColorStop(0.45, 'hsl(218 62% 22% / 0.98)');
-    ocean.addColorStop(0.85, 'hsl(228 70% 10% / 1)');
-    ocean.addColorStop(1, 'hsl(235 75% 6% / 1)');
-  } else {
-    ocean.addColorStop(0, 'hsl(205 70% 55% / 0.92)');
-    ocean.addColorStop(0.5, 'hsl(215 65% 38% / 0.96)');
-    ocean.addColorStop(1, 'hsl(225 60% 22% / 1)');
-  }
-
+  ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+  ctx.clip();
+
+  const ocean = ctx.createRadialGradient(
+    cx - radius * 0.38,
+    cy - radius * 0.42,
+    radius * 0.05,
+    cx + radius * 0.12,
+    cy + radius * 0.18,
+    radius * 1.08,
+  );
+  if (isDark) {
+    ocean.addColorStop(0, 'hsl(205 62% 48% / 0.96)');
+    ocean.addColorStop(0.35, 'hsl(215 68% 28% / 0.98)');
+    ocean.addColorStop(0.72, 'hsl(225 72% 14% / 1)');
+    ocean.addColorStop(1, 'hsl(232 78% 7% / 1)');
+  } else {
+    ocean.addColorStop(0, 'hsl(200 72% 58% / 0.94)');
+    ocean.addColorStop(0.45, 'hsl(212 65% 40% / 0.96)');
+    ocean.addColorStop(1, 'hsl(222 58% 20% / 1)');
+  }
+
   ctx.fillStyle = ocean;
-  ctx.fill();
+  ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+
+  const night = ctx.createRadialGradient(
+    cx + radius * 0.42,
+    cy + radius * 0.38,
+    radius * 0.08,
+    cx - radius * 0.25,
+    cy - radius * 0.15,
+    radius * 1.05,
+  );
+  night.addColorStop(0, 'rgba(0,0,0,0)');
+  night.addColorStop(0.5, isDark ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.12)');
+  night.addColorStop(1, isDark ? 'rgba(0,0,0,0.48)' : 'rgba(0,0,0,0.28)');
+  ctx.fillStyle = night;
+  ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+
+  ctx.restore();
 }
 
 function drawLandMasses(
@@ -389,7 +588,7 @@ function drawLandMasses(
 ) {
   ctx.save();
   ctx.beginPath();
-  ctx.arc(cx, cy, radius * 0.995, 0, Math.PI * 2);
+  ctx.arc(cx, cy, radius * 0.998, 0, Math.PI * 2);
   ctx.clip();
 
   for (const mass of LAND_MASSES) {
@@ -397,7 +596,7 @@ function drawLandMasses(
       projectLatLon(lat, lon, radius, cx, cy, rotY, rotX),
     );
     const avgZ = projected.reduce((sum, point) => sum + point.z, 0) / projected.length;
-    if (avgZ < -0.15) {
+    if (avgZ < -0.12) {
       continue;
     }
 
@@ -417,9 +616,13 @@ function drawLandMasses(
     }
     ctx.closePath();
 
-    const landLight = isDark ? 0.42 + avgZ * 0.25 : 0.5 + avgZ * 0.2;
-    ctx.fillStyle = hslAlpha(isDark ? '152 38% 38%' : '148 35% 42%', landLight);
+    const landFill = hslAlpha(isDark ? '158 32% 36%' : '150 28% 40%', 0.38 + avgZ * 0.32);
+    ctx.fillStyle = landFill;
     ctx.fill();
+
+    ctx.strokeStyle = hslAlpha(isDark ? '155 28% 22%' : '145 25% 28%', 0.35 + avgZ * 0.2);
+    ctx.lineWidth = 0.6;
+    ctx.stroke();
   }
 
   ctx.restore();
@@ -439,16 +642,16 @@ function drawCloudTexture(
   ctx.arc(cx, cy, radius * 0.99, 0, Math.PI * 2);
   ctx.clip();
 
-  for (let index = 0; index < 28; index += 1) {
-    const lat = -40 + ((index * 17) % 80);
-    const lon = -180 + ((index * 43) % 360);
-    const point = projectLatLon(lat, lon, radius * 1.01, cx, cy, rotY, rotX);
-    if (!point.visible || point.z < 0.1) {
+  for (let index = 0; index < 22; index += 1) {
+    const lat = -35 + ((index * 19) % 70);
+    const lon = -180 + ((index * 47) % 360);
+    const point = projectLatLon(lat, lon, radius * 1.005, cx, cy, rotY, rotX);
+    if (!point.visible || point.z < 0.12) {
       continue;
     }
-    ctx.fillStyle = hslAlpha('210 30% 96%', isDark ? 0.04 + point.z * 0.05 : 0.08 + point.z * 0.06);
+    ctx.fillStyle = hslAlpha('210 30% 96%', isDark ? 0.03 + point.z * 0.04 : 0.06 + point.z * 0.05);
     ctx.beginPath();
-    ctx.arc(point.x, point.y, 2 + (index % 4), 0, Math.PI * 2);
+    ctx.arc(point.x, point.y, 1.5 + (index % 3), 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -464,13 +667,18 @@ function drawLatLonGrid(
   rotX: number,
   stroke: string,
 ) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 0.998, 0, Math.PI * 2);
+  ctx.clip();
+
   ctx.strokeStyle = stroke;
-  ctx.lineWidth = 0.55;
+  ctx.lineWidth = 0.45;
 
   for (let lat = -60; lat <= 60; lat += 30) {
     ctx.beginPath();
     let started = false;
-    for (let lon = -180; lon <= 180; lon += 4) {
+    for (let lon = -180; lon <= 180; lon += 5) {
       const point = projectLatLon(lat, lon, radius, cx, cy, rotY, rotX);
       if (!point.visible) {
         started = false;
@@ -489,7 +697,7 @@ function drawLatLonGrid(
   for (let lon = -180; lon < 180; lon += 30) {
     ctx.beginPath();
     let started = false;
-    for (let lat = -90; lat <= 90; lat += 4) {
+    for (let lat = -90; lat <= 90; lat += 5) {
       const point = projectLatLon(lat, lon, radius, cx, cy, rotY, rotX);
       if (!point.visible) {
         started = false;
@@ -504,9 +712,30 @@ function drawLatLonGrid(
     }
     ctx.stroke();
   }
+
+  ctx.restore();
 }
 
-function drawAtmosphere(
+function drawAtmosphereHalo(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  radius: number,
+  accent: string,
+  isDark: boolean,
+) {
+  const halo = ctx.createRadialGradient(cx, cy, radius * 0.92, cx, cy, radius * 1.2);
+  halo.addColorStop(0, 'rgba(0,0,0,0)');
+  halo.addColorStop(0.55, hslAlpha('190 85% 62%', isDark ? 0.06 : 0.04));
+  halo.addColorStop(0.82, hslAlpha(accent, isDark ? 0.14 : 0.1));
+  halo.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = halo;
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius * 1.2, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawAtmosphereRim(
   ctx: CanvasRenderingContext2D,
   cx: number,
   cy: number,
@@ -519,16 +748,23 @@ function drawAtmosphere(
   ctx.arc(cx, cy, radius, 0, Math.PI * 2);
   ctx.clip();
 
-  const rim = ctx.createRadialGradient(cx, cy, radius * 0.82, cx, cy, radius * 1.08);
+  const rim = ctx.createRadialGradient(
+    cx - radius * 0.35,
+    cy - radius * 0.35,
+    radius * 0.78,
+    cx,
+    cy,
+    radius * 1.06,
+  );
   rim.addColorStop(0, 'rgba(0,0,0,0)');
-  rim.addColorStop(0.72, hslAlpha(accent, isDark ? 0.08 : 0.12));
-  rim.addColorStop(1, hslAlpha(accent, isDark ? 0.35 : 0.22));
+  rim.addColorStop(0.7, hslAlpha(accent, isDark ? 0.06 : 0.1));
+  rim.addColorStop(1, hslAlpha('195 90% 68%', isDark ? 0.28 : 0.18));
   ctx.fillStyle = rim;
-  ctx.fillRect(cx - radius * 1.2, cy - radius * 1.2, radius * 2.4, radius * 2.4);
+  ctx.fillRect(cx - radius * 1.15, cy - radius * 1.15, radius * 2.3, radius * 2.3);
   ctx.restore();
 
-  ctx.strokeStyle = hslAlpha(accent, isDark ? 0.25 : 0.18);
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = hslAlpha('195 90% 72%', isDark ? 0.35 : 0.22);
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, Math.PI * 2);
   ctx.stroke();
@@ -554,21 +790,24 @@ function drawRouteArc(
     samples.push(projectLatLon(lat, lon, radius, cx, cy, rotY, rotX));
   }
 
-  const visibleSamples = samples.filter((point) => point.visible && point.z > 0.05);
+  const visibleSamples = samples.filter((point) => point.visible && point.z > 0.04);
   if (visibleSamples.length < 2) {
     return;
   }
 
   const avgZ = visibleSamples.reduce((sum, point) => sum + point.z, 0) / visibleSamples.length;
-  const alpha = 0.2 + avgZ * 0.55;
+  const inHeadline = visibleSamples.some((point) =>
+    isInHeadlineZone(point.x, point.y, cx, cy, radius),
+  );
+  const alpha = (inHeadline ? 0.12 : 0.22) + avgZ * 0.45;
 
   ctx.strokeStyle = hslAlpha(accent, alpha);
-  ctx.lineWidth = 1.2 + avgZ * 0.8;
-  ctx.setLineDash(animate ? [6, 10] : []);
-  ctx.lineDashOffset = animate ? -phase * 28 : 0;
+  ctx.lineWidth = 0.9 + avgZ * 0.7;
+  ctx.setLineDash(animate ? [5, 9] : []);
+  ctx.lineDashOffset = animate ? -phase * 24 : 0;
   ctx.beginPath();
   visibleSamples.forEach((point, index) => {
-    const lift = 1 + (1 - Math.abs(index / 24 - 0.5) * 2) * 0.04;
+    const lift = 1 + (1 - Math.abs(index / 24 - 0.5) * 2) * 0.035;
     const px = cx + (point.x - cx) * lift;
     const py = cy + (point.y - cy) * lift;
     if (index === 0) {
@@ -585,9 +824,9 @@ function drawRouteArc(
     const sampleIndex = Math.floor(particleT * (visibleSamples.length - 1));
     const particle = visibleSamples[sampleIndex];
     if (particle) {
-      ctx.fillStyle = hslAlpha(accent, 0.75 + particle.z * 0.2);
+      ctx.fillStyle = hslAlpha(accent, 0.65 + particle.z * 0.25);
       ctx.beginPath();
-      ctx.arc(particle.x, particle.y, 2.2, 0, Math.PI * 2);
+      ctx.arc(particle.x, particle.y, 2, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -598,11 +837,12 @@ type InteractiveRouteGlobeProps = {
 };
 
 export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps) {
+  const { t } = useI18n();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const rotationYRef = useRef(degToRad(-24));
-  const rotationXRef = useRef(degToRad(12));
-  const zoomRef = useRef(1.05);
+  const rotationXRef = useRef(degToRad(10));
+  const zoomRef = useRef(1.04);
   const draggingRef = useRef(false);
   const lastPointerRef = useRef({ x: 0, y: 0 });
   const autoRotateRef = useRef(true);
@@ -642,28 +882,25 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
     const accent = rootStyles.getPropertyValue('--accent').trim() || '174 58% 45%';
     const isDark = document.documentElement.classList.contains('dark');
 
-    drawStarfield(ctx, width, height, isDark);
+    const { cx, cy, radius } = computeGlobeMetrics(width, height, zoomRef.current);
 
-    const cx = width / 2;
-    const cy = height / 2;
-    const baseRadius = Math.min(width, 680);
-    const radius = (baseRadius * 0.52 + Math.min(width, height) * 0.08) * zoomRef.current;
-
-    const rotY = rotationYRef.current;
-    const rotX = rotationXRef.current;
-
+    drawStarfield(ctx, width, height, cx, cy, radius, isDark);
+    drawAtmosphereHalo(ctx, cx, cy, radius, accent, isDark);
     drawOceanSphere(ctx, cx, cy, radius, isDark);
-    drawLandMasses(ctx, radius, cx, cy, rotY, rotX, isDark);
-    drawCloudTexture(ctx, radius, cx, cy, rotY, rotX, isDark);
+    drawLandMasses(ctx, radius, cx, cy, rotationYRef.current, rotationXRef.current, isDark);
+    drawCloudTexture(ctx, radius, cx, cy, rotationYRef.current, rotationXRef.current, isDark);
     drawLatLonGrid(
       ctx,
       radius,
       cx,
       cy,
-      rotY,
-      rotX,
-      hslAlpha(isDark ? '210 40% 88%' : '220 30% 40%', isDark ? 0.12 : 0.18),
+      rotationYRef.current,
+      rotationXRef.current,
+      hslAlpha(isDark ? '210 40% 88%' : '220 30% 40%', isDark ? 0.07 : 0.1),
     );
+
+    const rotY = rotationYRef.current;
+    const rotX = rotationXRef.current;
 
     const projectedCities = CITIES.map((city) => ({
       city,
@@ -692,38 +929,45 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
       );
     }
 
-    for (const { city, point } of projectedCities) {
+    for (const { point } of projectedCities) {
       if (!point.visible || point.z < 0.08) {
         continue;
       }
 
-      const glow = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, 14);
-      glow.addColorStop(0, hslAlpha(accent, 0.35 + point.z * 0.35));
+      const glow = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, 12);
+      glow.addColorStop(0, hslAlpha(accent, 0.28 + point.z * 0.32));
       glow.addColorStop(1, 'transparent');
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(point.x, point.y, 12, 0, Math.PI * 2);
+      ctx.arc(point.x, point.y, 10, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = hslAlpha(accent, 0.7 + point.z * 0.25);
+      ctx.fillStyle = hslAlpha(accent, 0.65 + point.z * 0.28);
       ctx.beginPath();
-      ctx.arc(point.x, point.y, 2.4 + point.z * 1.4, 0, Math.PI * 2);
+      ctx.arc(point.x, point.y, 2.2 + point.z * 1.2, 0, Math.PI * 2);
       ctx.fill();
-
-      if (city.label) {
-        ctx.font = '600 11px system-ui, sans-serif';
-        ctx.fillStyle = hslAlpha(isDark ? '210 40% 96%' : '228 35% 18%', 0.55 + point.z * 0.4);
-        ctx.textAlign = 'center';
-        ctx.fillText(city.name, point.x, point.y - 14);
-      }
     }
 
-    drawAtmosphere(ctx, cx, cy, radius, accent, isDark);
-    drawVignette(ctx, width, height, isDark);
+    const labelCandidates = projectedCities
+      .filter(({ city, point }) => city.label && point.visible && point.z > 0.14)
+      .sort((a, b) => b.point.z - a.point.z)
+      .slice(0, MAX_VISIBLE_LABELS);
+
+    for (const { city, point } of labelCandidates) {
+      const inHeadline = isInHeadlineZone(point.x, point.y, cx, cy, radius);
+      const alpha = inHeadline ? 0.12 + point.z * 0.15 : 0.5 + point.z * 0.38;
+      ctx.font = '600 10px system-ui, sans-serif';
+      ctx.fillStyle = hslAlpha(isDark ? '210 40% 96%' : '228 35% 18%', alpha);
+      ctx.textAlign = 'center';
+      ctx.fillText(city.name, point.x, point.y - 12);
+    }
+
+    drawAtmosphereRim(ctx, cx, cy, radius, accent, isDark);
+    drawVignette(ctx, width, height, cx, cy, isDark);
 
     if (!reducedMotionRef.current && autoRotateRef.current && !draggingRef.current) {
       rotationYRef.current += AUTO_ROTATE_SPEED;
-      phaseRef.current += 0.014;
+      phaseRef.current += 0.012;
     }
   }, []);
 
@@ -774,10 +1018,10 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
     const dx = event.clientX - lastPointerRef.current.x;
     const dy = event.clientY - lastPointerRef.current.y;
     lastPointerRef.current = { x: event.clientX, y: event.clientY };
-    rotationYRef.current += dx * 0.006;
+    rotationYRef.current += dx * 0.0045;
     rotationXRef.current = Math.max(
       -TILT_LIMIT,
-      Math.min(TILT_LIMIT, rotationXRef.current + dy * 0.004),
+      Math.min(TILT_LIMIT, rotationXRef.current + dy * 0.0035),
     );
   };
 
@@ -789,35 +1033,37 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
     }
     window.setTimeout(() => {
       autoRotateRef.current = true;
-    }, 2200);
+    }, 2400);
   };
 
   const onWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
     event.preventDefault();
-    const delta = event.deltaY > 0 ? -0.04 : 0.04;
+    const delta = event.deltaY > 0 ? -0.03 : 0.03;
     zoomRef.current = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoomRef.current + delta));
   };
 
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        'pointer-events-auto absolute inset-0 z-[1] flex items-center justify-center overflow-hidden',
-        className,
-      )}
-    >
-      <canvas
-        ref={canvasRef}
-        className={cn(
-          'h-full w-full max-h-[820px] max-w-[820px] touch-none select-none',
-          isDragging ? 'cursor-grabbing' : 'cursor-grab',
-        )}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerLeave={onPointerUp}
-        onWheel={onWheel}
-      />
+    <div className={cn('relative aspect-square w-full', className)}>
+      <div ref={containerRef} className="absolute inset-0">
+        <canvas
+          ref={canvasRef}
+          className={cn(
+            'block h-full w-full touch-none select-none',
+            isDragging ? 'cursor-grabbing' : 'cursor-grab',
+          )}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerLeave={onPointerUp}
+          onWheel={onWheel}
+        />
+      </div>
+      <p
+        className="pointer-events-none absolute bottom-[4%] left-1/2 z-10 hidden -translate-x-1/2 rounded-full border border-border/40 bg-card/45 px-2.5 py-1 text-[10px] text-muted-foreground backdrop-blur-sm sm:inline-block"
+        aria-hidden
+      >
+        {t('marketing.landing.globeDragHint')}
+      </p>
       <p className="sr-only">
         Interactive 3D-style Earth globe with global delivery routes. Drag to rotate, scroll to
         zoom.

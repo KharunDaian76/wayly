@@ -570,7 +570,7 @@
     background-position:
       0 0,
       8px 8px;
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+    mask-image: radial-gradient(ellipse 75% 55% at 50% 38%, black 18%, transparent 72%);
   }
 
   @media (prefers-reduced-motion: reduce) {
