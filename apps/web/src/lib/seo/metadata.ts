@@ -60,4 +60,5 @@ export const publicMarketingPaths = [
   '/terms',
   '/privacy',
   '/community-guidelines',
+  '/roadmap',
 ] as const;

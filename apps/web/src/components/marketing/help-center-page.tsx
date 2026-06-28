@@ -9,6 +9,7 @@ import {
   LifeBuoy,
   MapPin,
   Route,
+  Rocket,
   Scale,
   ScrollText,
   Shield,
@@ -76,6 +77,12 @@ const FEATURED_GUIDES: FeaturedGuide[] = [
     icon: ScrollText,
     titleKey: 'marketing.policies.navLabel',
     descriptionKey: 'marketing.policies.helpCenterDescription',
+  },
+  {
+    href: '/roadmap',
+    icon: Rocket,
+    titleKey: 'marketing.roadmap.navLabel',
+    descriptionKey: 'marketing.roadmap.helpCenterDescription',
   },
 ];
 

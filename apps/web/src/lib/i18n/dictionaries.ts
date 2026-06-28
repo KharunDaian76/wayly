@@ -2147,6 +2147,39 @@ const en = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'Prohibited conduct',
   'marketing.communityGuidelines.prohibitedConductBody':
     'No harassment, hate, threats, fraud, or impersonation.\nNo illegal activity, stolen goods, or restricted/prohibited items.\nNo attempts to bypass KYC, access gates, or platform safety tools.\nWayly may restrict accounts in future production enforcement — today focus on responsible self-governance and reporting issues.',
+  'marketing.roadmap.navLabel': 'Launch status & roadmap',
+  'marketing.roadmap.title': 'Launch status & roadmap',
+  'marketing.roadmap.subtitle':
+    'A transparent view of what Wayly offers today, what is still demo or manual, and the production work ahead — without overstating guarantees.',
+  'marketing.roadmap.openApp': 'Open app',
+  'marketing.roadmap.helpCenter': 'Help Center',
+  'marketing.roadmap.policyCenter': 'Policy Center',
+  'marketing.roadmap.helpCenterDescription':
+    'Current capabilities, mock/manual areas, planned production milestones, and honest platform limits.',
+  'marketing.roadmap.badgeAvailable': 'Available',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'Planned',
+  'marketing.roadmap.availableTitle': 'Available today',
+  'marketing.roadmap.availableBody':
+    'Sender and Wayler marketplace flows in the current app/demo environment.\nWayler availability listings and trip routes; Sender browse and request tools.\nSender requests to Waylers; accepted requests can convert to delivery orders.\nOrder-linked chat, timeline, proof-of-delivery metadata, and dispute tools.\nPublic guidance pages, Policy Center, Help Center, and Trust resources.\nIn-app Help & Safety Center, Role Starter checklist, and Safety Preflight guidance.\nBrowser-local productivity tools: drafts, templates, shortlist, recent route searches.\nAdmin operations and review queues for KYC, disputes, payments metadata, and moderation records where enabled.',
+  'marketing.roadmap.mockManualTitle': 'Mock or manual today',
+  'marketing.roadmap.mockManualBody':
+    'Payment provider flow may be mock or manual — status fields update without real provider money movement.\nNo real escrow guarantee, guaranteed refund, or guaranteed payout today.\nKYC provider flow may be mock or manual depending on environment and demo flags.\nAdmin payment/dispute review records are operational metadata — they do not move money by themselves.\nNotifications may be in-app polling or demo dispatch — not full production push infrastructure yet.\nSome operator actions are decision logs until real provider webhooks and execution exist.',
+  'marketing.roadmap.plannedTitle': 'Planned production work',
+  'marketing.roadmap.plannedBody':
+    'Real payment provider integration (for example Stripe) with live authorization and settlement paths.\nProvider webhooks and automated payment state reconciliation.\nRefund, capture, and payout execution — not metadata-only decisions.\nProduction KYC provider integration with verified webhook processing.\nProduction notification system (push/email) with reliable delivery.\nProduction monitoring, alerting, and incident response runbooks.\nMobile packaging and app store distribution readiness.\nLawyer-reviewed terms, privacy policy, and regional compliance review.\nRegion and currency fee rules with admin-configured pricing controls.\nStronger support workflows and operator escalation tooling.',
+  'marketing.roadmap.safetyRoadmapTitle': 'Safety and compliance roadmap',
+  'marketing.roadmap.safetyRoadmapBody':
+    'Stronger restricted-item workflows and clearer decline paths for Waylers.\nClearer evidence upload rules and file-handling policies when production-ready.\nPolicy and legal review before real-money launch.\nModeration, fraud signals, and risk tooling improvements.\nCompliance review for payments, KYC, and cross-border transport expectations.\nPre-launch operator training and honest public status updates as milestones ship.',
+  'marketing.roadmap.noGuaranteesTitle': 'What Wayly does not guarantee today',
+  'marketing.roadmap.noGuaranteesBody':
+    'No legal advice or legal protection.\nNo insurance or carrier liability coverage.\nNo guaranteed delivery, refund, or payout.\nNo real escrow guarantee or third-party funds protection today.\nNo verification of item legality, customs clearance, or package contents.\nDisputes and admin review organize records — they do not guarantee outcomes.',
+  'marketing.roadmap.helpfulLinksTitle': 'Helpful links',
+  'marketing.roadmap.fees': 'Fees & payments',
+  'marketing.roadmap.privacy': 'Privacy guidance',
+  'marketing.roadmap.supportDisputes': 'Support & disputes',
+  'marketing.roadmap.restrictedItems': 'Restricted items',
+  'marketing.roadmap.backHome': 'Back to home',
   'marketing.fees.navLabel': 'Fees & payments',
   'marketing.fees.title': 'Fees & payment transparency',
   'marketing.fees.subtitle':
@@ -4406,6 +4439,39 @@ const ru: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'Запрещённое поведение',
   'marketing.communityGuidelines.prohibitedConductBody':
     'Нет harassment, угроз, fraud, незаконной активности или запрещённых товаров.\nНе обходите KYC и safety tools.',
+  'marketing.roadmap.navLabel': 'Статус запуска и roadmap',
+  'marketing.roadmap.title': 'Статус запуска и roadmap',
+  'marketing.roadmap.subtitle':
+    'Прозрачный обзор возможностей Wayly сегодня, demo/manual областей и production-работы — без преувеличения гарантий.',
+  'marketing.roadmap.openApp': 'Открыть приложение',
+  'marketing.roadmap.helpCenter': 'Справочный центр',
+  'marketing.roadmap.policyCenter': 'Центр политик',
+  'marketing.roadmap.helpCenterDescription':
+    'Текущие возможности, mock/manual зоны, planned milestones и честные ограничения.',
+  'marketing.roadmap.badgeAvailable': 'Доступно',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'Planned',
+  'marketing.roadmap.availableTitle': 'Доступно сегодня',
+  'marketing.roadmap.availableBody':
+    'Marketplace-потоки Sender и Wayler в текущем app/demo.\nListings и trip routes; browse и запросы Sender.\nЗапросы к Waylers; accepted → delivery orders.\nChat, timeline, proof metadata, dispute tools.\nPublic guidance, Policy Center, Help Center.\nIn-app Help & Safety, Role Starter, Safety Preflight.\nBrowser-local: drafts, templates, shortlist, recent routes.\nAdmin operations/review queues где включено.',
+  'marketing.roadmap.mockManualTitle': 'Mock или manual сегодня',
+  'marketing.roadmap.mockManualBody':
+    'Payment flow может быть mock/manual — без реального движения денег.\nНет escrow, guaranteed refund/payout.\nKYC может быть mock/manual по environment.\nAdmin review — metadata, не движение денег.\nNotifications могут быть polling/demo, не production push.',
+  'marketing.roadmap.plannedTitle': 'Planned production work',
+  'marketing.roadmap.plannedBody':
+    'Real payment provider + webhooks.\nRefund/capture/payout execution.\nProduction KYC provider.\nProduction notifications.\nMonitoring/alerting.\nMobile app store packaging.\nLegal/privacy review.\nRegion/currency fee rules.\nStronger support workflows.',
+  'marketing.roadmap.safetyRoadmapTitle': 'Safety & compliance roadmap',
+  'marketing.roadmap.safetyRoadmapBody':
+    'Stronger restricted-item workflows.\nClearer evidence upload rules.\nPolicy/legal review before real-money launch.\nModeration and risk tooling.\nCompliance review for payments/KYC/transport.',
+  'marketing.roadmap.noGuaranteesTitle': 'Чего Wayly не гарантирует',
+  'marketing.roadmap.noGuaranteesBody':
+    'Нет legal advice, insurance, legal protection.\nНет guaranteed delivery, refund, payout.\nНет real escrow сегодня.\nНет verification legality предметов.\nDisputes/admin review не гарантируют outcome.',
+  'marketing.roadmap.helpfulLinksTitle': 'Полезные ссылки',
+  'marketing.roadmap.fees': 'Тарифы и платежи',
+  'marketing.roadmap.privacy': 'Конфиденциальность',
+  'marketing.roadmap.supportDisputes': 'Поддержка и споры',
+  'marketing.roadmap.restrictedItems': 'Запрещённые предметы',
+  'marketing.roadmap.backHome': 'На главную',
   'marketing.fees.navLabel': 'Тарифы и платежи',
   'marketing.fees.title': 'Тарифы и прозрачность платежей',
   'marketing.fees.subtitle':
@@ -6673,6 +6739,39 @@ const es: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'Conducta prohibida',
   'marketing.communityGuidelines.prohibitedConductBody':
     'Sin acoso, amenazas, fraude, actividad ilegal ni bienes restringidos.\nNo evada KYC ni herramientas de seguridad.',
+  'marketing.roadmap.navLabel': 'Estado de lanzamiento y roadmap',
+  'marketing.roadmap.title': 'Estado de lanzamiento y roadmap',
+  'marketing.roadmap.subtitle':
+    'Vista transparente de capacidades actuales, áreas demo/manual y trabajo de producción — sin exagerar garantías.',
+  'marketing.roadmap.openApp': 'Abrir app',
+  'marketing.roadmap.helpCenter': 'Centro de ayuda',
+  'marketing.roadmap.policyCenter': 'Centro de políticas',
+  'marketing.roadmap.helpCenterDescription':
+    'Capacidades actuales, mock/manual, hitos planificados y límites honestos.',
+  'marketing.roadmap.badgeAvailable': 'Disponible',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'Planificado',
+  'marketing.roadmap.availableTitle': 'Disponible hoy',
+  'marketing.roadmap.availableBody':
+    'Flujos marketplace Sender/Wayler en app/demo actual.\nListings y rutas; browse y solicitudes.\nSolicitudes a Waylers; accepted → orders.\nChat, timeline, proof, disputas.\nGuías públicas, Policy Center, Help Center.\nHelp & Safety in-app, Role Starter, Safety Preflight.\nDatos locales: borradores, plantillas, shortlist, rutas recientes.\nAdmin operations/review donde aplique.',
+  'marketing.roadmap.mockManualTitle': 'Mock o manual hoy',
+  'marketing.roadmap.mockManualBody':
+    'Pagos mock/manual — sin movimiento real de fondos.\nSin escrow, reembolso o pago garantizado.\nKYC mock/manual según entorno.\nReview admin = metadata, no mueve dinero.\nNotificaciones polling/demo, no push production.',
+  'marketing.roadmap.plannedTitle': 'Trabajo de producción planificado',
+  'marketing.roadmap.plannedBody':
+    'Integración real de pagos y webhooks.\nEjecución refund/capture/payout.\nKYC production.\nNotificaciones production.\nMonitoring/alerting.\nEmpaquetado app stores.\nRevisión legal/privacidad.\nReglas fee por región/moneda.\nWorkflows de soporte más fuertes.',
+  'marketing.roadmap.safetyRoadmapTitle': 'Roadmap de seguridad y cumplimiento',
+  'marketing.roadmap.safetyRoadmapBody':
+    'Workflows de artículos restringidos.\nReglas claras de evidencia.\nRevisión legal antes de dinero real.\nModeración y riesgo.\nRevisión compliance pagos/KYC/transporte.',
+  'marketing.roadmap.noGuaranteesTitle': 'Lo que Wayly no garantiza hoy',
+  'marketing.roadmap.noGuaranteesBody':
+    'Sin asesoramiento legal, seguro ni protección legal.\nSin entrega, reembolso o pago garantizado.\nSin escrow real hoy.\nSin verificación de legalidad de artículos.\nDisputas/review no garantizan resultado.',
+  'marketing.roadmap.helpfulLinksTitle': 'Enlaces útiles',
+  'marketing.roadmap.fees': 'Tarifas y pagos',
+  'marketing.roadmap.privacy': 'Orientación de privacidad',
+  'marketing.roadmap.supportDisputes': 'Soporte y disputas',
+  'marketing.roadmap.restrictedItems': 'Artículos restringidos',
+  'marketing.roadmap.backHome': 'Volver al inicio',
   'marketing.fees.navLabel': 'Tarifas y pagos',
   'marketing.fees.title': 'Tarifas y transparencia de pagos',
   'marketing.fees.subtitle':
@@ -8968,6 +9067,39 @@ const fr: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'Conduite interdite',
   'marketing.communityGuidelines.prohibitedConductBody':
     'Pas harcèlement, menaces, fraude, activité illégale ni biens restreints.\nNe contournez pas KYC ni outils sécurité.',
+  'marketing.roadmap.navLabel': 'Statut de lancement et roadmap',
+  'marketing.roadmap.title': 'Statut de lancement et roadmap',
+  'marketing.roadmap.subtitle':
+    'Vue transparente des capacités actuelles, zones demo/manual et travail production — sans sur-promesse.',
+  'marketing.roadmap.openApp': "Ouvrir l'app",
+  'marketing.roadmap.helpCenter': "Centre d'aide",
+  'marketing.roadmap.policyCenter': 'Centre des politiques',
+  'marketing.roadmap.helpCenterDescription':
+    'Capacités actuelles, mock/manual, jalons planifiés et limites honnêtes.',
+  'marketing.roadmap.badgeAvailable': 'Disponible',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'Planifié',
+  'marketing.roadmap.availableTitle': "Disponible aujourd'hui",
+  'marketing.roadmap.availableBody':
+    "Flux marketplace Sender/Wayler dans l'app/demo actuelle.\nListings et routes ; browse et demandes.\nDemandes aux Waylers ; accepted → commandes.\nChat, timeline, proof, litiges.\nGuides publics, Policy Center, Help Center.\nHelp & Safety in-app, Role Starter, Safety Preflight.\nDonnées locales : brouillons, modèles, shortlist, routes récentes.\nAdmin operations/review où applicable.",
+  'marketing.roadmap.mockManualTitle': "Mock ou manual aujourd'hui",
+  'marketing.roadmap.mockManualBody':
+    "Paiements mock/manual — pas de mouvement réel de fonds.\nPas d'escrow, remboursement ou paiement garanti.\nKYC mock/manual selon environnement.\nReview admin = metadata, ne déplace pas l'argent.\nNotifications polling/demo, pas push production.",
+  'marketing.roadmap.plannedTitle': 'Travail production planifié',
+  'marketing.roadmap.plannedBody':
+    'Intégration paiement réelle et webhooks.\nExécution refund/capture/payout.\nKYC production.\nNotifications production.\nMonitoring/alerting.\nPackaging app stores.\nRevue legal/privacy.\nRègles fee région/devise.\nWorkflows support renforcés.',
+  'marketing.roadmap.safetyRoadmapTitle': 'Roadmap sécurité et conformité',
+  'marketing.roadmap.safetyRoadmapBody':
+    'Workflows articles restreints.\nRègles preuves plus claires.\nRevue legal avant argent réel.\nModération et risque.\nRevue compliance paiements/KYC/transport.',
+  'marketing.roadmap.noGuaranteesTitle': 'Ce que Wayly ne garantit pas',
+  'marketing.roadmap.noGuaranteesBody':
+    "Pas de conseil juridique, assurance ni protection juridique.\nPas de livraison, remboursement ou paiement garanti.\nPas d'escrow réel aujourd'hui.\nPas de vérification légalité articles.\nLitiges/review ne garantissent pas résultat.",
+  'marketing.roadmap.helpfulLinksTitle': 'Liens utiles',
+  'marketing.roadmap.fees': 'Frais et paiements',
+  'marketing.roadmap.privacy': 'Orientation confidentialité',
+  'marketing.roadmap.supportDisputes': 'Support et litiges',
+  'marketing.roadmap.restrictedItems': 'Articles restreints',
+  'marketing.roadmap.backHome': "Retour à l'accueil",
   'marketing.fees.navLabel': 'Frais et paiements',
   'marketing.fees.title': 'Frais et transparence des paiements',
   'marketing.fees.subtitle':
@@ -11273,6 +11405,39 @@ const de: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'Verbotenes Verhalten',
   'marketing.communityGuidelines.prohibitedConductBody':
     'Kein Belästigen, Drohen, Betrug, Illegales oder verbotene Güter.\nKYC und Sicherheitstools nicht umgehen.',
+  'marketing.roadmap.navLabel': 'Launch-Status & Roadmap',
+  'marketing.roadmap.title': 'Launch-Status & Roadmap',
+  'marketing.roadmap.subtitle':
+    'Transparenter Überblick über heutige Funktionen, Demo/Manual-Bereiche und Production-Arbeit — ohne Garantie-Übertreibung.',
+  'marketing.roadmap.openApp': 'App öffnen',
+  'marketing.roadmap.helpCenter': 'Help Center',
+  'marketing.roadmap.policyCenter': 'Richtlinien-Center',
+  'marketing.roadmap.helpCenterDescription':
+    'Aktuelle Funktionen, Mock/Manual, geplante Meilensteine und ehrliche Grenzen.',
+  'marketing.roadmap.badgeAvailable': 'Verfügbar',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'Geplant',
+  'marketing.roadmap.availableTitle': 'Heute verfügbar',
+  'marketing.roadmap.availableBody':
+    'Sender/Wayler-Marketplace-Flows in aktueller App/Demo.\nListings und Routen; Browse und Anfragen.\nAnfragen an Wayler; accepted → Bestellungen.\nChat, Timeline, Proof, Streitfälle.\nÖffentliche Guides, Policy Center, Help Center.\nIn-app Help & Safety, Role Starter, Safety Preflight.\nBrowser-lokal: Entwürfe, Vorlagen, Shortlist, Routen.\nAdmin Operations/Review wo aktiv.',
+  'marketing.roadmap.mockManualTitle': 'Mock oder manual heute',
+  'marketing.roadmap.mockManualBody':
+    'Zahlungen mock/manual — kein echtes Geld.\nKein Escrow, Erstattung oder Auszahlung garantiert.\nKYC mock/manual je Umgebung.\nAdmin-Review = Metadata, bewegt kein Geld.\nBenachrichtigungen Polling/Demo, kein Production-Push.',
+  'marketing.roadmap.plannedTitle': 'Geplante Production-Arbeit',
+  'marketing.roadmap.plannedBody':
+    'Echter Payment-Provider und Webhooks.\nRefund/Capture/Payout-Ausführung.\nProduction-KYC.\nProduction-Benachrichtigungen.\nMonitoring/Alerting.\nApp-Store-Packaging.\nLegal/Privacy-Review.\nRegion/Währung-Gebühren.\nStärkere Support-Workflows.',
+  'marketing.roadmap.safetyRoadmapTitle': 'Safety- & Compliance-Roadmap',
+  'marketing.roadmap.safetyRoadmapBody':
+    'Stärkere Restricted-Item-Workflows.\nKlarere Evidence-Upload-Regeln.\nLegal-Review vor echtem Geld.\nModeration und Risiko-Tools.\nCompliance-Review Zahlungen/KYC/Transport.',
+  'marketing.roadmap.noGuaranteesTitle': 'Was Wayly heute nicht garantiert',
+  'marketing.roadmap.noGuaranteesBody':
+    'Keine Rechtsberatung, Versicherung oder Rechtsschutz.\nKeine garantierte Lieferung, Erstattung oder Auszahlung.\nKein echtes Escrow heute.\nKeine Artikellegalitätsprüfung.\nStreitfälle/Review garantieren kein Ergebnis.',
+  'marketing.roadmap.helpfulLinksTitle': 'Hilfreiche Links',
+  'marketing.roadmap.fees': 'Gebühren & Zahlungen',
+  'marketing.roadmap.privacy': 'Datenschutz-Orientierung',
+  'marketing.roadmap.supportDisputes': 'Support & Streitfälle',
+  'marketing.roadmap.restrictedItems': 'Eingeschränkte Artikel',
+  'marketing.roadmap.backHome': 'Zur Startseite',
   'marketing.fees.navLabel': 'Gebühren & Zahlungen',
   'marketing.fees.title': 'Gebühren & Zahlungstransparenz',
   'marketing.fees.subtitle':
@@ -13515,6 +13680,39 @@ const tr: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'Yasak davranış',
   'marketing.communityGuidelines.prohibitedConductBody':
     'Taciz, tehdit, dolandırıcılık, yasadışı faaliyet veya kısıtlı mal yok.\nKYC ve güvenlik araçlarını atlamayın.',
+  'marketing.roadmap.navLabel': 'Lansman durumu ve yol haritası',
+  'marketing.roadmap.title': 'Lansman durumu ve yol haritası',
+  'marketing.roadmap.subtitle':
+    'Bugünkü yetenekler, demo/manual alanlar ve production çalışması — garanti abartısı olmadan.',
+  'marketing.roadmap.openApp': 'Uygulamayı aç',
+  'marketing.roadmap.helpCenter': 'Yardım merkezi',
+  'marketing.roadmap.policyCenter': 'Politika merkezi',
+  'marketing.roadmap.helpCenterDescription':
+    'Mevcut yetenekler, mock/manual, planlı kilometre taşları ve dürüst sınırlar.',
+  'marketing.roadmap.badgeAvailable': 'Mevcut',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'Planlı',
+  'marketing.roadmap.availableTitle': 'Bugün mevcut',
+  'marketing.roadmap.availableBody':
+    "Mevcut app/demo'da Sender/Wayler marketplace akışları.\nListingler ve rotalar; browse ve talepler.\nWayler talepleri; accepted → siparişler.\nChat, timeline, proof, anlaşmazlıklar.\nPublic rehberler, Policy Center, Help Center.\nIn-app Help & Safety, Role Starter, Safety Preflight.\nYerel: taslaklar, şablonlar, shortlist, recent routes.\nAdmin operations/review uygunsa.",
+  'marketing.roadmap.mockManualTitle': 'Bugün mock veya manual',
+  'marketing.roadmap.mockManualBody':
+    'Ödemeler mock/manual — gerçek para hareketi yok.\nEscrow, garantili iade/ödeme yok.\nKYC ortama göre mock/manual.\nAdmin review metadata — para taşımaz.\nBildirimler polling/demo, production push değil.',
+  'marketing.roadmap.plannedTitle': 'Planlı production çalışması',
+  'marketing.roadmap.plannedBody':
+    "Gerçek ödeme sağlayıcısı ve webhook'lar.\nRefund/capture/payout execution.\nProduction KYC.\nProduction bildirimleri.\nMonitoring/alerting.\nApp store paketleme.\nHukuki/gizlilik incelemesi.\nBölge/para birimi ücret kuralları.\nDaha güçlü destek iş akışları.",
+  'marketing.roadmap.safetyRoadmapTitle': 'Güvenlik ve uyum yol haritası',
+  'marketing.roadmap.safetyRoadmapBody':
+    'Güçlü kısıtlı eşya iş akışları.\nDaha net kanıt yükleme kuralları.\nGerçek para öncesi hukuki inceleme.\nModerasyon ve risk araçları.\nÖdeme/KYC/taşıma uyum incelemesi.',
+  'marketing.roadmap.noGuaranteesTitle': "Wayly'nin bugün garanti etmediği",
+  'marketing.roadmap.noGuaranteesBody':
+    'Hukuki tavsiye, sigorta veya hukuki koruma yok.\nGarantili teslimat, iade veya ödeme yok.\nBugün gerçek escrow yok.\nEşya yasallığı doğrulaması yok.\nAnlaşmazlıklar/inceleme sonuç garantisi vermez.',
+  'marketing.roadmap.helpfulLinksTitle': 'Faydalı bağlantılar',
+  'marketing.roadmap.fees': 'Ücretler ve ödemeler',
+  'marketing.roadmap.privacy': 'Gizlilik rehberi',
+  'marketing.roadmap.supportDisputes': 'Destek ve anlaşmazlıklar',
+  'marketing.roadmap.restrictedItems': 'Kısıtlı eşyalar',
+  'marketing.roadmap.backHome': 'Ana sayfaya dön',
   'marketing.fees.navLabel': 'Ücretler ve ödemeler',
   'marketing.fees.title': 'Ücretler ve ödeme şeffaflığı',
   'marketing.fees.subtitle':
@@ -15671,6 +15869,39 @@ const ar: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': 'سلوك محظور',
   'marketing.communityGuidelines.prohibitedConductBody':
     'لا مضايقة أو تهديد أو احتيال أو نشاط غير قانوني أو بضائع مقيدة.\nلا تتجاوز KYC وأدوات الأمان.',
+  'marketing.roadmap.navLabel': 'حالة الإطلاق وخارطة الطريق',
+  'marketing.roadmap.title': 'حالة الإطلاق وخارطة الطريق',
+  'marketing.roadmap.subtitle':
+    'عرض شفاف للقدرات الحالية ومناطق demo/manual وعمل الإنتاج — دون مبالغة في الضمانات.',
+  'marketing.roadmap.openApp': 'فتح التطبيق',
+  'marketing.roadmap.helpCenter': 'مركز المساعدة',
+  'marketing.roadmap.policyCenter': 'مركز السياسات',
+  'marketing.roadmap.helpCenterDescription':
+    'القدرات الحالية وmock/manual والمعالم المخططة والحدود الصادقة.',
+  'marketing.roadmap.badgeAvailable': 'متاح',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': 'مخطط',
+  'marketing.roadmap.availableTitle': 'متاح اليوم',
+  'marketing.roadmap.availableBody':
+    'تدفقات marketplace للمرسل والوايلر في app/demo الحالي.\nListings ومسارات؛ browse وطلبات.\nطلبات للوايلرز؛ accepted → orders.\nChat وtimeline وproof ونزاعات.\nأدلة عامة وPolicy Center وHelp Center.\nHelp & Safety in-app وRole Starter وSafety Preflight.\nبيانات محلية: مسودات وقوالب وshortlist ومسارات.\nAdmin operations/review حيث ينطبق.',
+  'marketing.roadmap.mockManualTitle': 'Mock أو manual اليوم',
+  'marketing.roadmap.mockManualBody':
+    'مدفوعات mock/manual — لا حركة أموال حقيقية.\nلا escrow ولا استرداد/دفع مضمون.\nKYC mock/manual حسب البيئة.\nمراجعة admin = metadata لا تحرك الأموال.\nإشعارات polling/demo وليست push إنتاج.',
+  'marketing.roadmap.plannedTitle': 'عمل الإنتاج المخطط',
+  'marketing.roadmap.plannedBody':
+    'تكامل دفع حقيقي وwebhooks.\nتنفيذ refund/capture/payout.\nKYC إنتاج.\nإشعارات إنتاج.\nMonitoring/alerting.\nتغليف app stores.\nمراجعة legal/privacy.\nقواعد رسوم region/currency.\nسير عمل دعم أقوى.',
+  'marketing.roadmap.safetyRoadmapTitle': 'خارطة الأمان والامتثال',
+  'marketing.roadmap.safetyRoadmapBody':
+    'سير عمل أقوى للعناصر المقيدة.\nقواعد أوضح لرفع الأدلة.\nمراجعة legal قبل أموال حقيقية.\nModeration وأدوات مخاطر.\nمراجعة compliance للمدفوعات/KYC/النقل.',
+  'marketing.roadmap.noGuaranteesTitle': 'ما لا يضمنه Wayly اليوم',
+  'marketing.roadmap.noGuaranteesBody':
+    'لا استشارة قانونية ولا تأمين ولا حماية قانونية.\nلا تسليم أو استرداد أو دفع مضمون.\nلا escrow حقيقي اليوم.\nلا تحقق من قانونية العناصر.\nالنزاعات/المراجعة لا تضمن النتيجة.',
+  'marketing.roadmap.helpfulLinksTitle': 'روابط مفيدة',
+  'marketing.roadmap.fees': 'الرسوم والمدفوعات',
+  'marketing.roadmap.privacy': 'إرشاد الخصوصية',
+  'marketing.roadmap.supportDisputes': 'الدعم والنزاعات',
+  'marketing.roadmap.restrictedItems': 'العناصر المقيدة',
+  'marketing.roadmap.backHome': 'العودة للرئيسية',
   'marketing.fees.navLabel': 'الرسوم والمدفوعات',
   'marketing.fees.title': 'الرسوم وشفافية المدفوعات',
   'marketing.fees.subtitle':
@@ -17726,6 +17957,38 @@ const zh: Dictionary = {
   'marketing.communityGuidelines.prohibitedConductTitle': '禁止行为',
   'marketing.communityGuidelines.prohibitedConductBody':
     '禁止骚扰、威胁、欺诈、非法活动或受限物品。\n勿绕过 KYC 与安全工具。',
+  'marketing.roadmap.navLabel': '发布状态与路线图',
+  'marketing.roadmap.title': '发布状态与路线图',
+  'marketing.roadmap.subtitle':
+    '透明展示 Wayly 当前能力、demo/manual 区域与 production 工作 — 不夸大保证。',
+  'marketing.roadmap.openApp': '打开应用',
+  'marketing.roadmap.helpCenter': '帮助中心',
+  'marketing.roadmap.policyCenter': '政策中心',
+  'marketing.roadmap.helpCenterDescription': '当前能力、mock/manual、计划里程碑与诚实限制。',
+  'marketing.roadmap.badgeAvailable': '可用',
+  'marketing.roadmap.badgeMockManual': 'Mock / manual',
+  'marketing.roadmap.badgePlanned': '计划中',
+  'marketing.roadmap.availableTitle': '今日可用',
+  'marketing.roadmap.availableBody':
+    '当前 app/demo 中的 Sender/Wayler marketplace 流程。\nListings 与路线；browse 与请求。\n向 Wayler 发请求；accepted → 订单。\nChat、timeline、proof、争议。\n公共指南、Policy Center、Help Center。\nIn-app Help & Safety、Role Starter、Safety Preflight。\n浏览器本地：草稿、模板、shortlist、recent routes。\nAdmin operations/review（如启用）。',
+  'marketing.roadmap.mockManualTitle': '今日 mock 或 manual',
+  'marketing.roadmap.mockManualBody':
+    '支付可能 mock/manual — 无真实资金移动。\n无 escrow、guaranteed refund/payout。\nKYC 可能 mock/manual（视环境）。\nAdmin review 为 metadata — 不移动资金。\n通知可能为 polling/demo，非 production push。',
+  'marketing.roadmap.plannedTitle': '计划中的 production 工作',
+  'marketing.roadmap.plannedBody':
+    '真实支付集成与 webhooks。\nRefund/capture/payout 执行。\nProduction KYC。\nProduction 通知。\nMonitoring/alerting。\nApp store 打包。\nLegal/privacy 审阅。\nRegion/currency 费用规则。\n更强支持工作流。',
+  'marketing.roadmap.safetyRoadmapTitle': '安全与合规路线图',
+  'marketing.roadmap.safetyRoadmapBody':
+    '更强 restricted-item 工作流。\n更清晰的 evidence 上传规则。\n真实资金前 legal 审阅。\nModeration 与 risk 工具。\n支付/KYC/运输 compliance 审阅。',
+  'marketing.roadmap.noGuaranteesTitle': 'Wayly 今日不保证',
+  'marketing.roadmap.noGuaranteesBody':
+    '无法律建议、保险或法律保护。\n无 guaranteed 送达、refund 或 payout。\n今日无真实 escrow。\n无物品合法性验证。\n争议/review 不保证结果。',
+  'marketing.roadmap.helpfulLinksTitle': '有用链接',
+  'marketing.roadmap.fees': '费用与支付',
+  'marketing.roadmap.privacy': '隐私指引',
+  'marketing.roadmap.supportDisputes': '支持与争议',
+  'marketing.roadmap.restrictedItems': '受限物品',
+  'marketing.roadmap.backHome': '返回首页',
   'marketing.fees.navLabel': '费用与支付',
   'marketing.fees.title': '费用与支付透明度',
   'marketing.fees.subtitle':

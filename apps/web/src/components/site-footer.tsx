@@ -42,6 +42,9 @@ export function SiteFooter() {
           <Link href="/policies" className="transition-colors hover:text-foreground">
             {t('marketing.policies.navLabel')}
           </Link>
+          <Link href="/roadmap" className="transition-colors hover:text-foreground">
+            {t('marketing.roadmap.navLabel')}
+          </Link>
           <Link href="/terms" className="transition-colors hover:text-foreground">
             {t('marketing.terms.navLabel')}
           </Link>
