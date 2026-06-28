@@ -78,6 +78,7 @@ type HelpfulLink = {
 };
 
 const HELPFUL_LINKS: HelpfulLink[] = [
+  { href: '/help', labelKey: 'marketing.helpCenter.navLabel' },
   { href: '/trust', labelKey: 'marketing.supportDisputes.trustCenter' },
   { href: '/faq', labelKey: 'marketing.supportDisputes.faq' },
   { href: '/restricted-items', labelKey: 'marketing.supportDisputes.restrictedItems' },

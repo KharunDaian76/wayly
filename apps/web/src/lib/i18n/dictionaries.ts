@@ -1922,6 +1922,43 @@ const en = {
   'marketing.privacyLocalData.localOnlyNotice':
     'These local saved data tools are browser-local only — not synced to your account. Wayly account, order, and chat records on the server are separate.',
   'marketing.privacyLocalData.backHome': 'Back to home',
+  'marketing.helpCenter.navLabel': 'Help Center',
+  'marketing.helpCenter.title': 'Help Center',
+  'marketing.helpCenter.subtitle':
+    'Learn how Wayly works, stay safe, and understand current platform limits — all public guides in one place.',
+  'marketing.helpCenter.openApp': 'Open app',
+  'marketing.helpCenter.faq': 'FAQ',
+  'marketing.helpCenter.trustCenter': 'Trust Center',
+  'marketing.helpCenter.howItWorks': 'How It Works',
+  'marketing.helpCenter.restrictedItems': 'Restricted Items',
+  'marketing.helpCenter.fees': 'Fees & payments',
+  'marketing.helpCenter.privacyLocalData': 'Privacy & local data',
+  'marketing.helpCenter.supportDisputes': 'Support & disputes',
+  'marketing.helpCenter.featuredTitle': 'Featured guides',
+  'marketing.helpCenter.howItWorksDescription':
+    'Sender and Wayler flows, order lifecycle, and how marketplace coordination works today.',
+  'marketing.helpCenter.trustCenterDescription':
+    'Honest overview of safety signals, payments, disputes, and what Wayly does not guarantee.',
+  'marketing.helpCenter.faqDescription':
+    'Common questions about getting started, payments, disputes, and local saved data.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'What you are responsible for carrying or sending under local law, customs, and carrier rules.',
+  'marketing.helpCenter.feesDescription':
+    'How payment status and fees are shown today — without escrow or payout guarantees.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'Browser-local templates, drafts, and shortlist tools — not synced to your account.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'First steps, evidence guidance, and limits when a delivery needs attention.',
+  'marketing.helpCenter.viewGuide': 'View guide',
+  'marketing.helpCenter.startHereTitle': 'Start here',
+  'marketing.helpCenter.startHereBody':
+    'New Senders: read How It Works, FAQ, Fees & payments, and Restricted Items before posting.\nNew Waylers: read How It Works, Trust Center, Restricted Items, and Support & disputes before accepting work.\nIf you have an order issue: go to Support & disputes for first steps and evidence guidance.',
+  'marketing.helpCenter.limitsTitle': 'Current limits (honest notice)',
+  'marketing.helpCenter.limitsBody':
+    'Some payment, provider, and KYC flows are mock/manual or future work — not full production integrations.\nNo real escrow guarantee, guaranteed refund, guaranteed payout, insurance, or legal protection today.\nPublic help pages are general platform guidance — not legal advice.\nUsers must follow official laws, customs, and transport rules; dispute tools organize facts and evidence only.',
+  'marketing.helpCenter.safetyShortcutsTitle': 'Safety shortcuts',
+  'marketing.helpCenter.backHome': 'Back to home',
+  'marketing.landing.helpCenterLink': 'Browse all public guides and resources',
   'marketing.supportDisputes.navLabel': 'Support & disputes',
   'marketing.supportDisputes.title': 'Support & dispute help',
   'marketing.supportDisputes.subtitle':
@@ -3991,6 +4028,43 @@ const ru: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Эти локальные инструменты хранятся только в браузере — не синхронизируются с аккаунтом. Записи аккаунта, заказов и чата на сервере отделены.',
   'marketing.privacyLocalData.backHome': 'На главную',
+  'marketing.helpCenter.navLabel': 'Справочный центр',
+  'marketing.helpCenter.title': 'Справочный центр',
+  'marketing.helpCenter.subtitle':
+    'Как работает Wayly, безопасность и текущие ограничения платформы — все публичные руководства в одном месте.',
+  'marketing.helpCenter.openApp': 'Открыть приложение',
+  'marketing.helpCenter.faq': 'FAQ',
+  'marketing.helpCenter.trustCenter': 'Центр доверия',
+  'marketing.helpCenter.howItWorks': 'Как это работает',
+  'marketing.helpCenter.restrictedItems': 'Запрещённые предметы',
+  'marketing.helpCenter.fees': 'Тарифы и платежи',
+  'marketing.helpCenter.privacyLocalData': 'Конфиденциальность и локальные данные',
+  'marketing.helpCenter.supportDisputes': 'Поддержка и споры',
+  'marketing.helpCenter.featuredTitle': 'Основные руководства',
+  'marketing.helpCenter.howItWorksDescription':
+    'Потоки отправителя и Wayler, жизненный цикл заказа и координация marketplace сегодня.',
+  'marketing.helpCenter.trustCenterDescription':
+    'Честный обзор сигналов безопасности, платежей, споров и того, чего Wayly не гарантирует.',
+  'marketing.helpCenter.faqDescription':
+    'Частые вопросы о старте, платежах, спорах и локальных данных.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'Ваша ответственность за перевозку и отправку по местным законам, таможне и правилам перевозчиков.',
+  'marketing.helpCenter.feesDescription':
+    'Как сегодня показываются статус оплаты и тарифы — без гарантий escrow или выплат.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'Локальные в браузере шаблоны, черновики и шортлист — не синхронизируются с аккаунтом.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'Первые шаги, доказательства и ограничения, когда доставка требует внимания.',
+  'marketing.helpCenter.viewGuide': 'Открыть руководство',
+  'marketing.helpCenter.startHereTitle': 'Начните здесь',
+  'marketing.helpCenter.startHereBody':
+    'Новым отправителям: прочитайте Как это работает, FAQ, Тарифы и Запрещённые предметы перед публикацией.\nНовым Wayler: прочитайте Как это работает, Центр доверия, Запрещённые предметы и Поддержку/споры перед принятием работы.\nПри проблеме с заказом: перейдите в Поддержку и споры.',
+  'marketing.helpCenter.limitsTitle': 'Текущие ограничения (честное уведомление)',
+  'marketing.helpCenter.limitsBody':
+    'Часть платежей, провайдеров и KYC — mock/ручная или будущая работа, не полные production-интеграции.\nНет гарантии escrow, возврата, выплаты, страховки или правовой защиты сегодня.\nПубличные страницы — общее руководство, не юридическая консультация.\nСледуйте официальным законам и правилам; инструменты споров только организуют факты и доказательства.',
+  'marketing.helpCenter.safetyShortcutsTitle': 'Быстрые ссылки по безопасности',
+  'marketing.helpCenter.backHome': 'На главную',
+  'marketing.landing.helpCenterLink': 'Все публичные руководства и ресурсы',
   'marketing.supportDisputes.navLabel': 'Поддержка и споры',
   'marketing.supportDisputes.title': 'Поддержка и помощь по спорам',
   'marketing.supportDisputes.subtitle':
@@ -6068,6 +6142,43 @@ const es: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Estas herramientas son solo locales en el navegador — no se sincronizan con tu cuenta. Registros de cuenta, pedidos y chat en servidor son separados.',
   'marketing.privacyLocalData.backHome': 'Volver al inicio',
+  'marketing.helpCenter.navLabel': 'Centro de ayuda',
+  'marketing.helpCenter.title': 'Centro de ayuda',
+  'marketing.helpCenter.subtitle':
+    'Aprende cómo funciona Wayly, mantente seguro y entiende los límites actuales — todas las guías públicas en un lugar.',
+  'marketing.helpCenter.openApp': 'Abrir app',
+  'marketing.helpCenter.faq': 'FAQ',
+  'marketing.helpCenter.trustCenter': 'Centro de confianza',
+  'marketing.helpCenter.howItWorks': 'Cómo funciona',
+  'marketing.helpCenter.restrictedItems': 'Artículos restringidos',
+  'marketing.helpCenter.fees': 'Tarifas y pagos',
+  'marketing.helpCenter.privacyLocalData': 'Privacidad y datos locales',
+  'marketing.helpCenter.supportDisputes': 'Soporte y disputas',
+  'marketing.helpCenter.featuredTitle': 'Guías destacadas',
+  'marketing.helpCenter.howItWorksDescription':
+    'Flujos de remitente y Wayler, ciclo de pedido y coordinación del marketplace hoy.',
+  'marketing.helpCenter.trustCenterDescription':
+    'Visión honesta de señales de seguridad, pagos, disputas y lo que Wayly no garantiza.',
+  'marketing.helpCenter.faqDescription':
+    'Preguntas comunes sobre inicio, pagos, disputas y datos locales.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'Tu responsabilidad al enviar o transportar según leyes locales, aduanas y normas de transporte.',
+  'marketing.helpCenter.feesDescription':
+    'Cómo se muestran hoy estado de pago y tarifas — sin garantías de escrow o payout.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'Plantillas, borradores y lista corta locales en el navegador — no sincronizados con tu cuenta.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'Primeros pasos, evidencia y límites cuando una entrega necesita atención.',
+  'marketing.helpCenter.viewGuide': 'Ver guía',
+  'marketing.helpCenter.startHereTitle': 'Empieza aquí',
+  'marketing.helpCenter.startHereBody':
+    'Remitentes nuevos: lee Cómo funciona, FAQ, Tarifas y Artículos restringidos antes de publicar.\nWaylers nuevos: lee Cómo funciona, Centro de confianza, Artículos restringidos y Soporte/disputas antes de aceptar.\nSi tienes un problema de pedido: ve a Soporte y disputas.',
+  'marketing.helpCenter.limitsTitle': 'Límites actuales (aviso honesto)',
+  'marketing.helpCenter.limitsBody':
+    'Algunos flujos de pago, proveedor y KYC son mock/manuales o trabajo futuro — no integraciones production completas.\nSin garantía de escrow, reembolso, payout, seguro o protección legal hoy.\nLas páginas públicas son orientación general — no asesoramiento legal.\nSigue leyes y normas oficiales; las herramientas de disputa solo organizan hechos y evidencia.',
+  'marketing.helpCenter.safetyShortcutsTitle': 'Accesos rápidos de seguridad',
+  'marketing.helpCenter.backHome': 'Volver al inicio',
+  'marketing.landing.helpCenterLink': 'Explorar todas las guías y recursos públicos',
   'marketing.supportDisputes.navLabel': 'Soporte y disputas',
   'marketing.supportDisputes.title': 'Ayuda de soporte y disputas',
   'marketing.supportDisputes.subtitle':
@@ -8172,6 +8283,43 @@ const fr: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Ces outils sont uniquement locaux dans le navigateur — non synchronisés avec votre compte. Enregistrements compte, commandes et chat serveur sont séparés.',
   'marketing.privacyLocalData.backHome': "Retour à l'accueil",
+  'marketing.helpCenter.navLabel': "Centre d'aide",
+  'marketing.helpCenter.title': "Centre d'aide",
+  'marketing.helpCenter.subtitle':
+    'Comment Wayly fonctionne, rester en sécurité et comprendre les limites actuelles — tous les guides publics au même endroit.',
+  'marketing.helpCenter.openApp': "Ouvrir l'app",
+  'marketing.helpCenter.faq': 'FAQ',
+  'marketing.helpCenter.trustCenter': 'Centre de confiance',
+  'marketing.helpCenter.howItWorks': 'Comment ça marche',
+  'marketing.helpCenter.restrictedItems': 'Articles restreints',
+  'marketing.helpCenter.fees': 'Frais et paiements',
+  'marketing.helpCenter.privacyLocalData': 'Confidentialité et données locales',
+  'marketing.helpCenter.supportDisputes': 'Support et litiges',
+  'marketing.helpCenter.featuredTitle': 'Guides en vedette',
+  'marketing.helpCenter.howItWorksDescription':
+    "Parcours expéditeur et Wayler, cycle de commande et coordination marketplace aujourd'hui.",
+  'marketing.helpCenter.trustCenterDescription':
+    'Aperçu honnête des signaux de sécurité, paiements, litiges et ce que Wayly ne garantit pas.',
+  'marketing.helpCenter.faqDescription':
+    'Questions fréquentes sur démarrage, paiements, litiges et données locales.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'Votre responsabilité pour transporter ou envoyer selon lois locales, douanes et règles transport.',
+  'marketing.helpCenter.feesDescription':
+    'Comment statut paiement et frais sont affichés — sans garanties escrow ou payout.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'Modèles, brouillons et liste courte locaux navigateur — non synchronisés avec votre compte.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'Premières étapes, preuves et limites quand une livraison nécessite attention.',
+  'marketing.helpCenter.viewGuide': 'Voir le guide',
+  'marketing.helpCenter.startHereTitle': 'Commencer ici',
+  'marketing.helpCenter.startHereBody':
+    "Nouveaux expéditeurs : lisez Comment ça marche, FAQ, Frais et Articles restreints avant de publier.\nNouveaux Waylers : lisez Comment ça marche, Centre de confiance, Articles restreints et Support/litiges avant d'accepter.\nProblème de commande : allez à Support et litiges.",
+  'marketing.helpCenter.limitsTitle': 'Limites actuelles (avis honnête)',
+  'marketing.helpCenter.limitsBody':
+    "Certains flux paiement, fournisseur et KYC sont mock/manuels ou travail futur — pas intégrations production complètes.\nPas de garantie escrow, remboursement, payout, assurance ou protection juridique aujourd'hui.\nPages publiques = orientation générale — pas conseil juridique.\nRespectez lois et règles officielles ; outils litige organisent faits et preuves seulement.",
+  'marketing.helpCenter.safetyShortcutsTitle': 'Raccourcis sécurité',
+  'marketing.helpCenter.backHome': "Retour à l'accueil",
+  'marketing.landing.helpCenterLink': 'Parcourir tous les guides et ressources publics',
   'marketing.supportDisputes.navLabel': 'Support et litiges',
   'marketing.supportDisputes.title': 'Aide support et litiges',
   'marketing.supportDisputes.subtitle':
@@ -10287,6 +10435,43 @@ const de: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Diese lokalen Tools sind nur browser-lokal — nicht mit Ihrem Konto synchronisiert. Server-Konto-, Bestell- und Chat-Daten sind getrennt.',
   'marketing.privacyLocalData.backHome': 'Zur Startseite',
+  'marketing.helpCenter.navLabel': 'Hilfe-Center',
+  'marketing.helpCenter.title': 'Hilfe-Center',
+  'marketing.helpCenter.subtitle':
+    'Wie Wayly funktioniert, Sicherheit und aktuelle Plattformgrenzen — alle öffentlichen Leitfäden an einem Ort.',
+  'marketing.helpCenter.openApp': 'App öffnen',
+  'marketing.helpCenter.faq': 'FAQ',
+  'marketing.helpCenter.trustCenter': 'Trust Center',
+  'marketing.helpCenter.howItWorks': 'So funktioniert es',
+  'marketing.helpCenter.restrictedItems': 'Eingeschränkte Artikel',
+  'marketing.helpCenter.fees': 'Gebühren & Zahlungen',
+  'marketing.helpCenter.privacyLocalData': 'Datenschutz & lokale Daten',
+  'marketing.helpCenter.supportDisputes': 'Support & Streitfälle',
+  'marketing.helpCenter.featuredTitle': 'Empfohlene Leitfäden',
+  'marketing.helpCenter.howItWorksDescription':
+    'Sender- und Wayler-Abläufe, Bestelllebenszyklus und Marketplace-Koordination heute.',
+  'marketing.helpCenter.trustCenterDescription':
+    'Ehrlicher Überblick über Sicherheitssignale, Zahlungen, Streitfälle und was Wayly nicht garantiert.',
+  'marketing.helpCenter.faqDescription':
+    'Häufige Fragen zu Einstieg, Zahlungen, Streitfällen und lokalen Daten.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'Ihre Verantwortung beim Senden oder Tragen nach lokalen Gesetzen, Zoll und Transportregeln.',
+  'marketing.helpCenter.feesDescription':
+    'Wie Zahlungsstatus und Gebühren heute angezeigt werden — ohne Escrow- oder Auszahlungsgarantien.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'Browser-lokale Vorlagen, Entwürfe und Merkliste — nicht mit Konto synchronisiert.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'Erste Schritte, Beweise und Grenzen wenn eine Lieferung Aufmerksamkeit braucht.',
+  'marketing.helpCenter.viewGuide': 'Leitfaden ansehen',
+  'marketing.helpCenter.startHereTitle': 'Hier starten',
+  'marketing.helpCenter.startHereBody':
+    'Neue Sender: lesen Sie So funktioniert es, FAQ, Gebühren und Eingeschränkte Artikel vor dem Posten.\nNeue Wayler: lesen Sie So funktioniert es, Trust Center, Eingeschränkte Artikel und Support/Streitfälle vor Annahme.\nBei Bestellproblem: gehen Sie zu Support & Streitfälle.',
+  'marketing.helpCenter.limitsTitle': 'Aktuelle Grenzen (ehrlicher Hinweis)',
+  'marketing.helpCenter.limitsBody':
+    'Einige Zahlungs-, Anbieter- und KYC-Flows sind Mock/manuell oder Zukunftsarbeit — keine vollen Production-Integrationen.\nKeine Escrow-Garantie, Erstattung, Auszahlung, Versicherung oder Rechtsschutz heute.\nÖffentliche Hilfeseiten sind allgemeine Orientierung — keine Rechtsberatung.\nOffizielle Gesetze befolgen; Streitfall-Tools organisieren nur Fakten und Beweise.',
+  'marketing.helpCenter.safetyShortcutsTitle': 'Sicherheits-Kurzlinks',
+  'marketing.helpCenter.backHome': 'Zur Startseite',
+  'marketing.landing.helpCenterLink': 'Alle öffentlichen Leitfäden und Ressourcen',
   'marketing.supportDisputes.navLabel': 'Support & Streitfälle',
   'marketing.supportDisputes.title': 'Support- & Streitfall-Hilfe',
   'marketing.supportDisputes.subtitle':
@@ -12339,6 +12524,43 @@ const tr: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Bu yerel araçlar yalnızca tarayıcıda — hesabınızla senkronize edilmez. Sunucu hesap, sipariş ve sohbet kayıtları ayrıdır.',
   'marketing.privacyLocalData.backHome': 'Ana sayfaya dön',
+  'marketing.helpCenter.navLabel': 'Yardım merkezi',
+  'marketing.helpCenter.title': 'Yardım merkezi',
+  'marketing.helpCenter.subtitle':
+    'Wayly nasıl çalışır, güvenlik ve güncel platform sınırları — tüm public rehberler tek yerde.',
+  'marketing.helpCenter.openApp': 'Uygulamayı aç',
+  'marketing.helpCenter.faq': 'SSS',
+  'marketing.helpCenter.trustCenter': 'Güven merkezi',
+  'marketing.helpCenter.howItWorks': 'Nasıl çalışır',
+  'marketing.helpCenter.restrictedItems': 'Kısıtlı eşyalar',
+  'marketing.helpCenter.fees': 'Ücretler ve ödemeler',
+  'marketing.helpCenter.privacyLocalData': 'Gizlilik ve yerel veriler',
+  'marketing.helpCenter.supportDisputes': 'Destek ve anlaşmazlıklar',
+  'marketing.helpCenter.featuredTitle': 'Öne çıkan rehberler',
+  'marketing.helpCenter.howItWorksDescription':
+    'Gönderici ve Wayler akışları, sipariş yaşam döngüsü ve bugünkü marketplace koordinasyonu.',
+  'marketing.helpCenter.trustCenterDescription':
+    "Güvenlik sinyalleri, ödemeler, anlaşmazlıklar ve Wayly'nin garanti etmediği konularda dürüst özet.",
+  'marketing.helpCenter.faqDescription':
+    'Başlangıç, ödemeler, anlaşmazlıklar ve yerel veriler hakkında sık sorulan sorular.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'Yerel yasa, gümrük ve taşıma kurallarına göre gönderme/taşıma sorumluluğunuz.',
+  'marketing.helpCenter.feesDescription':
+    'Ödeme durumu ve ücretler bugün nasıl gösterilir — escrow veya payout garantisi olmadan.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'Tarayıcı-yerel şablonlar, taslaklar ve kısa liste — hesabınızla senkronize değil.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'Teslimat dikkat gerektirdiğinde ilk adımlar, kanıt rehberi ve sınırlar.',
+  'marketing.helpCenter.viewGuide': 'Rehberi gör',
+  'marketing.helpCenter.startHereTitle': 'Buradan başlayın',
+  'marketing.helpCenter.startHereBody':
+    "Yeni göndericiler: yayınlamadan önce Nasıl çalışır, SSS, Ücretler ve Kısıtlı eşyalar okuyun.\nYeni Wayler'lar: kabul etmeden önce Nasıl çalışır, Güven merkezi, Kısıtlı eşyalar ve Destek/anlaşmazlıklar okuyun.\nSipariş sorununuz varsa: Destek ve anlaşmazlıklar'a gidin.",
+  'marketing.helpCenter.limitsTitle': 'Güncel sınırlar (dürüst bildirim)',
+  'marketing.helpCenter.limitsBody':
+    'Bazı ödeme, sağlayıcı ve KYC akışları mock/manuel veya gelecek iş — tam production entegrasyonları değil.\nBugün gerçek escrow, garantili iade, payout, sigorta veya hukuki koruma yok.\nPublic yardım sayfaları genel rehberlik — hukuki tavsiye değil.\nResmi yasa ve kurallara uyun; anlaşmazlık araçları yalnızca gerçek ve kanıt organize eder.',
+  'marketing.helpCenter.safetyShortcutsTitle': 'Güvenlik kısayolları',
+  'marketing.helpCenter.backHome': 'Ana sayfaya dön',
+  'marketing.landing.helpCenterLink': 'Tüm public rehber ve kaynaklara göz atın',
   'marketing.supportDisputes.navLabel': 'Destek ve anlaşmazlıklar',
   'marketing.supportDisputes.title': 'Destek ve anlaşmazlık yardımı',
   'marketing.supportDisputes.subtitle':
@@ -14310,6 +14532,43 @@ const ar: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'هذه الأدوات محلية في المتصفح فقط — غير متزامنة مع حسابك. سجلات الحساب والطلبات والدردشة على الخادم منفصلة.',
   'marketing.privacyLocalData.backHome': 'العودة للرئيسية',
+  'marketing.helpCenter.navLabel': 'مركز المساعدة',
+  'marketing.helpCenter.title': 'مركز المساعدة',
+  'marketing.helpCenter.subtitle':
+    'تعرّف على Wayly والسلامة وحدود المنصة الحالية — كل الأدلة العامة في مكان واحد.',
+  'marketing.helpCenter.openApp': 'فتح التطبيق',
+  'marketing.helpCenter.faq': 'الأسئلة الشائعة',
+  'marketing.helpCenter.trustCenter': 'مركز الثقة',
+  'marketing.helpCenter.howItWorks': 'كيف يعمل',
+  'marketing.helpCenter.restrictedItems': 'العناصر المقيدة',
+  'marketing.helpCenter.fees': 'الرسوم والمدفوعات',
+  'marketing.helpCenter.privacyLocalData': 'الخصوصية والبيانات المحلية',
+  'marketing.helpCenter.supportDisputes': 'الدعم والنزاعات',
+  'marketing.helpCenter.featuredTitle': 'أدلة مميزة',
+  'marketing.helpCenter.howItWorksDescription':
+    'مسارات المرسل و Wayler ودورة الطلب وتنسيق marketplace اليوم.',
+  'marketing.helpCenter.trustCenterDescription':
+    'نظرة صادقة على إشارات الأمان والمدفوعات والنزاعات وما لا يضمنه Wayly.',
+  'marketing.helpCenter.faqDescription':
+    'أسئلة شائعة عن البدء والمدفوعات والنزاعات والبيانات المحلية.',
+  'marketing.helpCenter.restrictedItemsDescription':
+    'مسؤوليتك عن الإرسال أو النقل وفق القوانين المحلية والجمارك وقواعد النقل.',
+  'marketing.helpCenter.feesDescription':
+    'كيف يُعرض حالة الدفع والرسوم اليوم — دون ضمان escrow أو payout.',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    'قوالب ومسودات وقائمة مختصرة محلية في المتصفح — غير متزامنة مع حسابك.',
+  'marketing.helpCenter.supportDisputesDescription':
+    'خطوات أولى وأدلة وحدود عندما يحتاج التسليم إلى اهتمام.',
+  'marketing.helpCenter.viewGuide': 'عرض الدليل',
+  'marketing.helpCenter.startHereTitle': 'ابدأ هنا',
+  'marketing.helpCenter.startHereBody':
+    'مرسلون جدد: اقرأ كيف يعمل وFAQ والرسوم والعناصر المقيدة قبل النشر.\nWayler جدد: اقرأ كيف يعمل ومركز الثقة والعناصر المقيدة والدعم/النزاعات قبل القبول.\nمشكلة في الطلب: اذهب إلى الدعم والنزاعات.',
+  'marketing.helpCenter.limitsTitle': 'الحدود الحالية (إشعار صادق)',
+  'marketing.helpCenter.limitsBody':
+    'بعض تدفقات الدفع والمزود وKYC mock/يدوية أو عمل مستقبلي — ليست تكاملات إنتاج كاملة.\nلا ضمان escrow أو استرداد أو payout أو تأمين أو حماية قانونية اليوم.\nصفحات المساعدة العامة إرشاد عام — وليست استشارة قانونية.\nاتبع القوانين والقواعد الرسمية؛ أدوات النزاع تنظم الحقائق والأدلة فقط.',
+  'marketing.helpCenter.safetyShortcutsTitle': 'اختصارات السلامة',
+  'marketing.helpCenter.backHome': 'العودة للرئيسية',
+  'marketing.landing.helpCenterLink': 'تصفح كل الأدلة والموارد العامة',
   'marketing.supportDisputes.navLabel': 'الدعم والنزاعات',
   'marketing.supportDisputes.title': 'مساعدة الدعم والنزاعات',
   'marketing.supportDisputes.subtitle':
@@ -16191,6 +16450,41 @@ const zh: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     '这些本地工具仅保存在浏览器 — 不同步到账户。服务器账户、订单和聊天记录是分开的。',
   'marketing.privacyLocalData.backHome': '返回首页',
+  'marketing.helpCenter.navLabel': '帮助中心',
+  'marketing.helpCenter.title': '帮助中心',
+  'marketing.helpCenter.subtitle':
+    '了解 Wayly 如何运作、如何保持安全以及当前平台限制 — 所有公开指南集中一处。',
+  'marketing.helpCenter.openApp': '打开应用',
+  'marketing.helpCenter.faq': '常见问题',
+  'marketing.helpCenter.trustCenter': '信任中心',
+  'marketing.helpCenter.howItWorks': '如何运作',
+  'marketing.helpCenter.restrictedItems': '受限物品',
+  'marketing.helpCenter.fees': '费用与支付',
+  'marketing.helpCenter.privacyLocalData': '隐私与本地数据',
+  'marketing.helpCenter.supportDisputes': '支持与争议',
+  'marketing.helpCenter.featuredTitle': '精选指南',
+  'marketing.helpCenter.howItWorksDescription':
+    '发件人与 Wayler 流程、订单生命周期及当前 marketplace 协调方式。',
+  'marketing.helpCenter.trustCenterDescription':
+    '安全信号、支付、争议及 Wayly 不保证内容的诚实概述。',
+  'marketing.helpCenter.faqDescription': '关于入门、支付、争议和本地数据的常见问题。',
+  'marketing.helpCenter.restrictedItemsDescription':
+    '您在当地法律、海关和运输规则下发送或携带物品的责任。',
+  'marketing.helpCenter.feesDescription': '今日如何显示支付状态与费用 — 无托管或 payout 保证。',
+  'marketing.helpCenter.privacyLocalDataDescription':
+    '浏览器本地模板、草稿与短名单 — 不同步到账户。',
+  'marketing.helpCenter.supportDisputesDescription':
+    '交付需要关注时的首要步骤、证据指引与限制说明。',
+  'marketing.helpCenter.viewGuide': '查看指南',
+  'marketing.helpCenter.startHereTitle': '从这里开始',
+  'marketing.helpCenter.startHereBody':
+    '新发件人：发布前请阅读如何运作、常见问题、费用与受限物品。\n新 Wayler：接受工作前请阅读如何运作、信任中心、受限物品与支持/争议。\n订单有问题：前往支持与争议。',
+  'marketing.helpCenter.limitsTitle': '当前限制（诚实说明）',
+  'marketing.helpCenter.limitsBody':
+    '部分支付、provider 与 KYC 流程为 mock/手动或未来工作 — 非完整生产集成。\n今日无真实托管、保证退款、payout、保险或法律保护。\n公开帮助页为一般平台指引 — 非法律建议。\n须遵守官方法律与运输/海关规则；争议工具仅整理事实与证据。',
+  'marketing.helpCenter.safetyShortcutsTitle': '安全快捷入口',
+  'marketing.helpCenter.backHome': '返回首页',
+  'marketing.landing.helpCenterLink': '浏览所有公开指南与资源',
   'marketing.supportDisputes.navLabel': '支持与争议',
   'marketing.supportDisputes.title': '支持与争议帮助',
   'marketing.supportDisputes.subtitle':

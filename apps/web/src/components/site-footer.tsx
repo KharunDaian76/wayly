@@ -15,6 +15,9 @@ export function SiteFooter() {
           &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
         </p>
         <nav className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+          <Link href="/help" className="transition-colors hover:text-foreground">
+            {t('marketing.helpCenter.navLabel')}
+          </Link>
           <Link href="/how-it-works" className="transition-colors hover:text-foreground">
             {t('marketing.howItWorks.navLabel')}
           </Link>
