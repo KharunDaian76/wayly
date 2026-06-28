@@ -14,3 +14,4 @@ export * from './user-admin';
 export * from './payment-admin';
 export * from './order-admin';
 export * from './admin-audit-log';
+export * from './support-ticket';

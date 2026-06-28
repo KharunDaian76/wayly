@@ -18,6 +18,8 @@ import { createOrdersApi } from './orders';
 import type { OrdersApi } from './orders.types';
 import { createPaymentsApi } from './payments';
 import type { PaymentsApi } from './payments.types';
+import { createSupportTicketsApi } from './support-tickets';
+import type { SupportTicketsApi } from './support-tickets.types';
 import type { ApiClientOptions, RequestOptions } from './types';
 import { createUsersApi } from './users';
 import { createWaylerAccessApi } from './wayler-access';
@@ -67,6 +69,9 @@ export class ApiClient {
   /** Dispute and arbitration endpoints. */
   readonly disputes: DisputesApi;
 
+  /** User support ticket endpoints (platform support review; not emergency response). */
+  readonly supportTickets: SupportTicketsApi;
+
   /** Admin / operations endpoints (role-gated; read-only in current batches). */
   readonly admin: AdminApi;
 
@@ -105,6 +110,7 @@ export class ApiClient {
     this.conversations = createConversationsApi((path, opts) => this.request(path, opts));
     this.payments = createPaymentsApi((path, opts) => this.request(path, opts));
     this.disputes = createDisputesApi((path, opts) => this.request(path, opts));
+    this.supportTickets = createSupportTicketsApi((path, opts) => this.request(path, opts));
     this.admin = createAdminApi((path, opts) => this.request(path, opts));
     this.marketplace = createMarketplaceApi((path, opts) => this.request(path, opts));
     this.waylerAvailabilities = createWaylerAvailabilitiesApi((path, opts) =>

@@ -8,6 +8,8 @@ import type {
   AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
+  AdminSupportTicketListResponse,
+  AdminSupportTicketQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
@@ -34,6 +36,10 @@ import type {
   AdminPaymentsListQuery,
 } from './payments-admin.types';
 import type { RequestOptions } from './types';
+import type {
+  AdminSupportTicketsListQuery,
+  AdminUpdateSupportTicketBody,
+} from './support-tickets-admin.types';
 import type {
   AdminUsersListQuery,
   AdminUserSuspendBody,
@@ -209,6 +215,36 @@ function buildAdminAuditLogsQuery(query?: AdminAuditLogsListQuery): string {
   return qs ? `?${qs}` : '';
 }
 
+function buildAdminSupportTicketsQuery(query?: AdminSupportTicketsListQuery): string {
+  if (!query) {
+    return '';
+  }
+  const params = new URLSearchParams();
+  if (query.page !== undefined) {
+    params.set('page', String(query.page));
+  }
+  if (query.limit !== undefined) {
+    params.set('limit', String(query.limit));
+  }
+  if (query.status !== undefined) {
+    params.set('status', query.status);
+  }
+  if (query.category !== undefined) {
+    params.set('category', query.category);
+  }
+  if (query.priority !== undefined) {
+    params.set('priority', query.priority);
+  }
+  if (query.userId !== undefined) {
+    params.set('userId', query.userId);
+  }
+  if (query.orderId !== undefined) {
+    params.set('orderId', query.orderId);
+  }
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
 export function createAdminApi(request: Requester): AdminApi {
   return {
     listDisputes: (query?: DisputesListQuery, accessToken?: string | null) =>
@@ -374,6 +410,26 @@ export function createAdminApi(request: Requester): AdminApi {
     listAuditLogs: (query?: AdminAuditLogsListQuery, accessToken?: string | null) =>
       request<AdminAuditLogListResponse>(`/admin/audit-logs${buildAdminAuditLogsQuery(query)}`, {
         method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    listSupportTickets: (query?: AdminSupportTicketsListQuery, accessToken?: string | null) =>
+      request<AdminSupportTicketListResponse>(
+        `/admin/support-tickets${buildAdminSupportTicketsQuery(query)}`,
+        {
+          method: 'GET',
+          ...withCookies,
+          accessToken,
+        },
+      ),
+    updateSupportTicket: (
+      id: string,
+      body: AdminUpdateSupportTicketBody,
+      accessToken?: string | null,
+    ) =>
+      request<AdminSupportTicketQueueItem>(`/admin/support-tickets/${id}`, {
+        method: 'PATCH',
+        body,
         ...withCookies,
         accessToken,
       }),

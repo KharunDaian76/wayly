@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@wayly/ui';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { AdminDisputesQueuePanel } from '@/components/app/admin-disputes-queue-panel';
+import { AdminSupportTicketsQueuePanel } from '@/components/app/admin-support-tickets-queue-panel';
 import { AdminKycQueuePanel } from '@/components/app/admin-kyc-queue-panel';
 import { AdminOperationsOverviewPanel } from '@/components/app/admin-operations-overview-panel';
 import { AdminOrdersQueuePanel } from '@/components/app/admin-orders-queue-panel';
@@ -155,6 +156,7 @@ export function AdminOperationsDashboard({ roles }: AdminOperationsDashboardProp
             highlighted={highlightTarget === 'systemHealth'}
             panelRef={panelRefs.systemHealth}
           />
+          <AdminSupportTicketsQueuePanel roles={roles} />
         </div>
       </CardContent>
     </Card>

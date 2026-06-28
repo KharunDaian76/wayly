@@ -189,6 +189,31 @@ enum WaylerAccessPassProvider {
   OTHER
 }
 
+enum SupportTicketCategory {
+  GENERAL
+  ACCOUNT
+  SAFETY
+  PAYMENT_STATUS
+  ORDER_ISSUE
+  BUG_REPORT
+  OTHER
+}
+
+enum SupportTicketStatus {
+  OPEN
+  UNDER_REVIEW
+  WAITING_FOR_USER
+  RESOLVED
+  CLOSED
+}
+
+enum SupportTicketPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
 // Account moderation status (admin suspend/unsuspend v1).
 enum UserAccountStatus {
   ACTIVE
@@ -317,6 +342,8 @@ model User {
   adminAuditLogs                AdminAuditLog[]             @relation("AdminAuditLogActor")
   paymentIntentsReviewed        PaymentIntent[]             @relation("PaymentIntentAdminReviewer")
   deliveryOrdersReviewed        DeliveryOrder[]             @relation("DeliveryOrderAdminReviewer")
+  supportTickets                SupportTicket[]             @relation("SupportTicketsOwned")
+  supportTicketAdminActions     SupportTicket[]             @relation("SupportTicketAdminActions")
 
   @@index([deletedAt])
   @@index([accountStatus])
@@ -450,6 +477,7 @@ model DeliveryOrder {
   paymentIntent          PaymentIntent?
   ledgerEntries          LedgerEntry[]
   disputes               Dispute[]
+  supportTickets         SupportTicket[]
 
   @@index([senderId])
   @@index([acceptedWaylerId])
@@ -868,4 +896,33 @@ model AdminAuditLog {
   @@index([targetType, targetId])
   @@index([targetUserId])
   @@map("admin_audit_logs")
+}
+
+// User support tickets (Support Ticket foundation v1 — not emergency response).
+model SupportTicket {
+  id                   String                 @id @default(uuid()) @db.Uuid
+  userId               String                 @db.Uuid
+  user                 User                   @relation("SupportTicketsOwned", fields: [userId], references: [id], onDelete: Cascade)
+  orderId              String?                @db.Uuid
+  order                DeliveryOrder?         @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  subject              String
+  message              String
+  category             SupportTicketCategory
+  status               SupportTicketStatus    @default(OPEN)
+  priority             SupportTicketPriority  @default(NORMAL)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  closedAt             DateTime?
+  adminNote            String?
+  lastAdminActionAt    DateTime?
+  lastAdminActionById  String?                @db.Uuid
+  lastAdminActionBy    User?                  @relation("SupportTicketAdminActions", fields: [lastAdminActionById], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([status])
+  @@index([category])
+  @@index([priority])
+  @@index([createdAt])
+  @@index([orderId])
+  @@map("support_tickets")
 }

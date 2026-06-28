@@ -3,6 +3,10 @@ export { ApiError, type ApiErrorBody } from './errors';
 export { createAdminApi } from './admin';
 export { type AdminApi } from './admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
+export type {
+  AdminSupportTicketsListQuery,
+  AdminUpdateSupportTicketBody,
+} from './support-tickets-admin.types';
 export type { AdminOrdersListQuery } from './orders-admin.types';
 export type { AdminPaymentsListQuery } from './payments-admin.types';
 export type { AdminUsersListQuery } from './users-admin.types';
@@ -33,6 +37,7 @@ export {
 export { createPaymentsApi } from './payments';
 export { type PaymentsApi } from './payments.types';
 export { createDisputesApi } from './disputes';
+export { createSupportTicketsApi } from './support-tickets';
 export { createWaylerAccessApi } from './wayler-access';
 export { type WaylerAccessApi, type WaylerAccessPassesListQuery } from './wayler-access.types';
 export { createMarketplaceApi } from './marketplace';
@@ -46,6 +51,7 @@ export {
   type DisputesListQuery,
   type OpenDisputeInput,
 } from './disputes.types';
+export type { SupportTicketsApi } from './support-tickets.types';
 export { createOrdersApi } from './orders';
 export {
   type AcceptedDeliveryOrderSummary,
@@ -69,6 +75,10 @@ export type {
   DisputeEvidenceSummary,
   DisputeListResponse,
   DisputeMessageSummary,
+  SupportTicketListResponse,
+  SupportTicketSummary,
+  AdminSupportTicketListResponse,
+  AdminSupportTicketQueueItem,
   KycStatusView,
   KycVerificationSummary,
   NotificationListResponse,
@@ -86,6 +96,7 @@ export type {
 export type {
   ActiveWaylerMarketplaceQueryInput,
   CreateWaylerAvailabilityRequestInput,
+  CreateSupportTicketInput,
   RespondWaylerAvailabilityRequestInput,
   SendChatMessageInput,
 } from '@wayly/validation';

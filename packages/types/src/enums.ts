@@ -292,3 +292,36 @@ export const WaylerAccessPassProvider = {
 } as const;
 export type WaylerAccessPassProvider =
   (typeof WaylerAccessPassProvider)[keyof typeof WaylerAccessPassProvider];
+
+/** User support ticket category (Support Ticket foundation v1). */
+export const SupportTicketCategory = {
+  GENERAL: 'GENERAL',
+  ACCOUNT: 'ACCOUNT',
+  SAFETY: 'SAFETY',
+  PAYMENT_STATUS: 'PAYMENT_STATUS',
+  ORDER_ISSUE: 'ORDER_ISSUE',
+  BUG_REPORT: 'BUG_REPORT',
+  OTHER: 'OTHER',
+} as const;
+export type SupportTicketCategory =
+  (typeof SupportTicketCategory)[keyof typeof SupportTicketCategory];
+
+/** User support ticket lifecycle status. */
+export const SupportTicketStatus = {
+  OPEN: 'OPEN',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  WAITING_FOR_USER: 'WAITING_FOR_USER',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED',
+} as const;
+export type SupportTicketStatus = (typeof SupportTicketStatus)[keyof typeof SupportTicketStatus];
+
+/** User support ticket priority. */
+export const SupportTicketPriority = {
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT',
+} as const;
+export type SupportTicketPriority =
+  (typeof SupportTicketPriority)[keyof typeof SupportTicketPriority];

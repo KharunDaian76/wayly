@@ -13,3 +13,4 @@ export * from './wayler-availability-request';
 export * from './wayler-access-pass';
 export * from './system-health';
 export * from './admin-audit-log';
+export * from './support-ticket';

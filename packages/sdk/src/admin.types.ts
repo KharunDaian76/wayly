@@ -8,6 +8,8 @@ import type {
   AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
+  AdminSupportTicketListResponse,
+  AdminSupportTicketQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
@@ -32,6 +34,10 @@ import type {
   AdminPaymentReleaseDecisionBody,
   AdminPaymentsListQuery,
 } from './payments-admin.types';
+import type {
+  AdminSupportTicketsListQuery,
+  AdminUpdateSupportTicketBody,
+} from './support-tickets-admin.types';
 import type {
   AdminUsersListQuery,
   AdminUserSuspendBody,
@@ -131,6 +137,15 @@ export interface AdminApi {
     query?: AdminAuditLogsListQuery,
     accessToken?: string | null,
   ): Promise<AdminAuditLogListResponse>;
+  listSupportTickets(
+    query?: AdminSupportTicketsListQuery,
+    accessToken?: string | null,
+  ): Promise<AdminSupportTicketListResponse>;
+  updateSupportTicket(
+    id: string,
+    body: AdminUpdateSupportTicketBody,
+    accessToken?: string | null,
+  ): Promise<AdminSupportTicketQueueItem>;
 }
 
 export type {
@@ -143,6 +158,8 @@ export type {
   AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
+  AdminSupportTicketListResponse,
+  AdminSupportTicketQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
@@ -163,6 +180,10 @@ export type {
   AdminPaymentsListQuery,
 } from './payments-admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
+export type {
+  AdminSupportTicketsListQuery,
+  AdminUpdateSupportTicketBody,
+} from './support-tickets-admin.types';
 export type { AdminDisputeResolveBody } from './disputes-admin.types';
 export type {
   AdminUsersListQuery,
