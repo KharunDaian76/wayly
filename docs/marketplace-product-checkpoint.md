@@ -178,6 +178,7 @@ Recent UI-only pass to reduce stacked panels:
 
 - [local-saved-data-checkpoint.md](./local-saved-data-checkpoint.md)
 - [payment-and-dispute-safety-checkpoint.md](./payment-and-dispute-safety-checkpoint.md)
+- [support-notifications-demo-checkpoint.md](./support-notifications-demo-checkpoint.md) — support tickets + in-app activity notifications
 - [admin-operations-checkpoint.md](./admin-operations-checkpoint.md)
 - [admin-operations-center.md](./admin-operations-center.md) — full admin reference
 - [README.md](../README.md) — milestone history and local dev setup

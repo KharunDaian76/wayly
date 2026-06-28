@@ -63,15 +63,16 @@ Banner text confirms which triage view is active.
 
 ## Queue panels & filters
 
-| Panel         | Component                         | List API                       | Filters (v1)                                                              |
-| ------------- | --------------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
-| Disputes      | `admin-disputes-queue-panel.tsx`  | `GET /admin/disputes`          | status, orderId, openedById                                               |
-| KYC           | `admin-kyc-queue-panel.tsx`       | `GET /admin/kyc-verifications` | status, userId, country                                                   |
-| Users         | `admin-users-queue-panel.tsx`     | `GET /admin/users`             | role, kycStatus, accountStatus, search                                    |
-| Orders        | `admin-orders-queue-panel.tsx`    | `GET /admin/orders`            | adminReviewStatus (+ pagination)                                          |
-| Payments      | `admin-payments-queue-panel.tsx`  | `GET /admin/payments`          | adminReviewStatus (+ pagination)                                          |
-| System Health | `admin-system-health-panel.tsx`   | `GET /admin/system-health`     | —                                                                         |
-| Audit log     | subsection in system health panel | `GET /admin/audit-logs`        | action, targetType, status, actorUserId, targetUserId, targetId, from, to |
+| Panel           | Component                               | List API                       | Filters (v1)                                                              |
+| --------------- | --------------------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| Disputes        | `admin-disputes-queue-panel.tsx`        | `GET /admin/disputes`          | status, orderId, openedById                                               |
+| KYC             | `admin-kyc-queue-panel.tsx`             | `GET /admin/kyc-verifications` | status, userId, country                                                   |
+| Users           | `admin-users-queue-panel.tsx`           | `GET /admin/users`             | role, kycStatus, accountStatus, search                                    |
+| Orders          | `admin-orders-queue-panel.tsx`          | `GET /admin/orders`            | adminReviewStatus (+ pagination)                                          |
+| Payments        | `admin-payments-queue-panel.tsx`        | `GET /admin/payments`          | adminReviewStatus (+ pagination)                                          |
+| System Health   | `admin-system-health-panel.tsx`         | `GET /admin/system-health`     | —                                                                         |
+| Audit log       | subsection in system health panel       | `GET /admin/audit-logs`        | action, targetType, status, actorUserId, targetUserId, targetId, from, to |
+| Support tickets | `admin-support-tickets-queue-panel.tsx` | `GET /admin/support-tickets`   | status, category, priority, userId, orderId                               |
 
 All panels: loading / error+retry / empty / refresh patterns via `panel-status-states.tsx`.
 
@@ -165,5 +166,6 @@ Swagger admin tag: `http://localhost:4000/docs`
 ## Related docs
 
 - [admin-operations-center.md](./admin-operations-center.md) — endpoints, SDK, security, manual checklist
+- [support-notifications-demo-checkpoint.md](./support-notifications-demo-checkpoint.md) — support ticket queue + in-app notifications
 - [marketplace-product-checkpoint.md](./marketplace-product-checkpoint.md)
 - [payment-and-dispute-safety-checkpoint.md](./payment-and-dispute-safety-checkpoint.md)

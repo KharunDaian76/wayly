@@ -16,8 +16,9 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 | [docs/local-saved-data-checkpoint.md](docs/local-saved-data-checkpoint.md)                     | **Checkpoint** — browser `localStorage` keys, fields, privacy boundaries                                                                 |
 | [docs/payment-and-dispute-safety-checkpoint.md](docs/payment-and-dispute-safety-checkpoint.md) | **Checkpoint** — honest payment/dispute/demo wording; no real escrow/refund claims                                                       |
 | [docs/public-guidance-and-safety-checkpoint.md](docs/public-guidance-and-safety-checkpoint.md) | **Checkpoint** — public help/policy/roadmap pages, SEO, in-app safety + Launch Status notice                                             |
+| [docs/support-notifications-demo-checkpoint.md](docs/support-notifications-demo-checkpoint.md) | **Checkpoint** — support tickets, in-app notifications, local demo seed                                                                  |
 
-Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The five **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
+Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The six **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
 
 ### Recent local stack (checkpoint — not deployed)
 
@@ -28,6 +29,7 @@ The branch is **ahead of `origin/main`** with marketplace trust/discovery UX, lo
 3. [Local saved data](docs/local-saved-data-checkpoint.md) — `localStorage` keys and privacy limits
 4. [Payment & dispute safety](docs/payment-and-dispute-safety-checkpoint.md) — mock payments, no real money movement, honest demo language
 5. [Public guidance & in-app safety](docs/public-guidance-and-safety-checkpoint.md) — Help Center, Policy Center, Roadmap, SEO, Help/Safety cards, Safety Preflight, Launch Status notice
+6. [Support, notifications & demo seed](docs/support-notifications-demo-checkpoint.md) — support tickets, in-app notification center, `seed:demo` for local walkthroughs
 
 ## Tech stack
 
