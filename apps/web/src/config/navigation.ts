@@ -23,7 +23,7 @@ export interface NavItem {
 
 /** Marketing landing anchors — map 1:1 to the landing page sections. */
 export const marketingNav: NavItem[] = [
-  { label: 'How it works', href: '#how-it-works' },
+  { label: 'How it works', href: '/how-it-works' },
   { label: 'International', href: '#international' },
   { label: 'Local', href: '#local' },
   { label: 'Pricing', href: '#pricing' },

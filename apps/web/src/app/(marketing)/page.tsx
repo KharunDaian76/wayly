@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { FaqLandingLink } from '@/components/marketing/faq-landing-link';
+import { HowItWorksLandingLink } from '@/components/marketing/how-it-works-landing-link';
 import { TrustCenterLandingLink } from '@/components/marketing/trust-center-landing-link';
 import { FadeIn } from '@/components/motion';
 import { siteConfig } from '@/config/site';
@@ -89,12 +90,12 @@ export default function LandingPage() {
               >
                 Get started
               </Link>
-              <a
-                href="#how-it-works"
+              <Link
+                href="/how-it-works"
                 className="inline-flex items-center rounded-md border border-border px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
               >
                 See how it works
-              </a>
+              </Link>
             </div>
             <TrustCenterLandingLink className="mt-4" />
             <FaqLandingLink className="mt-2" />
@@ -114,7 +115,9 @@ export default function LandingPage() {
                 <p className="max-w-xl text-muted-foreground">{section.blurb}</p>
               </div>
               <div className="mt-8">
-                {section.id === 'trust-safety' ? (
+                {section.id === 'how-it-works' ? (
+                  <HowItWorksLandingLink variant="card" />
+                ) : section.id === 'trust-safety' ? (
                   <TrustCenterLandingLink variant="card" />
                 ) : section.id === 'faq' ? (
                   <FaqLandingLink variant="card" />

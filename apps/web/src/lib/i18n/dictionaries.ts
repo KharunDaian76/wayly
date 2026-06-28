@@ -1894,6 +1894,37 @@ const en = {
   'marketing.faq.commercialLaunchQuestion': 'Is Wayly ready for real commercial launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly is actively developed. Core marketplace tools work, but real payments, production KYC, and full commercial guarantees are not in place yet. See the Trust Center for current limits.',
+  'marketing.howItWorks.navLabel': 'How it works',
+  'marketing.howItWorks.title': 'How Wayly works',
+  'marketing.howItWorks.subtitle':
+    'A simple look at how Senders and Waylers coordinate delivery inside Wayly — with honest notes on what the platform does and does not guarantee today.',
+  'marketing.howItWorks.openApp': 'Open app',
+  'marketing.howItWorks.trustCenter': 'Trust Center',
+  'marketing.howItWorks.faq': 'FAQ',
+  'marketing.howItWorks.restrictedItems': 'Restricted items',
+  'marketing.howItWorks.senderTitle': 'For Senders',
+  'marketing.howItWorks.senderSubtitle':
+    'Find a Wayler, send a clear request, and track the order inside Wayly.',
+  'marketing.howItWorks.senderStepsBody':
+    'Browse Wayler listings or create a delivery request.\nReview route-match hints and trust signals — they are informational, not booking guarantees.\nSend a clear request with item, timing, and handoff details.\nWhen a Wayler accepts, it becomes a tracked order inside Wayly.\nChat and confirm details inside Wayly — keep agreements on the platform.\nTrack delivery progress and delivery proof in the order.\nUse dispute tools if coordination breaks down — they organize facts, not legal outcomes.',
+  'marketing.howItWorks.waylerTitle': 'For Waylers',
+  'marketing.howItWorks.waylerSubtitle':
+    'Publish availability, review requests, and deliver with proof inside Wayly.',
+  'marketing.howItWorks.waylerStepsBody':
+    'Complete verification or KYC steps if required for your role.\nPublish local availability or a trip route listing.\nReview incoming Sender requests and compare routes.\nAccept only clear, safe requests you can carry under local rules.\nChat and confirm item details, timing, and handoff inside Wayly.\nStart transit, mark delivered, and submit proof when applicable.\nKeep evidence and coordination inside Wayly if an issue arises.',
+  'marketing.howItWorks.lifecycleTitle': 'Order lifecycle',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'From first request to delivery. Payment stages are mock/manual today — no real escrow, refund, or payout guarantee.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'Request\nAccepted order\nChat\nTransit\nDelivered\nProof or confirmation\nDispute review if needed',
+  'marketing.howItWorks.safetyLinksTitle': 'Trust and safety resources',
+  'marketing.howItWorks.limitsTitle': 'Current production limits',
+  'marketing.howItWorks.limitsBody':
+    'Real payment provider integration, real KYC provider, push notifications, production monitoring, and native mobile packaging are future work. Core marketplace tools are available today with honest operational limits.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly helps organize chat, proof, and dispute records — not guaranteed delivery, payment protection, insurance, or legal outcomes.',
+  'marketing.howItWorks.backHome': 'Back to home',
+  'marketing.landing.howItWorksLink': 'See the Sender and Wayler flow',
   'marketing.restrictedItems.navLabel': 'Restricted items',
   'marketing.restrictedItems.title': 'Restricted items & responsible use',
   'marketing.restrictedItems.subtitle':
@@ -3838,6 +3869,37 @@ const ru: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Готов ли Wayly к коммерческому запуску?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly активно развивается. Основные инструменты работают, но реальные платежи, production KYC и полные коммерческие гарантии пока отсутствуют. См. Центр доверия.',
+  'marketing.howItWorks.navLabel': 'Как это работает',
+  'marketing.howItWorks.title': 'Как работает Wayly',
+  'marketing.howItWorks.subtitle':
+    'Простой обзор координации доставки между отправителями и Wayler в Wayly — с честными заметками о том, что платформа гарантирует и не гарантирует сегодня.',
+  'marketing.howItWorks.openApp': 'Открыть приложение',
+  'marketing.howItWorks.trustCenter': 'Центр доверия',
+  'marketing.howItWorks.faq': 'FAQ',
+  'marketing.howItWorks.restrictedItems': 'Запрещённые предметы',
+  'marketing.howItWorks.senderTitle': 'Для отправителей',
+  'marketing.howItWorks.senderSubtitle':
+    'Найдите Wayler, отправьте понятный запрос и отслеживайте заказ в Wayly.',
+  'marketing.howItWorks.senderStepsBody':
+    'Просматривайте объявления Wayler или создайте запрос на доставку.\nИзучайте подсказки маршрута и сигналы доверия — они информационные, не гарантия бронирования.\nОтправьте понятный запрос с предметом, сроками и деталями передачи.\nПосле принятия Wayler запрос становится отслеживаемым заказом в Wayly.\nОбщайтесь и подтверждайте детали в Wayly — держите договорённости на платформе.\nОтслеживайте доставку и подтверждение в заказе.\nИспользуйте инструменты споров при сбое координации — они упорядочивают факты, не юридический исход.',
+  'marketing.howItWorks.waylerTitle': 'Для Wayler',
+  'marketing.howItWorks.waylerSubtitle':
+    'Публикуйте доступность, просматривайте запросы и доставляйте с подтверждением в Wayly.',
+  'marketing.howItWorks.waylerStepsBody':
+    'Пройдите верификацию или KYC, если требуется для вашей роли.\nОпубликуйте локальную доступность или маршрут поездки.\nПросматривайте входящие запросы и сравнивайте маршруты.\nПринимайте только понятные и безопасные запросы по местным правилам.\nОбщайтесь и подтверждайте детали предмета, сроки и передачу в Wayly.\nНачните транзит, отметьте доставку и отправьте подтверждение при необходимости.\nХраните доказательства и координацию в Wayly при возникновении проблем.',
+  'marketing.howItWorks.lifecycleTitle': 'Жизненный цикл заказа',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'От первого запроса до доставки. Этапы платежа сегодня mock/ручные — без реального эскроу, гарантированного возврата или выплаты.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'Запрос\nПринятый заказ\nЧат\nТранзит\nДоставлено\nПодтверждение\nРассмотрение спора при необходимости',
+  'marketing.howItWorks.safetyLinksTitle': 'Ресурсы доверия и безопасности',
+  'marketing.howItWorks.limitsTitle': 'Текущие production-ограничения',
+  'marketing.howItWorks.limitsBody':
+    'Реальный платёжный провайдер, KYC-провайдер, push-уведомления, production-мониторинг и нативное мобильное приложение — будущая работа. Основные инструменты marketplace доступны сегодня с честными операционными ограничениями.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly помогает организовать чат, подтверждения и записи споров — не гарантированную доставку, защиту платежей, страховку или юридический исход.',
+  'marketing.howItWorks.backHome': 'На главную',
+  'marketing.landing.howItWorksLink': 'Поток для отправителей и Wayler',
   'marketing.restrictedItems.navLabel': 'Запрещённые предметы',
   'marketing.restrictedItems.title': 'Запрещённые предметы и ответственное использование',
   'marketing.restrictedItems.subtitle':
@@ -5790,6 +5852,37 @@ const es: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': '¿Wayly listo para lanzamiento comercial?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly se desarrolla activamente. Las herramientas core funcionan, pero pagos reales, KYC de producción y garantías comerciales completas aún no están. Ver Centro de confianza.',
+  'marketing.howItWorks.navLabel': 'Cómo funciona',
+  'marketing.howItWorks.title': 'Cómo funciona Wayly',
+  'marketing.howItWorks.subtitle':
+    'Una mirada simple a cómo remitentes y Wayler coordinan la entrega en Wayly — con notas honestas sobre lo que la plataforma garantiza y no garantiza hoy.',
+  'marketing.howItWorks.openApp': 'Abrir app',
+  'marketing.howItWorks.trustCenter': 'Centro de confianza',
+  'marketing.howItWorks.faq': 'FAQ',
+  'marketing.howItWorks.restrictedItems': 'Artículos restringidos',
+  'marketing.howItWorks.senderTitle': 'Para remitentes',
+  'marketing.howItWorks.senderSubtitle':
+    'Encuentra un Wayler, envía una solicitud clara y rastrea el pedido en Wayly.',
+  'marketing.howItWorks.senderStepsBody':
+    'Explora anuncios Wayler o crea una solicitud de entrega.\nRevisa coincidencias de ruta y señales de confianza — son informativas, no garantía de reserva.\nEnvía una solicitud clara con artículo, tiempos y detalles de entrega.\nCuando un Wayler acepta, se convierte en pedido rastreado en Wayly.\nChatea y confirma detalles en Wayly — mantén acuerdos en la plataforma.\nRastrea progreso de entrega y prueba en el pedido.\nUsa herramientas de disputa si falla la coordinación — organizan hechos, no resultados legales.',
+  'marketing.howItWorks.waylerTitle': 'Para Wayler',
+  'marketing.howItWorks.waylerSubtitle':
+    'Publica disponibilidad, revisa solicitudes y entrega con prueba en Wayly.',
+  'marketing.howItWorks.waylerStepsBody':
+    'Completa verificación o KYC si tu rol lo requiere.\nPublica disponibilidad local o anuncio de ruta de viaje.\nRevisa solicitudes entrantes y compara rutas.\nAcepta solo solicitudes claras y seguras según reglas locales.\nChatea y confirma detalles del artículo, tiempos y entrega en Wayly.\nInicia tránsito, marca entregado y envía prueba cuando aplique.\nMantén evidencia y coordinación en Wayly si surge un problema.',
+  'marketing.howItWorks.lifecycleTitle': 'Ciclo de vida del pedido',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'Desde la primera solicitud hasta la entrega. Etapas de pago mock/manuales hoy — sin depósito real, reembolso o pago garantizado.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'Solicitud\nPedido aceptado\nChat\nTránsito\nEntregado\nPrueba o confirmación\nRevisión de disputa si hace falta',
+  'marketing.howItWorks.safetyLinksTitle': 'Recursos de confianza y seguridad',
+  'marketing.howItWorks.limitsTitle': 'Límites de producción actuales',
+  'marketing.howItWorks.limitsBody':
+    'Proveedor de pagos real, KYC real, notificaciones push, monitoreo de producción y app móvil nativa son trabajo futuro. Las herramientas core están disponibles con límites operativos honestos.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly ayuda a organizar chat, pruebas y registros de disputa — no entrega garantizada, protección de pago, seguro ni resultados legales.',
+  'marketing.howItWorks.backHome': 'Volver al inicio',
+  'marketing.landing.howItWorksLink': 'Ver flujo de remitente y Wayler',
   'marketing.restrictedItems.navLabel': 'Artículos restringidos',
   'marketing.restrictedItems.title': 'Artículos restringidos y uso responsable',
   'marketing.restrictedItems.subtitle':
@@ -7769,6 +7862,37 @@ const fr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly prêt pour un lancement commercial ?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly est en développement actif. Les outils core fonctionnent, mais paiements réels, KYC production et garanties commerciales complètes ne sont pas en place. Voir Centre de confiance.',
+  'marketing.howItWorks.navLabel': 'Comment ça marche',
+  'marketing.howItWorks.title': 'Comment Wayly fonctionne',
+  'marketing.howItWorks.subtitle':
+    'Un aperçu simple de la coordination entre expéditeurs et Wayler dans Wayly — avec des notes honnêtes sur ce que la plateforme garantit ou non aujourd’hui.',
+  'marketing.howItWorks.openApp': 'Ouvrir l’app',
+  'marketing.howItWorks.trustCenter': 'Centre de confiance',
+  'marketing.howItWorks.faq': 'FAQ',
+  'marketing.howItWorks.restrictedItems': 'Articles restreints',
+  'marketing.howItWorks.senderTitle': 'Pour les expéditeurs',
+  'marketing.howItWorks.senderSubtitle':
+    'Trouvez un Wayler, envoyez une demande claire et suivez la commande dans Wayly.',
+  'marketing.howItWorks.senderStepsBody':
+    'Parcourez les annonces Wayler ou créez une demande de livraison.\nConsultez correspondances d’itinéraire et signaux de confiance — informatifs, pas garantie de réservation.\nEnvoyez une demande claire avec article, horaires et remise.\nQuand un Wayler accepte, cela devient une commande suivie dans Wayly.\nChattez et confirmez dans Wayly — gardez les accords sur la plateforme.\nSuivez livraison et preuve dans la commande.\nUtilisez les litiges si la coordination échoue — ils organisent les faits, pas un résultat juridique.',
+  'marketing.howItWorks.waylerTitle': 'Pour les Wayler',
+  'marketing.howItWorks.waylerSubtitle':
+    'Publiez une disponibilité, examinez les demandes et livrez avec preuve dans Wayly.',
+  'marketing.howItWorks.waylerStepsBody':
+    'Complétez vérification ou KYC si requis pour votre rôle.\nPubliez disponibilité locale ou annonce d’itinéraire de voyage.\nExaminez demandes entrantes et comparez itinéraires.\nAcceptez seulement demandes claires et sûres selon règles locales.\nChattez et confirmez détails, horaires et remise dans Wayly.\nDémarrez transit, marquez livré et soumettez preuve si applicable.\nGardez preuves et coordination dans Wayly en cas de problème.',
+  'marketing.howItWorks.lifecycleTitle': 'Cycle de vie de la commande',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'De la première demande à la livraison. Étapes paiement mock/manuelles — pas de séquestre, remboursement ou paiement garanti.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'Demande\nCommande acceptée\nChat\nTransit\nLivré\nPreuve ou confirmation\nRevue litige si besoin',
+  'marketing.howItWorks.safetyLinksTitle': 'Ressources confiance et sécurité',
+  'marketing.howItWorks.limitsTitle': 'Limites production actuelles',
+  'marketing.howItWorks.limitsBody':
+    'Prestataire paiement réel, KYC réel, notifications push, monitoring production et app mobile native sont travail futur. Outils core disponibles avec limites opérationnelles honnêtes.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly aide à organiser chat, preuves et litiges — pas livraison garantie, protection paiement, assurance ou issue juridique.',
+  'marketing.howItWorks.backHome': 'Retour à l’accueil',
+  'marketing.landing.howItWorksLink': 'Voir le parcours expéditeur et Wayler',
   'marketing.restrictedItems.navLabel': 'Articles restreints',
   'marketing.restrictedItems.title': 'Articles restreints et usage responsable',
   'marketing.restrictedItems.subtitle':
@@ -9759,6 +9883,37 @@ const de: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Bereit für kommerziellen Launch?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly wird aktiv entwickelt. Kern-Tools funktionieren, aber echte Zahlungen, Production-KYC und volle Garantien fehlen noch. Siehe Trust Center.',
+  'marketing.howItWorks.navLabel': 'So funktioniert’s',
+  'marketing.howItWorks.title': 'So funktioniert Wayly',
+  'marketing.howItWorks.subtitle':
+    'Ein einfacher Überblick, wie Sender und Wayler Lieferungen in Wayly koordinieren — mit ehrlichen Hinweisen zu Garantien und Grenzen heute.',
+  'marketing.howItWorks.openApp': 'App öffnen',
+  'marketing.howItWorks.trustCenter': 'Trust Center',
+  'marketing.howItWorks.faq': 'FAQ',
+  'marketing.howItWorks.restrictedItems': 'Eingeschränkte Gegenstände',
+  'marketing.howItWorks.senderTitle': 'Für Sender',
+  'marketing.howItWorks.senderSubtitle':
+    'Wayler finden, klare Anfrage senden und Bestellung in Wayly verfolgen.',
+  'marketing.howItWorks.senderStepsBody':
+    'Wayler-Anzeigen durchsuchen oder Lieferanfrage erstellen.\nRouten-Match-Hinweise und Vertrauenssignale prüfen — informativ, keine Buchungsgarantie.\nKlare Anfrage mit Artikel, Timing und Übergabe senden.\nBei Annahme wird daraus eine nachverfolgbare Bestellung in Wayly.\nIm Wayly-Chat Details bestätigen — Absprachen auf der Plattform halten.\nLieferfortschritt und Nachweis in der Bestellung verfolgen.\nStreitfall-Tools bei Koordinationsproblemen — ordnen Fakten, keine Rechtsfolge.',
+  'marketing.howItWorks.waylerTitle': 'Für Wayler',
+  'marketing.howItWorks.waylerSubtitle':
+    'Verfügbarkeit veröffentlichen, Anfragen prüfen und mit Nachweis liefern.',
+  'marketing.howItWorks.waylerStepsBody':
+    'Verifizierung oder KYC abschließen, falls für Ihre Rolle nötig.\nLokale Verfügbarkeit oder Reiseroute veröffentlichen.\nEingehende Sender-Anfragen prüfen und Routen vergleichen.\nNur klare, sichere Anfragen nach lokalen Regeln annehmen.\nDetails, Timing und Übergabe im Wayly-Chat bestätigen.\nTransit starten, als geliefert markieren und Nachweis einreichen.\nBei Problemen Nachweise und Koordination in Wayly halten.',
+  'marketing.howItWorks.lifecycleTitle': 'Bestell-Lebenszyklus',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'Von der Anfrage bis zur Lieferung. Zahlungsstufen heute mock/manuell — kein echtes Escrow, Erstattungs- oder Auszahlungsgarantie.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'Anfrage\nAngenommene Bestellung\nChat\nTransit\nGeliefert\nNachweis oder Bestätigung\nStreitprüfung bei Bedarf',
+  'marketing.howItWorks.safetyLinksTitle': 'Vertrauens- und Sicherheitsressourcen',
+  'marketing.howItWorks.limitsTitle': 'Aktuelle Production-Grenzen',
+  'marketing.howItWorks.limitsBody':
+    'Echter Zahlungsanbieter, KYC, Push-Benachrichtigungen, Production-Monitoring und native Mobile-App sind künftige Arbeit. Kern-Tools sind heute mit ehrlichen operativen Grenzen verfügbar.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly organisiert Chat, Nachweise und Streitakten — keine garantierte Lieferung, Zahlungsschutz, Versicherung oder Rechtsfolge.',
+  'marketing.howItWorks.backHome': 'Zur Startseite',
+  'marketing.landing.howItWorksLink': 'Sender- und Wayler-Ablauf ansehen',
   'marketing.restrictedItems.navLabel': 'Eingeschränkte Gegenstände',
   'marketing.restrictedItems.title': 'Eingeschränkte Gegenstände & verantwortungsvolle Nutzung',
   'marketing.restrictedItems.subtitle':
@@ -11686,6 +11841,37 @@ const tr: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly ticari lansmana hazır mı?',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly aktif geliştiriliyor. Temel araçlar çalışıyor ancak gerçek ödemeler, production KYC ve tam ticari garantiler yok. Güven merkezine bakın.',
+  'marketing.howItWorks.navLabel': 'Nasıl çalışır',
+  'marketing.howItWorks.title': 'Wayly nasıl çalışır',
+  'marketing.howItWorks.subtitle':
+    'Göndericiler ve Wayler’ların Wayly içinde teslimatı nasıl koordine ettiğine dair basit bir bakış — platformun bugün neyi garanti edip etmediği dahil.',
+  'marketing.howItWorks.openApp': 'Uygulamayı aç',
+  'marketing.howItWorks.trustCenter': 'Güven merkezi',
+  'marketing.howItWorks.faq': 'SSS',
+  'marketing.howItWorks.restrictedItems': 'Kısıtlı eşyalar',
+  'marketing.howItWorks.senderTitle': 'Göndericiler için',
+  'marketing.howItWorks.senderSubtitle':
+    'Wayler bulun, net talep gönderin ve siparişi Wayly içinde takip edin.',
+  'marketing.howItWorks.senderStepsBody':
+    'Wayler ilanlarına göz atın veya teslimat talebi oluşturun.\nRota eşleşme ipuçları ve güven sinyallerini inceleyin — bilgilendiricidir, rezervasyon garantisi değil.\nEşya, zamanlama ve teslim detaylarıyla net talep gönderin.\nWayler kabul edince Wayly içinde takip edilen sipariş olur.\nWayly sohbetinde detayları onaylayın — anlaşmaları platformda tutun.\nTeslimat ilerlemesini ve kanıtı siparişte takip edin.\nKoordinasyon bozulursa anlaşmazlık araçlarını kullanın — gerçekleri düzenler, hukuki sonuç değil.',
+  'marketing.howItWorks.waylerTitle': 'Wayler’lar için',
+  'marketing.howItWorks.waylerSubtitle':
+    'Müsaitlik yayınlayın, talepleri inceleyin ve Wayly içinde kanıtla teslim edin.',
+  'marketing.howItWorks.waylerStepsBody':
+    'Rolünüz için gerekliyse doğrulama veya KYC adımlarını tamamlayın.\nYerel müsaitlik veya seyahat rotası ilanı yayınlayın.\nGelen gönderici taleplerini inceleyin ve rotaları karşılaştırın.\nYalnızca yerel kurallara uygun net ve güvenli talepleri kabul edin.\nWayly sohbetinde eşya, zamanlama ve teslim detaylarını onaylayın.\nTransiti başlatın, teslim edildi işaretleyin ve kanıt gönderin.\nSorun çıkarsa kanıt ve koordinasyonu Wayly içinde tutun.',
+  'marketing.howItWorks.lifecycleTitle': 'Sipariş yaşam döngüsü',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'İlk talepten teslimata. Ödeme aşamaları bugün mock/manuel — gerçek emanet, iade veya ödeme garantisi yok.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'Talep\nKabul edilen sipariş\nSohbet\nTransit\nTeslim edildi\nKanıt veya onay\nGerekirse anlaşmazlık incelemesi',
+  'marketing.howItWorks.safetyLinksTitle': 'Güven ve güvenlik kaynakları',
+  'marketing.howItWorks.limitsTitle': 'Mevcut production sınırları',
+  'marketing.howItWorks.limitsBody':
+    'Gerçek ödeme sağlayıcısı, KYC, push bildirimleri, production izleme ve yerel mobil uygulama gelecekteki çalışma. Temel araçlar bugün dürüst operasyonel sınırlarla kullanılabilir.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly sohbet, kanıt ve anlaşmazlık kayıtlarını düzenlemeye yardımcı olur — garantili teslimat, ödeme koruması, sigorta veya hukuki sonuç değil.',
+  'marketing.howItWorks.backHome': 'Ana sayfaya dön',
+  'marketing.landing.howItWorksLink': 'Gönderici ve Wayler akışını görün',
   'marketing.restrictedItems.navLabel': 'Kısıtlı eşyalar',
   'marketing.restrictedItems.title': 'Kısıtlı eşyalar ve sorumlu kullanım',
   'marketing.restrictedItems.subtitle':
@@ -13532,6 +13718,36 @@ const ar: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'هل Wayly جاهز للإطلاق التجاري؟',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly قيد التطوير النشط. الأدوات الأساسية تعمل لكن المدفوعات الحقيقية وKYC الإنتاج والضمانات التجارية الكاملة غير متوفرة بعد. راجع مركز الثقة.',
+  'marketing.howItWorks.navLabel': 'كيف يعمل',
+  'marketing.howItWorks.title': 'كيف يعمل Wayly',
+  'marketing.howItWorks.subtitle':
+    'نظرة بسيطة على تنسيق التسليم بين المرسلين و Wayler داخل Wayly — مع ملاحظات صادقة عما تضمنه المنصة وما لا تضمنه اليوم.',
+  'marketing.howItWorks.openApp': 'فتح التطبيق',
+  'marketing.howItWorks.trustCenter': 'مركز الثقة',
+  'marketing.howItWorks.faq': 'الأسئلة الشائعة',
+  'marketing.howItWorks.restrictedItems': 'عناصر مقيدة',
+  'marketing.howItWorks.senderTitle': 'للمرسلين',
+  'marketing.howItWorks.senderSubtitle':
+    'اعثر على Wayler وأرسل طلباً واضحاً وتتبع الطلب داخل Wayly.',
+  'marketing.howItWorks.senderStepsBody':
+    'تصفح إعلانات Wayler أو أنشئ طلب توصيل.\nراجع تلميحات تطابق المسار وإشارات الثقة — إعلامية وليست ضمان حجز.\nأرسل طلباً واضحاً مع العنصر والتوقيت وتفاصيل التسليم.\nعند قبول Wayler يصبح طلباً متتبعاً داخل Wayly.\nتحدث وأكد التفاصيل داخل Wayly — احتفظ بالاتفاقات على المنصة.\nتتبع تقدم التسليم والإثبات في الطلب.\nاستخدم أدوات النزاع عند فشل التنسيق — تنظم الحقائق وليست نتيجة قانونية.',
+  'marketing.howItWorks.waylerTitle': 'لـ Wayler',
+  'marketing.howItWorks.waylerSubtitle': 'انشر التوفر وراجع الطلبات وسلّم مع إثبات داخل Wayly.',
+  'marketing.howItWorks.waylerStepsBody':
+    'أكمل التحقق أو KYC إذا كان مطلوباً لدورك.\nانشر توفراً محلياً أو إعلان مسار رحلة.\nراجع طلبات المرسلين الواردة وقارن المسارات.\nاقبل فقط طلبات واضحة وآمنة وفق القواعد المحلية.\nتحدث وأكد تفاصيل العنصر والتوقيت والتسليم داخل Wayly.\nابدأ العبور وعلّم كمُسلَّم وأرسل الإثبات عند الحاجة.\nاحتفظ بالأدلة والتنسيق داخل Wayly عند ظهور مشكلة.',
+  'marketing.howItWorks.lifecycleTitle': 'دورة حياة الطلب',
+  'marketing.howItWorks.lifecycleSubtitle':
+    'من الطلب الأول إلى التسليم. مراحل الدفع mock/يدوية اليوم — بدون ضمان حقيقي أو استرداد أو دفع.',
+  'marketing.howItWorks.lifecycleStepsBody':
+    'طلب\nطلب مقبول\nدردشة\nعبور\nمُسلَّم\nإثبات أو تأكيد\nمراجعة نزاع عند الحاجة',
+  'marketing.howItWorks.safetyLinksTitle': 'موارد الثقة والسلامة',
+  'marketing.howItWorks.limitsTitle': 'حدود الإنتاج الحالية',
+  'marketing.howItWorks.limitsBody':
+    'مزود دفع حقيقي وKYC وإشعارات push ومراقبة إنتاج وتطبيق جوال أصلي — عمل مستقبلي. الأدوات الأساسية متاحة اليوم بحدود تشغيلية صادقة.',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly يساعد على تنظيم الدردشة والإثبات وسجلات النزاع — وليس توصيلاً مضموناً أو حماية مدفوعات أو تأميناً أو نتيجة قانونية.',
+  'marketing.howItWorks.backHome': 'العودة للرئيسية',
+  'marketing.landing.howItWorksLink': 'اطلع على مسار المرسل و Wayler',
   'marketing.restrictedItems.navLabel': 'عناصر مقيدة',
   'marketing.restrictedItems.title': 'العناصر المقيدة والاستخدام المسؤول',
   'marketing.restrictedItems.subtitle':
@@ -15289,6 +15505,35 @@ const zh: Dictionary = {
   'marketing.faq.commercialLaunchQuestion': 'Wayly 准备好商业发布了吗？',
   'marketing.faq.commercialLaunchAnswer':
     'Wayly 仍在积极开发。核心 marketplace 工具可用，但真实支付、生产 KYC 与完整商业保证尚未到位。详见信任中心。',
+  'marketing.howItWorks.navLabel': '如何运作',
+  'marketing.howItWorks.title': 'Wayly 如何运作',
+  'marketing.howItWorks.subtitle':
+    '简要说明寄件人与 Wayler 如何在 Wayly 内协调配送——并如实说明平台目前保证与不保证的内容。',
+  'marketing.howItWorks.openApp': '打开应用',
+  'marketing.howItWorks.trustCenter': '信任中心',
+  'marketing.howItWorks.faq': '常见问题',
+  'marketing.howItWorks.restrictedItems': '受限物品',
+  'marketing.howItWorks.senderTitle': '寄件人',
+  'marketing.howItWorks.senderSubtitle': '找到 Wayler、发送清晰请求，并在 Wayly 内跟踪订单。',
+  'marketing.howItWorks.senderStepsBody':
+    '浏览 Wayler listing 或创建配送请求。\n查看路线匹配提示与信任信号——仅供参考，非预订保证。\n发送包含物品、时间与交接细节的清晰请求。\nWayler 接受后，在 Wayly 内成为可跟踪订单。\n在 Wayly 聊天内确认细节——将约定留在平台内。\n在订单中跟踪配送进度与交付凭证。\n协调失败时使用争议工具——用于整理事实，非法律结果。',
+  'marketing.howItWorks.waylerTitle': 'Wayler',
+  'marketing.howItWorks.waylerSubtitle': '发布可用性、审核请求，并在 Wayly 内带凭证完成配送。',
+  'marketing.howItWorks.waylerStepsBody':
+    '如角色需要，完成验证或 KYC 步骤。\n发布本地可用性或行程路线 listing。\n审核收到的寄件人请求并比较路线。\n仅接受符合当地规则的清晰、安全请求。\n在 Wayly 聊天内确认物品、时间与交接细节。\n开始运输、标记已送达并按需提交凭证。\n如有问题，将证据与协调留在 Wayly 内。',
+  'marketing.howItWorks.lifecycleTitle': '订单生命周期',
+  'marketing.howItWorks.lifecycleSubtitle':
+    '从首次请求到送达。支付阶段目前为 mock/手动——无真实托管、退款或打款保证。',
+  'marketing.howItWorks.lifecycleStepsBody':
+    '请求\n已接受订单\n聊天\n运输中\n已送达\n凭证或确认\n必要时争议审查',
+  'marketing.howItWorks.safetyLinksTitle': '信任与安全资源',
+  'marketing.howItWorks.limitsTitle': '当前生产限制',
+  'marketing.howItWorks.limitsBody':
+    '真实支付提供商、KYC、推送通知、生产监控与原生移动打包为未来工作。核心 marketplace 工具现已可用，但有诚实的运营限制。',
+  'marketing.howItWorks.noGuaranteesNotice':
+    'Wayly 帮助整理聊天、凭证与争议记录——不提供保证配送、支付保护、保险或法律结果。',
+  'marketing.howItWorks.backHome': '返回首页',
+  'marketing.landing.howItWorksLink': '查看寄件人与 Wayler 流程',
   'marketing.restrictedItems.navLabel': '受限物品',
   'marketing.restrictedItems.title': '受限物品与负责任使用',
   'marketing.restrictedItems.subtitle':
