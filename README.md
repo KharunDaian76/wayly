@@ -15,7 +15,7 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 | [docs/admin-operations-checkpoint.md](docs/admin-operations-checkpoint.md)                     | **Checkpoint** — admin dashboard, queues, filters, triage shortcuts, metadata-only reviews                                               |
 | [docs/local-saved-data-checkpoint.md](docs/local-saved-data-checkpoint.md)                     | **Checkpoint** — browser `localStorage` keys, fields, privacy boundaries                                                                 |
 | [docs/payment-and-dispute-safety-checkpoint.md](docs/payment-and-dispute-safety-checkpoint.md) | **Checkpoint** — honest payment/dispute/demo wording; no real escrow/refund claims                                                       |
-| [docs/public-guidance-and-safety-checkpoint.md](docs/public-guidance-and-safety-checkpoint.md) | **Checkpoint** — public help pages, SEO/discoverability, in-app safety/onboarding layer                                                  |
+| [docs/public-guidance-and-safety-checkpoint.md](docs/public-guidance-and-safety-checkpoint.md) | **Checkpoint** — public help/policy/roadmap pages, SEO, in-app safety + Launch Status notice                                             |
 
 Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The five **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
 
@@ -27,7 +27,7 @@ The branch is **ahead of `origin/main`** with marketplace trust/discovery UX, lo
 2. [Admin operations](docs/admin-operations-checkpoint.md) — overview KPIs, triage shortcuts, queue filters, metadata-only payment/dispute review
 3. [Local saved data](docs/local-saved-data-checkpoint.md) — `localStorage` keys and privacy limits
 4. [Payment & dispute safety](docs/payment-and-dispute-safety-checkpoint.md) — mock payments, no real money movement, honest demo language
-5. [Public guidance & in-app safety](docs/public-guidance-and-safety-checkpoint.md) — Help Center, SEO, Help/Safety cards, Safety Preflight checklists
+5. [Public guidance & in-app safety](docs/public-guidance-and-safety-checkpoint.md) — Help Center, Policy Center, Roadmap, SEO, Help/Safety cards, Safety Preflight, Launch Status notice
 
 ## Tech stack
 
