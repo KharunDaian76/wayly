@@ -11,12 +11,12 @@ This checkpoint records foundations added in recent commits (`feat(api): add sup
 
 Wayly now includes four related foundations:
 
-| Foundation                     | Purpose                                                                                      |
-| ------------------------------ | -------------------------------------------------------------------------------------------- |
-| **User support tickets**       | Authenticated users can submit and list platform support requests from `/app`                |
-| **Admin support ticket queue** | `ADMIN` operators list, filter, and update tickets from the Operations Center                |
-| **In-app notifications**       | Activity updates surfaced in `/app` (notification center + bell) — no email/SMS/push         |
-| **Demo seed script**           | Idempotent local/dev data for admin, sender, wayler accounts and sample marketplace activity |
+| Foundation                     | Purpose                                                                                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **User support tickets**       | Authenticated users can submit and list platform support requests from `/app`                                                              |
+| **Admin support ticket queue** | `ADMIN` operators list, filter, and update tickets from the Operations Center                                                              |
+| **In-app notifications**       | Activity updates surfaced in `/app` (notification center + bell) — no email/SMS/push; live review API also notifies reviewee on new review |
+| **Demo seed script**           | Idempotent local/dev data for admin, sender, wayler accounts and sample marketplace activity                                               |
 
 **Explicitly not included:** email, SMS, push/web push, third-party notification providers, emergency response, guaranteed real-time delivery, or automatic changes to payment/order/dispute/KYC state from support tickets.
 
@@ -182,6 +182,7 @@ On each run, demo-marked rows (`[Demo]` title prefix / `Created by Wayly demo se
 - Support tickets
 - Mock payment intent metadata (including one manual-review example)
 - **7 demo notifications** (mix of read/unread across demo users)
+- **Up to 5 demo reviews** on DELIVERED orders only (bidirectional visible samples + one hidden moderation row) — see [trust-reviews-ratings-checkpoint.md](./trust-reviews-ratings-checkpoint.md)
 
 ### Safety guards
 

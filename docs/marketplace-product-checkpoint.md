@@ -163,14 +163,14 @@ Recent UI-only pass to reduce stacked panels:
 
 ## Key frontend files (reference)
 
-| Feature          | Primary files                                                          |
-| ---------------- | ---------------------------------------------------------------------- |
-| Sender browse    | `sender-waylers-panel.tsx`, `active-waylers-marketplace-section.tsx`   |
-| Wayler listings  | `wayler-availability-panel.tsx`                                        |
-| Trust / safety   | `marketplace-trust-signals.tsx`, `restricted-items-safety-note.tsx`    |
-| Orders dashboard | `app/(app)/app/page.tsx`, `accepted-order-details-drawer.tsx`          |
-| Chat             | `conversation-panel.tsx`, `conversation-safety-note.tsx`               |
-| Local data       | `local-saved-data-panel.tsx`, `*-storage.ts` under `apps/web/src/lib/` |
+| Feature          | Primary files                                                                           |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| Sender browse    | `sender-waylers-panel.tsx`, `active-waylers-marketplace-section.tsx`                    |
+| Wayler listings  | `wayler-availability-panel.tsx`                                                         |
+| Trust / safety   | `marketplace-trust-signals.tsx`, `restricted-items-safety-note.tsx`                     |
+| Orders dashboard | `app/(app)/app/page.tsx`, `accepted-order-details-drawer.tsx`, `order-review-panel.tsx` |
+| Chat             | `conversation-panel.tsx`, `conversation-safety-note.tsx`                                |
+| Local data       | `local-saved-data-panel.tsx`, `*-storage.ts` under `apps/web/src/lib/`                  |
 
 ---
 
@@ -179,6 +179,7 @@ Recent UI-only pass to reduce stacked panels:
 - [local-saved-data-checkpoint.md](./local-saved-data-checkpoint.md)
 - [payment-and-dispute-safety-checkpoint.md](./payment-and-dispute-safety-checkpoint.md)
 - [support-notifications-demo-checkpoint.md](./support-notifications-demo-checkpoint.md) — support tickets + in-app activity notifications
+- [trust-reviews-ratings-checkpoint.md](./trust-reviews-ratings-checkpoint.md) — post-delivery reviews (DELIVERED orders only)
 - [admin-operations-checkpoint.md](./admin-operations-checkpoint.md)
 - [admin-operations-center.md](./admin-operations-center.md) — full admin reference
 - [README.md](../README.md) — milestone history and local dev setup

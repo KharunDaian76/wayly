@@ -19,6 +19,7 @@
 | User suspend/unsuspend v1                                     | ✅ ADMIN only                                       |
 | Payment review v1                                             | ✅ **Metadata records only — no money movement**    |
 | Orders queue                                                  | ✅ Read-only monitoring + review metadata filters   |
+| Reviews moderation queue                                      | ✅ ADMIN hide/unhide + filters (content moderation) |
 | Audit log list + filters                                      | ✅ Append-only                                      |
 | Active Wayler counts (marketplace)                            | ✅ Separate user-facing API — not an admin mutation |
 | Real Stripe refund/payout/capture                             | ❌                                                  |
@@ -167,5 +168,6 @@ Swagger admin tag: `http://localhost:4000/docs`
 
 - [admin-operations-center.md](./admin-operations-center.md) — endpoints, SDK, security, manual checklist
 - [support-notifications-demo-checkpoint.md](./support-notifications-demo-checkpoint.md) — support ticket queue + in-app notifications
+- [trust-reviews-ratings-checkpoint.md](./trust-reviews-ratings-checkpoint.md) — post-delivery reviews + admin moderation
 - [marketplace-product-checkpoint.md](./marketplace-product-checkpoint.md)
 - [payment-and-dispute-safety-checkpoint.md](./payment-and-dispute-safety-checkpoint.md)
