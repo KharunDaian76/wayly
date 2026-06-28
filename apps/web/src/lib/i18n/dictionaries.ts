@@ -1922,6 +1922,41 @@ const en = {
   'marketing.privacyLocalData.localOnlyNotice':
     'These local saved data tools are browser-local only — not synced to your account. Wayly account, order, and chat records on the server are separate.',
   'marketing.privacyLocalData.backHome': 'Back to home',
+  'marketing.supportDisputes.navLabel': 'Support & disputes',
+  'marketing.supportDisputes.title': 'Support & dispute help',
+  'marketing.supportDisputes.subtitle':
+    'What to do when a delivery needs attention — first steps, evidence guidance, and honest limits on disputes.',
+  'marketing.supportDisputes.openApp': 'Open app',
+  'marketing.supportDisputes.trustCenter': 'Trust Center',
+  'marketing.supportDisputes.faq': 'FAQ',
+  'marketing.supportDisputes.restrictedItems': 'Restricted items',
+  'marketing.supportDisputes.fees': 'Fees & payments',
+  'marketing.supportDisputes.privacyLocalData': 'Local saved data',
+  'marketing.supportDisputes.firstStepsTitle': 'First steps when something goes wrong',
+  'marketing.supportDisputes.firstStepsBody':
+    'Stay calm and focus on facts.\nKeep communication inside Wayly chat.\nConfirm agreements, timing, and handoff details in chat.\nDo not share private payment, card, or bank details.\nDo not ask anyone to bypass local law, customs, or transport rules.',
+  'marketing.supportDisputes.whenToOpenTitle': 'When to open a dispute',
+  'marketing.supportDisputes.whenToOpenBody':
+    'Item not delivered or handoff missed.\nUnclear or conflicting delivery status.\nDisagreement about delivery proof.\nPickup or drop-off details changed without agreement.\nYou cannot reach the other user through Wayly.\nSafety concern or suspected restricted item issue.',
+  'marketing.supportDisputes.evidenceTitle': 'Evidence to include',
+  'marketing.supportDisputes.evidenceBody':
+    'Order timeline and status changes.\nRelevant chat messages inside Wayly.\nPickup and drop-off details agreed in chat.\nDelivery proof references or photos where appropriate.\nPayment status screenshots inside Wayly if relevant to the issue.\nA clear explanation of what happened and what you need reviewed.',
+  'marketing.supportDisputes.avoidUploadingTitle': 'Do not upload or share',
+  'marketing.supportDisputes.avoidUploadingBody':
+    'Passwords or login credentials.\nCard numbers, bank details, or private payment info.\nUnnecessary identity documents.\nIllegal, dangerous, or unsafe content.',
+  'marketing.supportDisputes.toolsTitle': 'What dispute tools do',
+  'marketing.supportDisputes.toolsBody':
+    'Help organize facts, messages, and evidence for an order issue.\nHelp admins or arbitrators review platform records related to the dispute.\nHelp keep a record of what was reported and when.',
+  'marketing.supportDisputes.noGuaranteesTitle': 'What Wayly does not guarantee',
+  'marketing.supportDisputes.noGuaranteesBody':
+    'Legal advice or representation.\nGuaranteed refund or payout.\nInsurance coverage.\nReal escrow or third-party funds protection today.\nCustoms clearance or legal protection.\nThat submitted evidence will automatically prove a claim or decide an outcome.',
+  'marketing.supportDisputes.safetyEscalationTitle': 'Safety escalation',
+  'marketing.supportDisputes.safetyEscalationBody':
+    'If there is immediate danger, illegal activity, or an emergency, contact local authorities or official emergency services first.\nWayly dispute tools are for platform order records and coordination — not emergency response.\nDo not rely on disputes instead of reporting crimes or safety threats to proper authorities.',
+  'marketing.supportDisputes.helpfulLinksTitle': 'Helpful links',
+  'marketing.supportDisputes.emergencyNotice':
+    'Wayly dispute tools organize order issues — they are not legal advice, guaranteed refunds, or emergency response. Contact local authorities for danger or illegal activity.',
+  'marketing.supportDisputes.backHome': 'Back to home',
   'marketing.fees.navLabel': 'Fees & payments',
   'marketing.fees.title': 'Fees & payment transparency',
   'marketing.fees.subtitle':
@@ -3956,6 +3991,41 @@ const ru: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Эти локальные инструменты хранятся только в браузере — не синхронизируются с аккаунтом. Записи аккаунта, заказов и чата на сервере отделены.',
   'marketing.privacyLocalData.backHome': 'На главную',
+  'marketing.supportDisputes.navLabel': 'Поддержка и споры',
+  'marketing.supportDisputes.title': 'Поддержка и помощь по спорам',
+  'marketing.supportDisputes.subtitle':
+    'Что делать, если доставка требует внимания — первые шаги, доказательства и честные ограничения споров.',
+  'marketing.supportDisputes.openApp': 'Открыть приложение',
+  'marketing.supportDisputes.trustCenter': 'Центр доверия',
+  'marketing.supportDisputes.faq': 'FAQ',
+  'marketing.supportDisputes.restrictedItems': 'Запрещённые предметы',
+  'marketing.supportDisputes.fees': 'Тарифы и платежи',
+  'marketing.supportDisputes.privacyLocalData': 'Локальные данные',
+  'marketing.supportDisputes.firstStepsTitle': 'Первые шаги, если что-то пошло не так',
+  'marketing.supportDisputes.firstStepsBody':
+    'Сохраняйте спокойствие и опирайтесь на факты.\nОбщайтесь только в чате Wayly.\nПодтверждайте договорённости, сроки и детали передачи в чате.\nНе делитесь частными платёжными, картами или банковскими данными.\nНе просите обходить местные законы, таможню или правила перевозки.',
+  'marketing.supportDisputes.whenToOpenTitle': 'Когда открывать спор',
+  'marketing.supportDisputes.whenToOpenBody':
+    'Товар не доставлен или передача сорвана.\nНеясный или противоречивый статус доставки.\nРазногласие по доказательству доставки.\nДетали pickup/drop-off изменены без согласия.\nНе удаётся связаться с другой стороной через Wayly.\nПроблема безопасности или подозрение на запрещённый предмет.',
+  'marketing.supportDisputes.evidenceTitle': 'Какие доказательства включить',
+  'marketing.supportDisputes.evidenceBody':
+    'Хронология заказа и смены статуса.\nРелевантные сообщения чата в Wayly.\nДетали pickup/drop-off, согласованные в чате.\nСсылки на proof доставки или фото где уместно.\nСкриншоты статуса оплаты в Wayly, если относятся к проблеме.\nЧёткое объяснение, что произошло и что нужно проверить.',
+  'marketing.supportDisputes.avoidUploadingTitle': 'Не загружайте и не делитесь',
+  'marketing.supportDisputes.avoidUploadingBody':
+    'Паролями или учётными данными.\nНомерами карт, банковскими данными или частной платёжной информацией.\nЛишними identity-документами.\nНезаконным, опасным или небезопасным контентом.',
+  'marketing.supportDisputes.toolsTitle': 'Что делают инструменты споров',
+  'marketing.supportDisputes.toolsBody':
+    'Помогают организовать факты, сообщения и доказательства по заказу.\nПомогают админу или арбитру просмотреть записи платформы по спору.\nПомогают сохранить запись о том, что и когда сообщено.',
+  'marketing.supportDisputes.noGuaranteesTitle': 'Чего Wayly не гарантирует',
+  'marketing.supportDisputes.noGuaranteesBody':
+    'Юридические консультации или представительство.\nГарантированный возврат или выплату.\nСтраховое покрытие.\nРеальный escrow или защиту средств третьей стороной сегодня.\nТаможенное оформление или правовую защиту.\nЧто доказательства автоматически докажут претензию или решат исход.',
+  'marketing.supportDisputes.safetyEscalationTitle': 'Эскалация безопасности',
+  'marketing.supportDisputes.safetyEscalationBody':
+    'При непосредственной опасности, незаконной активности или чрезвычайной ситуации сначала обратитесь к местным властям или экстренным службам.\nИнструменты споров Wayly — для записей заказов и координации, не для экстренного реагирования.\nНе полагайтесь на споры вместо сообщения о преступлениях или угрозах безопасности.',
+  'marketing.supportDisputes.helpfulLinksTitle': 'Полезные ссылки',
+  'marketing.supportDisputes.emergencyNotice':
+    'Инструменты споров Wayly организуют проблемы по заказам — это не юридическая консультация, гарантированный возврат или экстренная помощь. При опасности обращайтесь к местным властям.',
+  'marketing.supportDisputes.backHome': 'На главную',
   'marketing.fees.navLabel': 'Тарифы и платежи',
   'marketing.fees.title': 'Тарифы и прозрачность платежей',
   'marketing.fees.subtitle':
@@ -5998,6 +6068,41 @@ const es: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Estas herramientas son solo locales en el navegador — no se sincronizan con tu cuenta. Registros de cuenta, pedidos y chat en servidor son separados.',
   'marketing.privacyLocalData.backHome': 'Volver al inicio',
+  'marketing.supportDisputes.navLabel': 'Soporte y disputas',
+  'marketing.supportDisputes.title': 'Ayuda de soporte y disputas',
+  'marketing.supportDisputes.subtitle':
+    'Qué hacer cuando una entrega necesita atención — primeros pasos, evidencia y límites honestos de disputas.',
+  'marketing.supportDisputes.openApp': 'Abrir app',
+  'marketing.supportDisputes.trustCenter': 'Centro de confianza',
+  'marketing.supportDisputes.faq': 'FAQ',
+  'marketing.supportDisputes.restrictedItems': 'Artículos restringidos',
+  'marketing.supportDisputes.fees': 'Tarifas y pagos',
+  'marketing.supportDisputes.privacyLocalData': 'Datos locales',
+  'marketing.supportDisputes.firstStepsTitle': 'Primeros pasos cuando algo sale mal',
+  'marketing.supportDisputes.firstStepsBody':
+    'Mantén la calma y céntrate en los hechos.\nComunica solo dentro del chat de Wayly.\nConfirma acuerdos, plazos y detalles de entrega en el chat.\nNo compartas datos privados de pago, tarjeta o banco.\nNo pidas a nadie eludir leyes locales, aduanas o normas de transporte.',
+  'marketing.supportDisputes.whenToOpenTitle': 'Cuándo abrir una disputa',
+  'marketing.supportDisputes.whenToOpenBody':
+    'Artículo no entregado o entrega fallida.\nEstado de entrega poco claro o conflictivo.\nDesacuerdo sobre prueba de entrega.\nDetalles de recogida/entrega cambiados sin acuerdo.\nNo puedes contactar al otro usuario por Wayly.\nPreocupación de seguridad o sospecha de artículo restringido.',
+  'marketing.supportDisputes.evidenceTitle': 'Evidencia a incluir',
+  'marketing.supportDisputes.evidenceBody':
+    'Cronología del pedido y cambios de estado.\nMensajes relevantes del chat en Wayly.\nDetalles de recogida/entrega acordados en el chat.\nReferencias de prueba de entrega o fotos cuando corresponda.\nCapturas del estado de pago en Wayly si son relevantes.\nExplicación clara de qué ocurrió y qué necesitas revisar.',
+  'marketing.supportDisputes.avoidUploadingTitle': 'No subas ni compartas',
+  'marketing.supportDisputes.avoidUploadingBody':
+    'Contraseñas o credenciales de acceso.\nNúmeros de tarjeta, datos bancarios o info de pago privada.\nDocumentos de identidad innecesarios.\nContenido ilegal, peligroso o inseguro.',
+  'marketing.supportDisputes.toolsTitle': 'Qué hacen las herramientas de disputa',
+  'marketing.supportDisputes.toolsBody':
+    'Ayudan a organizar hechos, mensajes y evidencia de un problema de pedido.\nAyudan a admins o árbitros a revisar registros de la plataforma.\nAyudan a mantener registro de qué se reportó y cuándo.',
+  'marketing.supportDisputes.noGuaranteesTitle': 'Lo que Wayly no garantiza',
+  'marketing.supportDisputes.noGuaranteesBody':
+    'Asesoramiento legal o representación.\nReembolso o pago garantizado.\nCobertura de seguro.\nEscrow real o protección de fondos por terceros hoy.\nDespacho aduanero o protección legal.\nQue la evidencia probará automáticamente un reclamo o decidirá el resultado.',
+  'marketing.supportDisputes.safetyEscalationTitle': 'Escalada de seguridad',
+  'marketing.supportDisputes.safetyEscalationBody':
+    'Si hay peligro inmediato, actividad ilegal o emergencia, contacta primero autoridades locales o servicios de emergencia.\nLas herramientas de disputa de Wayly son para registros de pedidos — no respuesta de emergencia.\nNo dependas de disputas en lugar de reportar delitos o amenazas a las autoridades.',
+  'marketing.supportDisputes.helpfulLinksTitle': 'Enlaces útiles',
+  'marketing.supportDisputes.emergencyNotice':
+    'Las herramientas de disputa organizan problemas de pedidos — no son asesoramiento legal, reembolsos garantizados ni respuesta de emergencia. Contacta autoridades locales ante peligro.',
+  'marketing.supportDisputes.backHome': 'Volver al inicio',
   'marketing.fees.navLabel': 'Tarifas y pagos',
   'marketing.fees.title': 'Tarifas y transparencia de pagos',
   'marketing.fees.subtitle':
@@ -8067,6 +8172,41 @@ const fr: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Ces outils sont uniquement locaux dans le navigateur — non synchronisés avec votre compte. Enregistrements compte, commandes et chat serveur sont séparés.',
   'marketing.privacyLocalData.backHome': "Retour à l'accueil",
+  'marketing.supportDisputes.navLabel': 'Support et litiges',
+  'marketing.supportDisputes.title': 'Aide support et litiges',
+  'marketing.supportDisputes.subtitle':
+    'Que faire quand une livraison nécessite attention — premières étapes, preuves et limites honnêtes des litiges.',
+  'marketing.supportDisputes.openApp': "Ouvrir l'app",
+  'marketing.supportDisputes.trustCenter': 'Centre de confiance',
+  'marketing.supportDisputes.faq': 'FAQ',
+  'marketing.supportDisputes.restrictedItems': 'Articles restreints',
+  'marketing.supportDisputes.fees': 'Frais et paiements',
+  'marketing.supportDisputes.privacyLocalData': 'Données locales',
+  'marketing.supportDisputes.firstStepsTitle': 'Premières étapes en cas de problème',
+  'marketing.supportDisputes.firstStepsBody':
+    'Restez calme et concentrez-vous sur les faits.\nCommuniquez uniquement dans le chat Wayly.\nConfirmez accords, délais et détails de remise dans le chat.\nNe partagez pas de données privées de paiement, carte ou banque.\nNe demandez à personne de contourner lois locales, douanes ou règles de transport.',
+  'marketing.supportDisputes.whenToOpenTitle': 'Quand ouvrir un litige',
+  'marketing.supportDisputes.whenToOpenBody':
+    "Article non livré ou remise manquée.\nStatut de livraison flou ou contradictoire.\nDésaccord sur preuve de livraison.\nDétails pickup/drop-off changés sans accord.\nImpossible de joindre l'autre utilisateur via Wayly.\nProblème de sécurité ou article restreint suspecté.",
+  'marketing.supportDisputes.evidenceTitle': 'Preuves à inclure',
+  'marketing.supportDisputes.evidenceBody':
+    "Chronologie de commande et changements de statut.\nMessages chat pertinents dans Wayly.\nDétails pickup/drop-off convenus dans le chat.\nRéférences preuve de livraison ou photos si approprié.\nCaptures statut paiement dans Wayly si pertinent.\nExplication claire de ce qui s'est passé et de ce à revoir.",
+  'marketing.supportDisputes.avoidUploadingTitle': 'Ne pas téléverser ni partager',
+  'marketing.supportDisputes.avoidUploadingBody':
+    "Mots de passe ou identifiants de connexion.\nNuméros de carte, coordonnées bancaires ou infos paiement privées.\nDocuments d'identité inutiles.\nContenu illégal, dangereux ou unsafe.",
+  'marketing.supportDisputes.toolsTitle': 'Ce que font les outils de litige',
+  'marketing.supportDisputes.toolsBody':
+    'Aident à organiser faits, messages et preuves pour un problème de commande.\nAident admins ou arbitres à revoir les enregistrements plateforme.\nAident à garder trace de ce qui a été signalé et quand.',
+  'marketing.supportDisputes.noGuaranteesTitle': 'Ce que Wayly ne garantit pas',
+  'marketing.supportDisputes.noGuaranteesBody':
+    "Conseil juridique ou représentation.\nRemboursement ou paiement garanti.\nCouverture assurance.\nEscrow réel ou protection fonds tiers aujourd'hui.\nDédouanement ou protection juridique.\nQue les preuves prouveront automatiquement une réclamation ou décideront l'issue.",
+  'marketing.supportDisputes.safetyEscalationTitle': 'Escalade sécurité',
+  'marketing.supportDisputes.safetyEscalationBody':
+    "En cas de danger immédiat, activité illégale ou urgence, contactez d'abord autorités locales ou services d'urgence.\nLes outils litige Wayly servent aux enregistrements commande — pas à l'intervention d'urgence.\nNe comptez pas sur les litiges au lieu de signaler crimes ou menaces aux autorités.",
+  'marketing.supportDisputes.helpfulLinksTitle': 'Liens utiles',
+  'marketing.supportDisputes.emergencyNotice':
+    'Les outils litige Wayly organisent les problèmes de commande — pas conseil juridique, remboursements garantis ni urgence. Contactez autorités locales en cas de danger.',
+  'marketing.supportDisputes.backHome': "Retour à l'accueil",
   'marketing.fees.navLabel': 'Frais et paiements',
   'marketing.fees.title': 'Frais et transparence des paiements',
   'marketing.fees.subtitle':
@@ -10147,6 +10287,41 @@ const de: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Diese lokalen Tools sind nur browser-lokal — nicht mit Ihrem Konto synchronisiert. Server-Konto-, Bestell- und Chat-Daten sind getrennt.',
   'marketing.privacyLocalData.backHome': 'Zur Startseite',
+  'marketing.supportDisputes.navLabel': 'Support & Streitfälle',
+  'marketing.supportDisputes.title': 'Support- & Streitfall-Hilfe',
+  'marketing.supportDisputes.subtitle':
+    'Was tun, wenn eine Lieferung Aufmerksamkeit braucht — erste Schritte, Beweise und ehrliche Grenzen bei Streitfällen.',
+  'marketing.supportDisputes.openApp': 'App öffnen',
+  'marketing.supportDisputes.trustCenter': 'Trust Center',
+  'marketing.supportDisputes.faq': 'FAQ',
+  'marketing.supportDisputes.restrictedItems': 'Eingeschränkte Artikel',
+  'marketing.supportDisputes.fees': 'Gebühren & Zahlungen',
+  'marketing.supportDisputes.privacyLocalData': 'Lokale Daten',
+  'marketing.supportDisputes.firstStepsTitle': 'Erste Schritte bei Problemen',
+  'marketing.supportDisputes.firstStepsBody':
+    'Bleiben Sie ruhig und konzentrieren Sie sich auf Fakten.\nKommunizieren Sie nur im Wayly-Chat.\nBestätigen Sie Vereinbarungen, Zeiten und Übergabedetails im Chat.\nTeilen Sie keine privaten Zahlungs-, Karten- oder Bankdaten.\nBitten Sie niemanden, lokale Gesetze, Zoll oder Transportregeln zu umgehen.',
+  'marketing.supportDisputes.whenToOpenTitle': 'Wann einen Streitfall eröffnen',
+  'marketing.supportDisputes.whenToOpenBody':
+    'Artikel nicht geliefert oder Übergabe verpasst.\nUnklarer oder widersprüchlicher Lieferstatus.\nUneinigkeit über Liefernachweis.\nPickup/Drop-off-Details ohne Zustimmung geändert.\nAnderer Nutzer über Wayly nicht erreichbar.\nSicherheitsbedenken oder Verdacht auf eingeschränkten Artikel.',
+  'marketing.supportDisputes.evidenceTitle': 'Beizubringende Beweise',
+  'marketing.supportDisputes.evidenceBody':
+    'Bestellzeitlinie und Statusänderungen.\nRelevante Chat-Nachrichten in Wayly.\nIm Chat vereinbarte Pickup/Drop-off-Details.\nLiefernachweis-Referenzen oder Fotos wo passend.\nZahlungsstatus-Screenshots in Wayly wenn relevant.\nKlare Erklärung was passiert ist und was geprüft werden soll.',
+  'marketing.supportDisputes.avoidUploadingTitle': 'Nicht hochladen oder teilen',
+  'marketing.supportDisputes.avoidUploadingBody':
+    'Passwörter oder Anmeldedaten.\nKartennummern, Bankdaten oder private Zahlungsinfos.\nUnnötige Identitätsdokumente.\nIllegale, gefährliche oder unsichere Inhalte.',
+  'marketing.supportDisputes.toolsTitle': 'Was Streitfall-Tools tun',
+  'marketing.supportDisputes.toolsBody':
+    'Helfen Fakten, Nachrichten und Beweise für ein Bestellproblem zu organisieren.\nHelfen Admins oder Schiedsrichtern Plattform-Aufzeichnungen zu prüfen.\nHelfen festzuhalten was wann gemeldet wurde.',
+  'marketing.supportDisputes.noGuaranteesTitle': 'Was Wayly nicht garantiert',
+  'marketing.supportDisputes.noGuaranteesBody':
+    'Rechtsberatung oder Vertretung.\nGarantierte Erstattung oder Auszahlung.\nVersicherungsschutz.\nEchtes Escrow oder Drittanbieter-Fondsschutz heute.\nZollabfertigung oder Rechtsschutz.\nDass eingereichte Beweise automatisch einen Anspruch beweisen oder das Ergebnis entscheiden.',
+  'marketing.supportDisputes.safetyEscalationTitle': 'Sicherheits-Eskalation',
+  'marketing.supportDisputes.safetyEscalationBody':
+    'Bei unmittelbarer Gefahr, illegaler Aktivität oder Notfall zuerst lokale Behörden oder Notdienste kontaktieren.\nWayly-Streitfall-Tools dienen Bestellaufzeichnungen — nicht Notfallreaktion.\nVerlassen Sie sich nicht auf Streitfälle statt Straftaten oder Bedrohungen zu melden.',
+  'marketing.supportDisputes.helpfulLinksTitle': 'Hilfreiche Links',
+  'marketing.supportDisputes.emergencyNotice':
+    'Wayly-Streitfall-Tools organisieren Bestellprobleme — keine Rechtsberatung, garantierte Erstattungen oder Notfallhilfe. Bei Gefahr lokale Behörden kontaktieren.',
+  'marketing.supportDisputes.backHome': 'Zur Startseite',
   'marketing.fees.navLabel': 'Gebühren & Zahlungen',
   'marketing.fees.title': 'Gebühren & Zahlungstransparenz',
   'marketing.fees.subtitle':
@@ -12164,6 +12339,41 @@ const tr: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'Bu yerel araçlar yalnızca tarayıcıda — hesabınızla senkronize edilmez. Sunucu hesap, sipariş ve sohbet kayıtları ayrıdır.',
   'marketing.privacyLocalData.backHome': 'Ana sayfaya dön',
+  'marketing.supportDisputes.navLabel': 'Destek ve anlaşmazlıklar',
+  'marketing.supportDisputes.title': 'Destek ve anlaşmazlık yardımı',
+  'marketing.supportDisputes.subtitle':
+    'Teslimat dikkat gerektirdiğinde ne yapmalı — ilk adımlar, kanıt rehberi ve anlaşmazlıklarda dürüst sınırlar.',
+  'marketing.supportDisputes.openApp': 'Uygulamayı aç',
+  'marketing.supportDisputes.trustCenter': 'Güven merkezi',
+  'marketing.supportDisputes.faq': 'SSS',
+  'marketing.supportDisputes.restrictedItems': 'Kısıtlı eşyalar',
+  'marketing.supportDisputes.fees': 'Ücretler ve ödemeler',
+  'marketing.supportDisputes.privacyLocalData': 'Yerel veriler',
+  'marketing.supportDisputes.firstStepsTitle': 'Bir şeyler ters gittiğinde ilk adımlar',
+  'marketing.supportDisputes.firstStepsBody':
+    'Sakin kalın ve gerçeklere odaklanın.\nİletişimi Wayly sohbetinde tutun.\nAnlaşmaları, zamanlamayı ve teslim detaylarını sohbette onaylayın.\nÖzel ödeme, kart veya banka bilgisi paylaşmayın.\nKimseyi yerel yasa, gümrük veya taşıma kurallarını atlatmaya yönlendirmeyin.',
+  'marketing.supportDisputes.whenToOpenTitle': 'Ne zaman anlaşmazlık açılır',
+  'marketing.supportDisputes.whenToOpenBody':
+    'Eşya teslim edilmedi veya teslim kaçırıldı.\nBelirsiz veya çelişkili teslimat durumu.\nTeslimat kanıtı konusunda anlaşmazlık.\nPickup/drop-off detayları anlaşma olmadan değişti.\nWayly üzerinden diğer kullanıcıya ulaşılamıyor.\nGüvenlik endişesi veya kısıtlı eşya şüphesi.',
+  'marketing.supportDisputes.evidenceTitle': 'Dahil edilecek kanıtlar',
+  'marketing.supportDisputes.evidenceBody':
+    'Sipariş zaman çizelgesi ve durum değişiklikleri.\nWayly içindeki ilgili sohbet mesajları.\nSohbette anlaşılan pickup/drop-off detayları.\nUygun olduğunda teslimat kanıtı referansları veya fotoğraflar.\nKonuyla ilgiliyse Wayly içinde ödeme durumu ekran görüntüleri.\nNe olduğu ve neyin incelenmesi gerektiğine dair net açıklama.',
+  'marketing.supportDisputes.avoidUploadingTitle': 'Yüklemeyin veya paylaşmayın',
+  'marketing.supportDisputes.avoidUploadingBody':
+    'Şifreler veya giriş bilgileri.\nKart numaraları, banka bilgileri veya özel ödeme bilgisi.\nGereksiz kimlik belgeleri.\nYasadışı, tehlikeli veya güvensiz içerik.',
+  'marketing.supportDisputes.toolsTitle': 'Anlaşmazlık araçları ne yapar',
+  'marketing.supportDisputes.toolsBody':
+    'Sipariş sorunu için gerçekleri, mesajları ve kanıtları düzenlemeye yardım eder.\nAdmin veya hakemin platform kayıtlarını incelemesine yardım eder.\nNe zaman ne bildirildiğinin kaydını tutmaya yardım eder.',
+  'marketing.supportDisputes.noGuaranteesTitle': "Wayly'nin garanti etmediği",
+  'marketing.supportDisputes.noGuaranteesBody':
+    'Hukuki tavsiye veya temsil.\nGarantili iade veya ödeme.\nSigorta kapsamı.\nBugün gerçek escrow veya üçüncü taraf fon koruması.\nGümrük veya hukuki koruma.\nSunulan kanıtların otomatik olarak iddiayı kanıtlayacağı veya sonucu belirleyeceği.',
+  'marketing.supportDisputes.safetyEscalationTitle': 'Güvenlik eskalasyonu',
+  'marketing.supportDisputes.safetyEscalationBody':
+    'Acil tehlike, yasadışı faaliyet veya acil durum varsa önce yerel yetkililer veya resmi acil servislerle iletişime geçin.\nWayly anlaşmazlık araçları platform sipariş kayıtları içindir — acil müdahale değil.\nSuç veya güvenlik tehditlerini yetkililere bildirmek yerine anlaşmazlıklara güvenmeyin.',
+  'marketing.supportDisputes.helpfulLinksTitle': 'Yararlı bağlantılar',
+  'marketing.supportDisputes.emergencyNotice':
+    'Wayly anlaşmazlık araçları sipariş sorunlarını düzenler — hukuki tavsiye, garantili iade veya acil müdahale değildir. Tehlike durumunda yerel yetkililere başvurun.',
+  'marketing.supportDisputes.backHome': 'Ana sayfaya dön',
   'marketing.fees.navLabel': 'Ücretler ve ödemeler',
   'marketing.fees.title': 'Ücretler ve ödeme şeffaflığı',
   'marketing.fees.subtitle':
@@ -14100,6 +14310,41 @@ const ar: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     'هذه الأدوات محلية في المتصفح فقط — غير متزامنة مع حسابك. سجلات الحساب والطلبات والدردشة على الخادم منفصلة.',
   'marketing.privacyLocalData.backHome': 'العودة للرئيسية',
+  'marketing.supportDisputes.navLabel': 'الدعم والنزاعات',
+  'marketing.supportDisputes.title': 'مساعدة الدعم والنزاعات',
+  'marketing.supportDisputes.subtitle':
+    'ماذا تفعل عندما تحتاج التسليم إلى اهتمام — خطوات أولى، أدلة، وحدود صادقة للنزاعات.',
+  'marketing.supportDisputes.openApp': 'فتح التطبيق',
+  'marketing.supportDisputes.trustCenter': 'مركز الثقة',
+  'marketing.supportDisputes.faq': 'الأسئلة الشائعة',
+  'marketing.supportDisputes.restrictedItems': 'العناصر المقيدة',
+  'marketing.supportDisputes.fees': 'الرسوم والمدفوعات',
+  'marketing.supportDisputes.privacyLocalData': 'البيانات المحلية',
+  'marketing.supportDisputes.firstStepsTitle': 'الخطوات الأولى عند حدوث مشكلة',
+  'marketing.supportDisputes.firstStepsBody':
+    'ابق هادئاً وركز على الحقائق.\nأبقِ التواصل داخل دردشة Wayly.\nأكد الاتفاقيات والتوقيت وتفاصيل التسليم في الدردشة.\nلا تشارك بيانات دفع أو بطاقة أو بنك خاصة.\nلا تطلب من أحد تجاوز القانون المحلي أو الجمارك أو قواعد النقل.',
+  'marketing.supportDisputes.whenToOpenTitle': 'متى تفتح نزاعاً',
+  'marketing.supportDisputes.whenToOpenBody':
+    'لم يُسلَّم العنصر أو فُوِّت التسليم.\nحالة تسليم غير واضحة أو متعارضة.\nخلاف حول إثبات التسليم.\nتغيّرت تفاصيل الاستلام/التسليم دون اتفاق.\nلا يمكن الوصول للطرف الآخر عبر Wayly.\nقلق أمني أو اشتباه بعنصر مقيد.',
+  'marketing.supportDisputes.evidenceTitle': 'الأدلة التي يجب تضمينها',
+  'marketing.supportDisputes.evidenceBody':
+    'جدول زمني للطلب وتغييرات الحالة.\nرسائل الدردشة ذات صلة داخل Wayly.\nتفاصيل الاستلام/التسليم المتفق عليها في الدردشة.\nمراجع إثبات التسليم أو صور عند الحاجة.\nلقطات حالة الدفع داخل Wayly إن كانت ذات صلة.\nشرح واضح لما حدث وما يحتاج مراجعة.',
+  'marketing.supportDisputes.avoidUploadingTitle': 'لا ترفع أو تشارك',
+  'marketing.supportDisputes.avoidUploadingBody':
+    'كلمات مرور أو بيانات دخول.\nأرقام بطاقات أو تفاصيل بنك أو معلومات دفع خاصة.\nمستندات هوية غير ضرورية.\nمحتوى غير قانوني أو خطير أو غير آمن.',
+  'marketing.supportDisputes.toolsTitle': 'ماذا تفعل أدوات النزاع',
+  'marketing.supportDisputes.toolsBody':
+    'تساعد في تنظيم الحقائق والرسائل والأدلة لمشكلة طلب.\nتساعد المسؤول أو المحكم على مراجعة سجلات المنصة.\nتساعد في الاحتفاظ بسجل ما أُبلغ عنه ومتى.',
+  'marketing.supportDisputes.noGuaranteesTitle': 'ما لا يضمنه Wayly',
+  'marketing.supportDisputes.noGuaranteesBody':
+    'استشارة قانونية أو تمثيل.\nاسترداد أو دفع مضمون.\nتغطية تأمين.\nضمان escrow حقيقي أو حماية أموال طرف ثالث اليوم.\nتخليص جمركي أو حماية قانونية.\nأن الأدلة المقدمة ستثبت المطالبة تلقائياً أو تحسم النتيجة.',
+  'marketing.supportDisputes.safetyEscalationTitle': 'تصعيد السلامة',
+  'marketing.supportDisputes.safetyEscalationBody':
+    'عند خطر فوري أو نشاط غير قانوني أو طوارئ، اتصل بالسلطات المحلية أو خدمات الطوارئ أولاً.\nأدوات نزاع Wayly لسجلات الطلبات — وليست استجابة طوارئ.\nلا تعتمد على النزاعات بدلاً من الإبلاغ عن جرائم أو تهديدات للسلطات.',
+  'marketing.supportDisputes.helpfulLinksTitle': 'روابط مفيدة',
+  'marketing.supportDisputes.emergencyNotice':
+    'أدوات نزاع Wayly تنظم مشاكل الطلبات — وليست استشارة قانونية أو استرداداً مضموناً أو استجابة طوارئ. اتصل بالسلطات المحلية عند الخطر.',
+  'marketing.supportDisputes.backHome': 'العودة للرئيسية',
   'marketing.fees.navLabel': 'الرسوم والمدفوعات',
   'marketing.fees.title': 'الرسوم وشفافية المدفوعات',
   'marketing.fees.subtitle':
@@ -15946,6 +16191,41 @@ const zh: Dictionary = {
   'marketing.privacyLocalData.localOnlyNotice':
     '这些本地工具仅保存在浏览器 — 不同步到账户。服务器账户、订单和聊天记录是分开的。',
   'marketing.privacyLocalData.backHome': '返回首页',
+  'marketing.supportDisputes.navLabel': '支持与争议',
+  'marketing.supportDisputes.title': '支持与争议帮助',
+  'marketing.supportDisputes.subtitle':
+    '交付需要关注时该怎么做 — 首要步骤、证据指引及争议方面的诚实限制说明。',
+  'marketing.supportDisputes.openApp': '打开应用',
+  'marketing.supportDisputes.trustCenter': '信任中心',
+  'marketing.supportDisputes.faq': '常见问题',
+  'marketing.supportDisputes.restrictedItems': '受限物品',
+  'marketing.supportDisputes.fees': '费用与支付',
+  'marketing.supportDisputes.privacyLocalData': '本地数据',
+  'marketing.supportDisputes.firstStepsTitle': '出现问题时的首要步骤',
+  'marketing.supportDisputes.firstStepsBody':
+    '保持冷静，聚焦事实。\n在 Wayly 聊天内沟通。\n在聊天中确认约定、时间和交接细节。\n不要分享私人支付、银行卡或银行账户信息。\n不要要求任何人规避当地法律、海关或运输规则。',
+  'marketing.supportDisputes.whenToOpenTitle': '何时开启争议',
+  'marketing.supportDisputes.whenToOpenBody':
+    '物品未交付或交接失败。\n交付状态不清或相互矛盾。\n对交付证明存在分歧。\n取件/送达细节未经同意被更改。\n无法通过 Wayly 联系对方。\n安全顾虑或疑似受限物品。',
+  'marketing.supportDisputes.evidenceTitle': '应包含的证据',
+  'marketing.supportDisputes.evidenceBody':
+    '订单时间线与状态变更。\nWayly 内相关聊天消息。\n聊天中约定的取件/送达细节。\n适当的交付证明引用或照片。\n与问题相关的 Wayly 内支付状态截图。\n清晰说明发生了什么以及需要审查什么。',
+  'marketing.supportDisputes.avoidUploadingTitle': '请勿上传或分享',
+  'marketing.supportDisputes.avoidUploadingBody':
+    '密码或登录凭据。\n卡号、银行信息或私人支付信息。\n不必要的身份文件。\n非法、危险或不安全内容。',
+  'marketing.supportDisputes.toolsTitle': '争议工具的作用',
+  'marketing.supportDisputes.toolsBody':
+    '帮助整理订单问题的事实、消息和证据。\n帮助管理员或仲裁员审查平台相关记录。\n帮助保留报告内容与时间的记录。',
+  'marketing.supportDisputes.noGuaranteesTitle': 'Wayly 不保证的内容',
+  'marketing.supportDisputes.noGuaranteesBody':
+    '法律建议或代理。\n不保证退款或 payout。\n无保险覆盖。\n今日无真实托管或第三方资金保护。\n无清关或法律保护。\n提交的证据不会自动证明主张或决定结果。',
+  'marketing.supportDisputes.safetyEscalationTitle': '安全升级',
+  'marketing.supportDisputes.safetyEscalationBody':
+    '如有即时危险、非法活动或紧急情况，请先联系当地当局或官方紧急服务。\nWayly 争议工具用于平台订单记录与协调 — 非紧急响应。\n不要依赖争议代替向当局报告犯罪或安全威胁。',
+  'marketing.supportDisputes.helpfulLinksTitle': '有用链接',
+  'marketing.supportDisputes.emergencyNotice':
+    'Wayly 争议工具用于整理订单问题 — 非法律建议、保证退款或紧急响应。遇危险请联系当地当局。',
+  'marketing.supportDisputes.backHome': '返回首页',
   'marketing.fees.navLabel': '费用与支付',
   'marketing.fees.title': '费用与支付透明度',
   'marketing.fees.subtitle':

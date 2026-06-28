@@ -164,6 +164,14 @@ export function FeesPage() {
                     <div className="mt-3">
                       <SectionBody bodyKey={section.bodyKey} />
                     </div>
+                    {section.id === 'admin-review' ? (
+                      <Link
+                        href="/support-disputes"
+                        className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        {t('marketing.supportDisputes.navLabel')} →
+                      </Link>
+                    ) : null}
                     {section.id === 'safety-reminder' ? (
                       <Link
                         href="/privacy-local-data"

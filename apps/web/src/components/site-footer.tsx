@@ -33,6 +33,9 @@ export function SiteFooter() {
           <Link href="/privacy-local-data" className="transition-colors hover:text-foreground">
             {t('marketing.privacyLocalData.navLabel')}
           </Link>
+          <Link href="/support-disputes" className="transition-colors hover:text-foreground">
+            {t('marketing.supportDisputes.navLabel')}
+          </Link>
           {/* Legal pages are added in a later milestone. */}
           <Link href="#" className="transition-colors hover:text-foreground">
             Terms
