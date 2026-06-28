@@ -320,4 +320,183 @@
     background: transparent;
     border: none;
   }
+
+  /* ---------------------------------------------------------------- landing */
+  .wayly-landing-glass {
+    border: 1px solid hsl(var(--border) / 0.55);
+    background: hsl(var(--card) / 0.55);
+    box-shadow:
+      0 1px 2px hsl(var(--foreground) / 0.04),
+      0 12px 40px hsl(var(--primary) / 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .wayly-landing-glass {
+    background: hsl(var(--card) / 0.45);
+    box-shadow:
+      0 1px 2px hsl(0 0% 0% / 0.2),
+      0 16px 48px hsl(var(--primary) / 0.12);
+  }
+
+  .wayly-landing-glow-card {
+    transition:
+      transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .wayly-landing-glow-card:hover {
+    transform: translateY(-3px);
+    border-color: hsl(var(--primary) / 0.45);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.15),
+      0 16px 40px hsl(var(--primary) / 0.18);
+  }
+
+  .wayly-landing-shine-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wayly-landing-shine-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsl(var(--primary-foreground) / 0.12) 50%,
+      transparent 60%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.6s ease;
+  }
+
+  .wayly-landing-shine-btn:hover::after {
+    transform: translateX(120%);
+  }
+
+  .wayly-landing-gradient-border {
+    position: relative;
+    border-radius: calc(var(--radius) + 8px);
+  }
+
+  .wayly-landing-gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary) / 0.55),
+      hsl(var(--accent) / 0.35),
+      hsl(var(--primary) / 0.2)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  @keyframes wayly-landing-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes wayly-landing-glow-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.65;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes wayly-landing-route-pulse {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes wayly-landing-dot-travel {
+    0% {
+      offset-distance: 0%;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      offset-distance: 100%;
+      opacity: 0;
+    }
+  }
+
+  .wayly-landing-float {
+    animation: wayly-landing-float 6s ease-in-out infinite;
+  }
+
+  .wayly-landing-float-delay-1 {
+    animation-delay: 1.2s;
+  }
+
+  .wayly-landing-float-delay-2 {
+    animation-delay: 2.4s;
+  }
+
+  .wayly-landing-glow-blob {
+    animation: wayly-landing-glow-pulse 8s ease-in-out infinite;
+  }
+
+  .wayly-landing-route-dot {
+    animation: wayly-landing-route-pulse 2.4s ease-in-out infinite;
+  }
+
+  .wayly-landing-hero-grid {
+    background-image:
+      radial-gradient(hsl(var(--accent) / 0.14) 1px, transparent 1px),
+      radial-gradient(hsl(var(--primary) / 0.1) 1px, transparent 1px);
+    background-size:
+      32px 32px,
+      16px 16px;
+    background-position:
+      0 0,
+      8px 8px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wayly-landing-float,
+    .wayly-landing-glow-blob,
+    .wayly-landing-route-dot,
+    .wayly-landing-shine-btn::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    .wayly-landing-glow-card:hover {
+      transform: none;
+    }
+  }
 }
