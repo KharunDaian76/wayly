@@ -16,13 +16,14 @@ import type {
   WaylerAccessPassSummary,
   WaylerAccessState,
 } from '@wayly/types';
-import { NotificationType } from '@wayly/types';
+import { NotificationEntityType, NotificationType } from '@wayly/types';
 import type { WaylerAccessPassesListQueryInput } from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { appLinkHref } from '../notifications/notification.helpers';
 
 import { toWaylerAccessPassSummary, toWaylerAccessState } from './wayler-access.mapper';
 
@@ -132,9 +133,11 @@ export class WaylerAccessService {
 
     await this.notifications.createForUser({
       userId: user.id,
-      type: NotificationType.SYSTEM,
+      type: NotificationType.SUCCESS,
       title: 'Wayler work access active',
-      body: 'Your Wayler work access is active for today.',
+      body: 'Your Wayler work access is active for today (mock/manual).',
+      entityType: NotificationEntityType.SYSTEM,
+      linkHref: appLinkHref('/app#wayler-access'),
     });
 
     return toWaylerAccessPassSummary(record);
@@ -173,9 +176,11 @@ export class WaylerAccessService {
     if (wasActive) {
       await this.notifications.createForUser({
         userId: user.id,
-        type: NotificationType.SYSTEM,
+        type: NotificationType.INFO,
         title: 'Wayler work access cancelled',
         body: 'Your Wayler work access for today was cancelled.',
+        entityType: NotificationEntityType.SYSTEM,
+        linkHref: appLinkHref('/app#wayler-access'),
       });
     }
 

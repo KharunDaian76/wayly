@@ -39,6 +39,7 @@ import {
 import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
 import { HelpSafetyCenterCard } from '@/components/app/help-safety-center-card';
 import { LaunchStatusNoticeCard } from '@/components/app/launch-status-notice-card';
+import { NotificationsCenter } from '@/components/app/notifications-center';
 import { SupportTicketPanel } from '@/components/app/support-ticket-panel';
 import { RoleStarterChecklistCard } from '@/components/app/role-starter-checklist-card';
 import { ConversationPanel } from '@/components/app/conversation-panel';
@@ -1801,6 +1802,10 @@ export default function AppHomePage() {
         </div>
 
         <LaunchStatusNoticeCard />
+
+        <NotificationsCenter
+          onFocusOrder={(orderId) => void focusAcceptedOrderFromNotification(orderId, 'sender')}
+        />
 
         <SupportTicketPanel />
 

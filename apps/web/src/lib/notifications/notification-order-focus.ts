@@ -1,4 +1,7 @@
-import { NotificationType, type NotificationType as NotificationTypeValue } from '@wayly/types';
+import {
+  NotificationEntityType,
+  type NotificationEntityType as NotificationEntityTypeValue,
+} from '@wayly/types';
 
 export type AcceptedOrdersPanel = 'sender' | 'wayler';
 
@@ -10,17 +13,14 @@ export function acceptedPanelElementId(panel: AcceptedOrdersPanel): string {
   return panel === 'sender' ? 'sender-accepted-panel' : 'wayler-accepted-panel';
 }
 
-/** Preferred Accepted panel for order-linked notifications (fallback tries the other panel). */
-export function getAcceptedPanelForNotification(type: NotificationTypeValue): AcceptedOrdersPanel {
-  switch (type) {
-    case NotificationType.ORDER_ACCEPTED:
-    case NotificationType.ORDER_IN_TRANSIT:
-    case NotificationType.ORDER_DELIVERED:
-    case NotificationType.PROOF_SUBMITTED:
-      return 'sender';
-    default:
-      return 'wayler';
+/** Preferred Accepted panel for order-linked notifications. */
+export function getAcceptedPanelForNotification(
+  entityType: NotificationEntityTypeValue | null,
+): AcceptedOrdersPanel {
+  if (entityType === NotificationEntityType.DELIVERY_ORDER) {
+    return 'sender';
   }
+  return 'wayler';
 }
 
 export function scrollToAcceptedOrder(orderId: string): void {
@@ -35,4 +35,14 @@ export function scrollToAcceptedPanel(panel: AcceptedOrdersPanel): void {
     behavior: 'smooth',
     block: 'start',
   });
+}
+
+export function resolveOrderIdFromNotification(item: {
+  entityType: NotificationEntityTypeValue | null;
+  entityId: string | null;
+}): string | null {
+  if (item.entityType === NotificationEntityType.DELIVERY_ORDER && item.entityId) {
+    return item.entityId;
+  }
+  return null;
 }

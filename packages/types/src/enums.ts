@@ -112,19 +112,26 @@ export const OrderAdminReviewDecision = {
 export type OrderAdminReviewDecision =
   (typeof OrderAdminReviewDecision)[keyof typeof OrderAdminReviewDecision];
 
-/** In-app notification categories (dispatch routes land in a later batch). */
+/** In-app notification severity (foundation v1 — not push/email/SMS). */
 export const NotificationType = {
-  ORDER_PUBLISHED: 'ORDER_PUBLISHED',
-  ORDER_ACCEPTED: 'ORDER_ACCEPTED',
-  ORDER_IN_TRANSIT: 'ORDER_IN_TRANSIT',
-  ORDER_DELIVERED: 'ORDER_DELIVERED',
-  ORDER_CANCELLED: 'ORDER_CANCELLED',
-  PROOF_SUBMITTED: 'PROOF_SUBMITTED',
-  KYC_APPROVED: 'KYC_APPROVED',
-  KYC_REJECTED: 'KYC_REJECTED',
-  SYSTEM: 'SYSTEM',
+  INFO: 'INFO',
+  SUCCESS: 'SUCCESS',
+  WARNING: 'WARNING',
+  ACTION_REQUIRED: 'ACTION_REQUIRED',
 } as const;
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType];
+
+/** Linked entity for in-app notifications. */
+export const NotificationEntityType = {
+  SUPPORT_TICKET: 'SUPPORT_TICKET',
+  DELIVERY_ORDER: 'DELIVERY_ORDER',
+  WAYLER_AVAILABILITY_REQUEST: 'WAYLER_AVAILABILITY_REQUEST',
+  PAYMENT: 'PAYMENT',
+  DISPUTE: 'DISPUTE',
+  SYSTEM: 'SYSTEM',
+} as const;
+export type NotificationEntityType =
+  (typeof NotificationEntityType)[keyof typeof NotificationEntityType];
 
 /** Delivery request lifecycle (M4 foundation). */
 export const DeliveryOrderStatus = {

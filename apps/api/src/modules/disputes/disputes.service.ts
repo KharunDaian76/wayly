@@ -20,7 +20,12 @@ import type {
   DisputeListResponse,
   DisputeMessageSummary,
 } from '@wayly/types';
-import { AdminAuditLogAction, AdminAuditLogTargetType, NotificationType } from '@wayly/types';
+import {
+  AdminAuditLogAction,
+  AdminAuditLogTargetType,
+  NotificationEntityType,
+  NotificationType,
+} from '@wayly/types';
 import type {
   AddDisputeEvidenceInput,
   AddDisputeMessageInput,
@@ -38,6 +43,7 @@ import {
   type AdminAuditRequestContext,
 } from '../admin-audit/admin-audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { orderNotificationLink } from '../notifications/notification.helpers';
 
 import {
   toAdminDisputeQueueItem,
@@ -98,10 +104,12 @@ export class DisputesService {
     if (recipientId) {
       await this.notifications.createForUser({
         userId: recipientId,
-        type: NotificationType.SYSTEM,
+        type: NotificationType.ACTION_REQUIRED,
         title: 'Dispute opened',
         body: 'A dispute was opened for one of your deliveries.',
-        relatedOrderId: order.id,
+        entityType: NotificationEntityType.DISPUTE,
+        entityId: dispute.id,
+        linkHref: orderNotificationLink(order.id),
       });
     }
 
@@ -326,10 +334,12 @@ export class DisputesService {
     if (recipientId) {
       await this.notifications.createForUser({
         userId: recipientId,
-        type: NotificationType.SYSTEM,
+        type: NotificationType.INFO,
         title: 'New dispute message',
         body: this.buildDisputeMessageNotificationBody(body.body),
-        relatedOrderId: dispute.orderId,
+        entityType: NotificationEntityType.DISPUTE,
+        entityId: dispute.id,
+        linkHref: orderNotificationLink(dispute.orderId),
       });
     }
 
@@ -361,10 +371,12 @@ export class DisputesService {
     if (recipientId) {
       await this.notifications.createForUser({
         userId: recipientId,
-        type: NotificationType.SYSTEM,
+        type: NotificationType.INFO,
         title: 'New dispute evidence',
         body: 'New evidence was added to a dispute.',
-        relatedOrderId: dispute.orderId,
+        entityType: NotificationEntityType.DISPUTE,
+        entityId: dispute.id,
+        linkHref: orderNotificationLink(dispute.orderId),
       });
     }
 

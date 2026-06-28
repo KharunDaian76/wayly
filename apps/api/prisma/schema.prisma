@@ -70,16 +70,20 @@ enum PackageSize {
   OVERSIZED
 }
 
-// In-app notification categories (dispatch/WebSocket land in a later batch).
+// In-app notification severity/category (foundation v1 — in-app only, no push/email).
 enum NotificationType {
-  ORDER_PUBLISHED
-  ORDER_ACCEPTED
-  ORDER_IN_TRANSIT
-  ORDER_DELIVERED
-  ORDER_CANCELLED
-  PROOF_SUBMITTED
-  KYC_APPROVED
-  KYC_REJECTED
+  INFO
+  SUCCESS
+  WARNING
+  ACTION_REQUIRED
+}
+
+enum NotificationEntityType {
+  SUPPORT_TICKET
+  DELIVERY_ORDER
+  WAYLER_AVAILABILITY_REQUEST
+  PAYMENT
+  DISPUTE
   SYSTEM
 }
 
@@ -472,7 +476,6 @@ model DeliveryOrder {
   adminReviewByUserId   String?                    @db.Uuid
   adminReviewBy         User?                      @relation("DeliveryOrderAdminReviewer", fields: [adminReviewByUserId], references: [id], onDelete: SetNull)
 
-  notifications          Notification[]
   conversation           Conversation?
   paymentIntent          PaymentIntent?
   ledgerEntries          LedgerEntry[]
@@ -497,24 +500,26 @@ model DeliveryOrder {
   @@map("delivery_orders")
 }
 
-// In-app notification for a user (email/push/WebSocket dispatch in later batches).
+// In-app notification for a user (in-app only — no email/push/SMS in v1).
 model Notification {
-  id             String           @id @default(uuid()) @db.Uuid
-  userId         String           @db.Uuid
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type           NotificationType
-  title          String
-  body           String?
-  relatedOrderId String?          @db.Uuid
-  relatedOrder   DeliveryOrder?   @relation(fields: [relatedOrderId], references: [id], onDelete: SetNull)
-  readAt         DateTime?
-  createdAt      DateTime         @default(now())
+  id         String                  @id @default(uuid()) @db.Uuid
+  userId     String                  @db.Uuid
+  user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       NotificationType
+  title      String
+  body       String
+  linkHref   String?
+  entityType NotificationEntityType?
+  entityId   String?                 @db.Uuid
+  readAt     DateTime?
+  createdAt  DateTime                @default(now())
+  updatedAt  DateTime                @updatedAt
 
   @@index([userId])
-  @@index([readAt])
-  @@index([createdAt])
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
   @@index([type])
-  @@index([relatedOrderId])
+  @@index([entityType, entityId])
   @@map("notifications")
 }
 

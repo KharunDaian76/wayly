@@ -1,22 +1,36 @@
 import type { ISODateString } from './common';
-import type { NotificationType } from './enums';
+import type { NotificationEntityType, NotificationType } from './enums';
 
-/** Compact notification for lists and feeds. */
+/** Compact in-app notification for lists and feeds. */
 export interface NotificationSummary {
   id: string;
   type: NotificationType;
   title: string;
-  body: string | null;
-  relatedOrderId: string | null;
+  body: string;
+  linkHref: string | null;
+  entityType: NotificationEntityType | null;
+  entityId: string | null;
   readAt: ISODateString | null;
   createdAt: ISODateString;
+  updatedAt: ISODateString;
 }
 
-/** Paginated notification list (API not implemented yet). */
+/** Paginated notification list for the current user. */
 export interface NotificationListResponse {
   items: NotificationSummary[];
   page: number;
   limit: number;
   total: number;
-  unreadTotal: number;
+  unreadCount: number;
+}
+
+/** GET /notifications/me/unread-count response. */
+export interface NotificationUnreadCountResponse {
+  unreadCount: number;
+}
+
+/** PATCH /notifications/read-all response. */
+export interface NotificationMarkAllReadResponse {
+  updatedCount: number;
+  unreadCount: number;
 }

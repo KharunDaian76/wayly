@@ -31,8 +31,8 @@ export { createNotificationsApi } from './notifications';
 export {
   type NotificationsApi,
   type NotificationsListQuery,
-  type NotificationsMarkAllReadResponse,
-  type NotificationsUnreadCountResponse,
+  type NotificationMarkAllReadResponse,
+  type NotificationUnreadCountResponse,
 } from './notifications.types';
 export { createPaymentsApi } from './payments';
 export { type PaymentsApi } from './payments.types';

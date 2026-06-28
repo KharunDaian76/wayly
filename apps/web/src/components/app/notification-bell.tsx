@@ -14,6 +14,7 @@ import {
 import { useI18n } from '@/lib/i18n/i18n-context';
 import {
   getAcceptedPanelForNotification,
+  resolveOrderIdFromNotification,
   type AcceptedOrdersPanel,
 } from '@/lib/notifications/notification-order-focus';
 import { api } from '@/lib/sdk';
@@ -35,7 +36,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
   const [visible, setVisible] = useState(
     () => typeof document !== 'undefined' && document.visibilityState === 'visible',
   );
-  const [unreadTotal, setUnreadTotal] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [items, setItems] = useState<NotificationSummary[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +52,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
     countInFlightRef.current = true;
     try {
       const result = await api.notifications.unreadCount();
-      setUnreadTotal(result.unreadTotal);
+      setUnreadCount(result.unreadCount);
     } catch {
       // Silent for background polling; badge keeps last known value.
     } finally {
@@ -72,7 +73,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
       try {
         const result = await api.notifications.list({ page: 1, limit: 10 });
         setItems(result.items);
-        setUnreadTotal(result.unreadTotal);
+        setUnreadCount(result.unreadCount);
         setError(null);
       } catch {
         if (foreground) {
@@ -159,7 +160,8 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
   }
 
   async function handleOrderLinkedNotificationClick(item: NotificationSummary) {
-    if (!item.relatedOrderId || actionBusy) {
+    const orderId = resolveOrderIdFromNotification(item);
+    if (!orderId || actionBusy) {
       return;
     }
 
@@ -174,7 +176,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
         setItems((prev) => prev.map((entry) => (entry.id === item.id ? updated : entry)));
         await fetchUnreadCount();
       }
-      await onFocusOrder?.(item.relatedOrderId, getAcceptedPanelForNotification(item.type));
+      await onFocusOrder?.(orderId, getAcceptedPanelForNotification(item.entityType));
     } catch (err) {
       setError(
         err instanceof ApiError
@@ -192,7 +194,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
     setSuccessMessage(null);
     try {
       await api.notifications.markAllRead();
-      setUnreadTotal(0);
+      setUnreadCount(0);
       await fetchList(true);
       setSuccessMessage(t('app.notifications.markAllReadSuccess'));
     } catch (err) {
@@ -207,8 +209,8 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
   }
 
   const badgeLabel =
-    unreadTotal > 0
-      ? t('app.notifications.unreadCount').replace('{count}', String(unreadTotal))
+    unreadCount > 0
+      ? t('app.notifications.unreadCount').replace('{count}', String(unreadCount))
       : undefined;
 
   const showInitialLoading = loading && items.length === 0;
@@ -228,12 +230,12 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
         onClick={() => setOpen((prev) => !prev)}
       >
         <Bell className="h-4 w-4" aria-hidden />
-        {unreadTotal > 0 ? (
+        {unreadCount > 0 ? (
           <span
             className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground"
             aria-label={badgeLabel}
           >
-            {unreadTotal > 99 ? '99+' : unreadTotal}
+            {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         ) : null}
       </Button>
@@ -262,7 +264,7 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                 variant="ghost"
                 size="sm"
                 className="h-8 px-2 text-xs"
-                disabled={loading || actionBusy || unreadTotal === 0}
+                disabled={loading || actionBusy || unreadCount === 0}
                 onClick={() => void handleMarkAllRead()}
               >
                 {markingAll
@@ -309,7 +311,8 @@ export function NotificationBell({ onFocusOrder }: NotificationBellProps) {
                 {items.map((item) => {
                   const isUnread = item.readAt === null;
                   const isMarking = markingReadId === item.id;
-                  const hasOrderLink = item.relatedOrderId !== null;
+                  const orderId = resolveOrderIdFromNotification(item);
+                  const hasOrderLink = orderId !== null;
                   const orderLinkLabel = hasOrderLink
                     ? `${item.title}. ${t('app.notifications.viewAcceptedOrder')}`
                     : undefined;

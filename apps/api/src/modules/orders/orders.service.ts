@@ -44,6 +44,7 @@ import {
   type AdminAuditRequestContext,
 } from '../admin-audit/admin-audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { buildOrderNotification } from '../notifications/notification.helpers';
 import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
 import {
@@ -263,13 +264,15 @@ export class OrdersService {
       },
     });
 
-    await this.notifications.createForUser({
-      userId: updated.senderId,
-      type: NotificationType.ORDER_ACCEPTED,
-      title: 'Your delivery request was accepted',
-      body: `Your delivery request "${updated.title}" was accepted.`,
-      relatedOrderId: updated.id,
-    });
+    await this.notifications.createForUser(
+      buildOrderNotification(
+        updated.senderId,
+        updated.id,
+        NotificationType.SUCCESS,
+        'Your delivery request was accepted',
+        `Your delivery request "${updated.title}" was accepted.`,
+      ),
+    );
 
     return toDeliveryOrderDetail(updated);
   }
@@ -299,13 +302,15 @@ export class OrdersService {
       },
     });
 
-    await this.notifications.createForUser({
-      userId: updated.senderId,
-      type: NotificationType.ORDER_IN_TRANSIT,
-      title: 'Your delivery is in transit',
-      body: `Your delivery "${updated.title}" is now in transit.`,
-      relatedOrderId: updated.id,
-    });
+    await this.notifications.createForUser(
+      buildOrderNotification(
+        updated.senderId,
+        updated.id,
+        NotificationType.INFO,
+        'Your delivery is in transit',
+        `Your delivery "${updated.title}" is now in transit.`,
+      ),
+    );
 
     return toDeliveryOrderDetail(updated);
   }
@@ -381,13 +386,15 @@ export class OrdersService {
       },
     });
 
-    await this.notifications.createForUser({
-      userId: updated.senderId,
-      type: NotificationType.PROOF_SUBMITTED,
-      title: 'Proof of delivery was submitted',
-      body: `Proof of delivery was submitted for "${updated.title}".`,
-      relatedOrderId: updated.id,
-    });
+    await this.notifications.createForUser(
+      buildOrderNotification(
+        updated.senderId,
+        updated.id,
+        NotificationType.INFO,
+        'Proof of delivery was submitted',
+        `Proof of delivery was submitted for "${updated.title}".`,
+      ),
+    );
 
     return toDeliveryOrderDetail(updated);
   }
@@ -419,13 +426,15 @@ export class OrdersService {
       },
     });
 
-    await this.notifications.createForUser({
-      userId: updated.senderId,
-      type: NotificationType.ORDER_DELIVERED,
-      title: 'Your delivery was marked delivered',
-      body: `Your delivery "${updated.title}" was marked as delivered.`,
-      relatedOrderId: updated.id,
-    });
+    await this.notifications.createForUser(
+      buildOrderNotification(
+        updated.senderId,
+        updated.id,
+        NotificationType.SUCCESS,
+        'Your delivery was marked delivered',
+        `Your delivery "${updated.title}" was marked as delivered.`,
+      ),
+    );
 
     return toDeliveryOrderDetail(updated);
   }

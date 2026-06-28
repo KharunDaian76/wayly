@@ -16,7 +16,7 @@ import type {
   WaylerAvailabilityRequestDetail,
   WaylerAvailabilityRequestListResponse,
 } from '@wayly/types';
-import { NotificationType } from '@wayly/types';
+import { NotificationEntityType, NotificationType } from '@wayly/types';
 import type {
   CreateWaylerAvailabilityRequestInput,
   RespondWaylerAvailabilityRequestInput,
@@ -27,6 +27,10 @@ import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import {
+  availabilityRequestNotificationLink,
+  buildOrderNotification,
+} from '../notifications/notification.helpers';
 import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
 import { toDeliveryOrderCreateFromAvailabilityRequest } from './availability-request-order.mapper';
@@ -105,9 +109,12 @@ export class WaylerAvailabilityRequestsService {
 
     await this.notifications.createForUser({
       userId: record.waylerId,
-      type: NotificationType.SYSTEM,
+      type: NotificationType.ACTION_REQUIRED,
       title: 'New delivery request',
       body: 'A Sender sent you a delivery request for your Wayler availability.',
+      entityType: NotificationEntityType.WAYLER_AVAILABILITY_REQUEST,
+      entityId: record.id,
+      linkHref: availabilityRequestNotificationLink(),
     });
 
     return toWaylerAvailabilityRequestDetail(record);
@@ -212,13 +219,15 @@ export class WaylerAvailabilityRequestsService {
       }
     });
 
-    await this.notifications.createForUser({
-      userId: updated.senderId,
-      type: NotificationType.ORDER_ACCEPTED,
-      title: 'Your delivery request was accepted',
-      body: `Your delivery request "${updated.title}" was accepted and a delivery order was created.`,
-      relatedOrderId: deliveryOrderId,
-    });
+    await this.notifications.createForUser(
+      buildOrderNotification(
+        updated.senderId,
+        deliveryOrderId,
+        NotificationType.SUCCESS,
+        'Your delivery request was accepted',
+        `Your delivery request "${updated.title}" was accepted and a delivery order was created.`,
+      ),
+    );
 
     return toWaylerAvailabilityRequestDetail({
       ...updated,
@@ -248,9 +257,12 @@ export class WaylerAvailabilityRequestsService {
 
     await this.notifications.createForUser({
       userId: updated.senderId,
-      type: NotificationType.SYSTEM,
+      type: NotificationType.WARNING,
       title: 'Delivery request declined',
       body: 'Your delivery request was declined by the Wayler.',
+      entityType: NotificationEntityType.WAYLER_AVAILABILITY_REQUEST,
+      entityId: updated.id,
+      linkHref: availabilityRequestNotificationLink(),
     });
 
     return toWaylerAvailabilityRequestDetail(updated);
@@ -273,9 +285,12 @@ export class WaylerAvailabilityRequestsService {
 
     await this.notifications.createForUser({
       userId: updated.waylerId,
-      type: NotificationType.SYSTEM,
+      type: NotificationType.INFO,
       title: 'Delivery request cancelled',
       body: 'A Sender cancelled a delivery request.',
+      entityType: NotificationEntityType.WAYLER_AVAILABILITY_REQUEST,
+      entityId: updated.id,
+      linkHref: availabilityRequestNotificationLink(),
     });
 
     return toWaylerAvailabilityRequestDetail(updated);

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Patch, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
@@ -7,7 +7,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import type { NotificationListResponse, NotificationSummary } from '@wayly/types';
+import type {
+  NotificationListResponse,
+  NotificationMarkAllReadResponse,
+  NotificationSummary,
+  NotificationUnreadCountResponse,
+} from '@wayly/types';
 import { notificationsListQuerySchema } from '@wayly/validation';
 import { z } from 'zod';
 
@@ -18,15 +23,11 @@ import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
   NotificationListResponseDto,
+  NotificationMarkAllReadResponseDto,
   NotificationSummaryDto,
-  NotificationsMarkAllReadResponseDto,
-  NotificationsUnreadCountResponseDto,
+  NotificationUnreadCountResponseDto,
 } from './dto/swagger.dto';
-import {
-  NotificationsService,
-  type NotificationsMarkAllReadResult,
-  type NotificationsUnreadCountResult,
-} from './notifications.service';
+import { NotificationsService } from './notifications.service';
 
 @ApiTags('notifications')
 @ApiBearerAuth('access-token')
@@ -35,35 +36,35 @@ import {
 export class NotificationsController {
   constructor(private readonly notifications: NotificationsService) {}
 
-  @Get()
+  @Get('me')
   @ApiOperation({ summary: 'List notifications for the current user' })
   @ApiOkResponse({ type: NotificationListResponseDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
-  list(
+  listMine(
     @CurrentUser() user: RequestUser,
     @Query(zodQuery(notificationsListQuerySchema))
     query: z.infer<typeof notificationsListQuerySchema>,
   ): Promise<NotificationListResponse> {
-    return this.notifications.list(user.id, query);
+    return this.notifications.listForUser(user.id, query);
   }
 
-  @Get('unread-count')
+  @Get('me/unread-count')
   @ApiOperation({ summary: 'Get unread notification count for the current user' })
-  @ApiOkResponse({ type: NotificationsUnreadCountResponseDto })
+  @ApiOkResponse({ type: NotificationUnreadCountResponseDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
-  unreadCount(@CurrentUser() user: RequestUser): Promise<NotificationsUnreadCountResult> {
-    return this.notifications.unreadCount(user.id);
+  unreadCount(@CurrentUser() user: RequestUser): Promise<NotificationUnreadCountResponse> {
+    return this.notifications.getUnreadCount(user.id);
   }
 
-  @Post('read-all')
+  @Patch('read-all')
   @ApiOperation({ summary: 'Mark all notifications as read for the current user' })
-  @ApiOkResponse({ type: NotificationsMarkAllReadResponseDto })
+  @ApiOkResponse({ type: NotificationMarkAllReadResponseDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
-  markAllRead(@CurrentUser() user: RequestUser): Promise<NotificationsMarkAllReadResult> {
+  markAllRead(@CurrentUser() user: RequestUser): Promise<NotificationMarkAllReadResponse> {
     return this.notifications.markAllRead(user.id);
   }
 
-  @Post(':id/read')
+  @Patch(':id/read')
   @ApiOperation({ summary: 'Mark a single notification as read' })
   @ApiOkResponse({ type: NotificationSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

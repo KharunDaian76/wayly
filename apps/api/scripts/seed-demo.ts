@@ -18,6 +18,8 @@ import {
   DeliveryOrderStatus,
   DeliveryOrderType,
   KycStatus,
+  NotificationEntityType,
+  NotificationType,
   PackageSize,
   PaymentProvider,
   PaymentStatus,
@@ -63,6 +65,7 @@ type SeedCounts = {
   accessPasses: number;
   supportTickets: number;
   paymentIntents: number;
+  notifications: number;
 };
 
 function requireEnv(name: string): string {
@@ -230,6 +233,13 @@ async function cleanupDemoData(ids: DemoUserIds): Promise<void> {
     where: {
       waylerId: ids.waylerId,
       notes: { contains: DEMO_SEED_MARKER },
+    },
+  });
+
+  await prisma.notification.deleteMany({
+    where: {
+      userId: { in: [ids.adminId, ids.senderId, ids.waylerId] },
+      title: { startsWith: DEMO_TITLE_PREFIX },
     },
   });
 }
@@ -922,6 +932,85 @@ async function seedMockPaymentIntents(ids: DemoUserIds, now: Date): Promise<numb
   return created;
 }
 
+async function seedDemoNotifications(ids: DemoUserIds, now: Date): Promise<number> {
+  const readAt = addDays(now, -1);
+  const specs: Prisma.NotificationCreateManyInput[] = [
+    {
+      userId: ids.senderId,
+      type: NotificationType.SUCCESS,
+      title: demoTitle('Support ticket created'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: your support ticket was recorded.`,
+      linkHref: '/app#support-tickets',
+      entityType: NotificationEntityType.SUPPORT_TICKET,
+      readAt: null,
+      createdAt: addDays(now, -2),
+    },
+    {
+      userId: ids.senderId,
+      type: NotificationType.INFO,
+      title: demoTitle('Order accepted'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: a demo delivery order was accepted.`,
+      linkHref: '/app',
+      entityType: NotificationEntityType.DELIVERY_ORDER,
+      readAt,
+      createdAt: addDays(now, -5),
+    },
+    {
+      userId: ids.senderId,
+      type: NotificationType.WARNING,
+      title: demoTitle('Payment under review'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: mock payment flagged for manual review (not real money).`,
+      linkHref: '/app',
+      entityType: NotificationEntityType.PAYMENT,
+      readAt: null,
+      createdAt: addDays(now, -3),
+    },
+    {
+      userId: ids.waylerId,
+      type: NotificationType.ACTION_REQUIRED,
+      title: demoTitle('New availability request'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: a sender submitted a demo availability request.`,
+      linkHref: '/app',
+      entityType: NotificationEntityType.WAYLER_AVAILABILITY_REQUEST,
+      readAt: null,
+      createdAt: addDays(now, -4),
+    },
+    {
+      userId: ids.waylerId,
+      type: NotificationType.SUCCESS,
+      title: demoTitle('Delivery proof submitted'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: delivery proof was submitted on a demo order.`,
+      linkHref: '/app',
+      entityType: NotificationEntityType.DELIVERY_ORDER,
+      readAt,
+      createdAt: addDays(now, -6),
+    },
+    {
+      userId: ids.adminId,
+      type: NotificationType.INFO,
+      title: demoTitle('System notice'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: admin operations dashboard activity (demo only).`,
+      linkHref: '/app/admin',
+      entityType: NotificationEntityType.SYSTEM,
+      readAt: null,
+      createdAt: addDays(now, -1),
+    },
+    {
+      userId: ids.adminId,
+      type: NotificationType.SUCCESS,
+      title: demoTitle('Support ticket updated'),
+      body: `${DEMO_SEED_MARKER} Demo in-app notice: a demo support ticket status was updated.`,
+      linkHref: '/app/admin',
+      entityType: NotificationEntityType.SUPPORT_TICKET,
+      readAt,
+      createdAt: addDays(now, -7),
+    },
+  ];
+
+  const result = await prisma.notification.createMany({ data: specs });
+  return result.count;
+}
+
 async function main(): Promise<void> {
   assertSafeToRun();
 
@@ -974,6 +1063,7 @@ async function main(): Promise<void> {
   const accessPasses = await seedWaylerAccess(waylerId, now);
   const ticketResult = await seedSupportTickets(ids, now);
   const paymentIntents = await seedMockPaymentIntents(ids, now);
+  const notifications = await seedDemoNotifications(ids, now);
 
   const counts: SeedCounts = {
     users: 3,
@@ -985,6 +1075,7 @@ async function main(): Promise<void> {
     accessPasses,
     supportTickets: ticketResult.tickets,
     paymentIntents,
+    notifications,
   };
 
   console.log('');
@@ -1006,6 +1097,7 @@ async function main(): Promise<void> {
   console.log(`  access passes:    ${counts.accessPasses}`);
   console.log(`  support tickets:  ${counts.supportTickets}`);
   console.log(`  payment intents:  ${counts.paymentIntents}`);
+  console.log(`  notifications:    ${counts.notifications}`);
   if (ticketResult.linkedOrderId) {
     console.log(`  linked ticket order: ${ticketResult.linkedOrderId}`);
   }

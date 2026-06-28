@@ -1,38 +1,36 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { NotificationEntityType, NotificationType } from '@wayly/types';
 
 export class NotificationSummaryDto {
   @ApiProperty({ format: 'uuid' })
   id!: string;
 
-  @ApiProperty({
-    enum: [
-      'ORDER_PUBLISHED',
-      'ORDER_ACCEPTED',
-      'ORDER_IN_TRANSIT',
-      'ORDER_DELIVERED',
-      'ORDER_CANCELLED',
-      'PROOF_SUBMITTED',
-      'KYC_APPROVED',
-      'KYC_REJECTED',
-      'SYSTEM',
-    ],
-  })
-  type!: string;
+  @ApiProperty({ enum: NotificationType })
+  type!: NotificationType;
 
   @ApiProperty({ example: 'Delivery accepted' })
   title!: string;
 
-  @ApiPropertyOptional({ example: 'Your delivery request was accepted by a Wayler.' })
-  body!: string | null;
+  @ApiProperty({ example: 'Your delivery request was accepted by a Wayler.' })
+  body!: string;
+
+  @ApiPropertyOptional({ example: '/app#accepted-order-…' })
+  linkHref!: string | null;
+
+  @ApiPropertyOptional({ enum: NotificationEntityType })
+  entityType!: NotificationEntityType | null;
 
   @ApiPropertyOptional({ format: 'uuid' })
-  relatedOrderId!: string | null;
+  entityId!: string | null;
 
   @ApiPropertyOptional({ format: 'date-time' })
   readAt!: string | null;
 
   @ApiProperty({ format: 'date-time' })
   createdAt!: string;
+
+  @ApiProperty({ format: 'date-time' })
+  updatedAt!: string;
 }
 
 export class NotificationListResponseDto {
@@ -49,18 +47,18 @@ export class NotificationListResponseDto {
   total!: number;
 
   @ApiProperty({ example: 1 })
-  unreadTotal!: number;
+  unreadCount!: number;
 }
 
-export class NotificationsUnreadCountResponseDto {
+export class NotificationUnreadCountResponseDto {
   @ApiProperty({ example: 2 })
-  unreadTotal!: number;
+  unreadCount!: number;
 }
 
-export class NotificationsMarkAllReadResponseDto {
+export class NotificationMarkAllReadResponseDto {
   @ApiProperty({ example: 2 })
   updatedCount!: number;
 
   @ApiProperty({ example: 0 })
-  unreadTotal!: number;
+  unreadCount!: number;
 }

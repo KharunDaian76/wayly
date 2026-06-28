@@ -151,7 +151,7 @@ export function SupportTicketPanel({ className }: { className?: string }) {
     !submitting;
 
   return (
-    <Card className={cn(APP_PANEL_CLASS, className)}>
+    <Card id="support-tickets" className={cn(APP_PANEL_CLASS, className)}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 flex-1 flex-col gap-1">

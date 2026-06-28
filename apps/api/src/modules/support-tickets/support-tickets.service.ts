@@ -11,6 +11,8 @@ import {
   SupportTicketPriority,
   SupportTicketStatus,
   UserRole,
+  NotificationEntityType,
+  NotificationType,
 } from '@wayly/types';
 import type {
   AdminSupportTicketsListQueryInput,
@@ -20,6 +22,8 @@ import type {
 
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { supportTicketNotificationLink } from '../notifications/notification.helpers';
 
 import { toAdminSupportTicketQueueItem, toSupportTicketSummary } from './support-tickets.mapper';
 
@@ -36,7 +40,10 @@ const REOPEN_STATUSES: SupportTicketStatus[] = [
 
 @Injectable()
 export class SupportTicketsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notifications: NotificationsService,
+  ) {}
 
   async create(user: RequestUser, body: CreateSupportTicketInput): Promise<SupportTicketSummary> {
     if (body.orderId) {
@@ -58,6 +65,16 @@ export class SupportTicketsService {
         status: SupportTicketStatus.OPEN,
         priority,
       },
+    });
+
+    await this.notifications.createForUser({
+      userId: user.id,
+      type: NotificationType.SUCCESS,
+      title: 'Support ticket submitted',
+      body: `Your support ticket "${ticket.subject}" was submitted for platform review (not emergency response).`,
+      entityType: NotificationEntityType.SUPPORT_TICKET,
+      entityId: ticket.id,
+      linkHref: supportTicketNotificationLink(),
     });
 
     return toSupportTicketSummary(ticket);
@@ -153,6 +170,16 @@ export class SupportTicketsService {
           select: { displayName: true, email: true },
         },
       },
+    });
+
+    await this.notifications.createForUser({
+      userId: updated.userId,
+      type: NotificationType.INFO,
+      title: 'Support ticket updated',
+      body: `Your support ticket "${updated.subject}" was updated by platform support review.`,
+      entityType: NotificationEntityType.SUPPORT_TICKET,
+      entityId: updated.id,
+      linkHref: supportTicketNotificationLink(),
     });
 
     return toAdminSupportTicketQueueItem(updated);

@@ -41,6 +41,7 @@ import {
   type AdminAuditRequestContext,
 } from '../admin-audit/admin-audit.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { buildPaymentNotification } from '../notifications/notification.helpers';
 
 import { toAdminPaymentQueueItem, toPaymentIntentSummary } from './payments.mapper';
 
@@ -179,13 +180,16 @@ export class PaymentsService {
         return intent;
       });
 
-      await this.notifications.createForUser({
-        userId: order.acceptedWaylerId,
-        type: NotificationType.SYSTEM,
-        title: 'Payment was authorized',
-        body: 'The Sender authorized payment for your delivery.',
-        relatedOrderId: order.id,
-      });
+      await this.notifications.createForUser(
+        buildPaymentNotification(
+          order.acceptedWaylerId,
+          updated.id,
+          order.id,
+          NotificationType.INFO,
+          'Payment was authorized',
+          'The Sender authorized payment for your delivery.',
+        ),
+      );
 
       return toPaymentIntentSummary(updated);
     }
@@ -219,13 +223,16 @@ export class PaymentsService {
       return intent;
     });
 
-    await this.notifications.createForUser({
-      userId: order.acceptedWaylerId,
-      type: NotificationType.SYSTEM,
-      title: 'Payment was authorized',
-      body: 'The Sender authorized payment for your delivery.',
-      relatedOrderId: order.id,
-    });
+    await this.notifications.createForUser(
+      buildPaymentNotification(
+        order.acceptedWaylerId,
+        created.id,
+        order.id,
+        NotificationType.INFO,
+        'Payment was authorized',
+        'The Sender authorized payment for your delivery.',
+      ),
+    );
 
     return toPaymentIntentSummary(created);
   }
@@ -288,13 +295,16 @@ export class PaymentsService {
     });
 
     if (intent.payeeId) {
-      await this.notifications.createForUser({
-        userId: intent.payeeId,
-        type: NotificationType.SYSTEM,
-        title: 'Escrow is held',
-        body: 'Payment is now held in escrow for your delivery.',
-        relatedOrderId: intent.orderId,
-      });
+      await this.notifications.createForUser(
+        buildPaymentNotification(
+          intent.payeeId,
+          updated.id,
+          intent.orderId,
+          NotificationType.INFO,
+          'Escrow is held',
+          'Payment is now held in escrow for your delivery (mock/manual metadata only).',
+        ),
+      );
     }
 
     return toPaymentIntentSummary(updated);
@@ -362,13 +372,16 @@ export class PaymentsService {
       return record;
     });
 
-    await this.notifications.createForUser({
-      userId: intent.payeeId,
-      type: NotificationType.SYSTEM,
-      title: 'Mock payout created',
-      body: 'A mock/manual payout was created for your delivery.',
-      relatedOrderId: intent.orderId,
-    });
+    await this.notifications.createForUser(
+      buildPaymentNotification(
+        intent.payeeId,
+        updated.id,
+        intent.orderId,
+        NotificationType.INFO,
+        'Mock payout created',
+        'A mock/manual payout was created for your delivery (not real money movement).',
+      ),
+    );
 
     return toPaymentIntentSummary(updated);
   }
@@ -433,6 +446,17 @@ export class PaymentsService {
       }),
       requestContext,
     });
+
+    await this.notifications.createForUser(
+      buildPaymentNotification(
+        payment.payerId,
+        payment.id,
+        payment.orderId,
+        NotificationType.ACTION_REQUIRED,
+        'Payment marked for manual review',
+        'An operator marked your payment for manual review. Metadata-only — not a payout or refund guarantee.',
+      ),
+    );
 
     return this.getAdminQueueItem(paymentId);
   }
@@ -519,6 +543,17 @@ export class PaymentsService {
       requestContext,
     });
 
+    await this.notifications.createForUser(
+      buildPaymentNotification(
+        payment.payerId,
+        payment.id,
+        payment.orderId,
+        NotificationType.INFO,
+        'Refund decision recorded',
+        'An operator recorded a refund decision on your payment. Metadata-only — not real money movement.',
+      ),
+    );
+
     return this.getAdminQueueItem(paymentId);
   }
 
@@ -559,6 +594,18 @@ export class PaymentsService {
       }),
       requestContext,
     });
+
+    const releaseRecipientId = payment.payeeId ?? payment.payerId;
+    await this.notifications.createForUser(
+      buildPaymentNotification(
+        releaseRecipientId,
+        payment.id,
+        payment.orderId,
+        NotificationType.INFO,
+        'Release decision recorded',
+        'An operator recorded a release decision on your payment. Metadata-only — not real money movement.',
+      ),
+    );
 
     return this.getAdminQueueItem(paymentId);
   }

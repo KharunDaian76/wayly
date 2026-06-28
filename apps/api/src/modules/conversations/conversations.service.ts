@@ -11,13 +11,14 @@ import type {
   ConversationDetail,
   ConversationListResponse,
 } from '@wayly/types';
-import { NotificationType } from '@wayly/types';
+import { NotificationEntityType, NotificationType } from '@wayly/types';
 import type { ConversationsListQueryInput, SendChatMessageInput } from '@wayly/validation';
 
 import { requireKycApproved } from '../../common/helpers/kyc-access.helper';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { orderNotificationLink } from '../notifications/notification.helpers';
 import { WaylerAccessService } from '../wayler-access/wayler-access.service';
 
 import {
@@ -162,10 +163,12 @@ export class ConversationsService {
 
     await this.notifications.createForUser({
       userId: recipientId,
-      type: NotificationType.SYSTEM,
+      type: NotificationType.INFO,
       title: 'New chat message',
       body: this.buildChatNotificationBody(body.body),
-      relatedOrderId: conversation.orderId,
+      entityType: NotificationEntityType.DELIVERY_ORDER,
+      entityId: conversation.orderId,
+      linkHref: orderNotificationLink(conversation.orderId),
     });
 
     return toChatMessageSummary(message);
