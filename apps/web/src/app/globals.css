@@ -573,6 +573,48 @@
     mask-image: radial-gradient(ellipse 75% 55% at 50% 38%, black 18%, transparent 72%);
   }
 
+  .wayly-route-network-grid {
+    background-image:
+      radial-gradient(hsl(var(--accent) / 0.1) 1px, transparent 1px),
+      linear-gradient(hsl(var(--border) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.07) 1px, transparent 1px);
+    background-size:
+      22px 22px,
+      44px 44px,
+      44px 44px;
+    mask-image: radial-gradient(ellipse 88% 68% at 50% 42%, black 12%, transparent 74%);
+  }
+
+  .wayly-route-network-card {
+    box-shadow:
+      0 0 0 1px hsl(var(--border) / 0.35),
+      0 10px 36px hsl(var(--primary) / 0.14);
+  }
+
+  .wayly-route-network-panel {
+    opacity: 0.5;
+  }
+
+  @media (min-width: 640px) {
+    .wayly-route-network-panel {
+      opacity: 0.62;
+    }
+  }
+
+  @keyframes wayly-route-line-pulse-keyframes {
+    0%,
+    100% {
+      stroke-opacity: 0.4;
+    }
+    50% {
+      stroke-opacity: 0.95;
+    }
+  }
+
+  .wayly-route-line-pulse {
+    animation: wayly-route-line-pulse-keyframes 3.5s ease-in-out infinite;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .wayly-landing-float,
     .wayly-landing-glow-blob,
@@ -584,6 +626,10 @@
 
     .wayly-landing-glow-card:hover {
       transform: none;
+    }
+
+    .wayly-route-line-pulse {
+      animation: none !important;
     }
   }
 }
