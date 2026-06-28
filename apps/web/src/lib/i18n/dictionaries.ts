@@ -1742,6 +1742,18 @@ const en = {
   'app.localSavedData.noSavedData': 'No local marketplace data saved in this browser.',
   'app.localSavedData.privacyNote':
     'We only store counts here — never the contents of your drafts.',
+  'app.helpSafetyCenter.title': 'Help & Safety Center',
+  'app.helpSafetyCenter.subtitle': 'Review public guidance before sending or accepting deliveries.',
+  'app.helpSafetyCenter.notice':
+    'These pages are general platform guidance — not legal advice. Follow local laws and transport/customs rules. Wayly does not guarantee refunds, payouts, insurance, or escrow.',
+  'app.helpSafetyCenter.helpCenter': 'Help Center',
+  'app.helpSafetyCenter.howItWorks': 'How It Works',
+  'app.helpSafetyCenter.trustCenter': 'Trust Center',
+  'app.helpSafetyCenter.faq': 'FAQ',
+  'app.helpSafetyCenter.restrictedItems': 'Restricted Items',
+  'app.helpSafetyCenter.fees': 'Fees & Payments',
+  'app.helpSafetyCenter.privacyLocalData': 'Privacy & Local Data',
+  'app.helpSafetyCenter.supportDisputes': 'Support & Disputes',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -3847,6 +3859,19 @@ const ru: Dictionary = {
   'app.localSavedData.noSavedData': 'В этом браузере нет сохранённых данных маркетплейса.',
   'app.localSavedData.privacyNote':
     'Здесь показываются только количества — не содержимое черновиков.',
+  'app.helpSafetyCenter.title': 'Справочный центр и безопасность',
+  'app.helpSafetyCenter.subtitle':
+    'Изучите публичные руководства перед отправкой или принятием доставок.',
+  'app.helpSafetyCenter.notice':
+    'Эти страницы — общее руководство платформы, не юридическая консультация. Соблюдайте местные законы и правила перевозки/таможни. Wayly не гарантирует возвраты, выплаты, страховку или escrow.',
+  'app.helpSafetyCenter.helpCenter': 'Справочный центр',
+  'app.helpSafetyCenter.howItWorks': 'Как это работает',
+  'app.helpSafetyCenter.trustCenter': 'Центр доверия',
+  'app.helpSafetyCenter.faq': 'FAQ',
+  'app.helpSafetyCenter.restrictedItems': 'Запрещённые предметы',
+  'app.helpSafetyCenter.fees': 'Тарифы и платежи',
+  'app.helpSafetyCenter.privacyLocalData': 'Конфиденциальность и локальные данные',
+  'app.helpSafetyCenter.supportDisputes': 'Поддержка и споры',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -5961,6 +5986,18 @@ const es: Dictionary = {
   'app.localSavedData.noSavedData': 'No hay datos locales del marketplace en este navegador.',
   'app.localSavedData.privacyNote':
     'Solo mostramos recuentos aquí — nunca el contenido de los borradores.',
+  'app.helpSafetyCenter.title': 'Centro de ayuda y seguridad',
+  'app.helpSafetyCenter.subtitle': 'Revisa la guía pública antes de enviar o aceptar entregas.',
+  'app.helpSafetyCenter.notice':
+    'Estas páginas son orientación general — no asesoramiento legal. Sigue leyes locales y normas de transporte/aduanas. Wayly no garantiza reembolsos, pagos, seguro ni escrow.',
+  'app.helpSafetyCenter.helpCenter': 'Centro de ayuda',
+  'app.helpSafetyCenter.howItWorks': 'Cómo funciona',
+  'app.helpSafetyCenter.trustCenter': 'Centro de confianza',
+  'app.helpSafetyCenter.faq': 'FAQ',
+  'app.helpSafetyCenter.restrictedItems': 'Artículos restringidos',
+  'app.helpSafetyCenter.fees': 'Tarifas y pagos',
+  'app.helpSafetyCenter.privacyLocalData': 'Privacidad y datos locales',
+  'app.helpSafetyCenter.supportDisputes': 'Soporte y disputas',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -8102,6 +8139,19 @@ const fr: Dictionary = {
     'Aucune donnée marketplace locale enregistrée dans ce navigateur.',
   'app.localSavedData.privacyNote':
     "Nous n'affichons ici que des comptes — jamais le contenu des brouillons.",
+  'app.helpSafetyCenter.title': "Centre d'aide et sécurité",
+  'app.helpSafetyCenter.subtitle':
+    "Consultez les guides publics avant d'envoyer ou d'accepter des livraisons.",
+  'app.helpSafetyCenter.notice':
+    'Ces pages sont une orientation générale — pas un conseil juridique. Respectez les lois locales et règles transport/douanes. Wayly ne garantit pas remboursements, paiements, assurance ou escrow.',
+  'app.helpSafetyCenter.helpCenter': "Centre d'aide",
+  'app.helpSafetyCenter.howItWorks': 'Comment ça marche',
+  'app.helpSafetyCenter.trustCenter': 'Centre de confiance',
+  'app.helpSafetyCenter.faq': 'FAQ',
+  'app.helpSafetyCenter.restrictedItems': 'Articles restreints',
+  'app.helpSafetyCenter.fees': 'Frais et paiements',
+  'app.helpSafetyCenter.privacyLocalData': 'Confidentialité et données locales',
+  'app.helpSafetyCenter.supportDisputes': 'Support et litiges',
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -10255,6 +10305,19 @@ const de: Dictionary = {
   'app.localSavedData.noSavedData':
     'Keine lokalen Marketplace-Daten in diesem Browser gespeichert.',
   'app.localSavedData.privacyNote': 'Wir zeigen hier nur Anzahlen — nie den Inhalt Ihrer Entwürfe.',
+  'app.helpSafetyCenter.title': 'Hilfe- & Sicherheits-Center',
+  'app.helpSafetyCenter.subtitle':
+    'Öffentliche Leitfäden vor dem Senden oder Annehmen von Lieferungen lesen.',
+  'app.helpSafetyCenter.notice':
+    'Diese Seiten sind allgemeine Plattform-Orientierung — keine Rechtsberatung. Beachten Sie lokale Gesetze und Transport/Zoll-Regeln. Wayly garantiert keine Erstattungen, Auszahlungen, Versicherung oder Escrow.',
+  'app.helpSafetyCenter.helpCenter': 'Hilfe-Center',
+  'app.helpSafetyCenter.howItWorks': 'So funktioniert es',
+  'app.helpSafetyCenter.trustCenter': 'Trust Center',
+  'app.helpSafetyCenter.faq': 'FAQ',
+  'app.helpSafetyCenter.restrictedItems': 'Eingeschränkte Artikel',
+  'app.helpSafetyCenter.fees': 'Gebühren & Zahlungen',
+  'app.helpSafetyCenter.privacyLocalData': 'Datenschutz & lokale Daten',
+  'app.helpSafetyCenter.supportDisputes': 'Support & Streitfälle',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -12343,6 +12406,19 @@ const tr: Dictionary = {
   'app.localSavedData.noSavedData': 'Bu tarayıcıda kayıtlı marketplace verisi yok.',
   'app.localSavedData.privacyNote':
     'Burada yalnızca sayılar gösterilir — taslak içerikleri asla gösterilmez.',
+  'app.helpSafetyCenter.title': 'Yardım ve güvenlik merkezi',
+  'app.helpSafetyCenter.subtitle':
+    'Göndermeden veya kabul etmeden önce public rehberleri inceleyin.',
+  'app.helpSafetyCenter.notice':
+    'Bu sayfalar genel platform rehberliğidir — hukuki tavsiye değil. Yerel yasa ve taşıma/gümrük kurallarına uyun. Wayly iade, ödeme, sigorta veya escrow garantisi vermez.',
+  'app.helpSafetyCenter.helpCenter': 'Yardım merkezi',
+  'app.helpSafetyCenter.howItWorks': 'Nasıl çalışır',
+  'app.helpSafetyCenter.trustCenter': 'Güven merkezi',
+  'app.helpSafetyCenter.faq': 'SSS',
+  'app.helpSafetyCenter.restrictedItems': 'Kısıtlı eşyalar',
+  'app.helpSafetyCenter.fees': 'Ücretler ve ödemeler',
+  'app.helpSafetyCenter.privacyLocalData': 'Gizlilik ve yerel veriler',
+  'app.helpSafetyCenter.supportDisputes': 'Destek ve anlaşmazlıklar',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -14353,6 +14429,18 @@ const ar: Dictionary = {
   'app.localSavedData.clearedAll': 'تم مسح جميع بيانات السوق المحلية من هذا المتصفح.',
   'app.localSavedData.noSavedData': 'لا توجد بيانات سوق محلية في هذا المتصفح.',
   'app.localSavedData.privacyNote': 'نعرض هنا الأعداد فقط — وليس محتوى المسودات.',
+  'app.helpSafetyCenter.title': 'مركز المساعدة والسلامة',
+  'app.helpSafetyCenter.subtitle': 'راجع الأدلة العامة قبل الإرسال أو قبول التسليمات.',
+  'app.helpSafetyCenter.notice':
+    'هذه الصفحات إرشاد عام للمنصة — وليست استشارة قانونية. اتبع القوانين المحلية وقواعد النقل/الجمارك. Wayly لا يضمن استرداداً أو دفعاً أو تأميناً أو escrow.',
+  'app.helpSafetyCenter.helpCenter': 'مركز المساعدة',
+  'app.helpSafetyCenter.howItWorks': 'كيف يعمل',
+  'app.helpSafetyCenter.trustCenter': 'مركز الثقة',
+  'app.helpSafetyCenter.faq': 'الأسئلة الشائعة',
+  'app.helpSafetyCenter.restrictedItems': 'العناصر المقيدة',
+  'app.helpSafetyCenter.fees': 'الرسوم والمدفوعات',
+  'app.helpSafetyCenter.privacyLocalData': 'الخصوصية والبيانات المحلية',
+  'app.helpSafetyCenter.supportDisputes': 'الدعم والنزاعات',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -16273,6 +16361,18 @@ const zh: Dictionary = {
   'app.localSavedData.clearedAll': '已从此浏览器清除所有本地 marketplace 数据。',
   'app.localSavedData.noSavedData': '此浏览器中没有保存的 marketplace 数据。',
   'app.localSavedData.privacyNote': '此处仅显示数量 — 从不显示草稿内容。',
+  'app.helpSafetyCenter.title': '帮助与安全中心',
+  'app.helpSafetyCenter.subtitle': '在发送或接受交付前查阅公开指南。',
+  'app.helpSafetyCenter.notice':
+    '这些页面为一般平台指引 — 非法律建议。请遵守当地法律及运输/海关规则。Wayly 不保证退款、payout、保险或托管。',
+  'app.helpSafetyCenter.helpCenter': '帮助中心',
+  'app.helpSafetyCenter.howItWorks': '如何运作',
+  'app.helpSafetyCenter.trustCenter': '信任中心',
+  'app.helpSafetyCenter.faq': '常见问题',
+  'app.helpSafetyCenter.restrictedItems': '受限物品',
+  'app.helpSafetyCenter.fees': '费用与支付',
+  'app.helpSafetyCenter.privacyLocalData': '隐私与本地数据',
+  'app.helpSafetyCenter.supportDisputes': '支持与争议',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',

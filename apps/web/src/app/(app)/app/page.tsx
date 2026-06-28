@@ -37,6 +37,7 @@ import {
   type AcceptedOrderDetailsPanelRole,
 } from '@/components/app/accepted-order-details-drawer';
 import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
+import { HelpSafetyCenterCard } from '@/components/app/help-safety-center-card';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
@@ -1790,6 +1791,8 @@ export default function AppHomePage() {
             {!isApproved ? <KycMarketplaceGateNotice {...kycGateProps} /> : null}
           </CardContent>
         </Card>
+
+        <HelpSafetyCenterCard />
 
         {mode === 'wayler' ? (
           <>
