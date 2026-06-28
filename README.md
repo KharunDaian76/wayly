@@ -20,8 +20,9 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 | [docs/trust-reviews-ratings-checkpoint.md](docs/trust-reviews-ratings-checkpoint.md)                   | **Checkpoint** — post-delivery reviews & ratings, admin moderation, trust signals only                                                   |
 | [docs/security-and-secrets-checkpoint.md](docs/security-and-secrets-checkpoint.md)                     | **Checkpoint** — secret handling, demo seed guards, deployment safety, rotation guidance                                                 |
 | [docs/rate-limiting-abuse-protection-checkpoint.md](docs/rate-limiting-abuse-protection-checkpoint.md) | **Checkpoint** — MVP API rate limits (auth, writes, admin, public), env tuning, production TODOs                                         |
+| [docs/demo-dashboard-ux-checkpoint.md](docs/demo-dashboard-ux-checkpoint.md)                           | **Checkpoint** — admin queue fixes, demo seed walkthrough data, light mode, logged-in app UX polish                                      |
 
-Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The nine **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
+Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The ten **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
 
 ### Recent local stack (checkpoint — not deployed)
 
@@ -36,6 +37,7 @@ The branch is **ahead of `origin/main`** with marketplace trust/discovery UX, lo
 7. [Trust Reviews & Ratings](docs/trust-reviews-ratings-checkpoint.md) — post-delivery reviews foundation, admin moderation queue, demo seed samples
 8. [Security & secrets hardening](docs/security-and-secrets-checkpoint.md) — demo seed guards, secret rotation, deployment safety
 9. [Rate limiting & abuse protection](docs/rate-limiting-abuse-protection-checkpoint.md) — MVP throttling policies, env vars, manual verification
+10. [Demo dashboard UX](docs/demo-dashboard-ux-checkpoint.md) — admin queue fixes, demo seed data, light mode, app polish
 
 ## Tech stack
 

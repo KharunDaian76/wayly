@@ -277,25 +277,34 @@ export function WaylerAccessPanel({ kycGate, onAccessChanged }: WaylerAccessPane
                 </>
               ) : (
                 <>
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    {t('app.waylerAccess.inactiveNote')}
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {t('app.waylerAvailabilityComposer.accessNote')}
-                  </p>
-                  {demoToolsEnabled ? (
-                    <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                      <Button
-                        size="sm"
-                        disabled={activating || loading}
-                        onClick={() => void handleMockActivate()}
-                      >
-                        {activating
-                          ? t('app.waylerAccess.activating')
-                          : t('app.waylerAccess.mockActivate')}
-                      </Button>
-                    </div>
-                  ) : null}
+                  <div className="mt-3 rounded-lg border border-primary/25 bg-primary/5 px-4 py-4">
+                    <p className="text-sm font-semibold text-foreground">
+                      {t('app.waylerAccess.demoAccessCardTitle')}
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {t('app.waylerAccess.demoAccessCardBody')}
+                    </p>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {t('app.waylerAccess.demoAccessCardNote')}
+                    </p>
+                    {demoToolsEnabled ? (
+                      <div className="mt-4">
+                        <Button
+                          size="sm"
+                          disabled={activating || loading}
+                          onClick={() => void handleMockActivate()}
+                        >
+                          {activating
+                            ? t('app.waylerAccess.activating')
+                            : t('app.waylerAccess.activateDemoAccess')}
+                        </Button>
+                      </div>
+                    ) : (
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        {t('app.waylerAccess.manualOnlyNote')}
+                      </p>
+                    )}
+                  </div>
                 </>
               )}
 

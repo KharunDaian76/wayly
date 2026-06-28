@@ -179,13 +179,13 @@ async function upsertDemoUser(params: {
 }
 
 async function cleanupDemoData(ids: DemoUserIds): Promise<void> {
+  const demoUserIds = [ids.adminId, ids.senderId, ids.waylerId];
+
   const demoOrderIds = (
     await prisma.deliveryOrder.findMany({
       where: {
-        OR: [
-          { senderId: ids.senderId, title: { startsWith: DEMO_TITLE_PREFIX } },
-          { acceptedWaylerId: ids.waylerId, title: { startsWith: DEMO_TITLE_PREFIX } },
-        ],
+        title: { startsWith: DEMO_TITLE_PREFIX },
+        OR: [{ senderId: { in: demoUserIds } }, { acceptedWaylerId: { in: demoUserIds } }],
       },
       select: { id: true },
     })
@@ -205,21 +205,21 @@ async function cleanupDemoData(ids: DemoUserIds): Promise<void> {
 
   await prisma.supportTicket.deleteMany({
     where: {
-      userId: { in: [ids.senderId, ids.waylerId] },
+      userId: { in: demoUserIds },
       subject: { startsWith: DEMO_TITLE_PREFIX },
     },
   });
 
   await prisma.waylerAvailabilityRequest.deleteMany({
     where: {
-      senderId: ids.senderId,
       title: { startsWith: DEMO_TITLE_PREFIX },
+      OR: [{ senderId: { in: demoUserIds } }, { waylerId: { in: demoUserIds } }],
     },
   });
 
   await prisma.waylerAvailability.deleteMany({
     where: {
-      waylerId: ids.waylerId,
+      waylerId: { in: demoUserIds },
       notes: { contains: DEMO_SEED_MARKER },
     },
   });
@@ -232,11 +232,53 @@ async function cleanupDemoData(ids: DemoUserIds): Promise<void> {
   });
 }
 
-async function seedAvailabilities(waylerId: string, now: Date): Promise<Map<string, string>> {
+async function seedAvailabilities(ids: DemoUserIds, now: Date): Promise<Map<string, string>> {
   const keys = new Map<string, string>();
-  const specs = [
+
+  type AvailabilitySpec = {
+    key: string;
+    owner: keyof DemoUserIds;
+    type: WaylerAvailabilityType;
+    originCountry: string;
+    originCity: string;
+    destinationCountry: string;
+    destinationCity: string;
+    maxPackages: number;
+    maxWeightKg: number;
+    tripDirection: TripDirection | null;
+    departureDays: number;
+  };
+
+  const specs: AvailabilitySpec[] = [
+    {
+      key: 'admin-amsterdam-local',
+      owner: 'adminId',
+      type: WaylerAvailabilityType.LOCAL_AVAILABILITY,
+      originCountry: 'NL',
+      originCity: 'Amsterdam',
+      destinationCountry: 'NL',
+      destinationCity: 'Amsterdam',
+      maxPackages: 2,
+      maxWeightKg: 8,
+      tripDirection: null,
+      departureDays: 9,
+    },
+    {
+      key: 'sender-london-local',
+      owner: 'senderId',
+      type: WaylerAvailabilityType.LOCAL_AVAILABILITY,
+      originCountry: 'GB',
+      originCity: 'London',
+      destinationCountry: 'GB',
+      destinationCity: 'London',
+      maxPackages: 2,
+      maxWeightKg: 6,
+      tripDirection: null,
+      departureDays: 8,
+    },
     {
       key: 'istanbul-nyc-trip',
+      owner: 'waylerId',
       type: WaylerAvailabilityType.TRIP_ROUTE,
       originCountry: 'TR',
       originCity: 'Istanbul',
@@ -249,6 +291,7 @@ async function seedAvailabilities(waylerId: string, now: Date): Promise<Map<stri
     },
     {
       key: 'berlin-paris-trip',
+      owner: 'waylerId',
       type: WaylerAvailabilityType.TRIP_ROUTE,
       originCountry: 'DE',
       originCity: 'Berlin',
@@ -261,6 +304,7 @@ async function seedAvailabilities(waylerId: string, now: Date): Promise<Map<stri
     },
     {
       key: 'bishkek-local',
+      owner: 'waylerId',
       type: WaylerAvailabilityType.LOCAL_AVAILABILITY,
       originCountry: 'KG',
       originCity: 'Bishkek',
@@ -273,6 +317,7 @@ async function seedAvailabilities(waylerId: string, now: Date): Promise<Map<stri
     },
     {
       key: 'istanbul-local',
+      owner: 'waylerId',
       type: WaylerAvailabilityType.LOCAL_AVAILABILITY,
       originCountry: 'TR',
       originCity: 'Istanbul',
@@ -285,6 +330,7 @@ async function seedAvailabilities(waylerId: string, now: Date): Promise<Map<stri
     },
     {
       key: 'nyc-local',
+      owner: 'waylerId',
       type: WaylerAvailabilityType.LOCAL_AVAILABILITY,
       originCountry: 'US',
       originCity: 'New York',
@@ -295,9 +341,10 @@ async function seedAvailabilities(waylerId: string, now: Date): Promise<Map<stri
       tripDirection: null,
       departureDays: 12,
     },
-  ] as const;
+  ];
 
   for (const spec of specs) {
+    const waylerId = ids[spec.owner];
     const availableFrom = addDays(now, spec.departureDays - 3);
     const availableTo = addDays(now, spec.departureDays + 5);
     const departureDate = addDays(now, spec.departureDays);
@@ -339,8 +386,55 @@ async function seedAvailabilityRequests(
 
   const requestSpecs = [
     {
+      key: 'req-to-admin-pending',
+      availabilityKey: 'admin-amsterdam-local',
+      senderKey: 'senderId' as const,
+      waylerKey: 'adminId' as const,
+      status: WaylerAvailabilityRequestStatus.PENDING,
+      title: demoTitle('To admin: Amsterdam parcel (pending)'),
+      packageDescription: 'Small parcel for demo admin incoming queue.',
+      pickupCountry: 'NL',
+      pickupCity: 'Amsterdam',
+      dropoffCountry: 'NL',
+      dropoffCity: 'Rotterdam',
+      rewardCents: 1800,
+      currency: 'EUR',
+    },
+    {
+      key: 'req-to-sender-pending',
+      availabilityKey: 'sender-london-local',
+      senderKey: 'waylerId' as const,
+      waylerKey: 'senderId' as const,
+      status: WaylerAvailabilityRequestStatus.PENDING,
+      title: demoTitle('To sender: London documents (pending)'),
+      packageDescription: 'Document pouch for sender incoming queue demo.',
+      pickupCountry: 'GB',
+      pickupCity: 'London',
+      dropoffCountry: 'GB',
+      dropoffCity: 'Manchester',
+      rewardCents: 2200,
+      currency: 'GBP',
+    },
+    {
+      key: 'req-to-wayler-admin',
+      availabilityKey: 'istanbul-nyc-trip',
+      senderKey: 'adminId' as const,
+      waylerKey: 'waylerId' as const,
+      status: WaylerAvailabilityRequestStatus.PENDING,
+      title: demoTitle('From admin: Istanbul sample (pending)'),
+      packageDescription: 'Admin-initiated request to wayler listing.',
+      pickupCountry: 'TR',
+      pickupCity: 'Istanbul',
+      dropoffCountry: 'US',
+      dropoffCity: 'New York',
+      rewardCents: 5000,
+      currency: 'USD',
+    },
+    {
       key: 'req-documents-pending',
       availabilityKey: 'istanbul-nyc-trip',
+      senderKey: 'senderId' as const,
+      waylerKey: 'waylerId' as const,
       status: WaylerAvailabilityRequestStatus.PENDING,
       title: demoTitle('Documents envelope (pending)'),
       packageDescription: 'Sealed documents envelope for demo review only.',
@@ -354,6 +448,8 @@ async function seedAvailabilityRequests(
     {
       key: 'req-books-accepted',
       availabilityKey: 'berlin-paris-trip',
+      senderKey: 'senderId' as const,
+      waylerKey: 'waylerId' as const,
       status: WaylerAvailabilityRequestStatus.ACCEPTED,
       title: demoTitle('Books package (accepted)'),
       packageDescription: 'Two paperback books in a small box.',
@@ -367,6 +463,8 @@ async function seedAvailabilityRequests(
     {
       key: 'req-gift-declined',
       availabilityKey: 'istanbul-local',
+      senderKey: 'senderId' as const,
+      waylerKey: 'waylerId' as const,
       status: WaylerAvailabilityRequestStatus.DECLINED,
       title: demoTitle('Gift package (declined)'),
       packageDescription: 'Small gift box with non-restricted items.',
@@ -380,6 +478,8 @@ async function seedAvailabilityRequests(
     {
       key: 'req-accessory-cancelled',
       availabilityKey: 'nyc-local',
+      senderKey: 'senderId' as const,
+      waylerKey: 'waylerId' as const,
       status: WaylerAvailabilityRequestStatus.CANCELLED,
       title: demoTitle('Electronics accessory (cancelled)'),
       packageDescription: 'Phone case and cable — allowed consumer accessory.',
@@ -398,14 +498,17 @@ async function seedAvailabilityRequests(
       continue;
     }
 
+    const senderId = ids[spec.senderKey];
+    const waylerId = ids[spec.waylerKey];
+
     const acceptedAt =
       spec.status === WaylerAvailabilityRequestStatus.ACCEPTED ? addDays(now, -2) : null;
 
     const request = await prisma.waylerAvailabilityRequest.create({
       data: {
         availabilityId,
-        senderId: ids.senderId,
-        waylerId: ids.waylerId,
+        senderId,
+        waylerId,
         status: spec.status,
         title: spec.title,
         packageDescription: spec.packageDescription,
@@ -579,6 +682,55 @@ async function seedSenderOrders(ids: DemoUserIds, now: Date): Promise<number> {
         publishedAt: now,
         notes: demoNotes('open-order'),
         packageSize: PackageSize.MEDIUM,
+      },
+    });
+    created += 1;
+  }
+
+  const crossAccountOpenSpecs = [
+    {
+      senderKey: 'adminId' as const,
+      title: demoTitle('Open: Admin Amsterdam to Brussels'),
+      pickupCountry: 'NL',
+      pickupCity: 'Amsterdam',
+      dropoffCountry: 'BE',
+      dropoffCity: 'Brussels',
+      currency: 'EUR',
+      reward: 45,
+    },
+    {
+      senderKey: 'waylerId' as const,
+      title: demoTitle('Open: Wayler Rome to Milan'),
+      pickupCountry: 'IT',
+      pickupCity: 'Rome',
+      dropoffCountry: 'IT',
+      dropoffCity: 'Milan',
+      currency: 'EUR',
+      reward: 38,
+    },
+  ] as const;
+
+  for (const spec of crossAccountOpenSpecs) {
+    await prisma.deliveryOrder.create({
+      data: {
+        senderId: ids[spec.senderKey],
+        status: DeliveryOrderStatus.OPEN,
+        type:
+          spec.pickupCountry !== spec.dropoffCountry
+            ? DeliveryOrderType.INTERNATIONAL
+            : DeliveryOrderType.LOCAL,
+        sourceType: DeliveryOrderSource.SENDER_POSTED_ORDER,
+        title: spec.title,
+        description: 'Demo open order from another demo account for Wayler accept testing.',
+        pickupCountry: spec.pickupCountry,
+        pickupCity: spec.pickupCity,
+        dropoffCountry: spec.dropoffCountry,
+        dropoffCity: spec.dropoffCity,
+        currency: spec.currency,
+        offeredRewardAmount: new Prisma.Decimal(spec.reward),
+        publishedAt: now,
+        notes: demoNotes('cross-open-order'),
+        packageSize: PackageSize.SMALL,
       },
     });
     created += 1;
@@ -825,7 +977,7 @@ async function seedChats(ids: DemoUserIds): Promise<{ conversations: number; mes
   return { conversations, messages };
 }
 
-async function seedWaylerAccess(waylerId: string, now: Date): Promise<number> {
+async function seedWaylerAccess(waylerId: string, now: Date): Promise<void> {
   const accessDate = utcDayStart(now);
   const startsAt = accessDate;
   const expiresAt = nextUtcDayStart(now);
@@ -863,8 +1015,13 @@ async function seedWaylerAccess(waylerId: string, now: Date): Promise<number> {
       providerPaymentId: 'demo-seed-mock-manual',
     },
   });
+}
 
-  return 1;
+async function seedWaylerAccessForAll(ids: DemoUserIds, now: Date): Promise<number> {
+  for (const userId of [ids.adminId, ids.senderId, ids.waylerId]) {
+    await seedWaylerAccess(userId, now);
+  }
+  return 3;
 }
 
 async function seedSupportTickets(
@@ -1283,11 +1440,11 @@ async function main(): Promise<void> {
 
   await cleanupDemoData(ids);
 
-  const availabilityIds = await seedAvailabilities(waylerId, now);
+  const availabilityIds = await seedAvailabilities(ids, now);
   const requestResult = await seedAvailabilityRequests(ids, availabilityIds, now);
   const ordersFromSender = await seedSenderOrders(ids, now);
   const chatResult = await seedChats(ids);
-  const accessPasses = await seedWaylerAccess(waylerId, now);
+  const accessPasses = await seedWaylerAccessForAll(ids, now);
   const ticketResult = await seedSupportTickets(ids, now);
   const paymentIntents = await seedMockPaymentIntents(ids, now);
   const notifications = await seedDemoNotifications(ids, now);

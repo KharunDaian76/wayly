@@ -25,6 +25,7 @@ import {
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
+import { safePanelErrorMessage } from '@/lib/api/safe-error-message';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
@@ -205,7 +206,7 @@ export function AdminSupportTicketsQueuePanel({
       setLoadedOnce(true);
     } catch (error) {
       setLoadError(
-        error instanceof ApiError ? error.message : t('app.admin.supportTickets.loadError'),
+        safePanelErrorMessage(error, { fallbackKey: 'app.admin.supportTickets.loadError', t }),
       );
     } finally {
       setLoading(false);

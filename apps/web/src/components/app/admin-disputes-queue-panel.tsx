@@ -25,6 +25,7 @@ import {
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
+import { safePanelErrorMessage } from '@/lib/api/safe-error-message';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
@@ -208,8 +209,10 @@ export function AdminDisputesQueuePanel({
         setPage(response.page);
         setTotal(response.total);
         setLoadedOnce(true);
-      } catch {
-        setLoadError(t('app.admin.disputesLoadFailed'));
+      } catch (error) {
+        setLoadError(
+          safePanelErrorMessage(error, { fallbackKey: 'app.admin.disputesLoadFailed', t }),
+        );
       } finally {
         setLoading(false);
       }

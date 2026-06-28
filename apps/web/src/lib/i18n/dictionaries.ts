@@ -188,6 +188,11 @@ const en = {
     'Review open marketplace disputes and resolve them with a decision note. No payment or order actions are performed.',
   'app.admin.disputesLoading': 'Loading disputes…',
   'app.admin.disputesLoadFailed': 'Could not load the disputes queue.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'Retry',
   'app.admin.refreshDisputes': 'Refresh queue',
   'app.admin.readOnlyQueue': 'Read-only queue',
@@ -1959,6 +1964,12 @@ const en = {
   'app.admin.reviews.tags': 'Tags',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.active': 'Active',
   'app.waylerAccess.inactive': 'Inactive',
   'app.waylerAccess.activeNote': 'You have mock/manual work access for today.',
@@ -2800,6 +2811,11 @@ const ru: Dictionary = {
     'Просмотр и разрешение споров с примечанием к решению. Платёжные и заказные действия не выполняются.',
   'app.admin.disputesLoading': 'Загрузка споров…',
   'app.admin.disputesLoadFailed': 'Не удалось загрузить очередь споров.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'Повторить',
   'app.admin.refreshDisputes': 'Обновить очередь',
   'app.admin.readOnlyQueue': 'Очередь только для чтения',
@@ -4589,6 +4605,12 @@ const ru: Dictionary = {
   'app.waylerAccess.activeNote': 'У вас есть тестовый/ручной доступ к работе на сегодня.',
   'app.waylerAccess.inactiveNote':
     'Позже для принятия/контакта/чата потребуется доступ на сегодня.',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Тестовая активация доступа на сегодня (€1)',
   'app.waylerAccess.activating': 'Активация…',
   'app.waylerAccess.activateSuccess': 'Доступ к работе на сегодня активирован.',
@@ -5419,6 +5441,11 @@ const es: Dictionary = {
     'Revise y resuelva disputas del marketplace con una nota de decisión. No se realizan acciones de pago ni de pedido.',
   'app.admin.disputesLoading': 'Cargando disputas…',
   'app.admin.disputesLoadFailed': 'No se pudo cargar la cola de disputas.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'Reintentar',
   'app.admin.refreshDisputes': 'Actualizar cola',
   'app.admin.readOnlyQueue': 'Cola de solo lectura',
@@ -7216,6 +7243,12 @@ const es: Dictionary = {
   'app.waylerAccess.activeNote': 'Tienes acceso de trabajo simulado/manual para hoy.',
   'app.waylerAccess.inactiveNote':
     'Más adelante, aceptar/contactar/chatear requerirá el acceso de hoy.',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Activar acceso simulado de hoy (€1)',
   'app.waylerAccess.activating': 'Activando…',
   'app.waylerAccess.activateSuccess': 'Acceso de trabajo de hoy activado.',
@@ -8047,6 +8080,11 @@ const fr: Dictionary = {
     'Examinez et résolvez les litiges du marketplace avec une note de décision. Aucune action de paiement ou de commande.',
   'app.admin.disputesLoading': 'Chargement des litiges…',
   'app.admin.disputesLoadFailed': 'Impossible de charger la file de litiges.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'Réessayer',
   'app.admin.refreshDisputes': 'Actualiser la file',
   'app.admin.readOnlyQueue': 'File en lecture seule',
@@ -9870,6 +9908,12 @@ const fr: Dictionary = {
   'app.waylerAccess.activeNote': "Vous avez un accès de travail simulé/manuel pour aujourd'hui.",
   'app.waylerAccess.inactiveNote':
     "Plus tard, accepter/contacter/chatter nécessitera l'accès du jour.",
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': "Activer l'accès simulé du jour (€1)",
   'app.waylerAccess.activating': 'Activation…',
   'app.waylerAccess.activateSuccess': 'Accès de travail du jour activé.',
@@ -10706,6 +10750,11 @@ const de: Dictionary = {
     'Marktplatz-Streitfälle prüfen und mit Entscheidungsnotiz abschließen. Keine Zahlungs- oder Bestellaktionen.',
   'app.admin.disputesLoading': 'Streitfälle werden geladen…',
   'app.admin.disputesLoadFailed': 'Streitfall-Warteschlange konnte nicht geladen werden.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'Erneut versuchen',
   'app.admin.refreshDisputes': 'Warteschlange aktualisieren',
   'app.admin.readOnlyQueue': 'Nur-Lese-Warteschlange',
@@ -12535,6 +12584,12 @@ const de: Dictionary = {
   'app.waylerAccess.inactive': 'Inaktiv',
   'app.waylerAccess.activeNote': 'Sie haben heute simulierten/manuellen Arbeitszugang.',
   'app.waylerAccess.inactiveNote': 'Später erfordern Annehmen/Kontakt/Chat den heutigen Zugang.',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Simulierten Tageszugang aktivieren (€1)',
   'app.waylerAccess.activating': 'Aktivierung…',
   'app.waylerAccess.activateSuccess': 'Heutiger Arbeitszugang aktiviert.',
@@ -13352,6 +13407,11 @@ const tr: Dictionary = {
     'Pazar yeri anlaşmazlıklarını karar notuyla inceleyin ve çözün. Ödeme veya sipariş işlemi yapılmaz.',
   'app.admin.disputesLoading': 'Anlaşmazlıklar yükleniyor…',
   'app.admin.disputesLoadFailed': 'Anlaşmazlık kuyruğu yüklenemedi.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'Yeniden dene',
   'app.admin.refreshDisputes': 'Kuyruğu yenile',
   'app.admin.readOnlyQueue': 'Salt okunur kuyruk',
@@ -15135,6 +15195,12 @@ const tr: Dictionary = {
   'app.waylerAccess.activeNote': 'Bugün için simüle/manuel iş erişiminiz var.',
   'app.waylerAccess.inactiveNote':
     'Daha sonra kabul/iletişim/sohbet için bugünkü erişim gerekecek.',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Bugünkü erişimi simüle et (€1)',
   'app.waylerAccess.activating': 'Etkinleştiriliyor…',
   'app.waylerAccess.activateSuccess': 'Bugünkü iş erişimi etkinleştirildi.',
@@ -15939,6 +16005,11 @@ const ar: Dictionary = {
     'راجع نزاعات السوق وقم بحلها بملاحظة قرار. لا تُنفَّذ إجراءات دفع أو طلب.',
   'app.admin.disputesLoading': 'جارٍ تحميل النزاعات…',
   'app.admin.disputesLoadFailed': 'تعذّر تحميل قائمة النزاعات.',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': 'إعادة المحاولة',
   'app.admin.refreshDisputes': 'تحديث القائمة',
   'app.admin.readOnlyQueue': 'قائمة للقراءة فقط',
@@ -17647,6 +17718,12 @@ const ar: Dictionary = {
   'app.admin.reviews.tags': 'Tags',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.active': 'نشط',
   'app.waylerAccess.inactive': 'غير نشط',
   'app.waylerAccess.activeNote': 'لديك وصول عمل تجريبي/يدوي لليوم.',
@@ -18435,6 +18512,11 @@ const zh: Dictionary = {
   'app.admin.disputesQueueBody': '查看并解决市场争议，需填写决策说明。不会执行支付或订单操作。',
   'app.admin.disputesLoading': '正在加载争议…',
   'app.admin.disputesLoadFailed': '无法加载争议队列。',
+  'app.admin.accessRequired': 'Admin access required.',
+  'app.admin.rateLimitExceeded': 'Too many requests. Please wait and try again.',
+  'app.admin.demoDataNote':
+    'Demo data may use mock/manual flows — not real payments, escrow, or emergency support.',
+  'app.admin.queueEmptyTitle': 'No items in queue',
   'app.admin.retryDisputes': '重试',
   'app.admin.refreshDisputes': '刷新队列',
   'app.admin.readOnlyQueue': '只读队列',
@@ -20061,6 +20143,12 @@ const zh: Dictionary = {
   'app.admin.reviews.tags': 'Tags',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
+  'app.waylerAccess.demoAccessCardTitle': 'Wayler work access required',
+  'app.waylerAccess.demoAccessCardBody':
+    "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
+  'app.waylerAccess.demoAccessCardNote':
+    'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.active': '有效',
   'app.waylerAccess.inactive': '无效',
   'app.waylerAccess.activeNote': '您今日拥有模拟/手动工作权限。',

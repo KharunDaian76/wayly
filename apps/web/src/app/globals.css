@@ -141,11 +141,94 @@
 
   .wayly-app-panel {
     border-color: hsl(var(--border) / 0.55);
-    background: hsl(var(--card) / 0.82);
+    background: hsl(var(--card) / 0.95);
     box-shadow:
       0 1px 2px hsl(var(--foreground) / 0.04),
       0 6px 28px hsl(var(--foreground) / 0.06);
     backdrop-filter: blur(8px);
+  }
+
+  :root:not(.dark) .wayly-app-panel {
+    background: hsl(var(--card));
+    border-color: hsl(var(--border));
+    box-shadow:
+      0 1px 3px hsl(var(--foreground) / 0.06),
+      0 8px 24px hsl(var(--primary) / 0.04);
+  }
+
+  :root:not(.dark) .wayly-app-header {
+    background: hsl(var(--card));
+    border-color: hsl(var(--border));
+  }
+
+  :root:not(.dark) .wayly-order-card {
+    background: hsl(var(--card));
+    border-color: hsl(var(--border));
+  }
+
+  :root:not(.dark) .wayly-order-card:hover {
+    border-color: hsl(var(--primary) / 0.35);
+    box-shadow: 0 8px 24px hsl(var(--primary) / 0.08);
+    transform: translateY(-1px);
+  }
+
+  .wayly-order-card {
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .wayly-panel-error {
+    border-color: hsl(var(--danger) / 0.35);
+    background: hsl(var(--danger) / 0.08);
+    color: hsl(var(--danger));
+  }
+
+  :root:not(.dark) .wayly-panel-error {
+    background: hsl(var(--danger) / 0.06);
+    color: hsl(0 72% 40%);
+  }
+
+  .wayly-empty-state {
+    animation: wayly-fade-in-up 0.45s ease both;
+  }
+
+  .wayly-skeleton-enter {
+    animation: wayly-fade-in 0.35s ease both;
+  }
+
+  @keyframes wayly-fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes wayly-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wayly-empty-state,
+    .wayly-skeleton-enter,
+    .wayly-order-card {
+      animation: none;
+      transition: none;
+    }
+
+    .wayly-order-card:hover {
+      transform: none;
+    }
   }
 
   .dark .wayly-app-panel {
@@ -174,6 +257,10 @@
     background: hsl(var(--card) / 0.65);
     box-shadow: 0 1px 3px hsl(var(--foreground) / 0.04);
     backdrop-filter: blur(4px);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
   }
 
   .wayly-order-card:hover {

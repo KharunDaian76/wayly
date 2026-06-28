@@ -28,6 +28,7 @@ import {
   RequestsListSkeleton,
 } from '@/components/app/panel-status-states';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
+import { safePanelErrorMessage } from '@/lib/api/safe-error-message';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
@@ -239,8 +240,10 @@ export function AdminSystemHealthPanel({
       const response = await api.admin.getSystemHealth();
       setSnapshot(response);
       setLoadedOnce(true);
-    } catch {
-      setLoadError(t('app.admin.systemHealthLoadFailed'));
+    } catch (error) {
+      setLoadError(
+        safePanelErrorMessage(error, { fallbackKey: 'app.admin.systemHealthLoadFailed', t }),
+      );
     } finally {
       setLoading(false);
     }
@@ -256,8 +259,10 @@ export function AdminSystemHealthPanel({
         setAuditPage(response.page);
         setAuditTotal(response.total);
         setAuditLoadedOnce(true);
-      } catch {
-        setAuditLoadError(t('app.admin.adminAuditLogLoadFailed'));
+      } catch (error) {
+        setAuditLoadError(
+          safePanelErrorMessage(error, { fallbackKey: 'app.admin.adminAuditLogLoadFailed', t }),
+        );
       } finally {
         setAuditLoading(false);
       }

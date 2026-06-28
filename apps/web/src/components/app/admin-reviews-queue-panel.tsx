@@ -15,6 +15,7 @@ import {
 } from '@/components/app/panel-status-states';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import { useI18n } from '@/lib/i18n/i18n-context';
+import { safePanelErrorMessage } from '@/lib/api/safe-error-message';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
@@ -130,7 +131,7 @@ export function AdminReviewsQueuePanel({
       setItems(response.items);
       setLoadedOnce(true);
     } catch (error) {
-      setLoadError(error instanceof ApiError ? error.message : t('app.admin.reviews.error'));
+      setLoadError(safePanelErrorMessage(error, { fallbackKey: 'app.admin.reviews.error', t }));
     } finally {
       setLoading(false);
     }

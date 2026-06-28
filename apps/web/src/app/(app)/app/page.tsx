@@ -70,6 +70,7 @@ import { WaylerAvailabilityPanel } from '@/components/app/wayler-availability-pa
 import { WaylerIncomingRequestsPanel } from '@/components/app/wayler-incoming-requests-panel';
 import { WaylerNextBestActions } from '@/components/app/wayler-next-best-actions';
 import { LanguageSelect } from '@/components/language-select';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
@@ -1760,6 +1761,7 @@ export default function AppHomePage() {
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <LanguageSelect />
+            <ThemeToggle />
             <NotificationBell onFocusOrder={focusAcceptedOrderFromNotification} />
             <Button variant="outline" asChild>
               <Link href="/">{t('common.backToHome')}</Link>
