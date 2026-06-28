@@ -1754,6 +1754,24 @@ const en = {
   'app.helpSafetyCenter.fees': 'Fees & Payments',
   'app.helpSafetyCenter.privacyLocalData': 'Privacy & Local Data',
   'app.helpSafetyCenter.supportDisputes': 'Support & Disputes',
+  'app.roleStarter.title': 'Getting started checklist',
+  'app.roleStarter.subtitle': 'A quick path for your first delivery on Wayly.',
+  'app.roleStarter.senderBadge': 'Sender',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'Getting started',
+  'app.roleStarter.senderSteps':
+    'Review How It Works before posting.\nCheck Restricted Items for what you can send.\nSearch for Waylers or browse routes in the app.\nSend a clear request with timing and handoff details.\nKeep chat and payment-related agreements inside Wayly.\nUse proof and dispute tools if something goes wrong.',
+  'app.roleStarter.waylerSteps':
+    'Review How It Works before accepting work.\nComplete verification/KYC if the app requires it.\nPublish local availability or a trip route listing.\nAccept only clear and safe requests you can carry legally.\nCheck Restricted Items before agreeing to carry something.\nKeep proof and issue records inside Wayly.',
+  'app.roleStarter.generalSteps':
+    'Choose Sender or Wayler mode above.\nReview How It Works and public guidance.\nCheck Restricted Items before sending or carrying anything.\nKeep agreements, proof, and issue records inside Wayly.',
+  'app.roleStarter.notice':
+    'General guidance only — not legal advice. Follow local laws and transport/customs rules. Wayly does not guarantee refunds, payouts, insurance, or escrow.',
+  'app.roleStarter.howItWorks': 'How It Works',
+  'app.roleStarter.trustCenter': 'Trust Center',
+  'app.roleStarter.restrictedItems': 'Restricted Items',
+  'app.roleStarter.fees': 'Fees & Payments',
+  'app.roleStarter.supportDisputes': 'Support & Disputes',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -3872,6 +3890,24 @@ const ru: Dictionary = {
   'app.helpSafetyCenter.fees': 'Тарифы и платежи',
   'app.helpSafetyCenter.privacyLocalData': 'Конфиденциальность и локальные данные',
   'app.helpSafetyCenter.supportDisputes': 'Поддержка и споры',
+  'app.roleStarter.title': 'Чеклист для старта',
+  'app.roleStarter.subtitle': 'Краткий путь к первой доставке в Wayly.',
+  'app.roleStarter.senderBadge': 'Отправитель',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'Старт',
+  'app.roleStarter.senderSteps':
+    'Изучите «Как это работает» перед публикацией.\nПроверьте «Запрещённые предметы».\nИщите Wayler или просматривайте маршруты в приложении.\nОтправьте чёткий запрос со сроками и деталями передачи.\nДержите чат и платёжные договорённости в Wayly.\nИспользуйте proof и споры, если что-то пошло не так.',
+  'app.roleStarter.waylerSteps':
+    'Изучите «Как это работает» перед принятием работы.\nПройдите верификацию/KYC, если приложение требует.\nОпубликуйте локальную доступность или маршрут.\nПринимайте только чёткие и безопасные запросы, которые можете нести законно.\nПроверьте «Запрещённые предметы» перед согласием.\nХраните proof и записи о проблемах в Wayly.',
+  'app.roleStarter.generalSteps':
+    'Выберите режим Отправитель или Wayler выше.\nИзучите «Как это работает» и публичные руководства.\nПроверьте «Запрещённые предметы» перед отправкой или перевозкой.\nДержите договорённости, proof и записи о проблемах в Wayly.',
+  'app.roleStarter.notice':
+    'Общее руководство — не юридическая консультация. Соблюдайте местные законы и правила перевозки/таможни. Wayly не гарантирует возвраты, выплаты, страховку или escrow.',
+  'app.roleStarter.howItWorks': 'Как это работает',
+  'app.roleStarter.trustCenter': 'Центр доверия',
+  'app.roleStarter.restrictedItems': 'Запрещённые предметы',
+  'app.roleStarter.fees': 'Тарифы и платежи',
+  'app.roleStarter.supportDisputes': 'Поддержка и споры',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -5998,6 +6034,24 @@ const es: Dictionary = {
   'app.helpSafetyCenter.fees': 'Tarifas y pagos',
   'app.helpSafetyCenter.privacyLocalData': 'Privacidad y datos locales',
   'app.helpSafetyCenter.supportDisputes': 'Soporte y disputas',
+  'app.roleStarter.title': 'Lista de inicio',
+  'app.roleStarter.subtitle': 'Un camino rápido para tu primera entrega en Wayly.',
+  'app.roleStarter.senderBadge': 'Remitente',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'Primeros pasos',
+  'app.roleStarter.senderSteps':
+    'Revisa Cómo funciona antes de publicar.\nConsulta Artículos restringidos.\nBusca Waylers o explora rutas en la app.\nEnvía una solicitud clara con plazos y detalles de entrega.\nMantén chat y acuerdos de pago dentro de Wayly.\nUsa proof y disputas si algo sale mal.',
+  'app.roleStarter.waylerSteps':
+    'Revisa Cómo funciona antes de aceptar trabajo.\nCompleta verificación/KYC si la app lo requiere.\nPublica disponibilidad local o un anuncio de ruta.\nAcepta solo solicitudes claras y seguras que puedas transportar legalmente.\nConsulta Artículos restringidos antes de aceptar.\nMantén proof y registros de problemas dentro de Wayly.',
+  'app.roleStarter.generalSteps':
+    'Elige modo Remitente o Wayler arriba.\nRevisa Cómo funciona y la guía pública.\nConsulta Artículos restringidos antes de enviar o transportar.\nMantén acuerdos, proof y registros de problemas dentro de Wayly.',
+  'app.roleStarter.notice':
+    'Orientación general — no asesoramiento legal. Sigue leyes locales y normas de transporte/aduanas. Wayly no garantiza reembolsos, pagos, seguro ni escrow.',
+  'app.roleStarter.howItWorks': 'Cómo funciona',
+  'app.roleStarter.trustCenter': 'Centro de confianza',
+  'app.roleStarter.restrictedItems': 'Artículos restringidos',
+  'app.roleStarter.fees': 'Tarifas y pagos',
+  'app.roleStarter.supportDisputes': 'Soporte y disputas',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -8152,6 +8206,24 @@ const fr: Dictionary = {
   'app.helpSafetyCenter.fees': 'Frais et paiements',
   'app.helpSafetyCenter.privacyLocalData': 'Confidentialité et données locales',
   'app.helpSafetyCenter.supportDisputes': 'Support et litiges',
+  'app.roleStarter.title': 'Liste de démarrage',
+  'app.roleStarter.subtitle': 'Un parcours rapide pour votre première livraison sur Wayly.',
+  'app.roleStarter.senderBadge': 'Expéditeur',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'Premiers pas',
+  'app.roleStarter.senderSteps':
+    "Consultez Comment ça marche avant de publier.\nVérifiez Articles restreints.\nCherchez des Waylers ou parcourez les routes dans l'app.\nEnvoyez une demande claire avec délais et détails de remise.\nGardez chat et accords de paiement dans Wayly.\nUtilisez proof et litiges si quelque chose va mal.",
+  'app.roleStarter.waylerSteps':
+    "Consultez Comment ça marche avant d'accepter du travail.\nComplétez vérification/KYC si l'app l'exige.\nPubliez une disponibilité locale ou une annonce de route.\nAcceptez seulement des demandes claires et sûres transportables légalement.\nVérifiez Articles restreints avant d'accepter.\nGardez proof et enregistrements de problèmes dans Wayly.",
+  'app.roleStarter.generalSteps':
+    "Choisissez le mode Expéditeur ou Wayler ci-dessus.\nConsultez Comment ça marche et les guides publics.\nVérifiez Articles restreints avant d'envoyer ou transporter.\nGardez accords, proof et enregistrements de problèmes dans Wayly.",
+  'app.roleStarter.notice':
+    'Orientation générale — pas conseil juridique. Respectez lois locales et règles transport/douanes. Wayly ne garantit pas remboursements, paiements, assurance ou escrow.',
+  'app.roleStarter.howItWorks': 'Comment ça marche',
+  'app.roleStarter.trustCenter': 'Centre de confiance',
+  'app.roleStarter.restrictedItems': 'Articles restreints',
+  'app.roleStarter.fees': 'Frais et paiements',
+  'app.roleStarter.supportDisputes': 'Support et litiges',
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -10318,6 +10390,24 @@ const de: Dictionary = {
   'app.helpSafetyCenter.fees': 'Gebühren & Zahlungen',
   'app.helpSafetyCenter.privacyLocalData': 'Datenschutz & lokale Daten',
   'app.helpSafetyCenter.supportDisputes': 'Support & Streitfälle',
+  'app.roleStarter.title': 'Starter-Checkliste',
+  'app.roleStarter.subtitle': 'Ein schneller Weg zu Ihrer ersten Lieferung auf Wayly.',
+  'app.roleStarter.senderBadge': 'Absender',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'Erste Schritte',
+  'app.roleStarter.senderSteps':
+    'Lesen Sie So funktioniert es vor dem Posten.\nPrüfen Sie Eingeschränkte Artikel.\nSuchen Sie Wayler oder durchsuchen Sie Routen in der App.\nSenden Sie eine klare Anfrage mit Zeiten und Übergabedetails.\nHalten Sie Chat und Zahlungsvereinbarungen in Wayly.\nNutzen Sie Proof- und Streitfall-Tools bei Problemen.',
+  'app.roleStarter.waylerSteps':
+    'Lesen Sie So funktioniert es vor Annahme.\nSchließen Sie Verifizierung/KYC ab, wenn die App es verlangt.\nVeröffentlichen Sie lokale Verfügbarkeit oder eine Routen-Anzeige.\nNehmen Sie nur klare, sichere Anfragen an, die Sie legal tragen können.\nPrüfen Sie Eingeschränkte Artikel vor Zustimmung.\nHalten Sie Proof- und Problemaufzeichnungen in Wayly.',
+  'app.roleStarter.generalSteps':
+    'Wählen Sie oben Absender- oder Wayler-Modus.\nLesen Sie So funktioniert es und öffentliche Leitfäden.\nPrüfen Sie Eingeschränkte Artikel vor Senden oder Tragen.\nHalten Sie Vereinbarungen, Proof und Problemaufzeichnungen in Wayly.',
+  'app.roleStarter.notice':
+    'Allgemeine Orientierung — keine Rechtsberatung. Beachten Sie lokale Gesetze und Transport/Zoll-Regeln. Wayly garantiert keine Erstattungen, Auszahlungen, Versicherung oder Escrow.',
+  'app.roleStarter.howItWorks': 'So funktioniert es',
+  'app.roleStarter.trustCenter': 'Trust Center',
+  'app.roleStarter.restrictedItems': 'Eingeschränkte Artikel',
+  'app.roleStarter.fees': 'Gebühren & Zahlungen',
+  'app.roleStarter.supportDisputes': 'Support & Streitfälle',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -12419,6 +12509,24 @@ const tr: Dictionary = {
   'app.helpSafetyCenter.fees': 'Ücretler ve ödemeler',
   'app.helpSafetyCenter.privacyLocalData': 'Gizlilik ve yerel veriler',
   'app.helpSafetyCenter.supportDisputes': 'Destek ve anlaşmazlıklar',
+  'app.roleStarter.title': 'Başlangıç kontrol listesi',
+  'app.roleStarter.subtitle': "Wayly'de ilk teslimatınız için hızlı yol haritası.",
+  'app.roleStarter.senderBadge': 'Gönderici',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'Başlangıç',
+  'app.roleStarter.senderSteps':
+    'Yayınlamadan önce Nasıl çalışır bölümünü okuyun.\nKısıtlı eşyaları kontrol edin.\nUygulamada Wayler arayın veya rotalara göz atın.\nZamanlama ve teslim detaylarıyla net bir talep gönderin.\nSohbet ve ödeme anlaşmalarını Wayly içinde tutun.\nBir sorun olursa proof ve anlaşmazlık araçlarını kullanın.',
+  'app.roleStarter.waylerSteps':
+    'Kabul etmeden önce Nasıl çalışır bölümünü okuyun.\nUygulama gerektiriyorsa doğrulama/KYC tamamlayın.\nYerel müsaitlik veya rota ilanı yayınlayın.\nYalnızca yasal olarak taşıyabileceğiniz net ve güvenli talepleri kabul edin.\nKabul etmeden önce Kısıtlı eşyaları kontrol edin.\nProof ve sorun kayıtlarını Wayly içinde tutun.',
+  'app.roleStarter.generalSteps':
+    'Yukarıdan Gönderici veya Wayler modunu seçin.\nNasıl çalışır ve public rehberleri okuyun.\nGöndermeden veya taşımadan önce Kısıtlı eşyaları kontrol edin.\nAnlaşmaları, proof ve sorun kayıtlarını Wayly içinde tutun.',
+  'app.roleStarter.notice':
+    'Genel rehberlik — hukuki tavsiye değil. Yerel yasa ve taşıma/gümrük kurallarına uyun. Wayly iade, ödeme, sigorta veya escrow garantisi vermez.',
+  'app.roleStarter.howItWorks': 'Nasıl çalışır',
+  'app.roleStarter.trustCenter': 'Güven merkezi',
+  'app.roleStarter.restrictedItems': 'Kısıtlı eşyalar',
+  'app.roleStarter.fees': 'Ücretler ve ödemeler',
+  'app.roleStarter.supportDisputes': 'Destek ve anlaşmazlıklar',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -14441,6 +14549,24 @@ const ar: Dictionary = {
   'app.helpSafetyCenter.fees': 'الرسوم والمدفوعات',
   'app.helpSafetyCenter.privacyLocalData': 'الخصوصية والبيانات المحلية',
   'app.helpSafetyCenter.supportDisputes': 'الدعم والنزاعات',
+  'app.roleStarter.title': 'قائمة البدء',
+  'app.roleStarter.subtitle': 'مسار سريع لأول تسليم لك على Wayly.',
+  'app.roleStarter.senderBadge': 'مرسل',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': 'البدء',
+  'app.roleStarter.senderSteps':
+    'راجع كيف يعمل قبل النشر.\nتحقق من العناصر المقيدة.\nابحث عن Wayler أو تصفح المسارات في التطبيق.\nأرسل طلباً واضحاً مع التوقيت وتفاصيل التسليم.\nأبقِ الدردشة واتفاقات الدفع داخل Wayly.\nاستخدم أدوات الإثبات والنزاع عند حدوث مشكلة.',
+  'app.roleStarter.waylerSteps':
+    'راجع كيف يعمل قبل قبول العمل.\nأكمل التحقق/KYC إذا طلب التطبيق ذلك.\nانشر توفراً محلياً أو إعلان مسار.\nاقبل فقط طلبات واضحة وآمنة يمكنك حملها قانونياً.\nتحقق من العناصر المقيدة قبل الموافقة.\nأبقِ الإثبات وسجلات المشاكل داخل Wayly.',
+  'app.roleStarter.generalSteps':
+    'اختر وضع المرسل أو Wayler أعلاه.\nراجع كيف يعمل والأدلة العامة.\nتحقق من العناصر المقيدة قبل الإرسال أو النقل.\nأبقِ الاتفاقات والإثبات وسجلات المشاكل داخل Wayly.',
+  'app.roleStarter.notice':
+    'إرشاد عام — وليست استشارة قانونية. اتبع القوانين المحلية وقواعد النقل/الجمارك. Wayly لا يضمن استرداداً أو دفعاً أو تأميناً أو escrow.',
+  'app.roleStarter.howItWorks': 'كيف يعمل',
+  'app.roleStarter.trustCenter': 'مركز الثقة',
+  'app.roleStarter.restrictedItems': 'العناصر المقيدة',
+  'app.roleStarter.fees': 'الرسوم والمدفوعات',
+  'app.roleStarter.supportDisputes': 'الدعم والنزاعات',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -16373,6 +16499,24 @@ const zh: Dictionary = {
   'app.helpSafetyCenter.fees': '费用与支付',
   'app.helpSafetyCenter.privacyLocalData': '隐私与本地数据',
   'app.helpSafetyCenter.supportDisputes': '支持与争议',
+  'app.roleStarter.title': '入门清单',
+  'app.roleStarter.subtitle': '在 Wayly 上完成首次交付的快速路径。',
+  'app.roleStarter.senderBadge': '发件人',
+  'app.roleStarter.waylerBadge': 'Wayler',
+  'app.roleStarter.generalBadge': '入门',
+  'app.roleStarter.senderSteps':
+    '发布前阅读如何运作。\n查看受限物品指南。\n在应用中搜索 Wayler 或浏览路线。\n发送包含时间和交接细节的清晰请求。\n在 Wayly 内保持聊天与支付相关约定。\n如有问题，使用 proof 与争议工具。',
+  'app.roleStarter.waylerSteps':
+    '接受工作前阅读如何运作。\n如应用要求，完成验证/KYC。\n发布本地可用性或 trip 路线 listing。\n仅接受您可合法承运的清晰安全请求。\n同意前查看受限物品。\n在 Wayly 内保留 proof 与问题记录。',
+  'app.roleStarter.generalSteps':
+    '在上方选择发件人或 Wayler 模式。\n阅读如何运作与公开指南。\n发送或承运前查看受限物品。\n在 Wayly 内保留约定、proof 与问题记录。',
+  'app.roleStarter.notice':
+    '一般指引 — 非法律建议。遵守当地法律及运输/海关规则。Wayly 不保证退款、payout、保险或托管。',
+  'app.roleStarter.howItWorks': '如何运作',
+  'app.roleStarter.trustCenter': '信任中心',
+  'app.roleStarter.restrictedItems': '受限物品',
+  'app.roleStarter.fees': '费用与支付',
+  'app.roleStarter.supportDisputes': '支持与争议',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',

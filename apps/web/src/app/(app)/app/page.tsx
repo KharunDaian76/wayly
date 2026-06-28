@@ -38,6 +38,7 @@ import {
 } from '@/components/app/accepted-order-details-drawer';
 import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
 import { HelpSafetyCenterCard } from '@/components/app/help-safety-center-card';
+import { RoleStarterChecklistCard } from '@/components/app/role-starter-checklist-card';
 import { ConversationPanel } from '@/components/app/conversation-panel';
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
@@ -1792,7 +1793,10 @@ export default function AppHomePage() {
           </CardContent>
         </Card>
 
-        <HelpSafetyCenterCard />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <RoleStarterChecklistCard />
+          <HelpSafetyCenterCard />
+        </div>
 
         {mode === 'wayler' ? (
           <>
