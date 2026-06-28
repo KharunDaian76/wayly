@@ -26,7 +26,6 @@ import {
   SenderRequestMessageCounter,
   SENDER_REQUEST_MESSAGE_MAX_LENGTH,
   SenderRequestReadyBadge,
-  SenderRequestSafetyChecklist,
   SenderRequestSummary,
 } from '@/components/app/sender-request-composer';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
@@ -34,6 +33,7 @@ import { SenderNextBestActions } from '@/components/app/sender-next-best-actions
 import { RecentRouteSearches } from '@/components/app/recent-route-searches';
 import { SenderRequestQualityCoach } from '@/components/app/sender-request-quality-coach';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
+import { SafetyPreflightChecklist } from '@/components/app/safety-preflight-checklist';
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
 import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
@@ -1446,8 +1446,8 @@ export function SenderWaylersPanel({
 
                           <SenderRequestSummary form={requestForm} />
                           <div className="flex flex-col gap-2">
+                            <SafetyPreflightChecklist variant="senderRequest" />
                             <SenderRequestQualityCoach form={requestForm} compact />
-                            <SenderRequestSafetyChecklist />
                             <RestrictedItemsSafetyNote variant="sender" />
                             <SenderRequestGoodTips />
                           </div>

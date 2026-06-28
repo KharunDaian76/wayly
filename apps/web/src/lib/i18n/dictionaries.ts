@@ -1772,6 +1772,22 @@ const en = {
   'app.roleStarter.restrictedItems': 'Restricted Items',
   'app.roleStarter.fees': 'Fees & Payments',
   'app.roleStarter.supportDisputes': 'Support & Disputes',
+  'app.safetyPreflight.title': 'Safety preflight',
+  'app.safetyPreflight.senderSubtitle': 'Quick checks before sending a delivery request.',
+  'app.safetyPreflight.waylerSubtitle': 'Quick checks before publishing availability.',
+  'app.safetyPreflight.generalSubtitle': 'Quick checks before using marketplace tools.',
+  'app.safetyPreflight.senderSteps':
+    'Item is legal and allowed on the route.\nItem details are clear and not hidden.\nPickup/dropoff details are accurate.\nAgreements stay inside Wayly chat.\nNo private card/bank details are shared.\nPayment status is not a real escrow guarantee today.',
+  'app.safetyPreflight.waylerSteps':
+    'Route or local availability is accurate.\nOnly clear and safe requests should be accepted.\nRestricted or unclear items should be declined.\nAgreements stay inside Wayly chat.\nProof and issue records should stay inside Wayly.\nNo legal, refund, payout, insurance, or escrow guarantee is provided.',
+  'app.safetyPreflight.generalSteps':
+    'Follow local laws and transport/customs rules.\nKeep agreements inside Wayly chat.\nDo not share private payment details.\nUnderstand Wayly does not guarantee refunds, payouts, insurance, or escrow.',
+  'app.safetyPreflight.notice':
+    'General platform guidance only — not legal advice. Follow local laws, customs, and transport rules.',
+  'app.safetyPreflight.restrictedItems': 'Restricted Items',
+  'app.safetyPreflight.fees': 'Fees & Payments',
+  'app.safetyPreflight.trustCenter': 'Trust Center',
+  'app.safetyPreflight.supportDisputes': 'Support & Disputes',
   'app.waylerAccess.title': "Today's Wayler work access",
   'app.waylerAccess.subtitle': 'Pay a daily fee to accept orders, contact Senders, and take jobs.',
   'app.waylerAccess.active': 'Active',
@@ -3908,6 +3924,23 @@ const ru: Dictionary = {
   'app.roleStarter.restrictedItems': 'Запрещённые предметы',
   'app.roleStarter.fees': 'Тарифы и платежи',
   'app.roleStarter.supportDisputes': 'Поддержка и споры',
+  'app.safetyPreflight.title': 'Проверка безопасности',
+  'app.safetyPreflight.senderSubtitle': 'Быстрая проверка перед отправкой запроса на доставку.',
+  'app.safetyPreflight.waylerSubtitle': 'Быстрая проверка перед публикацией доступности.',
+  'app.safetyPreflight.generalSubtitle':
+    'Быстрая проверка перед использованием инструментов marketplace.',
+  'app.safetyPreflight.senderSteps':
+    'Предмет законен и разрешён на маршруте.\nДетали предмета ясны и не скрыты.\nДетали pickup/dropoff точны.\nДоговорённости остаются в чате Wayly.\nЧастные данные карт/банка не передаются.\nСтатус оплаты — не гарантия реального escrow сегодня.',
+  'app.safetyPreflight.waylerSteps':
+    'Маршрут или локальная доступность точны.\nПринимайте только чёткие и безопасные запросы.\nЗапрещённые или неясные предметы следует отклонять.\nДоговорённости остаются в чате Wayly.\nProof и записи о проблемах — в Wayly.\nНе предоставляется гарантия права, возврата, выплаты, страховки или escrow.',
+  'app.safetyPreflight.generalSteps':
+    'Соблюдайте местные законы и правила перевозки/таможни.\nДержите договорённости в чате Wayly.\nНе делитесь частными платёжными данными.\nWayly не гарантирует возвраты, выплаты, страховку или escrow.',
+  'app.safetyPreflight.notice':
+    'Общее руководство платформы — не юридическая консультация. Соблюдайте местные законы, таможню и правила перевозки.',
+  'app.safetyPreflight.restrictedItems': 'Запрещённые предметы',
+  'app.safetyPreflight.fees': 'Тарифы и платежи',
+  'app.safetyPreflight.trustCenter': 'Центр доверия',
+  'app.safetyPreflight.supportDisputes': 'Поддержка и споры',
   'app.waylerAccess.title': 'Доступ курьера на сегодня',
   'app.waylerAccess.subtitle':
     'Оплатите дневной доступ, чтобы принимать заказы, связываться с отправителями и брать работу.',
@@ -6052,6 +6085,24 @@ const es: Dictionary = {
   'app.roleStarter.restrictedItems': 'Artículos restringidos',
   'app.roleStarter.fees': 'Tarifas y pagos',
   'app.roleStarter.supportDisputes': 'Soporte y disputas',
+  'app.safetyPreflight.title': 'Preflight de seguridad',
+  'app.safetyPreflight.senderSubtitle':
+    'Comprobaciones rápidas antes de enviar una solicitud de entrega.',
+  'app.safetyPreflight.waylerSubtitle': 'Comprobaciones rápidas antes de publicar disponibilidad.',
+  'app.safetyPreflight.generalSubtitle':
+    'Comprobaciones rápidas antes de usar herramientas del marketplace.',
+  'app.safetyPreflight.senderSteps':
+    'El artículo es legal y permitido en la ruta.\nLos detalles del artículo son claros y no ocultos.\nLos detalles de recogida/entrega son precisos.\nLos acuerdos permanecen en el chat de Wayly.\nNo se comparten datos privados de tarjeta/banco.\nEl estado de pago no es una garantía de escrow real hoy.',
+  'app.safetyPreflight.waylerSteps':
+    'La ruta o disponibilidad local es precisa.\nSolo se deben aceptar solicitudes claras y seguras.\nLos artículos restringidos o poco claros deben rechazarse.\nLos acuerdos permanecen en el chat de Wayly.\nProof y registros de problemas deben quedar en Wayly.\nNo se proporciona garantía legal, reembolso, pago, seguro ni escrow.',
+  'app.safetyPreflight.generalSteps':
+    'Sigue leyes locales y normas de transporte/aduanas.\nMantén acuerdos en el chat de Wayly.\nNo compartas datos de pago privados.\nWayly no garantiza reembolsos, pagos, seguro ni escrow.',
+  'app.safetyPreflight.notice':
+    'Orientación general de la plataforma — no asesoramiento legal. Sigue leyes locales, aduanas y normas de transporte.',
+  'app.safetyPreflight.restrictedItems': 'Artículos restringidos',
+  'app.safetyPreflight.fees': 'Tarifas y pagos',
+  'app.safetyPreflight.trustCenter': 'Centro de confianza',
+  'app.safetyPreflight.supportDisputes': 'Soporte y disputas',
   'app.waylerAccess.title': 'Acceso de trabajo del Wayler hoy',
   'app.waylerAccess.subtitle':
     'Paga una tarifa diaria para aceptar pedidos, contactar remitentes y tomar trabajos.',
@@ -8224,6 +8275,24 @@ const fr: Dictionary = {
   'app.roleStarter.restrictedItems': 'Articles restreints',
   'app.roleStarter.fees': 'Frais et paiements',
   'app.roleStarter.supportDisputes': 'Support et litiges',
+  'app.safetyPreflight.title': 'Prévol sécurité',
+  'app.safetyPreflight.senderSubtitle':
+    "Vérifications rapides avant d'envoyer une demande de livraison.",
+  'app.safetyPreflight.waylerSubtitle': 'Vérifications rapides avant de publier une disponibilité.',
+  'app.safetyPreflight.generalSubtitle':
+    "Vérifications rapides avant d'utiliser les outils marketplace.",
+  'app.safetyPreflight.senderSteps':
+    "L'article est légal et autorisé sur la route.\nLes détails de l'article sont clairs et non cachés.\nLes détails pickup/drop-off sont exacts.\nLes accords restent dans le chat Wayly.\nAucune donnée privée carte/banque partagée.\nLe statut paiement n'est pas une garantie escrow réelle aujourd'hui.",
+  'app.safetyPreflight.waylerSteps':
+    "La route ou disponibilité locale est exacte.\nN'acceptez que des demandes claires et sûres.\nLes articles restreints ou flous doivent être refusés.\nLes accords restent dans le chat Wayly.\nProof et enregistrements de problèmes restent dans Wayly.\nAucune garantie juridique, remboursement, paiement, assurance ou escrow.",
+  'app.safetyPreflight.generalSteps':
+    'Respectez lois locales et règles transport/douanes.\nGardez accords dans le chat Wayly.\nNe partagez pas de données de paiement privées.\nWayly ne garantit pas remboursements, paiements, assurance ou escrow.',
+  'app.safetyPreflight.notice':
+    'Orientation générale plateforme — pas conseil juridique. Respectez lois locales, douanes et règles transport.',
+  'app.safetyPreflight.restrictedItems': 'Articles restreints',
+  'app.safetyPreflight.fees': 'Frais et paiements',
+  'app.safetyPreflight.trustCenter': 'Centre de confiance',
+  'app.safetyPreflight.supportDisputes': 'Support et litiges',
   'app.waylerAccess.title': "Accès de travail Wayler aujourd'hui",
   'app.waylerAccess.subtitle':
     'Payez des frais journaliers pour accepter des commandes, contacter les expéditeurs et prendre des missions.',
@@ -10408,6 +10477,23 @@ const de: Dictionary = {
   'app.roleStarter.restrictedItems': 'Eingeschränkte Artikel',
   'app.roleStarter.fees': 'Gebühren & Zahlungen',
   'app.roleStarter.supportDisputes': 'Support & Streitfälle',
+  'app.safetyPreflight.title': 'Sicherheits-Preflight',
+  'app.safetyPreflight.senderSubtitle': 'Schnellchecks vor dem Senden einer Lieferanfrage.',
+  'app.safetyPreflight.waylerSubtitle':
+    'Schnellchecks vor dem Veröffentlichen einer Verfügbarkeit.',
+  'app.safetyPreflight.generalSubtitle': 'Schnellchecks vor der Nutzung von Marketplace-Tools.',
+  'app.safetyPreflight.senderSteps':
+    'Artikel ist legal und auf der Route erlaubt.\nArtikeldetails sind klar und nicht versteckt.\nPickup/Drop-off-Details sind korrekt.\nVereinbarungen bleiben im Wayly-Chat.\nKeine privaten Karten-/Bankdaten teilen.\nZahlungsstatus ist heute keine echte Escrow-Garantie.',
+  'app.safetyPreflight.waylerSteps':
+    'Route oder lokale Verfügbarkeit ist korrekt.\nNur klare und sichere Anfragen annehmen.\nEingeschränkte oder unklare Artikel ablehnen.\nVereinbarungen bleiben im Wayly-Chat.\nProof- und Problemaufzeichnungen bleiben in Wayly.\nKeine Rechts-, Erstattungs-, Auszahlungs-, Versicherungs- oder Escrow-Garantie.',
+  'app.safetyPreflight.generalSteps':
+    'Lokale Gesetze und Transport/Zoll-Regeln beachten.\nVereinbarungen im Wayly-Chat halten.\nKeine privaten Zahlungsdaten teilen.\nWayly garantiert keine Erstattungen, Auszahlungen, Versicherung oder Escrow.',
+  'app.safetyPreflight.notice':
+    'Allgemeine Plattform-Orientierung — keine Rechtsberatung. Beachten Sie lokale Gesetze, Zoll und Transportregeln.',
+  'app.safetyPreflight.restrictedItems': 'Eingeschränkte Artikel',
+  'app.safetyPreflight.fees': 'Gebühren & Zahlungen',
+  'app.safetyPreflight.trustCenter': 'Trust Center',
+  'app.safetyPreflight.supportDisputes': 'Support & Streitfälle',
   'app.waylerAccess.title': 'Heutiger Wayler-Arbeitszugang',
   'app.waylerAccess.subtitle':
     'Zahlen Sie eine Tagesgebühr, um Aufträge anzunehmen, Absender zu kontaktieren und Jobs zu übernehmen.',
@@ -12527,6 +12613,23 @@ const tr: Dictionary = {
   'app.roleStarter.restrictedItems': 'Kısıtlı eşyalar',
   'app.roleStarter.fees': 'Ücretler ve ödemeler',
   'app.roleStarter.supportDisputes': 'Destek ve anlaşmazlıklar',
+  'app.safetyPreflight.title': 'Güvenlik ön kontrolü',
+  'app.safetyPreflight.senderSubtitle': 'Teslimat talebi göndermeden önce hızlı kontroller.',
+  'app.safetyPreflight.waylerSubtitle': 'Müsaitlik yayınlamadan önce hızlı kontroller.',
+  'app.safetyPreflight.generalSubtitle':
+    'Marketplace araçlarını kullanmadan önce hızlı kontroller.',
+  'app.safetyPreflight.senderSteps':
+    'Eşya yasal ve rotada izinlidir.\nEşya detayları açık ve gizli değildir.\nPickup/drop-off detayları doğrudur.\nAnlaşmalar Wayly sohbetinde kalır.\nÖzel kart/banka bilgisi paylaşılmaz.\nÖdeme durumu bugün gerçek escrow garantisi değildir.',
+  'app.safetyPreflight.waylerSteps':
+    'Rota veya yerel müsaitlik doğrudur.\nYalnızca net ve güvenli talepler kabul edilmelidir.\nKısıtlı veya belirsiz eşyalar reddedilmelidir.\nAnlaşmalar Wayly sohbetinde kalır.\nProof ve sorun kayıtları Wayly içinde kalmalıdır.\nHukuki, iade, ödeme, sigorta veya escrow garantisi verilmez.',
+  'app.safetyPreflight.generalSteps':
+    'Yerel yasa ve taşıma/gümrük kurallarına uyun.\nAnlaşmaları Wayly sohbetinde tutun.\nÖzel ödeme bilgisi paylaşmayın.\nWayly iade, ödeme, sigorta veya escrow garantisi vermez.',
+  'app.safetyPreflight.notice':
+    'Genel platform rehberliği — hukuki tavsiye değil. Yerel yasa, gümrük ve taşıma kurallarına uyun.',
+  'app.safetyPreflight.restrictedItems': 'Kısıtlı eşyalar',
+  'app.safetyPreflight.fees': 'Ücretler ve ödemeler',
+  'app.safetyPreflight.trustCenter': 'Güven merkezi',
+  'app.safetyPreflight.supportDisputes': 'Destek ve anlaşmazlıklar',
   'app.waylerAccess.title': 'Bugünkü Wayler iş erişimi',
   'app.waylerAccess.subtitle':
     'Sipariş kabul etmek, göndericilerle iletişim kurmak ve iş almak için günlük ücret ödeyin.',
@@ -14567,6 +14670,22 @@ const ar: Dictionary = {
   'app.roleStarter.restrictedItems': 'العناصر المقيدة',
   'app.roleStarter.fees': 'الرسوم والمدفوعات',
   'app.roleStarter.supportDisputes': 'الدعم والنزاعات',
+  'app.safetyPreflight.title': 'فحص الأمان المسبق',
+  'app.safetyPreflight.senderSubtitle': 'فحوصات سريعة قبل إرسال طلب تسليم.',
+  'app.safetyPreflight.waylerSubtitle': 'فحوصات سريعة قبل نشر التوفر.',
+  'app.safetyPreflight.generalSubtitle': 'فحوصات سريعة قبل استخدام أدوات marketplace.',
+  'app.safetyPreflight.senderSteps':
+    'العنصر قانوني ومسموح على المسار.\nتفاصيل العنصر واضحة وغير مخفية.\nتفاصيل الاستلام/التسليم دقيقة.\nالاتفاقات تبقى في دردشة Wayly.\nلا تُشارك بيانات بطاقة/بنك خاصة.\nحالة الدفع ليست ضمان escrow حقيقي اليوم.',
+  'app.safetyPreflight.waylerSteps':
+    'المسار أو التوفر المحلي دقيق.\nيجب قبول الطلبات الواضحة والآمنة فقط.\nيجب رفض العناصر المقيدة أو غير الواضحة.\nالاتفاقات تبقى في دردشة Wayly.\nيجب أن تبقى الإثباتات وسجلات المشاكل داخل Wayly.\nلا يُقدَّم ضمان قانوني أو استرداد أو دفع أو تأمين أو escrow.',
+  'app.safetyPreflight.generalSteps':
+    'اتبع القوانين المحلية وقواعد النقل/الجمارك.\nأبقِ الاتفاقات في دردشة Wayly.\nلا تشارك بيانات دفع خاصة.\nWayly لا يضمن استرداداً أو دفعاً أو تأميناً أو escrow.',
+  'app.safetyPreflight.notice':
+    'إرشاد عام للمنصة — وليست استشارة قانونية. اتبع القوانين المحلية والجمارك وقواعد النقل.',
+  'app.safetyPreflight.restrictedItems': 'العناصر المقيدة',
+  'app.safetyPreflight.fees': 'الرسوم والمدفوعات',
+  'app.safetyPreflight.trustCenter': 'مركز الثقة',
+  'app.safetyPreflight.supportDisputes': 'الدعم والنزاعات',
   'app.waylerAccess.title': 'وصول عمل الوايلر اليوم',
   'app.waylerAccess.subtitle': 'ادفع رسوماً يومية لقبول الطلبات والتواصل مع المرسلين وأخذ الوظائف.',
   'app.waylerAccess.active': 'نشط',
@@ -14830,7 +14949,7 @@ const ar: Dictionary = {
     'يعرض Wayly حالة الدفع بناءً على سجلات المنصة المرتبطة بالطلب.\nقد تُستخدم تدفقات mock/يدوية في التطوير والعرض التوضيحي.\nتكامل مزود دفع حقيقي عمل مستقبلي ما لم يُفعَّل صراحة.\nحقول الحالة تساعد التنسيق — وليست دليلاً على أموال محتجزة لدى مزود.',
   'marketing.fees.statusMeaningTitle': 'ماذا تعني حالة الدفع',
   'marketing.fees.statusMeaningBody':
-    'الحالة تُظهر مرحلة الطلب (مثل مصرّح أو محجوز).\nتغيير الحالة يسجل تقدم سير العمل — لا يعني تلقائياً حركة أموال حقيقية.\nاحتفظ باتفاقات الدفع في درdشة Wayly وعروض الطلب.\nعامل التسميات كأدوات تنسيق وليس نتائج مالية مضمونة.',
+    'الحالة تُظهر مرحلة الطلب (مثل مصرّح أو محجوز).\nتغيير الحالة يسجل تقدم سير العمل — لا يعني تلقائياً حركة أموال حقيقية.\nاحتفظ باتفاقات الدفع في دردشة Wayly وعروض الطلب.\nعامل التسميات كأدوات تنسيق وليس نتائج مالية مضمونة.',
   'marketing.fees.platformFeeTitle': 'اتجاه رسوم المنصة',
   'marketing.fees.platformFeeBody':
     'صُمم Wayly لدعم نموذج رسوم منصة مع نضوج المنتج.\nالرسوم الفعلية قد تعتمد على المزود والبلد والعملة وإعدادات الإطلاق.\nلا تفترض رسوماً ثابطة نشطة اليوم ما لم يفعّل نشرك ذلك صراحة.\nيجب تأكيد أي رسوم في النصوص مع إعدادات المنتج الحالية.',
@@ -16517,6 +16636,21 @@ const zh: Dictionary = {
   'app.roleStarter.restrictedItems': '受限物品',
   'app.roleStarter.fees': '费用与支付',
   'app.roleStarter.supportDisputes': '支持与争议',
+  'app.safetyPreflight.title': '安全预检',
+  'app.safetyPreflight.senderSubtitle': '发送交付请求前的快速检查。',
+  'app.safetyPreflight.waylerSubtitle': '发布可用性前的快速检查。',
+  'app.safetyPreflight.generalSubtitle': '使用 marketplace 工具前的快速检查。',
+  'app.safetyPreflight.senderSteps':
+    '物品在路线上合法且允许。\n物品细节清晰且不隐藏。\n取件/送达细节准确。\n约定保持在 Wayly 聊天内。\n不分享私人银行卡/账户信息。\n支付状态今日非真实托管保证。',
+  'app.safetyPreflight.waylerSteps':
+    '路线或本地可用性准确。\n仅应接受清晰安全的请求。\n应拒绝受限或不明确的物品。\n约定保持在 Wayly 聊天内。\nproof 与问题记录应留在 Wayly 内。\n不提供法律、退款、payout、保险或托管保证。',
+  'app.safetyPreflight.generalSteps':
+    '遵守当地法律及运输/海关规则。\n在 Wayly 聊天内保持约定。\n不要分享私人支付信息。\nWayly 不保证退款、payout、保险或托管。',
+  'app.safetyPreflight.notice': '一般平台指引 — 非法律建议。遵守当地法律、海关及运输规则。',
+  'app.safetyPreflight.restrictedItems': '受限物品',
+  'app.safetyPreflight.fees': '费用与支付',
+  'app.safetyPreflight.trustCenter': '信任中心',
+  'app.safetyPreflight.supportDisputes': '支持与争议',
   'app.waylerAccess.title': '今日 Wayler 工作权限',
   'app.waylerAccess.subtitle': '支付每日费用以接单、联系发件人并接受工作。',
   'app.waylerAccess.active': '有效',
