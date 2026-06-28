@@ -300,18 +300,22 @@ export function LandingPage() {
   return (
     <div className="dark bg-background text-foreground">
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border/60">
+      <section className="relative min-h-[640px] overflow-hidden border-b border-border/60 sm:min-h-[760px]">
         <div
-          className="pointer-events-none absolute inset-0 wayly-landing-hero-grid opacity-60"
+          className="pointer-events-none absolute inset-0 wayly-landing-hero-grid opacity-40"
           aria-hidden
         />
         <InteractiveRouteGlobe />
         <div
-          className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-background/10 via-transparent to-background/70"
+          className="pointer-events-none absolute inset-0 z-[2] bg-[radial-gradient(ellipse_70%_55%_at_50%_42%,hsl(var(--background)/0.72)_0%,transparent_58%)]"
           aria-hidden
         />
-        <div className="container relative z-10 flex flex-col items-center gap-8 py-24 text-center sm:py-36">
-          <p className="pointer-events-none absolute right-4 top-4 hidden rounded-full border border-border/50 bg-card/60 px-3 py-1 text-[11px] text-muted-foreground backdrop-blur sm:inline-block">
+        <div
+          className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-background/15 via-transparent to-background/75"
+          aria-hidden
+        />
+        <div className="container relative z-10 flex min-h-[640px] flex-col items-center justify-center gap-8 py-20 text-center sm:min-h-[760px] sm:py-28">
+          <p className="pointer-events-none absolute bottom-6 right-4 z-20 hidden rounded-full border border-border/50 bg-card/50 px-3 py-1.5 text-[11px] text-muted-foreground backdrop-blur sm:inline-block">
             Drag globe to explore routes
           </p>
           <FadeIn>
@@ -322,13 +326,13 @@ export function LandingPage() {
           </FadeIn>
 
           <FadeIn delay={0.05}>
-            <h1 className="mx-auto max-w-4xl bg-gradient-to-br from-foreground via-foreground to-muted-foreground bg-clip-text font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-transparent sm:text-6xl lg:text-7xl">
+            <h1 className="mx-auto max-w-4xl bg-gradient-to-br from-foreground via-foreground to-muted-foreground bg-clip-text font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-transparent drop-shadow-sm sm:text-6xl lg:text-7xl">
               {siteConfig.tagline}
             </h1>
           </FadeIn>
 
           <FadeIn delay={0.1}>
-            <p className="mx-auto max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground sm:text-xl">
+            <p className="mx-auto max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground drop-shadow-sm sm:text-xl">
               {t('marketing.landing.heroSubtitle')}
             </p>
           </FadeIn>

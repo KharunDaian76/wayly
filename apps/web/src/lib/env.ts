@@ -6,4 +6,6 @@
 export const clientEnv = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000',
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
+  showEnvBadge:
+    process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_SHOW_ENV_BADGE === 'true',
 } as const;
