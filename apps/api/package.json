@@ -16,7 +16,8 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "db:seed-demo-users": "tsx scripts/seed-demo-users.ts"
+    "db:seed-demo-users": "tsx scripts/seed-demo-users.ts",
+    "seed:demo": "tsx scripts/seed-demo.ts"
   },
   "prisma": {
     "schema": "prisma/schema.prisma",
