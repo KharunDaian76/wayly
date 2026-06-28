@@ -2448,6 +2448,121 @@ const en = {
     'When in doubt, check official airline, carrier, customs, and local authority rules before sending or carrying anything.',
   'marketing.landing.trustCenterLink': 'How Wayly handles safety',
   'marketing.landing.faqLink': 'Browse common questions',
+  'marketing.landing.heroBadge': 'P2P delivery, reimagined',
+  'marketing.landing.getStarted': 'Get started',
+  'marketing.landing.seeHowItWorks': 'See how it works',
+  'marketing.landing.howItWorks.title': 'How it works',
+  'marketing.landing.howItWorks.blurb':
+    'A clear Sender and Wayler flow — from first request to delivery, with tools designed to keep coordination inside Wayly.',
+  'marketing.landing.howItWorks.step1Title': 'Sender posts or requests',
+  'marketing.landing.howItWorks.step1Body':
+    'Senders post a delivery need or send a request to a Wayler route or local availability listing.',
+  'marketing.landing.howItWorks.step2Title': 'Wayler publishes availability',
+  'marketing.landing.howItWorks.step2Body':
+    'Waylers publish trip routes or same-city availability so Senders can discover active options.',
+  'marketing.landing.howItWorks.step3Title': 'Request becomes an order',
+  'marketing.landing.howItWorks.step3Body':
+    'When a Wayler accepts, the request becomes an accepted delivery order with a shared timeline.',
+  'marketing.landing.howItWorks.step4Title': 'Manage the delivery in Wayly',
+  'marketing.landing.howItWorks.step4Body':
+    'Chat, delivery proof, support tickets, notifications, and post-delivery reviews help organize the handoff — not guaranteed outcomes.',
+  'marketing.landing.howItWorks.fullGuide': 'Full how-it-works guide',
+  'marketing.landing.international.title': 'International & intercity',
+  'marketing.landing.international.blurb':
+    'Travelers can carry parcels along routes they already take — Senders discover active routes and coordinate inside Wayly.',
+  'marketing.landing.international.body':
+    'Waylers publish intercity or international trip routes they plan to travel.\nSenders browse routes and send requests with clear item and timing details.\nBoth parties confirm handoff plans in Wayly chat before relying on them.\nUsers remain responsible for customs, transport, and destination rules.',
+  'marketing.landing.international.routesLabel': 'Example route ideas',
+  'marketing.landing.international.route1': 'Istanbul → New York',
+  'marketing.landing.international.route2': 'Berlin → Paris',
+  'marketing.landing.international.route3': 'Bishkek → Istanbul',
+  'marketing.landing.international.lawsNotice':
+    'Wayly does not verify item legality, inspect parcels, or guarantee customs clearance. Check official rules before sending or carrying anything.',
+  'marketing.landing.international.restrictedLink': 'Restricted items guidance',
+  'marketing.landing.local.title': 'Local city delivery',
+  'marketing.landing.local.blurb':
+    'Same-city help from local Waylers — useful when you need a handoff without a long trip route.',
+  'marketing.landing.local.body':
+    'Local Waylers can help with documents, small parcels, gifts, and marketplace pickups in the same city.\nPublish or browse local availability instead of a full trip route.\nKeep communication, timing, and handoff details inside Wayly chat.\nFollow restricted-items guidance and decline unclear or unsafe requests.',
+  'marketing.landing.local.restrictedLink': 'What you can send',
+  'marketing.landing.pricing.title': 'Pricing',
+  'marketing.landing.pricing.blurb':
+    'Honest payment and access guidance for the current demo — no hidden promises.',
+  'marketing.landing.pricing.body':
+    'Payment and Wayler access flows may be mock or manual in the current demo environment.\nPlanned model: Wayler work access plus a simple platform fee on orders.\nNo real escrow, guaranteed refund, or guaranteed payout today.\nAdmin payment review tools record metadata only — they do not move money.',
+  'marketing.landing.pricing.viewFees': 'Fees & payments',
+  'marketing.landing.pricing.viewRoadmap': 'Product roadmap',
+  'marketing.landing.trustSafety.title': 'Trust & safety',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly is designed for verification-first workflows, clear communication, and responsible marketplace use.',
+  'marketing.landing.trustSafety.feature1': 'Verification-first account design',
+  'marketing.landing.trustSafety.feature2': 'Restricted item guidance',
+  'marketing.landing.trustSafety.feature3': 'In-app order chat',
+  'marketing.landing.trustSafety.feature4': 'Delivery proof metadata',
+  'marketing.landing.trustSafety.feature5': 'Dispute and support ticket tools',
+  'marketing.landing.trustSafety.feature6': 'In-app notifications',
+  'marketing.landing.trustSafety.feature7': 'Post-delivery reviews as trust signals',
+  'marketing.landing.trustSafety.feature8': 'Admin review tools for operators',
+  'marketing.landing.trustSafety.notice':
+    'Wayly provides guidance and platform tools — not guaranteed safety, legal protection, insurance, refunds, payouts, or delivery outcomes.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Verified by design',
+  'marketing.landing.verified.blurb':
+    'Identity and verification workflows are built into the product direction — with honest limits in the current environment.',
+  'marketing.landing.verified.body':
+    'Wayly is designed for verification-first workflows before marketplace activity.\nCurrent KYC and identity checks may be mock or manual depending on environment.\nProduction identity provider integration is planned before real-money launch.\nVerification helps trust signals — it does not guarantee safety, legality, or outcomes.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Roadmap',
+  'marketing.landing.principles.title': 'Built for Senders & Waylers',
+  'marketing.landing.principles.blurb':
+    'Product principles that guide Wayly — not verified customer testimonials.',
+  'marketing.landing.principles.disclaimer':
+    'These cards describe product principles and demo examples. They are not verified customer reviews or guarantees.',
+  'marketing.landing.principles.card1Title': 'Built for clear routes',
+  'marketing.landing.principles.card1Body':
+    'Trip routes and local availability are designed so Senders can discover realistic options.',
+  'marketing.landing.principles.card2Title': 'Built for safer communication',
+  'marketing.landing.principles.card2Body':
+    'Order-linked chat and guidance encourage coordination inside Wayly instead of off-platform deals.',
+  'marketing.landing.principles.card3Title': 'Built for transparent delivery status',
+  'marketing.landing.principles.card3Body':
+    'Timelines, proof fields, and notifications help both parties follow progress — without promising delivery.',
+  'marketing.landing.principles.card4Title': 'Built for trust signals',
+  'marketing.landing.principles.card4Body':
+    'Reviews, verification design, and admin tools support trust — they do not guarantee outcomes.',
+  'marketing.landing.faqPreview.title': 'Frequently asked questions',
+  'marketing.landing.faqPreview.blurb': 'Quick answers with links to deeper public guides.',
+  'marketing.landing.faqPreview.q1Question': 'Is Wayly live with real payments?',
+  'marketing.landing.faqPreview.q1Answer':
+    'Not yet for production money movement. Current flows may be mock or manual with honest status labels.',
+  'marketing.landing.faqPreview.q1Link': 'Read fees & payments',
+  'marketing.landing.faqPreview.q2Question': 'What can I send?',
+  'marketing.landing.faqPreview.q2Answer':
+    'Follow restricted-items guidance and local laws. Wayly does not verify item legality or inspect parcels.',
+  'marketing.landing.faqPreview.q2Link': 'Restricted items guide',
+  'marketing.landing.faqPreview.q3Question': 'How do Waylers get work?',
+  'marketing.landing.faqPreview.q3Answer':
+    'Publish a trip route or local availability, review Sender requests, and accept clear jobs you can carry safely.',
+  'marketing.landing.faqPreview.q3Link': 'How it works',
+  'marketing.landing.faqPreview.q4Question': 'Are reviews guarantees?',
+  'marketing.landing.faqPreview.q4Answer':
+    'No. Post-delivery reviews are trust signals for the community — not guarantees of safety, quality, or outcomes.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': 'What if something goes wrong?',
+  'marketing.landing.faqPreview.q5Answer':
+    'Use in-app chat, delivery proof, support tickets, and dispute tools to organize facts — not emergency response.',
+  'marketing.landing.faqPreview.q5Link': 'Support & disputes',
+  'marketing.landing.faqPreview.q6Question': 'Is Wayly available as a mobile app yet?',
+  'marketing.landing.faqPreview.q6Answer':
+    'Native app-store packaging is planned future work. The web app is the current primary experience.',
+  'marketing.landing.faqPreview.q6Link': 'Product roadmap',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'Full FAQ',
+  'marketing.landing.finalCta.title': 'Ready to explore Wayly?',
+  'marketing.landing.finalCta.subtitle':
+    'Create an account to try the Sender and Wayler marketplace tools in the current demo environment.',
+  'marketing.landing.finalCta.signIn': 'Sign in',
   'app.placeholderNotice':
     'This is a placeholder app shell. Orders, trips, chat, and payments arrive in later milestones.',
 } as const;
@@ -4909,6 +5024,117 @@ const ru: Dictionary = {
     'При сомнениях проверьте официальные правила авиакомпаний, перевозчиков, таможни и местных органов до отправки или перевозки.',
   'marketing.landing.trustCenterLink': 'Как Wayly обеспечивает безопасность',
   'marketing.landing.faqLink': 'Частые вопросы',
+  'marketing.landing.heroBadge': 'P2P-доставка по-новому',
+  'marketing.landing.getStarted': 'Начать',
+  'marketing.landing.seeHowItWorks': 'Как это работает',
+  'marketing.landing.howItWorks.title': 'Как это работает',
+  'marketing.landing.howItWorks.blurb':
+    'Понятный поток для отправителя и Wayler — от запроса до доставки с инструментами внутри Wayly.',
+  'marketing.landing.howItWorks.step1Title': 'Отправитель публикует или запрашивает',
+  'marketing.landing.howItWorks.step1Body':
+    'Отправитель создаёт заказ или отправляет запрос на маршрут или локальную доступность Wayler.',
+  'marketing.landing.howItWorks.step2Title': 'Wayler публикует доступность',
+  'marketing.landing.howItWorks.step2Body':
+    'Wayler публикует маршруты или локальную доступность, чтобы отправители находили активные варианты.',
+  'marketing.landing.howItWorks.step3Title': 'Запрос становится заказом',
+  'marketing.landing.howItWorks.step3Body':
+    'После принятия Wayler запрос становится принятым заказом с общей временной шкалой.',
+  'marketing.landing.howItWorks.step4Title': 'Управление доставкой в Wayly',
+  'marketing.landing.howItWorks.step4Body':
+    'Чат, подтверждение доставки, тикеты поддержки, уведомления и отзывы помогают организовать передачу — без гарантий результата.',
+  'marketing.landing.howItWorks.fullGuide': 'Полное руководство',
+  'marketing.landing.international.title': 'Международная и междугородняя',
+  'marketing.landing.international.blurb':
+    'Путешественники могут нести посылки по маршрутам, которые они уже совершают.',
+  'marketing.landing.international.body':
+    'Wayler публикует международные или междугородние маршруты.\nОтправители просматривают маршруты и отправляют запросы с деталями.\nСтороны подтверждают планы передачи в чате Wayly.\nПользователи отвечают за таможню, транспорт и правила пункта назначения.',
+  'marketing.landing.international.routesLabel': 'Примеры маршрутов',
+  'marketing.landing.international.route1': 'Стамбул → Нью-Йорк',
+  'marketing.landing.international.route2': 'Берлин → Париж',
+  'marketing.landing.international.route3': 'Бишкек → Стамбул',
+  'marketing.landing.international.lawsNotice':
+    'Wayly не проверяет законность предметов и не гарантирует таможенное оформление. Проверяйте официальные правила.',
+  'marketing.landing.international.restrictedLink': 'Ограниченные предметы',
+  'marketing.landing.local.title': 'Локальная доставка по городу',
+  'marketing.landing.local.blurb': 'Помощь от локальных Wayler в том же городе.',
+  'marketing.landing.local.body':
+    'Локальные Wayler помогают с документами, малыми посылками, подарками и забором с маркетплейсов.\nПубликуйте или ищите локальную доступность.\nДержите общение и детали передачи в чате Wayly.\nСледуйте guidance по ограниченным предметам.',
+  'marketing.landing.local.restrictedLink': 'Что можно отправлять',
+  'marketing.landing.pricing.title': 'Цены',
+  'marketing.landing.pricing.blurb': 'Честная информация об оплате и доступе в текущем demo.',
+  'marketing.landing.pricing.body':
+    'Оплата и доступ Wayler могут быть mock/manual в demo.\nПланируемая модель: доступ к работе + простая комиссия платформы.\nНет реального escrow, гарантированного возврата или выплаты.\nAdmin review — только metadata, без движения денег.',
+  'marketing.landing.pricing.viewFees': 'Комиссии и оплата',
+  'marketing.landing.pricing.viewRoadmap': 'Roadmap',
+  'marketing.landing.trustSafety.title': 'Доверие и безопасность',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly спроектирован для verification-first workflows и ответственного использования.',
+  'marketing.landing.trustSafety.feature1': 'Verification-first дизайн аккаунта',
+  'marketing.landing.trustSafety.feature2': 'Guidance по ограниченным предметам',
+  'marketing.landing.trustSafety.feature3': 'Чат заказа в приложении',
+  'marketing.landing.trustSafety.feature4': 'Metadata подтверждения доставки',
+  'marketing.landing.trustSafety.feature5': 'Disputes и support tickets',
+  'marketing.landing.trustSafety.feature6': 'In-app уведомления',
+  'marketing.landing.trustSafety.feature7': 'Отзывы после доставки как trust signals',
+  'marketing.landing.trustSafety.feature8': 'Admin review tools',
+  'marketing.landing.trustSafety.notice':
+    'Wayly даёт guidance и инструменты — не гарантирует безопасность, страховку, возврат, выплату или результат доставки.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Verified by design',
+  'marketing.landing.verified.blurb':
+    'Verification встроена в продукт — с честными ограничениями demo.',
+  'marketing.landing.verified.body':
+    'Wayly спроектирован для verification-first workflows.\nKYC может быть mock/manual в зависимости от среды.\nProduction identity provider — planned до real-money launch.\nVerification — trust signal, не гарантия безопасности или результата.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Roadmap',
+  'marketing.landing.principles.title': 'Для отправителей и Wayler',
+  'marketing.landing.principles.blurb': 'Принципы продукта — не verified отзывы клиентов.',
+  'marketing.landing.principles.disclaimer':
+    'Это принципы продукта и demo-примеры, не verified customer reviews.',
+  'marketing.landing.principles.card1Title': 'Понятные маршруты',
+  'marketing.landing.principles.card1Body':
+    'Маршруты и локальная доступность для реалистичного выбора.',
+  'marketing.landing.principles.card2Title': 'Безопаснее общение',
+  'marketing.landing.principles.card2Body': 'Order chat и guidance вместо сделок вне платформы.',
+  'marketing.landing.principles.card3Title': 'Прозрачный статус',
+  'marketing.landing.principles.card3Body':
+    'Timeline, proof и уведомления — без обещания доставки.',
+  'marketing.landing.principles.card4Title': 'Trust signals',
+  'marketing.landing.principles.card4Body':
+    'Отзывы и admin tools поддерживают доверие — не гарантируют исход.',
+  'marketing.landing.faqPreview.title': 'Частые вопросы',
+  'marketing.landing.faqPreview.blurb': 'Краткие ответы со ссылками на public guides.',
+  'marketing.landing.faqPreview.q1Question': 'Есть ли real payments?',
+  'marketing.landing.faqPreview.q1Answer':
+    'Пока нет production money movement. Flows могут быть mock/manual.',
+  'marketing.landing.faqPreview.q1Link': 'Комиссии и оплата',
+  'marketing.landing.faqPreview.q2Question': 'Что можно отправлять?',
+  'marketing.landing.faqPreview.q2Answer':
+    'Следуйте restricted-items guidance и законам. Wayly не проверяет legality.',
+  'marketing.landing.faqPreview.q2Link': 'Restricted items',
+  'marketing.landing.faqPreview.q3Question': 'Как Wayler получает работу?',
+  'marketing.landing.faqPreview.q3Answer':
+    'Публикуйте маршрут или локальную доступность и принимайте безопасные запросы.',
+  'marketing.landing.faqPreview.q3Link': 'Как это работает',
+  'marketing.landing.faqPreview.q4Question': 'Отзывы — это гарантии?',
+  'marketing.landing.faqPreview.q4Answer':
+    'Нет. Отзывы — trust signals, не гарантии качества или безопасности.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': 'Что если что-то пошло не так?',
+  'marketing.landing.faqPreview.q5Answer':
+    'Используйте chat, proof, support tickets и disputes — не emergency response.',
+  'marketing.landing.faqPreview.q5Link': 'Support & disputes',
+  'marketing.landing.faqPreview.q6Question': 'Есть мобильное приложение?',
+  'marketing.landing.faqPreview.q6Answer':
+    'Native app-store — planned. Сейчас основной опыт — web app.',
+  'marketing.landing.faqPreview.q6Link': 'Roadmap',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'Полный FAQ',
+  'marketing.landing.finalCta.title': 'Готовы попробовать Wayly?',
+  'marketing.landing.finalCta.subtitle':
+    'Создайте аккаунт для demo marketplace tools отправителя и Wayler.',
+  'marketing.landing.finalCta.signIn': 'Войти',
   'app.placeholderNotice':
     'Это временная оболочка приложения. Заказы, поездки, чат и платежи появятся позже.',
 };
@@ -7378,6 +7604,116 @@ const es: Dictionary = {
     'Ante dudas, consulta reglas oficiales de aerolíneas, transportistas, aduanas y autoridades locales antes de enviar o transportar.',
   'marketing.landing.trustCenterLink': 'Cómo Wayly gestiona la seguridad',
   'marketing.landing.faqLink': 'Ver preguntas frecuentes',
+  'marketing.landing.heroBadge': 'Entrega P2P reinventada',
+  'marketing.landing.getStarted': 'Empezar',
+  'marketing.landing.seeHowItWorks': 'Cómo funciona',
+  'marketing.landing.howItWorks.title': 'Cómo funciona',
+  'marketing.landing.howItWorks.blurb':
+    'Flujo claro de remitente y Wayler — desde la solicitud hasta la entrega dentro de Wayly.',
+  'marketing.landing.howItWorks.step1Title': 'El remitente publica o solicita',
+  'marketing.landing.howItWorks.step1Body':
+    'Los remitentes publican una entrega o envían una solicitud a una ruta o disponibilidad local.',
+  'marketing.landing.howItWorks.step2Title': 'El Wayler publica disponibilidad',
+  'marketing.landing.howItWorks.step2Body':
+    'Los Waylers publican rutas o disponibilidad local para que los remitentes descubran opciones activas.',
+  'marketing.landing.howItWorks.step3Title': 'La solicitud se convierte en pedido',
+  'marketing.landing.howItWorks.step3Body':
+    'Cuando un Wayler acepta, la solicitud pasa a ser un pedido aceptado con línea de tiempo compartida.',
+  'marketing.landing.howItWorks.step4Title': 'Gestiona la entrega en Wayly',
+  'marketing.landing.howItWorks.step4Body':
+    'Chat, prueba de entrega, tickets, notificaciones y reseñas organizan la entrega — sin garantías de resultado.',
+  'marketing.landing.howItWorks.fullGuide': 'Guía completa',
+  'marketing.landing.international.title': 'Internacional e interurbano',
+  'marketing.landing.international.blurb':
+    'Viajeros pueden llevar paquetes en rutas que ya recorren — los remitentes descubren rutas activas.',
+  'marketing.landing.international.body':
+    'Los Waylers publican rutas internacionales o interurbanas.\nLos remitentes exploran rutas y envían solicitudes con detalles claros.\nAmbas partes confirman la entrega en el chat de Wayly.\nLos usuarios deben cumplir aduanas, transporte y normas del destino.',
+  'marketing.landing.international.routesLabel': 'Ejemplos de rutas',
+  'marketing.landing.international.route1': 'Estambul → Nueva York',
+  'marketing.landing.international.route2': 'Berlín → París',
+  'marketing.landing.international.route3': 'Bishkek → Estambul',
+  'marketing.landing.international.lawsNotice':
+    'Wayly no verifica legalidad ni garantiza aduanas. Consulte normas oficiales antes de enviar o transportar.',
+  'marketing.landing.international.restrictedLink': 'Artículos restringidos',
+  'marketing.landing.local.title': 'Entrega local en la ciudad',
+  'marketing.landing.local.blurb': 'Ayuda en la misma ciudad de Waylers locales.',
+  'marketing.landing.local.body':
+    'Waylers locales ayudan con documentos, paquetes pequeños, regalos y recogidas de marketplace.\nPublique o busque disponibilidad local.\nMantenga comunicación y detalles de entrega en el chat de Wayly.\nSiga la guía de artículos restringidos.',
+  'marketing.landing.local.restrictedLink': 'Qué puede enviar',
+  'marketing.landing.pricing.title': 'Precios',
+  'marketing.landing.pricing.blurb': 'Información honesta sobre pagos y acceso en el demo actual.',
+  'marketing.landing.pricing.body':
+    'Pagos y acceso Wayler pueden ser mock/manual en demo.\nModelo planificado: acceso al trabajo + comisión simple de plataforma.\nSin escrow real, reembolso garantizado ni pago garantizado hoy.\nLa revisión admin registra metadata — no mueve dinero.',
+  'marketing.landing.pricing.viewFees': 'Tarifas y pagos',
+  'marketing.landing.pricing.viewRoadmap': 'Roadmap',
+  'marketing.landing.trustSafety.title': 'Confianza y seguridad',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly está diseñado para flujos verification-first y uso responsable del marketplace.',
+  'marketing.landing.trustSafety.feature1': 'Diseño verification-first',
+  'marketing.landing.trustSafety.feature2': 'Guía de artículos restringidos',
+  'marketing.landing.trustSafety.feature3': 'Chat del pedido',
+  'marketing.landing.trustSafety.feature4': 'Metadata de prueba de entrega',
+  'marketing.landing.trustSafety.feature5': 'Disputas y tickets de soporte',
+  'marketing.landing.trustSafety.feature6': 'Notificaciones in-app',
+  'marketing.landing.trustSafety.feature7': 'Reseñas post-entrega como señales de confianza',
+  'marketing.landing.trustSafety.feature8': 'Herramientas admin de revisión',
+  'marketing.landing.trustSafety.notice':
+    'Wayly ofrece guía e herramientas — no garantiza seguridad, seguro, reembolso, pago ni resultados de entrega.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Verificado por diseño',
+  'marketing.landing.verified.blurb':
+    'Verificación integrada en el producto — con límites honestos del demo.',
+  'marketing.landing.verified.body':
+    'Wayly está diseñado para flujos verification-first.\nKYC puede ser mock/manual según entorno.\nIntegración de proveedor de identidad planificada antes del lanzamiento con dinero real.\nLa verificación ayuda a la confianza — no garantiza resultados.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Roadmap',
+  'marketing.landing.principles.title': 'Hecho para remitentes y Waylers',
+  'marketing.landing.principles.blurb': 'Principios del producto — no testimonios verificados.',
+  'marketing.landing.principles.disclaimer':
+    'Estas tarjetas describen principios y ejemplos demo — no reseñas verificadas de clientes.',
+  'marketing.landing.principles.card1Title': 'Rutas claras',
+  'marketing.landing.principles.card1Body': 'Rutas y disponibilidad local para opciones realistas.',
+  'marketing.landing.principles.card2Title': 'Comunicación más segura',
+  'marketing.landing.principles.card2Body': 'Chat del pedido y guía dentro de Wayly.',
+  'marketing.landing.principles.card3Title': 'Estado de entrega transparente',
+  'marketing.landing.principles.card3Body':
+    'Timeline, prueba y notificaciones — sin prometer entrega.',
+  'marketing.landing.principles.card4Title': 'Señales de confianza',
+  'marketing.landing.principles.card4Body':
+    'Reseñas y herramientas admin apoyan confianza — no garantizan resultados.',
+  'marketing.landing.faqPreview.title': 'Preguntas frecuentes',
+  'marketing.landing.faqPreview.blurb': 'Respuestas rápidas con enlaces a guías públicas.',
+  'marketing.landing.faqPreview.q1Question': '¿Wayly tiene pagos reales?',
+  'marketing.landing.faqPreview.q1Answer':
+    'Aún no hay movimiento real de dinero. Los flujos pueden ser mock/manual.',
+  'marketing.landing.faqPreview.q1Link': 'Tarifas y pagos',
+  'marketing.landing.faqPreview.q2Question': '¿Qué puedo enviar?',
+  'marketing.landing.faqPreview.q2Answer':
+    'Siga la guía de restringidos y las leyes. Wayly no verifica legalidad.',
+  'marketing.landing.faqPreview.q2Link': 'Artículos restringidos',
+  'marketing.landing.faqPreview.q3Question': '¿Cómo consiguen trabajo los Waylers?',
+  'marketing.landing.faqPreview.q3Answer':
+    'Publiquen ruta o disponibilidad local y acepten solicitudes claras y seguras.',
+  'marketing.landing.faqPreview.q3Link': 'Cómo funciona',
+  'marketing.landing.faqPreview.q4Question': '¿Las reseñas son garantías?',
+  'marketing.landing.faqPreview.q4Answer':
+    'No. Son señales de confianza — no garantías de calidad o seguridad.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': '¿Qué pasa si algo sale mal?',
+  'marketing.landing.faqPreview.q5Answer':
+    'Use chat, prueba, tickets y disputas — no es respuesta de emergencia.',
+  'marketing.landing.faqPreview.q5Link': 'Soporte y disputas',
+  'marketing.landing.faqPreview.q6Question': '¿Hay app móvil en tiendas?',
+  'marketing.landing.faqPreview.q6Answer':
+    'App nativa planificada. La web app es la experiencia principal hoy.',
+  'marketing.landing.faqPreview.q6Link': 'Roadmap',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'FAQ completo',
+  'marketing.landing.finalCta.title': '¿Listo para explorar Wayly?',
+  'marketing.landing.finalCta.subtitle':
+    'Cree una cuenta para probar las herramientas de marketplace en el entorno demo.',
+  'marketing.landing.finalCta.signIn': 'Iniciar sesión',
   'app.placeholderNotice':
     'Este es un marcador de posición. Pedidos, viajes, chat y pagos llegarán más adelante.',
 };
@@ -9875,6 +10211,118 @@ const fr: Dictionary = {
     'En cas de doute, consultez les règles officielles des compagnies, transporteurs, douanes et autorités locales avant d’envoyer ou transporter.',
   'marketing.landing.trustCenterLink': 'Comment Wayly gère la sécurité',
   'marketing.landing.faqLink': 'Parcourir les questions fréquentes',
+  'marketing.landing.heroBadge': 'Livraison P2P réinventée',
+  'marketing.landing.getStarted': 'Commencer',
+  'marketing.landing.seeHowItWorks': 'Comment ça marche',
+  'marketing.landing.howItWorks.title': 'Comment ça marche',
+  'marketing.landing.howItWorks.blurb':
+    'Parcours clair expéditeur et Wayler — de la demande à la livraison dans Wayly.',
+  'marketing.landing.howItWorks.step1Title': "L'expéditeur publie ou demande",
+  'marketing.landing.howItWorks.step1Body':
+    'Les expéditeurs publient un besoin ou envoient une demande à une route ou disponibilité locale.',
+  'marketing.landing.howItWorks.step2Title': 'Le Wayler publie une disponibilité',
+  'marketing.landing.howItWorks.step2Body':
+    'Les Waylers publient des routes ou disponibilités locales pour que les expéditeurs trouvent des options.',
+  'marketing.landing.howItWorks.step3Title': 'La demande devient une commande',
+  'marketing.landing.howItWorks.step3Body':
+    'Quand un Wayler accepte, la demande devient une commande acceptée avec une timeline partagée.',
+  'marketing.landing.howItWorks.step4Title': 'Gérer la livraison dans Wayly',
+  'marketing.landing.howItWorks.step4Body':
+    'Chat, preuve, tickets, notifications et avis aident à organiser la remise — sans garantie de résultat.',
+  'marketing.landing.howItWorks.fullGuide': 'Guide complet',
+  'marketing.landing.international.title': 'International et interurbain',
+  'marketing.landing.international.blurb':
+    'Les voyageurs peuvent transporter des colis sur des routes qu’ils empruntent déjà.',
+  'marketing.landing.international.body':
+    'Les Waylers publient des routes internationales ou interurbaines.\nLes expéditeurs parcourent les routes et envoient des demandes détaillées.\nLes deux parties confirment la remise dans le chat Wayly.\nLes utilisateurs restent responsables des douanes, transport et règles locales.',
+  'marketing.landing.international.routesLabel': 'Exemples de routes',
+  'marketing.landing.international.route1': 'Istanbul → New York',
+  'marketing.landing.international.route2': 'Berlin → Paris',
+  'marketing.landing.international.route3': 'Bishkek → Istanbul',
+  'marketing.landing.international.lawsNotice':
+    'Wayly ne vérifie pas la légalité ni ne garantit le dédouanement. Vérifiez les règles officielles.',
+  'marketing.landing.international.restrictedLink': 'Articles restreints',
+  'marketing.landing.local.title': 'Livraison locale en ville',
+  'marketing.landing.local.blurb': 'Aide en ville de Waylers locaux.',
+  'marketing.landing.local.body':
+    'Waylers locaux pour documents, petits colis, cadeaux et retraits marketplace.\nPubliez ou parcourez la disponibilité locale.\nGardez communication et détails de remise dans le chat Wayly.\nSuivez le guide des articles restreints.',
+  'marketing.landing.local.restrictedLink': 'Ce que vous pouvez envoyer',
+  'marketing.landing.pricing.title': 'Tarifs',
+  'marketing.landing.pricing.blurb':
+    'Informations honnêtes sur paiements et accès dans le demo actuel.',
+  'marketing.landing.pricing.body':
+    'Paiements et accès Wayler peuvent être mock/manual en demo.\nModèle prévu : accès au travail + frais plateforme simple.\nPas d’escrow réel, remboursement ou paiement garanti aujourd’hui.\nLa revue admin enregistre des metadata — ne déplace pas d’argent.',
+  'marketing.landing.pricing.viewFees': 'Frais et paiements',
+  'marketing.landing.pricing.viewRoadmap': 'Roadmap',
+  'marketing.landing.trustSafety.title': 'Confiance et sécurité',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly est conçu pour des flux verification-first et un usage responsable.',
+  'marketing.landing.trustSafety.feature1': 'Conception verification-first',
+  'marketing.landing.trustSafety.feature2': 'Guide articles restreints',
+  'marketing.landing.trustSafety.feature3': 'Chat de commande',
+  'marketing.landing.trustSafety.feature4': 'Metadata de preuve de livraison',
+  'marketing.landing.trustSafety.feature5': 'Litiges et tickets support',
+  'marketing.landing.trustSafety.feature6': 'Notifications in-app',
+  'marketing.landing.trustSafety.feature7': 'Avis post-livraison comme signaux de confiance',
+  'marketing.landing.trustSafety.feature8': 'Outils admin de revue',
+  'marketing.landing.trustSafety.notice':
+    'Wayly fournit guidance et outils — pas de garantie de sécurité, assurance, remboursement, paiement ou livraison.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Vérifié par conception',
+  'marketing.landing.verified.blurb':
+    'Vérification intégrée au produit — limites honnêtes du demo.',
+  'marketing.landing.verified.body':
+    'Wayly est conçu pour des flux verification-first.\nKYC peut être mock/manual selon l’environnement.\nIntégration identity provider prévue avant lancement avec argent réel.\nLa vérification aide la confiance — ne garantit pas les résultats.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Roadmap',
+  'marketing.landing.principles.title': 'Conçu pour expéditeurs et Waylers',
+  'marketing.landing.principles.blurb': 'Principes produit — pas de témoignages clients vérifiés.',
+  'marketing.landing.principles.disclaimer':
+    'Ces cartes décrivent des principes et exemples demo — pas des avis clients vérifiés.',
+  'marketing.landing.principles.card1Title': 'Routes claires',
+  'marketing.landing.principles.card1Body':
+    'Routes et disponibilité locale pour des options réalistes.',
+  'marketing.landing.principles.card2Title': 'Communication plus sûre',
+  'marketing.landing.principles.card2Body': 'Chat commande et guidance dans Wayly.',
+  'marketing.landing.principles.card3Title': 'Statut de livraison transparent',
+  'marketing.landing.principles.card3Body':
+    'Timeline, preuve et notifications — sans promettre la livraison.',
+  'marketing.landing.principles.card4Title': 'Signaux de confiance',
+  'marketing.landing.principles.card4Body':
+    'Avis et outils admin soutiennent la confiance — ne garantissent pas les résultats.',
+  'marketing.landing.faqPreview.title': 'Questions fréquentes',
+  'marketing.landing.faqPreview.blurb': 'Réponses rapides avec liens vers les guides publics.',
+  'marketing.landing.faqPreview.q1Question': 'Wayly a-t-il des paiements réels ?',
+  'marketing.landing.faqPreview.q1Answer':
+    'Pas encore de mouvement réel d’argent. Flux mock/manual possibles.',
+  'marketing.landing.faqPreview.q1Link': 'Frais et paiements',
+  'marketing.landing.faqPreview.q2Question': 'Que puis-je envoyer ?',
+  'marketing.landing.faqPreview.q2Answer':
+    'Suivez le guide restreints et les lois. Wayly ne vérifie pas la légalité.',
+  'marketing.landing.faqPreview.q2Link': 'Articles restreints',
+  'marketing.landing.faqPreview.q3Question': 'Comment les Waylers obtiennent-ils du travail ?',
+  'marketing.landing.faqPreview.q3Answer':
+    'Publiez une route ou disponibilité locale et acceptez des demandes claires.',
+  'marketing.landing.faqPreview.q3Link': 'Comment ça marche',
+  'marketing.landing.faqPreview.q4Question': 'Les avis sont-ils des garanties ?',
+  'marketing.landing.faqPreview.q4Answer':
+    'Non. Signaux de confiance — pas garanties de qualité ou sécurité.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': 'Et si quelque chose se passe mal ?',
+  'marketing.landing.faqPreview.q5Answer':
+    'Utilisez chat, preuve, tickets et litiges — pas une réponse d’urgence.',
+  'marketing.landing.faqPreview.q5Link': 'Support et litiges',
+  'marketing.landing.faqPreview.q6Question': 'Application mobile en store ?',
+  'marketing.landing.faqPreview.q6Answer':
+    'App native prévue. La web app est l’expérience principale aujourd’hui.',
+  'marketing.landing.faqPreview.q6Link': 'Roadmap',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'FAQ complet',
+  'marketing.landing.finalCta.title': 'Prêt à explorer Wayly ?',
+  'marketing.landing.finalCta.subtitle':
+    'Créez un compte pour essayer le marketplace expéditeur et Wayler en demo.',
+  'marketing.landing.finalCta.signIn': 'Se connecter',
   'app.placeholderNotice':
     'Ceci est un espace réservé. Commandes, trajets, chat et paiements arriveront plus tard.',
 };
@@ -12382,6 +12830,116 @@ const de: Dictionary = {
     'Bei Zweifeln offizielle Airline-, Carrier-, Zoll- und Behördenregeln prüfen, bevor Sie etwas senden oder transportieren.',
   'marketing.landing.trustCenterLink': 'Wie Wayly Sicherheit handhabt',
   'marketing.landing.faqLink': 'Häufige Fragen ansehen',
+  'marketing.landing.heroBadge': 'P2P-Lieferung neu gedacht',
+  'marketing.landing.getStarted': 'Loslegen',
+  'marketing.landing.seeHowItWorks': 'So funktioniert es',
+  'marketing.landing.howItWorks.title': 'So funktioniert es',
+  'marketing.landing.howItWorks.blurb':
+    'Klarer Sender- und Wayler-Ablauf — von der Anfrage bis zur Lieferung in Wayly.',
+  'marketing.landing.howItWorks.step1Title': 'Sender postet oder fragt an',
+  'marketing.landing.howItWorks.step1Body':
+    'Sender posten einen Bedarf oder senden eine Anfrage an Route oder lokale Verfügbarkeit.',
+  'marketing.landing.howItWorks.step2Title': 'Wayler veröffentlicht Verfügbarkeit',
+  'marketing.landing.howItWorks.step2Body':
+    'Wayler veröffentlichen Routen oder lokale Verfügbarkeit für aktive Optionen.',
+  'marketing.landing.howItWorks.step3Title': 'Anfrage wird zur Bestellung',
+  'marketing.landing.howItWorks.step3Body':
+    'Nach Annahme wird die Anfrage zur akzeptierten Lieferbestellung mit gemeinsamer Timeline.',
+  'marketing.landing.howItWorks.step4Title': 'Lieferung in Wayly verwalten',
+  'marketing.landing.howItWorks.step4Body':
+    'Chat, Liefernachweis, Tickets, Benachrichtigungen und Bewertungen organisieren die Übergabe — ohne Ergebnisgarantie.',
+  'marketing.landing.howItWorks.fullGuide': 'Vollständige Anleitung',
+  'marketing.landing.international.title': 'International und überregional',
+  'marketing.landing.international.blurb':
+    'Reisende können Pakete auf Routen mitnehmen, die sie ohnehin fahren.',
+  'marketing.landing.international.body':
+    'Wayler veröffentlichen internationale oder überregionale Routen.\nSender durchsuchen Routen und senden Anfragen mit klaren Details.\nBeide Seiten bestätigen Übergabepläne im Wayly-Chat.\nNutzer sind für Zoll, Transport und Zielregeln verantwortlich.',
+  'marketing.landing.international.routesLabel': 'Beispielrouten',
+  'marketing.landing.international.route1': 'Istanbul → New York',
+  'marketing.landing.international.route2': 'Berlin → Paris',
+  'marketing.landing.international.route3': 'Bischkek → Istanbul',
+  'marketing.landing.international.lawsNotice':
+    'Wayly prüft keine Legalität und garantiert keinen Zoll. Offizielle Regeln vor Versand prüfen.',
+  'marketing.landing.international.restrictedLink': 'Eingeschränkte Artikel',
+  'marketing.landing.local.title': 'Lokale Stadt-Lieferung',
+  'marketing.landing.local.blurb': 'Hilfe von lokalen Waylern in derselben Stadt.',
+  'marketing.landing.local.body':
+    'Lokale Wayler helfen bei Dokumenten, kleinen Paketen, Geschenken und Marketplace-Abholungen.\nLokale Verfügbarkeit veröffentlichen oder suchen.\nKommunikation und Übergabe im Wayly-Chat halten.\nGuidance zu eingeschränkten Artikeln befolgen.',
+  'marketing.landing.local.restrictedLink': 'Was Sie senden können',
+  'marketing.landing.pricing.title': 'Preise',
+  'marketing.landing.pricing.blurb': 'Ehrliche Infos zu Zahlung und Zugang im aktuellen Demo.',
+  'marketing.landing.pricing.body':
+    'Zahlung und Wayler-Zugang können im Demo mock/manual sein.\nGeplantes Modell: Arbeitszugang + einfache Plattformgebühr.\nKein echtes Escrow, garantierte Erstattung oder Auszahlung heute.\nAdmin-Review speichert nur Metadata — bewegt kein Geld.',
+  'marketing.landing.pricing.viewFees': 'Gebühren & Zahlungen',
+  'marketing.landing.pricing.viewRoadmap': 'Roadmap',
+  'marketing.landing.trustSafety.title': 'Vertrauen & Sicherheit',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly ist für verification-first Workflows und verantwortungsvolle Nutzung konzipiert.',
+  'marketing.landing.trustSafety.feature1': 'Verification-first Kontodesign',
+  'marketing.landing.trustSafety.feature2': 'Guidance zu eingeschränkten Artikeln',
+  'marketing.landing.trustSafety.feature3': 'Bestell-Chat in der App',
+  'marketing.landing.trustSafety.feature4': 'Liefernachweis-Metadata',
+  'marketing.landing.trustSafety.feature5': 'Streit- und Support-Ticket-Tools',
+  'marketing.landing.trustSafety.feature6': 'In-App-Benachrichtigungen',
+  'marketing.landing.trustSafety.feature7': 'Bewertungen nach Lieferung als Trust Signals',
+  'marketing.landing.trustSafety.feature8': 'Admin-Review-Tools',
+  'marketing.landing.trustSafety.notice':
+    'Wayly bietet Guidance und Tools — keine Garantie für Sicherheit, Versicherung, Erstattung, Auszahlung oder Lieferung.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Verifiziert by design',
+  'marketing.landing.verified.blurb':
+    'Verifizierung im Produktdesign — mit ehrlichen Demo-Grenzen.',
+  'marketing.landing.verified.body':
+    'Wayly ist für verification-first Workflows konzipiert.\nKYC kann je Umgebung mock/manual sein.\nProduction Identity Provider vor Real-Money-Launch geplant.\nVerifizierung unterstützt Trust Signals — garantiert keine Ergebnisse.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Roadmap',
+  'marketing.landing.principles.title': 'Für Sender & Wayler gebaut',
+  'marketing.landing.principles.blurb': 'Produktprinzipien — keine verifizierten Kundenstimmen.',
+  'marketing.landing.principles.disclaimer':
+    'Diese Karten beschreiben Produktprinzipien und Demo-Beispiele — keine verifizierten Kundenbewertungen.',
+  'marketing.landing.principles.card1Title': 'Klare Routen',
+  'marketing.landing.principles.card1Body':
+    'Routen und lokale Verfügbarkeit für realistische Optionen.',
+  'marketing.landing.principles.card2Title': 'Sicherere Kommunikation',
+  'marketing.landing.principles.card2Body': 'Bestell-Chat und Guidance innerhalb von Wayly.',
+  'marketing.landing.principles.card3Title': 'Transparenter Lieferstatus',
+  'marketing.landing.principles.card3Body':
+    'Timeline, Nachweis und Benachrichtigungen — ohne Liefergarantie.',
+  'marketing.landing.principles.card4Title': 'Trust Signals',
+  'marketing.landing.principles.card4Body':
+    'Bewertungen und Admin-Tools unterstützen Vertrauen — garantieren keine Ergebnisse.',
+  'marketing.landing.faqPreview.title': 'Häufige Fragen',
+  'marketing.landing.faqPreview.blurb': 'Kurze Antworten mit Links zu öffentlichen Guides.',
+  'marketing.landing.faqPreview.q1Question': 'Hat Wayly echte Zahlungen?',
+  'marketing.landing.faqPreview.q1Answer': 'Noch kein echtes Geld. Flows können mock/manual sein.',
+  'marketing.landing.faqPreview.q1Link': 'Gebühren & Zahlungen',
+  'marketing.landing.faqPreview.q2Question': 'Was darf ich senden?',
+  'marketing.landing.faqPreview.q2Answer':
+    'Restricted-Items-Guidance und Gesetze beachten. Wayly prüft keine Legalität.',
+  'marketing.landing.faqPreview.q2Link': 'Eingeschränkte Artikel',
+  'marketing.landing.faqPreview.q3Question': 'Wie bekommen Wayler Aufträge?',
+  'marketing.landing.faqPreview.q3Answer':
+    'Route oder lokale Verfügbarkeit veröffentlichen und sichere Anfragen annehmen.',
+  'marketing.landing.faqPreview.q3Link': 'So funktioniert es',
+  'marketing.landing.faqPreview.q4Question': 'Sind Bewertungen Garantien?',
+  'marketing.landing.faqPreview.q4Answer':
+    'Nein. Trust Signals — keine Garantie für Qualität oder Sicherheit.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': 'Was, wenn etwas schiefgeht?',
+  'marketing.landing.faqPreview.q5Answer':
+    'Chat, Nachweis, Tickets und Streit-Tools nutzen — kein Notfalldienst.',
+  'marketing.landing.faqPreview.q5Link': 'Support & Streitigkeiten',
+  'marketing.landing.faqPreview.q6Question': 'Gibt es eine Mobile App im Store?',
+  'marketing.landing.faqPreview.q6Answer':
+    'Native App geplant. Web-App ist heute die Hauptoberfläche.',
+  'marketing.landing.faqPreview.q6Link': 'Roadmap',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'Vollständiges FAQ',
+  'marketing.landing.finalCta.title': 'Bereit, Wayly zu erkunden?',
+  'marketing.landing.finalCta.subtitle':
+    'Konto erstellen und Sender- und Wayler-Marketplace-Tools im Demo testen.',
+  'marketing.landing.finalCta.signIn': 'Anmelden',
   'app.placeholderNotice':
     'Dies ist eine Platzhalter-Oberfläche. Bestellungen, Fahrten, Chat und Zahlungen folgen später.',
 };
@@ -14826,6 +15384,116 @@ const tr: Dictionary = {
     'Şüphede havayolu, taşıyıcı, gümrük ve yerel makamların resmi kurallarını göndermeden veya taşımadan önce kontrol edin.',
   'marketing.landing.trustCenterLink': 'Wayly güvenliği nasıl yönetir',
   'marketing.landing.faqLink': 'Sık sorulan sorulara göz atın',
+  'marketing.landing.heroBadge': 'Yeniden tasarlanmış P2P teslimat',
+  'marketing.landing.getStarted': 'Başlayın',
+  'marketing.landing.seeHowItWorks': 'Nasıl çalışır',
+  'marketing.landing.howItWorks.title': 'Nasıl çalışır',
+  'marketing.landing.howItWorks.blurb':
+    'Gönderici ve Wayler için net akış — istekten teslimata Wayly içinde.',
+  'marketing.landing.howItWorks.step1Title': 'Gönderici yayınlar veya talep eder',
+  'marketing.landing.howItWorks.step1Body':
+    'Göndericiler teslimat ihtiyacı yayınlar veya Wayler rotasına talep gönderir.',
+  'marketing.landing.howItWorks.step2Title': 'Wayler müsaitlik yayınlar',
+  'marketing.landing.howItWorks.step2Body':
+    'Wayler rotalar veya yerel müsaitlik yayınlar; göndericiler aktif seçenekleri bulur.',
+  'marketing.landing.howItWorks.step3Title': 'Talep siparişe dönüşür',
+  'marketing.landing.howItWorks.step3Body':
+    'Wayler kabul edince talep, paylaşılan zaman çizelgeli kabul edilmiş sipariş olur.',
+  'marketing.landing.howItWorks.step4Title': 'Teslimatı Wayly içinde yönetin',
+  'marketing.landing.howItWorks.step4Body':
+    'Sohbet, teslim kanıtı, destek biletleri, bildirimler ve yorumlar teslimi organize eder — sonuç garantisi yok.',
+  'marketing.landing.howItWorks.fullGuide': 'Tam rehber',
+  'marketing.landing.international.title': 'Uluslararası ve şehirlerarası',
+  'marketing.landing.international.blurb':
+    'Yolcular zaten gidecekleri rotalarda paket taşıyabilir.',
+  'marketing.landing.international.body':
+    'Wayler uluslararası veya şehirlerarası rotalar yayınlar.\nGöndericiler rotaları inceler ve net detaylarla talep gönderir.\nTaraflar teslim planlarını Wayly sohbetinde onaylar.\nKullanıcılar gümrük, taşıma ve hedef kurallarından sorumludur.',
+  'marketing.landing.international.routesLabel': 'Örnek rotalar',
+  'marketing.landing.international.route1': 'İstanbul → New York',
+  'marketing.landing.international.route2': 'Berlin → Paris',
+  'marketing.landing.international.route3': 'Bişkek → İstanbul',
+  'marketing.landing.international.lawsNotice':
+    'Wayly yasallığı doğrulamaz ve gümrük garantisi vermez. Resmi kuralları kontrol edin.',
+  'marketing.landing.international.restrictedLink': 'Kısıtlı eşyalar',
+  'marketing.landing.local.title': 'Yerel şehir teslimatı',
+  'marketing.landing.local.blurb': 'Aynı şehirde yerel Wayler desteği.',
+  'marketing.landing.local.body':
+    'Yerel Wayler belgeler, küçük paketler, hediyeler ve marketplace alımlarında yardımcı olur.\nYerel müsaitlik yayınlayın veya arayın.\nİletişim ve teslim detaylarını Wayly sohbetinde tutun.\nKısıtlı eşya rehberine uyun.',
+  'marketing.landing.local.restrictedLink': 'Ne gönderebilirsiniz',
+  'marketing.landing.pricing.title': 'Fiyatlandırma',
+  'marketing.landing.pricing.blurb': 'Mevcut demo için dürüst ödeme ve erişim bilgisi.',
+  'marketing.landing.pricing.body':
+    'Ödeme ve Wayler erişimi demo ortamında mock/manual olabilir.\nPlanlanan model: Wayler iş erişimi + basit platform ücreti.\nBugün gerçek escrow, garantili iade veya ödeme yok.\nAdmin incelemesi yalnızca metadata kaydeder — para taşımaz.',
+  'marketing.landing.pricing.viewFees': 'Ücretler ve ödemeler',
+  'marketing.landing.pricing.viewRoadmap': 'Yol haritası',
+  'marketing.landing.trustSafety.title': 'Güven ve güvenlik',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly verification-first akışlar ve sorumlu marketplace kullanımı için tasarlandı.',
+  'marketing.landing.trustSafety.feature1': 'Verification-first hesap tasarımı',
+  'marketing.landing.trustSafety.feature2': 'Kısıtlı eşya rehberi',
+  'marketing.landing.trustSafety.feature3': 'Uygulama içi sipariş sohbeti',
+  'marketing.landing.trustSafety.feature4': 'Teslim kanıtı metadata',
+  'marketing.landing.trustSafety.feature5': 'Anlaşmazlık ve destek biletleri',
+  'marketing.landing.trustSafety.feature6': 'Uygulama içi bildirimler',
+  'marketing.landing.trustSafety.feature7': 'Teslim sonrası yorumlar — trust signals',
+  'marketing.landing.trustSafety.feature8': 'Admin inceleme araçları',
+  'marketing.landing.trustSafety.notice':
+    'Wayly rehberlik ve araçlar sunar — güvenlik, sigorta, iade, ödeme veya teslimat garantisi vermez.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Tasarım gereği doğrulama',
+  'marketing.landing.verified.blurb':
+    'Doğrulama ürün yönünde — demo sınırları dürüstçe belirtilir.',
+  'marketing.landing.verified.body':
+    'Wayly verification-first akışlar için tasarlandı.\nKYC ortama göre mock/manual olabilir.\nGerçek para lansmanından önce production identity provider planlandı.\nDoğrulama trust signal sağlar — sonuç garantisi değildir.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Yol haritası',
+  'marketing.landing.principles.title': 'Göndericiler ve Wayler için',
+  'marketing.landing.principles.blurb': 'Ürün ilkeleri — doğrulanmış müşteri yorumları değil.',
+  'marketing.landing.principles.disclaimer':
+    'Bu kartlar ürün ilkeleri ve demo örneklerini anlatır — doğrulanmış müşteri yorumları değildir.',
+  'marketing.landing.principles.card1Title': 'Net rotalar',
+  'marketing.landing.principles.card1Body': 'Gerçekçi seçenekler için rota ve yerel müsaitlik.',
+  'marketing.landing.principles.card2Title': 'Daha güvenli iletişim',
+  'marketing.landing.principles.card2Body': 'Sipariş sohbeti ve platform içi rehberlik.',
+  'marketing.landing.principles.card3Title': 'Şeffaf teslimat durumu',
+  'marketing.landing.principles.card3Body':
+    'Zaman çizelgesi, kanıt ve bildirimler — teslimat vaadi olmadan.',
+  'marketing.landing.principles.card4Title': 'Trust signals',
+  'marketing.landing.principles.card4Body':
+    'Yorumlar ve admin araçları güveni destekler — sonuç garantisi vermez.',
+  'marketing.landing.faqPreview.title': 'Sık sorulan sorular',
+  'marketing.landing.faqPreview.blurb': 'Public rehberlere bağlantılı kısa yanıtlar.',
+  'marketing.landing.faqPreview.q1Question': 'Wayly gerçek ödemelerle canlı mı?',
+  'marketing.landing.faqPreview.q1Answer':
+    'Henüz production para hareketi yok. Akışlar mock/manual olabilir.',
+  'marketing.landing.faqPreview.q1Link': 'Ücretler ve ödemeler',
+  'marketing.landing.faqPreview.q2Question': 'Ne gönderebilirim?',
+  'marketing.landing.faqPreview.q2Answer':
+    'Kısıtlı eşya rehberi ve yasalara uyun. Wayly yasallığı doğrulamaz.',
+  'marketing.landing.faqPreview.q2Link': 'Kısıtlı eşyalar',
+  'marketing.landing.faqPreview.q3Question': 'Wayler işi nasıl alır?',
+  'marketing.landing.faqPreview.q3Answer':
+    'Rota veya yerel müsaitlik yayınlayın ve net talepleri kabul edin.',
+  'marketing.landing.faqPreview.q3Link': 'Nasıl çalışır',
+  'marketing.landing.faqPreview.q4Question': 'Yorumlar garanti mi?',
+  'marketing.landing.faqPreview.q4Answer':
+    'Hayır. Trust signals — kalite veya güvenlik garantisi değil.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': 'Bir şeyler ters giderse?',
+  'marketing.landing.faqPreview.q5Answer':
+    'Sohbet, kanıt, biletler ve anlaşmazlık araçlarını kullanın — acil müdahale değil.',
+  'marketing.landing.faqPreview.q5Link': 'Destek ve anlaşmazlıklar',
+  'marketing.landing.faqPreview.q6Question': 'Mobil uygulama mağazada mı?',
+  'marketing.landing.faqPreview.q6Answer':
+    'Native app planlandı. Şu an birincil deneyim web uygulaması.',
+  'marketing.landing.faqPreview.q6Link': 'Yol haritası',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'Tam SSS',
+  'marketing.landing.finalCta.title': 'Wayly keşfetmeye hazır mısınız?',
+  'marketing.landing.finalCta.subtitle':
+    'Demo ortamında gönderici ve Wayler marketplace araçlarını denemek için hesap oluşturun.',
+  'marketing.landing.finalCta.signIn': 'Giriş yap',
   'app.placeholderNotice':
     'Bu geçici bir uygulama kabuğudur. Siparişler, seyahatler, sohbet ve ödemeler daha sonra gelecek.',
 };
@@ -17183,6 +17851,108 @@ const ar: Dictionary = {
     'عند الشك، راجع القواعد الرسمية لشركات الطيران والناقلين والجمارك والسلطات المحلية قبل الإرسال أو النقل.',
   'marketing.landing.trustCenterLink': 'كيف يتعامل Wayly مع السلامة',
   'marketing.landing.faqLink': 'تصفح الأسئلة الشائعة',
+  'marketing.landing.heroBadge': 'توصيل P2P بأسلوب جديد',
+  'marketing.landing.getStarted': 'ابدأ',
+  'marketing.landing.seeHowItWorks': 'كيف يعمل',
+  'marketing.landing.howItWorks.title': 'كيف يعمل',
+  'marketing.landing.howItWorks.blurb':
+    'مسار واضح للمرسل و Wayler — من الطلب إلى التسليم داخل Wayly.',
+  'marketing.landing.howItWorks.step1Title': 'المرسل ينشر أو يطلب',
+  'marketing.landing.howItWorks.step1Body':
+    'ينشر المرسل حاجة توصيل أو يرسل طلباً إلى مسار أو توفر محلي.',
+  'marketing.landing.howItWorks.step2Title': 'Wayler ينشر التوفر',
+  'marketing.landing.howItWorks.step2Body':
+    'ينشر Wayler مسارات أو توفراً محلياً لاكتشاف الخيارات النشطة.',
+  'marketing.landing.howItWorks.step3Title': 'الطلب يصبح order',
+  'marketing.landing.howItWorks.step3Body':
+    'عند القبول يصبح الطلب order مقبولاً مع timeline مشترك.',
+  'marketing.landing.howItWorks.step4Title': 'إدارة التسليم في Wayly',
+  'marketing.landing.howItWorks.step4Body':
+    'الدردشة والإثبات والتذاكر والإشعارات والمراجعات تنظم التسليم — دون ضمان النتيجة.',
+  'marketing.landing.howItWorks.fullGuide': 'الدليل الكامل',
+  'marketing.landing.international.title': 'دولي وبين المدن',
+  'marketing.landing.international.blurb': 'يمكن للمسافرين حمل طرود على مسارات يسافرونها أصلاً.',
+  'marketing.landing.international.body':
+    'ينشر Wayler مسارات دولية أو بين المدن.\nيتصفح المرسلون المسارات ويرسلون طلبات بتفاصيل واضحة.\nيؤكد الطرفان خطط التسليم في دردشة Wayly.\nالمستخدمون مسؤولون عن الجمارك والنقل وقوانين الوجهة.',
+  'marketing.landing.international.routesLabel': 'أمثلة مسارات',
+  'marketing.landing.international.route1': 'إسطنبول → نيويورك',
+  'marketing.landing.international.route2': 'برلين → باريس',
+  'marketing.landing.international.route3': 'بishkek → إسطنبول',
+  'marketing.landing.international.lawsNotice':
+    'Wayly لا يتحقق من قانونية البضائع ولا يضمن الجمارك. راجع القواعد الرسمية.',
+  'marketing.landing.international.restrictedLink': 'العناصر الم restricted',
+  'marketing.landing.local.title': 'توصيل محلي داخل المدينة',
+  'marketing.landing.local.blurb': 'مساعدة من Waylers محليين في نفس المدينة.',
+  'marketing.landing.local.body':
+    'Waylers محليون للوثائق والطرود الصغيرة والهدايا واستلام marketplace.\nانشر أو ابحث عن توفر محلي.\nأبقِ التواصل وتفاصيل التسليم في درdشة Wayly.\nاتبع guidance للعناصر الم restricted.',
+  'marketing.landing.local.restrictedLink': 'ما يمكنك إرساله',
+  'marketing.landing.pricing.title': 'التسعير',
+  'marketing.landing.pricing.blurb': 'معلومات صادقة عن الدفع والوصول في demo الحالي.',
+  'marketing.landing.pricing.body':
+    'قد تكون الدفعات والوصول mock/manual في demo.\nالنموذج الم planned: وصول Wayler للعمل + رسوم منصة بسيطة.\nلا escrow حقيقي ولا refund/payout مضمون اليوم.\nمراجعة admin تسجل metadata فقط — لا تحرك أموالاً.',
+  'marketing.landing.pricing.viewFees': 'الرسوم والدفع',
+  'marketing.landing.pricing.viewRoadmap': 'Roadmap',
+  'marketing.landing.trustSafety.title': 'الثقة والسلامة',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly مصمم لـ verification-first workflows واستخدام marketplace مسؤول.',
+  'marketing.landing.trustSafety.feature1': 'تصميم verification-first',
+  'marketing.landing.trustSafety.feature2': 'guidance للعناصر الم restricted',
+  'marketing.landing.trustSafety.feature3': 'دردشة الطلب',
+  'marketing.landing.trustSafety.feature4': 'metadata إثبات التسليم',
+  'marketing.landing.trustSafety.feature5': 'أدوات النزاع وتذاكر الدعم',
+  'marketing.landing.trustSafety.feature6': 'إشعارات in-app',
+  'marketing.landing.trustSafety.feature7': 'مراجعات post-delivery كـ trust signals',
+  'marketing.landing.trustSafety.feature8': 'أدوات admin review',
+  'marketing.landing.trustSafety.notice':
+    'Wayly يقدم guidance وأدوات — لا يضمن السلامة أو التأمين أو refund/payout أو نتائج التسليم.',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Verified by design',
+  'marketing.landing.verified.blurb': 'التحقق مدمج في المنتج — مع حدود demo صادقة.',
+  'marketing.landing.verified.body':
+    'Wayly مصمم لـ verification-first workflows.\nKYC قد يكون mock/manual حسب البيئة.\nتكامل identity provider مخطط قبل real-money launch.\nالتحقق trust signal — لا يضمن النتائج.',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': 'Roadmap',
+  'marketing.landing.principles.title': 'لبناء Senders و Waylers',
+  'marketing.landing.principles.blurb': 'مبادئ المنتج — ليست شهادات عملاء verified.',
+  'marketing.landing.principles.disclaimer':
+    'هذه البطاقات تصف مبادئ المنتج وأمثلة demo — ليست مراجعات عملاء verified.',
+  'marketing.landing.principles.card1Title': 'مسارات واضحة',
+  'marketing.landing.principles.card1Body': 'مسارات وتوفر محلي لخيارات واقعية.',
+  'marketing.landing.principles.card2Title': 'تواصل أكثر أماناً',
+  'marketing.landing.principles.card2Body': 'دردشة الطلب و guidance داخل Wayly.',
+  'marketing.landing.principles.card3Title': 'حالة تسليم شفافة',
+  'marketing.landing.principles.card3Body': 'Timeline وإثبات وإشعارات — دون وعد بالتسليم.',
+  'marketing.landing.principles.card4Title': 'Trust signals',
+  'marketing.landing.principles.card4Body': 'المراجعات وأدوات admin تدعم الثقة — لا تضمن النتائج.',
+  'marketing.landing.faqPreview.title': 'أسئلة شائعة',
+  'marketing.landing.faqPreview.blurb': 'إجابات سريعة مع روابط للأدلة العامة.',
+  'marketing.landing.faqPreview.q1Question': 'هل Wayly live بمدفوعات حقيقية؟',
+  'marketing.landing.faqPreview.q1Answer': 'لا حركة أموال production بعد. قد تكون mock/manual.',
+  'marketing.landing.faqPreview.q1Link': 'الرسوم والدفع',
+  'marketing.landing.faqPreview.q2Question': 'ماذا يمكنني إرساله؟',
+  'marketing.landing.faqPreview.q2Answer':
+    'اتبع restricted-items guidance والقوانين. Wayly لا يتحقق من legality.',
+  'marketing.landing.faqPreview.q2Link': 'العناصر الم restricted',
+  'marketing.landing.faqPreview.q3Question': 'كيف يحصل Wayler على عمل؟',
+  'marketing.landing.faqPreview.q3Answer': 'انشر مساراً أو توفراً محلياً واقبل طلبات واضحة وآمنة.',
+  'marketing.landing.faqPreview.q3Link': 'كيف يعمل',
+  'marketing.landing.faqPreview.q4Question': 'هل المراجعات ضمانات؟',
+  'marketing.landing.faqPreview.q4Answer': 'لا. trust signals — ليست ضمانات جودة أو سلامة.',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': 'ماذا إذا حدث خطأ؟',
+  'marketing.landing.faqPreview.q5Answer':
+    'استخدم chat وproof وتذاكر وdisputes — ليس emergency response.',
+  'marketing.landing.faqPreview.q5Link': 'الدعم والنزاعات',
+  'marketing.landing.faqPreview.q6Question': 'هل هناك تطبيق جوال في المتجر؟',
+  'marketing.landing.faqPreview.q6Answer': 'تطبيق native مخطط. web app هو التجربة الأساسية اليوم.',
+  'marketing.landing.faqPreview.q6Link': 'Roadmap',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': 'FAQ كامل',
+  'marketing.landing.finalCta.title': 'مستعد لاستكشاف Wayly؟',
+  'marketing.landing.finalCta.subtitle':
+    'أنشئ حساباً لتجربة أدوات marketplace للمرسل و Wayler في demo.',
+  'marketing.landing.finalCta.signIn': 'تسجيل الدخول',
   'app.placeholderNotice':
     'هذا هيكل تطبيق مؤقت. الطلبات والرحلات والدردشة والمدفوعات ستأتي لاحقاً.',
 };
@@ -19436,6 +20206,107 @@ const zh: Dictionary = {
     '如有疑问，寄送或携带前请查阅航司、承运人、海关与地方官方的正式规则。',
   'marketing.landing.trustCenterLink': 'Wayly 如何处理安全',
   'marketing.landing.faqLink': '浏览常见问题',
+  'marketing.landing.heroBadge': '重新想象的 P2P 配送',
+  'marketing.landing.getStarted': '开始使用',
+  'marketing.landing.seeHowItWorks': '如何运作',
+  'marketing.landing.howItWorks.title': '如何运作',
+  'marketing.landing.howItWorks.blurb':
+    '清晰的寄件人与 Wayler 流程 — 从请求到交付，在 Wayly 内完成。',
+  'marketing.landing.howItWorks.step1Title': '寄件人发布或请求',
+  'marketing.landing.howItWorks.step1Body':
+    '寄件人发布配送需求或向 Wayler 路线/本地可用性发送请求。',
+  'marketing.landing.howItWorks.step2Title': 'Wayler 发布可用性',
+  'marketing.landing.howItWorks.step2Body':
+    'Wayler 发布行程路线或同城可用性，供寄件人发现活跃选项。',
+  'marketing.landing.howItWorks.step3Title': '请求变为订单',
+  'marketing.landing.howItWorks.step3Body': 'Wayler 接受后，请求成为已接受订单，共享时间线。',
+  'marketing.landing.howItWorks.step4Title': '在 Wayly 内管理交付',
+  'marketing.landing.howItWorks.step4Body':
+    '聊天、交付证明、支持工单、通知与交付后评价帮助组织交接 — 不保证结果。',
+  'marketing.landing.howItWorks.fullGuide': '完整指南',
+  'marketing.landing.international.title': '国际与城际',
+  'marketing.landing.international.blurb': '旅行者可在已有路线上携带包裹 — 寄件人发现活跃路线。',
+  'marketing.landing.international.body':
+    'Wayler 发布国际或城际路线。\n寄件人浏览路线并发送清晰请求。\n双方在 Wayly 聊天中确认交接计划。\n用户须遵守海关、运输与目的地规则。',
+  'marketing.landing.international.routesLabel': '路线示例',
+  'marketing.landing.international.route1': '伊斯坦布尔 → 纽约',
+  'marketing.landing.international.route2': '柏林 → 巴黎',
+  'marketing.landing.international.route3': '比什凯克 → 伊斯坦布尔',
+  'marketing.landing.international.lawsNotice':
+    'Wayly 不验证物品合法性，不保证清关。发送或携带前请查阅官方规则。',
+  'marketing.landing.international.restrictedLink': '禁运物品指南',
+  'marketing.landing.local.title': '同城本地配送',
+  'marketing.landing.local.blurb': '本地 Wayler 在同城提供帮助。',
+  'marketing.landing.local.body':
+    '本地 Wayler 可协助文件、小包裹、礼物与 marketplace 取件。\n发布或浏览本地可用性。\n在 Wayly 聊天中保持沟通与交接细节。\n遵循禁运物品指南。',
+  'marketing.landing.local.restrictedLink': '可发送什么',
+  'marketing.landing.pricing.title': '定价',
+  'marketing.landing.pricing.blurb': '当前 demo 的诚实支付与访问说明。',
+  'marketing.landing.pricing.body':
+    '支付与 Wayler 访问在 demo 中可能为 mock/manual。\n计划模式：Wayler 工作访问 + 简单平台费。\n今日无真实 escrow、保证退款或保证 payout。\nAdmin review 仅记录 metadata — 不移动资金。',
+  'marketing.landing.pricing.viewFees': '费用与支付',
+  'marketing.landing.pricing.viewRoadmap': '产品路线图',
+  'marketing.landing.trustSafety.title': '信任与安全',
+  'marketing.landing.trustSafety.blurb':
+    'Wayly 为 verification-first 流程与 responsible marketplace 而设计。',
+  'marketing.landing.trustSafety.feature1': 'Verification-first 账户设计',
+  'marketing.landing.trustSafety.feature2': '禁运物品指南',
+  'marketing.landing.trustSafety.feature3': '应用内订单聊天',
+  'marketing.landing.trustSafety.feature4': '交付证明 metadata',
+  'marketing.landing.trustSafety.feature5': '争议与支持工单工具',
+  'marketing.landing.trustSafety.feature6': '应用内通知',
+  'marketing.landing.trustSafety.feature7': '交付后评价作为 trust signals',
+  'marketing.landing.trustSafety.feature8': 'Admin review 工具',
+  'marketing.landing.trustSafety.notice':
+    'Wayly 提供 guidance 与工具 — 不保证安全、保险、退款、payout 或交付结果。',
+  'marketing.landing.trustSafety.viewTrust': 'Trust Center',
+  'marketing.landing.trustSafety.viewHelp': 'Help Center',
+  'marketing.landing.verified.title': 'Verified by design',
+  'marketing.landing.verified.blurb': '验证融入产品设计 — demo 限制如实说明。',
+  'marketing.landing.verified.body':
+    'Wayly 为 verification-first workflows 而设计。\nKYC 可能因环境而为 mock/manual。\n真实资金上线前计划 production identity provider。\n验证是 trust signal — 不保证结果。',
+  'marketing.landing.verified.viewTrust': 'Trust Center',
+  'marketing.landing.verified.viewRoadmap': '路线图',
+  'marketing.landing.principles.title': '为寄件人与 Wayler 而建',
+  'marketing.landing.principles.blurb': '产品原则 — 非 verified 客户证言。',
+  'marketing.landing.principles.disclaimer':
+    '这些卡片描述产品原则与 demo 示例 — 非 verified 客户评价。',
+  'marketing.landing.principles.card1Title': '清晰路线',
+  'marketing.landing.principles.card1Body': '行程路线与本地可用性便于 realistic 选择。',
+  'marketing.landing.principles.card2Title': '更安全的沟通',
+  'marketing.landing.principles.card2Body': '订单聊天与 guidance 留在 Wayly 内。',
+  'marketing.landing.principles.card3Title': '透明的交付状态',
+  'marketing.landing.principles.card3Body': '时间线、证明与通知 — 不承诺 guaranteed delivery。',
+  'marketing.landing.principles.card4Title': 'Trust signals',
+  'marketing.landing.principles.card4Body': '评价与 admin 工具支持信任 — 不保证结果。',
+  'marketing.landing.faqPreview.title': '常见问题',
+  'marketing.landing.faqPreview.blurb': '快速回答并链接到公开指南。',
+  'marketing.landing.faqPreview.q1Question': 'Wayly 是否已上线真实支付？',
+  'marketing.landing.faqPreview.q1Answer': '尚无 production 资金移动。流程可能为 mock/manual。',
+  'marketing.landing.faqPreview.q1Link': '费用与支付',
+  'marketing.landing.faqPreview.q2Question': '可以发送什么？',
+  'marketing.landing.faqPreview.q2Answer': '遵循禁运指南与法律。Wayly 不验证 legality。',
+  'marketing.landing.faqPreview.q2Link': '禁运物品',
+  'marketing.landing.faqPreview.q3Question': 'Wayler 如何获得工作？',
+  'marketing.landing.faqPreview.q3Answer': '发布路线或本地可用性，接受清晰安全的请求。',
+  'marketing.landing.faqPreview.q3Link': '如何运作',
+  'marketing.landing.faqPreview.q4Question': '评价是 guarantee 吗？',
+  'marketing.landing.faqPreview.q4Answer':
+    '否。Post-delivery 评价是 trust signals — 非质量或安全 guarantee。',
+  'marketing.landing.faqPreview.q4Link': 'Trust Center',
+  'marketing.landing.faqPreview.q5Question': '出问题怎么办？',
+  'marketing.landing.faqPreview.q5Answer':
+    '使用 chat、proof、工单与 dispute 工具 — 非 emergency response。',
+  'marketing.landing.faqPreview.q5Link': '支持与争议',
+  'marketing.landing.faqPreview.q6Question': '是否有应用商店移动 app？',
+  'marketing.landing.faqPreview.q6Answer': 'Native app 为 planned work。当前主体验为 web app。',
+  'marketing.landing.faqPreview.q6Link': '路线图',
+  'marketing.landing.faqPreview.browseHelp': 'Help Center',
+  'marketing.landing.faqPreview.viewFaq': '完整 FAQ',
+  'marketing.landing.finalCta.title': '准备探索 Wayly？',
+  'marketing.landing.finalCta.subtitle':
+    '创建账户，在 demo 环境中试用寄件人与 Wayler marketplace 工具。',
+  'marketing.landing.finalCta.signIn': '登录',
   'app.placeholderNotice': '这是占位应用界面。订单、行程、聊天和支付将在后续里程碑中添加。',
 };
 
