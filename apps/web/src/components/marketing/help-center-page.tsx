@@ -10,6 +10,7 @@ import {
   MapPin,
   Route,
   Scale,
+  ScrollText,
   Shield,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -69,6 +70,12 @@ const FEATURED_GUIDES: FeaturedGuide[] = [
     icon: Scale,
     titleKey: 'marketing.helpCenter.supportDisputes',
     descriptionKey: 'marketing.helpCenter.supportDisputesDescription',
+  },
+  {
+    href: '/policies',
+    icon: ScrollText,
+    titleKey: 'marketing.policies.navLabel',
+    descriptionKey: 'marketing.policies.helpCenterDescription',
   },
 ];
 

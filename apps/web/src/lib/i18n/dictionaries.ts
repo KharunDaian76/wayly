@@ -2040,6 +2040,113 @@ const en = {
   'marketing.supportDisputes.emergencyNotice':
     'Wayly dispute tools organize order issues — they are not legal advice, guaranteed refunds, or emergency response. Contact local authorities for danger or illegal activity.',
   'marketing.supportDisputes.backHome': 'Back to home',
+  'marketing.policies.navLabel': 'Policy Center',
+  'marketing.policies.title': 'Policy Center',
+  'marketing.policies.subtitle':
+    'Platform rules, privacy guidance, and responsible-use policies for Senders and Waylers — draft general guidance for the current product.',
+  'marketing.policies.draftNotice':
+    'Draft general platform guidance only — not legal advice and not a final lawyer-reviewed agreement. Users must follow local laws, customs, transport rules, and platform guidance. Future legal and privacy review is planned before production launch.',
+  'marketing.policies.cardsTitle': 'Policy and guidance documents',
+  'marketing.policies.terms': 'Terms of Use',
+  'marketing.policies.termsDescription':
+    'Draft guidance on responsible marketplace use, roles, payments, disputes, and current platform limits.',
+  'marketing.policies.privacy': 'Privacy guidance',
+  'marketing.policies.privacyDescription':
+    'Draft overview of account data, browser-local saved data, user controls, and future privacy work — not a full legal privacy policy.',
+  'marketing.policies.communityGuidelines': 'Community Guidelines',
+  'marketing.policies.communityGuidelinesDescription':
+    'Expected conduct for honest listings, in-platform communication, lawful behavior, and respectful dispute use.',
+  'marketing.policies.restrictedItems': 'Restricted Items',
+  'marketing.policies.restrictedItemsDescription':
+    'Responsible-use guidance for items, customs, and transport rules — users remain responsible for legality.',
+  'marketing.policies.fees': 'Fees & payments',
+  'marketing.policies.feesDescription':
+    'Payment status transparency and honest limits — no real escrow or guaranteed refund/payout today.',
+  'marketing.policies.supportDisputes': 'Support & disputes',
+  'marketing.policies.supportDisputesDescription':
+    'How to report issues and use dispute tools — coordination and evidence, not guaranteed outcomes.',
+  'marketing.policies.helpCenterDescription':
+    'Draft terms, privacy guidance, community rules, and links to related responsible-use pages.',
+  'marketing.policies.viewPolicy': 'View document',
+  'marketing.policies.openApp': 'Open app',
+  'marketing.policies.backHome': 'Back to home',
+  'marketing.terms.navLabel': 'Terms of Use',
+  'marketing.terms.title': 'Terms of Use (draft guidance)',
+  'marketing.terms.subtitle':
+    'General expectations for using Wayly responsibly today. This is draft platform guidance — not legal advice and not a binding contract.',
+  'marketing.terms.usingResponsiblyTitle': 'Using Wayly responsibly',
+  'marketing.terms.usingResponsiblyBody':
+    'Wayly connects Senders and Waylers for peer-to-peer delivery coordination.\nUse the platform honestly and follow applicable laws, customs, airline/carrier rules, and local transport regulations.\nDo not use Wayly for illegal goods, fraud, harassment, or evading official controls.\nPlatform tools help coordinate orders — they do not replace your own judgment or legal obligations.',
+  'marketing.terms.senderResponsibilitiesTitle': 'Sender responsibilities',
+  'marketing.terms.senderResponsibilitiesBody':
+    'Describe items accurately — contents, size, weight, and route details.\nConfirm pickup and drop-off details in Wayly chat before relying on them.\nDo not ask a Wayler to carry prohibited, unsafe, or deliberately hidden items.\nKeep agreements and payment-related updates inside Wayly where possible.\nUnderstand that Wayly does not verify item legality or guarantee delivery.',
+  'marketing.terms.waylerResponsibilitiesTitle': 'Wayler responsibilities',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'Publish accurate route or local availability information.\nAccept only requests you can inspect, understand, and carry safely.\nDecline restricted, unclear, or suspicious requests.\nFollow carrier, airline, customs, and local transport rules on your route.\nDo not promise services Wayly cannot guarantee (insurance, escrow, legal protection).',
+  'marketing.terms.paymentsTitle': 'Payments and fees transparency',
+  'marketing.terms.paymentsBody':
+    'Payment status shown in Wayly reflects platform records — not necessarily real funds held with a provider today.\nMock or manual payment flows may exist in development/demo environments.\nWayly does not guarantee refunds to Senders or payouts to Waylers.\nThere is no real escrow guarantee, insurance, or guaranteed financial outcome today.\nSee Fees & payments for current transparency details.',
+  'marketing.terms.disputesTitle': 'Disputes and evidence',
+  'marketing.terms.disputesBody':
+    'Use Wayly dispute tools to organize order issues, messages, and evidence metadata.\nDisputes help coordination and review — they do not guarantee refund, payout, or legal outcome.\nKeep proof, timing, and delivery discussions inside Wayly chat when possible.\nFor emergencies or illegal activity, contact local authorities — disputes are not emergency response.',
+  'marketing.terms.restrictedItemsTitle': 'Restricted items and legal compliance',
+  'marketing.terms.restrictedItemsBody':
+    'Users are responsible for item legality on each route and jurisdiction.\nWayly does not verify contents, customs clearance, or carrier acceptance.\nProhibited, dangerous, or deliberately mislabeled items must not be sent or carried.\nWhen in doubt, decline the request or do not publish availability for that route.',
+  'marketing.terms.platformLimitsTitle': 'Current platform limits',
+  'marketing.terms.platformLimitsBody':
+    'Real payment provider integration is not fully implemented today.\nKYC and demo/provider flows may be mock or manual depending on environment.\nNo automatic fraud detection or message moderation is guaranteed.\nAdmin review actions may update metadata only — not execute real money movement.\nFuture production features may change; this draft guidance describes the current stack.',
+  'marketing.terms.noGuaranteeTitle': 'No guarantee notice',
+  'marketing.terms.noGuaranteeBody':
+    'Wayly provides draft general guidance — not legal advice.\nNo guaranteed delivery, refund, payout, insurance, or real escrow protection.\nNo legal protection or representation is provided by Wayly.\nUsers must follow applicable laws and official transport/customs rules.\nA future lawyer-reviewed agreement may replace or supplement this draft guidance.',
+  'marketing.privacy.navLabel': 'Privacy guidance',
+  'marketing.privacy.title': 'Privacy guidance (draft)',
+  'marketing.privacy.subtitle':
+    'How Wayly handles account and marketplace data on platform servers versus browser-local saved data. Draft guidance only — not a full legal privacy policy or compliance certification.',
+  'marketing.privacy.accountDataTitle': 'Account and marketplace data',
+  'marketing.privacy.accountDataBody':
+    'When you register and use Wayly, account profile, KYC submission metadata, orders, chat messages, disputes, and payment status records may be stored on Wayly platform servers.\nThis data supports authentication, marketplace coordination, and operator review tools.\nWayly does not claim that no server-side data exists.\nProduction retention, deletion, and data-processing practices will be finalized before launch.',
+  'marketing.privacy.localSavedDataTitle': 'Browser-local saved data tools',
+  'marketing.privacy.localSavedDataBody':
+    'Some productivity features save data in your browser localStorage only — for example shortlist, templates, drafts, and recent route searches.\nThis data stays on your device and is not synced to your account or other devices.\nSee Privacy & local data for the public explanation and LocalSavedDataPanel in /app for controls.',
+  'marketing.privacy.localDataNotIncludedTitle': 'What local saved data does not include',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage tools do not replace server records for submitted orders, chat, disputes, or proof metadata.\nClearing local data does not delete your account or server-side marketplace history.\nTemplates intentionally omit some sensitive fields — full addresses and exact dates may still exist in drafts.',
+  'marketing.privacy.userControlsTitle': 'User controls for local saved data',
+  'marketing.privacy.userControlsBody':
+    'LocalSavedDataPanel on /app shows counts of browser-local items.\nYou can clear individual scopes (shortlist, templates, drafts, recent searches) or clear all local Wayly saved data.\nClearing browser storage or using a different device removes local-only data.',
+  'marketing.privacy.sensitiveInfoTitle': 'Sensitive information users should not share',
+  'marketing.privacy.sensitiveInfoBody':
+    'Do not share private card numbers, bank credentials, passwords, or off-platform payment instructions in chat or proof notes.\nDo not post government ID images or unnecessary personal data in messages unless a future verified flow explicitly requires it.\nReport suspicious requests and keep high-risk agreements inside Wayly chat when possible.',
+  'marketing.privacy.futureWorkTitle': 'Future production privacy work',
+  'marketing.privacy.futureWorkBody':
+    'A lawyer-reviewed privacy policy, data retention schedule, and regional compliance review are planned for production.\nThis page does not claim full GDPR/CCPA/legal compliance today.\nDo not rely on this draft page for regulatory certification or data-deletion guarantees on server records.',
+  'marketing.communityGuidelines.navLabel': 'Community Guidelines',
+  'marketing.communityGuidelines.title': 'Community Guidelines (draft)',
+  'marketing.communityGuidelines.subtitle':
+    'Expected behavior for a respectful, lawful marketplace. Draft general guidance — not legal advice and not a final enforcement policy.',
+  'marketing.communityGuidelines.honestItemsTitle': 'Be honest about items and route details',
+  'marketing.communityGuidelines.honestItemsBody':
+    'Describe package contents, size, and timing truthfully.\nDo not hide restricted contents or mislabel packages.\nPublish availability and routes you can actually honor.\nConfirm pickup, drop-off, and delivery windows in Wayly chat.',
+  'marketing.communityGuidelines.communicationTitle': 'Keep communication inside Wayly',
+  'marketing.communityGuidelines.communicationBody':
+    'Use Wayly chat for agreements, timing changes, and delivery updates when possible.\nIn-platform records help disputes and support review.\nMoving entirely off-platform increases risk and reduces visibility for both parties.',
+  'marketing.communityGuidelines.lawsCustomsTitle':
+    'Do not bypass laws, customs, or transport rules',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'Follow airline, carrier, customs, and local authority rules on every route.\nDo not ask others to evade security, duties, or legal controls.\nWayly does not verify item legality — users remain responsible.',
+  'marketing.communityGuidelines.paymentDetailsTitle':
+    'Do not share private payment or bank details in chat',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'Never share full card numbers, CVV, bank passwords, or sensitive credentials in chat or proof fields.\nUse platform payment status and documented flows — not informal off-platform money requests.\nBe alert to scams asking for direct transfers outside agreed process.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'Decline unsafe or unclear requests',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'Waylers should decline items they cannot inspect or do not understand.\nSenders should not pressure carriers to accept prohibited or suspicious goods.\nWhen in doubt, stop and clarify in chat or cancel the request.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'Use disputes respectfully',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'Open disputes for genuine order issues — not harassment or threats.\nProvide factual messages and evidence metadata; do not submit abusive content.\nDisputes organize review — they do not guarantee refund, payout, or legal outcome.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'Prohibited conduct',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'No harassment, hate, threats, fraud, or impersonation.\nNo illegal activity, stolen goods, or restricted/prohibited items.\nNo attempts to bypass KYC, access gates, or platform safety tools.\nWayly may restrict accounts in future production enforcement — today focus on responsible self-governance and reporting issues.',
   'marketing.fees.navLabel': 'Fees & payments',
   'marketing.fees.title': 'Fees & payment transparency',
   'marketing.fees.subtitle':
@@ -4194,6 +4301,111 @@ const ru: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'Инструменты споров Wayly организуют проблемы по заказам — это не юридическая консультация, гарантированный возврат или экстренная помощь. При опасности обращайтесь к местным властям.',
   'marketing.supportDisputes.backHome': 'На главную',
+  'marketing.policies.navLabel': 'Центр политик',
+  'marketing.policies.title': 'Центр политик',
+  'marketing.policies.subtitle':
+    'Правила платформы, конфиденциальность и ответственное использование — черновое общее руководство.',
+  'marketing.policies.draftNotice':
+    'Черновое общее руководство — не юридическая консультация и не финальное соглашение, проверенное юристом. Соблюдайте местные законы, таможню и правила перевозки.',
+  'marketing.policies.cardsTitle': 'Политики и документы',
+  'marketing.policies.terms': 'Условия использования',
+  'marketing.policies.termsDescription':
+    'Черновое руководство по ответственному использованию, ролям, платежам и спорам.',
+  'marketing.policies.privacy': 'Конфиденциальность',
+  'marketing.policies.privacyDescription':
+    'Черновой обзор данных аккаунта и локальных данных браузера — не полная юридическая политика.',
+  'marketing.policies.communityGuidelines': 'Правила сообщества',
+  'marketing.policies.communityGuidelinesDescription':
+    'Честные объявления, общение на платформе, законность и уважительные споры.',
+  'marketing.policies.restrictedItems': 'Запрещённые предметы',
+  'marketing.policies.restrictedItemsDescription':
+    'Руководство по ответственному использованию — пользователи отвечают за законность.',
+  'marketing.policies.fees': 'Тарифы и платежи',
+  'marketing.policies.feesDescription':
+    'Прозрачность оплаты — без реального escrow и гарантий возврата/выплаты.',
+  'marketing.policies.supportDisputes': 'Поддержка и споры',
+  'marketing.policies.supportDisputesDescription':
+    'Сообщение о проблемах — координация и доказательства, не гарантированный результат.',
+  'marketing.policies.helpCenterDescription':
+    'Черновые условия, конфиденциальность, правила сообщества и связанные страницы.',
+  'marketing.policies.viewPolicy': 'Открыть документ',
+  'marketing.policies.openApp': 'Открыть приложение',
+  'marketing.policies.backHome': 'На главную',
+  'marketing.terms.navLabel': 'Условия использования',
+  'marketing.terms.title': 'Условия использования (черновик)',
+  'marketing.terms.subtitle':
+    'Общие ожидания ответственного использования Wayly. Черновое руководство — не юридическая консультация.',
+  'marketing.terms.usingResponsiblyTitle': 'Ответственное использование Wayly',
+  'marketing.terms.usingResponsiblyBody':
+    'Wayly соединяет Senders и Waylers для P2P-доставки.\nИспользуйте платформу честно и соблюдайте законы, таможню и правила перевозки.\nНе используйте Wayly для незаконных товаров или мошенничества.\nИнструменты координируют заказы — не заменяют юридическую ответственность.',
+  'marketing.terms.senderResponsibilitiesTitle': 'Обязанности Sender',
+  'marketing.terms.senderResponsibilitiesBody':
+    'Точно описывайте предметы и маршрут.\nПодтверждайте pickup/drop-off в чате Wayly.\nНе просите перевозить запрещённые предметы.\nWayly не проверяет законность и не гарантирует доставку.',
+  'marketing.terms.waylerResponsibilitiesTitle': 'Обязанности Wayler',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'Публикуйте точную доступность.\nПринимайте только безопасные запросы.\nОтклоняйте запрещённые или подозрительные запросы.\nНе обещайте страховку, escrow или юридическую защиту.',
+  'marketing.terms.paymentsTitle': 'Платежи и тарифы',
+  'marketing.terms.paymentsBody':
+    'Статус оплаты — записи платформы, не обязательно реальные средства у провайдера.\nMock/ручные потоки возможны в demo.\nНет гарантий возврата, выплаты, escrow или страховки.',
+  'marketing.terms.disputesTitle': 'Споры и доказательства',
+  'marketing.terms.disputesBody':
+    'Используйте споры для организации проблем и доказательств.\nСпоры не гарантируют возврат, выплату или юридический результат.\nПри опасности обращайтесь к местным властям.',
+  'marketing.terms.restrictedItemsTitle': 'Запрещённые предметы',
+  'marketing.terms.restrictedItemsBody':
+    'Пользователи отвечают за законность на маршруте.\nWayly не проверяет содержимое или таможню.\nЗапрещённые предметы нельзя отправлять или перевозить.',
+  'marketing.terms.platformLimitsTitle': 'Ограничения платформы',
+  'marketing.terms.platformLimitsBody':
+    'Реальный платёжный провайдер не реализован полностью.\nKYC/demo могут быть mock/ручными.\nНет гарантированного antifraud или модерации.\nAdmin-действия могут обновлять только metadata.',
+  'marketing.terms.noGuaranteeTitle': 'Без гарантий',
+  'marketing.terms.noGuaranteeBody':
+    'Черновое руководство — не юридическая консультация.\nНет гарантий доставки, возврата, выплаты, страховки или escrow.\nСоблюдайте законы и правила перевозки.',
+  'marketing.privacy.navLabel': 'Конфиденциальность',
+  'marketing.privacy.title': 'Конфиденциальность (черновик)',
+  'marketing.privacy.subtitle':
+    'Данные аккаунта на серверах vs локальные данные браузера. Черновик — не полная юридическая политика.',
+  'marketing.privacy.accountDataTitle': 'Данные аккаунта',
+  'marketing.privacy.accountDataBody':
+    'Профиль, KYC, заказы, чат, споры и статус оплаты могут храниться на серверах Wayly.\nWayly не утверждает, что server-side данных не существует.\nRetention/deletion будут финализированы перед production.',
+  'marketing.privacy.localSavedDataTitle': 'Локальные данные браузера',
+  'marketing.privacy.localSavedDataBody':
+    'Shortlist, шаблоны и черновики хранятся только в localStorage.\nНе синхронизируются с аккаунтом.\nСм. Privacy & local data и LocalSavedDataPanel.',
+  'marketing.privacy.localDataNotIncludedTitle': 'Что не входит в локальные данные',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage не заменяет server records.\nОчистка local data не удаляет аккаунт или историю на сервере.',
+  'marketing.privacy.userControlsTitle': 'Контроль локальных данных',
+  'marketing.privacy.userControlsBody':
+    'LocalSavedDataPanel на /app — counts и clear per-scope/all.\nДругой браузер удаляет local-only data.',
+  'marketing.privacy.sensitiveInfoTitle': 'Чувствительная информация',
+  'marketing.privacy.sensitiveInfoBody':
+    'Не делитесь картами, банковскими паролями или off-platform инструкциями в чате.\nНе публикуйте лишние ID без verified flow.',
+  'marketing.privacy.futureWorkTitle': 'Будущая privacy-работа',
+  'marketing.privacy.futureWorkBody':
+    'Юридически проверенная политика планируется для production.\nНе заявляет полную GDPR/CCPA compliance сегодня.',
+  'marketing.communityGuidelines.navLabel': 'Правила сообщества',
+  'marketing.communityGuidelines.title': 'Правила сообщества (черновик)',
+  'marketing.communityGuidelines.subtitle':
+    'Ожидаемое поведение на marketplace. Черновое руководство — не юридическая консультация.',
+  'marketing.communityGuidelines.honestItemsTitle': 'Честность о предметах',
+  'marketing.communityGuidelines.honestItemsBody':
+    'Описывайте содержимое правдиво.\nНе скрывайте запрещённое.\nПубликуйте доступность, которую можете выполнить.',
+  'marketing.communityGuidelines.communicationTitle': 'Общение в Wayly',
+  'marketing.communityGuidelines.communicationBody':
+    'Используйте чат Wayly для соглашений.\nOff-platform повышает риск.',
+  'marketing.communityGuidelines.lawsCustomsTitle': 'Соблюдайте законы и таможню',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'Соблюдайте правила перевозчиков и таможни.\nWayly не проверяет законность предметов.',
+  'marketing.communityGuidelines.paymentDetailsTitle': 'Не делитесь платёжными данными',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'Не делитесь CVV, паролями банка или credentials.\nОстерегайтесь off-platform scam.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'Отклоняйте небезопасные запросы',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'Отклоняйте непонятные предметы.\nПри сомнении — уточните или отмените.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'Уважительные споры',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'Споры по реальным проблемам — не harassment.\nНе гарантируют возврат или выплату.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'Запрещённое поведение',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'Нет harassment, угроз, fraud, незаконной активности или запрещённых товаров.\nНе обходите KYC и safety tools.',
   'marketing.fees.navLabel': 'Тарифы и платежи',
   'marketing.fees.title': 'Тарифы и прозрачность платежей',
   'marketing.fees.subtitle':
@@ -6356,6 +6568,111 @@ const es: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'Las herramientas de disputa organizan problemas de pedidos — no son asesoramiento legal, reembolsos garantizados ni respuesta de emergencia. Contacta autoridades locales ante peligro.',
   'marketing.supportDisputes.backHome': 'Volver al inicio',
+  'marketing.policies.navLabel': 'Centro de políticas',
+  'marketing.policies.title': 'Centro de políticas',
+  'marketing.policies.subtitle':
+    'Reglas de la plataforma, privacidad y uso responsable — orientación general preliminar.',
+  'marketing.policies.draftNotice':
+    'Orientación general preliminar — no asesoramiento legal ni acuerdo final revisado por abogados. Siga leyes locales, aduanas y normas de transporte.',
+  'marketing.policies.cardsTitle': 'Documentos de políticas',
+  'marketing.policies.terms': 'Términos de uso',
+  'marketing.policies.termsDescription':
+    'Orientación preliminar sobre uso responsable, roles, pagos y disputas.',
+  'marketing.policies.privacy': 'Orientación de privacidad',
+  'marketing.policies.privacyDescription':
+    'Borrador sobre datos de cuenta y datos locales del navegador — no política legal completa.',
+  'marketing.policies.communityGuidelines': 'Normas de la comunidad',
+  'marketing.policies.communityGuidelinesDescription':
+    'Conducta esperada: anuncios honestos, chat en plataforma y disputas respetuosas.',
+  'marketing.policies.restrictedItems': 'Artículos restringidos',
+  'marketing.policies.restrictedItemsDescription':
+    'Uso responsable — los usuarios responden por la legalidad.',
+  'marketing.policies.fees': 'Tarifas y pagos',
+  'marketing.policies.feesDescription':
+    'Transparencia de pagos — sin escrow real ni reembolso/pago garantizado hoy.',
+  'marketing.policies.supportDisputes': 'Soporte y disputas',
+  'marketing.policies.supportDisputesDescription':
+    'Reportar problemas — coordinación y evidencia, no resultado garantizado.',
+  'marketing.policies.helpCenterDescription':
+    'Términos preliminares, privacidad, normas comunitarias y páginas relacionadas.',
+  'marketing.policies.viewPolicy': 'Ver documento',
+  'marketing.policies.openApp': 'Abrir app',
+  'marketing.policies.backHome': 'Volver al inicio',
+  'marketing.terms.navLabel': 'Términos de uso',
+  'marketing.terms.title': 'Términos de uso (borrador)',
+  'marketing.terms.subtitle':
+    'Expectativas generales de uso responsable. Orientación preliminar — no asesoramiento legal.',
+  'marketing.terms.usingResponsiblyTitle': 'Usar Wayly responsablemente',
+  'marketing.terms.usingResponsiblyBody':
+    'Wayly conecta Senders y Waylers para entregas P2P.\nUse la plataforma con honestidad y cumpla leyes, aduanas y normas de transporte.\nNo use Wayly para bienes ilegales o fraude.\nLas herramientas coordinan pedidos — no reemplazan obligaciones legales.',
+  'marketing.terms.senderResponsibilitiesTitle': 'Responsabilidades del Sender',
+  'marketing.terms.senderResponsibilitiesBody':
+    'Describa artículos y rutas con precisión.\nConfirme pickup/drop-off en el chat de Wayly.\nNo pida transportar artículos prohibidos u ocultos.\nWayly no verifica legalidad ni garantiza entrega.',
+  'marketing.terms.waylerResponsibilitiesTitle': 'Responsabilidades del Wayler',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'Publique disponibilidad y rutas precisas.\nAcepte solo solicitudes seguras y claras.\nRechace solicitudes restringidas o sospechosas.\nNo prometa seguro, escrow ni protección legal.',
+  'marketing.terms.paymentsTitle': 'Pagos y tarifas',
+  'marketing.terms.paymentsBody':
+    'El estado de pago refleja registros de la plataforma — no necesariamente fondos reales.\nFlujos mock/manuales pueden existir en demo.\nSin reembolso, pago, escrow o seguro garantizados hoy.',
+  'marketing.terms.disputesTitle': 'Disputas y evidencia',
+  'marketing.terms.disputesBody':
+    'Use disputas para organizar problemas y evidencia.\nNo garantizan reembolso, pago ni resultado legal.\nEn emergencias, contacte autoridades locales.',
+  'marketing.terms.restrictedItemsTitle': 'Artículos restringidos',
+  'marketing.terms.restrictedItemsBody':
+    'Los usuarios son responsables de la legalidad en cada ruta.\nWayly no verifica contenido ni aduanas.\nNo envíe ni transporte artículos prohibidos o peligrosos.',
+  'marketing.terms.platformLimitsTitle': 'Límites actuales',
+  'marketing.terms.platformLimitsBody':
+    'Integración real de pagos no implementada completamente.\nKYC/demo pueden ser mock/manuales.\nSin antifraud o moderación garantizada.\nAcciones admin pueden ser solo metadata.',
+  'marketing.terms.noGuaranteeTitle': 'Sin garantías',
+  'marketing.terms.noGuaranteeBody':
+    'Orientación preliminar — no asesoramiento legal.\nSin entrega, reembolso, pago, seguro ni escrow garantizados.\nCumpla leyes y normas de transporte/aduanas.',
+  'marketing.privacy.navLabel': 'Privacidad',
+  'marketing.privacy.title': 'Orientación de privacidad (borrador)',
+  'marketing.privacy.subtitle':
+    'Datos de cuenta en servidores vs datos locales del navegador. Borrador — no política legal completa.',
+  'marketing.privacy.accountDataTitle': 'Datos de cuenta',
+  'marketing.privacy.accountDataBody':
+    'Perfil, KYC, pedidos, chat, disputas y pagos pueden almacenarse en servidores Wayly.\nWayly no afirma que no existan datos en servidor.\nRetención/eliminación se finalizarán antes de producción.',
+  'marketing.privacy.localSavedDataTitle': 'Datos locales del navegador',
+  'marketing.privacy.localSavedDataBody':
+    'Shortlist, plantillas y borradores solo en localStorage.\nNo se sincronizan con la cuenta.\nVea Privacy & local data y LocalSavedDataPanel.',
+  'marketing.privacy.localDataNotIncludedTitle': 'Qué no incluyen datos locales',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage no reemplaza registros del servidor.\nBorrar datos locales no elimina cuenta ni historial del servidor.',
+  'marketing.privacy.userControlsTitle': 'Controles de datos locales',
+  'marketing.privacy.userControlsBody':
+    'LocalSavedDataPanel en /app — conteos y borrado por ámbito/todo.\nOtro navegador elimina datos solo locales.',
+  'marketing.privacy.sensitiveInfoTitle': 'Información sensible',
+  'marketing.privacy.sensitiveInfoBody':
+    'No comparta tarjetas, contraseñas bancarias ni instrucciones off-platform en chat.\nNo publique ID innecesario sin flujo verificado.',
+  'marketing.privacy.futureWorkTitle': 'Trabajo futuro de privacidad',
+  'marketing.privacy.futureWorkBody':
+    'Política revisada por abogados planificada para producción.\nNo reclama cumplimiento GDPR/CCPA completo hoy.',
+  'marketing.communityGuidelines.navLabel': 'Normas comunitarias',
+  'marketing.communityGuidelines.title': 'Normas comunitarias (borrador)',
+  'marketing.communityGuidelines.subtitle':
+    'Conducta esperada en el marketplace. Orientación preliminar — no asesoramiento legal.',
+  'marketing.communityGuidelines.honestItemsTitle': 'Honestidad sobre artículos',
+  'marketing.communityGuidelines.honestItemsBody':
+    'Describa contenido y plazos con verdad.\nNo oculte contenido restringido.\nPublique disponibilidad real.',
+  'marketing.communityGuidelines.communicationTitle': 'Comunicación en Wayly',
+  'marketing.communityGuidelines.communicationBody':
+    'Use el chat de Wayly para acuerdos.\nOff-platform aumenta el riesgo.',
+  'marketing.communityGuidelines.lawsCustomsTitle': 'Cumpla leyes y aduanas',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'Siga normas de aerolíneas, transportistas y aduanas.\nWayly no verifica legalidad de artículos.',
+  'marketing.communityGuidelines.paymentDetailsTitle': 'No comparta datos de pago',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'No comparta CVV, contraseñas bancarias ni credenciales.\nCuidado con estafas off-platform.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'Rechace solicitudes inseguras',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'Rechace artículos no claros.\nAnte duda, aclare o cancele.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'Disputas respetuosas',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'Disputas por problemas reales — no acoso.\nNo garantizan reembolso ni pago.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'Conducta prohibida',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'Sin acoso, amenazas, fraude, actividad ilegal ni bienes restringidos.\nNo evada KYC ni herramientas de seguridad.',
   'marketing.fees.navLabel': 'Tarifas y pagos',
   'marketing.fees.title': 'Tarifas y transparencia de pagos',
   'marketing.fees.subtitle':
@@ -8546,6 +8863,111 @@ const fr: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'Les outils litige Wayly organisent les problèmes de commande — pas conseil juridique, remboursements garantis ni urgence. Contactez autorités locales en cas de danger.',
   'marketing.supportDisputes.backHome': "Retour à l'accueil",
+  'marketing.policies.navLabel': 'Centre des politiques',
+  'marketing.policies.title': 'Centre des politiques',
+  'marketing.policies.subtitle':
+    'Règles plateforme, confidentialité et usage responsable — orientation générale provisoire.',
+  'marketing.policies.draftNotice':
+    'Orientation générale provisoire — pas conseil juridique ni accord final validé par avocat. Respectez lois locales, douanes et règles transport.',
+  'marketing.policies.cardsTitle': 'Documents de politique',
+  'marketing.policies.terms': "Conditions d'utilisation",
+  'marketing.policies.termsDescription':
+    'Orientation provisoire sur usage responsable, rôles, paiements et litiges.',
+  'marketing.policies.privacy': 'Orientation confidentialité',
+  'marketing.policies.privacyDescription':
+    'Aperçu provisoire des données compte et locales navigateur — pas politique juridique complète.',
+  'marketing.policies.communityGuidelines': 'Règles communautaires',
+  'marketing.policies.communityGuidelinesDescription':
+    'Annonces honnêtes, communication sur plateforme et litiges respectueux.',
+  'marketing.policies.restrictedItems': 'Articles restreints',
+  'marketing.policies.restrictedItemsDescription':
+    'Usage responsable — utilisateurs responsables de la légalité.',
+  'marketing.policies.fees': 'Frais et paiements',
+  'marketing.policies.feesDescription':
+    "Transparence paiement — pas d'escrow réel ni remboursement/paiement garanti aujourd'hui.",
+  'marketing.policies.supportDisputes': 'Support et litiges',
+  'marketing.policies.supportDisputesDescription':
+    'Signaler problèmes — coordination et preuves, pas résultat garanti.',
+  'marketing.policies.helpCenterDescription':
+    'Conditions provisoires, confidentialité, règles communautaires et pages liées.',
+  'marketing.policies.viewPolicy': 'Voir le document',
+  'marketing.policies.openApp': "Ouvrir l'app",
+  'marketing.policies.backHome': "Retour à l'accueil",
+  'marketing.terms.navLabel': "Conditions d'utilisation",
+  'marketing.terms.title': "Conditions d'utilisation (provisoire)",
+  'marketing.terms.subtitle':
+    "Attentes générales d'usage responsable. Orientation provisoire — pas conseil juridique.",
+  'marketing.terms.usingResponsiblyTitle': 'Utiliser Wayly responsablement',
+  'marketing.terms.usingResponsiblyBody':
+    "Wayly connecte Senders et Waylers pour livraison P2P.\nUtilisez la plateforme honnêtement et respectez lois, douanes et transport.\nPas de biens illégaux ni fraude.\nLes outils coordonnent — n'effacent pas obligations légales.",
+  'marketing.terms.senderResponsibilitiesTitle': 'Responsabilités Sender',
+  'marketing.terms.senderResponsibilitiesBody':
+    "Décrivez articles et route avec précision.\nConfirmez pickup/drop-off dans le chat Wayly.\nNe demandez pas d'articles interdits ou cachés.\nWayly ne vérifie pas la légalité ni ne garantit livraison.",
+  'marketing.terms.waylerResponsibilitiesTitle': 'Responsabilités Wayler',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'Publiez disponibilité et routes exactes.\nAcceptez seulement demandes sûres et claires.\nRefusez demandes restreintes ou suspectes.\nNe promettez pas assurance, escrow ni protection juridique.',
+  'marketing.terms.paymentsTitle': 'Paiements et frais',
+  'marketing.terms.paymentsBody':
+    'Statut paiement = enregistrements plateforme — pas forcément fonds réels.\nFlux mock/manuels possibles en demo.\nPas de remboursement, paiement, escrow ou assurance garantis.',
+  'marketing.terms.disputesTitle': 'Litiges et preuves',
+  'marketing.terms.disputesBody':
+    'Utilisez litiges pour organiser problèmes et preuves.\nPas de remboursement, paiement ou résultat juridique garanti.\nUrgence : autorités locales.',
+  'marketing.terms.restrictedItemsTitle': 'Articles restreints',
+  'marketing.terms.restrictedItemsBody':
+    "Utilisateurs responsables de légalité sur chaque route.\nWayly ne vérifie pas contenu ni douanes.\nPas d'articles interdits ou dangereux.",
+  'marketing.terms.platformLimitsTitle': 'Limites actuelles',
+  'marketing.terms.platformLimitsBody':
+    "Intégration paiement réelle incomplète.\nKYC/demo peuvent être mock/manuels.\nPas d'antifraude ou modération garantie.\nActions admin = metadata seulement.",
+  'marketing.terms.noGuaranteeTitle': 'Aucune garantie',
+  'marketing.terms.noGuaranteeBody':
+    'Orientation provisoire — pas conseil juridique.\nPas de livraison, remboursement, paiement, assurance ou escrow garantis.\nRespectez lois et règles transport/douanes.',
+  'marketing.privacy.navLabel': 'Confidentialité',
+  'marketing.privacy.title': 'Orientation confidentialité (provisoire)',
+  'marketing.privacy.subtitle':
+    'Données compte serveur vs données locales navigateur. Provisoire — pas politique juridique complète.',
+  'marketing.privacy.accountDataTitle': 'Données compte',
+  'marketing.privacy.accountDataBody':
+    "Profil, KYC, commandes, chat, litiges et paiements peuvent être stockés sur serveurs Wayly.\nWayly n'affirme pas l'absence de données serveur.\nRétention/suppression à finaliser avant production.",
+  'marketing.privacy.localSavedDataTitle': 'Données locales navigateur',
+  'marketing.privacy.localSavedDataBody':
+    'Shortlist, modèles et brouillons en localStorage seulement.\nNon synchronisés au compte.\nVoir Privacy & local data et LocalSavedDataPanel.',
+  'marketing.privacy.localDataNotIncludedTitle': 'Hors données locales',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage ne remplace pas enregistrements serveur.\nEffacer local ne supprime pas compte ni historique serveur.',
+  'marketing.privacy.userControlsTitle': 'Contrôles données locales',
+  'marketing.privacy.userControlsBody':
+    'LocalSavedDataPanel sur /app — comptages et effacement par scope/tout.\nAutre navigateur supprime données locales.',
+  'marketing.privacy.sensitiveInfoTitle': 'Informations sensibles',
+  'marketing.privacy.sensitiveInfoBody':
+    "Ne partagez pas cartes, mots de passe bancaires ni instructions off-platform.\nPas d'ID inutile sans flux vérifié.",
+  'marketing.privacy.futureWorkTitle': 'Travail confidentialité futur',
+  'marketing.privacy.futureWorkBody':
+    "Politique validée par avocat prévue pour production.\nNe revendique pas conformité GDPR/CCPA complète aujourd'hui.",
+  'marketing.communityGuidelines.navLabel': 'Règles communautaires',
+  'marketing.communityGuidelines.title': 'Règles communautaires (provisoire)',
+  'marketing.communityGuidelines.subtitle':
+    'Comportement attendu sur marketplace. Orientation provisoire — pas conseil juridique.',
+  'marketing.communityGuidelines.honestItemsTitle': 'Honnêteté sur articles',
+  'marketing.communityGuidelines.honestItemsBody':
+    'Décrivez contenu et délais avec vérité.\nNe cachez pas contenu restreint.\nPubliez disponibilité réelle.',
+  'marketing.communityGuidelines.communicationTitle': 'Communication dans Wayly',
+  'marketing.communityGuidelines.communicationBody':
+    'Utilisez chat Wayly pour accords.\nOff-platform augmente le risque.',
+  'marketing.communityGuidelines.lawsCustomsTitle': 'Respectez lois et douanes',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'Suivez règles compagnies, transporteurs et douanes.\nWayly ne vérifie pas légalité des articles.',
+  'marketing.communityGuidelines.paymentDetailsTitle': 'Pas de données paiement privées',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'Pas de CVV, mots de passe bancaires ni identifiants.\nMéfiance arnaques off-platform.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'Refusez demandes dangereuses',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'Refusez articles flous.\nEn doute, clarifiez ou annulez.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'Litiges respectueux',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'Litiges pour vrais problèmes — pas harcèlement.\nPas de remboursement ou paiement garanti.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'Conduite interdite',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'Pas harcèlement, menaces, fraude, activité illégale ni biens restreints.\nNe contournez pas KYC ni outils sécurité.',
   'marketing.fees.navLabel': 'Frais et paiements',
   'marketing.fees.title': 'Frais et transparence des paiements',
   'marketing.fees.subtitle':
@@ -10746,6 +11168,111 @@ const de: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'Wayly-Streitfall-Tools organisieren Bestellprobleme — keine Rechtsberatung, garantierte Erstattungen oder Notfallhilfe. Bei Gefahr lokale Behörden kontaktieren.',
   'marketing.supportDisputes.backHome': 'Zur Startseite',
+  'marketing.policies.navLabel': 'Richtlinien-Center',
+  'marketing.policies.title': 'Richtlinien-Center',
+  'marketing.policies.subtitle':
+    'Plattformregeln, Datenschutz-Orientierung und verantwortungsvolle Nutzung — allgemeiner Entwurf.',
+  'marketing.policies.draftNotice':
+    'Allgemeiner Entwurf — keine Rechtsberatung und kein finaler anwaltlich geprüfter Vertrag. Beachten Sie lokale Gesetze, Zoll und Transportregeln.',
+  'marketing.policies.cardsTitle': 'Richtlinien und Dokumente',
+  'marketing.policies.terms': 'Nutzungsbedingungen',
+  'marketing.policies.termsDescription':
+    'Entwurf zu verantwortungsvoller Nutzung, Rollen, Zahlungen und Streitfällen.',
+  'marketing.policies.privacy': 'Datenschutz-Orientierung',
+  'marketing.policies.privacyDescription':
+    'Entwurf zu Kontodaten und browser-lokalen Daten — keine vollständige Rechtspolitik.',
+  'marketing.policies.communityGuidelines': 'Community-Richtlinien',
+  'marketing.policies.communityGuidelinesDescription':
+    'Ehrliche Angebote, Plattform-Chat und respektvolle Streitnutzung.',
+  'marketing.policies.restrictedItems': 'Eingeschränkte Artikel',
+  'marketing.policies.restrictedItemsDescription':
+    'Verantwortungsvolle Nutzung — Nutzer tragen Legalitätsverantwortung.',
+  'marketing.policies.fees': 'Gebühren & Zahlungen',
+  'marketing.policies.feesDescription':
+    'Zahlungstransparenz — kein echtes Escrow oder garantierte Erstattung/Auszahlung.',
+  'marketing.policies.supportDisputes': 'Support & Streitfälle',
+  'marketing.policies.supportDisputesDescription':
+    'Probleme melden — Koordination und Nachweise, kein garantiertes Ergebnis.',
+  'marketing.policies.helpCenterDescription':
+    'Entwurfs-Bedingungen, Datenschutz, Community-Regeln und verknüpfte Seiten.',
+  'marketing.policies.viewPolicy': 'Dokument ansehen',
+  'marketing.policies.openApp': 'App öffnen',
+  'marketing.policies.backHome': 'Zur Startseite',
+  'marketing.terms.navLabel': 'Nutzungsbedingungen',
+  'marketing.terms.title': 'Nutzungsbedingungen (Entwurf)',
+  'marketing.terms.subtitle':
+    'Allgemeine Erwartungen für verantwortungsvolle Nutzung. Entwurf — keine Rechtsberatung.',
+  'marketing.terms.usingResponsiblyTitle': 'Wayly verantwortungsvoll nutzen',
+  'marketing.terms.usingResponsiblyBody':
+    'Wayly verbindet Sender und Wayler für P2P-Lieferung.\nNutzen Sie die Plattform ehrlich und beachten Sie Gesetze, Zoll und Transportregeln.\nKeine illegalen Güter oder Betrug.\nTools koordinieren — ersetzen keine Rechtspflichten.',
+  'marketing.terms.senderResponsibilitiesTitle': 'Sender-Pflichten',
+  'marketing.terms.senderResponsibilitiesBody':
+    'Artikel und Route genau beschreiben.\nPickup/Drop-off im Wayly-Chat bestätigen.\nKeine verbotenen oder versteckten Artikel.\nWayly prüft Legalität nicht und garantiert keine Lieferung.',
+  'marketing.terms.waylerResponsibilitiesTitle': 'Wayler-Pflichten',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'Verfügbarkeit und Routen korrekt veröffentlichen.\nNur sichere, klare Anfragen annehmen.\nEingeschränkte oder verdächtige Anfragen ablehnen.\nKeine Versicherung, Escrow oder Rechtsschutz versprechen.',
+  'marketing.terms.paymentsTitle': 'Zahlungen und Gebühren',
+  'marketing.terms.paymentsBody':
+    'Zahlungsstatus = Plattformdaten — nicht zwingend echte Provider-Mittel.\nMock/manuelle Flows in Demo möglich.\nKeine garantierte Erstattung, Auszahlung, Escrow oder Versicherung.',
+  'marketing.terms.disputesTitle': 'Streitfälle und Nachweise',
+  'marketing.terms.disputesBody':
+    'Streitfälle organisieren Probleme und Nachweise.\nKeine garantierte Erstattung, Auszahlung oder Rechtsfolge.\nNotfall: lokale Behörden.',
+  'marketing.terms.restrictedItemsTitle': 'Eingeschränkte Artikel',
+  'marketing.terms.restrictedItemsBody':
+    'Nutzer verantwortlich für Legalität je Route.\nWayly prüft Inhalt oder Zoll nicht.\nVerbotene oder gefährliche Artikel nicht senden/transportieren.',
+  'marketing.terms.platformLimitsTitle': 'Aktuelle Plattformgrenzen',
+  'marketing.terms.platformLimitsBody':
+    'Echte Zahlungsintegration nicht vollständig.\nKYC/Demo können mock/manuell sein.\nKein garantiertes Antifraud oder Moderation.\nAdmin-Aktionen nur Metadata.',
+  'marketing.terms.noGuaranteeTitle': 'Keine Garantie',
+  'marketing.terms.noGuaranteeBody':
+    'Entwurf — keine Rechtsberatung.\nKeine garantierte Lieferung, Erstattung, Auszahlung, Versicherung oder Escrow.\nGesetze und Transport/Zoll-Regeln beachten.',
+  'marketing.privacy.navLabel': 'Datenschutz',
+  'marketing.privacy.title': 'Datenschutz-Orientierung (Entwurf)',
+  'marketing.privacy.subtitle':
+    'Server-Kontodaten vs. browser-lokale Daten. Entwurf — keine vollständige Rechtspolitik.',
+  'marketing.privacy.accountDataTitle': 'Konto- und Marktplatzdaten',
+  'marketing.privacy.accountDataBody':
+    'Profil, KYC, Bestellungen, Chat, Streitfälle und Zahlungen können auf Wayly-Servern liegen.\nWayly behauptet nicht, dass keine Serverdaten existieren.\nRetention/Löschung vor Production finalisieren.',
+  'marketing.privacy.localSavedDataTitle': 'Browser-lokale Daten',
+  'marketing.privacy.localSavedDataBody':
+    'Shortlist, Vorlagen, Entwürfe nur in localStorage.\nNicht kontosynchronisiert.\nSiehe Privacy & local data und LocalSavedDataPanel.',
+  'marketing.privacy.localDataNotIncludedTitle': 'Nicht in lokalen Daten',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage ersetzt keine Serverdatensätze.\nLokales Löschen löscht Konto/Serverhistorie nicht.',
+  'marketing.privacy.userControlsTitle': 'Steuerung lokaler Daten',
+  'marketing.privacy.userControlsBody':
+    'LocalSavedDataPanel auf /app — Zähler und Löschen pro Bereich/alles.\nAnderer Browser entfernt nur lokale Daten.',
+  'marketing.privacy.sensitiveInfoTitle': 'Sensible Informationen',
+  'marketing.privacy.sensitiveInfoBody':
+    'Keine Karten, Bankpasswörter oder Off-Platform-Anweisungen im Chat.\nKeine unnötigen ID-Daten ohne verifizierten Flow.',
+  'marketing.privacy.futureWorkTitle': 'Zukünftige Datenschutzarbeit',
+  'marketing.privacy.futureWorkBody':
+    'Anwaltlich geprüfte Policy für Production geplant.\nKein vollständiger GDPR/CCPA-Compliance-Anspruch heute.',
+  'marketing.communityGuidelines.navLabel': 'Community-Richtlinien',
+  'marketing.communityGuidelines.title': 'Community-Richtlinien (Entwurf)',
+  'marketing.communityGuidelines.subtitle':
+    'Erwartetes Marktplatzverhalten. Entwurf — keine Rechtsberatung.',
+  'marketing.communityGuidelines.honestItemsTitle': 'Ehrlichkeit über Artikel',
+  'marketing.communityGuidelines.honestItemsBody':
+    'Inhalt und Zeiten wahrheitsgemäß beschreiben.\nKeine versteckten verbotenen Inhalte.\nNur realistische Verfügbarkeit veröffentlichen.',
+  'marketing.communityGuidelines.communicationTitle': 'Kommunikation in Wayly',
+  'marketing.communityGuidelines.communicationBody':
+    'Wayly-Chat für Vereinbarungen nutzen.\nOff-Platform erhöht Risiko.',
+  'marketing.communityGuidelines.lawsCustomsTitle': 'Gesetze und Zoll beachten',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'Airline-, Carrier-, Zoll- und lokale Regeln befolgen.\nWayly prüft Artikellegalität nicht.',
+  'marketing.communityGuidelines.paymentDetailsTitle': 'Keine privaten Zahlungsdaten',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'Kein CVV, Bankpasswort oder Credentials teilen.\nVorsicht vor Off-Platform-Betrug.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'Unsichere Anfragen ablehnen',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'Unklare Artikel ablehnen.\nBei Zweifel klären oder abbrechen.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'Streitfälle respektvoll',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'Streitfälle für echte Probleme — kein Belästigen.\nKeine garantierte Erstattung oder Auszahlung.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'Verbotenes Verhalten',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'Kein Belästigen, Drohen, Betrug, Illegales oder verbotene Güter.\nKYC und Sicherheitstools nicht umgehen.',
   'marketing.fees.navLabel': 'Gebühren & Zahlungen',
   'marketing.fees.title': 'Gebühren & Zahlungstransparenz',
   'marketing.fees.subtitle':
@@ -12883,6 +13410,111 @@ const tr: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'Wayly anlaşmazlık araçları sipariş sorunlarını düzenler — hukuki tavsiye, garantili iade veya acil müdahale değildir. Tehlike durumunda yerel yetkililere başvurun.',
   'marketing.supportDisputes.backHome': 'Ana sayfaya dön',
+  'marketing.policies.navLabel': 'Politika merkezi',
+  'marketing.policies.title': 'Politika merkezi',
+  'marketing.policies.subtitle':
+    'Platform kuralları, gizlilik rehberi ve sorumlu kullanım — taslak genel rehberlik.',
+  'marketing.policies.draftNotice':
+    'Taslak genel rehberlik — hukuki tavsiye değil ve avukat onaylı nihai sözleşme değil. Yerel yasa, gümrük ve taşıma kurallarına uyun.',
+  'marketing.policies.cardsTitle': 'Politika belgeleri',
+  'marketing.policies.terms': 'Kullanım koşulları',
+  'marketing.policies.termsDescription':
+    'Sorumlu kullanım, roller, ödemeler ve anlaşmazlıklar için taslak rehber.',
+  'marketing.policies.privacy': 'Gizlilik rehberi',
+  'marketing.policies.privacyDescription':
+    'Hesap ve tarayıcı-yerel veriler — tam hukuki gizlilik politikası değil.',
+  'marketing.policies.communityGuidelines': 'Topluluk kuralları',
+  'marketing.policies.communityGuidelinesDescription':
+    'Dürüst ilanlar, platform içi iletişim ve saygılı anlaşmazlıklar.',
+  'marketing.policies.restrictedItems': 'Kısıtlı eşyalar',
+  'marketing.policies.restrictedItemsDescription':
+    'Sorumlu kullanım — yasallık kullanıcı sorumluluğundadır.',
+  'marketing.policies.fees': 'Ücretler ve ödemeler',
+  'marketing.policies.feesDescription':
+    'Ödeme şeffaflığı — gerçek escrow veya garantili iade/ödeme yok.',
+  'marketing.policies.supportDisputes': 'Destek ve anlaşmazlıklar',
+  'marketing.policies.supportDisputesDescription':
+    'Sorun bildirme — koordinasyon ve kanıt, garantili sonuç değil.',
+  'marketing.policies.helpCenterDescription':
+    'Taslak koşullar, gizlilik, topluluk kuralları ve ilgili sayfalar.',
+  'marketing.policies.viewPolicy': 'Belgeyi gör',
+  'marketing.policies.openApp': 'Uygulamayı aç',
+  'marketing.policies.backHome': 'Ana sayfaya dön',
+  'marketing.terms.navLabel': 'Kullanım koşulları',
+  'marketing.terms.title': 'Kullanım koşulları (taslak)',
+  'marketing.terms.subtitle':
+    'Sorumlu kullanım beklentileri. Taslak rehber — hukuki tavsiye değil.',
+  'marketing.terms.usingResponsiblyTitle': "Wayly'i sorumlu kullanın",
+  'marketing.terms.usingResponsiblyBody':
+    "Wayly Sender ve Wayler'ı P2P teslimat için bağlar.\nPlatformu dürüst kullanın; yasa, gümrük ve taşıma kurallarına uyun.\nYasadışı mal veya dolandırıcılık yok.\nAraçlar koordine eder — yasal yükümlülükleri kaldırmaz.",
+  'marketing.terms.senderResponsibilitiesTitle': 'Sender sorumlulukları',
+  'marketing.terms.senderResponsibilitiesBody':
+    "Eşya ve rotayı doğru tanımlayın.\nPickup/drop-off'u Wayly sohbetinde onaylayın.\nYasak veya gizli eşya taşıtmayın.\nWayly yasallığı doğrulamaz ve teslimat garantisi vermez.",
+  'marketing.terms.waylerResponsibilitiesTitle': 'Wayler sorumlulukları',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'Doğru müsaitlik yayınlayın.\nYalnızca güvenli talepleri kabul edin.\nKısıtlı veya şüpheli talepleri reddedin.\nSigorta, escrow veya hukuki koruma vaat etmeyin.',
+  'marketing.terms.paymentsTitle': 'Ödemeler ve ücretler',
+  'marketing.terms.paymentsBody':
+    "Ödeme durumu platform kayıtlarını yansıtır — gerçek sağlayıcı fonu olmayabilir.\nDemo'da mock/manuel akışlar olabilir.\nGarantili iade, ödeme, escrow veya sigorta yok.",
+  'marketing.terms.disputesTitle': 'Anlaşmazlıklar ve kanıt',
+  'marketing.terms.disputesBody':
+    'Anlaşmazlıklar sorun ve kanıtı organize eder.\nGarantili iade, ödeme veya hukuki sonuç yok.\nAcil durumda yerel makamlar.',
+  'marketing.terms.restrictedItemsTitle': 'Kısıtlı eşyalar',
+  'marketing.terms.restrictedItemsBody':
+    'Kullanıcılar rota yasallığından sorumludur.\nWayly içerik veya gümrüğü doğrulamaz.\nYasak veya tehlikeli eşya taşınmamalı.',
+  'marketing.terms.platformLimitsTitle': 'Platform sınırları',
+  'marketing.terms.platformLimitsBody':
+    'Gerçek ödeme entegrasyonu tam değil.\nKYC/demo mock/manuel olabilir.\nGarantili antifraud veya moderasyon yok.\nAdmin eylemleri yalnızca metadata.',
+  'marketing.terms.noGuaranteeTitle': 'Garanti yok',
+  'marketing.terms.noGuaranteeBody':
+    'Taslak rehber — hukuki tavsiye değil.\nGarantili teslimat, iade, ödeme, sigorta veya escrow yok.\nYasa ve taşıma/gümrük kurallarına uyun.',
+  'marketing.privacy.navLabel': 'Gizlilik',
+  'marketing.privacy.title': 'Gizlilik rehberi (taslak)',
+  'marketing.privacy.subtitle':
+    'Sunucu hesap verisi vs tarayıcı-yerel veri. Taslak — tam hukuki politika değil.',
+  'marketing.privacy.accountDataTitle': 'Hesap verileri',
+  'marketing.privacy.accountDataBody':
+    'Profil, KYC, siparişler, sohbet, anlaşmazlıklar ve ödemeler Wayly sunucularında olabilir.\nWayly sunucu verisi olmadığını iddia etmez.\nSaklama/silme production öncesi netleşecek.',
+  'marketing.privacy.localSavedDataTitle': 'Tarayıcı-yerel veri',
+  'marketing.privacy.localSavedDataBody':
+    "Shortlist, şablonlar ve taslaklar yalnızca localStorage'da.\nHesapla senkronize değil.\nPrivacy & local data ve LocalSavedDataPanel'e bakın.",
+  'marketing.privacy.localDataNotIncludedTitle': 'Yerel veriye dahil olmayanlar',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage sunucu kayıtlarının yerini almaz.\nYerel silme hesabı veya sunucu geçmişini silmez.',
+  'marketing.privacy.userControlsTitle': 'Yerel veri kontrolleri',
+  'marketing.privacy.userControlsBody':
+    "/app'te LocalSavedDataPanel — sayım ve kapsam/tümünü temizle.\nFarklı tarayıcı yerel veriyi kaldırır.",
+  'marketing.privacy.sensitiveInfoTitle': 'Hassas bilgi',
+  'marketing.privacy.sensitiveInfoBody':
+    'Sohbette kart, banka şifresi veya off-platform talimat paylaşmayın.\nDoğrulanmış akış olmadan gereksiz kimlik paylaşmayın.',
+  'marketing.privacy.futureWorkTitle': 'Gelecek gizlilik çalışması',
+  'marketing.privacy.futureWorkBody':
+    'Avukat onaylı politika production için planlanıyor.\nBugün tam GDPR/CCPA uyumu iddiası yok.',
+  'marketing.communityGuidelines.navLabel': 'Topluluk kuralları',
+  'marketing.communityGuidelines.title': 'Topluluk kuralları (taslak)',
+  'marketing.communityGuidelines.subtitle':
+    'Beklenen marketplace davranışı. Taslak — hukuki tavsiye değil.',
+  'marketing.communityGuidelines.honestItemsTitle': 'Eşyalar hakkında dürüstlük',
+  'marketing.communityGuidelines.honestItemsBody':
+    'İçerik ve zamanları doğru tanımlayın.\nKısıtlı içeriği gizlemeyin.\nGerçek müsaitlik yayınlayın.',
+  'marketing.communityGuidelines.communicationTitle': 'Wayly içinde iletişim',
+  'marketing.communityGuidelines.communicationBody':
+    'Anlaşmalar için Wayly sohbetini kullanın.\nOff-platform riski artırır.',
+  'marketing.communityGuidelines.lawsCustomsTitle': 'Yasa ve gümrüğe uyun',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'Taşıyıcı, havayolu ve gümrük kurallarına uyun.\nWayly eşya yasallığını doğrulamaz.',
+  'marketing.communityGuidelines.paymentDetailsTitle': 'Özel ödeme bilgisi paylaşmayın',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'CVV, banka şifresi veya kimlik bilgisi paylaşmayın.\nOff-platform dolandırıcılığa dikkat.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'Güvensiz talepleri reddedin',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'Belirsiz eşyaları reddedin.\nŞüphede netleştirin veya iptal edin.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'Saygılı anlaşmazlıklar',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'Gerçek sorunlar için anlaşmazlık — taciz değil.\nGarantili iade veya ödeme yok.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'Yasak davranış',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'Taciz, tehdit, dolandırıcılık, yasadışı faaliyet veya kısıtlı mal yok.\nKYC ve güvenlik araçlarını atlamayın.',
   'marketing.fees.navLabel': 'Ücretler ve ödemeler',
   'marketing.fees.title': 'Ücretler ve ödeme şeffaflığı',
   'marketing.fees.subtitle':
@@ -14937,6 +15569,108 @@ const ar: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'أدوات نزاع Wayly تنظم مشاكل الطلبات — وليست استشارة قانونية أو استرداداً مضموناً أو استجابة طوارئ. اتصل بالسلطات المحلية عند الخطر.',
   'marketing.supportDisputes.backHome': 'العودة للرئيسية',
+  'marketing.policies.navLabel': 'مركز السياسات',
+  'marketing.policies.title': 'مركز السياسات',
+  'marketing.policies.subtitle': 'قواعد المنصة والخصوصية والاستخدام المسؤول — إرشاد عام مسودة.',
+  'marketing.policies.draftNotice':
+    'إرشاد عام مسودة — ليست استشارة قانونية وليست اتفاقية نهائية مراجعة من محامٍ. اتبع القوانين المحلية والجمارك وقواعد النقل.',
+  'marketing.policies.cardsTitle': 'مستندات السياسات',
+  'marketing.policies.terms': 'شروط الاستخدام',
+  'marketing.policies.termsDescription':
+    'إرشاد مسودة للاستخدام المسؤول والأدوار والمدفوعات والنزاعات.',
+  'marketing.policies.privacy': 'إرشاد الخصوصية',
+  'marketing.policies.privacyDescription':
+    'مسودة عن بيانات الحساب والبيانات المحلية — ليست سياسة خصوصية قانونية كاملة.',
+  'marketing.policies.communityGuidelines': 'إرشادات المجتمع',
+  'marketing.policies.communityGuidelinesDescription':
+    'إعلانات صادقة وتواصل داخل المنصة ونزاعات محترمة.',
+  'marketing.policies.restrictedItems': 'العناصر المقيدة',
+  'marketing.policies.restrictedItemsDescription':
+    'استخدام مسؤول — المستخدمون مسؤولون عن القانونية.',
+  'marketing.policies.fees': 'الرسوم والمدفوعات',
+  'marketing.policies.feesDescription':
+    'شفافية الدفع — لا escrow حقيقي ولا استرداد/دفع مضمون اليوم.',
+  'marketing.policies.supportDisputes': 'الدعم والنزاعات',
+  'marketing.policies.supportDisputesDescription':
+    'الإبلاغ عن المشاكل — تنسيق وأدلة وليس نتيجة مضمونة.',
+  'marketing.policies.helpCenterDescription': 'شروط مسودة وخصوصية وقواعد مجتمع وصفحات ذات صلة.',
+  'marketing.policies.viewPolicy': 'عرض المستند',
+  'marketing.policies.openApp': 'فتح التطبيق',
+  'marketing.policies.backHome': 'العودة للرئيسية',
+  'marketing.terms.navLabel': 'شروط الاستخدام',
+  'marketing.terms.title': 'شروط الاستخدام (مسودة)',
+  'marketing.terms.subtitle': 'توقعات الاستخدام المسؤول. إرشاد مسودة — ليست استشارة قانونية.',
+  'marketing.terms.usingResponsiblyTitle': 'استخدام Wayly بمسؤولية',
+  'marketing.terms.usingResponsiblyBody':
+    'Wayly يربط المرسلين والوايلرز للتسليم P2P.\nاستخدم المنصة بصدق واتبع القوانين والجمارك وقواعد النقل.\nلا للبضائع غير القانونية أو الاحتيال.\nالأدوات للتنسيق — لا تلغي الالتزامات القانونية.',
+  'marketing.terms.senderResponsibilitiesTitle': 'مسؤوليات المرسل',
+  'marketing.terms.senderResponsibilitiesBody':
+    'صف العناصر والمسار بدقة.\nأكد pickup/drop-off في chat Wayly.\nلا تطلب نقل عناصر محظورة أو مخفية.\nWayly لا يتحقق من القانونية ولا يضمن التسليم.',
+  'marketing.terms.waylerResponsibilitiesTitle': 'مسؤوليات الوايلر',
+  'marketing.terms.waylerResponsibilitiesBody':
+    'انشر توفراً ومسارات دقيقة.\nاقبل طلبات آمنة وواضحة فقط.\nارفض الطلبات المقيدة أو المشبوهة.\nلا تعد بالتأمين أو escrow أو حماية قانونية.',
+  'marketing.terms.paymentsTitle': 'المدفوعات والرسوم',
+  'marketing.terms.paymentsBody':
+    'حالة الدفع تعكس سجلات المنصة — ليس بالضرورة أموالاً حقيقية.\nتدفقات mock/يدوية ممكنة في demo.\nلا استرداد أو دفع أو escrow أو تأمين مضمون.',
+  'marketing.terms.disputesTitle': 'النزاعات والأدلة',
+  'marketing.terms.disputesBody':
+    'استخدم النزاعات لتنظيم المشاكل والأدلة.\nلا تضمن استرداداً أو دفعاً أو نتيجة قانونية.\nللطوارئ: السلطات المحلية.',
+  'marketing.terms.restrictedItemsTitle': 'العناصر المقيدة',
+  'marketing.terms.restrictedItemsBody':
+    'المستخدمون مسؤولون عن القانونية في كل مسار.\nWayly لا يتحقق من المحتوى أو الجمارك.\nلا ترسل أو تحمل عناصر محظورة أو خطرة.',
+  'marketing.terms.platformLimitsTitle': 'حدود المنصة',
+  'marketing.terms.platformLimitsBody':
+    'تكامل الدفع الحقيقي غير مكتمل.\nKYC/demo قد يكون mock/يدوياً.\nلا antifraud أو moderation مضمون.\nإجراءات admin قد تكون metadata فقط.',
+  'marketing.terms.noGuaranteeTitle': 'لا ضمانات',
+  'marketing.terms.noGuaranteeBody':
+    'إرشاد مسودة — ليست استشارة قانونية.\nلا تسليم أو استرداد أو دفع أو تأمين أو escrow مضمون.\nاتبع القوانين وقواعد النقل/الجمارك.',
+  'marketing.privacy.navLabel': 'الخصوصية',
+  'marketing.privacy.title': 'إرشاد الخصوصية (مسودة)',
+  'marketing.privacy.subtitle':
+    'بيانات الحساب على الخادم vs البيانات المحلية. مسودة — ليست سياسة قانونية كاملة.',
+  'marketing.privacy.accountDataTitle': 'بيانات الحساب',
+  'marketing.privacy.accountDataBody':
+    'الملف وKYC والطلبات والدردشة والنزاعات والمدفوعات قد تُخزن على خوادم Wayly.\nWayly لا يدعي عدم وجود بيانات على الخادم.\nالاحتفاظ/الحذف سيُحدد قبل الإنتاج.',
+  'marketing.privacy.localSavedDataTitle': 'البيانات المحلية',
+  'marketing.privacy.localSavedDataBody':
+    'Shortlist والقوالب والمسودات في localStorage فقط.\nغير متزامنة مع الحساب.\nراجع Privacy & local data وLocalSavedDataPanel.',
+  'marketing.privacy.localDataNotIncludedTitle': 'ما لا يشمله المحلي',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage لا يحل محل سجلات الخادم.\nمسح المحلي لا يحذف الحساب أو تاريخ الخادم.',
+  'marketing.privacy.userControlsTitle': 'تحكم البيانات المحلية',
+  'marketing.privacy.userControlsBody':
+    'LocalSavedDataPanel على /app — عدد ومسح حسب النطاق/الكل.\nمتصفح آخر يزيل البيانات المحلية فقط.',
+  'marketing.privacy.sensitiveInfoTitle': 'معلومات حساسة',
+  'marketing.privacy.sensitiveInfoBody':
+    'لا تشارك بطاقات أو كلمات مرور بنك أو تعليمات off-platform في الدردشة.\nلا تنشر هوية غير ضرورية بدون تدفق موثق.',
+  'marketing.privacy.futureWorkTitle': 'عمل الخصوصية المستقبلي',
+  'marketing.privacy.futureWorkBody':
+    'سياسة مراجعة من محامٍ مخططة للإنتاج.\nلا تدعي امتثال GDPR/CCPA كاملاً اليوم.',
+  'marketing.communityGuidelines.navLabel': 'إرشادات المجتمع',
+  'marketing.communityGuidelines.title': 'إرشادات المجتمع (مسودة)',
+  'marketing.communityGuidelines.subtitle':
+    'السلوك المتوقع في marketplace. مسودة — ليست استشارة قانونية.',
+  'marketing.communityGuidelines.honestItemsTitle': 'الصدق عن العناصر',
+  'marketing.communityGuidelines.honestItemsBody':
+    'صف المحتوى والمواعيد بصدق.\nلا تخفِ محتوى مقيداً.\nانشر توفراً حقيقياً.',
+  'marketing.communityGuidelines.communicationTitle': 'التواصل داخل Wayly',
+  'marketing.communityGuidelines.communicationBody':
+    'استخدم درdشة Wayly للاتفاقات.\nOff-platform يزيد المخاطر.',
+  'marketing.communityGuidelines.lawsCustomsTitle': 'اتبع القوانين والجمارك',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    'اتبع قواعد شركات الطيران والناقلين والجمارك.\nWayly لا يتحقق من قانونية العناصر.',
+  'marketing.communityGuidelines.paymentDetailsTitle': 'لا تبادل بيانات دفع خاصة',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    'لا CVV أو كلمات مرور بنك أو بيانات اعتماد.\nاحذر احتيال off-platform.',
+  'marketing.communityGuidelines.declineUnsafeTitle': 'ارفض الطلبات غير الآمنة',
+  'marketing.communityGuidelines.declineUnsafeBody':
+    'ارفض عناصر غير واضحة.\nعند الشك، وضّح أو ألغِ.',
+  'marketing.communityGuidelines.disputesRespectTitle': 'نزاعات محترمة',
+  'marketing.communityGuidelines.disputesRespectBody':
+    'نزاعات لمشاكل حقيقية — لا مضايقة.\nلا استرداد أو دفع مضمون.',
+  'marketing.communityGuidelines.prohibitedConductTitle': 'سلوك محظور',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    'لا مضايقة أو تهديد أو احتيال أو نشاط غير قانوني أو بضائع مقيدة.\nلا تتجاوز KYC وأدوات الأمان.',
   'marketing.fees.navLabel': 'الرسوم والمدفوعات',
   'marketing.fees.title': 'الرسوم وشفافية المدفوعات',
   'marketing.fees.subtitle':
@@ -16898,6 +17632,100 @@ const zh: Dictionary = {
   'marketing.supportDisputes.emergencyNotice':
     'Wayly 争议工具用于整理订单问题 — 非法律建议、保证退款或紧急响应。遇危险请联系当地当局。',
   'marketing.supportDisputes.backHome': '返回首页',
+  'marketing.policies.navLabel': '政策中心',
+  'marketing.policies.title': '政策中心',
+  'marketing.policies.subtitle': '平台规则、隐私指引与 responsible use — 草案一般性指引。',
+  'marketing.policies.draftNotice':
+    '草案一般性平台指引 — 非法律建议，非律师审阅的最终协议。请遵守当地法律、海关与运输规则。',
+  'marketing.policies.cardsTitle': '政策与指引文件',
+  'marketing.policies.terms': '使用条款',
+  'marketing.policies.termsDescription': '负责任使用、角色、支付与争议的草案指引。',
+  'marketing.policies.privacy': '隐私指引',
+  'marketing.policies.privacyDescription': '账户数据与浏览器本地数据概述 — 非完整法律隐私政策。',
+  'marketing.policies.communityGuidelines': '社区准则',
+  'marketing.policies.communityGuidelinesDescription':
+    '诚实 listing、平台内沟通与 respectful 争议使用。',
+  'marketing.policies.restrictedItems': '受限物品',
+  'marketing.policies.restrictedItemsDescription': '负责任使用 — 用户自行负责合法性。',
+  'marketing.policies.fees': '费用与支付',
+  'marketing.policies.feesDescription': '支付透明度 — 今日无真实托管或 guaranteed refund/payout。',
+  'marketing.policies.supportDisputes': '支持与争议',
+  'marketing.policies.supportDisputesDescription': '报告问题 — 协调与证据，非 guaranteed 结果。',
+  'marketing.policies.helpCenterDescription': '草案条款、隐私、社区规则及相关页面链接。',
+  'marketing.policies.viewPolicy': '查看文件',
+  'marketing.policies.openApp': '打开应用',
+  'marketing.policies.backHome': '返回首页',
+  'marketing.terms.navLabel': '使用条款',
+  'marketing.terms.title': '使用条款（草案指引）',
+  'marketing.terms.subtitle': '负责任使用的一般期望。草案指引 — 非法律建议。',
+  'marketing.terms.usingResponsiblyTitle': '负责任使用 Wayly',
+  'marketing.terms.usingResponsiblyBody':
+    'Wayly 连接 Sender 与 Wayler 进行 P2P 交付。\n诚实使用平台并遵守法律、海关与运输规则。\n不得用于非法物品或欺诈。\n工具用于协调 — 不替代法律义务。',
+  'marketing.terms.senderResponsibilitiesTitle': 'Sender 责任',
+  'marketing.terms.senderResponsibilitiesBody':
+    '准确描述物品与路线。\n在 Wayly 聊天中确认 pickup/drop-off。\n不得要求运送禁止或隐藏物品。\nWayly 不验证合法性且不保证送达。',
+  'marketing.terms.waylerResponsibilitiesTitle': 'Wayler 责任',
+  'marketing.terms.waylerResponsibilitiesBody':
+    '发布准确的可用性与路线。\n仅接受清晰安全的请求。\n拒绝受限或可疑请求。\n不得承诺保险、托管或法律保护。',
+  'marketing.terms.paymentsTitle': '支付与费用',
+  'marketing.terms.paymentsBody':
+    '支付状态反映平台记录 — 未必是 provider 真实资金。\nDemo 可能有 mock/手动流程。\n今日无 guaranteed refund、payout、托管或保险。',
+  'marketing.terms.disputesTitle': '争议与证据',
+  'marketing.terms.disputesBody':
+    '争议用于组织问题与证据。\n不保证 refund、payout 或法律结果。\n紧急情况联系当地当局。',
+  'marketing.terms.restrictedItemsTitle': '受限物品',
+  'marketing.terms.restrictedItemsBody':
+    '用户对各路线的合法性负责。\nWayly 不验证内容或海关。\n禁止运送危险或违禁物品。',
+  'marketing.terms.platformLimitsTitle': '平台当前限制',
+  'marketing.terms.platformLimitsBody':
+    '真实支付集成未完全实现。\nKYC/demo 可能为 mock/手动。\n无 guaranteed antifraud 或 moderation。\nAdmin 操作可能仅更新 metadata。',
+  'marketing.terms.noGuaranteeTitle': '无保证声明',
+  'marketing.terms.noGuaranteeBody':
+    '草案指引 — 非法律建议。\n无 guaranteed 送达、refund、payout、保险或托管。\n遵守法律与运输/海关规则。',
+  'marketing.privacy.navLabel': '隐私指引',
+  'marketing.privacy.title': '隐私指引（草案）',
+  'marketing.privacy.subtitle': '服务器账户数据 vs 浏览器本地数据。草案 — 非完整法律隐私政策。',
+  'marketing.privacy.accountDataTitle': '账户与市场数据',
+  'marketing.privacy.accountDataBody':
+    '资料、KYC、订单、聊天、争议与支付可能存储于 Wayly 服务器。\nWayly 不声称不存在服务器数据。\n保留/删除策略将在 production 前确定。',
+  'marketing.privacy.localSavedDataTitle': '浏览器本地数据',
+  'marketing.privacy.localSavedDataBody':
+    'Shortlist、模板与草稿仅存在于 localStorage。\n不同步至账户。\n见 Privacy & local data 与 LocalSavedDataPanel。',
+  'marketing.privacy.localDataNotIncludedTitle': '本地数据不包含',
+  'marketing.privacy.localDataNotIncludedBody':
+    'localStorage 不替代服务器订单/聊天/争议记录。\n清除本地数据不删除账户或服务器历史。',
+  'marketing.privacy.userControlsTitle': '本地数据控制',
+  'marketing.privacy.userControlsBody':
+    '/app 的 LocalSavedDataPanel — 计数与分 scope/全部清除。\n换浏览器会丢失仅本地数据。',
+  'marketing.privacy.sensitiveInfoTitle': '敏感信息',
+  'marketing.privacy.sensitiveInfoBody':
+    '勿在聊天分享卡号、银行密码或 off-platform 支付指令。\n无 verified flow 时不要发布多余 ID。',
+  'marketing.privacy.futureWorkTitle': '未来隐私工作',
+  'marketing.privacy.futureWorkBody':
+    '计划 production 前律师审阅隐私政策。\n今日不声称完整 GDPR/CCPA 合规。',
+  'marketing.communityGuidelines.navLabel': '社区准则',
+  'marketing.communityGuidelines.title': '社区准则（草案）',
+  'marketing.communityGuidelines.subtitle': 'marketplace 预期行为。草案 — 非法律建议。',
+  'marketing.communityGuidelines.honestItemsTitle': '诚实描述物品',
+  'marketing.communityGuidelines.honestItemsBody':
+    '真实描述内容与时间。\n不隐藏受限内容。\n发布可兑现的可用性。',
+  'marketing.communityGuidelines.communicationTitle': '在 Wayly 内沟通',
+  'marketing.communityGuidelines.communicationBody':
+    '用 Wayly 聊天记录约定。\nOff-platform 增加风险。',
+  'marketing.communityGuidelines.lawsCustomsTitle': '遵守法律与海关',
+  'marketing.communityGuidelines.lawsCustomsBody':
+    '遵守航司、承运人与海关规则。\nWayly 不验证物品合法性。',
+  'marketing.communityGuidelines.paymentDetailsTitle': '勿分享私人支付信息',
+  'marketing.communityGuidelines.paymentDetailsBody':
+    '勿分享 CVV、银行密码或凭证。\n警惕 off-platform 诈骗。',
+  'marketing.communityGuidelines.declineUnsafeTitle': '拒绝不安全请求',
+  'marketing.communityGuidelines.declineUnsafeBody': '拒绝不清楚的物品。\n有疑问时澄清或取消。',
+  'marketing.communityGuidelines.disputesRespectTitle': 'respectful 使用争议',
+  'marketing.communityGuidelines.disputesRespectBody':
+    '争议用于真实问题 — 非骚扰。\n不保证 refund 或 payout。',
+  'marketing.communityGuidelines.prohibitedConductTitle': '禁止行为',
+  'marketing.communityGuidelines.prohibitedConductBody':
+    '禁止骚扰、威胁、欺诈、非法活动或受限物品。\n勿绕过 KYC 与安全工具。',
   'marketing.fees.navLabel': '费用与支付',
   'marketing.fees.title': '费用与支付透明度',
   'marketing.fees.subtitle':

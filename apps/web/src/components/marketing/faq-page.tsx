@@ -323,6 +323,14 @@ export function FaqPage() {
             >
               {t('marketing.restrictedItems.navLabel')}
             </Link>
+            <Link
+              href="/policies"
+              className={cn(
+                'inline-flex items-center justify-center rounded-md border border-border/60 bg-card/40 px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-card/80',
+              )}
+            >
+              {t('marketing.policies.navLabel')}
+            </Link>
           </div>
         </FadeIn>
       </div>

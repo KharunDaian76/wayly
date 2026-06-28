@@ -39,12 +39,17 @@ export function SiteFooter() {
           <Link href="/support-disputes" className="transition-colors hover:text-foreground">
             {t('marketing.supportDisputes.navLabel')}
           </Link>
-          {/* Legal pages are added in a later milestone. */}
-          <Link href="#" className="transition-colors hover:text-foreground">
-            Terms
+          <Link href="/policies" className="transition-colors hover:text-foreground">
+            {t('marketing.policies.navLabel')}
           </Link>
-          <Link href="#" className="transition-colors hover:text-foreground">
-            Privacy
+          <Link href="/terms" className="transition-colors hover:text-foreground">
+            {t('marketing.terms.navLabel')}
+          </Link>
+          <Link href="/privacy" className="transition-colors hover:text-foreground">
+            {t('marketing.privacy.navLabel')}
+          </Link>
+          <Link href="/community-guidelines" className="transition-colors hover:text-foreground">
+            {t('marketing.communityGuidelines.navLabel')}
           </Link>
           <Link href="#" className="transition-colors hover:text-foreground">
             Contact

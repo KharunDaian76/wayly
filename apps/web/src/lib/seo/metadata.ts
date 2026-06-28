@@ -56,4 +56,8 @@ export const publicMarketingPaths = [
   '/fees',
   '/privacy-local-data',
   '/support-disputes',
+  '/policies',
+  '/terms',
+  '/privacy',
+  '/community-guidelines',
 ] as const;
