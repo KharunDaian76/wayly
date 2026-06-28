@@ -27,6 +27,7 @@ import { z } from 'zod';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { AdminModerateRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
 import type { RequestUser } from '../../common/types/request-user.type';
@@ -43,7 +44,7 @@ import { KycService } from './kyc.service';
 @ApiBearerAuth('access-token')
 @Controller({ path: 'admin/kyc-verifications', version: '1' })
 @AdminModerateRateLimit()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN, UserRole.ARBITRATOR)
 export class AdminKycController {
   constructor(private readonly kyc: KycService) {}

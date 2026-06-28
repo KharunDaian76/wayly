@@ -7,16 +7,17 @@
  *   pnpm --filter @wayly/api run db:seed-demo-users
  *
  * Required: DEMO_USERS_PASSWORD (min 12 chars, not a known placeholder)
- * Prefer: pnpm --dir apps/api seed:demo for full demo data
+ * Prefer: pnpm --dir apps/api seed:demo for full demo data (@wayly.demo accounts).
  */
 import { KycStatus, PrismaClient, UserRole } from '@prisma/client';
 import * as argon2 from 'argon2';
 
 import { assertDemoSeedPasswordSafe, assertDemoSeedSafeToRun } from './demo-seed-safety';
 
+/** Current checkpoint demo emails — aligned with seed:demo. */
 const DEMO_USERS = [
-  { email: 'demo.sender@wayly.app', displayName: 'Demo Sender' },
-  { email: 'demo.wayler@wayly.app', displayName: 'Demo Wayler' },
+  { email: 'demo.sender@wayly.demo', displayName: 'Demo Sender' },
+  { email: 'demo.wayler@wayly.demo', displayName: 'Demo Wayler' },
 ] as const;
 
 const prisma = new PrismaClient();
@@ -100,13 +101,17 @@ async function main(): Promise<void> {
   assertDemoSeedPasswordSafe('DEMO_USERS_PASSWORD', password);
   const passwordHash = await argon2.hash(password);
 
+  console.warn(
+    '[seed-demo-users] Legacy script — prefer `pnpm --dir apps/api seed:demo` for full dashboard data.',
+  );
+
   for (const demo of DEMO_USERS) {
     const user = await upsertDemoUser(demo.email, demo.displayName, passwordHash);
     console.log(`[seed-demo-users] Demo user ready: ${user.email} (${user.displayName})`);
   }
 
   console.log('[seed-demo-users] Success — both demo accounts are KYC-approved.');
-  console.log('[seed-demo-users] Login emails: demo.sender@wayly.app, demo.wayler@wayly.app');
+  console.log('[seed-demo-users] Login emails: demo.sender@wayly.demo, demo.wayler@wayly.demo');
   console.warn(
     '[seed-demo-users] WARNING: Demo/mock accounts only — rotate passwords if used on hosted DB.',
   );

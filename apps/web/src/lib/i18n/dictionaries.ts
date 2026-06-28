@@ -1969,6 +1969,9 @@ const en = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.active': 'Active',
   'app.waylerAccess.inactive': 'Inactive',
@@ -4610,6 +4613,9 @@ const ru: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Тестовая активация доступа на сегодня (€1)',
   'app.waylerAccess.activating': 'Активация…',
@@ -7248,6 +7254,9 @@ const es: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Activar acceso simulado de hoy (€1)',
   'app.waylerAccess.activating': 'Activando…',
@@ -9913,6 +9922,9 @@ const fr: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': "Activer l'accès simulé du jour (€1)",
   'app.waylerAccess.activating': 'Activation…',
@@ -12589,6 +12601,9 @@ const de: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Simulierten Tageszugang aktivieren (€1)',
   'app.waylerAccess.activating': 'Aktivierung…',
@@ -15200,6 +15215,9 @@ const tr: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.mockActivate': 'Bugünkü erişimi simüle et (€1)',
   'app.waylerAccess.activating': 'Etkinleştiriliyor…',
@@ -17723,6 +17741,9 @@ const ar: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.active': 'نشط',
   'app.waylerAccess.inactive': 'غير نشط',
@@ -20148,6 +20169,9 @@ const zh: Dictionary = {
     "Activate today's demo/manual access before accepting orders or contacting Senders. No real payment is charged in the demo environment.",
   'app.waylerAccess.demoAccessCardNote':
     'Mock/manual access only — not a real subscription or payment confirmation.',
+  'app.waylerAccess.demoAdminPassLabel': 'Demo admin access (mock/manual pass)',
+  'app.waylerAccess.demoAdminPassNote':
+    'Long-lived demo/manual admin pass for walkthrough — no real payment or subscription.',
   'app.waylerAccess.activateDemoAccess': 'Activate demo access',
   'app.waylerAccess.active': '有效',
   'app.waylerAccess.inactive': '无效',

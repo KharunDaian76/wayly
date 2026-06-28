@@ -34,6 +34,9 @@ const FILTER_INPUT_CLASS =
 
 const QUEUE_PAGE_LIMIT = 50;
 
+const DEFAULT_KYC_REJECT_REASON =
+  'Demo review rejection — documents need resubmission (mock review only).';
+
 const KYC_STATUS_OPTIONS = Object.values(KycStatusEnum);
 
 type KycFilterForm = {
@@ -207,30 +210,25 @@ export function AdminKycQueuePanel({
           ...current,
           [item.id]: t('app.admin.kycApprovedSuccess'),
         }));
-      } catch {
+        void fetchKycQueue(page, appliedFilters);
+      } catch (error) {
         setCardActionErrors((current) => ({
           ...current,
-          [item.id]: t('app.admin.kycReviewActionFailed'),
+          [item.id]: safePanelErrorMessage(error, {
+            fallbackKey: 'app.admin.kycReviewActionFailed',
+            t,
+          }),
         }));
       } finally {
         setCardActions((current) => ({ ...current, [item.id]: null }));
       }
     },
-    [t, updateItemInList],
+    [appliedFilters, fetchKycQueue, page, t, updateItemInList],
   );
 
   const handleRejectSubmit = useCallback(
     async (item: AdminKycQueueItem) => {
-      const reason = rejectReasons[item.id]?.trim() ?? '';
-      if (!reason) {
-        setRejectReasonErrors((current) => ({
-          ...current,
-          [item.id]: t('app.admin.rejectKycReasonRequired'),
-        }));
-        return;
-      }
-
-      setRejectReasonErrors((current) => ({ ...current, [item.id]: '' }));
+      const reason = rejectReasons[item.id]?.trim() || DEFAULT_KYC_REJECT_REASON;
       setCardActions((current) => ({ ...current, [item.id]: 'reject' }));
       setCardActionErrors((current) => ({ ...current, [item.id]: '' }));
       setCardActionSuccess((current) => ({ ...current, [item.id]: '' }));
@@ -246,16 +244,20 @@ export function AdminKycQueuePanel({
           ...current,
           [item.id]: t('app.admin.kycRejectedSuccess'),
         }));
-      } catch {
+        void fetchKycQueue(page, appliedFilters);
+      } catch (error) {
         setCardActionErrors((current) => ({
           ...current,
-          [item.id]: t('app.admin.kycReviewActionFailed'),
+          [item.id]: safePanelErrorMessage(error, {
+            fallbackKey: 'app.admin.kycReviewActionFailed',
+            t,
+          }),
         }));
       } finally {
         setCardActions((current) => ({ ...current, [item.id]: null }));
       }
     },
-    [rejectReasons, t, updateItemInList],
+    [appliedFilters, fetchKycQueue, page, rejectReasons, t, updateItemInList],
   );
 
   if (!hasOperationsDashboardAccess(roles)) {

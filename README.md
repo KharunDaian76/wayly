@@ -21,6 +21,7 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 | [docs/security-and-secrets-checkpoint.md](docs/security-and-secrets-checkpoint.md)                     | **Checkpoint** — secret handling, demo seed guards, deployment safety, rotation guidance                                                 |
 | [docs/rate-limiting-abuse-protection-checkpoint.md](docs/rate-limiting-abuse-protection-checkpoint.md) | **Checkpoint** — MVP API rate limits (auth, writes, admin, public), env tuning, production TODOs                                         |
 | [docs/demo-dashboard-ux-checkpoint.md](docs/demo-dashboard-ux-checkpoint.md)                           | **Checkpoint** — admin queue fixes, demo seed walkthrough data, light mode, logged-in app UX polish                                      |
+| [docs/demo-walkthrough-checkpoint.md](docs/demo-walkthrough-checkpoint.md)                             | **Checkpoint** — demo accounts, KYC actions, Wayler access, dashboard panels, homepage globe                                             |
 
 Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The ten **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
 
@@ -4171,7 +4172,7 @@ Use a **KYC-approved Wayler** on `/app` (Wayler mode):
 
 ### Manual testing checklist (access gating — Wayler)
 
-Use a **KYC-approved Wayler** (`demo.wayler@wayly.app` if seeded) and a **KYC-approved Sender** with an OPEN then ACCEPTED order:
+Use a **KYC-approved Wayler** (`demo.wayler@wayly.demo` if seeded) and a **KYC-approved Sender** with an OPEN then ACCEPTED order:
 
 - [ ] Wayler mode, **no active pass**: browse OPEN orders ✓; posted-order accept blocked (UI + **403** `WAYLER_ACCESS_REQUIRED`)
 - [ ] Wayler mode, **no active pass**: **Incoming Sender requests** visible; **Accept request** disabled + note; **Decline** works; `POST /wayler-availability-requests/:id/accept` → **403**

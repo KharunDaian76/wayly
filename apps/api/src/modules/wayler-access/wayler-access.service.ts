@@ -30,6 +30,9 @@ import { toWaylerAccessPassSummary, toWaylerAccessState } from './wayler-access.
 const DEFAULT_AMOUNT = new Decimal('1.00');
 const DEFAULT_CURRENCY = 'EUR';
 
+/** Demo-seed marker — long-lived mock pass for admin walkthrough only (not a role bypass). */
+const DEMO_ADMIN_LONG_LIVED_PASS_ID = 'demo-admin-long-lived-pass';
+
 function utcDayStart(date: Date = new Date()): Date {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 }
@@ -211,6 +214,20 @@ export class WaylerAccessService {
     now: Date,
     accessDate: Date,
   ): Promise<WaylerAccessPass | null> {
+    const longLivedDemoPass = await this.prisma.waylerAccessPass.findFirst({
+      where: {
+        waylerId,
+        providerPaymentId: DEMO_ADMIN_LONG_LIVED_PASS_ID,
+        status: PrismaWaylerAccessPassStatus.ACTIVE,
+        startsAt: { lte: now },
+        expiresAt: { gt: now },
+      },
+      orderBy: { expiresAt: 'desc' },
+    });
+    if (longLivedDemoPass) {
+      return longLivedDemoPass;
+    }
+
     return this.prisma.waylerAccessPass.findFirst({
       where: {
         waylerId,

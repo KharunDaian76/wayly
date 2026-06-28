@@ -12,6 +12,8 @@ import type { TranslationKey } from '@/lib/i18n/dictionaries';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
 
+const DEMO_ADMIN_LONG_LIVED_PASS_ID = 'demo-admin-long-lived-pass';
+
 const LISTING_CARD_CLASS = cn(
   'wayly-order-card rounded-xl px-4 py-4 text-sm',
   'wayly-feed-item-enter',
@@ -223,6 +225,7 @@ export function WaylerAccessPanel({ kycGate, onAccessChanged }: WaylerAccessPane
 
   const hasActiveAccess = accessState?.hasActiveAccess ?? false;
   const activePass = accessState?.activePass ?? null;
+  const isDemoAdminLongLivedPass = activePass?.providerPaymentId === DEMO_ADMIN_LONG_LIVED_PASS_ID;
   const showCancel = hasActiveAccess && activePass?.status === WaylerAccessPassStatus.ACTIVE;
 
   return (
@@ -258,8 +261,15 @@ export function WaylerAccessPanel({ kycGate, onAccessChanged }: WaylerAccessPane
               {hasActiveAccess && activePass ? (
                 <>
                   <p className="mt-3 text-sm text-muted-foreground">
-                    {t('app.waylerAccess.activeNote')}
+                    {isDemoAdminLongLivedPass
+                      ? t('app.waylerAccess.demoAdminPassNote')
+                      : t('app.waylerAccess.activeNote')}
                   </p>
+                  {isDemoAdminLongLivedPass ? (
+                    <p className="mt-2 text-xs font-medium text-primary">
+                      {t('app.waylerAccess.demoAdminPassLabel')}
+                    </p>
+                  ) : null}
                   <dl className="mt-3 flex flex-col gap-1.5">
                     <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
                       <dt className="text-muted-foreground">{t('app.waylerAccess.expiresAt')}</dt>

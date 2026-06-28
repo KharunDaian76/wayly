@@ -51,6 +51,18 @@ const DEFAULT_ADMIN_EMAIL = 'admin@wayly.demo';
 const DEMO_SENDER_EMAIL = 'demo.sender@wayly.demo';
 const DEMO_WAYLER_EMAIL = 'demo.wayler@wayly.demo';
 
+const DEMO_ADMIN_LONG_LIVED_PASS_ID = 'demo-admin-long-lived-pass';
+const DEMO_SEED_MOCK_MANUAL_PASS_ID = 'demo-seed-mock-manual';
+
+/** Pending KYC samples for admin approve/reject walkthrough — not main demo accounts. */
+const DEMO_KYC_REVIEW_EMAILS = [
+  'demo.kyc-pending-paris@wayly.demo',
+  'demo.kyc-pending-bishkek@wayly.demo',
+] as const;
+
+/** Legacy showcase emails — cleanup demo-owned rows only when these accounts exist. */
+const LEGACY_DEMO_EMAILS = ['demo.sender@wayly.app', 'demo.wayler@wayly.app'] as const;
+
 const prisma = new PrismaClient();
 
 type DemoUserIds = {
@@ -72,6 +84,7 @@ type SeedCounts = {
   paymentIntents: number;
   notifications: number;
   reviews: number;
+  kycReviewSamples: number;
 };
 
 function requireEnv(name: string): string {
@@ -178,8 +191,19 @@ async function upsertDemoUser(params: {
   return user.id;
 }
 
+async function resolveDemoUserIdsForCleanup(ids: DemoUserIds): Promise<string[]> {
+  const extraEmails = [...DEMO_KYC_REVIEW_EMAILS, ...LEGACY_DEMO_EMAILS].map((email) =>
+    email.toLowerCase(),
+  );
+  const extraUsers = await prisma.user.findMany({
+    where: { email: { in: extraEmails } },
+    select: { id: true },
+  });
+  return [...new Set([ids.adminId, ids.senderId, ids.waylerId, ...extraUsers.map((u) => u.id)])];
+}
+
 async function cleanupDemoData(ids: DemoUserIds): Promise<void> {
-  const demoUserIds = [ids.adminId, ids.senderId, ids.waylerId];
+  const demoUserIds = await resolveDemoUserIdsForCleanup(ids);
 
   const demoOrderIds = (
     await prisma.deliveryOrder.findMany({
@@ -340,6 +364,32 @@ async function seedAvailabilities(ids: DemoUserIds, now: Date): Promise<Map<stri
       maxWeightKg: 6,
       tripDirection: null,
       departureDays: 12,
+    },
+    {
+      key: 'paris-london-trip',
+      owner: 'adminId',
+      type: WaylerAvailabilityType.TRIP_ROUTE,
+      originCountry: 'FR',
+      originCity: 'Paris',
+      destinationCountry: 'GB',
+      destinationCity: 'London',
+      maxPackages: 2,
+      maxWeightKg: 7,
+      tripDirection: TripDirection.ONE_WAY,
+      departureDays: 11,
+    },
+    {
+      key: 'almaty-bishkek-trip',
+      owner: 'senderId',
+      type: WaylerAvailabilityType.TRIP_ROUTE,
+      originCountry: 'KZ',
+      originCity: 'Almaty',
+      destinationCountry: 'KG',
+      destinationCity: 'Bishkek',
+      maxPackages: 3,
+      maxWeightKg: 9,
+      tripDirection: TripDirection.ONE_WAY,
+      departureDays: 13,
     },
   ];
 
@@ -794,6 +844,70 @@ async function seedSenderOrders(ids: DemoUserIds, now: Date): Promise<number> {
     created += 1;
   }
 
+  const crossAcceptedSpecs = [
+    {
+      senderKey: 'senderId' as const,
+      waylerKey: 'adminId' as const,
+      title: demoTitle('Accepted: Admin as Wayler — Amsterdam handoff'),
+      pickupCountry: 'NL',
+      pickupCity: 'Amsterdam',
+      dropoffCountry: 'NL',
+      dropoffCity: 'Utrecht',
+      currency: 'EUR',
+      reward: 28,
+    },
+    {
+      senderKey: 'waylerId' as const,
+      waylerKey: 'senderId' as const,
+      title: demoTitle('Accepted: Sender as Wayler — London express'),
+      pickupCountry: 'GB',
+      pickupCity: 'London',
+      dropoffCountry: 'GB',
+      dropoffCity: 'Brighton',
+      currency: 'GBP',
+      reward: 32,
+    },
+    {
+      senderKey: 'adminId' as const,
+      waylerKey: 'waylerId' as const,
+      title: demoTitle('Accepted: Wayler — Paris to London relay'),
+      pickupCountry: 'FR',
+      pickupCity: 'Paris',
+      dropoffCountry: 'GB',
+      dropoffCity: 'London',
+      currency: 'EUR',
+      reward: 70,
+    },
+  ] as const;
+
+  for (const spec of crossAcceptedSpecs) {
+    await prisma.deliveryOrder.create({
+      data: {
+        senderId: ids[spec.senderKey],
+        acceptedWaylerId: ids[spec.waylerKey],
+        status: DeliveryOrderStatus.ACCEPTED,
+        type:
+          spec.pickupCountry !== spec.dropoffCountry
+            ? DeliveryOrderType.INTERNATIONAL
+            : DeliveryOrderType.LOCAL,
+        sourceType: DeliveryOrderSource.SENDER_POSTED_ORDER,
+        title: spec.title,
+        description: 'Demo accepted order — each main demo account can see accepted Wayler work.',
+        pickupCountry: spec.pickupCountry,
+        pickupCity: spec.pickupCity,
+        dropoffCountry: spec.dropoffCountry,
+        dropoffCity: spec.dropoffCity,
+        currency: spec.currency,
+        offeredRewardAmount: new Prisma.Decimal(spec.reward),
+        publishedAt: addDays(now, -4),
+        acceptedAt: addDays(now, -1),
+        notes: demoNotes('cross-accepted-order'),
+        packageSize: PackageSize.SMALL,
+      },
+    });
+    created += 1;
+  }
+
   const inTransitOrder = await prisma.deliveryOrder.create({
     data: {
       senderId: ids.senderId,
@@ -977,6 +1091,50 @@ async function seedChats(ids: DemoUserIds): Promise<{ conversations: number; mes
   return { conversations, messages };
 }
 
+async function seedAdminLongLivedAccess(adminId: string, now: Date): Promise<void> {
+  const startsAt = utcDayStart(now);
+  const expiresAt = addDays(now, 365);
+  const accessDate = utcDayStart(now);
+
+  const existing = await prisma.waylerAccessPass.findFirst({
+    where: {
+      waylerId: adminId,
+      providerPaymentId: DEMO_ADMIN_LONG_LIVED_PASS_ID,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const passData = {
+    status: WaylerAccessPassStatus.ACTIVE,
+    provider: WaylerAccessPassProvider.MANUAL,
+    currency: 'EUR',
+    amount: new Prisma.Decimal('0.00'),
+    accessDate,
+    startsAt,
+    expiresAt,
+    activatedAt: now,
+    providerPaymentId: DEMO_ADMIN_LONG_LIVED_PASS_ID,
+    cancelledAt: null,
+    failedAt: null,
+    refundedAt: null,
+  };
+
+  if (existing) {
+    await prisma.waylerAccessPass.update({
+      where: { id: existing.id },
+      data: passData,
+    });
+    return;
+  }
+
+  await prisma.waylerAccessPass.create({
+    data: {
+      waylerId: adminId,
+      ...passData,
+    },
+  });
+}
+
 async function seedWaylerAccess(waylerId: string, now: Date): Promise<void> {
   const accessDate = utcDayStart(now);
   const startsAt = accessDate;
@@ -997,7 +1155,7 @@ async function seedWaylerAccess(waylerId: string, now: Date): Promise<void> {
       startsAt,
       expiresAt,
       activatedAt: now,
-      providerPaymentId: 'demo-seed-mock-manual',
+      providerPaymentId: DEMO_SEED_MOCK_MANUAL_PASS_ID,
       cancelledAt: null,
       failedAt: null,
       refundedAt: null,
@@ -1012,16 +1170,113 @@ async function seedWaylerAccess(waylerId: string, now: Date): Promise<void> {
       startsAt,
       expiresAt,
       activatedAt: now,
-      providerPaymentId: 'demo-seed-mock-manual',
+      providerPaymentId: DEMO_SEED_MOCK_MANUAL_PASS_ID,
     },
   });
 }
 
 async function seedWaylerAccessForAll(ids: DemoUserIds, now: Date): Promise<number> {
-  for (const userId of [ids.adminId, ids.senderId, ids.waylerId]) {
-    await seedWaylerAccess(userId, now);
-  }
+  await seedAdminLongLivedAccess(ids.adminId, now);
+  await seedWaylerAccess(ids.senderId, now);
+  await seedWaylerAccess(ids.waylerId, now);
   return 3;
+}
+
+async function upsertKycReviewSampleUser(params: {
+  email: string;
+  displayName: string;
+  passwordHash: string;
+  country: string;
+  now: Date;
+}): Promise<string> {
+  const email = params.email.trim().toLowerCase();
+
+  const user = await prisma.$transaction(async (tx) => {
+    const record = await tx.user.upsert({
+      where: { email },
+      update: {
+        displayName: params.displayName,
+        passwordHash: params.passwordHash,
+        roles: [UserRole.USER],
+        verified: true,
+        kycStatus: KycStatus.PENDING,
+        accountStatus: UserAccountStatus.ACTIVE,
+      },
+      create: {
+        email,
+        displayName: params.displayName,
+        passwordHash: params.passwordHash,
+        roles: [UserRole.USER],
+        verified: true,
+        kycStatus: KycStatus.PENDING,
+        accountStatus: UserAccountStatus.ACTIVE,
+      },
+    });
+
+    const latestKyc = await tx.kycVerification.findFirst({
+      where: { userId: record.id },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (latestKyc) {
+      await tx.kycVerification.update({
+        where: { id: latestKyc.id },
+        data: {
+          status: KycStatus.PENDING,
+          provider: 'mock',
+          levelName: 'demo-kyc-review-sample',
+          country: params.country,
+          submittedAt: params.now,
+          reviewedAt: null,
+          rejectionReason: null,
+        },
+      });
+    } else {
+      await tx.kycVerification.create({
+        data: {
+          userId: record.id,
+          status: KycStatus.PENDING,
+          provider: 'mock',
+          levelName: 'demo-kyc-review-sample',
+          country: params.country,
+          submittedAt: params.now,
+        },
+      });
+    }
+
+    return record;
+  });
+
+  return user.id;
+}
+
+async function seedKycReviewQueueSamples(passwordHash: string, now: Date): Promise<number> {
+  const specs = [
+    {
+      email: DEMO_KYC_REVIEW_EMAILS[0],
+      displayName: '[Demo] KYC pending — Paris sender',
+      country: 'FR',
+    },
+    {
+      email: DEMO_KYC_REVIEW_EMAILS[1],
+      displayName: '[Demo] KYC pending — Bishkek wayler',
+      country: 'KG',
+    },
+  ] as const;
+
+  let created = 0;
+  for (const spec of specs) {
+    await upsertKycReviewSampleUser({
+      email: spec.email,
+      displayName: spec.displayName,
+      passwordHash,
+      country: spec.country,
+      now,
+    });
+    created += 1;
+  }
+
+  return created;
 }
 
 async function seedSupportTickets(
@@ -1132,6 +1387,40 @@ async function seedSupportTickets(
       });
       messages += 1;
     }
+  }
+
+  const extraTicketSpecs = [
+    {
+      userId: ids.adminId,
+      subject: demoTitle('Admin demo support question'),
+      message:
+        'Demo admin support ticket — platform walkthrough note. Not emergency or legal support.',
+      category: SupportTicketCategory.GENERAL,
+      status: SupportTicketStatus.OPEN,
+    },
+    {
+      userId: ids.waylerId,
+      subject: demoTitle('Wayler route clarification'),
+      message:
+        'Demo wayler support ticket — asking about mock/manual access labels. No payout guarantee.',
+      category: SupportTicketCategory.GENERAL,
+      status: SupportTicketStatus.OPEN,
+    },
+  ] as const;
+
+  for (const spec of extraTicketSpecs) {
+    await prisma.supportTicket.create({
+      data: {
+        userId: spec.userId,
+        subject: spec.subject,
+        message: `${spec.message}\n\n${demoNotes('support-ticket-extra')}`,
+        category: spec.category,
+        status: spec.status,
+        priority: SupportTicketPriority.NORMAL,
+        orderId: null,
+      },
+    });
+    tickets += 1;
   }
 
   return { tickets, messages, linkedOrderId };
@@ -1445,6 +1734,7 @@ async function main(): Promise<void> {
   const ordersFromSender = await seedSenderOrders(ids, now);
   const chatResult = await seedChats(ids);
   const accessPasses = await seedWaylerAccessForAll(ids, now);
+  const kycReviewSamples = await seedKycReviewQueueSamples(userHash, now);
   const ticketResult = await seedSupportTickets(ids, now);
   const paymentIntents = await seedMockPaymentIntents(ids, now);
   const notifications = await seedDemoNotifications(ids, now);
@@ -1463,6 +1753,7 @@ async function main(): Promise<void> {
     paymentIntents,
     notifications,
     reviews,
+    kycReviewSamples,
   };
 
   console.log('');
@@ -1487,6 +1778,7 @@ async function main(): Promise<void> {
   console.log(`  payment intents:  ${counts.paymentIntents}`);
   console.log(`  notifications:    ${counts.notifications}`);
   console.log(`  reviews:          ${counts.reviews}`);
+  console.log(`  kyc review queue: ${counts.kycReviewSamples} pending sample(s)`);
   if (ticketResult.linkedOrderId) {
     console.log(`  linked ticket order: ${ticketResult.linkedOrderId}`);
   }

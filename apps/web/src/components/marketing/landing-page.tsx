@@ -24,7 +24,7 @@ import {
 import Link from 'next/link';
 import type { LucideIcon } from 'lucide-react';
 
-import { LandingHeroBackground } from '@/components/marketing/landing-hero-background';
+import { InteractiveRouteGlobe } from '@/components/marketing/interactive-route-globe';
 import { FadeIn } from '@/components/motion';
 import { siteConfig } from '@/config/site';
 import type { TranslationKey } from '@/lib/i18n/dictionaries';
@@ -301,8 +301,16 @@ export function LandingPage() {
     <div className="dark bg-background text-foreground">
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/60">
-        <LandingHeroBackground />
-        <div className="container relative flex flex-col items-center gap-8 py-24 text-center sm:py-36">
+        <div
+          className="pointer-events-none absolute inset-0 wayly-landing-hero-grid opacity-60"
+          aria-hidden
+        />
+        <InteractiveRouteGlobe />
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/80"
+          aria-hidden
+        />
+        <div className="container relative z-10 flex flex-col items-center gap-8 py-24 text-center sm:py-36">
           <FadeIn>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
               <span className="size-1.5 rounded-full bg-success wayly-landing-route-dot" />
