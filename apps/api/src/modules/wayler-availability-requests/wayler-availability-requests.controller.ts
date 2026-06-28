@@ -37,6 +37,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -57,6 +58,7 @@ export class WaylerAvailabilityRequestsController {
 
   @Post()
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: 'Sender creates a delivery request for a published Wayler availability',
   })
@@ -120,6 +122,7 @@ export class WaylerAvailabilityRequestsController {
 
   @Post(':id/accept')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Wayler accepts a pending availability request' })
   @ApiBody({ type: RespondWaylerAvailabilityRequestBodyDto, required: false })
   @ApiOkResponse({ type: WaylerAvailabilityRequestDetailDto })
@@ -140,6 +143,7 @@ export class WaylerAvailabilityRequestsController {
 
   @Post(':id/decline')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Wayler declines a pending availability request' })
   @ApiBody({ type: RespondWaylerAvailabilityRequestBodyDto, required: false })
   @ApiOkResponse({ type: WaylerAvailabilityRequestDetailDto })
@@ -160,6 +164,7 @@ export class WaylerAvailabilityRequestsController {
 
   @Post(':id/cancel')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Sender cancels their pending availability request' })
   @ApiOkResponse({ type: WaylerAvailabilityRequestDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

@@ -29,6 +29,13 @@ export const envSchema = z
     PASSWORD_RESET_TTL: z.string().default('1h'),
     THROTTLE_TTL: z.coerce.number().int().positive().default(60_000),
     THROTTLE_LIMIT: z.coerce.number().int().positive().default(100),
+    RATE_LIMIT_ENABLED: boolFromString('true'),
+    RATE_LIMIT_AUTH_WINDOW_SECONDS: z.coerce.number().int().positive().default(60),
+    RATE_LIMIT_AUTH_MAX: z.coerce.number().int().positive().default(10),
+    RATE_LIMIT_WRITE_WINDOW_SECONDS: z.coerce.number().int().positive().default(60),
+    RATE_LIMIT_WRITE_MAX: z.coerce.number().int().positive().default(30),
+    RATE_LIMIT_PUBLIC_WINDOW_SECONDS: z.coerce.number().int().positive().default(60),
+    RATE_LIMIT_PUBLIC_MAX: z.coerce.number().int().positive().default(120),
 
     // --- Database ---
     DATABASE_URL: z.string().url(),

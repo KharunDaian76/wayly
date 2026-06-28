@@ -65,6 +65,30 @@ export class AppConfigService {
     };
   }
 
+  /** Named rate-limit policies for @nestjs/throttler (MVP in-memory). */
+  get rateLimit() {
+    return {
+      enabled: this.get('RATE_LIMIT_ENABLED'),
+      auth: {
+        windowMs: this.get('RATE_LIMIT_AUTH_WINDOW_SECONDS') * 1000,
+        max: this.get('RATE_LIMIT_AUTH_MAX'),
+      },
+      write: {
+        windowMs: this.get('RATE_LIMIT_WRITE_WINDOW_SECONDS') * 1000,
+        max: this.get('RATE_LIMIT_WRITE_MAX'),
+      },
+      public: {
+        windowMs: this.get('RATE_LIMIT_PUBLIC_WINDOW_SECONDS') * 1000,
+        max: this.get('RATE_LIMIT_PUBLIC_MAX'),
+      },
+      /** Admin routes — fixed defaults; not env-tuned in v1. */
+      admin: {
+        windowMs: 60_000,
+        max: 120,
+      },
+    };
+  }
+
   get database() {
     return {
       url: this.get('DATABASE_URL'),

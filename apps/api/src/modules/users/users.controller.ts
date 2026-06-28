@@ -15,6 +15,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { RequiresActiveAccount } from '../../common/decorators/requires-active-account.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { zodBody } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { UserProfileDto } from '../auth/dto/swagger.dto';
 
@@ -43,6 +44,7 @@ export class UsersController {
 
   @Patch('me')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Update the authenticated user profile' })
   @ApiBody({ type: UpdateProfileBodyDto })
   @ApiOkResponse({ type: UserProfileDto })

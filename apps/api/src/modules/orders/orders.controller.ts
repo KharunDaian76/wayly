@@ -37,6 +37,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -70,6 +71,7 @@ export class OrdersController {
 
   @Post()
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Create a delivery order as the current user (Sender)' })
   @ApiBody({ type: CreateDeliveryOrderBodyDto })
   @ApiCreatedResponse({ type: DeliveryOrderDetailDto })
@@ -118,6 +120,7 @@ export class OrdersController {
 
   @Post(':id/publish')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Publish a draft delivery order (Sender only)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -133,6 +136,7 @@ export class OrdersController {
 
   @Post(':id/accept')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Accept an open delivery order (Wayler)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -152,6 +156,7 @@ export class OrdersController {
   }
 
   @Post(':id/start-transit')
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Move an accepted delivery order to in transit (accepted Wayler)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -168,6 +173,7 @@ export class OrdersController {
   }
 
   @Post(':id/mark-delivered')
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Mark an in-transit delivery order as delivered (accepted Wayler)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -184,6 +190,7 @@ export class OrdersController {
   }
 
   @Post(':id/proof')
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Submit proof-of-delivery metadata (accepted Wayler)' })
   @ApiBody({ type: SubmitDeliveryProofBodyDto })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
@@ -209,6 +216,7 @@ export class OrdersController {
 
   @Post(':id/cancel')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Cancel a draft or open delivery order (Sender only)' })
   @ApiOkResponse({ type: DeliveryOrderDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

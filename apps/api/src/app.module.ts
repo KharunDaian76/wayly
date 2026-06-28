@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AccountModerationGuard } from './common/guards/account-moderation.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { VerificationGuard } from './common/guards/verification.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { WaylyThrottlerGuard } from './common/rate-limit/wayly-throttler.guard';
+import { shouldApplyThrottler } from './common/rate-limit/rate-limit.util';
+import { RATE_LIMIT_ERROR_MESSAGE } from './common/rate-limit/rate-limit.constants';
 import { AppConfigModule } from './config/config.module';
 import { AppConfigService } from './config/config.service';
 import { InfraModule } from './infra/infra.module';
@@ -39,11 +42,32 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
       useFactory: (config: AppConfigService) => ({
         throttlers: [
           {
-            name: 'default',
-            ttl: config.throttle.ttl,
-            limit: config.throttle.limit,
+            name: 'authStrict',
+            ttl: config.rateLimit.auth.windowMs,
+            limit: config.rateLimit.auth.max,
+            skipIf: (context) => !shouldApplyThrottler(context, 'authStrict'),
+          },
+          {
+            name: 'userWrite',
+            ttl: config.rateLimit.write.windowMs,
+            limit: config.rateLimit.write.max,
+            skipIf: (context) => !shouldApplyThrottler(context, 'userWrite'),
+          },
+          {
+            name: 'adminModerate',
+            ttl: config.rateLimit.admin.windowMs,
+            limit: config.rateLimit.admin.max,
+            skipIf: (context) => !shouldApplyThrottler(context, 'adminModerate'),
+          },
+          {
+            name: 'publicLight',
+            ttl: config.rateLimit.public.windowMs,
+            limit: config.rateLimit.public.max,
+            skipIf: (context) => !shouldApplyThrottler(context, 'publicLight'),
           },
         ],
+        errorMessage: RATE_LIMIT_ERROR_MESSAGE,
+        setHeaders: false,
       }),
     }),
     HealthModule,
@@ -78,7 +102,7 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: WaylyThrottlerGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: VerificationGuard },
     { provide: APP_GUARD, useClass: AccountModerationGuard },

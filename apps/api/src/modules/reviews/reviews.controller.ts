@@ -32,6 +32,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -53,6 +54,7 @@ export class ReviewsController {
   @Post('orders/:orderId')
   @UseGuards(VerificationGuard)
   @RequiresVerification()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Create a post-delivery review for the other order party' })
   @ApiCreatedResponse({ type: ReviewSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

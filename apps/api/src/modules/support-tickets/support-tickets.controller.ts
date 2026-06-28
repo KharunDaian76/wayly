@@ -22,6 +22,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -43,6 +44,7 @@ export class SupportTicketsController {
   constructor(private readonly supportTickets: SupportTicketsService) {}
 
   @Post()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Create a support ticket for the current user' })
   @ApiCreatedResponse({ type: SupportTicketSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -74,6 +76,7 @@ export class SupportTicketsController {
   }
 
   @Post(':id/messages')
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Reply to one of the current user support tickets' })
   @ApiCreatedResponse({ type: SupportTicketMessageSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

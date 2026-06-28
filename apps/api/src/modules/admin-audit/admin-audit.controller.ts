@@ -14,6 +14,7 @@ import { z } from 'zod';
 
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { AdminModerateRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import { zodQuery } from '../../common/pipes/zod-validation.pipe';
 
 import { AdminAuditLogService } from './admin-audit.service';
@@ -22,6 +23,7 @@ import { AdminAuditLogListResponseDto } from './dto/swagger.dto';
 @ApiTags('admin')
 @ApiBearerAuth('access-token')
 @Controller({ path: 'admin/audit-logs', version: '1' })
+@AdminModerateRateLimit()
 @UseGuards(JwtAuthGuard)
 @Roles(UserRole.ADMIN, UserRole.ARBITRATOR)
 export class AdminAuditLogController {

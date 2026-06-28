@@ -40,6 +40,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import { DisputesService } from './disputes.service';
@@ -63,6 +64,7 @@ export class DisputesController {
 
   @Post()
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Open a dispute on an eligible delivery order' })
   @ApiBody({ type: OpenDisputeBodyDto })
   @ApiCreatedResponse({ type: DisputeDetailDto })
@@ -108,6 +110,7 @@ export class DisputesController {
 
   @Post(':id/messages')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Add a message to an open dispute thread' })
   @ApiBody({ type: AddDisputeMessageBodyDto })
   @ApiCreatedResponse({ type: DisputeMessageSummaryDto })
@@ -126,6 +129,7 @@ export class DisputesController {
 
   @Post(':id/evidence')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Add evidence metadata to an open dispute' })
   @ApiBody({ type: AddDisputeEvidenceBodyDto })
   @ApiCreatedResponse({ type: DisputeEvidenceSummaryDto })

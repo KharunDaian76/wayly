@@ -8,19 +8,20 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 
 ## Project documentation
 
-| Document                                                                                       | Description                                                                                                                              |
-| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| [docs/admin-operations-center.md](docs/admin-operations-center.md)                             | Admin / Arbitrator Operations Center — read-only panels, KYC approve/reject v1, dispute resolution v1, access control, security, roadmap |
-| [docs/marketplace-product-checkpoint.md](docs/marketplace-product-checkpoint.md)               | **Checkpoint** — marketplace UX added locally (trust, shortlist, templates, coaches, guidance)                                           |
-| [docs/admin-operations-checkpoint.md](docs/admin-operations-checkpoint.md)                     | **Checkpoint** — admin dashboard, queues, filters, triage shortcuts, metadata-only reviews                                               |
-| [docs/local-saved-data-checkpoint.md](docs/local-saved-data-checkpoint.md)                     | **Checkpoint** — browser `localStorage` keys, fields, privacy boundaries                                                                 |
-| [docs/payment-and-dispute-safety-checkpoint.md](docs/payment-and-dispute-safety-checkpoint.md) | **Checkpoint** — honest payment/dispute/demo wording; no real escrow/refund claims                                                       |
-| [docs/public-guidance-and-safety-checkpoint.md](docs/public-guidance-and-safety-checkpoint.md) | **Checkpoint** — public help/policy/roadmap pages, SEO, in-app safety + Launch Status notice                                             |
-| [docs/support-notifications-demo-checkpoint.md](docs/support-notifications-demo-checkpoint.md) | **Checkpoint** — support tickets, in-app notifications, local demo seed                                                                  |
-| [docs/trust-reviews-ratings-checkpoint.md](docs/trust-reviews-ratings-checkpoint.md)           | **Checkpoint** — post-delivery reviews & ratings, admin moderation, trust signals only                                                   |
-| [docs/security-and-secrets-checkpoint.md](docs/security-and-secrets-checkpoint.md)             | **Checkpoint** — secret handling, demo seed guards, deployment safety, rotation guidance                                                 |
+| Document                                                                                               | Description                                                                                                                              |
+| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| [docs/admin-operations-center.md](docs/admin-operations-center.md)                                     | Admin / Arbitrator Operations Center — read-only panels, KYC approve/reject v1, dispute resolution v1, access control, security, roadmap |
+| [docs/marketplace-product-checkpoint.md](docs/marketplace-product-checkpoint.md)                       | **Checkpoint** — marketplace UX added locally (trust, shortlist, templates, coaches, guidance)                                           |
+| [docs/admin-operations-checkpoint.md](docs/admin-operations-checkpoint.md)                             | **Checkpoint** — admin dashboard, queues, filters, triage shortcuts, metadata-only reviews                                               |
+| [docs/local-saved-data-checkpoint.md](docs/local-saved-data-checkpoint.md)                             | **Checkpoint** — browser `localStorage` keys, fields, privacy boundaries                                                                 |
+| [docs/payment-and-dispute-safety-checkpoint.md](docs/payment-and-dispute-safety-checkpoint.md)         | **Checkpoint** — honest payment/dispute/demo wording; no real escrow/refund claims                                                       |
+| [docs/public-guidance-and-safety-checkpoint.md](docs/public-guidance-and-safety-checkpoint.md)         | **Checkpoint** — public help/policy/roadmap pages, SEO, in-app safety + Launch Status notice                                             |
+| [docs/support-notifications-demo-checkpoint.md](docs/support-notifications-demo-checkpoint.md)         | **Checkpoint** — support tickets, in-app notifications, local demo seed                                                                  |
+| [docs/trust-reviews-ratings-checkpoint.md](docs/trust-reviews-ratings-checkpoint.md)                   | **Checkpoint** — post-delivery reviews & ratings, admin moderation, trust signals only                                                   |
+| [docs/security-and-secrets-checkpoint.md](docs/security-and-secrets-checkpoint.md)                     | **Checkpoint** — secret handling, demo seed guards, deployment safety, rotation guidance                                                 |
+| [docs/rate-limiting-abuse-protection-checkpoint.md](docs/rate-limiting-abuse-protection-checkpoint.md) | **Checkpoint** — MVP API rate limits (auth, writes, admin, public), env tuning, production TODOs                                         |
 
-Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The eight **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
+Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The nine **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
 
 ### Recent local stack (checkpoint — not deployed)
 
@@ -34,6 +35,7 @@ The branch is **ahead of `origin/main`** with marketplace trust/discovery UX, lo
 6. [Support, notifications & demo seed](docs/support-notifications-demo-checkpoint.md) — support tickets, in-app notification center, `seed:demo` for local walkthroughs
 7. [Trust Reviews & Ratings](docs/trust-reviews-ratings-checkpoint.md) — post-delivery reviews foundation, admin moderation queue, demo seed samples
 8. [Security & secrets hardening](docs/security-and-secrets-checkpoint.md) — demo seed guards, secret rotation, deployment safety
+9. [Rate limiting & abuse protection](docs/rate-limiting-abuse-protection-checkpoint.md) — MVP throttling policies, env vars, manual verification
 
 ## Tech stack
 

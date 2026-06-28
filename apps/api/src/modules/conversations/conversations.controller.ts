@@ -34,6 +34,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import { ConversationsService, type MarkConversationReadResult } from './conversations.service';
@@ -55,6 +56,7 @@ export class ConversationsController {
 
   @Post('order/:orderId')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Create or fetch the conversation for an accepted delivery order' })
   @ApiCreatedResponse({ type: ConversationDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -101,6 +103,7 @@ export class ConversationsController {
 
   @Post(':id/messages')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Send a message in a conversation' })
   @ApiBody({ type: SendChatMessageBodyDto })
   @ApiCreatedResponse({ type: ChatMessageSummaryDto })

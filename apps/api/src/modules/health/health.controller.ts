@@ -2,11 +2,14 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
 
+import { SkipAllRateLimits } from '../../common/rate-limit/rate-limit.decorators';
+
 import { PrismaHealthIndicator } from './indicators/prisma.health';
 import { RedisHealthIndicator } from './indicators/redis.health';
 
 @ApiTags('health')
 @Controller({ path: 'health', version: '1' })
+@SkipAllRateLimits()
 export class HealthController {
   constructor(
     private readonly health: HealthCheckService,

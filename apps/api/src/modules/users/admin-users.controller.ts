@@ -32,6 +32,7 @@ import { z } from 'zod';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { AdminModerateRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
 import type { RequestUser } from '../../common/types/request-user.type';
 import { adminAuditRequestContext } from '../admin-audit/admin-audit.util';
@@ -47,6 +48,7 @@ import { UsersService } from './users.service';
 @ApiTags('admin')
 @ApiBearerAuth('access-token')
 @Controller({ path: 'admin/users', version: '1' })
+@AdminModerateRateLimit()
 @UseGuards(JwtAuthGuard)
 export class AdminUsersController {
   constructor(private readonly users: UsersService) {}

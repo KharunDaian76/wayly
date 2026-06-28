@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { zodBody } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -45,6 +46,7 @@ export class KycController {
   }
 
   @Post('start')
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Start or resume a mock KYC verification flow' })
   @ApiBody({ type: KycStartBodyDto })
   @ApiOkResponse({ type: KycVerificationSummaryDto })
@@ -57,6 +59,7 @@ export class KycController {
   }
 
   @Post('mock/approve')
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: 'Mock-approve pending KYC (development only — hidden in production)',
   })
@@ -68,6 +71,7 @@ export class KycController {
   }
 
   @Post('mock/reject')
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: 'Mock-reject pending KYC (development only — hidden in production)',
   })

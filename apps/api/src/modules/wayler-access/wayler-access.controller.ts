@@ -23,6 +23,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -64,6 +65,7 @@ export class WaylerAccessController {
 
   @Post('mock-activate-today')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: "Mock/manual activate today's Wayler work access pass (no real payment)",
   })
@@ -76,6 +78,7 @@ export class WaylerAccessController {
 
   @Post(':id/cancel')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: "Cancel current user's own non-expired access pass" })
   @ApiOkResponse({ type: WaylerAccessPassSummaryDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

@@ -39,6 +39,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody, zodQuery } from '../../common/pipes/zod-validation.pipe';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
 
 import {
@@ -59,6 +60,7 @@ export class WaylerAvailabilitiesController {
 
   @Post()
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Create a DRAFT Wayler availability or trip listing' })
   @ApiBody({ type: CreateWaylerAvailabilityBodyDto })
   @ApiCreatedResponse({ type: WaylerAvailabilityDetailDto })
@@ -126,6 +128,7 @@ export class WaylerAvailabilitiesController {
 
   @Post(':id/publish')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Publish a DRAFT or PAUSED Wayler availability' })
   @ApiOkResponse({ type: WaylerAvailabilityDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -141,6 +144,7 @@ export class WaylerAvailabilitiesController {
 
   @Post(':id/pause')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Pause an ACTIVE Wayler availability' })
   @ApiOkResponse({ type: WaylerAvailabilityDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })
@@ -156,6 +160,7 @@ export class WaylerAvailabilitiesController {
 
   @Post(':id/cancel')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({ summary: 'Cancel a Wayler availability' })
   @ApiOkResponse({ type: WaylerAvailabilityDetailDto })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid Bearer access token' })

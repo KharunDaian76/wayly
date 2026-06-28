@@ -17,6 +17,7 @@ import { RequiresVerification } from '../../common/decorators/requires-verificat
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { VerificationGuard } from '../../common/guards/verification.guard';
 import type { RequestUser } from '../../common/types/request-user.type';
+import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 
 import { PaymentIntentSummaryDto } from './dto/swagger.dto';
 import { PaymentsService } from './payments.service';
@@ -31,6 +32,7 @@ export class PaymentsController {
 
   @Post('orders/:orderId/mock-authorize')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: 'Mock-authorize payment for an accepted order (MANUAL provider, local testing only)',
   })
@@ -64,6 +66,7 @@ export class PaymentsController {
 
   @Post(':id/mock-hold-escrow')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: 'Mock hold escrow (AUTHORIZED → HELD_IN_ESCROW, MANUAL provider, local testing only)',
   })
@@ -81,6 +84,7 @@ export class PaymentsController {
 
   @Post(':id/mock-release')
   @RequiresActiveAccount()
+  @UserWriteRateLimit()
   @ApiOperation({
     summary: 'Mock release escrow to Wayler payout (HELD_IN_ESCROW → RELEASED, local testing only)',
   })

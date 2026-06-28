@@ -12,6 +12,7 @@ import { UserRole } from '@wayly/types';
 
 import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { AdminModerateRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 
 import { AdminSystemHealthResponseDto } from './dto/swagger.dto';
 import { SystemHealthService } from './system-health.service';
@@ -19,6 +20,7 @@ import { SystemHealthService } from './system-health.service';
 @ApiTags('admin')
 @ApiBearerAuth('access-token')
 @Controller({ path: 'admin/system-health', version: '1' })
+@AdminModerateRateLimit()
 @UseGuards(JwtAuthGuard)
 @Roles(UserRole.ADMIN, UserRole.ARBITRATOR)
 export class AdminSystemHealthController {

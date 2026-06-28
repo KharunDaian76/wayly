@@ -19,7 +19,6 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Throttle } from '@nestjs/throttler';
 import type { AuthResult } from '@wayly/types';
 import {
   loginSchema,
@@ -31,6 +30,7 @@ import type { Request, Response } from 'express';
 
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { zodBody } from '../../common/pipes/zod-validation.pipe';
+import { AuthStrictRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import { AppConfigService } from '../../config/config.service';
 
 import { AuthService } from './auth.service';
@@ -55,7 +55,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @AuthStrictRateLimit()
   @ApiOperation({ summary: 'Register a new user account' })
   @ApiBody({ type: RegisterBodyDto })
   @ApiCreatedResponse({
@@ -74,7 +74,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @AuthStrictRateLimit()
   @ApiOperation({ summary: 'Log in with email and password' })
   @ApiBody({ type: LoginBodyDto })
   @ApiOkResponse({
@@ -94,6 +94,7 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @AuthStrictRateLimit()
   @ApiOperation({
     summary: 'Rotate refresh token and issue a new access token',
     description:
@@ -140,7 +141,7 @@ export class AuthController {
 
   @Post('password/forgot')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @AuthStrictRateLimit()
   @ApiOperation({
     summary: 'Request a password reset email',
     description: 'Always returns success to prevent email enumeration.',
@@ -157,7 +158,7 @@ export class AuthController {
 
   @Post('password/reset')
   @HttpCode(HttpStatus.OK)
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @AuthStrictRateLimit()
   @ApiOperation({ summary: 'Reset password with a token' })
   @ApiBody({ type: PasswordResetConfirmBodyDto })
   @ApiOkResponse({ type: MessageResponseDto })

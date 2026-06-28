@@ -111,16 +111,16 @@ Before/after deploy to Render (or similar):
 
 Not complete in current v1 stack:
 
-| Area                                   | Status                                                                |
-| -------------------------------------- | --------------------------------------------------------------------- |
-| Rate limiting                          | Partial (`@nestjs/throttler` configured; review per-route limits)     |
-| Auth/admin audit logging               | Partial (`AdminAuditLog` for some admin actions; not full auth audit) |
-| Stronger admin access control          | Role split exists; production hardening ongoing                       |
-| Production monitoring / error tracking | Sentry/OTEL placeholders in `.env.example`                            |
-| Legal / privacy review                 | Draft public pages only                                               |
-| Payment / KYC provider security review | Mock/manual flows today                                               |
-| Secret scanning in CI                  | Recommended addition                                                  |
-| Demo account removal automation        | Manual before launch                                                  |
+| Area                                   | Status                                                                                                                                                          |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rate limiting                          | MVP v1 — named policies via `@nestjs/throttler` (in-memory); see [rate-limiting-abuse-protection-checkpoint.md](./rate-limiting-abuse-protection-checkpoint.md) |
+| Auth/admin audit logging               | Partial (`AdminAuditLog` for some admin actions; not full auth audit)                                                                                           |
+| Stronger admin access control          | Role split exists; production hardening ongoing                                                                                                                 |
+| Production monitoring / error tracking | Sentry/OTEL placeholders in `.env.example`                                                                                                                      |
+| Legal / privacy review                 | Draft public pages only                                                                                                                                         |
+| Payment / KYC provider security review | Mock/manual flows today                                                                                                                                         |
+| Secret scanning in CI                  | Recommended addition                                                                                                                                            |
+| Demo account removal automation        | Manual before launch                                                                                                                                            |
 
 ---
 
@@ -134,6 +134,7 @@ Not complete in current v1 stack:
 - [ ] `seed-demo-users` requires `DEMO_USERS_PASSWORD` (no hardcoded default)
 - [ ] Seed scripts do not print passwords
 - [ ] `.env.example` uses placeholders only
+- [ ] Rate limiting enabled in production (`RATE_LIMIT_ENABLED=true`); auth/login returns 429 after burst — see [rate-limiting-abuse-protection-checkpoint.md](./rate-limiting-abuse-protection-checkpoint.md)
 
 ---
 
@@ -143,4 +144,5 @@ Not complete in current v1 stack:
 - [trust-reviews-ratings-checkpoint.md](./trust-reviews-ratings-checkpoint.md) — demo review seed samples
 - [admin-operations-checkpoint.md](./admin-operations-checkpoint.md) — admin access and queues
 - [payment-and-dispute-safety-checkpoint.md](./payment-and-dispute-safety-checkpoint.md) — no real money movement
+- [rate-limiting-abuse-protection-checkpoint.md](./rate-limiting-abuse-protection-checkpoint.md) — MVP API rate limits
 - [README.md](../README.md) — local dev setup
