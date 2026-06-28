@@ -13,6 +13,20 @@ $env:DEMO_ADMIN_PASSWORD="<strong-password-min-12>"
 pnpm --dir apps/api seed:demo
 ```
 
+### Verify demo DB (read-only)
+
+After seeding, confirm the database is walkthrough-ready:
+
+```powershell
+$env:DATABASE_URL = ((Get-Content "apps/api/.env" | Where-Object { $_ -match "^DATABASE_URL=" }) -replace "^DATABASE_URL=", "").Trim('"')
+pnpm --dir apps/api demo:smoke
+Remove-Item Env:DATABASE_URL
+```
+
+- **Read-only** — no database writes; does not print passwords or secrets.
+- Exit **0** = critical checks pass (warnings allowed); exit **1** = re-run `seed:demo`.
+- Does **not** replace real automated E2E tests.
+
 | Account | Email                    | Password env                           |
 | ------- | ------------------------ | -------------------------------------- |
 | Admin   | `admin@wayly.demo`       | `DEMO_ADMIN_PASSWORD`                  |
@@ -73,6 +87,7 @@ Each main demo account should show:
 ## Manual checklist
 
 - [ ] `pnpm --dir apps/api seed:demo` on demo DB
+- [ ] `pnpm --dir apps/api demo:smoke` — all critical checks **PASS**
 - [ ] Admin KYC queue — filter **PENDING** — approve/reject sample users
 - [ ] Admin — Wayler access **ACTIVE**, “Demo admin access” label
 - [ ] Each `@wayly.demo` account — listings, incoming, open, accepted panels populated

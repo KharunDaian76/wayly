@@ -18,7 +18,8 @@
     "db:seed": "prisma db seed",
     "db:seed-demo-users": "tsx scripts/seed-demo-users.ts",
     "seed:demo": "tsx scripts/seed-demo.ts",
-    "seed:demo:check": "tsx scripts/seed-demo-check.ts"
+    "seed:demo:check": "tsx scripts/seed-demo-check.ts",
+    "demo:smoke": "tsx scripts/demo-smoke-check.ts"
   },
   "prisma": {
     "schema": "prisma/schema.prisma",

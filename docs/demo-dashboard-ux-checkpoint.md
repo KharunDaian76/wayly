@@ -55,6 +55,20 @@ Passwords: **`DEMO_ADMIN_PASSWORD`** required; **`DEMO_USER_PASSWORD`** optional
 
 Legacy `demo.sender@wayly.app` / `demo.wayler@wayly.app` — no longer created; demo-owned cleanup includes them if present.
 
+### Demo smoke check (read-only)
+
+Verify walkthrough readiness without writing to the database:
+
+```powershell
+$env:DATABASE_URL = ((Get-Content "apps/api/.env" | Where-Object { $_ -match "^DATABASE_URL=" }) -replace "^DATABASE_URL=", "").Trim('"')
+pnpm --dir apps/api demo:smoke
+Remove-Item Env:DATABASE_URL
+```
+
+Requires **`DATABASE_URL` only** (no demo passwords). Prints PASS/WARN/FAIL for users, KYC, Wayler access, listings, requests, orders, chat, notifications, and admin queue data. Exit **0** when critical checks pass. Not a substitute for E2E tests.
+
+Preflight before seed: `pnpm --dir apps/api seed:demo:check` (password env guards only).
+
 ---
 
 ## 3. Wayler access demo behavior
@@ -100,6 +114,7 @@ Legacy `demo.sender@wayly.app` / `demo.wayler@wayly.app` — no longer created; 
 - [ ] Overview KPIs populate or show `—` without red panel errors
 - [ ] Switch to **light mode** on `/app` — background/cards become light and readable
 - [ ] Run `seed:demo` locally — re-login each demo account
+- [ ] Run `demo:smoke` — critical checks PASS
 - [ ] **Wayler mode** on each account — “My listings”, incoming, open, accepted panels populated
 - [ ] **Accept open order** works after seed or “Activate demo access”
 - [ ] Homepage — interactive globe drag/zoom

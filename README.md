@@ -21,7 +21,7 @@ Cross-platform **two-sided P2P delivery marketplace** connecting Senders and Way
 | [docs/security-and-secrets-checkpoint.md](docs/security-and-secrets-checkpoint.md)                     | **Checkpoint** — secret handling, demo seed guards, deployment safety, rotation guidance                                                 |
 | [docs/rate-limiting-abuse-protection-checkpoint.md](docs/rate-limiting-abuse-protection-checkpoint.md) | **Checkpoint** — MVP API rate limits (auth, writes, admin, public), env tuning, production TODOs                                         |
 | [docs/demo-dashboard-ux-checkpoint.md](docs/demo-dashboard-ux-checkpoint.md)                           | **Checkpoint** — admin queue fixes, demo seed walkthrough data, light mode, logged-in app UX polish                                      |
-| [docs/demo-walkthrough-checkpoint.md](docs/demo-walkthrough-checkpoint.md)                             | **Checkpoint** — demo accounts, KYC actions, Wayler access, dashboard panels, homepage globe                                             |
+| [docs/demo-walkthrough-checkpoint.md](docs/demo-walkthrough-checkpoint.md)                             | **Checkpoint** — demo accounts, KYC actions, Wayler access, dashboard panels, homepage globe, `demo:smoke` verification                  |
 
 Most milestone detail lives in this README; the admin doc is the canonical reference for operations staff tooling. The ten **checkpoint** docs summarize the **local stack ahead of `origin/main`** for demos and handoff without duplicating the full README.
 
