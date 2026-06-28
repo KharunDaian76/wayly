@@ -71,6 +71,7 @@ import { WaylerIncomingRequestsPanel } from '@/components/app/wayler-incoming-re
 import { WaylerNextBestActions } from '@/components/app/wayler-next-best-actions';
 import { LanguageSelect } from '@/components/language-select';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { EnvDiagnosticsBadge } from '@/components/app/env-diagnostics-badge';
 import { ModeSwitcher } from '@/components/app/mode-switcher';
 import { hasOperationsDashboardAccess } from '@/lib/auth/operations-dashboard-access';
 import { useAppMode } from '@/lib/app-mode/app-mode-context';
@@ -1760,6 +1761,7 @@ export default function AppHomePage() {
             </h1>
           </div>
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <EnvDiagnosticsBadge />
             <LanguageSelect />
             <ThemeToggle />
             <NotificationBell onFocusOrder={focusAcceptedOrderFromNotification} />

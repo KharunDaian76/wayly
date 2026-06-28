@@ -307,10 +307,13 @@ export function LandingPage() {
         />
         <InteractiveRouteGlobe />
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/80"
+          className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-background/10 via-transparent to-background/70"
           aria-hidden
         />
         <div className="container relative z-10 flex flex-col items-center gap-8 py-24 text-center sm:py-36">
+          <p className="pointer-events-none absolute right-4 top-4 hidden rounded-full border border-border/50 bg-card/60 px-3 py-1 text-[11px] text-muted-foreground backdrop-blur sm:inline-block">
+            Drag globe to explore routes
+          </p>
           <FadeIn>
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
               <span className="size-1.5 rounded-full bg-success wayly-landing-route-dot" />

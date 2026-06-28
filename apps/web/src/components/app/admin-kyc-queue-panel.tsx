@@ -1,6 +1,7 @@
 'use client';
 
 import type { AdminKycQueueItem, KycStatus, UserRole } from '@wayly/types';
+import { ApiError } from '@wayly/sdk';
 import { KycStatus as KycStatusEnum } from '@wayly/types';
 import type { KycVerificationsListQuery } from '@wayly/sdk';
 import { Button, Input } from '@wayly/ui';
@@ -103,6 +104,28 @@ function formatUser(displayName: string | null, email: string | null): string {
     return `${displayName} (${email})`;
   }
   return displayName ?? email ?? '—';
+}
+
+function logKycActionDebug(
+  action: 'approve' | 'reject',
+  verificationId: string,
+  error: unknown,
+): void {
+  if (process.env.NODE_ENV !== 'development') {
+    return;
+  }
+  const status = error instanceof ApiError ? error.status : undefined;
+  const message =
+    error instanceof ApiError
+      ? error.message
+      : error instanceof Error
+        ? error.message
+        : 'unknown error';
+  console.warn(`[admin-kyc] ${action} failed`, {
+    path: `/api/v1/admin/kyc-verifications/${verificationId}/${action}`,
+    status,
+    message,
+  });
 }
 
 function canReviewKyc(status: KycStatus): boolean {
@@ -212,6 +235,7 @@ export function AdminKycQueuePanel({
         }));
         void fetchKycQueue(page, appliedFilters);
       } catch (error) {
+        logKycActionDebug('approve', item.id, error);
         setCardActionErrors((current) => ({
           ...current,
           [item.id]: safePanelErrorMessage(error, {
@@ -246,6 +270,7 @@ export function AdminKycQueuePanel({
         }));
         void fetchKycQueue(page, appliedFilters);
       } catch (error) {
+        logKycActionDebug('reject', item.id, error);
         setCardActionErrors((current) => ({
           ...current,
           [item.id]: safePanelErrorMessage(error, {

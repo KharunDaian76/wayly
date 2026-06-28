@@ -39,6 +39,11 @@ const ROUTE_PAIRS: [number, number][] = [
 const MIN_ZOOM = 0.75;
 const MAX_ZOOM = 1.45;
 
+/** Shadcn stores --primary as "H S% L%" channels; canvas needs hsl(H S% L% / alpha). */
+function hslChannel(channel: string, alpha: number): string {
+  return `hsl(${channel} / ${alpha})`;
+}
+
 function projectCity(
   city: City,
   rotationDeg: number,
@@ -125,9 +130,9 @@ function drawRouteArc(
   const midX = (from.x + to.x) / 2;
   const midY = (from.y + to.y) / 2 - Math.hypot(to.x - from.x, to.y - from.y) * 0.22;
   const gradient = ctx.createLinearGradient(from.x, from.y, to.x, to.y);
-  gradient.addColorStop(0, accent.replace(/[\d.]+\)$/, '0.15)'));
+  gradient.addColorStop(0, accent.replace(/\/ [\d.]+\)$/, ' / 0.15)'));
   gradient.addColorStop(0.5, accent);
-  gradient.addColorStop(1, accent.replace(/[\d.]+\)$/, '0.2)'));
+  gradient.addColorStop(1, accent.replace(/\/ [\d.]+\)$/, ' / 0.2)'));
 
   ctx.strokeStyle = gradient;
   ctx.lineWidth = 1.4;
@@ -202,24 +207,24 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
       cy,
       radius,
     );
-    globeGradient.addColorStop(0, `hsla(${primary}, 0.22)`);
-    globeGradient.addColorStop(0.55, `hsla(${primary}, 0.08)`);
-    globeGradient.addColorStop(1, `hsla(${card}, 0.02)`);
+    globeGradient.addColorStop(0, hslChannel(primary, 0.35));
+    globeGradient.addColorStop(0.55, hslChannel(primary, 0.14));
+    globeGradient.addColorStop(1, hslChannel(card, 0.04));
 
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
     ctx.fillStyle = globeGradient;
     ctx.fill();
 
-    ctx.strokeStyle = `hsla(${border}, 0.55)`;
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = hslChannel(border, 0.55);
+    ctx.lineWidth = 1.4;
     ctx.stroke();
 
-    drawGlobeGrid(ctx, rotationRef.current, radius, cx, cy, `hsla(${border}, 0.35)`);
+    drawGlobeGrid(ctx, rotationRef.current, radius, cx, cy, hslChannel(border, 0.4));
 
     const projected = CITIES.map((city) => projectCity(city, rotationRef.current, radius, cx, cy));
 
-    const accentStroke = `hsla(${accent}, 0.85)`;
+    const accentStroke = hslChannel(accent, 0.85);
     for (const [fromIdx, toIdx] of ROUTE_PAIRS) {
       const from = projected[fromIdx];
       const to = projected[toIdx];
@@ -235,20 +240,20 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
       }
 
       const glow = ctx.createRadialGradient(city.x, city.y, 0, city.x, city.y, 10);
-      glow.addColorStop(0, `hsla(${accent}, ${0.35 + city.z * 0.35})`);
+      glow.addColorStop(0, hslChannel(accent, 0.35 + city.z * 0.35));
       glow.addColorStop(1, 'transparent');
       ctx.fillStyle = glow;
       ctx.beginPath();
       ctx.arc(city.x, city.y, 10, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = `hsla(${accent}, ${0.65 + city.z * 0.35})`;
+      ctx.fillStyle = hslChannel(accent, 0.65 + city.z * 0.35);
       ctx.beginPath();
       ctx.arc(city.x, city.y, 3 + city.z * 1.2, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.font = '500 11px system-ui, sans-serif';
-      ctx.fillStyle = `hsla(${primary}, ${0.55 + city.z * 0.4})`;
+      ctx.fillStyle = hslChannel(primary, 0.55 + city.z * 0.4);
       ctx.textAlign = 'center';
       ctx.fillText(city.name, city.x, city.y - 12);
     }
@@ -320,7 +325,7 @@ export function InteractiveRouteGlobe({ className }: InteractiveRouteGlobeProps)
   return (
     <div
       ref={containerRef}
-      className={cn('pointer-events-auto absolute inset-0 overflow-hidden', className)}
+      className={cn('pointer-events-auto absolute inset-0 z-[1] overflow-hidden', className)}
       aria-hidden
     >
       <canvas
