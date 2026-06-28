@@ -340,3 +340,10 @@ export const SupportTicketMessageAuthorRole = {
 } as const;
 export type SupportTicketMessageAuthorRole =
   (typeof SupportTicketMessageAuthorRole)[keyof typeof SupportTicketMessageAuthorRole];
+
+/** Party role context for post-delivery reviews. */
+export const ReviewPartyRole = {
+  SENDER: 'SENDER',
+  WAYLER: 'WAYLER',
+} as const;
+export type ReviewPartyRole = (typeof ReviewPartyRole)[keyof typeof ReviewPartyRole];

@@ -21,6 +21,7 @@ import { MarketplaceModule } from './modules/marketplace/marketplace.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 import { SupportTicketsModule } from './modules/support-tickets/support-tickets.module';
 import { UsersModule } from './modules/users/users.module';
 import { WaylerAccessModule } from './modules/wayler-access/wayler-access.module';
@@ -57,6 +58,7 @@ import { WaylerAvailabilityRequestsModule } from './modules/wayler-availability-
     PaymentsModule,
     DisputesModule,
     SupportTicketsModule,
+    ReviewsModule,
     WaylerAvailabilitiesModule,
     WaylerAvailabilityRequestsModule,
     WaylerAccessModule,

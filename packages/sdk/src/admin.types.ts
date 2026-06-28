@@ -8,6 +8,8 @@ import type {
   AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
+  AdminReviewListResponse,
+  AdminReviewQueueItem,
   AdminSupportTicketListResponse,
   AdminSupportTicketQueueItem,
   AdminSystemHealthResponse,
@@ -36,6 +38,7 @@ import type {
   AdminPaymentReleaseDecisionBody,
   AdminPaymentsListQuery,
 } from './payments-admin.types';
+import type { AdminReviewsListQuery, AdminModerateReviewBody } from './reviews-admin.types';
 import type {
   AdminSupportTicketsListQuery,
   AdminCreateSupportTicketMessageBody,
@@ -158,6 +161,15 @@ export interface AdminApi {
     body: AdminCreateSupportTicketMessageBody,
     accessToken?: string | null,
   ): Promise<SupportTicketMessageSummary>;
+  listReviews(
+    query?: AdminReviewsListQuery,
+    accessToken?: string | null,
+  ): Promise<AdminReviewListResponse>;
+  moderateReview(
+    id: string,
+    body: AdminModerateReviewBody,
+    accessToken?: string | null,
+  ): Promise<AdminReviewQueueItem>;
 }
 
 export type {
@@ -170,6 +182,8 @@ export type {
   AdminOrderQueueItem,
   AdminPaymentListResponse,
   AdminPaymentQueueItem,
+  AdminReviewListResponse,
+  AdminReviewQueueItem,
   AdminSupportTicketListResponse,
   AdminSupportTicketQueueItem,
   AdminSystemHealthResponse,
@@ -192,6 +206,7 @@ export type {
   AdminPaymentsListQuery,
 } from './payments-admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
+export type { AdminReviewsListQuery, AdminModerateReviewBody } from './reviews-admin.types';
 export type {
   AdminSupportTicketsListQuery,
   AdminCreateSupportTicketMessageBody,

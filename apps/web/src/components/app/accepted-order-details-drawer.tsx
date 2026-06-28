@@ -14,6 +14,7 @@ import { formatShortOrderReference } from '@/components/app/availability-request
 import { DeliveryOrderSourceBadge } from '@/components/app/delivery-order-source-badge';
 import { OrderLifecycleTimeline } from '@/components/app/order-lifecycle-timeline';
 import { DeliveryProofGuidance } from '@/components/app/delivery-proof-guidance';
+import { OrderReviewPanel } from '@/components/app/order-review-panel';
 import { PaymentTransparencyNote } from '@/components/app/payment-transparency-note';
 import {
   PanelEmptyState,
@@ -474,6 +475,20 @@ export function AcceptedOrderDetailsDrawer({
                   status={orderStatus}
                   proofSubmittedAt={detail?.proofSubmittedAt ?? null}
                   paymentStatus={order.paymentStatus}
+                />
+              ) : null}
+
+              {orderStatus === DeliveryOrderStatus.DELIVERED ? (
+                <OrderReviewPanel
+                  className="mt-2"
+                  orderId={order.id}
+                  orderStatus={orderStatus}
+                  panelRole={panelRole}
+                  revieweeUserId={
+                    panelRole === 'sender'
+                      ? (detail?.acceptedWaylerId ?? null)
+                      : (detail?.senderId ?? null)
+                  }
                 />
               ) : null}
 

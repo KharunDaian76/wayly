@@ -38,6 +38,7 @@ export {
 export { createPaymentsApi } from './payments';
 export { type PaymentsApi } from './payments.types';
 export { createDisputesApi } from './disputes';
+export { createReviewsApi } from './reviews';
 export { createSupportTicketsApi } from './support-tickets';
 export { createWaylerAccessApi } from './wayler-access';
 export { type WaylerAccessApi, type WaylerAccessPassesListQuery } from './wayler-access.types';
@@ -53,6 +54,8 @@ export {
   type OpenDisputeInput,
 } from './disputes.types';
 export type { SupportTicketsApi } from './support-tickets.types';
+export type { ReviewsApi } from './reviews.types';
+export type { AdminReviewsListQuery, AdminModerateReviewBody } from './reviews-admin.types';
 export { createOrdersApi } from './orders';
 export {
   type AcceptedDeliveryOrderSummary,
@@ -82,6 +85,12 @@ export type {
   SupportTicketMessageSummary,
   AdminSupportTicketListResponse,
   AdminSupportTicketQueueItem,
+  ReviewSummary,
+  UserReviewSummary,
+  ReviewListResponse,
+  OrderReviewMineResponse,
+  AdminReviewListResponse,
+  AdminReviewQueueItem,
   KycStatusView,
   KycVerificationSummary,
   NotificationListResponse,
@@ -101,6 +110,7 @@ export type {
   CreateWaylerAvailabilityRequestInput,
   CreateSupportTicketInput,
   CreateSupportTicketMessageInput,
+  CreateReviewInput,
   RespondWaylerAvailabilityRequestInput,
   SendChatMessageInput,
 } from '@wayly/validation';

@@ -10,6 +10,8 @@ import type {
   AdminPaymentQueueItem,
   AdminSupportTicketListResponse,
   AdminSupportTicketQueueItem,
+  AdminReviewListResponse,
+  AdminReviewQueueItem,
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
@@ -38,6 +40,7 @@ import type {
   AdminPaymentsListQuery,
 } from './payments-admin.types';
 import type { RequestOptions } from './types';
+import type { AdminReviewsListQuery, AdminModerateReviewBody } from './reviews-admin.types';
 import type {
   AdminSupportTicketsListQuery,
   AdminCreateSupportTicketMessageBody,
@@ -248,6 +251,36 @@ function buildAdminSupportTicketsQuery(query?: AdminSupportTicketsListQuery): st
   return qs ? `?${qs}` : '';
 }
 
+function buildAdminReviewsQuery(query?: AdminReviewsListQuery): string {
+  if (!query) {
+    return '';
+  }
+  const params = new URLSearchParams();
+  if (query.page !== undefined) {
+    params.set('page', String(query.page));
+  }
+  if (query.limit !== undefined) {
+    params.set('limit', String(query.limit));
+  }
+  if (query.isHidden !== undefined) {
+    params.set('isHidden', String(query.isHidden));
+  }
+  if (query.rating !== undefined) {
+    params.set('rating', String(query.rating));
+  }
+  if (query.reviewerId !== undefined) {
+    params.set('reviewerId', query.reviewerId);
+  }
+  if (query.revieweeId !== undefined) {
+    params.set('revieweeId', query.revieweeId);
+  }
+  if (query.orderId !== undefined) {
+    params.set('orderId', query.orderId);
+  }
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
 export function createAdminApi(request: Requester): AdminApi {
   return {
     listDisputes: (query?: DisputesListQuery, accessToken?: string | null) =>
@@ -449,6 +482,19 @@ export function createAdminApi(request: Requester): AdminApi {
     ) =>
       request<SupportTicketMessageSummary>(`/admin/support-tickets/${ticketId}/messages`, {
         method: 'POST',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    listReviews: (query?: AdminReviewsListQuery, accessToken?: string | null) =>
+      request<AdminReviewListResponse>(`/admin/reviews${buildAdminReviewsQuery(query)}`, {
+        method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    moderateReview: (id: string, body: AdminModerateReviewBody, accessToken?: string | null) =>
+      request<AdminReviewQueueItem>(`/admin/reviews/${id}/moderation`, {
+        method: 'PATCH',
         body,
         ...withCookies,
         accessToken,

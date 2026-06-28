@@ -223,6 +223,11 @@ enum SupportTicketMessageAuthorRole {
   ADMIN
 }
 
+enum ReviewPartyRole {
+  SENDER
+  WAYLER
+}
+
 // Account moderation status (admin suspend/unsuspend v1).
 enum UserAccountStatus {
   ACTIVE
@@ -354,6 +359,9 @@ model User {
   supportTickets                SupportTicket[]             @relation("SupportTicketsOwned")
   supportTicketAdminActions     SupportTicket[]             @relation("SupportTicketAdminActions")
   supportTicketMessages         SupportTicketMessage[]      @relation("SupportTicketMessageAuthor")
+  reviewsWritten                Review[]                    @relation("ReviewsWritten")
+  reviewsReceived               Review[]                    @relation("ReviewsReceived")
+  reviewsHidden                 Review[]                    @relation("ReviewHiddenBy")
 
   @@index([deletedAt])
   @@index([accountStatus])
@@ -487,6 +495,7 @@ model DeliveryOrder {
   ledgerEntries          LedgerEntry[]
   disputes               Dispute[]
   supportTickets         SupportTicket[]
+  reviews                Review[]
 
   @@index([senderId])
   @@index([acceptedWaylerId])
@@ -958,4 +967,36 @@ model SupportTicketMessage {
   @@index([authorRole])
   @@index([isInternal])
   @@map("support_ticket_messages")
+}
+
+// Post-delivery user-submitted trust reviews (v1 — not verified identity or safety guarantees).
+model Review {
+  id           String          @id @default(uuid()) @db.Uuid
+  orderId      String          @db.Uuid
+  order        DeliveryOrder   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  reviewerId   String          @db.Uuid
+  reviewer     User            @relation("ReviewsWritten", fields: [reviewerId], references: [id], onDelete: Cascade)
+  revieweeId   String          @db.Uuid
+  reviewee     User            @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Cascade)
+  reviewerRole ReviewPartyRole
+  revieweeRole ReviewPartyRole
+  rating       Int
+  comment      String?
+  tags         String[]        @default([])
+  isHidden     Boolean         @default(false)
+  hiddenAt     DateTime?
+  hiddenById   String?         @db.Uuid
+  hiddenBy     User?           @relation("ReviewHiddenBy", fields: [hiddenById], references: [id], onDelete: SetNull)
+  adminNote    String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@unique([orderId, reviewerId, revieweeId])
+  @@index([orderId])
+  @@index([reviewerId])
+  @@index([revieweeId])
+  @@index([rating])
+  @@index([isHidden])
+  @@index([createdAt])
+  @@map("reviews")
 }

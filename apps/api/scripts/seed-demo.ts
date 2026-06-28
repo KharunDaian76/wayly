@@ -26,6 +26,7 @@ import {
   PaymentAdminReviewStatus,
   Prisma,
   PrismaClient,
+  ReviewPartyRole,
   SupportTicketCategory,
   SupportTicketMessageAuthorRole,
   SupportTicketPriority,
@@ -68,6 +69,7 @@ type SeedCounts = {
   supportTicketMessages: number;
   paymentIntents: number;
   notifications: number;
+  reviews: number;
 };
 
 function requireEnv(name: string): string {
@@ -707,6 +709,62 @@ async function seedSenderOrders(ids: DemoUserIds, now: Date): Promise<number> {
   });
   created += 1;
 
+  await prisma.deliveryOrder.create({
+    data: {
+      senderId: ids.senderId,
+      acceptedWaylerId: ids.waylerId,
+      status: DeliveryOrderStatus.DELIVERED,
+      type: DeliveryOrderType.INTERNATIONAL,
+      sourceType: DeliveryOrderSource.SENDER_POSTED_ORDER,
+      title: demoTitle('Delivered: Berlin to Paris handoff'),
+      description: 'Second demo delivered order for review seed coverage.',
+      pickupCountry: 'DE',
+      pickupCity: 'Berlin',
+      dropoffCountry: 'FR',
+      dropoffCity: 'Paris',
+      currency: 'EUR',
+      offeredRewardAmount: new Prisma.Decimal(65),
+      publishedAt: addDays(now, -20),
+      acceptedAt: addDays(now, -16),
+      deliveredAt: addDays(now, -6),
+      proofNote: 'Demo proof — handoff confirmed.',
+      proofConfirmationCode: 'DEMO-OK-002',
+      proofSubmittedAt: addDays(now, -6),
+      proofSubmittedById: ids.waylerId,
+      notes: demoNotes('delivered-order-2'),
+      packageSize: PackageSize.MEDIUM,
+    },
+  });
+  created += 1;
+
+  await prisma.deliveryOrder.create({
+    data: {
+      senderId: ids.senderId,
+      acceptedWaylerId: ids.waylerId,
+      status: DeliveryOrderStatus.DELIVERED,
+      type: DeliveryOrderType.LOCAL,
+      sourceType: DeliveryOrderSource.SENDER_POSTED_ORDER,
+      title: demoTitle('Delivered: Istanbul local handoff'),
+      description: 'Third demo delivered order for hidden review moderation sample.',
+      pickupCountry: 'TR',
+      pickupCity: 'Istanbul',
+      dropoffCountry: 'TR',
+      dropoffCity: 'Istanbul',
+      currency: 'TRY',
+      offeredRewardAmount: new Prisma.Decimal(400),
+      publishedAt: addDays(now, -10),
+      acceptedAt: addDays(now, -8),
+      deliveredAt: addDays(now, -5),
+      proofNote: 'Demo proof — local handoff confirmed.',
+      proofConfirmationCode: 'DEMO-OK-003',
+      proofSubmittedAt: addDays(now, -5),
+      proofSubmittedById: ids.waylerId,
+      notes: demoNotes('delivered-order-3'),
+      packageSize: PackageSize.SMALL,
+    },
+  });
+  created += 1;
+
   return created;
 }
 
@@ -1064,6 +1122,134 @@ async function seedDemoNotifications(ids: DemoUserIds, now: Date): Promise<numbe
   return result.count;
 }
 
+async function seedDemoReviews(ids: DemoUserIds, now: Date): Promise<number> {
+  const delivered = await prisma.deliveryOrder.findMany({
+    where: {
+      senderId: ids.senderId,
+      acceptedWaylerId: ids.waylerId,
+      title: { startsWith: DEMO_TITLE_PREFIX },
+      status: DeliveryOrderStatus.DELIVERED,
+    },
+    orderBy: { createdAt: 'asc' },
+  });
+
+  if (delivered.length === 0) {
+    return 0;
+  }
+
+  const primary = delivered[0];
+  const secondary = delivered[1];
+  const moderationOrder = delivered[2];
+
+  const specs: Array<{
+    orderId: string;
+    reviewerId: string;
+    revieweeId: string;
+    reviewerRole: ReviewPartyRole;
+    revieweeRole: ReviewPartyRole;
+    rating: number;
+    comment: string;
+    tags: string[];
+    isHidden: boolean;
+    createdAt: Date;
+    hiddenAt?: Date;
+    hiddenById?: string;
+    adminNote?: string;
+  }> = [
+    {
+      orderId: primary.id,
+      reviewerId: ids.senderId,
+      revieweeId: ids.waylerId,
+      reviewerRole: ReviewPartyRole.SENDER,
+      revieweeRole: ReviewPartyRole.WAYLER,
+      rating: 5,
+      comment: `${DEMO_SEED_MARKER} Demo review: Wayler was communicative and careful on this delivery.`,
+      tags: ['communicative', 'careful', 'on_time'],
+      isHidden: false,
+      createdAt: addDays(now, -2),
+    },
+    {
+      orderId: primary.id,
+      reviewerId: ids.waylerId,
+      revieweeId: ids.senderId,
+      reviewerRole: ReviewPartyRole.WAYLER,
+      revieweeRole: ReviewPartyRole.SENDER,
+      rating: 4,
+      comment: `${DEMO_SEED_MARKER} Demo review: Sender provided clear details (trust signal only).`,
+      tags: ['clear_details', 'communicative'],
+      isHidden: false,
+      createdAt: addDays(now, -2),
+    },
+  ];
+
+  if (secondary) {
+    specs.push(
+      {
+        orderId: secondary.id,
+        reviewerId: ids.senderId,
+        revieweeId: ids.waylerId,
+        reviewerRole: ReviewPartyRole.SENDER,
+        revieweeRole: ReviewPartyRole.WAYLER,
+        rating: 5,
+        comment: `${DEMO_SEED_MARKER} Demo review: positive delivery experience sample.`,
+        tags: ['on_time'],
+        isHidden: false,
+        createdAt: addDays(now, -4),
+      },
+      {
+        orderId: secondary.id,
+        reviewerId: ids.waylerId,
+        revieweeId: ids.senderId,
+        reviewerRole: ReviewPartyRole.WAYLER,
+        revieweeRole: ReviewPartyRole.SENDER,
+        rating: 3,
+        comment: `${DEMO_SEED_MARKER} Demo review: mixed rating sample for summary UI.`,
+        tags: ['communicative'],
+        isHidden: false,
+        createdAt: addDays(now, -4),
+      },
+    );
+  }
+
+  if (moderationOrder) {
+    specs.push({
+      orderId: moderationOrder.id,
+      reviewerId: ids.senderId,
+      revieweeId: ids.waylerId,
+      reviewerRole: ReviewPartyRole.SENDER,
+      revieweeRole: ReviewPartyRole.WAYLER,
+      rating: 2,
+      comment: `${DEMO_SEED_MARKER} Demo hidden review: moderation sample only (demo DB row).`,
+      tags: [],
+      isHidden: true,
+      hiddenAt: addDays(now, -1),
+      hiddenById: ids.adminId,
+      adminNote: `${DEMO_SEED_MARKER} Hidden for admin moderation queue demo.`,
+      createdAt: addDays(now, -5),
+    });
+  }
+
+  let created = 0;
+  for (const spec of specs) {
+    const duplicate = await prisma.review.findUnique({
+      where: {
+        orderId_reviewerId_revieweeId: {
+          orderId: spec.orderId,
+          reviewerId: spec.reviewerId,
+          revieweeId: spec.revieweeId,
+        },
+      },
+    });
+    if (duplicate) {
+      continue;
+    }
+    await prisma.review.create({ data: spec });
+    created += 1;
+  }
+
+  return created;
+}
+
 async function main(): Promise<void> {
   assertSafeToRun();
 
@@ -1117,6 +1303,7 @@ async function main(): Promise<void> {
   const ticketResult = await seedSupportTickets(ids, now);
   const paymentIntents = await seedMockPaymentIntents(ids, now);
   const notifications = await seedDemoNotifications(ids, now);
+  const reviews = await seedDemoReviews(ids, now);
 
   const counts: SeedCounts = {
     users: 3,
@@ -1130,6 +1317,7 @@ async function main(): Promise<void> {
     supportTicketMessages: ticketResult.messages,
     paymentIntents,
     notifications,
+    reviews,
   };
 
   console.log('');
@@ -1153,6 +1341,7 @@ async function main(): Promise<void> {
   console.log(`  ticket messages:  ${counts.supportTicketMessages}`);
   console.log(`  payment intents:  ${counts.paymentIntents}`);
   console.log(`  notifications:    ${counts.notifications}`);
+  console.log(`  reviews:          ${counts.reviews}`);
   if (ticketResult.linkedOrderId) {
     console.log(`  linked ticket order: ${ticketResult.linkedOrderId}`);
   }

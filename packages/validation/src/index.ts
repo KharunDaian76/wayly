@@ -15,3 +15,4 @@ export * from './payment-admin';
 export * from './order-admin';
 export * from './admin-audit-log';
 export * from './support-ticket';
+export * from './review';
