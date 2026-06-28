@@ -4,6 +4,8 @@ import type {
   AdminSupportTicketListResponse,
   AdminSupportTicketQueueItem,
   SupportTicketListResponse,
+  SupportTicketMessageListResponse,
+  SupportTicketMessageSummary,
   SupportTicketSummary,
 } from '@wayly/types';
 import {
@@ -15,9 +17,11 @@ import {
   NotificationType,
 } from '@wayly/types';
 import type {
+  AdminCreateSupportTicketMessageInput,
   AdminSupportTicketsListQueryInput,
   AdminUpdateSupportTicketInput,
   CreateSupportTicketInput,
+  CreateSupportTicketMessageInput,
 } from '@wayly/validation';
 
 import type { RequestUser } from '../../common/types/request-user.type';
@@ -25,7 +29,11 @@ import { PrismaService } from '../../infra/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { supportTicketNotificationLink } from '../notifications/notification.helpers';
 
-import { toAdminSupportTicketQueueItem, toSupportTicketSummary } from './support-tickets.mapper';
+import {
+  toAdminSupportTicketQueueItem,
+  toSupportTicketMessageSummary,
+  toSupportTicketSummary,
+} from './support-tickets.mapper';
 
 const CLOSED_STATUSES: SupportTicketStatus[] = [
   SupportTicketStatus.RESOLVED,
@@ -36,6 +44,11 @@ const REOPEN_STATUSES: SupportTicketStatus[] = [
   SupportTicketStatus.OPEN,
   SupportTicketStatus.UNDER_REVIEW,
   SupportTicketStatus.WAITING_FOR_USER,
+];
+
+const USER_REPLY_REOPEN_STATUSES: SupportTicketStatus[] = [
+  SupportTicketStatus.WAITING_FOR_USER,
+  SupportTicketStatus.RESOLVED,
 ];
 
 @Injectable()
@@ -185,6 +198,120 @@ export class SupportTicketsService {
     return toAdminSupportTicketQueueItem(updated);
   }
 
+  async listMessagesForUser(
+    userId: string,
+    ticketId: string,
+  ): Promise<SupportTicketMessageListResponse> {
+    await this.findOwnedTicketOrThrow(userId, ticketId);
+
+    const items = await this.prisma.supportTicketMessage.findMany({
+      where: { ticketId, isInternal: false },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    return { items: items.map(toSupportTicketMessageSummary) };
+  }
+
+  async createMessageForUser(
+    user: RequestUser,
+    ticketId: string,
+    body: CreateSupportTicketMessageInput,
+  ): Promise<SupportTicketMessageSummary> {
+    const ticket = await this.findOwnedTicketOrThrow(user.id, ticketId);
+
+    const message = await this.prisma.$transaction(async (tx) => {
+      const created = await tx.supportTicketMessage.create({
+        data: {
+          ticketId,
+          authorId: user.id,
+          authorRole: 'USER',
+          body: body.body,
+          isInternal: false,
+        },
+      });
+
+      const currentStatus = ticket.status as SupportTicketStatus;
+      if (USER_REPLY_REOPEN_STATUSES.includes(currentStatus)) {
+        await tx.supportTicket.update({
+          where: { id: ticketId },
+          data: { status: SupportTicketStatus.UNDER_REVIEW },
+        });
+      }
+
+      return created;
+    });
+
+    return toSupportTicketMessageSummary(message);
+  }
+
+  async listMessagesForAdmin(ticketId: string): Promise<SupportTicketMessageListResponse> {
+    await this.findTicketOrThrow(ticketId);
+
+    const items = await this.prisma.supportTicketMessage.findMany({
+      where: { ticketId },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    return { items: items.map(toSupportTicketMessageSummary) };
+  }
+
+  async createMessageForAdmin(
+    actor: RequestUser,
+    ticketId: string,
+    body: AdminCreateSupportTicketMessageInput,
+  ): Promise<SupportTicketMessageSummary> {
+    this.assertAdmin(actor);
+
+    const ticket = await this.findTicketOrThrow(ticketId);
+    const isInternal = body.isInternal ?? false;
+
+    const message = await this.prisma.$transaction(async (tx) => {
+      const created = await tx.supportTicketMessage.create({
+        data: {
+          ticketId,
+          authorId: actor.id,
+          authorRole: 'ADMIN',
+          body: body.body,
+          isInternal,
+        },
+      });
+
+      const ticketUpdate: {
+        lastAdminActionAt: Date;
+        lastAdminActionById: string;
+        status?: SupportTicketStatus;
+      } = {
+        lastAdminActionAt: new Date(),
+        lastAdminActionById: actor.id,
+      };
+
+      if (!isInternal && ticket.status === SupportTicketStatus.UNDER_REVIEW) {
+        ticketUpdate.status = SupportTicketStatus.WAITING_FOR_USER;
+      }
+
+      await tx.supportTicket.update({
+        where: { id: ticketId },
+        data: ticketUpdate,
+      });
+
+      return created;
+    });
+
+    if (!isInternal) {
+      await this.notifications.createForUser({
+        userId: ticket.userId,
+        type: NotificationType.INFO,
+        title: 'Support reply received',
+        body: `Platform support replied on your ticket "${ticket.subject}" (not emergency response).`,
+        entityType: NotificationEntityType.SUPPORT_TICKET,
+        entityId: ticket.id,
+        linkHref: supportTicketNotificationLink(),
+      });
+    }
+
+    return toSupportTicketMessageSummary(message);
+  }
+
   private resolveClosedAt(
     currentClosedAt: Date | null,
     previousStatus: SupportTicketStatus,
@@ -218,5 +345,21 @@ export class SupportTicketsService {
 
   private isOrderParticipant(order: DeliveryOrder, userId: string): boolean {
     return order.senderId === userId || order.acceptedWaylerId === userId;
+  }
+
+  private async findTicketOrThrow(ticketId: string): Promise<SupportTicket> {
+    const ticket = await this.prisma.supportTicket.findUnique({ where: { id: ticketId } });
+    if (!ticket) {
+      throw new NotFoundException('Support ticket not found');
+    }
+    return ticket;
+  }
+
+  private async findOwnedTicketOrThrow(userId: string, ticketId: string): Promise<SupportTicket> {
+    const ticket = await this.findTicketOrThrow(ticketId);
+    if (ticket.userId !== userId) {
+      throw new NotFoundException('Support ticket not found');
+    }
+    return ticket;
   }
 }

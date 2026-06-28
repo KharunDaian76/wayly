@@ -21,3 +21,9 @@ export type AdminUpdateSupportTicketBody = {
   priority?: SupportTicketPriority;
   adminNote?: string;
 };
+
+/** POST /admin/support-tickets/:id/messages body. */
+export type AdminCreateSupportTicketMessageBody = {
+  body: string;
+  isInternal?: boolean;
+};

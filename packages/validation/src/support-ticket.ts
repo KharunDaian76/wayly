@@ -43,3 +43,22 @@ export const adminUpdateSupportTicketSchema = z
   );
 
 export type AdminUpdateSupportTicketInput = z.infer<typeof adminUpdateSupportTicketSchema>;
+
+const supportTicketMessageBodySchema = z.string().trim().min(1).max(5000);
+
+/** POST /support-tickets/:id/messages body. */
+export const createSupportTicketMessageSchema = z.object({
+  body: supportTicketMessageBodySchema,
+});
+
+export type CreateSupportTicketMessageInput = z.infer<typeof createSupportTicketMessageSchema>;
+
+/** POST /admin/support-tickets/:id/messages body. */
+export const adminCreateSupportTicketMessageSchema = z.object({
+  body: supportTicketMessageBodySchema,
+  isInternal: z.boolean().optional().default(false),
+});
+
+export type AdminCreateSupportTicketMessageInput = z.infer<
+  typeof adminCreateSupportTicketMessageSchema
+>;

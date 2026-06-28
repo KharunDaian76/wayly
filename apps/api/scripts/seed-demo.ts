@@ -27,6 +27,7 @@ import {
   Prisma,
   PrismaClient,
   SupportTicketCategory,
+  SupportTicketMessageAuthorRole,
   SupportTicketPriority,
   SupportTicketStatus,
   TripDirection,
@@ -64,6 +65,7 @@ type SeedCounts = {
   messages: number;
   accessPasses: number;
   supportTickets: number;
+  supportTicketMessages: number;
   paymentIntents: number;
   notifications: number;
 };
@@ -826,7 +828,7 @@ async function seedWaylerAccess(waylerId: string, now: Date): Promise<number> {
 async function seedSupportTickets(
   ids: DemoUserIds,
   now: Date,
-): Promise<{ tickets: number; linkedOrderId: string | null }> {
+): Promise<{ tickets: number; messages: number; linkedOrderId: string | null }> {
   const orderForTicket = await prisma.deliveryOrder.findFirst({
     where: {
       senderId: ids.senderId,
@@ -867,8 +869,10 @@ async function seedSupportTickets(
   ] as const;
 
   let tickets = 0;
+  let messages = 0;
+  let linkedOrderId: string | null = null;
   for (const spec of specs) {
-    await prisma.supportTicket.create({
+    const ticket = await prisma.supportTicket.create({
       data: {
         userId: ids.senderId,
         subject: spec.subject,
@@ -880,9 +884,58 @@ async function seedSupportTickets(
       },
     });
     tickets += 1;
+    if (spec.orderId) {
+      linkedOrderId = spec.orderId;
+    }
+
+    if (tickets === 1) {
+      await prisma.supportTicketMessage.createMany({
+        data: [
+          {
+            ticketId: ticket.id,
+            authorId: ids.senderId,
+            authorRole: SupportTicketMessageAuthorRole.USER,
+            body: `${DEMO_SEED_MARKER} Demo follow-up: thanks for reviewing my general platform question.`,
+            isInternal: false,
+            createdAt: addDays(now, -1),
+          },
+          {
+            ticketId: ticket.id,
+            authorId: ids.adminId,
+            authorRole: SupportTicketMessageAuthorRole.ADMIN,
+            body: `${DEMO_SEED_MARKER} Demo public admin reply: we received your ticket for platform review (not emergency support).`,
+            isInternal: false,
+            createdAt: addDays(now, -1),
+          },
+          {
+            ticketId: ticket.id,
+            authorId: ids.adminId,
+            authorRole: SupportTicketMessageAuthorRole.ADMIN,
+            body: `${DEMO_SEED_MARKER} Demo internal note: mock payment areas are metadata-only — no refund/payout action from this ticket.`,
+            isInternal: true,
+            createdAt: now,
+          },
+        ],
+      });
+      messages += 3;
+    }
+
+    if (tickets === 2) {
+      await prisma.supportTicketMessage.create({
+        data: {
+          ticketId: ticket.id,
+          authorId: ids.adminId,
+          authorRole: SupportTicketMessageAuthorRole.ADMIN,
+          body: `${DEMO_SEED_MARKER} Demo admin reply on payment-status ticket: mock/manual payment visibility only — no guaranteed refund.`,
+          isInternal: false,
+          createdAt: addDays(now, -2),
+        },
+      });
+      messages += 1;
+    }
   }
 
-  return { tickets, linkedOrderId: orderForTicket?.id ?? null };
+  return { tickets, messages, linkedOrderId };
 }
 
 async function seedMockPaymentIntents(ids: DemoUserIds, now: Date): Promise<number> {
@@ -1074,6 +1127,7 @@ async function main(): Promise<void> {
     messages: chatResult.messages,
     accessPasses,
     supportTickets: ticketResult.tickets,
+    supportTicketMessages: ticketResult.messages,
     paymentIntents,
     notifications,
   };
@@ -1096,6 +1150,7 @@ async function main(): Promise<void> {
   console.log(`  chat messages:    ${counts.messages}`);
   console.log(`  access passes:    ${counts.accessPasses}`);
   console.log(`  support tickets:  ${counts.supportTickets}`);
+  console.log(`  ticket messages:  ${counts.supportTicketMessages}`);
   console.log(`  payment intents:  ${counts.paymentIntents}`);
   console.log(`  notifications:    ${counts.notifications}`);
   if (ticketResult.linkedOrderId) {

@@ -332,3 +332,11 @@ export const SupportTicketPriority = {
 } as const;
 export type SupportTicketPriority =
   (typeof SupportTicketPriority)[keyof typeof SupportTicketPriority];
+
+/** Author role for threaded support ticket messages. */
+export const SupportTicketMessageAuthorRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN',
+} as const;
+export type SupportTicketMessageAuthorRole =
+  (typeof SupportTicketMessageAuthorRole)[keyof typeof SupportTicketMessageAuthorRole];

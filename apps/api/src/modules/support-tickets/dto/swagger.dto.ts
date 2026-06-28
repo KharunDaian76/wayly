@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { SupportTicketCategory, SupportTicketPriority, SupportTicketStatus } from '@wayly/types';
+import {
+  SupportTicketCategory,
+  SupportTicketMessageAuthorRole,
+  SupportTicketPriority,
+  SupportTicketStatus,
+} from '@wayly/types';
 
 export class SupportTicketSummaryDto {
   @ApiProperty()
@@ -95,4 +100,48 @@ export class AdminUpdateSupportTicketBodyDto {
 
   @ApiPropertyOptional()
   adminNote?: string;
+}
+
+export class SupportTicketMessageSummaryDto {
+  @ApiProperty()
+  id!: string;
+
+  @ApiProperty()
+  ticketId!: string;
+
+  @ApiProperty()
+  authorId!: string;
+
+  @ApiProperty({ enum: SupportTicketMessageAuthorRole })
+  authorRole!: SupportTicketMessageAuthorRole;
+
+  @ApiProperty()
+  body!: string;
+
+  @ApiProperty()
+  createdAt!: string;
+
+  @ApiProperty()
+  updatedAt!: string;
+
+  @ApiProperty()
+  isInternal!: boolean;
+}
+
+export class SupportTicketMessageListResponseDto {
+  @ApiProperty({ type: [SupportTicketMessageSummaryDto] })
+  items!: SupportTicketMessageSummaryDto[];
+}
+
+export class CreateSupportTicketMessageBodyDto {
+  @ApiProperty()
+  body!: string;
+}
+
+export class AdminCreateSupportTicketMessageBodyDto {
+  @ApiProperty()
+  body!: string;
+
+  @ApiPropertyOptional({ default: false })
+  isInternal?: boolean;
 }

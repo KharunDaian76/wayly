@@ -1,8 +1,13 @@
 'use client';
 
 import { ApiError } from '@wayly/sdk';
-import type { SupportTicketSummary } from '@wayly/types';
-import { SupportTicketCategory, SupportTicketPriority, SupportTicketStatus } from '@wayly/types';
+import type { SupportTicketMessageSummary, SupportTicketSummary } from '@wayly/types';
+import {
+  SupportTicketCategory,
+  SupportTicketMessageAuthorRole,
+  SupportTicketPriority,
+  SupportTicketStatus,
+} from '@wayly/types';
 import { Button, Card, CardContent, CardHeader, CardTitle, Input } from '@wayly/ui';
 import { ChevronDown, ChevronUp, LifeBuoy } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -44,10 +49,10 @@ const TEXTAREA_CLASS = cn(
 const SELECT_CLASS =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm';
 
-const LISTING_CARD_CLASS = cn(
-  'wayly-order-card rounded-xl px-4 py-3 text-sm',
-  'wayly-feed-item-enter',
-);
+const MIN_REPLY_LENGTH = 1;
+const MAX_REPLY_LENGTH = 5000;
+
+const MESSAGE_BUBBLE_CLASS = cn('rounded-lg border px-3 py-2 text-xs', 'wayly-feed-item-enter');
 
 export function supportTicketCategoryKey(category: SupportTicketCategory): TranslationKey {
   return `app.supportTickets.category.${category}` as TranslationKey;
@@ -89,6 +94,15 @@ export function SupportTicketPanel({ className }: { className?: string }) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<SupportTicketMessageSummary[]>([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [messagesError, setMessagesError] = useState<string | null>(null);
+  const [replyBody, setReplyBody] = useState('');
+  const [replySubmitting, setReplySubmitting] = useState(false);
+  const [replyError, setReplyError] = useState<string | null>(null);
+  const [replySuccess, setReplySuccess] = useState(false);
+
   const loadTickets = useCallback(async () => {
     setLoading(true);
     setLoadError(null);
@@ -103,11 +117,40 @@ export function SupportTicketPanel({ className }: { className?: string }) {
     }
   }, [t]);
 
+  const loadMessages = useCallback(
+    async (ticketId: string) => {
+      setMessagesLoading(true);
+      setMessagesError(null);
+      try {
+        const response = await api.supportTickets.listMessages(ticketId);
+        setMessages(response.items);
+      } catch (error) {
+        setMessagesError(
+          error instanceof ApiError ? error.message : t('app.supportTickets.replyError'),
+        );
+      } finally {
+        setMessagesLoading(false);
+      }
+    },
+    [t],
+  );
+
   useEffect(() => {
     if (expanded && !loadedOnce && !loading) {
       void loadTickets();
     }
   }, [expanded, loadedOnce, loading, loadTickets]);
+
+  useEffect(() => {
+    if (selectedId) {
+      setReplyBody('');
+      setReplyError(null);
+      setReplySuccess(false);
+      void loadMessages(selectedId);
+    } else {
+      setMessages([]);
+    }
+  }, [selectedId, loadMessages]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -149,6 +192,33 @@ export function SupportTicketPanel({ className }: { className?: string }) {
     subject.trim().length >= MIN_SUBJECT_LENGTH &&
     message.trim().length >= MIN_MESSAGE_LENGTH &&
     !submitting;
+
+  const handleReplySubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!selectedId) {
+      return;
+    }
+    const trimmed = replyBody.trim();
+    if (trimmed.length < MIN_REPLY_LENGTH) {
+      return;
+    }
+    setReplySubmitting(true);
+    setReplyError(null);
+    setReplySuccess(false);
+    try {
+      await api.supportTickets.createMessage(selectedId, { body: trimmed });
+      setReplyBody('');
+      setReplySuccess(true);
+      await Promise.all([loadMessages(selectedId), loadTickets()]);
+    } catch (error) {
+      setReplyError(error instanceof ApiError ? error.message : t('app.supportTickets.replyError'));
+    } finally {
+      setReplySubmitting(false);
+    }
+  };
+
+  const canReply =
+    replyBody.trim().length >= MIN_REPLY_LENGTH && !replySubmitting && Boolean(selectedId);
 
   return (
     <Card id="support-tickets" className={cn(APP_PANEL_CLASS, className)}>
@@ -275,18 +345,124 @@ export function SupportTicketPanel({ className }: { className?: string }) {
             {items.length > 0 ? (
               <ul className="flex flex-col gap-2">
                 {items.map((ticket) => (
-                  <li key={ticket.id} className={LISTING_CARD_CLASS}>
-                    <div className="flex flex-wrap items-start justify-between gap-2">
-                      <p className="font-medium">{ticket.subject}</p>
-                      <span className="wayly-status-badge wayly-status-default text-[10px]">
-                        {t(supportTicketStatusKey(ticket.status))}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {t(supportTicketCategoryKey(ticket.category))}
-                      {' · '}
-                      {t('app.supportTickets.created')}: {formatDateTime(ticket.createdAt)}
-                    </p>
+                  <li key={ticket.id}>
+                    <button
+                      type="button"
+                      className={cn(
+                        'wayly-order-card w-full rounded-xl px-4 py-3 text-left text-sm transition-colors',
+                        selectedId === ticket.id
+                          ? 'border-primary/40 bg-primary/5'
+                          : 'hover:bg-muted/20',
+                      )}
+                      onClick={() =>
+                        setSelectedId((current) => (current === ticket.id ? null : ticket.id))
+                      }
+                    >
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <p className="font-medium">{ticket.subject}</p>
+                        <span className="wayly-status-badge wayly-status-default text-[10px]">
+                          {t(supportTicketStatusKey(ticket.status))}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {t(supportTicketCategoryKey(ticket.category))}
+                        {' · '}
+                        {t('app.supportTickets.created')}: {formatDateTime(ticket.createdAt)}
+                      </p>
+                    </button>
+
+                    {selectedId === ticket.id ? (
+                      <div className="mt-2 flex flex-col gap-2 rounded-lg border border-border/60 bg-muted/5 p-3">
+                        <h4 className="text-xs font-semibold">
+                          {t('app.supportTickets.messagesTitle')}
+                        </h4>
+
+                        <div className="flex max-h-48 flex-col gap-2 overflow-y-auto">
+                          <div
+                            className={cn(MESSAGE_BUBBLE_CLASS, 'border-border/60 bg-background')}
+                          >
+                            <p className="font-medium text-[11px] text-muted-foreground">
+                              {t('app.supportTickets.you')} · {formatDateTime(ticket.createdAt)}
+                            </p>
+                            <p className="mt-1 whitespace-pre-wrap">{ticket.message}</p>
+                          </div>
+
+                          {messagesLoading ? <RequestsListSkeleton rows={2} /> : null}
+                          {messagesError ? (
+                            <PanelErrorState
+                              message={messagesError}
+                              retryLabel={t('app.supportTickets.retry')}
+                              onRetry={() => void loadMessages(ticket.id)}
+                            />
+                          ) : null}
+                          {!messagesLoading && !messagesError && messages.length === 0 ? (
+                            <p className="text-xs text-muted-foreground">
+                              {t('app.supportTickets.messagesEmpty')}
+                            </p>
+                          ) : null}
+                          {messages.map((message) => (
+                            <div
+                              key={message.id}
+                              className={cn(
+                                MESSAGE_BUBBLE_CLASS,
+                                message.authorRole === SupportTicketMessageAuthorRole.ADMIN
+                                  ? 'border-primary/20 bg-primary/[0.04]'
+                                  : 'border-border/60 bg-background',
+                              )}
+                            >
+                              <p className="font-medium text-[11px] text-muted-foreground">
+                                {message.authorRole === SupportTicketMessageAuthorRole.ADMIN
+                                  ? t('app.supportTickets.support')
+                                  : t('app.supportTickets.you')}{' '}
+                                · {formatDateTime(message.createdAt)}
+                              </p>
+                              <p className="mt-1 whitespace-pre-wrap">{message.body}</p>
+                            </div>
+                          ))}
+                        </div>
+
+                        <form
+                          className="flex flex-col gap-2"
+                          onSubmit={(event) => void handleReplySubmit(event)}
+                        >
+                          <label className="flex flex-col gap-1 text-xs">
+                            <span className="font-medium">{t('app.supportTickets.reply')}</span>
+                            <textarea
+                              className={TEXTAREA_CLASS}
+                              value={replyBody}
+                              onChange={(event) => setReplyBody(event.target.value)}
+                              placeholder={t('app.supportTickets.replyPlaceholder')}
+                              maxLength={MAX_REPLY_LENGTH}
+                              disabled={replySubmitting}
+                              rows={3}
+                            />
+                          </label>
+                          {replyError ? (
+                            <p className="text-xs text-destructive" role="alert">
+                              {replyError}
+                            </p>
+                          ) : null}
+                          {replySuccess ? (
+                            <p
+                              className="text-xs text-emerald-600 dark:text-emerald-400"
+                              role="status"
+                            >
+                              {t('app.supportTickets.replySuccess')}
+                            </p>
+                          ) : null}
+                          <Button
+                            type="submit"
+                            size="sm"
+                            disabled={!canReply}
+                            className="self-start"
+                          >
+                            {replySubmitting
+                              ? t('app.supportTickets.submitting')
+                              : t('app.supportTickets.sendReply')}
+                          </Button>
+                        </form>
+                      </div>
+                    ) : null}
                   </li>
                 ))}
               </ul>

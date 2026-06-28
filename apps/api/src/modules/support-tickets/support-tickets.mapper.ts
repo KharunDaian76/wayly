@@ -1,6 +1,15 @@
-import type { SupportTicket } from '@prisma/client';
-import type { AdminSupportTicketQueueItem, SupportTicketSummary } from '@wayly/types';
-import { SupportTicketCategory, SupportTicketPriority, SupportTicketStatus } from '@wayly/types';
+import type { SupportTicket, SupportTicketMessage } from '@prisma/client';
+import type {
+  AdminSupportTicketQueueItem,
+  SupportTicketMessageSummary,
+  SupportTicketSummary,
+} from '@wayly/types';
+import {
+  SupportTicketCategory,
+  SupportTicketMessageAuthorRole,
+  SupportTicketPriority,
+  SupportTicketStatus,
+} from '@wayly/types';
 
 function toIso(value: Date | null): string | null {
   return value?.toISOString() ?? null;
@@ -34,5 +43,20 @@ export function toAdminSupportTicketQueueItem(
     lastAdminActionById: record.lastAdminActionById,
     userDisplayName: record.user.displayName,
     userEmail: record.user.email,
+  };
+}
+
+export function toSupportTicketMessageSummary(
+  record: SupportTicketMessage,
+): SupportTicketMessageSummary {
+  return {
+    id: record.id,
+    ticketId: record.ticketId,
+    authorId: record.authorId,
+    authorRole: record.authorRole as SupportTicketMessageAuthorRole,
+    body: record.body,
+    createdAt: record.createdAt.toISOString(),
+    updatedAt: record.updatedAt.toISOString(),
+    isInternal: record.isInternal,
   };
 }

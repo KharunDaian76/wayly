@@ -13,6 +13,8 @@ import type {
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
+  SupportTicketMessageListResponse,
+  SupportTicketMessageSummary,
 } from '@wayly/types';
 
 import type { AdminAuditLogsListQuery } from './admin-audit.types';
@@ -36,6 +38,7 @@ import type {
 } from './payments-admin.types';
 import type {
   AdminSupportTicketsListQuery,
+  AdminCreateSupportTicketMessageBody,
   AdminUpdateSupportTicketBody,
 } from './support-tickets-admin.types';
 import type {
@@ -146,6 +149,15 @@ export interface AdminApi {
     body: AdminUpdateSupportTicketBody,
     accessToken?: string | null,
   ): Promise<AdminSupportTicketQueueItem>;
+  listSupportTicketMessages(
+    ticketId: string,
+    accessToken?: string | null,
+  ): Promise<SupportTicketMessageListResponse>;
+  createSupportTicketMessage(
+    ticketId: string,
+    body: AdminCreateSupportTicketMessageBody,
+    accessToken?: string | null,
+  ): Promise<SupportTicketMessageSummary>;
 }
 
 export type {
@@ -182,6 +194,7 @@ export type {
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
 export type {
   AdminSupportTicketsListQuery,
+  AdminCreateSupportTicketMessageBody,
   AdminUpdateSupportTicketBody,
 } from './support-tickets-admin.types';
 export type { AdminDisputeResolveBody } from './disputes-admin.types';

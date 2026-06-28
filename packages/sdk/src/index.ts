@@ -5,6 +5,7 @@ export { type AdminApi } from './admin.types';
 export type { AdminAuditLogsListQuery } from './admin-audit.types';
 export type {
   AdminSupportTicketsListQuery,
+  AdminCreateSupportTicketMessageBody,
   AdminUpdateSupportTicketBody,
 } from './support-tickets-admin.types';
 export type { AdminOrdersListQuery } from './orders-admin.types';
@@ -77,6 +78,8 @@ export type {
   DisputeMessageSummary,
   SupportTicketListResponse,
   SupportTicketSummary,
+  SupportTicketMessageListResponse,
+  SupportTicketMessageSummary,
   AdminSupportTicketListResponse,
   AdminSupportTicketQueueItem,
   KycStatusView,
@@ -97,6 +100,7 @@ export type {
   ActiveWaylerMarketplaceQueryInput,
   CreateWaylerAvailabilityRequestInput,
   CreateSupportTicketInput,
+  CreateSupportTicketMessageInput,
   RespondWaylerAvailabilityRequestInput,
   SendChatMessageInput,
 } from '@wayly/validation';

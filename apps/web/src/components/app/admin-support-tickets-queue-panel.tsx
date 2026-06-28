@@ -1,9 +1,10 @@
 'use client';
 
 import { ApiError } from '@wayly/sdk';
-import type { AdminSupportTicketQueueItem } from '@wayly/types';
+import type { AdminSupportTicketQueueItem, SupportTicketMessageSummary } from '@wayly/types';
 import {
   SupportTicketCategory,
+  SupportTicketMessageAuthorRole,
   SupportTicketPriority,
   SupportTicketStatus,
   UserRole,
@@ -181,6 +182,15 @@ export function AdminSupportTicketsQueuePanel({
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
+  const [messages, setMessages] = useState<SupportTicketMessageSummary[]>([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [messagesError, setMessagesError] = useState<string | null>(null);
+  const [replyBody, setReplyBody] = useState('');
+  const [replyInternal, setReplyInternal] = useState(false);
+  const [replySubmitting, setReplySubmitting] = useState(false);
+  const [replyError, setReplyError] = useState<string | null>(null);
+  const [replySuccess, setReplySuccess] = useState(false);
+
   const isAdmin = roles.includes(UserRole.ADMIN);
 
   const loadTickets = useCallback(async () => {
@@ -208,6 +218,24 @@ export function AdminSupportTicketsQueuePanel({
     }
   }, [isAdmin, loadTickets]);
 
+  const loadMessages = useCallback(
+    async (ticketId: string) => {
+      setMessagesLoading(true);
+      setMessagesError(null);
+      try {
+        const response = await api.admin.listSupportTicketMessages(ticketId);
+        setMessages(response.items);
+      } catch (error) {
+        setMessagesError(
+          error instanceof ApiError ? error.message : t('app.admin.supportTickets.replyError'),
+        );
+      } finally {
+        setMessagesLoading(false);
+      }
+    },
+    [t],
+  );
+
   useEffect(() => {
     if (selected) {
       setEditStatus(selected.status);
@@ -215,8 +243,15 @@ export function AdminSupportTicketsQueuePanel({
       setEditAdminNote(selected.adminNote ?? '');
       setUpdateError(null);
       setUpdateSuccess(false);
+      setReplyBody('');
+      setReplyInternal(false);
+      setReplyError(null);
+      setReplySuccess(false);
+      void loadMessages(selected.id);
+    } else {
+      setMessages([]);
     }
-  }, [selected]);
+  }, [selected, loadMessages]);
 
   const handleApplyFilters = () => {
     setAppliedFilters(filters);
@@ -250,6 +285,36 @@ export function AdminSupportTicketsQueuePanel({
       );
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleReplySubmit = async () => {
+    if (!selected) {
+      return;
+    }
+    const trimmed = replyBody.trim();
+    if (!trimmed) {
+      return;
+    }
+    setReplySubmitting(true);
+    setReplyError(null);
+    setReplySuccess(false);
+    try {
+      await api.admin.createSupportTicketMessage(selected.id, {
+        body: trimmed,
+        isInternal: replyInternal,
+      });
+      setReplyBody('');
+      setReplySuccess(true);
+      const refreshed = await api.admin.listSupportTickets(buildListQuery(1, appliedFilters));
+      setItems(refreshed.items);
+      await loadMessages(selected.id);
+    } catch (error) {
+      setReplyError(
+        error instanceof ApiError ? error.message : t('app.admin.supportTickets.replyError'),
+      );
+    } finally {
+      setReplySubmitting(false);
     }
   };
 
@@ -450,6 +515,92 @@ export function AdminSupportTicketsQueuePanel({
               <dd className="text-muted-foreground">{formatDateTime(selected.createdAt)}</dd>
             </div>
           </dl>
+
+          <div className="flex flex-col gap-2">
+            <h5 className="text-xs font-semibold">{t('app.admin.supportTickets.messagesTitle')}</h5>
+            <div className="flex max-h-48 flex-col gap-2 overflow-y-auto">
+              <div className="rounded-lg border border-border/60 bg-background px-3 py-2 text-xs">
+                <p className="font-medium text-[11px] text-muted-foreground">
+                  {t('app.admin.supportTickets.userAuthor')} · {formatDateTime(selected.createdAt)}
+                </p>
+                <p className="mt-1 whitespace-pre-wrap">{selected.message}</p>
+              </div>
+              {messagesLoading ? (
+                <RequestsListSkeleton rows={2} itemClassName="h-12 w-full rounded-lg" />
+              ) : null}
+              {messagesError ? (
+                <PanelErrorState
+                  message={messagesError}
+                  retryLabel={t('app.admin.supportTickets.retry')}
+                  onRetry={() => void loadMessages(selected.id)}
+                />
+              ) : null}
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={cn(
+                    'rounded-lg border px-3 py-2 text-xs',
+                    message.isInternal
+                      ? 'border-amber-500/30 bg-amber-500/[0.06]'
+                      : message.authorRole === SupportTicketMessageAuthorRole.ADMIN
+                        ? 'border-primary/20 bg-primary/[0.04]'
+                        : 'border-border/60 bg-background',
+                  )}
+                >
+                  <p className="font-medium text-[11px] text-muted-foreground">
+                    {message.isInternal
+                      ? t('app.admin.supportTickets.internalNote')
+                      : message.authorRole === SupportTicketMessageAuthorRole.ADMIN
+                        ? t('app.admin.supportTickets.adminAuthor')
+                        : t('app.admin.supportTickets.userAuthor')}{' '}
+                    · {formatDateTime(message.createdAt)}
+                  </p>
+                  <p className="mt-1 whitespace-pre-wrap">{message.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <label className="flex flex-col gap-1 text-xs">
+            <span className="font-medium">{t('app.admin.supportTickets.reply')}</span>
+            <textarea
+              className={TEXTAREA_CLASS}
+              value={replyBody}
+              onChange={(event) => setReplyBody(event.target.value)}
+              placeholder={t('app.admin.supportTickets.replyPlaceholder')}
+              disabled={replySubmitting}
+            />
+          </label>
+          <label className="flex items-center gap-2 text-xs">
+            <input
+              type="checkbox"
+              checked={replyInternal}
+              onChange={(event) => setReplyInternal(event.target.checked)}
+              disabled={replySubmitting}
+            />
+            <span>{t('app.admin.supportTickets.internalOnly')}</span>
+          </label>
+          {replyError ? (
+            <p className="text-xs text-destructive" role="alert">
+              {replyError}
+            </p>
+          ) : null}
+          {replySuccess ? (
+            <p className="text-xs text-emerald-600 dark:text-emerald-400" role="status">
+              {t('app.admin.supportTickets.replySuccess')}
+            </p>
+          ) : null}
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            disabled={replySubmitting || !replyBody.trim()}
+            onClick={() => void handleReplySubmit()}
+          >
+            {replySubmitting
+              ? t('app.admin.supportTickets.updating')
+              : t('app.admin.supportTickets.sendReply')}
+          </Button>
 
           <label className="flex flex-col gap-1 text-xs">
             <span className="font-medium">{t('app.admin.supportTickets.status')}</span>

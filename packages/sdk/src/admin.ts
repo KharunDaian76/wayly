@@ -13,6 +13,8 @@ import type {
   AdminSystemHealthResponse,
   AdminUserListResponse,
   AdminUserQueueItem,
+  SupportTicketMessageListResponse,
+  SupportTicketMessageSummary,
 } from '@wayly/types';
 
 import type { AdminAuditLogsListQuery } from './admin-audit.types';
@@ -38,6 +40,7 @@ import type {
 import type { RequestOptions } from './types';
 import type {
   AdminSupportTicketsListQuery,
+  AdminCreateSupportTicketMessageBody,
   AdminUpdateSupportTicketBody,
 } from './support-tickets-admin.types';
 import type {
@@ -429,6 +432,23 @@ export function createAdminApi(request: Requester): AdminApi {
     ) =>
       request<AdminSupportTicketQueueItem>(`/admin/support-tickets/${id}`, {
         method: 'PATCH',
+        body,
+        ...withCookies,
+        accessToken,
+      }),
+    listSupportTicketMessages: (ticketId: string, accessToken?: string | null) =>
+      request<SupportTicketMessageListResponse>(`/admin/support-tickets/${ticketId}/messages`, {
+        method: 'GET',
+        ...withCookies,
+        accessToken,
+      }),
+    createSupportTicketMessage: (
+      ticketId: string,
+      body: AdminCreateSupportTicketMessageBody,
+      accessToken?: string | null,
+    ) =>
+      request<SupportTicketMessageSummary>(`/admin/support-tickets/${ticketId}/messages`, {
+        method: 'POST',
         body,
         ...withCookies,
         accessToken,

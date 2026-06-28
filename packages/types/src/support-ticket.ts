@@ -1,5 +1,10 @@
 import type { ISODateString } from './common';
-import type { SupportTicketCategory, SupportTicketPriority, SupportTicketStatus } from './enums';
+import type {
+  SupportTicketCategory,
+  SupportTicketMessageAuthorRole,
+  SupportTicketPriority,
+  SupportTicketStatus,
+} from './enums';
 
 /** Safe support ticket shape for authenticated users (no admin-only fields). */
 export interface SupportTicketSummary {
@@ -36,4 +41,21 @@ export interface AdminSupportTicketListResponse {
   page: number;
   limit: number;
   total: number;
+}
+
+/** Threaded support ticket message (user-visible rows omit internal admin notes). */
+export interface SupportTicketMessageSummary {
+  id: string;
+  ticketId: string;
+  authorId: string;
+  authorRole: SupportTicketMessageAuthorRole;
+  body: string;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+  isInternal: boolean;
+}
+
+/** GET /support-tickets/:id/messages response. */
+export interface SupportTicketMessageListResponse {
+  items: SupportTicketMessageSummary[];
 }
