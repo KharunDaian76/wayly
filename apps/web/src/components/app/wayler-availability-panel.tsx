@@ -8,7 +8,11 @@ import { Button, Input } from '@wayly/ui';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
-import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
+import {
+  PanelErrorState,
+  PanelOptionalNotice,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import {
   isWaylerAvailabilityReady,
@@ -834,9 +838,18 @@ export function WaylerAvailabilityPanel({
                 {actionSuccess}
               </p>
             ) : null}
-            {listingsError ? (
+            {listingsError && listings.length === 0 ? (
               <PanelErrorState
                 message={listingsError}
+                retryLabel={t('app.waylerAvailability.retryAvailability')}
+                onRetry={() => void loadListings()}
+                retryDisabled={listingsLoading}
+              />
+            ) : null}
+            {listingsError && listings.length > 0 ? (
+              <PanelOptionalNotice
+                severity="warning"
+                message={t('app.panel.listingsPartialLoad')}
                 retryLabel={t('app.waylerAvailability.retryAvailability')}
                 onRetry={() => void loadListings()}
                 retryDisabled={listingsLoading}

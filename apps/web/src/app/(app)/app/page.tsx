@@ -62,7 +62,11 @@ import { NotificationBell } from '@/components/app/notification-bell';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
 import { PaymentTransparencyNote } from '@/components/app/payment-transparency-note';
 import { OrderActionGuidance } from '@/components/app/order-action-guidance';
-import { PanelEmptyState, PanelErrorState } from '@/components/app/panel-status-states';
+import {
+  PanelEmptyState,
+  PanelErrorState,
+  PanelOptionalNotice,
+} from '@/components/app/panel-status-states';
 import { SenderWaylersPanel } from '@/components/app/sender-waylers-panel';
 import { SuspendedAccountNotice } from '@/components/app/suspended-account-notice';
 import { WaylerAccessPanel } from '@/components/app/wayler-access-panel';
@@ -430,7 +434,7 @@ function senderPaymentStatusLabel(
   t: (key: TranslationKey) => string,
 ): string {
   if (!intent) {
-    return t('app.senderPanel.payment.notAuthorized');
+    return t('app.panel.demoPaymentStatus');
   }
   switch (intent.status) {
     case PaymentStatus.AUTHORIZED:
@@ -457,8 +461,10 @@ async function fetchPaymentIntentForOrder(
     const intent = await api.payments.forOrder(orderId);
     return { intent, loadFailed: false };
   } catch (err) {
-    if (err instanceof ApiError && err.status === 404) {
-      return { intent: null, loadFailed: false };
+    if (err instanceof ApiError) {
+      if (err.status === 404 || err.status === 401 || err.status === 403) {
+        return { intent: null, loadFailed: false };
+      }
     }
     return { intent: null, loadFailed: true };
   }
@@ -536,7 +542,7 @@ function waylerPaymentStatusLabel(
   t: (key: TranslationKey) => string,
 ): string {
   if (!intent) {
-    return t('app.waylerFeed.acceptedPanel.payment.notAuthorized');
+    return t('app.panel.demoPaymentStatus');
   }
   switch (intent.status) {
     case PaymentStatus.AUTHORIZED:
@@ -940,7 +946,11 @@ export default function AppHomePage() {
           previous,
         ),
       );
-      await loadUserDisputes();
+      try {
+        await loadUserDisputes();
+      } catch {
+        /* Disputes are optional — do not fail the accepted orders list. */
+      }
       return withTimestamps;
     } catch {
       setSenderAcceptedError(t('app.senderPanel.acceptedLoadFailed'));
@@ -1046,7 +1056,11 @@ export default function AppHomePage() {
       setAcceptedOrders((previous) =>
         mergeOrderProofFromPrevious(mergeOrderPaymentFromPrevious(enriched, previous), previous),
       );
-      await loadUserDisputes();
+      try {
+        await loadUserDisputes();
+      } catch {
+        /* Disputes are optional — do not fail the accepted orders list. */
+      }
       return enriched;
     } catch {
       setAcceptedError(t('app.waylerFeed.acceptedPanel.loadFailed'));
@@ -2185,7 +2199,7 @@ export default function AppHomePage() {
                     retryDisabled={disputesLoading}
                   />
                 ) : null}
-                {isApproved && acceptedError ? (
+                {isApproved && acceptedError && acceptedOrders.length === 0 ? (
                   <PanelErrorState
                     message={acceptedError}
                     retryLabel={t('app.waylerFeed.acceptedPanel.retry')}
@@ -2308,8 +2322,9 @@ export default function AppHomePage() {
                             </dl>
                             {order.paymentLoadFailed ? (
                               <div className="mt-2">
-                                <PanelErrorState
-                                  message={t('app.waylerFeed.acceptedPanel.payment.loadFailed')}
+                                <PanelOptionalNotice
+                                  severity="warning"
+                                  message={t('app.panel.paymentRetryFailed')}
                                   retryLabel={t(
                                     'app.waylerFeed.acceptedPanel.payment.retryPaymentStatus',
                                   )}
@@ -2338,9 +2353,11 @@ export default function AppHomePage() {
                             !paymentIntent &&
                             !paymentStatusLoadingOrderIds.has(order.id) &&
                             !(acceptedLoading && acceptedOrders.length > 0) ? (
-                              <p className="mt-2 text-sm text-muted-foreground">
-                                {t('app.waylerFeed.acceptedPanel.payment.notAuthorized')}
-                              </p>
+                              <div className="mt-2">
+                                <PanelOptionalNotice
+                                  message={`${t('app.panel.demoPaymentUnavailable')} ${t('app.panel.demoPaymentHonesty')}`}
+                                />
+                              </div>
                             ) : null}
                             {paymentIntent ? (
                               <div className="wayly-proof-panel mt-3 rounded-xl border p-2.5">
@@ -2536,8 +2553,8 @@ export default function AppHomePage() {
                                 ) : null}
                                 {order.proofLoadFailed ? (
                                   <div className="mt-2">
-                                    <PanelErrorState
-                                      message={t('app.waylerFeed.acceptedPanel.proofLoadFailed')}
+                                    <PanelOptionalNotice
+                                      message={t('app.panel.proofUnavailable')}
                                       retryLabel={t(
                                         'app.waylerFeed.acceptedPanel.retryProofStatus',
                                       )}
@@ -3088,7 +3105,7 @@ export default function AppHomePage() {
                     retryDisabled={disputesLoading}
                   />
                 ) : null}
-                {canViewSenderOrders && senderAcceptedError ? (
+                {canViewSenderOrders && senderAcceptedError && senderAcceptedOrders.length === 0 ? (
                   <PanelErrorState
                     message={senderAcceptedError}
                     retryLabel={t('app.senderPanel.retryAccepted')}
@@ -3271,8 +3288,8 @@ export default function AppHomePage() {
                                 ) : null}
                                 {order.proofLoadFailed ? (
                                   <div className="mt-2">
-                                    <PanelErrorState
-                                      message={t('app.senderPanel.proofLoadFailed')}
+                                    <PanelOptionalNotice
+                                      message={t('app.panel.proofUnavailable')}
                                       retryLabel={t('app.senderPanel.retryProofStatus')}
                                       onRetry={() => void refreshSenderOrderProof(order.id)}
                                       retryDisabled={
@@ -3357,8 +3374,9 @@ export default function AppHomePage() {
                               ) : null}
                               {order.paymentLoadFailed ? (
                                 <div className="mt-2">
-                                  <PanelErrorState
-                                    message={t('app.senderPanel.payment.loadFailed')}
+                                  <PanelOptionalNotice
+                                    severity="warning"
+                                    message={t('app.panel.paymentRetryFailed')}
                                     retryLabel={t('app.senderPanel.payment.retryPaymentStatus')}
                                     onRetry={() => void refreshSenderOrderPayment(order.id)}
                                     retryDisabled={
@@ -3366,6 +3384,13 @@ export default function AppHomePage() {
                                       senderAcceptedLoading ||
                                       paymentActionBusy
                                     }
+                                  />
+                                </div>
+                              ) : null}
+                              {!order.paymentLoadFailed && !paymentIntent ? (
+                                <div className="mt-2">
+                                  <PanelOptionalNotice
+                                    message={`${t('app.panel.demoPaymentUnavailable')} ${t('app.panel.demoPaymentHonesty')}`}
                                   />
                                 </div>
                               ) : null}

@@ -35,7 +35,11 @@ import { SenderRequestQualityCoach } from '@/components/app/sender-request-quali
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { SafetyPreflightChecklist } from '@/components/app/safety-preflight-checklist';
 import { SenderRequestStatusSummary } from '@/components/app/sender-request-status-summary';
-import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
+import {
+  PanelErrorState,
+  PanelOptionalNotice,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import { SenderRequestTemplates } from '@/components/app/sender-request-templates';
 import { SenderRequestDraftBar } from '@/components/app/sender-request-draft-bar';
@@ -966,9 +970,18 @@ export function SenderWaylersPanel({
                 {t('app.marketplaceTrust.browseAvailableWaylers')}
               </p>
             </div>
-            {listingsError ? (
+            {listingsError && listings.length === 0 ? (
               <PanelErrorState
                 message={listingsError}
+                retryLabel={t('app.senderWaylers.retryWaylers')}
+                onRetry={() => void loadListings(filters)}
+                retryDisabled={listingsLoading}
+              />
+            ) : null}
+            {listingsError && listings.length > 0 ? (
+              <PanelOptionalNotice
+                severity="warning"
+                message={t('app.panel.listingsPartialLoad')}
                 retryLabel={t('app.senderWaylers.retryWaylers')}
                 onRetry={() => void loadListings(filters)}
                 retryDisabled={listingsLoading}
@@ -1492,9 +1505,18 @@ export function SenderWaylersPanel({
             </h3>
             {cancelSuccess ? <p className={ALERT_SUCCESS_CLASS}>{cancelSuccess}</p> : null}
             {cancelError ? <p className={ALERT_ERROR_CLASS}>{cancelError}</p> : null}
-            {myRequestsError ? (
+            {myRequestsError && myRequests.length === 0 ? (
               <PanelErrorState
                 message={myRequestsError}
+                retryLabel={t('app.availabilityRequests.retrySenderRequests')}
+                onRetry={() => void loadMyRequests()}
+                retryDisabled={myRequestsLoading}
+              />
+            ) : null}
+            {myRequestsError && myRequests.length > 0 ? (
+              <PanelOptionalNotice
+                severity="warning"
+                message={t('app.panel.requestsPartialLoad')}
                 retryLabel={t('app.availabilityRequests.retrySenderRequests')}
                 onRetry={() => void loadMyRequests()}
                 retryDisabled={myRequestsLoading}

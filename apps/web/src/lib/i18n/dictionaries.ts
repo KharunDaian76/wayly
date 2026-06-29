@@ -1361,6 +1361,17 @@ const en = {
   'app.activeWaylers.applyFilters': 'Apply filters',
   'app.activeWaylers.clearFilters': 'Clear filters',
   'app.activeWaylers.loadFailed': 'Could not load active Wayler counts.',
+  'app.panel.demoPaymentStatus': 'Demo / manual payment',
+  'app.panel.demoPaymentUnavailable': 'Payment details are demo/manual in this MVP.',
+  'app.panel.demoPaymentHonesty': 'No real payment, escrow, payout, or refund is processed.',
+  'app.panel.paymentRetryFailed':
+    'Payment details could not be refreshed. Main order data is still available.',
+  'app.panel.proofUnavailable': 'Proof details are unavailable in this demo order.',
+  'app.panel.activeWaylerCountsUnavailable': 'Live count unavailable — browse listings below.',
+  'app.panel.listingsPartialLoad':
+    'Some listing details could not be refreshed. Visible listings are still available.',
+  'app.panel.requestsPartialLoad':
+    'Some request details could not be refreshed. Visible requests are still available.',
   'app.marketplaceTrust.badgesLabel': 'Marketplace trust signals',
   'app.marketplaceTrust.publicAvailability': 'Public availability',
   'app.marketplaceTrust.activeRoute': 'Active listing',
@@ -4061,6 +4072,16 @@ const ru: Dictionary = {
   'app.activeWaylers.applyFilters': 'Применить',
   'app.activeWaylers.clearFilters': 'Сбросить',
   'app.activeWaylers.loadFailed': 'Не удалось загрузить счётчики Wayler.',
+  'app.panel.demoPaymentStatus': 'Демо / ручная оплата',
+  'app.panel.demoPaymentUnavailable': 'Детали оплаты — демо/ручные в этом MVP.',
+  'app.panel.demoPaymentHonesty': 'Реальные платежи, эскроу, выплаты и возвраты не обрабатываются.',
+  'app.panel.paymentRetryFailed':
+    'Не удалось обновить детали оплаты. Основные данные заказа доступны.',
+  'app.panel.proofUnavailable': 'Детали подтверждения недоступны в этом демо-заказе.',
+  'app.panel.activeWaylerCountsUnavailable': 'Счётчик недоступен — просмотрите списки ниже.',
+  'app.panel.listingsPartialLoad':
+    'Не удалось обновить часть списков. Видимые объявления доступны.',
+  'app.panel.requestsPartialLoad': 'Не удалось обновить часть запросов. Видимые запросы доступны.',
   'app.marketplaceTrust.badgesLabel': 'Сигналы доверия маркетплейса',
   'app.marketplaceTrust.publicAvailability': 'Публичная доступность',
   'app.marketplaceTrust.activeRoute': 'Активное объявление',
@@ -6762,6 +6783,19 @@ const es: Dictionary = {
   'app.activeWaylers.applyFilters': 'Aplicar filtros',
   'app.activeWaylers.clearFilters': 'Limpiar filtros',
   'app.activeWaylers.loadFailed': 'No se pudieron cargar los conteos de Waylers.',
+  'app.panel.demoPaymentStatus': 'Pago demo / manual',
+  'app.panel.demoPaymentUnavailable': 'Los detalles de pago son demo/manual en este MVP.',
+  'app.panel.demoPaymentHonesty':
+    'No se procesan pagos reales, depósito en garantía, pagos ni reembolsos.',
+  'app.panel.paymentRetryFailed':
+    'No se pudieron actualizar los detalles de pago. Los datos del pedido siguen disponibles.',
+  'app.panel.proofUnavailable': 'Los detalles de prueba no están disponibles en este pedido demo.',
+  'app.panel.activeWaylerCountsUnavailable':
+    'Conteo en vivo no disponible — explore los listados abajo.',
+  'app.panel.listingsPartialLoad':
+    'No se pudieron actualizar algunos listados. Los visibles siguen disponibles.',
+  'app.panel.requestsPartialLoad':
+    'No se pudieron actualizar algunas solicitudes. Las visibles siguen disponibles.',
   'app.marketplaceTrust.badgesLabel': 'Señales de confianza del marketplace',
   'app.marketplaceTrust.publicAvailability': 'Disponibilidad pública',
   'app.marketplaceTrust.activeRoute': 'Anuncio activo',
@@ -9489,6 +9523,20 @@ const fr: Dictionary = {
   'app.activeWaylers.applyFilters': 'Appliquer les filtres',
   'app.activeWaylers.clearFilters': 'Effacer les filtres',
   'app.activeWaylers.loadFailed': 'Impossible de charger les comptes Wayler.',
+  'app.panel.demoPaymentStatus': 'Paiement démo / manuel',
+  'app.panel.demoPaymentUnavailable': 'Les détails de paiement sont démo/manuels dans ce MVP.',
+  'app.panel.demoPaymentHonesty':
+    'Aucun paiement réel, séquestre, versement ou remboursement n’est traité.',
+  'app.panel.paymentRetryFailed':
+    'Impossible d’actualiser les détails de paiement. Les données de commande restent disponibles.',
+  'app.panel.proofUnavailable':
+    'Les détails de preuve ne sont pas disponibles pour cette commande démo.',
+  'app.panel.activeWaylerCountsUnavailable':
+    'Comptage en direct indisponible — parcourez les annonces ci-dessous.',
+  'app.panel.listingsPartialLoad':
+    'Certaines annonces n’ont pas pu être actualisées. Les annonces visibles restent disponibles.',
+  'app.panel.requestsPartialLoad':
+    'Certaines demandes n’ont pas pu être actualisées. Les demandes visibles restent disponibles.',
   'app.marketplaceTrust.badgesLabel': 'Signaux de confiance marketplace',
   'app.marketplaceTrust.publicAvailability': 'Disponibilité publique',
   'app.marketplaceTrust.activeRoute': 'Annonce active',
@@ -12234,6 +12282,19 @@ const de: Dictionary = {
   'app.activeWaylers.applyFilters': 'Filter anwenden',
   'app.activeWaylers.clearFilters': 'Filter löschen',
   'app.activeWaylers.loadFailed': 'Wayler-Zähler konnten nicht geladen werden.',
+  'app.panel.demoPaymentStatus': 'Demo- / manuelle Zahlung',
+  'app.panel.demoPaymentUnavailable': 'Zahlungsdetails sind in diesem MVP Demo/manuell.',
+  'app.panel.demoPaymentHonesty':
+    'Keine echten Zahlungen, Treuhand, Auszahlungen oder Erstattungen werden verarbeitet.',
+  'app.panel.paymentRetryFailed':
+    'Zahlungsdetails konnten nicht aktualisiert werden. Hauptbestelldaten sind weiter verfügbar.',
+  'app.panel.proofUnavailable': 'Nachweisdetails sind in dieser Demo-Bestellung nicht verfügbar.',
+  'app.panel.activeWaylerCountsUnavailable':
+    'Live-Zähler nicht verfügbar — durchsuchen Sie die Angebote unten.',
+  'app.panel.listingsPartialLoad':
+    'Einige Angebote konnten nicht aktualisiert werden. Sichtbare Angebote bleiben verfügbar.',
+  'app.panel.requestsPartialLoad':
+    'Einige Anfragen konnten nicht aktualisiert werden. Sichtbare Anfragen bleiben verfügbar.',
   'app.marketplaceTrust.badgesLabel': 'Marketplace-Vertrauenssignale',
   'app.marketplaceTrust.publicAvailability': 'Öffentliche Verfügbarkeit',
   'app.marketplaceTrust.activeRoute': 'Aktives Angebot',
@@ -14925,6 +14986,18 @@ const tr: Dictionary = {
   'app.activeWaylers.applyFilters': 'Filtreleri uygula',
   'app.activeWaylers.clearFilters': 'Filtreleri temizle',
   'app.activeWaylers.loadFailed': 'Aktif Wayler sayıları yüklenemedi.',
+  'app.panel.demoPaymentStatus': 'Demo / manuel ödeme',
+  'app.panel.demoPaymentUnavailable': "Ödeme detayları bu MVP'de demo/manueldir.",
+  'app.panel.demoPaymentHonesty': 'Gerçek ödeme, emanet, ödeme veya iade işlenmez.',
+  'app.panel.paymentRetryFailed':
+    'Ödeme detayları yenilenemedi. Ana sipariş verileri hâlâ kullanılabilir.',
+  'app.panel.proofUnavailable': 'Kanıt detayları bu demo siparişinde kullanılamıyor.',
+  'app.panel.activeWaylerCountsUnavailable':
+    'Canlı sayım kullanılamıyor — aşağıdaki ilanlara göz atın.',
+  'app.panel.listingsPartialLoad':
+    'Bazı ilan detayları yenilenemedi. Görünen ilanlar hâlâ kullanılabilir.',
+  'app.panel.requestsPartialLoad':
+    'Bazı istek detayları yenilenemedi. Görünen istekler hâlâ kullanılabilir.',
   'app.marketplaceTrust.badgesLabel': 'Marketplace güven sinyalleri',
   'app.marketplaceTrust.publicAvailability': 'Herkese açık müsaitlik',
   'app.marketplaceTrust.activeRoute': 'Aktif ilan',
@@ -17536,6 +17609,14 @@ const ar: Dictionary = {
   'app.activeWaylers.applyFilters': 'تطبيق الفلاتر',
   'app.activeWaylers.clearFilters': 'مسح الفلاتر',
   'app.activeWaylers.loadFailed': 'تعذّر تحميل أعداد Wayler النشطين.',
+  'app.panel.demoPaymentStatus': 'دفع تجريبي / يدوي',
+  'app.panel.demoPaymentUnavailable': 'تفاصيل الدفع تجريبية/يدوية في هذا الإصدار.',
+  'app.panel.demoPaymentHonesty': 'لا تُعالَج مدفوعات حقيقية ولا ضمان ولا صرف ولا استرداد.',
+  'app.panel.paymentRetryFailed': 'تعذّر تحديث تفاصيل الدفع. بيانات الطلب الرئيسية ما زالت متاحة.',
+  'app.panel.proofUnavailable': 'تفاصيل الإثبات غير متاحة في هذا الطلب التجريبي.',
+  'app.panel.activeWaylerCountsUnavailable': 'العدّ المباشر غير متاح — تصفّح القوائم أدناه.',
+  'app.panel.listingsPartialLoad': 'تعذّر تحديث بعض تفاصيل القوائم. القوائم الظاهرة ما زالت متاحة.',
+  'app.panel.requestsPartialLoad': 'تعذّر تحديث بعض تفاصيل الطلبات. الطلبات الظاهرة ما زالت متاحة.',
   'app.marketplaceTrust.badgesLabel': 'إشارات ثقة السوق',
   'app.marketplaceTrust.publicAvailability': 'توفر عام',
   'app.marketplaceTrust.activeRoute': 'إعلان نشط',
@@ -20057,6 +20138,14 @@ const zh: Dictionary = {
   'app.activeWaylers.applyFilters': '应用筛选',
   'app.activeWaylers.clearFilters': '清除筛选',
   'app.activeWaylers.loadFailed': '无法加载活跃 Wayler 计数。',
+  'app.panel.demoPaymentStatus': '演示 / 手动支付',
+  'app.panel.demoPaymentUnavailable': '本 MVP 中支付详情为演示/手动。',
+  'app.panel.demoPaymentHonesty': '不处理真实支付、托管、出款或退款。',
+  'app.panel.paymentRetryFailed': '无法刷新支付详情。主要订单数据仍可用。',
+  'app.panel.proofUnavailable': '此演示订单的证明详情不可用。',
+  'app.panel.activeWaylerCountsUnavailable': '实时计数不可用 — 请浏览下方列表。',
+  'app.panel.listingsPartialLoad': '部分列表详情无法刷新。可见列表仍可用。',
+  'app.panel.requestsPartialLoad': '部分请求详情无法刷新。可见请求仍可用。',
   'app.marketplaceTrust.badgesLabel': '市场信任标识',
   'app.marketplaceTrust.publicAvailability': '公开可用',
   'app.marketplaceTrust.activeRoute': '活跃 listing',

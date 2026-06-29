@@ -113,6 +113,16 @@ Each main demo account should show:
 - **Session on homepage:** marketing header reflects auth state; navigation home does not sign out.
 - **Homepage light mode:** removed forced `dark` wrapper; route network hero supports light theme.
 
+## Error panel cleanup (June 2026)
+
+- **Accepted orders:** disputes load no longer fails the whole panel; top-level error only when orders array is empty.
+- **Payment subpanels:** 401/403/404 treated as demo/manual — no red “Not authorized” on every card.
+- **Proof subpanels:** missing proof shows calm demo notice, not a red error banner.
+- **Active Wayler counts:** failure shows “Live count unavailable — browse listings below” instead of blocking browse.
+- **Browse availability / my requests:** partial refresh failures show inline warnings when listings or requests are visible.
+
+Walkthrough focus: main marketplace and delivery flows — **not** real payment, escrow, or legal proof.
+
 ---
 
 ## Honesty

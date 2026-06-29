@@ -77,6 +77,46 @@ export function PanelErrorState({
   );
 }
 
+/** Calm inline notice for optional/demo details — not a full panel failure. */
+export function PanelOptionalNotice({
+  message,
+  severity = 'info',
+  retryLabel,
+  onRetry,
+  retryDisabled,
+}: {
+  message: string;
+  severity?: 'info' | 'warning';
+  retryLabel?: string;
+  onRetry?: () => void;
+  retryDisabled?: boolean;
+}) {
+  return (
+    <div
+      className={
+        severity === 'warning'
+          ? 'flex flex-col gap-2 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2 sm:flex-row sm:items-center sm:justify-between'
+          : 'flex flex-col gap-2 rounded-lg border border-border/50 bg-muted/15 px-3 py-2 sm:flex-row sm:items-center sm:justify-between'
+      }
+      role="status"
+    >
+      <p className="text-xs leading-relaxed text-muted-foreground">{message}</p>
+      {retryLabel && onRetry ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-7 shrink-0 text-xs"
+          disabled={retryDisabled}
+          onClick={onRetry}
+        >
+          {retryLabel}
+        </Button>
+      ) : null}
+    </div>
+  );
+}
+
 export function RequestsListSkeleton({
   rows = 2,
   itemClassName = 'h-20 w-full rounded-lg',

@@ -4,7 +4,7 @@ import type { ActiveWaylerLocationCount, ActiveWaylerMarketplaceResponse } from 
 import { Button, Input, Skeleton } from '@wayly/ui';
 import { useCallback, useEffect, useState } from 'react';
 
-import { PanelErrorState } from '@/components/app/panel-status-states';
+import { PanelOptionalNotice } from '@/components/app/panel-status-states';
 import { useI18n } from '@/lib/i18n/i18n-context';
 import { api } from '@/lib/sdk';
 import { cn } from '@/lib/utils';
@@ -211,8 +211,9 @@ export function ActiveWaylersMarketplaceSection({
       </div>
 
       {error ? (
-        <PanelErrorState
-          message={error}
+        <PanelOptionalNotice
+          severity="warning"
+          message={t('app.panel.activeWaylerCountsUnavailable')}
           retryLabel={t('app.activeWaylers.refresh')}
           onRetry={() => void loadCounts()}
           retryDisabled={loading}

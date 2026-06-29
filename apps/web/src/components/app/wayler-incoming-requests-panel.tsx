@@ -8,7 +8,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { AvailabilityRequestConvertedOrder } from '@/components/app/availability-request-converted-order';
 import { MarketplaceEmptyState } from '@/components/app/marketplace-empty-state';
-import { PanelErrorState, RequestsListSkeleton } from '@/components/app/panel-status-states';
+import {
+  PanelErrorState,
+  PanelOptionalNotice,
+  RequestsListSkeleton,
+} from '@/components/app/panel-status-states';
 import { RestrictedItemsSafetyNote } from '@/components/app/restricted-items-safety-note';
 import { KycMarketplaceGateNotice, type KycGateProps } from '@/components/app/kyc-marketplace-gate';
 import {
@@ -221,9 +225,18 @@ export function WaylerIncomingRequestsPanel({
 
       {actionSuccess ? <p className={ALERT_SUCCESS_CLASS}>{actionSuccess}</p> : null}
       {actionError ? <p className={ALERT_ERROR_CLASS}>{actionError}</p> : null}
-      {loadError ? (
+      {loadError && requests.length === 0 ? (
         <PanelErrorState
           message={loadError}
+          retryLabel={t('app.availabilityRequests.retryWaylerRequests')}
+          onRetry={() => void loadRequests()}
+          retryDisabled={loading}
+        />
+      ) : null}
+      {loadError && requests.length > 0 ? (
+        <PanelOptionalNotice
+          severity="warning"
+          message={t('app.panel.requestsPartialLoad')}
           retryLabel={t('app.availabilityRequests.retryWaylerRequests')}
           onRetry={() => void loadRequests()}
           retryDisabled={loading}

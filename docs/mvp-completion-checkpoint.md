@@ -137,6 +137,20 @@ pnpm --dir apps/api demo:smoke
 - Support ticket submission works for logged-in users (no KYC gate on create).
 - Public homepage no longer forces dark mode — theme toggle applies.
 - Signed-in users visiting `/` see **Open app** in header; session persists until Sign out.
+- **Error panel cleanup:** red top-level errors no longer appear when main panel data loaded; optional payment/proof/count subpanels show calm demo/manual notices instead of “Not authorized” or “Failed to load” banners.
+
+---
+
+## 7c. Demo-safe optional panels (June 2026)
+
+| Subpanel                    | When details missing                     | UI behavior                                                   |
+| --------------------------- | ---------------------------------------- | ------------------------------------------------------------- |
+| Payment (order cards)       | No intent / 401 / 403 / 404              | Muted info: demo/manual payment; no real escrow/payout/refund |
+| Proof (delivered orders)    | Detail fetch fails                       | Muted notice: proof unavailable in demo order                 |
+| Active Wayler counts        | Counts endpoint fails                    | Warning: live count unavailable — browse listings below       |
+| Listings / requests refresh | Secondary fetch fails while data visible | Small warning inline; list stays visible                      |
+
+Friend walkthrough should focus on **main flows** (browse, request, accept, chat) — not real payments or legal proof guarantees.
 
 ---
 
