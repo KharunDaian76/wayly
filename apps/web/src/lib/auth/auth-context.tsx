@@ -62,6 +62,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void hydrateFromRefresh();
   }, [hydrateFromRefresh]);
 
+  useEffect(() => {
+    const recoverSession = () => {
+      if (status === 'unauthenticated') {
+        void hydrateFromRefresh();
+      }
+    };
+
+    window.addEventListener('focus', recoverSession);
+    return () => window.removeEventListener('focus', recoverSession);
+  }, [status, hydrateFromRefresh]);
+
   const login = useCallback(async (input: LoginInput) => {
     const result = await api.auth.login(input);
     applySession(result.accessToken);

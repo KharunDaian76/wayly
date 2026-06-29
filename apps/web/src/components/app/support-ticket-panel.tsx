@@ -52,7 +52,28 @@ const SELECT_CLASS =
 const MIN_REPLY_LENGTH = 1;
 const MAX_REPLY_LENGTH = 5000;
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 const MESSAGE_BUBBLE_CLASS = cn('rounded-lg border px-3 py-2 text-xs', 'wayly-feed-item-enter');
+
+function mapSupportTicketError(error: unknown, t: (key: TranslationKey) => string): string {
+  if (error instanceof ApiError) {
+    if (error.status === 401 || error.status === 403) {
+      return t('app.supportTickets.signInAgain');
+    }
+    if (error.status === 429) {
+      return t('app.supportTickets.rateLimited');
+    }
+    if (error.status >= 500) {
+      return t('app.supportTickets.serverError');
+    }
+    if (error.code === 'KYC_REQUIRED') {
+      return t('app.supportTickets.signInAgain');
+    }
+    return error.message || t('app.supportTickets.createError');
+  }
+  return t('app.supportTickets.createError');
+}
 
 export function supportTicketCategoryKey(category: SupportTicketCategory): TranslationKey {
   return `app.supportTickets.category.${category}` as TranslationKey;
@@ -162,6 +183,12 @@ export function SupportTicketPanel({ className }: { className?: string }) {
     const trimmedOrderId = orderId.trim();
 
     if (trimmedSubject.length < MIN_SUBJECT_LENGTH || trimmedMessage.length < MIN_MESSAGE_LENGTH) {
+      setSubmitError(t('app.supportTickets.validationError'));
+      return;
+    }
+
+    if (trimmedOrderId && !UUID_PATTERN.test(trimmedOrderId)) {
+      setSubmitError(t('app.supportTickets.invalidOrderId'));
       return;
     }
 
@@ -180,9 +207,7 @@ export function SupportTicketPanel({ className }: { className?: string }) {
       setSubmitSuccess(true);
       await loadTickets();
     } catch (error) {
-      setSubmitError(
-        error instanceof ApiError ? error.message : t('app.supportTickets.createError'),
-      );
+      setSubmitError(mapSupportTicketError(error, t));
     } finally {
       setSubmitting(false);
     }
@@ -211,7 +236,7 @@ export function SupportTicketPanel({ className }: { className?: string }) {
       setReplySuccess(true);
       await Promise.all([loadMessages(selectedId), loadTickets()]);
     } catch (error) {
-      setReplyError(error instanceof ApiError ? error.message : t('app.supportTickets.replyError'));
+      setReplyError(mapSupportTicketError(error, t));
     } finally {
       setReplySubmitting(false);
     }
@@ -324,6 +349,11 @@ export function SupportTicketPanel({ className }: { className?: string }) {
             <Button type="submit" disabled={!canSubmit} className="self-start">
               {submitting ? t('app.supportTickets.submitting') : t('app.supportTickets.submit')}
             </Button>
+            {!canSubmit && !submitting ? (
+              <p className="text-xs text-muted-foreground">
+                {t('app.supportTickets.validationHint')}
+              </p>
+            ) : null}
           </form>
 
           <div className="flex flex-col gap-2">

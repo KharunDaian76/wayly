@@ -18,9 +18,7 @@ import { createSupportTicketMessageSchema, createSupportTicketSchema } from '@wa
 import { z } from 'zod';
 
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { RequiresVerification } from '../../common/decorators/requires-verification.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { VerificationGuard } from '../../common/guards/verification.guard';
 import { zodBody } from '../../common/pipes/zod-validation.pipe';
 import { UserWriteRateLimit } from '../../common/rate-limit/rate-limit.decorators';
 import type { RequestUser } from '../../common/types/request-user.type';
@@ -38,8 +36,7 @@ import { SupportTicketsService } from './support-tickets.service';
 @ApiTags('support-tickets')
 @ApiBearerAuth('access-token')
 @Controller({ path: 'support-tickets', version: '1' })
-@UseGuards(JwtAuthGuard, VerificationGuard)
-@RequiresVerification()
+@UseGuards(JwtAuthGuard)
 export class SupportTicketsController {
   constructor(private readonly supportTickets: SupportTicketsService) {}
 

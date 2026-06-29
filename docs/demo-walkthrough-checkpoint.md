@@ -100,8 +100,18 @@ Each main demo account should show:
 - [ ] Admin — Wayler access **ACTIVE**, “Demo admin access” label
 - [ ] Each `@wayly.demo` account — listings, incoming, open, accepted panels populated
 - [ ] Accept open order works with active access
-- [ ] Homepage — drag globe, zoom, see city labels
-- [ ] Light mode on `/app` — readable cards and empty states
+- [ ] Homepage — route network hero, readable headline (light + dark)
+- [ ] Light mode on homepage and `/app` — readable cards and empty states
+- [ ] Support ticket — expand panel, submit ticket, see success + recent list entry
+- [ ] Back to home from `/app` — still signed in; header shows Open app
+
+---
+
+## Live MVP bugfixes (June 2026)
+
+- **Support tickets:** create endpoint no longer requires KYC approval; UI validates order ID and shows safe errors.
+- **Session on homepage:** marketing header reflects auth state; navigation home does not sign out.
+- **Homepage light mode:** removed forced `dark` wrapper; route network hero supports light theme.
 
 ---
 

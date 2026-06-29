@@ -346,32 +346,32 @@ export function RouteNetworkHeroVisual() {
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
-      {/* Premium dark gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(228_45%_6%)] via-[hsl(232_42%_8%)] to-[hsl(var(--background))]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,hsl(260_50%_22%/0.35),transparent_65%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_60%,hsl(190_70%_35%/0.12),transparent_55%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_35%_at_85%_45%,hsl(155_45%_30%/0.1),transparent_50%)]" />
+      {/* Theme-aware premium gradient base */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-100 via-slate-50 to-background dark:from-[hsl(228_45%_6%)] dark:via-[hsl(232_42%_8%)] dark:to-[hsl(var(--background))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,hsl(var(--primary)/0.12),transparent_65%)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_35%,hsl(260_50%_22%/0.35),transparent_65%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_60%,hsl(var(--accent)/0.08),transparent_55%)] dark:bg-[radial-gradient(ellipse_50%_40%_at_20%_60%,hsl(190_70%_35%/0.12),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_35%_at_85%_45%,hsl(var(--success)/0.06),transparent_50%)] dark:bg-[radial-gradient(ellipse_45%_35%_at_85%_45%,hsl(155_45%_30%/0.1),transparent_50%)]" />
 
       {/* Grid layer */}
-      <div className="wayly-route-network-grid absolute inset-0 opacity-60" />
+      <div className="wayly-route-network-grid absolute inset-0 opacity-50 dark:opacity-60" />
 
       {/* Glow blobs */}
       <div
-        className="wayly-landing-glow-blob absolute -left-20 top-[10%] h-64 w-64 rounded-full bg-[hsl(270_60%_45%/0.2)] blur-3xl"
+        className="wayly-landing-glow-blob absolute -left-20 top-[10%] h-64 w-64 rounded-full bg-primary/15 blur-3xl dark:bg-[hsl(270_60%_45%/0.2)]"
         style={{ transform: `translate(${parallax.x * -0.5}px, ${parallax.y * -0.5}px)` }}
       />
       <div
-        className="wayly-landing-glow-blob wayly-landing-float-delay-1 absolute -right-16 top-[18%] h-56 w-56 rounded-full bg-[hsl(190_80%_45%/0.18)] blur-3xl"
+        className="wayly-landing-glow-blob wayly-landing-float-delay-1 absolute -right-16 top-[18%] h-56 w-56 rounded-full bg-accent/15 blur-3xl dark:bg-[hsl(190_80%_45%/0.18)]"
         style={{ transform: `translate(${parallax.x * 0.4}px, ${parallax.y * 0.3}px)` }}
       />
       <div
-        className="wayly-landing-glow-blob wayly-landing-float-delay-2 absolute bottom-[20%] left-1/4 h-48 w-48 rounded-full bg-[hsl(155_55%_38%/0.14)] blur-3xl"
+        className="wayly-landing-glow-blob wayly-landing-float-delay-2 absolute bottom-[20%] left-1/4 h-48 w-48 rounded-full bg-success/10 blur-3xl dark:bg-[hsl(155_55%_38%/0.14)]"
         style={{ transform: `translate(${parallax.x * 0.3}px, ${parallax.y * -0.4}px)` }}
       />
 
       {/* Route network SVG */}
       <svg
-        className="absolute inset-0 h-full w-full opacity-90"
+        className="absolute inset-0 h-full w-full opacity-80 dark:opacity-90"
         viewBox="0 0 1200 520"
         preserveAspectRatio="xMidYMid slice"
         style={{ transform: `translate(${parallax.x * 0.15}px, ${parallax.y * 0.1}px)` }}
@@ -432,7 +432,7 @@ export function RouteNetworkHeroVisual() {
         {CITIES.map((city) => (
           <span
             key={city.id}
-            className="absolute hidden rounded-full border border-border/50 bg-card/55 px-2 py-0.5 text-[9px] font-medium text-muted-foreground backdrop-blur-sm sm:inline-block"
+            className="absolute hidden rounded-full border border-border/50 bg-card/70 px-2 py-0.5 text-[9px] font-medium text-foreground/80 backdrop-blur-sm sm:inline-block dark:text-muted-foreground"
             style={{
               left: `${(city.x / 1200) * 100}%`,
               top: `${(city.y / 520) * 100}%`,

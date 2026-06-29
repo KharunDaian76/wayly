@@ -592,11 +592,21 @@
   }
 
   .wayly-route-network-panel {
-    opacity: 0.5;
+    opacity: 0.72;
   }
 
   @media (min-width: 640px) {
     .wayly-route-network-panel {
+      opacity: 0.78;
+    }
+  }
+
+  .dark .wayly-route-network-panel {
+    opacity: 0.5;
+  }
+
+  @media (min-width: 640px) {
+    .dark .wayly-route-network-panel {
       opacity: 0.62;
     }
   }

@@ -117,17 +117,26 @@ pnpm --dir apps/api demo:smoke
 
 ## 7. Browser walkthrough checklist
 
-- [ ] Landing page — globe visible, draggable, auto-rotating, text readable (light + dark)
+- [ ] Landing page — route network hero visible, headline readable (light + dark)
 - [ ] Login `admin@wayly.demo` — Operations Center, KYC queue, support/reviews/orders/users/payments
 - [ ] KYC — approve/reject `demo.kyc-pending-*@wayly.demo` samples; queue refreshes
 - [ ] Login `demo.wayler@wayly.demo` — Wayler mode, access ACTIVE, listings + incoming + open + accepted populated
 - [ ] Accept open order — enabled with active access; safe error if rejected
 - [ ] Chat opens on accepted order
 - [ ] Notifications bell loads
-- [ ] Create support ticket
+- [ ] Create support ticket — submit succeeds; ticket appears in recent list
 - [ ] Login `demo.sender@wayly.demo` — Sender mode, published + accepted orders
 - [ ] `/app` Demo walkthrough checklist — counts match expectations
-- [ ] Light and dark mode both usable
+- [ ] Light and dark mode both usable on homepage and `/app`
+- [ ] After login, **Back to home** keeps session — header shows **Open app** (not Sign in only)
+
+---
+
+## 7b. Friend walkthrough quick fixes (June 2026)
+
+- Support ticket submission works for logged-in users (no KYC gate on create).
+- Public homepage no longer forces dark mode — theme toggle applies.
+- Signed-in users visiting `/` see **Open app** in header; session persists until Sign out.
 
 ---
 

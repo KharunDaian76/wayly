@@ -298,7 +298,7 @@ export function LandingPage() {
   const { t } = useI18n();
 
   return (
-    <div className="dark bg-background text-foreground">
+    <div className="bg-background text-foreground">
       {/* Hero — Route Network Command Center */}
       <section className="relative min-h-[640px] overflow-hidden border-b border-border/60 sm:min-h-[720px] lg:min-h-[780px]">
         <RouteNetworkHeroVisual />
